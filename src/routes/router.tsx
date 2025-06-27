@@ -29,6 +29,10 @@ const router = createBrowserRouter([
             index: true,
             element: <Lounge />,
           },
+          {
+            path: 'book-info',
+            element: <Lounge />,
+          },
         ],
       },
 
