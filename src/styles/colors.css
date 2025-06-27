@@ -1,0 +1,13 @@
+@theme {
+  --color-nook-primary: #00352c;
+  --color-nook-secondaey: #79bfc9;
+  --color-nook-action: #a2f9a7;
+
+  /* 어두운 초록색 계열 */
+  --color-nook-forest-100: #ffffff;
+  --color-nook-forest-200: #b7bcba;
+  --color-nook-forest-400: #838b87;
+  --color-nook-forest-600: #49544f;
+  --color-nook-forest-700: #192620;
+  --color-nook-forest-900: #011009;
+}
