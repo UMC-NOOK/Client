@@ -5,7 +5,7 @@
 |                              Frontend                               |                              Frontend                               |                              Frontend                               |                                Frontend                                |
 | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :--------------------------------------------------------------------: |
 | <img style="width: 150px;" src="https://github.com/woojo230.png" /> | <img style="width: 150px;" src="https://github.com/Eunjin03.png" /> | <img style="width: 150px;" src="https://github.com/suzy0928.png" /> | <img style="width: 150px;" src="https://github.com/seoyeon0103.png" /> |
-|                [우정혁](https://github.com/woojo230)                |                [이은진](https://github.com/Eunjin03)                |                [박수지](https://github.com/suzy0928)                |                [임서연](https://github.com/seoyeon0103)                |
+|                [우정혁](https://github.com/woojo230)                |                [오은진](https://github.com/Eunjin03)                |                [박수지](https://github.com/suzy0928)                |                [임서연](https://github.com/seoyeon0103)                |
 
 </div>
 
