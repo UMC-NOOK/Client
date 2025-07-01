@@ -13,23 +13,23 @@ const Navbar = () => {
 
   return (
     <nav className="w-1/4 h-full py-4">
-      <ul className="flex justify-around items-center text-base bg-[rgba(43,58,37,0.5)] h-full rounded-4xl">
+      <ul className="flex justify-evenly items-center text-base h-full">
         {menus.map((menu) => (
           <li
             key={menu.path}
-            className={`px-6 py-3 rounded-4xl transition 
+            className={`px-6 py-3 transition 
               ${
                 location.pathname === menu.path
-                  ? 'bg-[rgba(54,72,46,1)] text-white text-center'
-                  : 'text-white hover:bg-nook-forest-900'
+                  ? 'text-nook-secondaey text-center font-semibold border-b-2 border-nook-secondaey'
+                  : 'text-[rgba(211,211,211,0.5)] '
               }`}
           >
             <NavLink
               to={menu.path}
               className={({ isActive }) =>
                 isActive
-                  ? 'bg-[rgba(54,72,46,1)] text-white text-center'
-                  : 'text-white hover:bg-nook-forest-900'
+                  ? 'text-nook-secondaey text-center font-semibold'
+                  : 'text-[rgba(211,211,211,0.5)] '
               }
             >
               {menu.name}

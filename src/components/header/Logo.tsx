@@ -13,7 +13,6 @@ const Logo = () => {
       className="flex justify-center items-center space-x-2 h-10 cursor-pointer"
       onClick={() => gotoHome()}
     >
-      <img src={Union} alt="logoImg" className="h-full object-contain" />
       <img src={Nook} alt="logoNook" className="h-full object-contain" />
     </div>
   );

@@ -23,7 +23,7 @@
 > 1. **개인 작업은 꼭 feature 브랜치에서 하기**
 > 2. **모든 작업 시작 전 develop에서 pull을 받은 후, feature 브랜치에서 작업 시작**
 > 3. **개인 작업 마치면 feature 브랜치로 pull request를 통해 develop에 merge하기**
-> 4. **프로젝트 완료 후 main으로 merge (팀장이 한번에 진행 예정)** > <br>
+> 4. **프로젝트 완료 후 main으로 merge (팀장이 한번에 진행 예정)** <br>
 
 ### 📝 Feature branch
 
@@ -33,7 +33,15 @@
 >
 > 2. **Feature branch -> develop branch로 merge하기 전 PR에서 reviewers 설정하여 팀장포함 2명 이상에게 approve 받기**
 >
-> 3. **PR 후 팀원들에게 공지하기** > <br>
+> 3. **PR 후 팀원들에게 공지하기** <br>
+
+### 📝 git command
+
+> 1. **develop 브랜치 이동 -> git pull**
+> 2. **feature 브랜치 생성 후 이동**
+> 3. **작업 완료 후, git add, git commit**
+> 4. **git push origin feature/woojo230-login#1(ex)**
+> 5. **PR 후 팀원들에게 공지하기** <br>
 
 ### 🎯 Commit Convention
 
