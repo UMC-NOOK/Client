@@ -1,13 +1,14 @@
 @theme {
   --color-nook-primary: #00352c;
   --color-nook-secondaey: #79bfc9;
-  --color-nook-action: #a2f9a7;
+  --color-nook-action-red: #f1494b;
+  --color-nook-action-yellow: #ffcf5c;
 
   /* 어두운 초록색 계열 */
-  --color-nook-forest-100: #ffffff;
-  --color-nook-forest-200: #b7bcba;
-  --color-nook-forest-400: #838b87;
-  --color-nook-forest-600: #49544f;
-  --color-nook-forest-700: #192620;
-  --color-nook-forest-900: #011009;
+  --color-nook-100: #ffffff;
+  --color-nook-200: #b8afa5;
+  --color-nook-300: #797776;
+  --color-nook-400: #5e5953;
+  --color-nook-500: #2d2b29;
+  --color-nook-600: #1f1c19;
 }

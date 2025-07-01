@@ -4,8 +4,8 @@ import Header from '../components/header/Header';
 const RootLayout = () => {
   return (
     <div>
-      <Header />
-      <div className="h-screen bg-[linear-gradient(to_bottom,rgba(12,14,9,1),rgba(0,53,44,1))]">
+      <div className="h-screen bg-[linear-gradient(to_bottom,rgba(0,0,0,1),rgba(35,23,9,1))]">
+        <Header />
         <Outlet />
       </div>
     </div>

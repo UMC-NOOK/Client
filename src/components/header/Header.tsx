@@ -9,7 +9,7 @@ const Header = () => {
   const isLogin = useSignInStore((state) => state.isLogin);
 
   return (
-    <header className="h-28 flex items-center justify-between bg-[rgba(7,12,6,1)] shadow-[0_4px_10px_0_rgba(73,73,73,0.04)] px-28">
+    <header className="h-28 flex items-center justify-evenly bg-[rgba(0,0,0,0.1)]">
       <Logo />
       <Navbar />
       {isLogin ? <UserInfo /> : <SignInBtn />}
