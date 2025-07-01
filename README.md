@@ -40,7 +40,7 @@
 > 1. **develop 브랜치 이동 -> git pull**
 > 2. **feature 브랜치 생성 후 이동**
 > 3. **작업 완료 후, git add, git commit**
-> 4. **git push origin develop**
+> 4. **git push origin feature/woojo230-login#1(ex)**
 > 5. **PR 후 팀원들에게 공지하기** <br>
 
 ### 🎯 Commit Convention
