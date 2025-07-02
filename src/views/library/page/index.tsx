@@ -28,6 +28,7 @@ const Library = () => {
             userName={userName}
             onChangeGrid={handleChangeGrid}
             onChangeVertical={handleChangeVertical}
+            activeView={view}
           />
           {view === 'grid' ? <GridView /> : <VerticalView />}
         </div>
