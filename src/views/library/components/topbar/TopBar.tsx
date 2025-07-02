@@ -9,7 +9,13 @@ interface TopBarProps {
 const TopBar = ({ userName }: TopBarProps) => {
   return (
     <div className="w-full h-[68px] bg-nook-600 text-nook-100 flex justify-between items-center px-[40px] rounded-[8px]">
-      <div className="text-lg font-normal">프로 독자 {userName} 님의 서재</div>
+      <div className="text-lg font-normal">
+        프로 독자{' '}
+        <span className="text-nook-secondaey text-lg font-normal">
+          {userName}
+        </span>{' '}
+        님의 서재
+      </div>
       <div className="flex gap-2">
         <button className="w-12 h-12 object-contain">
           <img src={gridButton} alt="그리드버튼" />
