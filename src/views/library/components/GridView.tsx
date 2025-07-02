@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../styles/calendar-override.css';
-import SaveList from './grid-save-list/SaveList';
-import SaveListView from './grid-save-list/SaveListView';
+import SaveList from './gridview-items/SaveList';
+import SaveListView from './gridview-items/SaveListView';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -23,7 +23,7 @@ const GridView = () => {
     <div className="w-full h-[1100px] flex gap-6">
       {istoggle ? (
         <div className="w-full h-full overflow-y-auto">
-          <SaveListView />
+          <SaveListView onClick={handleClick} />
         </div>
       ) : (
         <>

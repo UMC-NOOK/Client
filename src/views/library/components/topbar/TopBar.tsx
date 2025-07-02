@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import gridButton from '../../../../assets/button/library/Frame 25.png';
 import hamburger from '../../../../assets/button/library/Frame 26.png';
 
 interface TopBarProps {
   userName: string;
+  onChangeGrid: () => void;
+  onChangeVertical: () => void;
 }
 
-const TopBar = ({ userName }: TopBarProps) => {
+const TopBar = ({ userName, onChangeGrid, onChangeVertical }: TopBarProps) => {
   return (
     <div className="w-full h-[68px] bg-nook-600 text-nook-100 flex justify-between items-center px-[40px] rounded-[8px]">
       <div className="text-lg font-normal">
@@ -17,10 +19,10 @@ const TopBar = ({ userName }: TopBarProps) => {
         님의 서재
       </div>
       <div className="flex gap-2">
-        <button className="w-12 h-12 object-contain">
+        <button className="w-12 h-12 object-contain" onClick={onChangeGrid}>
           <img src={gridButton} alt="그리드버튼" />
         </button>
-        <button className="w-12 h-12 object-contain">
+        <button className="w-12 h-12 object-contain" onClick={onChangeVertical}>
           <img src={hamburger} alt="햄버거버튼" />
         </button>
       </div>

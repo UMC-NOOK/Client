@@ -9,11 +9,26 @@ type UserNameProps = string;
 const Library = () => {
   const [view, setView] = useState<LibraryView>('grid');
   const [userName, setUserName] = useState<UserNameProps>('경민');
+
+  const handleChangeGrid = () => {
+    setView((prev) => (prev = 'grid'));
+  };
+
+  const handleChangeVertical = () => {
+    setView((prev) => (prev = 'vertical'));
+  };
+
+  console.log(view);
+
   return (
     <>
       <div className="flex justify-center h-full">
         <div className="flex flex-col w-[1060px] justify-center items-center mt-5 mb-40 gap-10">
-          <TopBar userName={userName} />
+          <TopBar
+            userName={userName}
+            onChangeGrid={handleChangeGrid}
+            onChangeVertical={handleChangeVertical}
+          />
           {view === 'grid' ? <GridView /> : <VerticalView />}
         </div>
       </div>

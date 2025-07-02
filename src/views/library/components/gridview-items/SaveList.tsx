@@ -15,7 +15,7 @@ const SaveList = ({ onClick }: SaveListProps) => {
   return (
     <div>
       <div
-        className="flex items-baseline gap-2 cursor-pointer group border-b-transparent hover:border-nook-300 hover:border-b-2"
+        className="flex items-baseline gap-2 cursor-pointer group border-b-transparent hover:border-nook-300"
         onClick={onClick}
       >
         <span className="text-2xl text-nook-100 group-hover:text-nook-300">

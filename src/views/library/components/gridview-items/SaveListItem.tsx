@@ -19,7 +19,7 @@ const SaveListItem = ({
     >
       <div className="flex flex-col justify-start items-start gap-3 mt-8">
         <div
-          className="h-[188px] w-[130px] bg-cover bg-center bg-no-repeat"
+          className="h-[188px] w-[130px] bg-cover bg-center bg-no-repeat rounded-[6px]"
           style={{ backgroundImage: `url(${img})` }}
         />
         <div className="flex flex-col items-start gap-3 pb-6">
