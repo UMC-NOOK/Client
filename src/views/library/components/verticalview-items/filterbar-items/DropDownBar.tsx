@@ -7,6 +7,10 @@ const DropDownBar = () => {
   const [selectMenu, setSelectMenu] = useState<string>('최근 등록순');
   const menu = ['제목순', '최근 등록순', '최근 기록순', '내가 준 별점순'];
 
+  const handleClick = (item: string) => {
+    setSelectMenu(item);
+  };
+
   return (
     <div
       className="flex gap-4 cursor-pointer relative items-center"
@@ -45,7 +49,7 @@ const DropDownBar = () => {
                 'border-b border-[rgba(85,83,81,0.7)]': index < menu.length - 1, // 마지막 항목을 제외하고 하단 보더 추가
               }
             )}
-            onClick={() => setSelectMenu(item)}
+            onClick={() => handleClick(item)}
           >
             {item}
           </li>
