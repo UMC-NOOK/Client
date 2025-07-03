@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import leftButton from '../../../../assets/button/library/chevron-left.png';
+import DropDownBar from './filterbar-items/DropDownBar';
 
 const FilterBar = () => {
   const [selectedTab, setSelectedTab] = useState('독서중');
@@ -27,16 +27,8 @@ const FilterBar = () => {
           </p>
         ))}
       </div>
-      <div className="flex gap-4">
-        <p className="text-md text-nook-100">최근등록순</p>
-        <button className="w-10 h-10 flex items-center justify-center translate-y-[2px]">
-          <img
-            src={leftButton}
-            alt="왼쪽버튼"
-            className="w-full h-full object-contain rotate-90"
-          />
-        </button>
-      </div>
+
+      <DropDownBar />
     </div>
   );
 };
