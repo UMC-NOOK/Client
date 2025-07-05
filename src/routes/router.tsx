@@ -1,5 +1,4 @@
 import { createBrowserRouter } from 'react-router-dom';
-
 import Main from '../views/home/page';
 import Lounge from '../views/lounge/page';
 import Library from '../views/library/page';
@@ -8,6 +7,7 @@ import NotFoundPage from '../views/404';
 import MyPage from '../views/mypage/page';
 import RootLayout from '../layouts/root-layout';
 import AuthRouter from './authRouter';
+import SearchResultPage from '../views/lounge/page/search/SearchResultPage';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +17,9 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        element: <Main />, 
+      },
+      {
         path: 'home',
         element: <Main />,
       },
@@ -32,6 +35,10 @@ const router = createBrowserRouter([
           {
             path: 'book-info',
             element: <Lounge />,
+          },
+          {
+            path: 'search-result', 
+            element: <SearchResultPage />,
           },
         ],
       },
