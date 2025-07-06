@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import DropDownBar from './filterbar-items/DropDownBar';
 
 const FilterBar = () => {
@@ -11,8 +11,8 @@ const FilterBar = () => {
   };
 
   return (
-    <div className="flex justify-between border-b-1 border-[rgba(85,83,81,0.7)] pb-7 px-5 mb-3">
-      <div className="flex justify-between w-[212px]">
+    <div className="flex justify-between border-b-1 border-[rgba(85,83,81,0.7)] pb-8 px-5 mb-0">
+      <div className="flex justify-between w-[21.2rem]">
         {tabs.map((tab) => (
           <p
             key={tab}

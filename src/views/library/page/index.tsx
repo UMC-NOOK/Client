@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import GridView from '../components/GridView';
 import VerticalView from '../components/VerticalView';
 import TopBar from '../components/topbar/TopBar';
@@ -22,7 +22,7 @@ const Library = () => {
 
   return (
     <>
-      <div className="flex justify-center h-full">
+      <div className="flex justify-center h-full mt-9">
         <div className="flex flex-col w-[1060px] justify-center items-center mt-5 mb-40 gap-10">
           <TopBar
             userName={userName}

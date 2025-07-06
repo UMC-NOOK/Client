@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
@@ -21,7 +20,7 @@ const Navbar = () => {
               ${
                 location.pathname === menu.path
                   ? 'text-nook-secondaey text-center font-semibold border-b-2 border-nook-secondaey'
-                  : 'text-[rgba(211,211,211,0.5)] '
+                  : 'text-[rgba(211,211,211,0.5)] font-normal text-[1.6rem]'
               }`}
           >
             <NavLink
@@ -29,7 +28,7 @@ const Navbar = () => {
               className={({ isActive }) =>
                 isActive
                   ? 'text-nook-secondaey text-center font-semibold'
-                  : 'text-[rgba(211,211,211,0.5)] '
+                  : 'text-[rgba(211,211,211,0.5)] font-normal text-[1.6rem]'
               }
             >
               {menu.name}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import FilterBar from './verticalview-items/FilterBar';
 import tempBookData from '../../../mock/library/bookData';
 import BookItem from './verticalview-items/BookItem';
