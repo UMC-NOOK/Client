@@ -32,7 +32,7 @@ const DropDownBar = () => {
       </button>
       <ul
         className={clsx(
-          'absolute top-full left-0 mt-2 w-[13.2rem] h-[18.1rem] bg-nook-600 rounded-md shadow-lg z-10',
+          'absolute top-full left-0 mt-2 w-[13.2rem] h-[18.1rem] bg-nook-600 rounded-[8px] shadow-lg z-10',
           {
             hidden: !isOpen,
             block: isOpen,
@@ -44,7 +44,7 @@ const DropDownBar = () => {
             key={index}
             className={clsx(
               'text-nook-100 px-4 py-6 text-sm cursor-pointer',
-              'hover:bg-nook-500',
+              'hover:bg-nook-500 rou',
               {
                 'border-b border-[rgba(85,83,81,0.7)]': index < menu.length - 1,
               }

@@ -25,18 +25,22 @@ const TopBar = ({
       </div>
       <div className="flex gap-2">
         <button
-          className={`w-14 h-14 object-contain rounded-md p-1 ${
-            activeView === 'grid' ? 'bg-nook-400' : 'bg-transparent'
+          className={`w-14 h-14 object-contain rounded-md  ${
+            activeView === 'grid'
+              ? 'bg-[rgba(66,60,53,1)]'
+              : 'bg-[rgba(66,60,53,0.5)]'
           }`}
-          onClick={onChangeGrid} // 부모로부터 받은 함수를 직접 연결
+          onClick={onChangeGrid}
         >
           <img src={gridButton} alt="그리드버튼" />
         </button>
         <button
-          className={`w-14 h-14 object-contain rounded-md p-1 ${
-            activeView === 'vertical' ? 'bg-nook-400' : 'bg-transparent'
+          className={`w-14 h-14 object-contain rounded-md  ${
+            activeView === 'vertical'
+              ? 'bg-[rgba(66,60,53,1)]'
+              : 'bg-[rgba(66,60,53,0.5)]'
           }`}
-          onClick={onChangeVertical} // 부모로부터 받은 함수를 직접 연결
+          onClick={onChangeVertical}
         >
           <img src={hamburger} alt="햄버거버튼" />
         </button>
