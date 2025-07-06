@@ -10,6 +10,7 @@ interface BookItemProps {
   publisher: string;
   publication_date: string;
   star: number;
+  openModal: () => void;
 }
 
 const BookItem = ({
@@ -19,7 +20,10 @@ const BookItem = ({
   publisher,
   publication_date,
   star,
+  openModal,
 }: BookItemProps) => {
+  const year = publication_date.split('-')[0];
+
   return (
     <div className="flex h-[210px] py-8 border-b-1 border-[rgba(85,83,81,0.7)]">
       <div className="flex items-center mr-6">
@@ -34,9 +38,10 @@ const BookItem = ({
           <div className="space-y-3">
             <p className="text-md font-normal text-nook-100">{bookName}</p>
             <p className="text-sm text-nook-100">{author}</p>
-            <p className="text-sm text-nook-100">
+            <p className="text-sm text-nook-100 flex items-center">
               {publisher}
-              {publication_date}
+              <div className="w-1 h-1 bg-nook-100 rounded-full mx-2 inline-block" />
+              {year}
             </p>
           </div>
           <div className="space-y-1">
@@ -46,22 +51,25 @@ const BookItem = ({
         </div>
 
         <div className="flex flex-col justify-end items-center gap-3">
-          <button className="w-[120px] h-[40px] text-red-500 border-2 border-red-500 rounded-xl hover:bg-nook-600">
+          <button
+            className="w-[120px] h-[40px] text-red-500 border-2 border-red-500 rounded-xl hover:bg-nook-600"
+            onClick={openModal}
+          >
             <div className="flex justify-center items-center gap-3">
               <FaRegTrashAlt size={18} />
-              <span className="text-sm pt-2">삭제</span>
+              <span className="text-sm pt-1">삭제</span>
             </div>
           </button>
           <button className="w-[120px] h-[40px]  text-nook-100 border-2 border-[rgba(85,83,81,1)] rounded-xl hover:bg-nook-600">
             <div className="flex justify-center items-center gap-3">
               <FaRegFileAlt size={20} />
-              <span className="text-sm pt-2">책정보</span>
+              <span className="text-sm pt-1">책정보</span>
             </div>
           </button>
           <button className="w-[120px] h-[40px] bg-nook-500 text-white rounded-xl hover:bg-nook-600">
             <div className="flex justify-center items-center gap-3">
               <FiDownload size={20} />
-              <span className="text-sm pt-2">내기록</span>
+              <span className="text-sm pt-1">내기록</span>
             </div>
           </button>
         </div>
