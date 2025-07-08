@@ -1,10 +1,7 @@
-import { FaRegTrashAlt } from 'react-icons/fa';
-import { FaRegFileAlt } from 'react-icons/fa';
-import { FiDownload } from 'react-icons/fi';
-import StarMaker from './bookitem-items/StarMaker';
-import DeleteBtn from './bookitem-items/DeleteBtn';
-import InfoBtn from './bookitem-items/InfoBtn';
-import RecordBtn from './bookitem-items/RecordBtn';
+import StarMaker from '../../views/library/components/verticalview-items/bookitem-items/StarMaker';
+import DeleteBtn from '../../views/library/components/verticalview-items/bookitem-items/DeleteBtn';
+import InfoBtn from '../../views/library/components/verticalview-items/bookitem-items/InfoBtn';
+import RecordBtn from '../../views/library/components/verticalview-items/bookitem-items/RecordBtn';
 
 interface BookItemProps {
   img: string;
