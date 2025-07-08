@@ -3,22 +3,12 @@ import React, { useState } from 'react';
 
 const Search = () =>{
     const [isFocused, setIsFocused] = useState(false);
-    // const [onClick, setOnClick] = useState(false);
-    // const [isSmall, setIsSmall] = useState(false);
-    //const wrapperRef = useRef(null);
+    const [keyword, setKeyword] = useState('');
 
-    // useEffect(() => {
-    //     const handleResize = () => {
-    //         setIsSmall(window.innerWidth < 768);
-    //     };
-
-    //     handleResize(); // 초기 상태 설정
-    //     window.addEventListener('resize', handleResize);
-
-    //     return () => {
-    //         window.removeEventListener('resize', handleResize);
-    //     };
-    // }, []);
+    const handleBlur = () => {
+        setKeyword('');
+        setIsFocused(false);
+    }
 
     return(
         <div className='flex rounded-[42px] bg-[#1F1C19] items-center w-[340px] h-[36px]'>
@@ -34,8 +24,10 @@ const Search = () =>{
                     placeholder={isFocused ? 
                     '' : '제목, 저자, ISBN으로 검색'
                     }
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
                     onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)} 
+                    onBlur={handleBlur} 
                 />
             </span>
         </div>
