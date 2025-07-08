@@ -1,28 +1,29 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from "react-router-dom";
 
-import Main from '../views/home/page';
-import Lounge from '../views/lounge/page';
-import Library from '../views/library/page';
-import ReadingRoom from '../views/reading-room/page';
-import NotFoundPage from '../views/404';
-import MyPage from '../views/mypage/page';
-import RootLayout from '../layouts/root-layout';
-import AuthRouter from './authRouter';
+import Main from "../views/home/page";
+import Lounge from "../views/lounge/page";
+import BookInfoPage from "../views/lounge/page/book-info";
+import Library from "../views/library/page";
+import ReadingRoom from "../views/reading-room/page";
+import NotFoundPage from "../views/404";
+import MyPage from "../views/mypage/page";
+import RootLayout from "../layouts/root-layout";
+import AuthRouter from "./authRouter";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <RootLayout />,
     errorElement: <NotFoundPage />,
     children: [
       {
         index: true,
-        path: 'home',
+        path: "home",
         element: <Main />,
       },
 
       {
-        path: 'lounge',
+        path: "lounge",
         errorElement: <NotFoundPage />,
         children: [
           {
@@ -30,14 +31,14 @@ const router = createBrowserRouter([
             element: <Lounge />,
           },
           {
-            path: 'book-info',
-            element: <Lounge />,
+            path: "book-info",
+            element: <BookInfoPage />,
           },
         ],
       },
 
       {
-        path: 'library',
+        path: "library",
         errorElement: <NotFoundPage />,
         children: [
           {
@@ -48,7 +49,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: 'reading-room',
+        path: "reading-room",
         errorElement: <NotFoundPage />,
         children: [
           {
@@ -59,7 +60,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: 'mypage',
+        path: "mypage",
         errorElement: <NotFoundPage />,
         children: [
           {
