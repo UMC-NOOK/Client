@@ -1,0 +1,166 @@
+/* 전체 캘린더 컨테이너 */
+.react-calendar {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  color: #ffffff;
+  border: none;
+  font-family: 'Pretendard', sans-serif;
+  padding: 10px;
+}
+
+.react-calendar__navigation {
+  background: transparent;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+
+.react-calendar__navigation button {
+  background: none;
+  color: #fff;
+  min-width: 40px;
+  font-size: 28px;
+  font-weight: bold;
+  border: none;
+  margin: 0 6px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.react-calendar__navigation__label {
+  font-size: 28px;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 2px;
+}
+
+.react-calendar__navigation button:disabled {
+  color: #555;
+  opacity: 0.4;
+}
+
+/* 요일 라벨 (Sun, Mon, ...) */
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: #bbb;
+  background: transparent;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+  color: #bbb;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+
+.react-calendar__tile {
+  width: 100px;
+  height: 170px;
+  padding: 12px 6px 6px 6px;
+  margin: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #fff;
+  display: flex;
+  font-size: 12px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  position: relative;
+  overflow: visible;
+}
+
+/* 모든 날짜 셀에 border 적용 */
+.react-calendar__month-view__days__day {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* 비어있는 날짜 셀에도 border 적용 */
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #444;
+  background: none;
+  opacity: 0.25;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.react-calendar__tile--now {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid #fbbf24;
+}
+
+/* .react-calendar__tile--active {
+  background: #fbbf24;
+  color: #18120a;
+  border: 1.5px solid #fbbf24;
+} */
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background: rgba(251, 191, 36, 0.25);
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #444;
+  background: none;
+  opacity: 0.25;
+}
+
+.calendar-book-cover {
+  width: 100%;
+  max-width: 90px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* 날짜 숫자 스타일 */
+.react-calendar__tile > .react-calendar__tile-content {
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+/* 벽 */
+
+/* .react-calendar__tile:hover {
+  transform: scale(1.02);
+}
+
+
+.react-calendar__tile abbr {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.8);
+  z-index: 2;
+}
+
+
+.react-calendar__tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 1;
+} */
