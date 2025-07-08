@@ -8,7 +8,7 @@ interface SaveListProps {
 }
 
 const SaveList = ({ onClick }: SaveListProps) => {
-  const [bookData, setBookData] = useState(tempBookData);
+  const [bookData] = useState(tempBookData);
 
   const displayData = bookData.slice(0, 3);
 
