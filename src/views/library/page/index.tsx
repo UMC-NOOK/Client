@@ -22,7 +22,7 @@ const Library = () => {
 
   return (
     <>
-      <div className="flex justify-center h-full mt-9">
+      <div className="flex justify-center min-h-full mt-9">
         <div className="flex flex-col w-[106rem] justify-center items-center mt-5 mb-40 gap-10">
           <TopBar
             userName={userName}

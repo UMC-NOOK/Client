@@ -18,7 +18,7 @@ const GridView = () => {
   };
 
   return (
-    <div className="w-full h-[1400px] flex">
+    <div className="w-full flex">
       {istoggle ? (
         <div className="w-full h-full overflow-y-auto">
           <SaveListView onClick={handleClick} />
@@ -51,6 +51,11 @@ const GridView = () => {
                   'SAT',
                 ];
                 return weekdays[date.getDay()];
+              }}
+              formatMonthYear={(locale, date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                return `${year} . ${month}`;
               }}
             />
           </div>
