@@ -104,11 +104,11 @@
   border: 1.5px solid #fbbf24;
 }
 
-.react-calendar__tile--active {
+/* .react-calendar__tile--active {
   background: #fbbf24;
   color: #18120a;
   border: 1.5px solid #fbbf24;
-}
+} */
 
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {

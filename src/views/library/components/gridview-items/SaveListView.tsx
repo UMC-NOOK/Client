@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import SaveList from './SaveList';
+import { useState } from 'react';
 import SaveListItem from './SaveListItem';
 import tempBookData from '../../../../mock/library/bookData';
 import leftButton from '../../../../assets/button/library/chevron-left.png';
@@ -14,7 +13,7 @@ const SaveListView = ({ onClick }: SaveListProps) => {
   return (
     <div>
       <div
-        className="flex items-baseline gap-2 cursor-pointer group border-b-transparent hover:border-nook-300 mb-4"
+        className="flex items-baseline gap-9 cursor-pointer group border-b-transparent hover:border-nook-300 mb-9"
         onClick={onClick}
       >
         <button className="w-10 h-10 flex items-center justify-center translate-y-[2px]">
@@ -24,7 +23,7 @@ const SaveListView = ({ onClick }: SaveListProps) => {
             className="w-full h-full object-contain rotate-180"
           />
         </button>
-        <span className="text-2xl text-nook-100 group-hover:text-nook-300">
+        <span className="text-[2rem] text-nook-100 group-hover:text-nook-300">
           찜
         </span>
       </div>

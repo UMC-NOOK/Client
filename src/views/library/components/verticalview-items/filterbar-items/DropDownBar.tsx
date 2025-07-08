@@ -16,7 +16,7 @@ const DropDownBar = () => {
       className="flex gap-4 cursor-pointer relative items-center"
       onClick={() => setIsOpen((prev) => !prev)}
     >
-      <p className="text-md text-nook-100">{selectMenu}</p>
+      <p className="text-sm font-normal text-nook-100">{selectMenu}</p>
       <button className="w-6 h-6 flex items-center justify-center">
         <img
           src={leftButton}
@@ -32,7 +32,7 @@ const DropDownBar = () => {
       </button>
       <ul
         className={clsx(
-          'absolute top-full left-0 mt-2 w-[130px] h-auto bg-nook-600 rounded-md shadow-lg z-10',
+          'absolute top-full left-0 mt-2 w-[13.2rem] h-[18.1rem] bg-nook-600 rounded-[8px] shadow-lg z-10',
           {
             hidden: !isOpen,
             block: isOpen,
@@ -43,10 +43,10 @@ const DropDownBar = () => {
           <li
             key={index}
             className={clsx(
-              'text-nook-100 px-4 py-6 text-sm cursor-pointer', // px-4는 좌우 패딩, py-2는 상하 패딩, text-sm은 글자 크기
-              'hover:bg-nook-500', // 호버 시 배경색 변경 (Tailwind config에 nook-500 정의 필요)
+              'text-nook-100 px-4 py-6 text-sm cursor-pointer',
+              'hover:bg-nook-500 rou',
               {
-                'border-b border-[rgba(85,83,81,0.7)]': index < menu.length - 1, // 마지막 항목을 제외하고 하단 보더 추가
+                'border-b border-[rgba(85,83,81,0.7)]': index < menu.length - 1,
               }
             )}
             onClick={() => handleClick(item)}
