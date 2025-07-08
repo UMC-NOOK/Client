@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import leftButton from '../../../../../assets/button/library/chevron-left.png';
 import clsx from 'clsx';
 
@@ -32,7 +32,7 @@ const DropDownBar = () => {
       </button>
       <ul
         className={clsx(
-          'absolute top-full left-0 mt-2 w-[13.2rem] h-[18.1rem] bg-nook-600 rounded-[8px] shadow-lg z-10',
+          'absolute top-full -right-5 mt-4 w-[13.2rem] h-[18.1rem] bg-nook-600 rounded-[8px] shadow-lg z-10 overflow-hidden',
           {
             hidden: !isOpen,
             block: isOpen,
@@ -43,10 +43,12 @@ const DropDownBar = () => {
           <li
             key={index}
             className={clsx(
-              'text-nook-100 px-4 py-6 text-sm cursor-pointer',
-              'hover:bg-nook-500 rou',
+              'text-nook-100 px-4 py-6 text-sm cursor-pointer hover:bg-nook-500 relative',
               {
-                'border-b border-[rgba(85,83,81,0.7)]': index < menu.length - 1,
+                'hover:rounded-t-[8px]': index === 0,
+                'hover:rounded-b-[8px]': index === menu.length - 1,
+                'after:content-[""] after:absolute after:bottom-0 after:left-4 after:right-4 after:h-px after:bg-[rgba(85,83,81,0.7)]':
+                  index < menu.length - 1,
               }
             )}
             onClick={() => handleClick(item)}

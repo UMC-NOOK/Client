@@ -25,7 +25,13 @@ const VerticalView = () => {
       <FilterBar />
       <div className="flex flex-col">
         {bookData.map((data, idx) => (
-          <BookItem key={idx} {...data} openModal={modalHandler} />
+          <BookItem
+            key={idx}
+            {...data}
+            openModal={modalHandler}
+            visible_deleteBtn={true}
+            visible_star={true}
+          />
         ))}
       </div>
     </div>

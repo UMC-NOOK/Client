@@ -2,6 +2,9 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { FaRegFileAlt } from 'react-icons/fa';
 import { FiDownload } from 'react-icons/fi';
 import StarMaker from './bookitem-items/StarMaker';
+import DeleteBtn from './bookitem-items/DeleteBtn';
+import InfoBtn from './bookitem-items/InfoBtn';
+import RecordBtn from './bookitem-items/RecordBtn';
 
 interface BookItemProps {
   img: string;
@@ -10,8 +13,15 @@ interface BookItemProps {
   publisher: string;
   publication_date: string;
   star: number;
-  openModal: () => void;
+  openModal?: () => void;
 }
+
+interface VisibleOptionProps {
+  visible_star: boolean;
+  visible_deleteBtn: boolean;
+}
+
+type BookItemAllProps = BookItemProps & VisibleOptionProps;
 
 const BookItem = ({
   img,
@@ -20,8 +30,10 @@ const BookItem = ({
   publisher,
   publication_date,
   star,
+  visible_star,
+  visible_deleteBtn,
   openModal,
-}: BookItemProps) => {
+}: BookItemAllProps) => {
   const year = publication_date.split('-')[0];
 
   return (
@@ -40,37 +52,32 @@ const BookItem = ({
             <p className="text-sm font-normal text-nook-100">{author}</p>
             <p className="text-sm font-normal text-nook-100 flex items-center">
               {publisher}
-              <div className="w-1 h-1 bg-nook-100 rounded-full mx-2 inline-block" />
+              <span className="w-1 h-1 bg-nook-100 rounded-full mx-2" />
               {year}
             </p>
           </div>
-          <div className="space-y-1">
-            <p className="text-xs font-normal text-nook-100 mb-3">내별점</p>
-            <StarMaker star={star} />
-          </div>
+          {visible_star && (
+            <div className="space-y-1">
+              <p className="text-xs font-normal text-nook-100 mb-3">내별점</p>
+              <StarMaker star={star} />
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col justify-end items-center gap-3">
-          <button
-            className="w-[12.1rem] h-20 text-red-500 border-1 border-red-500 rounded-[8px] hover:bg-nook-600"
-            onClick={openModal}
-          >
-            <div className="flex justify-center items-center gap-3">
-              <FaRegTrashAlt size={18} />
-              <span className="text-[1.6rem] font-normal pt-0.1">삭제</span>
-            </div>
-          </button>
+          {visible_deleteBtn && (
+            <button
+              className="w-[12.1rem] h-20 text-red-500 border-1 border-red-500 rounded-[8px] hover:bg-nook-600"
+              onClick={openModal}
+            >
+              <DeleteBtn />
+            </button>
+          )}
           <button className="w-[12.1rem] h-20  text-nook-100 border-1 border-[rgba(85,83,81,1)] rounded-[8px] hover:bg-nook-600">
-            <div className="flex justify-center items-center gap-3">
-              <FaRegFileAlt size={18} />
-              <span className="text-[1.6rem] font-normal pt-0.1">책정보</span>
-            </div>
+            <InfoBtn />
           </button>
           <button className="w-[12.1rem] h-20 bg-nook-500 text-white rounded-[8px] hover:bg-nook-600">
-            <div className="flex justify-center items-center gap-3">
-              <FiDownload size={18} />
-              <span className="text-[1.6rem] font-normal pt-0.1">내 기록</span>
-            </div>
+            <RecordBtn />
           </button>
         </div>
       </div>
