@@ -1,16 +1,34 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSearchStore } from './useSearchStore';
 import SearchDropdown from './SearchDropdown';
 import searchIcon from '../../assets/button/search/search.png';
 
-export default function SearchBar() {
-  const { addRecentSearch, setSearchTerm } = useSearchStore();
+interface SearchBarProps {
+  wrapperClassName?: string;
+  customWidth?: string;
+}
+
+export default function SearchBar({
+  wrapperClassName = '',
+  customWidth = '470px',
+}: SearchBarProps) {
+  const {
+    addRecentSearch,
+    setSearchTerm,
+    searchTerm, // ✅ 가져오기
+  } = useSearchStore();
+
   const [input, setInput] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [isComposing, setIsComposing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  // ✅ 전역 상태로부터 초기값 동기화
+  useEffect(() => {
+    setInput(searchTerm);
+  }, [searchTerm]);
 
   const handleSearch = (term: string) => {
     const trimmed = term.trim();
@@ -19,8 +37,8 @@ export default function SearchBar() {
     setSearchTerm(trimmed);
     addRecentSearch(trimmed);
     navigate(`/lounge/search-result?query=${encodeURIComponent(trimmed)}`);
-    setInput('');
     setShowDropdown(false);
+    // ❌ setInput(''); 제거 → 그래야 검색어가 input에 남아 있음
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -30,10 +48,12 @@ export default function SearchBar() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center pt-5 px-4">
-      <div className="relative w-full max-w-[470px]">
-        <div className="flex items-center gap-[10px] w-[470px] h-[47px] px-[12px] py-[7px]
-          rounded-full border border-[rgba(211,211,211,0.3)] bg-[#1F1C19]">
+    <div className={`flex flex-col items-center justify-center ${wrapperClassName}`}>
+      <div className="relative" style={{ width: customWidth }}>
+        <div
+          className="flex items-center gap-[10px] h-[47px] px-[12px] py-[7px]
+          rounded-full border border-[rgba(211,211,211,0.3)] bg-[#1F1C19] w-full"
+        >
           <img
             src={searchIcon}
             alt="검색 아이콘"
