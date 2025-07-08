@@ -4,8 +4,8 @@ import Search from '../../../components/lounge/Search';
 
 const Lounge = () => {
   return (
-    <div className='flex justify-center bg-black mt-29'>
-      <div className='flex justify-evenly items-center space-x-200'>
+    <div className='flex justify-center bg-black mt-25'>
+      <div className='flex w-full justify-evenly items-center'>
         <Tap/>
         <Search/>
       </div>
