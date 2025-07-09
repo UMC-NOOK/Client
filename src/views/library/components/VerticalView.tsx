@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import FilterBar from './verticalview-items/FilterBar';
 import tempBookData from '../../../mock/library/bookData';
-import BookItem from '../../../components/book-list/BookItem';
-import DeleteBtn from '../../../components/delete-button/DeleteBtn';
+import BookItem from './verticalview-items/book-list/BookItem';
+import DeleteBtn from '../../../components/delete-modal/DeleteModal';
 
 const VerticalView = () => {
   const [bookData, setBookData] = useState(tempBookData);
@@ -17,6 +17,8 @@ const VerticalView = () => {
     setIsModalOpen((prev) => !prev);
   };
 
+  console.log(isModalOpen);
+
   return (
     <div className="w-full">
       {isModalOpen && (
@@ -29,8 +31,8 @@ const VerticalView = () => {
             key={idx}
             {...data}
             openModal={modalHandler}
-            visible_deleteBtn={true}
-            visible_star={true}
+            useOnLibrary={true}
+            useOnSearch={false}
           />
         ))}
       </div>

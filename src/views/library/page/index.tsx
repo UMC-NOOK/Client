@@ -18,7 +18,7 @@ const Library = () => {
     setView((prev) => (prev = 'vertical'));
   };
 
-  console.log(view);
+  // console.log(view);
 
   return (
     <>
