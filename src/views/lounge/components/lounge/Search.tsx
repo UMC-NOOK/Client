@@ -18,9 +18,14 @@ const Search = () =>{
                 </svg>
             </span>
             
-            <span className='my-2'>
-                <input className='text-[#B8AFA5] text-opacity-50 
-                    font-pretendard text-sm' 
+            <span>
+                <input className='
+                    placeholder:text-base
+                    placeholder:text-[#B8AFA5]
+                    placeholder:text-opacity-50
+                    placeholder:font-pretendard
+                    placeholder:text-xs
+                    ' 
                     placeholder={isFocused ? 
                     '' : '제목, 저자, ISBN으로 검색'
                     }
