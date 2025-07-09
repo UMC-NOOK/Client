@@ -19,9 +19,7 @@ const Search = () =>{
             
             <span>
                 <input className='
-                    placeholder:text-base
-                    placeholder:text-[#B8AFA5]
-                    placeholder:text-opacity-50
+                    placeholder:text-[rgba(184, 175, 165, 0.5)]
                     placeholder:font-pretendard
                     placeholder:text-xs
                     ' 

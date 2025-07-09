@@ -8,7 +8,7 @@ type UserNameProps = string;
 
 const Library = () => {
   const [view, setView] = useState<LibraryView>('grid');
-  const [userName, setUserName] = useState<UserNameProps>('경민');
+  const [userName] = useState<UserNameProps>('경민');
 
   const handleChangeGrid = () => {
     setView((prev) => (prev = 'grid'));

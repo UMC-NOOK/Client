@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Tap from '../../components/lounge/TapFilter';
 import Search from '../../components/lounge/Search';
-import RecommendView from '../../components/lounge/RecommendView';
 import CategorySectionView from '../../components/lounge/CategorySectionView';
 
 const Lounge = () => {

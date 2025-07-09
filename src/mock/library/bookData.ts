@@ -2,6 +2,7 @@ const tempBookData = [
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
+    category: '국내도서',
     author: '누키',
     publisher: '곰출판',
     publication_date: '2021-05-23',
@@ -10,6 +11,7 @@ const tempBookData = [
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
+    category: '국내도서',
     author: '누키',
     publisher: '곰출판',
     publication_date: '2021-05-23',
@@ -18,6 +20,7 @@ const tempBookData = [
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
+    category: '국내도서',
     author: '누키',
     publisher: '곰출판',
     publication_date: '2021-05-23',
@@ -26,6 +29,7 @@ const tempBookData = [
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
+    category: '국내도서',
     author: '누키',
     publisher: '곰출판',
     publication_date: '2021-05-23',
@@ -34,6 +38,7 @@ const tempBookData = [
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
+    category: '국내도서',
     author: '누키',
     publisher: '곰출판',
     publication_date: '2021-05-23',
@@ -42,6 +47,7 @@ const tempBookData = [
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
+    category: '국내도서',
     author: '누키',
     publisher: '곰출판',
     publication_date: '2021-05-23',
@@ -50,6 +56,7 @@ const tempBookData = [
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
+    category: '국내도서',
     author: '누키',
     publisher: '곰출판',
     publication_date: '2021-05-23',
@@ -58,6 +65,7 @@ const tempBookData = [
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
+    category: '국내도서',
     author: '누키',
     publisher: '곰출판',
     publication_date: '2021-05-23',
