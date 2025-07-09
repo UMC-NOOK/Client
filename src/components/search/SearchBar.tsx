@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSearchStore } from './useSearchStore';
+import { useSearchStore } from '../../store/search/useSearchStore';
 import SearchDropdown from './SearchDropdown';
 import searchIcon from '../../assets/button/search/search.png';
 

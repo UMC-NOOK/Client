@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import BookRow from '../common/BookRow';
 import tempBookData from '../../mock/library/bookData';
 import NookiIcon from '../../assets/button/search/none_book.png';
-import { useSearchStore } from './useSearchStore';
+import { useSearchStore } from '../../store/search/useSearchStore';
 
 interface Props {
   viewType?: 'default' | 'compact';

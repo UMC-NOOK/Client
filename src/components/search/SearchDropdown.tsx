@@ -1,4 +1,4 @@
-import { useSearchStore } from './useSearchStore';
+import { useSearchStore } from '../../store/search/useSearchStore';
 
 interface Props {
   onSelect: (val: string) => void;
