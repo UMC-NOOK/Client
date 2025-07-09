@@ -1,3 +1,5 @@
+@import '../../../styles/font.css';
+
 /* 전체 캘린더 컨테이너 */
 .react-calendar {
   width: 100%;
@@ -5,40 +7,72 @@
   background-color: transparent;
   color: #ffffff;
   /* border: 1px solid #333; */
-  font-family: 'Pretendard', sans-serif;
+  font-family: 'Pretendard' !important;
   padding: 0;
   margin: 0;
 }
 
 /* 네비게이션 헤더 */
 .react-calendar__navigation {
+  font-family: 'Pretendard' !important;
   background: transparent;
-  margin-bottom: 20px;
+  margin-bottom: 0.3rem;
   display: flex;
   justify-content: center;
   align-items: center;
   border: none;
-  /* border-bottom: 1px solid #333; */
-  padding: 5px 0;
+  pointer-events: none !important;
 }
 
 .react-calendar__navigation button {
-  background: none;
-  color: #fff;
-  min-width: 40px;
-  font-size: 20px;
-  font-weight: normal;
-  border: none;
-  margin: 0 15px;
-  cursor: pointer;
-  transition: color 0.2s;
+  font-family: 'Pretendard' !important;
 }
 
-.react-calendar__navigation__label {
-  font-size: 20px;
-  font-weight: 600;
+.react-calendar__navigation__label__labelText {
+  font-family: 'Pretendard' !important;
+  background: none;
   color: #fff;
-  letter-spacing: 1px;
+  font-size: 3rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.react-calendar__navigation__prev-button {
+  background: url('../../../assets/button/library/chevron-left.png') no-repeat
+    center !important;
+  background-size: contain !important;
+  color: transparent !important;
+  position: relative;
+  top: 0.2rem;
+  left: 30.625rem;
+  background: none;
+  color: #fff;
+  font-size: 8rem;
+  font-weight: 300;
+  border: none;
+  cursor: pointer;
+  transform: rotate(180deg);
+  height: 3rem !important;
+  pointer-events: auto;
+}
+
+.react-calendar__navigation__next-button {
+  background: url('../../../assets/button/library/chevron-left.png') no-repeat
+    center !important;
+  background-size: contain !important;
+  color: transparent !important;
+  position: relative;
+  top: 0.2rem;
+  right: 30.625rem;
+  background: none;
+  color: #fff;
+  font-size: 8rem;
+  font-weight: 300;
+  border: none;
+  cursor: pointer;
+  height: 3rem !important;
+  pointer-events: auto;
 }
 
 .react-calendar__navigation button:disabled {
@@ -46,21 +80,21 @@
   opacity: 0.4;
 }
 
-/* 요일 라벨 (SUN, MON, ...) */
+/* 요일 라벨  */
 .react-calendar__month-view__weekdays {
   display: flex;
   background: transparent;
   border: none;
-  border-bottom: 3px solid #333;
-  margin-bottom: 0;
+  border-bottom: 1.3px solid rgba(85, 83, 81, 1);
+  margin-bottom: 1rem;
   padding: 0;
 }
 
 .react-calendar__month-view__weekdays__weekday {
   flex: 1;
   text-align: center;
-  padding: 15px 0;
-  font-size: 12px;
+  padding: 1.5rem 0;
+  font-size: 1.2rem;
   font-weight: 400;
   color: #888;
   background: transparent;
@@ -74,9 +108,19 @@
 .react-calendar__month-view__weekdays__weekday abbr {
   text-decoration: none;
   color: #888;
-  font-size: 12px;
+  font-size: 1.6rem;
   font-weight: 400;
   letter-spacing: 0.5px;
+}
+
+/* 첫 번째 줄 셀들의 상단 테두리 제거 */
+.react-calendar__month-view__days > .react-calendar__tile {
+  border-top: none !important;
+  border-left: none !important;
+}
+
+.react-calendar__month-view__days > .react-calendar__tile:nth-child(7n) {
+  border-right: none !important;
 }
 
 /* 날짜 셀들 */
@@ -84,22 +128,25 @@
   display: grid !important;
   grid-template-columns: repeat(7, 1fr);
   gap: 0;
-  border: 1px solid #333 !important;
-  min-height: 800px; /* 최소 높이 보장 */
+  border: 1.3px solid rgba(85, 83, 81, 0.5) !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  min-height: 80rem;
 }
 
 .react-calendar__tile {
   width: 100%;
-  height: 170px;
-  padding: 8px;
+  height: 17rem;
+  padding: 2rem;
   margin: 0;
-  border: 1px solid #333 !important;
-  /* border-top: none;
-  border-left: none; */
+  border-left: 1.3px solid rgba(85, 83, 81, 0.5) !important;
+  border-right: 1.3px solid rgba(85, 83, 81, 0.5) !important;
+  border-top: none !important;
+  border-bottom: none !important;
   color: #fff;
   background: transparent;
   display: flex;
-  font-size: 12px;
+  font-size: 1.2rem;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
@@ -108,36 +155,61 @@
   overflow: hidden;
 }
 
+/* 커스텀 border-bottom 추가 */
+.react-calendar__tile::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 5%;
+  width: 90%;
+  height: 1px;
+  background-color: rgba(85, 83, 81, 0.5);
+}
+
 /* 빈 셀 스타일 (해당 달에 속하지 않는 날짜) */
 .react-calendar__month-view__days__day--neighboringMonth {
-  /* visibility: hidden; */
-  background: #000;
-  border: 1px solid #333 !important;
-  border-top: none;
-  border-left: none;
+  width: 100%;
+  height: 17rem;
+  padding: 0.8rem;
+  margin: 0;
+  border-left: 1.3px solid rgba(85, 83, 81, 0.5) !important;
+  border-right: 1.3px solid rgba(85, 83, 81, 0.5) !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  color: #fff;
+  background: transparent;
+  display: flex;
+  font-size: 1.2rem;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
 }
 
 /* 날짜 숫자 스타일 */
 .react-calendar__tile abbr {
-  font-size: 11px;
+  font-size: 1.1rem;
   font-weight: 400;
   color: #ccc;
   text-decoration: none;
   position: absolute;
-  top: 8px;
-  left: 8px;
+  top: 0.8rem;
+  left: 0.8rem;
   z-index: 0;
 }
 
 /* 이전/다음 달 날짜 */
-.react-calendar__month-view__days__day--neighboringMonth {
-  color: #444;
-  background: #000;
-  opacity: 0.3;
-}
-
 .react-calendar__month-view__days__day--neighboringMonth abbr {
-  color: #444;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: transparent;
+  text-decoration: none;
+  position: absolute;
+  top: 0.8rem;
+  left: 0.8rem;
+  z-index: 0;
 }
 
 /* 오늘 날짜 */
@@ -165,16 +237,16 @@
 }
 
 /* 책 커버 이미지 */
-.calendar-book-cover {
+/* .calendar-book-cover {
   width: 100%;
-  max-width: 80px;
-  height: 100px;
+  max-width: 8rem;
+  height: 10rem;
   object-fit: cover;
   border-radius: 4px;
-  margin-top: 20px;
+  margin-top: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
-}
+} */
 
 /* 전체 레이아웃 정리 */
 .react-calendar,

@@ -25,7 +25,7 @@ const TileContent = ({ date, view }: TileContentProps) => {
 
     if (booksOnThisDate && booksOnThisDate.length > 0) {
       return (
-        <div className="absolute inset-3 flex justify-center items-center overflow-hidden">
+        <div className="absolute inset-3 flex justify-center items-center py-2 px-1 overflow-hidden">
           <img
             src={booksOnThisDate[0].img}
             alt={booksOnThisDate[0].bookName}
@@ -36,12 +36,12 @@ const TileContent = ({ date, view }: TileContentProps) => {
               borderRadius: '5px',
             }}
           />
-          {booksOnThisDate.length > 1 && (
+          {/* {booksOnThisDate.length > 1 && (
             <span
               style={{
                 position: 'absolute',
-                top: '3px',
-                right: '3px',
+                top: '7px',
+                right: '7px',
                 backgroundColor: 'rgba(0, 0, 0, 0.6)',
                 color: 'white',
                 fontSize: '0.7em',
@@ -52,7 +52,7 @@ const TileContent = ({ date, view }: TileContentProps) => {
             >
               +{booksOnThisDate.length - 1}
             </span>
-          )}
+          )} */}
         </div>
       );
     }

@@ -5,7 +5,7 @@ interface TopBarProps {
   userName: string;
   onChangeGrid: () => void;
   onChangeVertical: () => void;
-  activeView: 'grid' | 'vertical'; // 현재 활성화된 뷰를 나타내는 prop 추가
+  activeView: 'grid' | 'vertical';
 }
 
 const TopBar = ({
@@ -26,9 +26,7 @@ const TopBar = ({
       <div className="flex gap-2">
         <button
           className={`w-14 h-14 object-contain rounded-md  ${
-            activeView === 'grid'
-              ? 'bg-[rgba(66,60,53,1)]'
-              : 'bg-[rgba(66,60,53,0.5)]'
+            activeView === 'grid' ? 'bg-[rgba(66,60,53,1)]' : 'bg-transparent'
           }`}
           onClick={onChangeGrid}
         >
@@ -38,7 +36,7 @@ const TopBar = ({
           className={`w-14 h-14 object-contain rounded-md  ${
             activeView === 'vertical'
               ? 'bg-[rgba(66,60,53,1)]'
-              : 'bg-[rgba(66,60,53,0.5)]'
+              : 'bg-transparent'
           }`}
           onClick={onChangeVertical}
         >

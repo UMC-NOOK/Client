@@ -1,8 +1,9 @@
-import { useState } from 'react';
 import DropDownBar from './filterbar-items/DropDownBar';
+import { useTabStore } from '../../../../store/library/useTabStore';
 
 const FilterBar = () => {
-  const [selectedTab, setSelectedTab] = useState('독서중');
+  const selectedTab = useTabStore((state) => state.selectedTab);
+  const setSelectedTab = useTabStore((state) => state.setSelectedTab);
 
   const tabs = ['독서중', '완독', '찜'];
 

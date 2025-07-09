@@ -18,12 +18,12 @@ const Library = () => {
     setView((prev) => (prev = 'vertical'));
   };
 
-  console.log(view);
+  // console.log(view);
 
   return (
     <>
-      <div className="flex justify-center h-full mt-9">
-        <div className="flex flex-col w-[1060px] justify-center items-center mt-5 mb-40 gap-10">
+      <div className="flex justify-center min-h-full mt-9">
+        <div className="flex flex-col w-[106rem] justify-center items-center mt-5 mb-40 gap-10">
           <TopBar
             userName={userName}
             onChangeGrid={handleChangeGrid}

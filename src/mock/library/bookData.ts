@@ -5,7 +5,7 @@ const tempBookData = [
     category: '국내도서',
     author: '누키',
     publisher: '곰출판',
-    publication_date: '2021-05-23',
+    publication_date: '2025-05-2',
     star: 4,
   },
   {
@@ -14,7 +14,7 @@ const tempBookData = [
     category: '국내도서',
     author: '누키',
     publisher: '곰출판',
-    publication_date: '2021-05-23',
+    publication_date: '2025-05-04',
     star: 4,
   },
   {
@@ -23,7 +23,7 @@ const tempBookData = [
     category: '국내도서',
     author: '누키',
     publisher: '곰출판',
-    publication_date: '2021-05-23',
+    publication_date: '2025-05-09',
     star: 4,
   },
   {
@@ -32,7 +32,7 @@ const tempBookData = [
     category: '국내도서',
     author: '누키',
     publisher: '곰출판',
-    publication_date: '2021-05-23',
+    publication_date: '2025-05-11',
     star: 4,
   },
   {
@@ -41,7 +41,7 @@ const tempBookData = [
     category: '국내도서',
     author: '누키',
     publisher: '곰출판',
-    publication_date: '2021-05-23',
+    publication_date: '2025-05-16',
     star: 4,
   },
   {
@@ -50,7 +50,7 @@ const tempBookData = [
     category: '국내도서',
     author: '누키',
     publisher: '곰출판',
-    publication_date: '2021-05-23',
+    publication_date: '2025-05-21',
     star: 4,
   },
   {
@@ -59,7 +59,7 @@ const tempBookData = [
     category: '국내도서',
     author: '누키',
     publisher: '곰출판',
-    publication_date: '2021-05-23',
+    publication_date: '2025-05-22',
     star: 4,
   },
   {
@@ -68,7 +68,7 @@ const tempBookData = [
     category: '국내도서',
     author: '누키',
     publisher: '곰출판',
-    publication_date: '2021-05-23',
+    publication_date: '2025-05-23',
     star: 4,
   },
 ];
