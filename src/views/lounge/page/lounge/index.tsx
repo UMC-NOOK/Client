@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Tap from '../../components/lounge/TapFilter';
 import Search from '../../components/lounge/Search';
-import BookListSection from '../../components/lounge/BookListSection';
-import RecommendLayout from '../../components/lounge/Recommend';
+import RecommendView from '../../components/lounge/RecommendView';
+import CategorySectionView from '../../components/lounge/CategorySectionView';
 
 const Lounge = () => {
   const [selectedCategory, setSelectedCategory] = useState('추천');
@@ -22,9 +22,9 @@ const Lounge = () => {
           <Tap selected={selectedCategory} onSelect={setSelectedCategory}/>
           <Search/>
         </div>
-        <div className='flex w-full justify-center items-center mt-10 '>
-          <div className='flex justify-evenly items-center border-t border-[#555351] border-opacity-70'>
-            <RecommendLayout/>
+        <div className='flex w-full justify-center items-center mb-10 '>
+          <div className='flex justify-evenly items-center'>
+            <CategorySectionView selectedCategory={selectedCategory} />
           </div>
         </div>
       </div>
