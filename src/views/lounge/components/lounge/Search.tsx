@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-
 const Search = () =>{
     const [isFocused, setIsFocused] = useState(false);
     const [keyword, setKeyword] = useState('');
