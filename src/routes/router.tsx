@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Main from '../views/home/page';
-import Lounge from '../views/lounge/page';
+import Lounge from '../views/lounge/page/lounge';
 import Library from '../views/library/page';
 import ReadingRoom from '../views/reading-room/page';
 import NotFoundPage from '../views/404';
