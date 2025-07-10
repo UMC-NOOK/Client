@@ -8,28 +8,58 @@ import Comment from "../../components/book-info/comment";
 import BestBook from "../../components/book-info/bestBook";
 import download_icon from "/src/assets/button/book-info/download.svg";
 import Pagination from "react-js-pagination";
+import DeleteBtn from "../../../../components/delete-modal/DeleteModal";
 
 const BookInfoPage = () => {
-  const commentList = [
-    <Comment key={1} />,
-    <Comment key={2} />,
-    <Comment key={3} />,
-    <Comment key={4} />,
-    <Comment key={5} />,
-    <Comment key={6} />,
-    <Comment key={7} />,
-    <Comment key={8} />,
-    <Comment key={9} />,
-    <Comment key={10} />,
-    <Comment key={11} />,
-    <Comment key={12} />,
-  ];
-
   // 리뷰 작성 관련 상태
   const [reviewText, setReviewText] = useState("");
   const [reviewTextLength, setReviewTextLength] = useState(0);
   const [rating, setRating] = useState(0);
   const [isReviewExist, setIsReviewExist] = useState(true);
+  const [isUserReviewExist, setIsUserReviewExist] = useState(false);
+  const [isUserEditReview, setIsUserEditReview] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDelete = () => {
+    //삭제로직 추가
+    setIsUserEditReview(false);
+    setIsUserReviewExist(false);
+    setReviewText("");
+    setReviewTextLength(0);
+    setRating(0);
+    setIsModalOpen(false);
+  };
+
+  const modalHandler = () => {
+    setIsModalOpen((prev) => !prev);
+  };
+
+  const commentList = [
+    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={1} />,
+    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={2} />,
+    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={3} />,
+    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={4} />,
+    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={5} />,
+    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={6} />,
+    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={7} />,
+    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={8} />,
+    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={9} />,
+    <Comment
+      isOwn={false}
+      setIsUserEditReview={setIsUserEditReview}
+      key={10}
+    />,
+    <Comment
+      isOwn={false}
+      setIsUserEditReview={setIsUserEditReview}
+      key={11}
+    />,
+    <Comment
+      isOwn={false}
+      setIsUserEditReview={setIsUserEditReview}
+      key={12}
+    />,
+  ];
 
   // Pagination 관련
   const [currentPost, setCurrentPost] = useState(1);
@@ -52,6 +82,9 @@ const BookInfoPage = () => {
 
   return (
     <div className="mt-11 w-full h-full">
+      {isModalOpen && (
+        <DeleteBtn onDelete={handleDelete} closeModal={modalHandler} />
+      )}
       {/* 상위 컴포넌트 */}
       <div className="flex flex-col items-center justify-start h-screen mr-150 ml-150 overflow-y-auto">
         {/* 상단바 */}
@@ -139,78 +172,169 @@ const BookInfoPage = () => {
         {/* 리뷰작성,리뷰 컴포넌트 */}
         <div className="w-full flex flex-col items-center justify-center gap-12  ">
           {/* 리뷰 작성 */}
-          <div className="flex flex-col items-start justify-center gap-12 w-full">
-            {/* 별점 */}
-            <div className="flex flex-col self-start items-start justify-center gap-6 mt-12 w-full">
-              <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
-                이 작품을 평가해 주세요!
-              </span>
-              <div className="flex items-center justify-start gap-6">
-                <img
-                  src={rating === 0 ? empty_star : filled_star}
-                  alt="Star"
-                  className="w-15 h-15"
-                  onClick={() => handleStarClick(0)}
-                />
-                <img
-                  src={rating <= 1 ? empty_star : filled_star}
-                  alt="Star"
-                  className="w-15 h-15"
-                  onClick={() => handleStarClick(1)}
-                />
-                <img
-                  src={rating <= 2 ? empty_star : filled_star}
-                  alt="Star"
-                  className="w-15 h-15"
-                  onClick={() => handleStarClick(2)}
-                />
-                <img
-                  src={rating <= 3 ? empty_star : filled_star}
-                  alt="Star"
-                  className="w-15 h-15"
-                  onClick={() => handleStarClick(3)}
-                />
-                <img
-                  src={rating <= 4 ? empty_star : filled_star}
-                  alt="Star"
-                  className="w-15 h-15"
-                  onClick={() => handleStarClick(4)}
-                />
-              </div>
-            </div>
-            {/* 리뷰 작성 폼 */}
-            <div className="flex flex-col items-start justify-center gap-6 w-full">
-              <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
-                리뷰
-              </span>
-              <div className="flex flex-col items-center justify-between box-border w-full h-[108px] pt-8 pb-4 pl-7 pr-9 text-white bg-[rgba(66,60,53,0.10)] rounded-lg resize-none focus:outline-none">
-                <textarea
-                  className="w-full resize-none text-white text-sm not-italic font-normal leading-[22px]   focus:outline-none placeholder:text-[rgba(255, 255, 255, 0.30)] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-[18px] placeholder:  "
-                  placeholder="책에 대한 리뷰를 남겨주세요. 과도한 비방 및 욕설, 책과 무관한 리뷰는 삭제될 수 있습니다."
-                  value={reviewText}
-                  onChange={(e) => {
-                    setReviewText(e.target.value);
-                    setReviewTextLength(e.target.value.length);
-                  }}
-                  maxLength={200}
-                />
-                <div className="flex items-end justify-end gap-5 w-full ">
-                  <span className="text-[rgba(255,255,255,0.20)] text-right text-[10px] not-italic font-normal leading-[18px]  ">
-                    ({reviewTextLength}/200)
+          {isUserReviewExist ? (
+            isUserEditReview ? (
+              <div className="flex flex-col items-start justify-center gap-12 w-full">
+                {/* 별점 */}
+                <div className="flex flex-col self-start items-start justify-center gap-6 mt-12 w-full">
+                  <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
+                    이 작품을 평가해 주세요!
                   </span>
-                  <button className="w-[103px] h-[34px] rounded-[5px] bg-nook-br-200 text-white text-sm not-italic font-bold leading-[29.518px] tracking-[0.56px]   flex items-center justify-center">
-                    리뷰 등록
-                  </button>
+                  <div className="flex items-center justify-start gap-6">
+                    <img
+                      src={rating === 0 ? empty_star : filled_star}
+                      alt="Star"
+                      className="w-15 h-15"
+                      onClick={() => handleStarClick(0)}
+                    />
+                    <img
+                      src={rating <= 1 ? empty_star : filled_star}
+                      alt="Star"
+                      className="w-15 h-15"
+                      onClick={() => handleStarClick(1)}
+                    />
+                    <img
+                      src={rating <= 2 ? empty_star : filled_star}
+                      alt="Star"
+                      className="w-15 h-15"
+                      onClick={() => handleStarClick(2)}
+                    />
+                    <img
+                      src={rating <= 3 ? empty_star : filled_star}
+                      alt="Star"
+                      className="w-15 h-15"
+                      onClick={() => handleStarClick(3)}
+                    />
+                    <img
+                      src={rating <= 4 ? empty_star : filled_star}
+                      alt="Star"
+                      className="w-15 h-15"
+                      onClick={() => handleStarClick(4)}
+                    />
+                  </div>
+                </div>
+                {/* 리뷰 작성 폼 */}
+                <div className="flex flex-col items-start justify-center gap-6 w-full">
+                  <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
+                    리뷰
+                  </span>
+                  <div className="flex flex-col items-center justify-between box-border w-full h-[108px] pt-8 pb-4 pl-7 pr-9 text-white bg-[rgba(66,60,53,0.10)] rounded-lg resize-none focus:outline-none">
+                    <textarea
+                      className="w-full resize-none text-white text-sm not-italic font-normal leading-[22px]   focus:outline-none placeholder:text-[rgba(255, 255, 255, 0.30)] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-[18px] placeholder:  "
+                      placeholder="책에 대한 리뷰를 남겨주세요. 과도한 비방 및 욕설, 책과 무관한 리뷰는 삭제될 수 있습니다."
+                      value={reviewText}
+                      onChange={(e) => {
+                        setReviewText(e.target.value);
+                        setReviewTextLength(e.target.value.length);
+                      }}
+                      maxLength={200}
+                    />
+                    <div className="flex items-end justify-end gap-5 w-full ">
+                      <span className="text-[rgba(255,255,255,0.20)] text-right text-[10px] not-italic font-normal leading-[18px]  ">
+                        ({reviewTextLength}/200)
+                      </span>
+                      <div className="flex items-center justify-center gap-4">
+                        <button
+                          className="w-[87px] h-[34px] rounded-sm bg-[#392121] text-[#E04F55] text-sm not-italic font-bold leading-[29.518px] tracking-[0.56px] flex items-center justify-center"
+                          onClick={() => {
+                            modalHandler();
+                          }}
+                        >
+                          삭제
+                        </button>
+                        <button
+                          className="w-[87px] h-[34px] rounded-sm bg-nook-br-200 text-white text-sm not-italic font-bold leading-[29.518px] tracking-[0.56px] flex items-center justify-center"
+                          onClick={() => {
+                            setIsUserEditReview(false);
+                          }}
+                        >
+                          저장
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Comment isOwn={true} setIsUserEditReview={setIsUserEditReview} />
+            )
+          ) : (
+            <div className="flex flex-col items-start justify-center gap-12 w-full">
+              {/* 별점 */}
+              <div className="flex flex-col self-start items-start justify-center gap-6 mt-12 w-full">
+                <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
+                  이 작품을 평가해 주세요!
+                </span>
+                <div className="flex items-center justify-start gap-6">
+                  <img
+                    src={rating === 0 ? empty_star : filled_star}
+                    alt="Star"
+                    className="w-15 h-15"
+                    onClick={() => handleStarClick(0)}
+                  />
+                  <img
+                    src={rating <= 1 ? empty_star : filled_star}
+                    alt="Star"
+                    className="w-15 h-15"
+                    onClick={() => handleStarClick(1)}
+                  />
+                  <img
+                    src={rating <= 2 ? empty_star : filled_star}
+                    alt="Star"
+                    className="w-15 h-15"
+                    onClick={() => handleStarClick(2)}
+                  />
+                  <img
+                    src={rating <= 3 ? empty_star : filled_star}
+                    alt="Star"
+                    className="w-15 h-15"
+                    onClick={() => handleStarClick(3)}
+                  />
+                  <img
+                    src={rating <= 4 ? empty_star : filled_star}
+                    alt="Star"
+                    className="w-15 h-15"
+                    onClick={() => handleStarClick(4)}
+                  />
+                </div>
+              </div>
+              {/* 리뷰 작성 폼 */}
+              <div className="flex flex-col items-start justify-center gap-6 w-full">
+                <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
+                  리뷰
+                </span>
+                <div className="flex flex-col items-center justify-between box-border w-full h-[108px] pt-8 pb-4 pl-7 pr-9 text-white bg-[rgba(66,60,53,0.10)] rounded-lg resize-none focus:outline-none">
+                  <textarea
+                    className="w-full resize-none text-white text-sm not-italic font-normal leading-[22px]   focus:outline-none placeholder:text-[rgba(255, 255, 255, 0.30)] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-[18px] placeholder:  "
+                    placeholder="책에 대한 리뷰를 남겨주세요. 과도한 비방 및 욕설, 책과 무관한 리뷰는 삭제될 수 있습니다."
+                    value={reviewText}
+                    onChange={(e) => {
+                      setReviewText(e.target.value);
+                      setReviewTextLength(e.target.value.length);
+                    }}
+                    maxLength={200}
+                  />
+                  <div className="flex items-end justify-end gap-5 w-full ">
+                    <span className="text-[rgba(255,255,255,0.20)] text-right text-[10px] not-italic font-normal leading-[18px]  ">
+                      ({reviewTextLength}/200)
+                    </span>
+                    <button
+                      className="w-[103px] h-[34px] rounded-sm bg-nook-br-200 text-white text-sm not-italic font-bold leading-[29.518px] tracking-[0.56px] flex items-center justify-center"
+                      onClick={() => {
+                        setIsUserReviewExist(true);
+                      }}
+                    >
+                      리뷰 등록
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
+
           {/* 리뷰 컴포넌트 */}
           {isReviewExist ? (
             <div className="flex flex-col items-start justify-center gap-12 w-full">
-              <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
-                리뷰
-              </span>
               <div className="flex flex-col items-start justify-center w-full">
                 {/* 댓글 리스트 */}
                 {page
