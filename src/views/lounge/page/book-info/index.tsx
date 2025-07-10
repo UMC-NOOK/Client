@@ -7,12 +7,39 @@ import error_outline_rounded from "/src/assets/button/book-info/error-outline-ro
 import Comment from "../../components/book-info/comment";
 import BestBook from "../../components/book-info/bestBook";
 import download_icon from "/src/assets/button/book-info/download.svg";
+import Pagination from "react-js-pagination";
 
 const BookInfoPage = () => {
+  const commentList = [
+    <Comment key={1} />,
+    <Comment key={2} />,
+    <Comment key={3} />,
+    <Comment key={4} />,
+    <Comment key={5} />,
+    <Comment key={6} />,
+    <Comment key={7} />,
+    <Comment key={8} />,
+    <Comment key={9} />,
+    <Comment key={10} />,
+    <Comment key={11} />,
+    <Comment key={12} />,
+  ];
+
   const [reviewText, setReviewText] = useState("");
   const [reviewTextLength, setReviewTextLength] = useState(0);
   const [rating, setRating] = useState(0);
   const [isReviewExist, setIsReviewExist] = useState(true);
+  {
+    /* Pagination 관련 */
+  }
+  const [currentPost, setCurrentPost] = useState(1);
+  const [page, setPage] = useState<JSX.Element[]>(commentList);
+  const postsPerPage = 5; // 페이지당 댓글 수
+  const indexOfLastPost = currentPost * postsPerPage; // 현재 페이지의 마지막 댓글 인덱스
+  const indexOfFirstPost = indexOfLastPost - postsPerPage; // 현재 페이지의 첫 댓글 인덱스
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPost(pageNumber);
+  };
 
   const handleStarClick = (index: number) => {
     if (rating === index + 1) {
@@ -180,10 +207,39 @@ const BookInfoPage = () => {
           </div>
           {/* 리뷰 컴포넌트 */}
           {isReviewExist ? (
-            <>
-              <Comment />
-              <Comment />
-            </>
+            <div className="flex flex-col items-start justify-center gap-12 w-full">
+              <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
+                리뷰
+              </span>
+              <div className="flex flex-col items-start justify-center w-full">
+                {/* 댓글 리스트 */}
+                {page
+                  .slice(indexOfFirstPost, indexOfLastPost)
+                  .map((comment, index) => (
+                    <div key={index} className="w-full">
+                      {comment}
+                    </div>
+                  ))}
+                {/* Pagination */}
+                <div className="flex items-center justify-center w-full mt-auto">
+                  <Pagination
+                    activePage={currentPost}
+                    itemsCountPerPage={postsPerPage}
+                    totalItemsCount={commentList.length}
+                    pageRangeDisplayed={5}
+                    onChange={handlePageChange}
+                    prevPageText=""
+                    nextPageText=""
+                    firstPageText=""
+                    lastPageText=""
+                    innerClass="flex justify-center items-center gap-10 mt-[13px]"
+                    itemClass="text-white text-center text-base not-italic font-normal leading-[normal] cursor-pointer"
+                    linkClass="hover:underline"
+                    activeClass="underline"
+                  />
+                </div>
+              </div>
+            </div>
           ) : (
             <div className="flex items-center justify-center gap-8 w-full h-[140px] rounded-sm bg-[rgba(66,60,53,0.10)]">
               <div className="w-9 h-9">
