@@ -25,18 +25,18 @@ const BookInfoPage = () => {
     <Comment key={12} />,
   ];
 
+  // 리뷰 작성 관련 상태
   const [reviewText, setReviewText] = useState("");
   const [reviewTextLength, setReviewTextLength] = useState(0);
   const [rating, setRating] = useState(0);
   const [isReviewExist, setIsReviewExist] = useState(true);
-  {
-    /* Pagination 관련 */
-  }
+
+  // Pagination 관련
   const [currentPost, setCurrentPost] = useState(1);
   const [page, setPage] = useState<JSX.Element[]>(commentList);
-  const postsPerPage = 5; // 페이지당 댓글 수
-  const indexOfLastPost = currentPost * postsPerPage; // 현재 페이지의 마지막 댓글 인덱스
-  const indexOfFirstPost = indexOfLastPost - postsPerPage; // 현재 페이지의 첫 댓글 인덱스
+  const postsPerPage = 5;
+  const indexOfLastPost = currentPost * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const handlePageChange = (pageNumber: number) => {
     setCurrentPost(pageNumber);
   };
@@ -233,9 +233,9 @@ const BookInfoPage = () => {
                     firstPageText=""
                     lastPageText=""
                     innerClass="flex justify-center items-center gap-10 mt-[13px]"
-                    itemClass="text-white text-center text-base not-italic font-normal leading-[normal] cursor-pointer"
-                    linkClass="hover:underline"
-                    activeClass="underline"
+                    itemClass="text-[rgba(255,255,255,0.50)] text-center text-base not-italic font-normal leading-[normal] cursor-pointer"
+                    linkClass="hover:text-white"
+                    activeClass="text-white"
                   />
                 </div>
               </div>
