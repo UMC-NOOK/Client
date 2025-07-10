@@ -1,14 +1,15 @@
-import { createBrowserRouter } from "react-router-dom";
 
-import Main from "../views/home/page";
-import Lounge from "../views/lounge/page";
+import { createBrowserRouter } from 'react-router-dom';
+import Main from '../views/home/page';
+import Lounge from '../views/lounge/page/lounge';
 import BookInfoPage from "../views/lounge/page/book-info";
-import Library from "../views/library/page";
-import ReadingRoom from "../views/reading-room/page";
-import NotFoundPage from "../views/404";
-import MyPage from "../views/mypage/page";
-import RootLayout from "../layouts/root-layout";
-import AuthRouter from "./authRouter";
+import Library from '../views/library/page';
+import ReadingRoom from '../views/reading-room/page';
+import NotFoundPage from '../views/404';
+import MyPage from '../views/mypage/page';
+import RootLayout from '../layouts/root-layout';
+import AuthRouter from './authRouter';
+import SearchResultPage from '../views/lounge/page/search/SearchResultPage';
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,10 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        path: "home",
+        element: <Main />, 
+      },
+      {
+        path: 'home',
         element: <Main />,
       },
 
@@ -33,6 +37,10 @@ const router = createBrowserRouter([
           {
             path: "book-info",
             element: <BookInfoPage />,
+          },
+          {
+            path: 'search-result', 
+            element: <SearchResultPage />,
           },
         ],
       },

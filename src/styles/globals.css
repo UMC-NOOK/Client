@@ -22,16 +22,16 @@ body {
   min-height: 100dvh;
   box-sizing: border-box;
   font-size: 62.5% !important;
-  /* font-family: 'Sorts Mill Goudy', 'Pretendard'; */
+  font-family: 'Pretendard' !important;
   font-family: var(--font-Sorts-Mill-Groudy), var(--font-pretendard);
 }
 
-img,
-video {
+img:not([class]),
+video:not([class]) {
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
+} 
 
 ol,
 li {
