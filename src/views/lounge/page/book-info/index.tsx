@@ -9,6 +9,7 @@ import BestBook from "../../components/book-info/bestBook";
 import download_icon from "/src/assets/button/book-info/download.svg";
 import Pagination from "react-js-pagination";
 import DeleteBtn from "../../../../components/delete-modal/DeleteModal";
+import LibraryRegistration from "../../components/book-info/libraryRegistration";
 
 const BookInfoPage = () => {
   // 리뷰 작성 관련 상태
@@ -18,7 +19,7 @@ const BookInfoPage = () => {
   const [isReviewExist, setIsReviewExist] = useState(true);
   const [isUserReviewExist, setIsUserReviewExist] = useState(false);
   const [isUserEditReview, setIsUserEditReview] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleDelete = () => {
     //삭제로직 추가
@@ -27,11 +28,20 @@ const BookInfoPage = () => {
     setReviewText("");
     setReviewTextLength(0);
     setRating(0);
-    setIsModalOpen(false);
+    setIsDeleteModalOpen(false);
   };
 
   const modalHandler = () => {
-    setIsModalOpen((prev) => !prev);
+    setIsDeleteModalOpen((prev) => !prev);
+  };
+
+  const handleStarClick = (index: number) => {
+    if (rating === index + 1) {
+      setRating(rating - 1); // 별점이 이미 선택된 경우, 선택 해제
+    } else {
+      setRating(index + 1); // 새로운 별점 선택
+    }
+    console.log(`Selected rating: ${index + 1}`);
   };
 
   const commentList = [
@@ -71,19 +81,28 @@ const BookInfoPage = () => {
     setCurrentPost(pageNumber);
   };
 
-  const handleStarClick = (index: number) => {
-    if (rating === index + 1) {
-      setRating(rating - 1); // 별점이 이미 선택된 경우, 선택 해제
-    } else {
-      setRating(index + 1); // 새로운 별점 선택
-    }
-    console.log(`Selected rating: ${index + 1}`);
+  // 서재 등록 관련
+  const [isLibraryModalOpen, setIsLibraryModalOpen] = useState(false);
+
+  const handleLibrary = () => {
+    //서재 등록 로직 추가
+    setIsLibraryModalOpen(false);
+  };
+
+  const libraryModalHandler = () => {
+    setIsLibraryModalOpen((prev) => !prev);
   };
 
   return (
     <div className="mt-11 w-full h-full">
-      {isModalOpen && (
+      {isDeleteModalOpen && (
         <DeleteBtn onDelete={handleDelete} closeModal={modalHandler} />
+      )}
+      {isLibraryModalOpen && (
+        <LibraryRegistration
+          onRegister={handleLibrary}
+          closeModal={libraryModalHandler}
+        />
       )}
       {/* 상위 컴포넌트 */}
       <div className="flex flex-col items-center justify-start h-screen mr-150 ml-150 overflow-y-auto">
@@ -160,11 +179,14 @@ const BookInfoPage = () => {
           </div>
         </div>
         {/* 서재 등록 버튼 */}
-        <div className="flex self-end items-center justify-center gap-5 mt-15 mb-24 rounded-sm mt-15 px-22 py-5 bg-nook-br-100">
+        <div className="flex self-end items-center justify-center gap-5 mt-15 mb-24 rounded-sm mt-15 px-22 py-5 bg-nook-br-100 cursor-pointer">
           <div className="w-[13px]">
             <img src={download_icon} alt="" />
           </div>
-          <div className="text-center text-white text-sm not-italic leading-[25px] ">
+          <div
+            className="text-center text-white text-sm not-italic leading-[25px]"
+            onClick={libraryModalHandler}
+          >
             서재에 등록
           </div>
         </div>
