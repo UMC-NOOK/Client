@@ -7,10 +7,10 @@ const BestBook = () => {
       <div className="w-70 h-102 rounded-lg">
         <img src={book_cover} alt="Best Book Cover" className="rounded-lg" />
       </div>
-      <span className="self-stretch justify-center text-white text-base font-semibold font-pretendard">
+      <span className="self-stretch justify-center text-white text-base font-semibold  ">
         혼모노
       </span>
-      <div className="flex items-center justify-start gap-3  justify-center text-white text-xs font-normal font-pretendard">
+      <div className="flex items-center justify-start gap-3  justify-center text-white text-xs font-normal  ">
         <span>성해나</span>
         <div className="w-[1px] h-[1px]">
           <img src={middle_point} alt="" />

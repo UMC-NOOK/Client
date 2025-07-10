@@ -10,10 +10,10 @@ const Comment = () => {
           <img src={userImg} alt="User" className="w-10 h-10 rounded-full" />
         </div>
         <div className="flex flex-col gap-1">
-          <span className="text-white text-sm not-italic font-semibold leading-[normal] leading-[normal] font-pretendard">
+          <span className="text-white text-sm not-italic font-semibold leading-[normal] leading-[normal]  ">
             승민
           </span>
-          <span className="text-white text-xs not-italic font-normal leading-[normal] font-pretendard">
+          <span className="text-white text-xs not-italic font-normal leading-[normal]  ">
             이 구역의 책벌레
           </span>
         </div>
@@ -36,11 +36,11 @@ const Comment = () => {
             <img src={emptyStar} alt="Empty Star" />
           </div>
         </div>
-        <span className="text-white text-xs font-normal font-pretendard leading-none">
+        <span className="text-white text-xs font-normal   leading-none">
           2025.04.23
         </span>
       </div>
-      <div className="w-full text-white text-sm font-normal leading-[normal] mt-10 font-pretendard">
+      <div className="w-full text-white text-sm font-normal leading-[normal] mt-10  ">
         일상과 비일 상의 경계를 넘나들며, 익숙한 감정을 낯설게 풀어낸 점이
         인상적입니다. 일상과 비일 상의 경계를 넘나들며, 익숙한 감정을 낯설게
         풀어낸 점이 인상적입니다. 일상과 비일 상의 경계를 넘나들며, 익숙한

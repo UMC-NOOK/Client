@@ -31,7 +31,7 @@ const BookInfoPage = () => {
           <div className="w-10 h-10 mr-6">
             <img src={chevron_left} alt="Lounge Top Bar" />
           </div>
-          <div className="text-white text-xl font-pretendard">라운지</div>
+          <div className="text-white text-xl  ">라운지</div>
         </div>
         {/* 책소개 컴포넌트 */}
         <div className="w-full flex items-center justify-between pr-20 pl-20 ">
@@ -40,7 +40,7 @@ const BookInfoPage = () => {
             <div className="w-118 h-173">
               <img src={book_cover} alt="Book Cover" className="rounded-lg" />
             </div>
-            <div className="w-full text-center text-white text-sm not-italic font-semibold leading-[25px] font-pretendard rounded-sm px-4 py-[7px] bg-nook-br-200">
+            <div className="w-full text-center text-white text-sm not-italic font-semibold leading-[25px]   rounded-sm px-4 py-[7px] bg-nook-br-200">
               서재에 등록
             </div>
           </div>
@@ -50,7 +50,7 @@ const BookInfoPage = () => {
               <div className="text-white text-[22px] not-italic font-semibold leading-[normal] text-pretendard">
                 칵테일, 러브, 좀비
               </div>
-              <div className="text-white text-sm not-italic font-normal leading-[22px] font-pretendard">
+              <div className="text-white text-sm not-italic font-normal leading-[22px]  ">
                 안전가옥 쇼-트 시리즈의 두 번째 책으로, 조예은 작가의
                 단편집이다. 안전가옥 오리지널 시리즈의 첫 책 뉴서울파크 젤리장수
                 대학살에서 탄탄한 구성의 호러 스릴러를 선보였던 작가의 연출력은
@@ -63,7 +63,7 @@ const BookInfoPage = () => {
               </div>
             </div>
             <hr className="w-full border-nook-hr" />
-            <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-sm text-white font-pretendard">
+            <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-sm text-white  ">
               {/* 왼쪽 열 */}
               <div className="flex gap-15">
                 <span className="font-semibold">저자</span>
@@ -100,7 +100,7 @@ const BookInfoPage = () => {
           <div className="flex flex-col items-start justify-center gap-12 w-full">
             {/* 별점 */}
             <div className="flex flex-col self-start items-start justify-center gap-6 mt-12 w-full">
-              <span className="text-white text-base not-italic font-semibold leading-[25px] font-pretendard">
+              <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
                 이 작품을 평가해 주세요!
               </span>
               <div className="flex items-center justify-start gap-6">
@@ -138,12 +138,12 @@ const BookInfoPage = () => {
             </div>
             {/* 리뷰 작성 폼 */}
             <div className="flex flex-col items-start justify-center gap-6 w-full">
-              <span className="text-white text-base not-italic font-semibold leading-[25px] font-pretendard">
+              <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
                 리뷰
               </span>
               <div className="flex flex-col items-center justify-between box-border w-full h-[108px] pt-8 pb-4 pl-7 pr-9 text-white bg-[rgba(66,60,53,0.10)] rounded-lg resize-none focus:outline-none">
                 <textarea
-                  className="w-full resize-none text-white text-sm not-italic font-normal leading-[22px] font-pretendard focus:outline-none placeholder:text-[rgba(255, 255, 255, 0.30)] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-[18px] placeholder:font-pretendard "
+                  className="w-full resize-none text-white text-sm not-italic font-normal leading-[22px]   focus:outline-none placeholder:text-[rgba(255, 255, 255, 0.30)] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-[18px] placeholder:  "
                   placeholder="책에 대한 리뷰를 남겨주세요. 과도한 비방 및 욕설, 책과 무관한 리뷰는 삭제될 수 있습니다."
                   value={reviewText}
                   onChange={(e) => {
@@ -153,10 +153,10 @@ const BookInfoPage = () => {
                   maxLength={200}
                 />
                 <div className="flex items-end justify-end gap-5 w-full ">
-                  <span className="text-[rgba(255,255,255,0.20)] text-right text-[10px] not-italic font-normal leading-[18px] font-pretendard">
+                  <span className="text-[rgba(255,255,255,0.20)] text-right text-[10px] not-italic font-normal leading-[18px]  ">
                     ({reviewTextLength}/200)
                   </span>
-                  <button className="w-[103px] h-[34px] rounded-[5px] bg-nook-br-200 text-white text-sm not-italic font-bold leading-[29.518px] tracking-[0.56px] font-pretendard flex items-center justify-center">
+                  <button className="w-[103px] h-[34px] rounded-[5px] bg-nook-br-200 text-white text-sm not-italic font-bold leading-[29.518px] tracking-[0.56px]   flex items-center justify-center">
                     리뷰 등록
                   </button>
                 </div>
@@ -174,7 +174,7 @@ const BookInfoPage = () => {
               <div className="w-9 h-9">
                 <img src={error_outline_rounded} alt="" />
               </div>
-              <span className="text-[rgba(255,255,255,0.50)] text-sm not-italic font-normal leading-[normal] font-pretendard">
+              <span className="text-[rgba(255,255,255,0.50)] text-sm not-italic font-normal leading-[normal]  ">
                 이 책의 첫 리뷰를 남겨주세요
               </span>
             </div>
@@ -182,7 +182,7 @@ const BookInfoPage = () => {
         </div>
         {/* 이 분야의 베스트 */}
         <div className="flex flex-col items-start justify-center gap-12 mt-27 w-full pr-20 pl-20">
-          <span className="text-white text-base not-italic font-semibold leading-[25px] font-pretendard">
+          <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
             | 이 분야의 베스트
           </span>
           <div className="flex items-start justify-center gap-[35px] w-full">
