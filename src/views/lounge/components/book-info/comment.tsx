@@ -1,13 +1,13 @@
-import userImg from "/src/assets/usrImg.svg";
-import fullStar from "/src/assets/fullStar.svg";
-import emptyStar from "/src/assets/emptyStar.svg";
+import userImg from "/src/assets/button/book-info/usrImg.svg";
+import fullStar from "/src/assets/button/book-info/fullStar.svg";
+import emptyStar from "/src/assets/button/book-info/emptyStar.svg";
 
 const Comment = () => {
   return (
     <div className="flex flex-col w-full">
       <div className="flex items-center gap-5">
         <div className="w-16 h-16">
-          <img src={userImg} alt="User" className="w-10 h-10 rounded-full" />
+          <img src={userImg} alt="User" />
         </div>
         <div className="flex flex-col gap-1">
           <span className="text-white text-sm not-italic font-semibold leading-[normal] leading-[normal]  ">

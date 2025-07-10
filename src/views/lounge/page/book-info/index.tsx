@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import chevron_left from "/src/assets/chevron-left.svg";
-import book_cover from "/src/assets/bookImgEx.png";
-import empty_star from "/src/assets/emptyStar.svg";
-import filled_star from "/src/assets/fullStar.svg";
-import error_outline_rounded from "/src/assets/error-outline-rounded.svg";
+import chevron_left from "/src/assets/button/book-info/chevron-left.svg";
+import book_cover from "/src/assets/button/book-info/bookImgEx.png";
+import empty_star from "/src/assets/button/book-info/emptyStar.svg";
+import filled_star from "/src/assets/button/book-info/fullStar.svg";
+import error_outline_rounded from "/src/assets/button/book-info/error-outline-rounded.svg";
 import Comment from "../../components/book-info/comment";
 import BestBook from "../../components/book-info/bestBook";
+import download_icon from "/src/assets/button/book-info/download.svg";
 
 const BookInfoPage = () => {
   const [reviewText, setReviewText] = useState("");
@@ -25,7 +26,7 @@ const BookInfoPage = () => {
   return (
     <div className="mt-11 w-full h-full">
       {/* 상위 컴포넌트 */}
-      <div className="flex flex-col items-center justify-start h-screen mr-120 ml-120 overflow-y-auto">
+      <div className="flex flex-col items-center justify-start h-screen mr-150 ml-150 overflow-y-auto">
         {/* 상단바 */}
         <div className="self-start flex items-center justify-center mb-25">
           <div className="w-10 h-10 mr-6">
@@ -34,68 +35,82 @@ const BookInfoPage = () => {
           <div className="text-white text-xl  ">라운지</div>
         </div>
         {/* 책소개 컴포넌트 */}
-        <div className="w-full flex items-center justify-between pr-20 pl-20 ">
-          {/* 책 이미지, 서재 추가 버튼 */}
-          <div className="flex flex-col items-center justify-center gap-5">
+        <div className="relative w-full">
+          <img
+            src={book_cover}
+            alt="배경 이미지"
+            className="absolute inset-0 w-full h-full object-cover z-0"
+          />
+
+          {/* 그라디언트 오버레이 */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black to-black/50" />
+
+          <div className="px-11 py-8 w-full relative flex items-center justify-between box-border">
+            {/* 책 이미지*/}
             <div className="w-118 h-173">
               <img src={book_cover} alt="Book Cover" className="rounded-lg" />
             </div>
-            <div className="w-full text-center text-white text-sm not-italic font-semibold leading-[25px]   rounded-sm px-4 py-[7px] bg-nook-br-200">
-              서재에 등록
-            </div>
-          </div>
-          {/* 책 정보 */}
-          <div className="w-246 flex flex-col items-start justify-start gap-20">
-            <div className="flex flex-col items-start justify-center gap-17">
-              <div className="text-white text-[22px] not-italic font-semibold leading-[normal] text-pretendard">
-                칵테일, 러브, 좀비
+            {/* 책 정보 */}
+            <div className="relative w-246 flex flex-col items-start justify-start gap-20">
+              <div className="flex flex-col items-start justify-center gap-17">
+                <div className="text-white text-[22px] not-italic font-semibold leading-[normal] text-pretendard">
+                  칵테일, 러브, 좀비
+                </div>
+                <div className="text-white text-sm not-italic font-normal leading-[22px]  ">
+                  1965년 미국에서 발표된 후, 오랜 시간 동안 독자들에게
+                  잊힌《스토너》는 영국, 프랑스, 독일, 네덜란드 등 유럽 출판계와
+                  평론가, 독자들의 열렬한 반응을 이끌어내며 베스트셀러가 되었다.
+                  미국과 유럽을 넘어 전 세계에 ‘늦고도 새로운 감동’을 전한
+                  베스트셀러. 《스토너》가 드디어 한국 독자들을 찾아왔다.
+                </div>
               </div>
-              <div className="text-white text-sm not-italic font-normal leading-[22px]  ">
-                안전가옥 쇼-트 시리즈의 두 번째 책으로, 조예은 작가의
-                단편집이다. 안전가옥 오리지널 시리즈의 첫 책 뉴서울파크 젤리장수
-                대학살에서 탄탄한 구성의 호러 스릴러를 선보였던 작가의 연출력은
-                단편집에서 더욱 다양한 색채로 빛을 발한다.미묘하지만 분명한
-                폭력을 감내해 왔던 여성 빌런의 탄생을 그린 '초대', 물귀신과
-                숲귀신 사이의 사랑스러운 이끌림을 담은 '습지의 사랑', 블랙
-                유머를 통해 가부장제의 이면을 들여다보는 오컬트 좀비물 '칵테일,
-                러브, 좀비', 제2회 황금가지 타임리프 공모전에서 우수상을 차지한
-                '오버랩 나이프, 나이프' 등 네 작품을 수록하였다.
-              </div>
-            </div>
-            <hr className="w-full border-nook-hr" />
-            <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-sm text-white  ">
-              {/* 왼쪽 열 */}
-              <div className="flex gap-15">
-                <span className="font-semibold">저자</span>
-                <span className="font-normal">조예은</span>
-              </div>
-              <div className="flex gap-15">
-                <span className="font-semibold">분야</span>
-                <span className="font-normal">국내도서 &gt; 소설/시/희곡</span>
-              </div>
+              <hr className="w-full border-nook-hr" />
+              <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-sm text-white  ">
+                {/* 왼쪽 열 */}
+                <div className="flex gap-15">
+                  <span className="font-semibold">저자</span>
+                  <span className="font-normal">조예은</span>
+                </div>
+                <div className="flex gap-15">
+                  <span className="font-semibold">분야</span>
+                  <span className="font-normal">
+                    국내도서 &gt; 소설/시/희곡
+                  </span>
+                </div>
 
-              <div className="flex gap-9">
-                <span className="font-semibold">출판사</span>
-                <span className="font-normal">안전가옥</span>
-              </div>
-              <div className="flex gap-15">
-                <span className="font-semibold">분량</span>
-                <span className="font-normal">162p</span>
-              </div>
+                <div className="flex gap-9">
+                  <span className="font-semibold">출판사</span>
+                  <span className="font-normal">안전가옥</span>
+                </div>
+                <div className="flex gap-15">
+                  <span className="font-semibold">분량</span>
+                  <span className="font-normal">162p</span>
+                </div>
 
-              <div className="flex gap-9">
-                <span className="font-semibold">출판일</span>
-                <span className="font-normal">2020.04.10</span>
-              </div>
-              <div className="flex gap-12">
-                <span className="font-semibold">ISBN</span>
-                <span className="font-normal">9791190174756</span>
+                <div className="flex gap-9">
+                  <span className="font-semibold">출판일</span>
+                  <span className="font-normal">2020.04.10</span>
+                </div>
+                <div className="flex gap-12">
+                  <span className="font-semibold">ISBN</span>
+                  <span className="font-normal">9791190174756</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        {/* 서재 등록 버튼 */}
+        <div className="flex self-end items-center justify-center gap-5 mt-15 mb-24 rounded-sm mt-15 px-22 py-5 bg-nook-br-100">
+          <div className="w-[13px]">
+            <img src={download_icon} alt="" />
+          </div>
+          <div className="text-center text-white text-sm not-italic leading-[25px] ">
+            서재에 등록
+          </div>
+        </div>
+
         {/* 리뷰작성,리뷰 컴포넌트 */}
-        <div className="w-full flex flex-col items-center justify-center gap-12 pr-20 pl-20">
+        <div className="w-full flex flex-col items-center justify-center gap-12  ">
           {/* 리뷰 작성 */}
           <div className="flex flex-col items-start justify-center gap-12 w-full">
             {/* 별점 */}
@@ -181,7 +196,7 @@ const BookInfoPage = () => {
           )}
         </div>
         {/* 이 분야의 베스트 */}
-        <div className="flex flex-col items-start justify-center gap-12 mt-27 w-full pr-20 pl-20">
+        <div className="flex flex-col items-start justify-center gap-12 mt-27 mb-27 w-full  ">
           <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
             | 이 분야의 베스트
           </span>

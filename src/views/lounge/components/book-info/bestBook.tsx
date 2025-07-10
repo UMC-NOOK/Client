@@ -1,9 +1,9 @@
-import book_cover from "/src/assets/bookImgEx.png";
-import middle_point from "/src/assets/middlePoint.svg";
+import book_cover from "/src/assets/button/book-info/bookImgEx.png";
+import middle_point from "/src/assets/button/book-info/middlePoint.svg";
 
 const BestBook = () => {
   return (
-    <div className="flex flex-col items-start justify-center gap-3 mt-27 w-full pr-20 pl-20">
+    <div className="flex flex-col items-start justify-center gap-3 w-full  ">
       <div className="w-70 h-102 rounded-lg">
         <img src={book_cover} alt="Best Book Cover" className="rounded-lg" />
       </div>
