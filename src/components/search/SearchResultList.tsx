@@ -19,38 +19,71 @@ export default function SearchResultList({ emptyMessage = '책을 찾을 수 없
     setCurrentPage(1); // 검색어 바뀌면 페이지 초기화
   }, [searchTerm]);
 
-  if (!searchTerm.trim()) return null;
+  const trimmedTerm = searchTerm.trim();
+
+  if (!trimmedTerm) {
+    return (
+      <div className="relative w-full bg-transparent mt-6">
+        <div
+          className="mx-auto"
+          style={{
+            width: '1040px',
+            borderTop: '1px solid rgba(85, 83, 81, 0.7)',
+            marginTop: '40px',
+            marginBottom: '20px',
+          }}
+        />
+        <div className="flex justify-center items-center gap-6 mt-10">
+          <img src={NookiIcon} alt="검색 결과 없음" className="w-[125.586px] h-[169px]" />
+          <p className="text-white text-base font-medium opacity-50">{emptyMessage}</p>
+        </div>
+      </div>
+    );
+  }
 
   const filteredResults = tempBookData.filter((book: any) =>
-    book.bookName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    book.author.toLowerCase().includes(searchTerm.toLowerCase())
+    book.bookName.toLowerCase().includes(trimmedTerm.toLowerCase()) ||
+    book.author.toLowerCase().includes(trimmedTerm.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredResults.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentResults = filteredResults.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  if (filteredResults.length === 0) {
+
+  if (!searchTerm.trim() || filteredResults.length === 0) {
+    const isInitial = !searchTerm.trim();
     return (
-      <div className="relative w-full h-screen bg-transparent">
-        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-6">
-          <img src={NookiIcon} alt="검색 결과 없음" className="w-[125.586px] h-[169px]" />
-          <p className="text-white text-base font-medium opacity-50">{emptyMessage}</p>
-        </div>
+      <div className="w-full bg-transparent pt-[40px]">
+        {/* 구분선 */}
         <div
-          className="absolute left-1/2 transform -translate-x-1/2"
-          style={{ width: '1040px', borderTop: '1px solid rgba(85, 83, 81, 0.7)', top: '40px' }}
+          className="mx-auto"
+          style={{
+            width: '1040px',
+            borderTop: '1px solid rgba(85, 83, 81, 0.7)',
+          }}
         />
+  
+        {/* 아이콘 + 문구 */}
+        <div className="flex justify-center items-center gap-2 mt-[142px]" style={{ transform: 'translateX(-4%)' }}>
+          <img src={NookiIcon} alt="검색 결과 없음" className="w-[125.586px] h-[169px]" />
+          <p className="text-white text-base font-medium opacity-50">
+            {isInitial ? '책을 검색하고 서재에 등록하세요.' : emptyMessage}
+          </p>
+        </div>
       </div>
     );
   }
+  
+
 
   return (
     <div className="flex flex-col items-center gap-4 w-full max-w-[1040px] mx-auto mt-8">
       <div style={{
         width: '1040px',
         borderTop: '1px solid rgba(85, 83, 81, 0.7)',
-        marginTop: '40px',
+        marginTop: '22px',
+        marginBottom: '20px',
       }} />
 
       <div className="flex flex-col gap-4 w-full">
