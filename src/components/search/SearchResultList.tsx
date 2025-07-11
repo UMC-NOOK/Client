@@ -21,26 +21,6 @@ export default function SearchResultList({ emptyMessage = '책을 찾을 수 없
 
   const trimmedTerm = searchTerm.trim();
 
-  if (!trimmedTerm) {
-    return (
-      <div className="relative w-full bg-transparent mt-6">
-        <div
-          className="mx-auto"
-          style={{
-            width: '1040px',
-            borderTop: '1px solid rgba(85, 83, 81, 0.7)',
-            marginTop: '40px',
-            marginBottom: '20px',
-          }}
-        />
-        <div className="flex justify-center items-center gap-6 mt-10">
-          <img src={NookiIcon} alt="검색 결과 없음" className="w-[125.586px] h-[169px]" />
-          <p className="text-white text-base font-medium opacity-50">{emptyMessage}</p>
-        </div>
-      </div>
-    );
-  }
-
   const filteredResults = tempBookData.filter((book: any) =>
     book.bookName.toLowerCase().includes(trimmedTerm.toLowerCase()) ||
     book.author.toLowerCase().includes(trimmedTerm.toLowerCase())
@@ -50,12 +30,12 @@ export default function SearchResultList({ emptyMessage = '책을 찾을 수 없
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentResults = filteredResults.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
+  if (!trimmedTerm || filteredResults.length === 0) {
+    const isInitial = !trimmedTerm;
 
-  if (!searchTerm.trim() || filteredResults.length === 0) {
-    const isInitial = !searchTerm.trim();
     return (
       <div className="w-full bg-transparent pt-[40px]">
-        {/* 구분선 */}
+        {/* 공통 구분선 */}
         <div
           className="mx-auto"
           style={{
@@ -63,7 +43,7 @@ export default function SearchResultList({ emptyMessage = '책을 찾을 수 없
             borderTop: '1px solid rgba(85, 83, 81, 0.7)',
           }}
         />
-  
+
         {/* 아이콘 + 문구 */}
         <div className="flex justify-center items-center gap-2 mt-[142px]" style={{ transform: 'translateX(-4%)' }}>
           <img src={NookiIcon} alt="검색 결과 없음" className="w-[125.586px] h-[169px]" />
@@ -74,17 +54,17 @@ export default function SearchResultList({ emptyMessage = '책을 찾을 수 없
       </div>
     );
   }
-  
-
 
   return (
     <div className="flex flex-col items-center gap-4 w-full max-w-[1040px] mx-auto mt-8">
-      <div style={{
-        width: '1040px',
-        borderTop: '1px solid rgba(85, 83, 81, 0.7)',
-        marginTop: '22px',
-        marginBottom: '20px',
-      }} />
+      <div
+        style={{
+          width: '1040px',
+          borderTop: '1px solid rgba(85, 83, 81, 0.7)',
+          marginTop: '22px',
+          marginBottom: '20px',
+        }}
+      />
 
       <div className="flex flex-col gap-4 w-full">
         {currentResults.map((book: any, idx: number) => (
