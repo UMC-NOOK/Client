@@ -214,7 +214,7 @@
 
 /* 오늘 날짜 */
 .react-calendar__tile--now {
-  background: #000;
+  background: rgba(22, 17, 11, 1);
   border: 2px solid #666;
 }
 
@@ -226,13 +226,13 @@
 /* 호버 효과 */
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {
-  background: #111;
+  background: rgba(22, 17, 11, 1);
   transform: none;
 }
 
 /* 선택된 날짜 */
 .react-calendar__tile--active {
-  background: #222 !important;
+  background: rgba(22, 17, 11, 1) !important;
   color: #fff;
 }
 

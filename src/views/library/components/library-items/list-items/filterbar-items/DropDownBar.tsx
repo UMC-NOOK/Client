@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import leftButton from '../../../../../assets/button/library/chevron-left.png';
+import leftButton from '../../../../../../assets/button/library/chevron-left.png';
 import clsx from 'clsx';
 
 const DropDownBar = () => {

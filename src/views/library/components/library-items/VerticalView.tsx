@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import FilterBar from './verticalview-items/FilterBar';
-import tempBookData from '../../../mock/library/bookData';
-import BookItem from './verticalview-items/book-list/BookItem';
-import DeleteBtn from '../../../components/delete-modal/DeleteModal';
+import FilterBar from '../library-items/list-items/FilterBar';
+import tempBookData from '../../../../mock/library/bookData';
+import BookItem from './list-items/book-list/BookItem';
+import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 
 const VerticalView = () => {
   const [bookData, setBookData] = useState(tempBookData);

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import Calendar from 'react-calendar';
-import '../styles/globalCalendar.css';
-import SaveList from './gridview-items/SaveList';
-import SaveListView from './gridview-items/SaveListView';
-import TileContent from './calendar/TileContent';
+import '../../styles/globalCalendar.css';
+import SaveList from '../library-items/grid-items/SaveList';
+import SaveListView from '../library-items/grid-items/SaveListView';
+import TileContent from '../calendar/TileContent';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];

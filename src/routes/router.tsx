@@ -9,6 +9,7 @@ import MyPage from '../views/mypage/page';
 import RootLayout from '../layouts/root-layout';
 import AuthRouter from './authRouter';
 import SearchResultPage from '../views/lounge/page/search/SearchResultPage';
+import ReadNotePage from '../views/library/page/read-note';
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Library />,
+          },
+          {
+            path: ':id',
+            element: <ReadNotePage />,
           },
         ],
       },

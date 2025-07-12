@@ -1,7 +1,7 @@
-import StarMaker from '../bookitem-items/StarMaker';
-import DeleteBtn from '../bookitem-items/DeleteBtn';
-import InfoBtn from '../bookitem-items/InfoBtn';
-import RecordBtn from '../bookitem-items/RecordBtn';
+import StarMaker from './bookitem-items/StarMaker';
+import DeleteBtn from './bookitem-items/DeleteBtn';
+import InfoBtn from './bookitem-items/InfoBtn';
+import RecordBtn from './bookitem-items/RecordBtn';
 
 interface BookItemProps {
   img: string;
@@ -67,26 +67,26 @@ const BookItem = ({
           {useOnLibrary && (
             <>
               <button
-                className="w-[12.1rem] h-20 text-red-500 border-1 border-red-500 rounded-[8px] hover:bg-nook-600"
+                className="w-[12.1rem] h-20 text-red-500 border-1 border-red-500 rounded-[8px] hover:bg-[rgba(22,17,11,1)]"
                 onClick={openModal}
               >
                 <DeleteBtn />
               </button>
-              <button className="w-[12.1rem] h-20  text-nook-100 border-1 border-[rgba(85,83,81,1)] rounded-[8px] hover:bg-nook-600">
+              <button className="w-[12.1rem] h-20  text-nook-100 border-1 border-[rgba(85,83,81,1)] rounded-[8px] hover:bg-[rgba(22,17,11,1)]">
                 <InfoBtn />
               </button>
-              <button className="w-[12.1rem] h-20 bg-nook-500 text-white rounded-[8px] hover:bg-nook-600">
+              <button className="w-[12.1rem] h-20 bg-nook-500 text-white rounded-[8px] hover:bg-[rgba(22,17,11,1)]">
                 <RecordBtn text="내 기록" />
               </button>
             </>
           )}
           {useOnSearch && (
             <>
-              <button className="w-[12.1rem] h-20  text-nook-100 border-1 border-[rgba(85,83,81,1)] rounded-[8px] hover:bg-nook-600">
+              <button className="w-[12.1rem] h-20  text-nook-100 border-1 border-[rgba(85,83,81,1)] rounded-[8px] hover:bg-[rgba(22,17,11,1)]">
                 <InfoBtn />
               </button>
               <button
-                className="w-[12.1rem] h-20 bg-nook-500 text-white rounded-[8px] hover:bg-nook-600"
+                className="w-[12.1rem] h-20 bg-nook-500 text-white rounded-[8px] hover:bg-[rgba(22,17, 1,1)]"
                 onClick={openModal}
               >
                 <RecordBtn text="서재 등록" />

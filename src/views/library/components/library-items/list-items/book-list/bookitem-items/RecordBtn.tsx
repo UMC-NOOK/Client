@@ -1,6 +1,6 @@
-import download from '../../../../../assets/button/library/download.png';
-import file2 from '../../../../../assets/button/library/file2.png';
-import { useTabStore } from '../../../../../store/library/useTabStore';
+import download from '../../../../../../../assets/button/library/download.png';
+import file2 from '../../../../../../../assets/button/library/file2.png';
+import { useTabStore } from '../../../../../../../store/library/useTabStore';
 
 type RecordBtnProps = {
   text: string;

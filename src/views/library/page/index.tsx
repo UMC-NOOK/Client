@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import GridView from '../components/GridView';
-import VerticalView from '../components/VerticalView';
-import TopBar from '../components/topbar/TopBar';
+import GridView from '../components/library-items/GridView';
+import VerticalView from '../components/library-items/VerticalView';
+import TopBar from '../components/library-items/topbar/TopBar';
 
 type LibraryView = 'grid' | 'vertical';
 type UserNameProps = string;
