@@ -61,7 +61,7 @@ const Profile = () => {
           <div className="flex justify-center items-center gap-4">
             <img
               src={questionImg}
-              alt=""
+              alt="도움말 아이콘"
               className="w-6 h-6 max-w-[12px] max-h-[12px] object-contain"
             />
             <p className="text-xs font-normal text-nook-100">도움말</p>
