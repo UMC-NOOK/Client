@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import chevron_left from "/src/assets/button/book-info/chevron-left.svg";
-import book_cover from "/src/assets/button/book-info/bookImgEx.png";
-import empty_star from "/src/assets/button/book-info/emptyStar.svg";
-import filled_star from "/src/assets/button/book-info/fullStar.svg";
-import error_outline_rounded from "/src/assets/button/book-info/error-outline-rounded.svg";
-import Comment from "../../components/book-info/comment";
-import BestBook from "../../components/book-info/bestBook";
-import download_icon from "/src/assets/button/book-info/download.svg";
-import Pagination from "react-js-pagination";
-import DeleteBtn from "../../../../components/delete-modal/DeleteModal";
-import LibraryRegistration from "../../components/book-info/libraryRegistration";
+import React, { useState } from 'react';
+import chevron_left from '/src/assets/button/book-info/chevron-left.svg';
+import book_cover from '/src/assets/button/book-info/bookImgEx.png';
+import empty_star from '/src/assets/button/book-info/emptyStar.svg';
+import filled_star from '/src/assets/button/book-info/fullStar.svg';
+import error_outline_rounded from '/src/assets/button/book-info/error-outline-rounded.svg';
+import Comment from '../../components/book-info/comment';
+import BestBook from '../../components/book-info/bestBook';
+import download_icon from '/src/assets/button/book-info/download.svg';
+import Pagination from 'react-js-pagination';
+import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
+import LibraryRegistration from '../../components/book-info/libraryRegistration';
 
 const BookInfoPage = () => {
   // 리뷰 작성 관련 상태
-  const [reviewText, setReviewText] = useState("");
+  const [reviewText, setReviewText] = useState('');
   const [reviewTextLength, setReviewTextLength] = useState(0);
   const [rating, setRating] = useState(0);
   const [isReviewExist, setIsReviewExist] = useState(true);
@@ -25,7 +25,7 @@ const BookInfoPage = () => {
     //삭제로직 추가
     setIsUserEditReview(false);
     setIsUserReviewExist(false);
-    setReviewText("");
+    setReviewText('');
     setReviewTextLength(0);
     setRating(0);
     setIsDeleteModalOpen(false);

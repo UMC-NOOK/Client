@@ -1,6 +1,6 @@
-import userImg from "/src/assets/button/book-info/usrImg.svg";
-import fullStar from "/src/assets/button/book-info/fullStar.svg";
-import emptyStar from "/src/assets/button/book-info/emptyStar.svg";
+import userImg from '/src/assets/button/book-info/usrImg.svg';
+import fullStar from '/src/assets/button/book-info/fullStar.svg';
+import emptyStar from '/src/assets/button/book-info/emptyStar.svg';
 
 const Comment = ({
   isOwn,

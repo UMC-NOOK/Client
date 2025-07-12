@@ -9,7 +9,7 @@ interface SearchBarProps {
   customWidth?: string;
   containerClassName?: string;
   inputClassName?: string;
-  placeholderClassName?: string; 
+  placeholderClassName?: string;
   iconClassName?: string;
 }
 
@@ -50,7 +50,9 @@ export default function SearchBar({
   };
 
   return (
-    <div className={`flex flex-col items-center justify-center ${wrapperClassName}`}>
+    <div
+      className={`flex flex-col items-center justify-center ${wrapperClassName}`}
+    >
       <div className="relative" style={{ width: customWidth }}>
         <div
           className={`flex items-center gap-[10px] px-[12px] py-[7px] w-full 

@@ -1,5 +1,5 @@
-import book_cover from "/src/assets/button/book-info/bookImgEx.png";
-import middle_point from "/src/assets/button/book-info/middlePoint.svg";
+import book_cover from '/src/assets/button/book-info/bookImgEx.png';
+import middle_point from '/src/assets/button/book-info/middlePoint.svg';
 
 const BestBook = () => {
   return (

@@ -1,8 +1,7 @@
-
 import { createBrowserRouter } from 'react-router-dom';
 import Main from '../views/home/page';
 import Lounge from '../views/lounge/page/lounge';
-import BookInfoPage from "../views/lounge/page/book-info";
+import BookInfoPage from '../views/lounge/page/book-info';
 import Library from '../views/library/page';
 import ReadingRoom from '../views/reading-room/page';
 import NotFoundPage from '../views/404';
@@ -13,13 +12,13 @@ import SearchResultPage from '../views/lounge/page/search/SearchResultPage';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <RootLayout />,
     errorElement: <NotFoundPage />,
     children: [
       {
         index: true,
-        element: <Main />, 
+        element: <Main />,
       },
       {
         path: 'home',
@@ -27,7 +26,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "lounge",
+        path: 'lounge',
         errorElement: <NotFoundPage />,
         children: [
           {
@@ -35,18 +34,18 @@ const router = createBrowserRouter([
             element: <Lounge />,
           },
           {
-            path: "book-info",
+            path: 'book-info',
             element: <BookInfoPage />,
           },
           {
-            path: 'search-result', 
+            path: 'search-result',
             element: <SearchResultPage />,
           },
         ],
       },
 
       {
-        path: "library",
+        path: 'library',
         errorElement: <NotFoundPage />,
         children: [
           {
@@ -57,7 +56,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "reading-room",
+        path: 'reading-room',
         errorElement: <NotFoundPage />,
         children: [
           {
@@ -68,7 +67,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "mypage",
+        path: 'mypage',
         errorElement: <NotFoundPage />,
         children: [
           {

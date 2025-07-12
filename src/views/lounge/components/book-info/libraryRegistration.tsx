@@ -1,6 +1,6 @@
-import chevron_left from "/src/assets/button/book-info/chevron-left.svg";
-import calendar from "/src/assets/button/book-info/calendar.svg";
-import bookImgEx from "/src/assets/button/book-info/bookImgEx.png";
+import chevron_left from '/src/assets/button/book-info/chevron-left.svg';
+import calendar from '/src/assets/button/book-info/calendar.svg';
+import bookImgEx from '/src/assets/button/book-info/bookImgEx.png';
 
 interface LibraryRegistrationProps {
   onRegister: () => void;

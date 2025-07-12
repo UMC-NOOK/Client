@@ -13,13 +13,13 @@ const Lounge = () => {
     //.then((res)=> res.json())
     //.then((data) => setBooks(data))
     //.catch((error) => console.error(err)))
-  },[selectedCategory])
+  }, [selectedCategory]);
 
   return (
     <div>
-      <div className='flex justify-center bg-black mt-25 flex-col'>
-        <div className='flex w-full justify-evenly items-center'>
-          <Tap selected={selectedCategory} onSelect={setSelectedCategory}/>
+      <div className="flex justify-center bg-black mt-25 flex-col">
+        <div className="flex w-full justify-evenly items-center">
+          <Tap selected={selectedCategory} onSelect={setSelectedCategory} />
           <SearchBar
             customWidth="340px"
             containerClassName="h-[36px] border border-[rgba(183,227,230,0.3)] bg-[#1F1C19] rounded-[42px] flex-shrink-0"
@@ -28,8 +28,8 @@ const Lounge = () => {
             iconClassName="w-[12.375px] h-[12.376px]"
           />
         </div>
-        <div className='flex w-full justify-center items-center mb-10 '>
-          <div className='flex justify-evenly items-center'>
+        <div className="flex w-full justify-center items-center mb-10 ">
+          <div className="flex justify-evenly items-center">
             <CategorySectionView selectedCategory={selectedCategory} />
           </div>
         </div>
