@@ -34,7 +34,7 @@ export default function SearchResultList({ emptyMessage = '책을 찾을 수 없
     const isInitial = !trimmedTerm;
 
     return (
-      <div className="w-full bg-transparent pt-[40px]">
+      <div className={`w-full bg-transparent pt-[40px] ${isInitial ? 'relative' : ''}`}>
         {/* 공통 구분선 */}
         <div
           className="mx-auto"
@@ -45,12 +45,26 @@ export default function SearchResultList({ emptyMessage = '책을 찾을 수 없
         />
 
         {/* 아이콘 + 문구 */}
-        <div className="flex justify-center items-center gap-2 mt-[142px]" style={{ transform: 'translateX(-4%)' }}>
-          <img src={NookiIcon} alt="검색 결과 없음" className="w-[125.586px] h-[169px]" />
-          <p className="text-white text-base font-medium opacity-50">
-            {isInitial ? '책을 검색하고 서재에 등록하세요.' : emptyMessage}
-          </p>
-        </div>
+        {isInitial ? (
+          <div
+            className="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3"
+            style={{ top: '487px' }}
+          >
+            <p className="text-white text-[16px] font-normal opacity-50 text-center" style={{ marginTop: '-90%' }}>
+              책을 검색하고 서재에 등록하세요.
+            </p>
+          </div>
+        ) : (
+          <div
+            className="flex justify-center items-center gap-2 mt-[142px]"
+            style={{ transform: 'translateX(-4%)' }}
+          >
+            <img src={NookiIcon} alt="검색 결과 없음" className="w-[125.586px] h-[169px]" />
+            <p className="text-white text-base font-medium opacity-50">
+              {emptyMessage}
+            </p>
+          </div>
+        )}
       </div>
     );
   }
