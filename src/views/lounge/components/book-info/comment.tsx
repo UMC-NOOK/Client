@@ -1,23 +1,53 @@
-import userImg from "/src/assets/usrImg.svg";
-import fullStar from "/src/assets/fullStar.svg";
-import emptyStar from "/src/assets/emptyStar.svg";
+import userImg from '/src/assets/button/book-info/usrImg.svg';
+import fullStar from '/src/assets/button/book-info/fullStar.svg';
+import emptyStar from '/src/assets/button/book-info/emptyStar.svg';
 
-const Comment = () => {
+const Comment = ({
+  isOwn,
+  setIsUserEditReview,
+}: {
+  isOwn: boolean;
+  setIsUserEditReview: (value: boolean) => void;
+}) => {
   return (
     <div className="flex flex-col w-full">
-      <div className="flex items-center gap-5">
-        <div className="w-16 h-16">
-          <img src={userImg} alt="User" className="w-10 h-10 rounded-full" />
+      {isOwn ? (
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-5">
+            <div className="w-16 h-16">
+              <img src={userImg} alt="User" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-white text-sm not-italic font-semibold leading-[normal] leading-[normal]  ">
+                승민
+              </span>
+              <span className="text-white text-xs not-italic font-normal leading-[normal]  ">
+                이 구역의 책벌레
+              </span>
+            </div>
+          </div>
+          <div
+            className="w-[103px] px-5 py-2 rounded-lg text-white text-sm not-italic font-bold leading-[29.518px] tracking-[0.56px] bg-nook-br-200 flex items-center justify-center cursor-pointer"
+            onClick={() => setIsUserEditReview(true)}
+          >
+            리뷰 수정
+          </div>
         </div>
-        <div className="flex flex-col gap-1">
-          <span className="text-white text-sm not-italic font-semibold leading-[normal] leading-[normal] font-pretendard">
-            승민
-          </span>
-          <span className="text-white text-xs not-italic font-normal leading-[normal] font-pretendard">
-            이 구역의 책벌레
-          </span>
+      ) : (
+        <div className="flex items-center gap-5">
+          <div className="w-16 h-16">
+            <img src={userImg} alt="User" />
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-white text-sm not-italic font-semibold leading-[normal] leading-[normal]  ">
+              승민
+            </span>
+            <span className="text-white text-xs not-italic font-normal leading-[normal]  ">
+              이 구역의 책벌레
+            </span>
+          </div>
         </div>
-      </div>
+      )}
       <div className="flex items-center justify-between mt-10">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10">
@@ -36,11 +66,11 @@ const Comment = () => {
             <img src={emptyStar} alt="Empty Star" />
           </div>
         </div>
-        <span className="text-white text-xs font-normal font-pretendard leading-none">
+        <span className="text-white text-xs font-normal   leading-none">
           2025.04.23
         </span>
       </div>
-      <div className="w-full text-white text-sm font-normal leading-[normal] mt-10 font-pretendard">
+      <div className="w-full text-white text-sm font-normal leading-[normal] mt-10  ">
         일상과 비일 상의 경계를 넘나들며, 익숙한 감정을 낯설게 풀어낸 점이
         인상적입니다. 일상과 비일 상의 경계를 넘나들며, 익숙한 감정을 낯설게
         풀어낸 점이 인상적입니다. 일상과 비일 상의 경계를 넘나들며, 익숙한

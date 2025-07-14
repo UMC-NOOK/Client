@@ -76,7 +76,9 @@ export default function SearchBar({
       };
 
   return (
-    <div className={`flex flex-col items-center justify-center ${wrapperClassName}`}>
+    <div
+      className={`flex flex-col items-center justify-center ${wrapperClassName}`}
+    >
       <div className="relative" style={{ width: customWidth }}>
         {isLounge && (
             <style>{`

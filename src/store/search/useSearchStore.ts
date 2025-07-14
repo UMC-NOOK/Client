@@ -20,13 +20,16 @@ export const useSearchStore = create<SearchState>((set, get) => ({
   addRecentSearch: (term) => {
     const cleaned = term.trim();
     const current = get().recentSearches;
-    const updated = [cleaned, ...current.filter(t => t !== cleaned)].slice(0, 10);
+    const updated = [cleaned, ...current.filter((t) => t !== cleaned)].slice(
+      0,
+      10,
+    );
     localStorage.setItem(RECENT_KEY, JSON.stringify(updated));
     set({ recentSearches: updated });
   },
 
   removeRecentSearch: (term) => {
-    const updated = get().recentSearches.filter(t => t !== term);
+    const updated = get().recentSearches.filter((t) => t !== term);
     localStorage.setItem(RECENT_KEY, JSON.stringify(updated));
     set({ recentSearches: updated });
   },

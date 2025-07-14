@@ -16,7 +16,7 @@ const StarMaker = ({ star }: StarMakerProps) => {
           alt="별"
           className="w-4 h-4 max-w-[13px] max-h-[13px] object-contain"
         />
-      </span>
+      </span>,
     );
   }
 

@@ -26,7 +26,7 @@ const DropDownBar = () => {
             {
               'rotate-270': isOpen,
               'rotate-90': !isOpen,
-            }
+            },
           )}
         />
       </button>
@@ -36,7 +36,7 @@ const DropDownBar = () => {
           {
             hidden: !isOpen,
             block: isOpen,
-          }
+          },
         )}
       >
         {menu.map((item, index) => (
@@ -49,7 +49,7 @@ const DropDownBar = () => {
                 'hover:rounded-b-[8px]': index === menu.length - 1,
                 'after:content-[""] after:absolute after:bottom-0 after:left-4 after:right-4 after:h-px after:bg-[rgba(85,83,81,0.7)]':
                   index < menu.length - 1,
-              }
+              },
             )}
             onClick={() => handleClick(item)}
           >
