@@ -1,5 +1,5 @@
-import gridButton from '../../../../assets/button/library/Frame 25.png';
-import hamburger from '../../../../assets/button/library/Frame 26.png';
+import gridButton from '../../../../../assets/button/library/Frame 25.png';
+import hamburger from '../../../../../assets/button/library/Frame 26.png';
 
 interface TopBarProps {
   userName: string;

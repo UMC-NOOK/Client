@@ -1,6 +1,6 @@
-import BookInfoImg from '../../../../../assets/button/library/file.png';
-import BookInfoImg2 from '../../../../../assets/button/library/reading.png';
-import { useTabStore } from '../../../../../store/library/useTabStore';
+import BookInfoImg from '../../../../../../../assets/button/library/file.png';
+import BookInfoImg2 from '../../../../../../../assets/button/library/reading.png';
+import { useTabStore } from '../../../../../../../store/library/useTabStore';
 
 const InfoBtn = () => {
   const selectecTab = useTabStore((state) => state.selectedTab);

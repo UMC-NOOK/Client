@@ -1,5 +1,5 @@
-import starFill from '../../../../../assets/button/library/star-fill.png';
-import starSubtract from '../../../../../assets/button/library/Subtract.png';
+import starFill from '../../../../../../../assets/button/library/star-fill.png';
+import starSubtract from '../../../../../../../assets/button/library/Subtract.png';
 
 interface StarMakerProps {
   star: number;

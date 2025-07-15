@@ -1,5 +1,5 @@
-import DropDownBar from './filterbar-items/DropDownBar';
-import { useTabStore } from '../../../../store/library/useTabStore';
+import DropDownBar from '../../library-items/list-items/filterbar-items/DropDownBar';
+import { useTabStore } from '../../../../../store/library/useTabStore';
 
 const FilterBar = () => {
   const selectedTab = useTabStore((state) => state.selectedTab);

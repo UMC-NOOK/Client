@@ -1,4 +1,4 @@
-import trashcan from '../../../../../assets/button/library/delete.png';
+import trashcan from '../../../../../../../assets/button/library/delete.png';
 
 const DeleteBtn = () => {
   return (

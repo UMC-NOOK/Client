@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import SaveListItem from './SaveListItem';
-import tempBookData from '../../../../mock/library/bookData';
-import leftButton from '../../../../assets/button/library/chevron-left.png';
+import tempBookData from '../../../../../mock/library/bookData';
+import leftButton from '../../../../../assets/button/library/chevron-left.png';
 
 interface SaveListProps {
   onClick: () => void;
