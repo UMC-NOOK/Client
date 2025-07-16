@@ -35,7 +35,7 @@ const Input = <T extends FieldValues>({
         <input
           type={name === 'password' && isHide === true ? 'password' : 'text'}
           {...register(name)}
-          className="w-full text-md text-nook-100 font-normal pr-10 bg-transparent outline-none"
+          className="w-full text-md text-nook-100 font-normal pr-10 bg-transparent outline-none autofill:shadow-[inset_0_0_0px_1000px_transparent] autofill:[-webkit-text-fill-color:inherit]"
         />
 
         {hideBtn && (
