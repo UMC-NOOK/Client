@@ -1,6 +1,11 @@
+import clsx from 'clsx';
 import { NavLink, useLocation } from 'react-router-dom';
 
-const Navbar = () => {
+interface NavbarProps {
+  isLogin: boolean;
+}
+
+const Navbar = ({ isLogin }: NavbarProps) => {
   const menus = [
     { name: '홈', path: '/home' },
     { name: '라운지', path: '/lounge' },
@@ -11,7 +16,12 @@ const Navbar = () => {
   const location = useLocation();
 
   return (
-    <nav className="w-1/4 h-full py-4">
+    <nav
+      className={clsx('w-1/4 h-full py-4', {
+        invisible: !isLogin,
+        visible: isLogin,
+      })}
+    >
       <ul className="flex justify-evenly items-center text-base h-full">
         {menus.map((menu) => (
           <li
