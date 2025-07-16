@@ -7,6 +7,7 @@ interface InputProps<T extends FieldValues> {
   hideBtn: boolean;
   register: UseFormRegister<T>;
   name: Path<T>;
+  schema: Record<string, any>;
 }
 
 export function nameConverter(name: string) {
@@ -24,9 +25,11 @@ const Input = <T extends FieldValues>({
   hideBtn,
   register,
   name,
+  schema,
 }: InputProps<T>) => {
   const [isHide, setIsHide] = useState<boolean>(true);
   const formName = nameConverter(name);
+  // console.log(schema);
 
   return (
     <div className="w-full h-[6.3rem] flex flex-col gap-4 border-b border-[rgba(255,255,255,0.5)]">
@@ -34,7 +37,7 @@ const Input = <T extends FieldValues>({
       <div className="relative w-full">
         <input
           type={name === 'password' && isHide === true ? 'password' : 'text'}
-          {...register(name)}
+          {...register(name, { ...schema })}
           className="w-full text-md text-nook-100 font-normal pr-10 bg-transparent outline-none autofill:shadow-[inset_0_0_0px_1000px_transparent] autofill:[-webkit-text-fill-color:inherit]"
         />
 
