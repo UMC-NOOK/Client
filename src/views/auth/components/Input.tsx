@@ -1,13 +1,21 @@
 import openeye from '../../../assets/button/auth/eyeOpen.svg';
 import closeeye from '../../../assets/button/auth/eyeClose.svg';
 import { useState } from 'react';
-import { UseFormRegister, FieldValues, Path } from 'react-hook-form';
+import {
+  FieldValues,
+  Path,
+  RegisterOptions,
+  UseFormRegister,
+  FieldErrors,
+} from 'react-hook-form';
 
 interface InputProps<T extends FieldValues> {
   hideBtn: boolean;
   register: UseFormRegister<T>;
   name: Path<T>;
-  schema: Record<string, any>;
+  schema?: RegisterOptions<T, Path<T>>;
+  placeholder?: string;
+  error?: FieldErrors<T>[Path<T>];
 }
 
 export function nameConverter(name: string) {
@@ -26,17 +34,24 @@ const Input = <T extends FieldValues>({
   register,
   name,
   schema,
+  placeholder,
+  error,
 }: InputProps<T>) => {
   const [isHide, setIsHide] = useState<boolean>(true);
   const formName = nameConverter(name);
-  // console.log(schema);
+  // console.log(error);
 
   return (
     <div className="w-full h-[6.3rem] flex flex-col gap-4 border-b border-[rgba(255,255,255,0.5)]">
       <p className="text-[1.6rem] font-normal text-nook-100">{formName}</p>
       <div className="relative w-full">
         <input
-          type={name === 'password' && isHide === true ? 'password' : 'text'}
+          type={
+            (name === 'password' || name === 'passwordCheck') && isHide
+              ? 'password'
+              : 'text'
+          }
+          placeholder={placeholder}
           {...register(name, { ...schema })}
           className="w-full text-md text-nook-100 font-normal pr-10 bg-transparent outline-none autofill:shadow-[inset_0_0_0px_1000px_transparent] autofill:[-webkit-text-fill-color:inherit]"
         />
@@ -53,6 +68,12 @@ const Input = <T extends FieldValues>({
               className="w-[1.8rem] h-[1.8rem] object-contain"
             />
           </button>
+        )}
+
+        {typeof error?.message === 'string' && (
+          <p className="text-[rgba(241,73,75,1)] text-sm absolute top-17">
+            {error.message}
+          </p>
         )}
       </div>
     </div>

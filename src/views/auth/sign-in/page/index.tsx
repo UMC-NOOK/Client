@@ -25,7 +25,7 @@ const SignInPage = () => {
 
   const hasErrors = Object.keys(errors).length > 0;
 
-  // console.log(errors);
+  console.log(errors);
 
   return (
     <div className="flex flex-col items-center justify-center ">
@@ -55,7 +55,7 @@ const SignInPage = () => {
           </div>
           <LoginOptions />
           <div className="flex flex-col gap-6 mt-32">
-            <SubmitBtn hasErrors={hasErrors} />
+            <SubmitBtn hasErrors={hasErrors} text="로그인" />
             <KakaoBtn />
           </div>
         </div>

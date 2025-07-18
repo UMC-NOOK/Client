@@ -2,8 +2,9 @@ import clsx from 'clsx';
 
 interface SubmitBtnProps {
   hasErrors: boolean;
+  text: string;
 }
-const SubmitBtn = ({ hasErrors }: SubmitBtnProps) => {
+const SubmitBtn = ({ hasErrors, text }: SubmitBtnProps) => {
   return (
     <button
       className={clsx(
@@ -14,7 +15,7 @@ const SubmitBtn = ({ hasErrors }: SubmitBtnProps) => {
       )}
       disabled={hasErrors}
     >
-      로그인
+      {text}
     </button>
   );
 };
