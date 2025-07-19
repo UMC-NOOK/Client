@@ -19,6 +19,7 @@ export default function SearchDropdown({ onSelect }: Props) {
         paddingTop: '20.54px',
         paddingRight: '23.5px',
         paddingLeft: '23.5px',
+        marginTop: '12px',
       }}
     >
       <div className="flex items-center" style={{ height: '16.919px' }}>
@@ -37,7 +38,7 @@ export default function SearchDropdown({ onSelect }: Props) {
             className="flex justify-between items-center py-3 cursor-pointer hover:bg-[#2b2825]"
           >
             <span
-              onClick={() => onSelect(item)} // ✅ handleSearch만 호출되도록
+              onClick={() => onSelect(item)} 
               style={{ fontSize: '12px', color: '#D3D3D3' }}
             >
               {item}
