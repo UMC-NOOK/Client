@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Main from '../views/home/page';
 import Lounge from '../views/lounge/page/lounge';
+import BookInfoPage from '../views/lounge/page/book-info';
 import Library from '../views/library/page';
 import ReadingRoom from '../views/reading-room/page';
 import NotFoundPage from '../views/404';
@@ -8,6 +9,7 @@ import MyPage from '../views/mypage/page';
 import RootLayout from '../layouts/root-layout';
 import AuthRouter from './authRouter';
 import SearchResultPage from '../views/lounge/page/search/SearchResultPage';
+import ReadNotePage from '../views/library/page/read-note';
 
 const router = createBrowserRouter([
   {
@@ -17,7 +19,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Main />, 
+        element: <Main />,
       },
       {
         path: 'home',
@@ -34,10 +36,10 @@ const router = createBrowserRouter([
           },
           {
             path: 'book-info',
-            element: <Lounge />,
+            element: <BookInfoPage />,
           },
           {
-            path: 'search-result', 
+            path: 'search-result',
             element: <SearchResultPage />,
           },
         ],
@@ -50,6 +52,10 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Library />,
+          },
+          {
+            path: ':id',
+            element: <ReadNotePage />,
           },
         ],
       },

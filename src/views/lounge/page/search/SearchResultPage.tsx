@@ -10,16 +10,13 @@ export default function SearchResultPage() {
   const { setSearchTerm } = useSearchStore();
 
   useEffect(() => {
-    setSearchTerm(query); 
+    setSearchTerm(query);
   }, [query, setSearchTerm]);
 
   return (
     <div className="flex flex-col items-center px-4 pt-8">
       <SearchBar />
-      <SearchResultList 
-        viewType="default"
-        emptyMessage="책을 찾을 수 없습니다."
-      />
+      <SearchResultList emptyMessage="책을 찾을 수 없습니다." />
     </div>
   );
 }
