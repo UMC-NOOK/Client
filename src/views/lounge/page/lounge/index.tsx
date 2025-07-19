@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Tap from '../../components/lounge/TapFilter';
-import Search from '../../components/lounge/Search';
+// import Search from '../../components/lounge/Search';
 import CategorySectionView from '../../components/lounge/CategorySectionView';
+import SearchBar from '../../../../components/search/SearchBar';
 
 const Lounge = () => {
   const [selectedCategory, setSelectedCategory] = useState('추천');
@@ -19,7 +20,7 @@ const Lounge = () => {
       <div className='flex justify-center bg-black mt-25 flex-col'>
         <div className='flex w-full justify-evenly items-center'>
           <Tap selected={selectedCategory} onSelect={setSelectedCategory}/>
-          <Search/>
+          <SearchBar/>
         </div>
         <div className='flex w-full justify-center items-center mb-10 '>
           <div className='flex justify-evenly items-center'>
