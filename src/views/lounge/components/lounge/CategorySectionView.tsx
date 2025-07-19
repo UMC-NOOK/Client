@@ -61,7 +61,7 @@ const CategorySectionView = ({selectedCategory} : {selectedCategory: string}) =>
     };
 
     return (
-        <div className='flex flex-col items-start justify-center w-full mt-10'>
+        <div className='flex flex-col items-start justify-center w-full mt-9'>
             <div className='flex flex-col items-start justify-center w-full mt-1 mb-10 text-white font-pretendard'
                 style={{ borderTop: "1px solid rgba(85, 83, 81, 0.7)" }}>
                 <div className='text-base mt-10'>
