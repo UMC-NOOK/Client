@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Tap from '../../components/lounge/TapFilter';
-import Search from '../../components/lounge/Search';
 import CategorySectionView from '../../components/lounge/CategorySectionView';
 import SearchBar from '../../../../components/search/SearchBar';
 import LsearchIcon from '../../../../assets/button/search/Lsearch.png';
