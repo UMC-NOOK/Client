@@ -130,7 +130,7 @@ const LibraryRegistration = ({
         </div>
 
         <div
-          className="w-full h-20 px-10 py-2 rounded bg-nook-br-100 text-white text-base font-semibold text-center cursor-pointer"
+          className="w-full h-20 px-10 py-2 rounded bg-nook-br-100 text-white text-base font-semibold text-center cursor-pointer flex items-center justify-center"
           onClick={() => {
             onRegister();
             handleClickSave();
