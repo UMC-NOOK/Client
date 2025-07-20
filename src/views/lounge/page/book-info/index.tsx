@@ -105,7 +105,7 @@ const BookInfoPage = () => {
         />
       )}
       {/* 상위 컴포넌트 */}
-      <div className="flex flex-col items-center justify-start h-screen mr-150 ml-150 overflow-y-auto">
+      <div className="flex flex-col items-center justify-start h-screen mr-150 ml-150 overflow-y-auto [&::-webkit-scrollbar]:hidden">
         {/* 상단바 */}
         <div className="self-start flex items-center justify-center mb-25">
           <div className="w-10 h-10 mr-6">
