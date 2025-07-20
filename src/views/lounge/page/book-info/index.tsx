@@ -179,14 +179,14 @@ const BookInfoPage = () => {
           </div>
         </div>
         {/* 서재 등록 버튼 */}
-        <div className="flex self-end items-center justify-center gap-5 mt-15 mb-24 rounded-sm mt-15 px-22 py-5 bg-nook-br-100 cursor-pointer">
+        <div
+          className="flex self-end items-center justify-center gap-5 mt-15 mb-24 rounded-sm mt-15 px-22 py-5 bg-nook-br-100 cursor-pointer"
+          onClick={libraryModalHandler}
+        >
           <div className="w-[13px]">
             <img src={download_icon} alt="" />
           </div>
-          <div
-            className="text-center text-white text-sm not-italic leading-[25px]"
-            onClick={libraryModalHandler}
-          >
+          <div className="text-center text-white text-sm not-italic leading-[25px]">
             서재에 등록
           </div>
         </div>
