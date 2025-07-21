@@ -10,7 +10,11 @@ type UserData = {
   email: string;
 };
 
-const Profile = () => {
+interface ProfileProps {
+  isLogin: boolean;
+}
+
+const Profile = ({ isLogin }: ProfileProps) => {
   const data = {
     name: '경민',
     email: 'nook123@gmail.com',
@@ -18,7 +22,12 @@ const Profile = () => {
   const [isClick, setIsClick] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserData>(data);
   return (
-    <div className="relative">
+    <div
+      className={clsx('relative', {
+        invisible: !isLogin,
+        visible: isLogin,
+      })}
+    >
       <button onClick={() => setIsClick((prev) => !prev)}>
         <img
           src={profileImg}
