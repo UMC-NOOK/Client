@@ -1,5 +1,5 @@
 interface DeleteBtnProps {
-  usage: 'library' | 'book-info';
+  usage?: 'library' | 'book-info';
   onDelete: () => void;
   closeModal: () => void;
 }
