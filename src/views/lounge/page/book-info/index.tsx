@@ -96,7 +96,11 @@ const BookInfoPage = () => {
   return (
     <div className="mt-11 w-full h-full">
       {isDeleteModalOpen && (
-        <DeleteBtn onDelete={handleDelete} closeModal={modalHandler} />
+        <DeleteBtn
+          usage="book-info"
+          onDelete={handleDelete}
+          closeModal={modalHandler}
+        />
       )}
       {isLibraryModalOpen && (
         <LibraryRegistration
