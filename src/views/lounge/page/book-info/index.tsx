@@ -7,6 +7,7 @@ import error_outline_rounded from '/src/assets/button/book-info/error-outline-ro
 import Comment from '../../components/book-info/comment';
 import BestBook from '../../components/book-info/bestBook';
 import download_icon from '/src/assets/button/book-info/download.svg';
+import move_icon from '/src/assets/button/book-info/move.svg';
 import Pagination from 'react-js-pagination';
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 import LibraryRegistration from '../../components/book-info/libraryRegistration';
@@ -83,10 +84,12 @@ const BookInfoPage = () => {
 
   // 서재 등록 관련
   const [isLibraryModalOpen, setIsLibraryModalOpen] = useState(false);
+  const [isRegistrationLibrary, setIsRegistrationLibrary] = useState(false);
 
   const handleLibrary = () => {
     //서재 등록 로직 추가
     setIsLibraryModalOpen(false);
+    setIsRegistrationLibrary(true);
   };
 
   const libraryModalHandler = () => {
@@ -188,10 +191,13 @@ const BookInfoPage = () => {
           onClick={libraryModalHandler}
         >
           <div className="w-[13px]">
-            <img src={download_icon} alt="" />
+            <img
+              src={isRegistrationLibrary ? move_icon : download_icon}
+              alt=""
+            />
           </div>
           <div className="text-center text-white text-sm not-italic leading-[25px]">
-            서재에 등록
+            {isRegistrationLibrary ? '서재로 이동' : '서재에 등록'}
           </div>
         </div>
 
