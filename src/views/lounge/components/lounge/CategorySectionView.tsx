@@ -58,20 +58,20 @@ const CategorySectionView = ({
     return <RecommendView />;
   }
 
-  return (
-    <div className="flex flex-col items-start justify-center w-full mt-10">
-      <div
-        className="flex flex-col items-start justify-center w-full mt-1 mb-10 text-white font-pretendard"
-        style={{ borderTop: '1px solid rgba(85, 83, 81, 0.7)' }}
-      >
-        <div className="text-base mt-10">{selected}</div>
-        <div className="text-lg font-semibold mt-1">
-          따끈따끈 신간 도서를 만나보세요!
-        </div>
-        <div className="flex items-center justify-center mt-10">
-          <BookListSection />
-        </div>
-      </div>
+    return (
+        <div className='flex flex-col items-start justify-center w-full mt-9'>
+            <div className='flex flex-col items-start justify-center w-full mt-1 mb-10 text-white font-pretendard'
+                style={{ borderTop: "1px solid rgba(85, 83, 81, 0.7)" }}>
+                <div className='text-base mt-10'>
+                    {selected}
+                </div>
+                <div className='text-lg font-semibold mt-1'>
+                    따끈따끈 신간 도서를 만나보세요!
+                </div>
+                <div className='flex items-center justify-center mt-10'>
+                    <BookListSection />
+                </div>
+            </div>
 
       <div className="flex flex-col items-start justify-center w-full mt-15 text-white font-pretendard">
         <div className="flex items-center w-full">
