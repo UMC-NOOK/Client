@@ -30,7 +30,7 @@ const BookCard = ({ index }: { index: number }) => {
             className="bg-[#B8AFA5] object-cover rounded-[7px]"
             />
         </div>
-        <div className="flex items-start flex-col space-y-2 text-white font-pretendard mt-4">
+        <div className="flex items-start flex-col space-y-2 text-white mt-4">
             <div className="flex items-center h-10 text-sm font-semibold">
                 {book.bookName}
             </div>
