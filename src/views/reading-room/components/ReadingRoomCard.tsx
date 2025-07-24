@@ -4,14 +4,14 @@ import card from '../../../assets/readingRoom/card/card.png';
 const ReadingRoomCard = () => {
     
     return (
-        <div className='relative w-[248px] h-[400px] group rounded-xl overflow-hidden'>
+        <div className='relative w-124 h-200 group rounded-xl overflow-hidden'>
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 width="248" 
                 height="122" 
                 viewBox="0 0 248 122" 
                 fill="none"
-                className='absolute top-0 left-0 z-10'>
+                className='absolute top-0 left-0 z-10 '>
                 <g clip-path="url(#clip0_1185_4567)">
                     <foreignObject x="-8" y="-8" width="264" height="138">
                         <div 
