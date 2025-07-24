@@ -16,20 +16,21 @@ interface MyReadingRoomStore{
     isLoading: boolean;
     setRooms: (rooms: MyReadingRoom[]) => void;
     setIsLoading: (isLoading: boolean) => void;
-    updateInfo: (id: number, title: string, introduction: string, 
+    updateInfo: (id: number, bgImg: string, title: string, introduction: string, 
         tags: string[], peopleOnLive: number, peopleCount: number) => void;
 }
 
-export const useReadingRoomStore = create<MyReadingRoomStore>((set) => ({
+export const useMyReadingRoomStore = create<MyReadingRoomStore>((set) => ({
     rooms: [],
     isLoading: false,
     setRooms: (rooms) => set({rooms}),
     setIsLoading: (isLoading) => set({isLoading}),
-    updateInfo: (id, title, introduction, tags, peopleOnLive, peopleCount) =>
+    updateInfo: (id, bgImg, title, introduction, tags, peopleOnLive, peopleCount) =>
         set((state) => ({
             rooms: state.rooms.map((room)=>
                 room.id === id?{
                     ...room,
+                    bgImg,
                     title,
                     introduction,
                     tags,

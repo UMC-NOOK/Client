@@ -5,7 +5,7 @@ import campfire from '../../assets/readingRoom/bg/캠프파이어.png';
 const readingRoomData = [
     {
         id: 1,
-        bgimg: subway,
+        bgImg: subway,
         title: 'Read With Me',
         introduction: '매주 토요일 저녁 9시 집합 2시간 독서',
         tags: ['대학생', '루틴'],
@@ -15,7 +15,7 @@ const readingRoomData = [
     },
     {
         id: 2,
-        bgimg: subway,
+        bgImg: subway,
         title: '한강 책 독파',
         introduction: '한강 작가님의 모든 책을 읽습니다.',
         tags: ['직장인', '20대', '30대'],
@@ -25,7 +25,7 @@ const readingRoomData = [
     },
     {
         id: 3,
-        bgimg: subway,
+        bgImg: subway,
         title: '외계인 침공 시',
         introduction: '시집 안 읽는 사람부터 잡아 먹힌다',
         tags: ['시', '필사'],
@@ -35,7 +35,7 @@ const readingRoomData = [
     },
     {
         id: 4,
-        bgimg: subway,
+        bgImg: subway,
         title: '외계인 침공 시',
         introduction: '시집 안 읽는 사람부터 잡아 먹힌다',
         tags: ['시', '필사'],
@@ -45,7 +45,7 @@ const readingRoomData = [
     },
     {
         id: 5,
-        bgimg: bookShop,
+        bgImg: bookShop,
         title: 'Read With Me',
         introduction: '매주 토요일 저녁 9시 집합 2시간 독서',
         tags: ['대학생', '루틴'],
@@ -55,7 +55,7 @@ const readingRoomData = [
     },
     {
         id: 6,
-        bgimg: bookShop,
+        bgImg: bookShop,
         title: '한강 책 독파',
         introduction: '한강 작가님의 모든 책을 읽습니다.',
         tags: ['직장인', '20대', '30대'],
@@ -65,7 +65,7 @@ const readingRoomData = [
     },
     {
         id: 7,
-        bgimg: bookShop,
+        bgImg: bookShop,
         title: '외계인 침공 시',
         introduction: '시집 안 읽는 사람부터 잡아 먹힌다',
         tags: ['시', '필사'],
@@ -75,7 +75,7 @@ const readingRoomData = [
     },
     {
         id: 8,
-        bgimg: bookShop,
+        bgImg: bookShop,
         title: '외계인 침공 시',
         introduction: '시집 안 읽는 사람부터 잡아 먹힌다',
         tags: ['시', '필사'],
@@ -85,7 +85,7 @@ const readingRoomData = [
     },
     {
         id: 9,
-        bgimg: campfire,
+        bgImg: campfire,
         title: 'Read With Me',
         introduction: '매주 토요일 저녁 9시 집합 2시간 독서',
         tags: ['대학생', '루틴'],
@@ -95,7 +95,7 @@ const readingRoomData = [
     },
     {
         id: 10,
-        bgimg: campfire,
+        bgImg: campfire,
         title: '한강 책 독파',
         introduction: '한강 작가님의 모든 책을 읽습니다.',
         tags: ['직장인', '20대', '30대'],
@@ -105,7 +105,7 @@ const readingRoomData = [
     },
     {
         id: 11,
-        bgimg: campfire,
+        bgImg: campfire,
         title: '외계인 침공 시',
         introduction: '시집 안 읽는 사람부터 잡아 먹힌다',
         tags: ['시', '필사'],
@@ -115,7 +115,7 @@ const readingRoomData = [
     },
     {
         id: 12,
-        bgimg: campfire,
+        bgImg: campfire,
         title: '외계인 침공 시',
         introduction: '시집 안 읽는 사람부터 잡아 먹힌다',
         tags: ['시', '필사'],
@@ -125,7 +125,7 @@ const readingRoomData = [
     },
     {
         id: 13,
-        bgimg: subway,
+        bgImg: subway,
         title: 'Read With Me',
         introduction: '매주 토요일 저녁 9시 집합 2시간 독서',
         tags: ['대학생', '루틴'],
@@ -135,7 +135,7 @@ const readingRoomData = [
     },
     {
         id: 14,
-        bgimg: subway,
+        bgImg: subway,
         title: '한강 책 독파',
         introduction: '한강 작가님의 모든 책을 읽습니다.',
         tags: ['직장인', '20대', '30대'],
@@ -145,7 +145,7 @@ const readingRoomData = [
     },
     {
         id: 15,
-        bgimg: subway,
+        bgImg: subway,
         title: '외계인 침공 시',
         introduction: '시집 안 읽는 사람부터 잡아 먹힌다',
         tags: ['시', '필사'],
@@ -155,7 +155,7 @@ const readingRoomData = [
     },
     {
         id: 16,
-        bgimg: subway,
+        bgImg: subway,
         title: '외계인 침공 시',
         introduction: '시집 안 읽는 사람부터 잡아 먹힌다',
         tags: ['시', '필사'],
@@ -165,7 +165,7 @@ const readingRoomData = [
     },
     {
         id: 17,
-        bgimg: bookShop,
+        bgImg: bookShop,
         title: 'Read With Me',
         introduction: '매주 토요일 저녁 9시 집합 2시간 독서',
         tags: ['대학생', '루틴'],
@@ -175,7 +175,7 @@ const readingRoomData = [
     },
     {
         id: 18,
-        bgimg: bookShop,
+        bgImg: bookShop,
         title: '한강 책 독파',
         introduction: '한강 작가님의 모든 책을 읽습니다.',
         tags: ['직장인', '20대', '30대'],
@@ -185,7 +185,7 @@ const readingRoomData = [
     },
     {
         id: 19,
-        bgimg: bookShop,
+        bgImg: bookShop,
         title: '외계인 침공 시',
         introduction: '시집 안 읽는 사람부터 잡아 먹힌다',
         tags: ['시', '필사'],
@@ -195,7 +195,7 @@ const readingRoomData = [
     },
     {
         id: 20,
-        bgimg: bookShop,
+        bgImg: bookShop,
         title: '외계인 침공 시',
         introduction: '시집 안 읽는 사람부터 잡아 먹힌다',
         tags: ['시', '필사'],

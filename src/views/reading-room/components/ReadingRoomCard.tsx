@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import card from '../../../assets/readingRoom/card/card.png';
+import { useMyReadingRoomStore } from '../../../store/reading-room/useMyReadingRoomStore';
+import myReadingRoomData from '../../../mock/readingRoom/myReadingRoomData';
 
-const ReadingRoomCard = () => {
-    
+const ReadingRoomCard = ({index}: {index: number}) => {
+    const myRooms = useMyReadingRoomStore((state => state.rooms));
+    const setMyRooms = useMyReadingRoomStore((state) => state.setRooms);
+
+    useEffect(()=> {
+        setMyRooms(myReadingRoomData);
+    }, []);
+
+    const room = myRooms[index];
+
     return (
         <div className='relative w-124 h-200 group rounded-xl overflow-hidden'>
             <svg 
@@ -13,7 +23,7 @@ const ReadingRoomCard = () => {
                 fill="none"
                 className='absolute top-0 left-0 z-10 '>
                 <g clip-path="url(#clip0_1185_4567)">
-                    <foreignObject x="-8" y="-8" width="264" height="138">
+                    <foreignObject x="-8" y="-8" width="248" height="138">
                         <div 
                             xmlns="http://www.w3.org/1999/xhtml" 
                             style={{
@@ -37,10 +47,35 @@ const ReadingRoomCard = () => {
             </clipPath>
             </defs>
             </svg>
-
             <img src={card} 
                 alt='RoomCard'
                 className='absolute top-0 left-0 w-full h-full object-cover rounded-lg z-0'/>
+            
+                        
+            <div className='flex flex-col absolute top-13 left-12 z-20 text-white'>
+                <span className='text-base font-semibold'> {room.title} </span>
+                <span className='text-2xs font-thin'> {room.introduction} </span>
+                <div 
+                    className='flex flex-row items-start text-2xs font-thin gap-2 mt-5'>
+                    {room.tags.map((tag, idx) => (
+                        <span 
+                            className='flex justify-center items-center rounded-lg px-5 py-2'
+                            key={idx}
+                            style={{backgroundColor: 'rgba(66, 60, 53, 0.80)'}}> 
+                            # {tag}
+                        </span>
+                    ))}
+                </div>
+            </div>
+
+            <div className='flex flex-row text-white'>
+                <div className='absolute bottom-7 left-10 text-sm'>
+                    {room.peopleOnLive}명 접속 중
+                </div>
+                <div className='absolute bottom-7 right-10 text-sm'>
+                    {room.peopleCount}/4
+                </div>
+            </div>
         </div>
     );
 };

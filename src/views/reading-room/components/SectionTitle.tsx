@@ -8,7 +8,7 @@ const SectionTitle = () => {
         내 리딩룸
       </div>  
       <div className='flex flex-row justify-between w-full items-center'>
-        <div className='flex justify-center items-center text-lg'>
+        <div className='flex justify-center items-center text-lg font-light'>
           오늘은 어떤 룸에서 책을 읽을까요?
         </div>
         <div className='flex flex-row items-center gap-5'>
