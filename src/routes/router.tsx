@@ -10,6 +10,7 @@ import RootLayout from '../layouts/root-layout';
 import AuthRouter from './authRouter';
 import SearchResultPage from '../views/lounge/page/search/SearchResultPage';
 import ReadNotePage from '../views/library/page/read-note';
+import ReadNoteEditPage from '../views/library/page/read-note-edit';
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,12 @@ const router = createBrowserRouter([
           {
             path: ':id',
             element: <ReadNotePage />,
+            children: [
+              {
+                path: 'edit',
+                element: <ReadNoteEditPage />,
+              },
+            ],
           },
         ],
       },
