@@ -22,7 +22,11 @@ const VerticalView = () => {
   return (
     <div className="w-full">
       {isModalOpen && (
-        <DeleteBtn onDelete={handleDelete} closeModal={modalHandler} />
+        <DeleteBtn
+          onDelete={handleDelete}
+          closeModal={modalHandler}
+          usage="library"
+        />
       )}
       <FilterBar />
       <div className="flex flex-col">
