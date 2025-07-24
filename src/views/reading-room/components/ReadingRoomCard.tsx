@@ -4,7 +4,7 @@ import card from '../../../assets/readingRoom/card/card.png';
 const ReadingRoomCard = () => {
     
     return (
-        <div className='relative w-[248px] h-[400px] group rounded-lg overflow-hidden'>
+        <div className='relative w-[248px] h-[400px] group rounded-xl overflow-hidden'>
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 width="248" 
@@ -14,7 +14,8 @@ const ReadingRoomCard = () => {
                 className='absolute top-0 left-0 z-10'>
                 <g clip-path="url(#clip0_1185_4567)">
                     <foreignObject x="-8" y="-8" width="264" height="138">
-                        <div xmlns="http://www.w3.org/1999/xhtml" 
+                        <div 
+                            xmlns="http://www.w3.org/1999/xhtml" 
                             style={{
                                 backdropFilter: 'blur(0px)',
                                 clipPath: 'url(#bgblur_1_1185_4567_clip_path)',

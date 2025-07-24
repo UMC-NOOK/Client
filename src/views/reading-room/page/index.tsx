@@ -1,15 +1,14 @@
 import React from 'react';
-import ReadingRoomCard from '../components/ReadingRoomCard';
+import ReadingRoomCardList from '../components/ReadingRoomCardList';
 
 const ReadingRoom = () => {
   return (
-    <div className='flex justify-center mt-23 flex-col'>
-    <div class>
-      내 리딩룸
+    <div className='flex flex-col justify-center items-center'>
+      <div className='flex items-center justify-center'>
+        <ReadingRoomCardList/>
+      </div>
     </div>
-    <ReadingRoomCard/>
-  </div>;
-  )
+  );
 };
 
 export default ReadingRoom;
