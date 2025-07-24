@@ -12,7 +12,7 @@ const AddReadingRoom = () => {
                 style={{borderColor: 'rgba(121, 191, 201, 0.50)'}}>
                 <svg 
                     xmlns="http://www.w3.org/2000/svg" 
-                    width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    width="20" height="20" viewBox="0 0 22 22" fill="none">
                     <path d="M11 0.75V11M11 21.25V11M11 11H1M11 11H21" stroke="#7ABFC9" stroke-linecap="round"/>
                 </svg>
             </button>
