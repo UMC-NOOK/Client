@@ -16,8 +16,7 @@ interface ReadingRoomStore{
     isLoading: boolean;
     setRooms: (rooms: ReadingRoom[]) => void;
     setIsLoading: (isLoading: boolean) => void;
-    updateInfo: (id: number, title: string, introduction: string, 
-        tags: string[], peopleOnLive: number, peopleCount: number) => void;
+    updateInfo: (id: number, peopleOnLive: number, peopleCount: number) => void;
 }
 
 export const useReadingRoomStore = create<ReadingRoomStore>((set) => ({
@@ -25,13 +24,11 @@ export const useReadingRoomStore = create<ReadingRoomStore>((set) => ({
     isLoading: false,
     setRooms: (rooms) => set({rooms}),
     setIsLoading: (isLoading) => set({isLoading}),
-    updateInfo: (id, title, introduction, tags, peopleOnLive, peopleCount) =>
+    updateInfo: (id, peopleOnLive, peopleCount) =>
         set((state) => ({
             rooms: state.rooms.map((room)=>
                 room.id === id?{
                     ...room,
-                    introduction,
-                    tags,
                     peopleOnLive,
                     peopleCount,
                 }: room )
