@@ -1,12 +1,14 @@
 interface ToggleProps {
   isPhrase: boolean;
   setIsPhrase: (value: boolean) => void;
+  onClick: () => void; // Optional onClick handler
 }
 
-const Toggle = ({ isPhrase, setIsPhrase }: ToggleProps) => {
+const Toggle = ({ isPhrase, setIsPhrase, onClick }: ToggleProps) => {
   const toggleHandler = () => {
     // isOn의 상태를 변경하는 메소드를 구현
     setIsPhrase(!isPhrase);
+    if (onClick) onClick();
   };
 
   return (
