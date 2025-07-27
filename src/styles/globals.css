@@ -78,3 +78,11 @@ input:-webkit-autofill:active {
     font-size: 37.5% !important;
   }
 }
+
+@layer utilities {
+  .no-spinner::-webkit-inner-spin-button,
+  .no-spinner::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
