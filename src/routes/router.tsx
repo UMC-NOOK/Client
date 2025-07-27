@@ -57,12 +57,10 @@ const router = createBrowserRouter([
           {
             path: ':id',
             element: <ReadNotePage />,
-            children: [
-              {
-                path: 'edit',
-                element: <ReadNoteEditPage />,
-              },
-            ],
+          },
+          {
+            path: ':id/edit',
+            element: <ReadNoteEditPage />,
           },
         ],
       },
