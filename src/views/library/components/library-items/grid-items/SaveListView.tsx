@@ -11,9 +11,9 @@ const SaveListView = ({ onClick }: SaveListProps) => {
   const [bookData, setBookData] = useState(tempBookData);
 
   return (
-    <div>
+    <div className="w-[96rem] mx-auto">
       <div
-        className="flex items-baseline gap-9 cursor-pointer group border-b-transparent hover:border-nook-300 mb-9"
+        className="flex items-center gap-9 cursor-pointer group border-b-transparent hover:border-nook-300 mb-9"
         onClick={onClick}
       >
         <button className="w-10 h-10 flex items-center justify-center translate-y-[2px]">
@@ -27,10 +27,12 @@ const SaveListView = ({ onClick }: SaveListProps) => {
           찜
         </span>
       </div>
-      <div className="grid gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 auto-rows-max">
-        {bookData.map((data, idx) => (
-          <SaveListItem key={idx} {...data} />
-        ))}
+      <div className="w-full flex justify-center">
+        <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 auto-rows-max">
+          {bookData.map((data, idx) => (
+            <SaveListItem key={idx} {...data} />
+          ))}
+        </div>
       </div>
     </div>
   );
