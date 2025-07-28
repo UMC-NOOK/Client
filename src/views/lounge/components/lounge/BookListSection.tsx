@@ -5,7 +5,10 @@ import tempBookData from '../../../../mock/library/bookData';
 import BookCard from './BookCard';
 
 const BookListSection = () => {
-  const { books, isLoading, setBooks, setIsLoading } = useBookStore();
+  const books = useBookStore((state) => state.books);
+  const isLoading = useBookStore((state) => state.isLoading);
+  const setBooks = useBookStore((state) => state.setBooks);
+  const setIsLoading = useBookStore((state) => state.setIsLoading);
 
   const [visibleCount, setVisibleCount] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
