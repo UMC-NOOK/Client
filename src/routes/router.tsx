@@ -10,6 +10,7 @@ import RootLayout from '../layouts/root-layout';
 import AuthRouter from './authRouter';
 import SearchResultPage from '../views/lounge/page/search/SearchResultPage';
 import ReadNotePage from '../views/library/page/read-note';
+import DesignPage from '../views/home/page/DesignPage';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,11 @@ const router = createBrowserRouter([
         path: 'home',
         element: <Main />,
       },
+      {
+        path: 'home/DesignPage',
+        element: <DesignPage />, 
+      },
+      
 
       {
         path: 'lounge',

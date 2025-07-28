@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import rightArrowIcon from '../../assets/button/home/chevron-right.png'; 
-import savedIcon from '../../assets/button/home/bookmark.png'; 
+import rightArrowIcon from '../../../assets/button/home/chevron-right.png'; 
+import savedIcon from '../../../assets/button/home/bookmark.png'; 
 
 
 const CurrentlyReadingBox = () => {

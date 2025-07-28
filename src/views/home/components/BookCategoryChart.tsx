@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import arrowDownIcon from '../../assets/button/home/Polygon_down.png';
-import arrowUpIcon from '../../assets/button/home/Polygon_up.png';
+import arrowDownIcon from '../../../assets/button/home/Polygon_down.png';
+import arrowUpIcon from '../../../assets/button/home/Polygon_up.png';
 
 interface CategoryData {
   name: string;

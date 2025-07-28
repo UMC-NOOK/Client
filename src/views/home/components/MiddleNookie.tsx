@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import profileIcon from '../../assets/button/home/profile.png';
-import penIcon from '../../assets/button/home/solar_pen.png';
-import ReadingGoalModal from './ReadingGoalModal'; // 경로는 실제 위치에 따라 조정
+import profileIcon from '../../../assets/button/home/profile.png';
+import penIcon from '../../../assets/button/home/solar_pen.png';
+import designIcon from '../../../assets/button/home/design.png';
+import ReadingGoalModal from './ReadingGoalModal';
+import { useNavigate } from 'react-router-dom';
 
 const MiddleNookie = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [goalBooks, setGoalBooks] = useState(50); // 목표 권수 상태
+  const [goalBooks, setGoalBooks] = useState(50);
+
+  const navigate = useNavigate(); 
 
   const currentBooks = 0;
   const remainingDays = 193;
@@ -19,10 +23,24 @@ const MiddleNookie = () => {
   return (
     <>
       {/* 카드 영역 */}
-      <div className="w-[528px] h-[648px] rounded-[12px] bg-[#423C35]/10 flex flex-col items-center justify-end">
+      <div className="relative w-[528px] h-[648px] rounded-[12px] bg-[#423C35]/10 flex flex-col items-center justify-end">
+        
+        {/* 디자인 아이콘 */}
+        <button
+          className="absolute top-[26px] right-[23px] w-[28px] h-[28px] flex items-center justify-center z-10"
+          onClick={() => navigate('/home/DesignPage')} 
+        >
+          <img
+            src={designIcon}
+            alt="lamp"
+            className="w-[28px] h-[28px] object-contain"
+          />
+        </button>
+
+        {/* 하단 내용 영역 */}
         <div className="w-[477px] h-[137px] rounded-[12px] bg-[#423C35]/20 backdrop-blur-[10px] flex flex-row items-center px-[25px] py-[25px] gap-[24px] mb-[14px] relative">
           
-          {/* ✏️ 우측 상단 버튼 */}
+          {/* ✏️ 목표 수정 버튼 */}
           <button
             className="absolute right-[25px] top-[25px] w-[28px] h-[28px] bg-[#423C35]/50 rounded-[4px] flex items-center justify-center z-10"
             onClick={() => setIsModalOpen(true)}
@@ -34,7 +52,7 @@ const MiddleNookie = () => {
             />
           </button>
 
-          {/* 프로필 영역 */}
+          {/* 프로필 */}
           <div className="flex flex-col items-center">
             <img
               src={profileIcon}
@@ -44,7 +62,7 @@ const MiddleNookie = () => {
             <p className="mt-[10px] text-white text-[14px] font-[600]">경민</p>
           </div>
 
-          {/* 목표 정보 영역 */}
+          {/* 목표 정보 */}
           <div className="flex flex-col justify-center">
             <p className="text-white/50 text-[12px] font-[400]">
               D-{remainingDays} | 올해 독서 목표 {goalBooks}권
@@ -76,7 +94,10 @@ const MiddleNookie = () => {
             className="fixed inset-0 bg-black/40 z-40"
             onClick={() => setIsModalOpen(false)}
           />
-          <ReadingGoalModal onClose={() => setIsModalOpen(false)} onSave={handleSaveGoal} />
+          <ReadingGoalModal
+            onClose={() => setIsModalOpen(false)}
+            onSave={handleSaveGoal}
+          />
         </>
       )}
     </>
