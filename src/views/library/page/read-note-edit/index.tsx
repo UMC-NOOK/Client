@@ -5,9 +5,32 @@ import arroow_redo from '/src/assets/button/read-note-edit/arrow-redo-outline.sv
 import send_btn from '/src/assets/button/read-note-edit/send-button.svg';
 
 import Toggle from '../../components/read-note-edit/toggle';
+import Phrase from '../../components/read-note-edit/phrase';
 
 const ReadNoteEditPage = () => {
   const [isPhrase, setIsPhrase] = useState(true);
+  const [isReadNoteExist, setIsReadNoteExist] = useState(true);
+
+  const phraseData = [
+    {
+      page: 17,
+      text: '너무 사소해서 남에게 말하기조차 민망하지만 확실히 나의 신경을 자극하는 것. 존재하지 않지만 나에게는 느껴지는 것. 그런 걸 어떻게 다뤄야 하는지 나는 알지 못했다.',
+    },
+    {
+      page: 45,
+      text: '시간이 많아지면 생각이 많아지고, 생각이 많아지면 우울이 찾아들기 마련이다.',
+    },
+    { page: null, text: '이얍' },
+    {
+      page: 17,
+      text: '너무 사소해서 남에게 말하기조차 민망하지만 확실히 나의 신경을 자극하는 것. 존재하지 않지만 나에게는 느껴지는 것. 그런 걸 어떻게 다뤄야 하는지 나는 알지 못했다.',
+    },
+    {
+      page: 45,
+      text: '시간이 많아지면 생각이 많아지고, 생각이 많아지면 우울이 찾아들기 마련이다.',
+    },
+    { page: null, text: '이얍' },
+  ];
 
   return (
     <div className="flex flex-col items-center justify-center h-400">
@@ -27,9 +50,25 @@ const ReadNoteEditPage = () => {
           <img src={nook_chat} alt="nook chat" className="h-16 w-16" />
         </div>
         <hr className="w-full h-0 outline outline-1 outline-offset-[-0.50px] outline-neutral-600/70 mt-14" />
-        <div className="flex flex-col items-center justify-center h-full w-402">
-          <div className="w-full h-full"></div>
-          <div className="w-full">
+        <div className="flex flex-col items-center justify-center h-full w-450">
+          <div className="ml-40 flex flex-col items-center justify-start gap-4 box-border overflow-y-auto [&::-webkit-scrollbar]:hidden mb-17 w-full">
+            {isReadNoteExist ? (
+              <>
+                {phraseData.map((phrase, index) =>
+                  phrase.page == null ? (
+                    <Phrase key={index} text={phrase.text} />
+                  ) : (
+                    <Phrase key={index} page={phrase.page} text={phrase.text} />
+                  ),
+                )}
+              </>
+            ) : (
+              <div className="text-[rgba(255,255,255,0.50)] text-center text-sm not-italic font-normal leading-[22px]">
+                작성한 독서 기록이 없습니다.
+              </div>
+            )}
+          </div>
+          <div className="w-402">
             {isPhrase ? (
               <div className="flex w-full h-[38px] items-center gap-3 shrink-0 border px-[27px] py-[9px] rounded-[14px_14px_0_0] border-solid border-nook-br-100 bg-[#2B2217]">
                 <img src={arroow_redo} alt="" className="h-[13px] w-[13px]" />
