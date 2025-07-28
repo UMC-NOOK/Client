@@ -35,7 +35,7 @@ const MyReadingRoomCardList = () => {
                         <ReadingRoomSkeleton/>
                     ))
                     : myRooms.map((room, index) => (
-                        <ReadingRoomCard index={index}/>
+                        <ReadingRoomCard room={room}/>
                     ))
                 }
                 <AddReadingRoom/>

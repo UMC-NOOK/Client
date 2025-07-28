@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 
-interface MyReadingRoom {
+export interface MyReadingRoom {
     id: number;
     bgImg: string;
     title: string;

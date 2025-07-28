@@ -1,17 +1,19 @@
 import React, { useEffect } from 'react';
 import card from '../../../assets/readingRoom/card/card.png';
-import { useMyReadingRoomStore } from '../../../store/reading-room/useMyReadingRoomStore';
+import { useMyReadingRoomStore, MyReadingRoom } from '../../../store/reading-room/useMyReadingRoomStore';
 import myReadingRoomData from '../../../mock/readingRoom/myReadingRoomData';
 
-const ReadingRoomCard = ({index}: {index: number}) => {
-    const myRooms = useMyReadingRoomStore((state => state.rooms));
+interface ReadingRoomCardProps {
+    room: MyReadingRoom;
+}
+
+const ReadingRoomCard = ({room}: ReadingRoomCardProps) => {
+    //const myRooms = useMyReadingRoomStore((state => state.rooms));
     const setMyRooms = useMyReadingRoomStore((state) => state.setRooms);
 
     useEffect(()=> {
         setMyRooms(myReadingRoomData);
     }, []);
-
-    const room = myRooms[index];
 
     return (
         <div className='relative w-124 h-200 group rounded-xl overflow-hidden'>
