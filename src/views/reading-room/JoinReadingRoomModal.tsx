@@ -3,7 +3,7 @@ import React from "react";
 const JoinReadingRoomModal = () => {
     return(
         <div 
-            className="relative w-224 h-86 rounded-xl"
+            className="relative w-224 h-86 rounded-3xl"
             style={{backgroundColor : 'rgba(45, 40, 34, 1)'}}>
             <div className="absolute transform -translate-x-1/2 -translate-y-2/3 top-1/2 left-1/2 text-white text-center text-lg whitespace-nowrap">
                 이 리딩룸에 가입하시겠습니까?
