@@ -10,7 +10,7 @@ const Tap = ({
   onSelect: (c: string) => void;
 }) => {
   return (
-    <div className="flex items-center text-sm font-pretendard">
+    <div className="flex items-center text-sm">
       {categories.map((cat, index) => (
         <React.Fragment key={cat}>
           <button
