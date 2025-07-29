@@ -11,6 +11,7 @@ import AuthRouter from './authRouter';
 import SearchResultPage from '../views/lounge/page/search/SearchResultPage';
 import ReadNotePage from '../views/library/page/read-note';
 import ReadingRoomList from '../views/reading-room/components/views/ReadingRoomList';
+import PrivateReadingRoom from '../views/reading-room/page/private-reading-room';
 
 const router = createBrowserRouter([
   {
@@ -71,8 +72,12 @@ const router = createBrowserRouter([
           },
           {
             path: 'all',
-            element: <ReadingRoomList/>
-          }
+            element: <ReadingRoomList />,
+          },
+          {
+            path: ':id',
+            element: <PrivateReadingRoom />,
+          },
         ],
       },
 
