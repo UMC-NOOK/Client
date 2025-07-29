@@ -10,6 +10,7 @@ import RootLayout from '../layouts/root-layout';
 import AuthRouter from './authRouter';
 import SearchResultPage from '../views/lounge/page/search/SearchResultPage';
 import ReadNotePage from '../views/library/page/read-note';
+import ReadingRoomList from '../views/reading-room/components/views/ReadingRoomList';
 
 const router = createBrowserRouter([
   {
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
             index: true,
             element: <ReadingRoom />,
           },
+          {
+            path: 'all',
+            element: <ReadingRoomList/>
+          }
         ],
       },
 
