@@ -1,6 +1,6 @@
-import subway from '../../assets/readingRoom/bg/지하철.png';
-import bookShop from '../../assets/readingRoom/bg/책방.png';
-import campfire from '../../assets/readingRoom/bg/캠프파이어.png';
+import subway from '../../assets/readingRoom/bg/Subway.png';
+import bookShop from '../../assets/readingRoom/bg/ReadingRoom.png';
+import campfire from '../../assets/readingRoom/bg/Campfire.png';
 
 const readingRoomData = [
     {

@@ -1,4 +1,4 @@
-import subway from '../../assets/readingRoom/bg/지하철.png';
+import subway from '../../assets/readingRoom/bg/Subway.png';
 
 const readingRoomData = [
     {
