@@ -1,5 +1,5 @@
-import { SignInProps } from '../../../../types/auth/signin/userType';
-import SignIn from '../../../../apis/auth/SignIn';
+import type { SignInProps } from '../../../../types/auth/signin/userType';
+import SignIn from '../../../../apis/auth/signIn';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
