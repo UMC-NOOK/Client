@@ -6,6 +6,7 @@ import SubmitBtn from '../../components/SubmitBtn';
 import { useForm } from 'react-hook-form';
 import { signInSchema } from '../../schemas/sign-in/validateSignIn';
 import ErrorBox from '../../components/ErrorBox';
+import useSignIn from '../../hook/useMutaion/useSignIn';
 
 type FormData = {
   email: string;
@@ -19,8 +20,14 @@ const SignInPage = () => {
     formState: { errors },
   } = useForm<FormData>({ mode: 'onSubmit' });
 
+  const { mutate: signInMutate } = useSignIn();
+
   const onSubmit = (data: FormData) => {
     console.log(data);
+    signInMutate({
+      email: data.email,
+      password: data.password,
+    });
   };
 
   const hasErrors = Object.keys(errors).length > 0;

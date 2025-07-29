@@ -3,6 +3,8 @@ import Input from '../../components/Input';
 import SubmitBtn from '../../components/SubmitBtn';
 import Logo from '../../components/Logo';
 import { signUnSchema } from '../../schemas/sign-up/validateSignUp';
+import useSignUp from '../../hook/useMutaion/useSignUp';
+import { useNavigate } from 'react-router-dom';
 
 type FormData = {
   name: string;
@@ -19,10 +21,16 @@ const SignUpPage = () => {
     getValues,
   } = useForm<FormData>({ mode: 'onChange' });
 
+  const { mutate: signUpMutate } = useSignUp();
+  const naviagte = useNavigate();
   const signUpSchema = signUnSchema(getValues);
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+  const onSubmit = async (data: FormData) => {
+    signUpMutate({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    });
   };
 
   const hasErrors = Object.keys(errors).length > 0;
