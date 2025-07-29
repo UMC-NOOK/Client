@@ -14,7 +14,7 @@ const StarMaker = ({ star }: StarMakerProps) => {
         <img
           src={i < star ? starFill : starSubtract}
           alt="별"
-          className="w-4 h-4 max-w-[13px] max-h-[13px] object-contain"
+          className="w-6 h-6 max-w-[13px] max-h-[13px] object-contain"
         />
       </span>,
     );

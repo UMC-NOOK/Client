@@ -6,9 +6,9 @@ const DeleteBtn = () => {
       <img
         src={trashcan}
         alt="삭제 버튼 로고"
-        className="w-12 h-12 max-w-[24px] max-h-[24px] object-contain"
+        className="w-8 h-8 max-w-[16px] max-h-[16px] object-contain"
       />
-      <span className="text-[1.6rem] font-normal pt-0.1">삭제</span>
+      <span className="text-sm font-normal pt-0.1">삭제</span>
     </div>
   );
 };
