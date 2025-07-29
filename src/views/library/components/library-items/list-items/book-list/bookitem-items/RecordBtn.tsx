@@ -14,16 +14,16 @@ const RecordBtn = ({ text }: RecordBtnProps) => {
         <img
           src={file2}
           alt="내 기록 버튼"
-          className="w-9 h-9 max-w-[18px] max-h-[18px] object-contain"
+          className="w-7 h-7 max-w-[14px] max-h-[14px] object-contain"
         />
       ) : (
         <img
           src={download}
           alt="내 기록 버튼"
-          className="w-9 h-9 max-w-[18px] max-h-[18px] object-contain"
+          className="w-7 h-7 max-w-[14px] max-h-[14px] object-contain"
         />
       )}
-      <span className="text-[1.6rem] font-normal pt-0.1">{text}</span>
+      <span className="text-sm font-normal pt-0.1">{text}</span>
     </div>
   );
 };

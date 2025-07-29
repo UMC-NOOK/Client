@@ -29,10 +29,10 @@ const SaveList = ({ onClick }: SaveListProps) => {
           />
         </button>
       </div>
-      <p className="text-[1.3rem] text-nook-100 font-light mt-5 mb-5">
+      <p className="text-[1.3rem] text-nook-100 font-light mt-5 mb-11">
         내가 찜한 책을 확인해보세요
       </p>
-      <div className="flex flex-col items-center gap-7">
+      <div className="flex flex-col items-center gap-9">
         {displayData.map((data, idx) => (
           <SaveListItem key={idx} {...data} />
         ))}
