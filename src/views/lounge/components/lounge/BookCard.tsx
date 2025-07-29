@@ -3,7 +3,8 @@ import { useBookStore } from '../../../../store/book-card/useBookStore';
 import tempBookData from '../../../../mock/library/bookData';
 
 const BookCard = ({ index }: { index: number }) => {
-    const { books, setBooks } = useBookStore();
+    const books = useBookStore((state) => state.books);
+    const setBooks = useBookStore((state) => state.setBooks); 
 
     useEffect(() => {
         setTimeout(() => {

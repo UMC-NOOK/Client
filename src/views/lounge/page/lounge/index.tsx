@@ -16,7 +16,7 @@ const Lounge = () => {
   }, [selectedCategory]);
 
   return (
-    <div className="flex justify-center bg-black mt-25 flex-col">
+    <div className="flex justify-center mt-25 flex-col">
       <div className="flex w-full justify-evenly items-center">
         <Tap selected={selectedCategory} onSelect={setSelectedCategory} />
         <SearchBar
