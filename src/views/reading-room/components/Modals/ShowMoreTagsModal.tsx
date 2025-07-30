@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 const ShowMoreTagsModal = ({
     selected,
@@ -18,8 +18,14 @@ const ShowMoreTagsModal = ({
     const fieldTags3 = ['여행', '요리', '가정', '청소년','eBook'];
     const fieldTags4 = ['일본도서', '외국도서', '영어 원서'];
 
+    const [tempSelected, setTempSelected] = useState<string[]>([]);
+
+    useEffect(() => {
+        setTempSelected(selected); // 모달 열릴 때 초기화
+    }, [selected]);
+
     const toggleTag = (tag: string) => {
-        setSelected((prev) => {
+        setTempSelected((prev) => {
             if(prev.includes(tag)) return prev.filter((t) => t !==tag);
             if(prev.length >= 3) return prev;
             return [...prev, tag];
@@ -28,12 +34,12 @@ const ShowMoreTagsModal = ({
 
     const renderTags = (tags: string[]) =>
         tags.map((label, idx) => {
-            const isSelected = selected.includes(label);
+            const isSelected = tempSelected.includes(label);
             return(
                 <div
                     key={idx}
                     onClick={() => toggleTag(label)}
-                    className={`cursor-pointer flex justify-center items-center text-sm rounded-md px-7 py-2 border transition-all duration-200
+                    className={`cursor-pointer flex justify-center items-center text-sm rounded-lg px-7 py-2 border transition-all duration-200
                         ${
                             isSelected
                                 ? "text-white border-[rgba(255,255,255,0.5)]"
@@ -113,7 +119,10 @@ const ShowMoreTagsModal = ({
                         <button
                             className="w-34 h-15 px-5 py-1 rounded-lg mr-7 font-bold mr-7 text-white"
                             style={{backgroundColor: 'rgba(66,60,53,1)'}}
-                            onClick={onClose}>
+                            onClick={() => {
+                                setSelected(tempSelected);
+                                onClose();
+                            }}>
                                 저장
                         </button>
                         <button
