@@ -27,7 +27,6 @@ const Search = () => {
         <input
           className="
                     placeholder:text-[rgba(184, 175, 165, 0.5)]
-                    placeholder:font-pretendard
                     placeholder:text-xs
                     "
           placeholder={isFocused ? '' : '제목, 저자, ISBN으로 검색'}

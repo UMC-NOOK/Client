@@ -5,7 +5,7 @@ const RecommendView = () => {
   return (
     <div className="flex flex-col items-start justify-center w-full">
       <div
-        className="flex flex-col items-start justify-center w-full mt-10 mb-10 text-white font-pretendard"
+        className="flex flex-col items-start justify-center w-full mt-10 mb-10 text-white"
         style={{ borderTop: '1px solid rgba(85, 83, 81, 0.7)' }}
       >
         <div className="text-base mt-10">지금 서재에 등록하세요!</div>
@@ -18,7 +18,7 @@ const RecommendView = () => {
       </div>
 
       <div
-        className="flex flex-col items-start justify-center w-full mt-15 text-white font-pretendard"
+        className="flex flex-col items-start justify-center w-full mt-15 text-white"
         style={{ borderTop: '1px solid rgba(85, 83, 81, 0.7)' }}
       >
         <div className="mt-20">

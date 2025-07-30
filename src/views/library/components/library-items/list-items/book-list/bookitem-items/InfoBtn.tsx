@@ -11,16 +11,16 @@ const InfoBtn = () => {
         <img
           src={BookInfoImg2}
           alt="책정보 아이콘(찜)"
-          className="w-9 h-9 max-w-[18px] max-h-[18px] object-contain"
+          className="w-7 h-7 max-w-[14px] max-h-[14px] object-contain"
         />
       ) : (
         <img
           src={BookInfoImg}
           alt="책정보 아이콘"
-          className="w-9 h-9 max-w-[18px] max-h-[18px] object-contain"
+          className="w-7 h-7 max-w-[14px] max-h-[14px] object-contain"
         />
       )}
-      <span className="text-[1.6rem] font-normal pt-0.1">책정보</span>
+      <span className="text-sm font-normal pt-0.1">책정보</span>
     </div>
   );
 };

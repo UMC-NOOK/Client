@@ -1,6 +1,5 @@
 import Logo from './Logo';
 import Navbar from './Navbar';
-import { useSignInStore } from '../../store/sign-in/useLoginStore';
 import Profile from './Profile';
 
 interface HeaderProps {
