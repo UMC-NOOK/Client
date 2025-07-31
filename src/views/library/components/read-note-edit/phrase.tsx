@@ -12,6 +12,7 @@ interface PhraseProps {
   setSelectedPhrasePage: (page: number | string | null) => void;
   setTextContent: (content: textContentType) => void;
   clickPhrase: () => void;
+  setIsDeleteModalOpen: (isOpen: boolean) => void; // Optional prop for delete modal
 }
 
 const Phrase = ({
@@ -20,6 +21,7 @@ const Phrase = ({
   setSelectedPhrasePage,
   setTextContent,
   clickPhrase,
+  setIsDeleteModalOpen,
 }: PhraseProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -53,6 +55,14 @@ const Phrase = ({
     }
     setTextContent('quotation');
     clickPhrase();
+  };
+
+  // 삭제로직
+  const handleDelete = () => {
+    // 삭제 로직을 여기에 구현
+    console.log('삭제되었습니다.');
+    clickPhrase();
+    setIsDeleteModalOpen(true); // Open delete modal
   };
 
   return (
@@ -114,7 +124,12 @@ const Phrase = ({
                 className="w-14 h-14"
                 onClick={handleQuote}
               />
-              <img src={delete_btn} alt="Delete" className="w-14 h-14" />
+              <img
+                src={delete_btn}
+                alt="Delete"
+                className="w-14 h-14"
+                onClick={handleDelete}
+              />
             </div>
           ) : (
             <></>

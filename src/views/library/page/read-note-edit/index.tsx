@@ -8,10 +8,10 @@ import quotation_arrow from '/src/assets/button/read-note-edit/quotation-arrow.s
 import Toggle from '../../components/read-note-edit/toggle';
 import Phrase from '../../components/read-note-edit/phrase';
 import Quotation from '../../components/read-note-edit/quotation';
+import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 
 const ReadNoteEditPage = () => {
   const [isReadNoteExist, setIsReadNoteExist] = useState(true);
-
   const [clickPhraseId, setClickPhraseId] = useState<number | null>(null);
 
   // textArea 로직
@@ -85,8 +85,33 @@ const ReadNoteEditPage = () => {
     },
   ];
 
+  // 삭제 로직
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  type DeleteOption =
+    | 'read-note-edit-phrase'
+    | 'read-note-edit-impression'
+    | 'read-note-edit-quotation';
+  const [deleteOption, setDeleteOption] = useState<DeleteOption>(
+    'read-note-edit-phrase',
+  );
+  const modalHandler = () => {
+    setIsDeleteModalOpen((prev) => !prev);
+  };
+  const handleDelete = () => {
+    // 삭제 로직을 여기에 구현
+    console.log('삭제되었습니다.');
+    setIsDeleteModalOpen(false);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-400">
+      {isDeleteModalOpen && (
+        <DeleteBtn
+          usage={deleteOption}
+          onDelete={handleDelete}
+          closeModal={modalHandler}
+        />
+      )}
       <div className="flex flex-col items-center justify-center w-[1044px] h-full pt-30 pb-[40px] box-border">
         <div className="flex w-full justify-between">
           <div className="flex items-center gap-20">
@@ -121,10 +146,22 @@ const ReadNoteEditPage = () => {
                         text={phrase.text}
                         setSelectedPhrasePage={setSelectedPhrasePage}
                         setTextContent={setTextContent}
-                        clickPhrase={() => setClickPhraseId(phrase.phraseId)}
+                        clickPhrase={() => {
+                          setClickPhraseId(phrase.phraseId);
+                          setDeleteOption('read-note-edit-phrase');
+                        }}
+                        setIsDeleteModalOpen={setIsDeleteModalOpen}
                       />
                       {matchingQuotations.map((q) => (
-                        <Quotation key={q.Quotation} text={q.text} />
+                        <Quotation
+                          key={q.Quotation}
+                          text={q.text}
+                          clickPhrase={() => {
+                            setClickPhraseId(phrase.phraseId);
+                            setDeleteOption('read-note-edit-quotation');
+                          }}
+                          setIsDeleteModalOpen={setIsDeleteModalOpen}
+                        />
                       ))}
                     </div>
                   ) : (
@@ -137,10 +174,22 @@ const ReadNoteEditPage = () => {
                         text={phrase.text}
                         setSelectedPhrasePage={setSelectedPhrasePage}
                         setTextContent={setTextContent}
-                        clickPhrase={() => setClickPhraseId(phrase.phraseId)}
+                        clickPhrase={() => {
+                          setClickPhraseId(phrase.phraseId);
+                          setDeleteOption('read-note-edit-phrase');
+                        }}
+                        setIsDeleteModalOpen={setIsDeleteModalOpen}
                       />
                       {matchingQuotations.map((q) => (
-                        <Quotation key={q.Quotation} text={q.text} />
+                        <Quotation
+                          key={q.Quotation}
+                          text={q.text}
+                          clickPhrase={() => {
+                            setClickPhraseId(phrase.phraseId);
+                            setDeleteOption('read-note-edit-quotation');
+                          }}
+                          setIsDeleteModalOpen={setIsDeleteModalOpen}
+                        />
                       ))}
                     </div>
                   );

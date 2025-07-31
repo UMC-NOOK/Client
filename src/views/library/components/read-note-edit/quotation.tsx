@@ -6,9 +6,15 @@ import send_btn from '/src/assets/button/read-note-edit/send-button.svg';
 
 interface QuotationProps {
   text: string;
+  clickPhrase: () => void;
+  setIsDeleteModalOpen: (isOpen: boolean) => void;
 }
 
-const Quotation = ({ text }: QuotationProps) => {
+const Quotation = ({
+  text,
+  clickPhrase,
+  setIsDeleteModalOpen,
+}: QuotationProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [textValue, setTextValue] = useState(text);
@@ -27,6 +33,14 @@ const Quotation = ({ text }: QuotationProps) => {
   };
   const handleSend = () => {
     setIsEditing(false);
+  };
+
+  // 삭제로직
+  const handleDelete = () => {
+    // 삭제 로직을 여기에 구현
+    console.log('삭제되었습니다.');
+    clickPhrase();
+    setIsDeleteModalOpen(true);
   };
 
   return (
@@ -72,7 +86,12 @@ const Quotation = ({ text }: QuotationProps) => {
                 className="w-14 h-14"
                 onClick={handleEdit}
               />
-              <img src={delete_btn} alt="Delete" className="w-14 h-14" />
+              <img
+                src={delete_btn}
+                alt="Delete"
+                className="w-14 h-14"
+                onClick={handleDelete}
+              />
             </div>
           ) : (
             <></>
