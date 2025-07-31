@@ -4,10 +4,10 @@ import Subway from '../../components/private-reading-room/Subway';
 
 const PrivateReadingRoom = () => {
   return (
-    <div className="max-w-[97rem] h-screen m-auto">
+    <div className="max-w-[970px] h-[780px] m-auto">
       {/* <CampFire /> */}
-      {/* <ReadingRoom /> */}
-      <Subway />
+      <ReadingRoom />
+      {/* <Subway /> */}
     </div>
   );
 };
