@@ -3,6 +3,7 @@ import chevron_left from '/src/assets/button/read-note-edit/chevron-left.svg';
 import nook_chat from '/src/assets/button/read-note-edit/nook-chat.svg';
 import arroow_redo from '/src/assets/button/read-note-edit/arrow-redo-outline.svg';
 import send_btn from '/src/assets/button/read-note-edit/send-button.svg';
+import send_disable_btn from '/src/assets/button/read-note-edit/send-disable-button.svg';
 import quotation_arrow from '/src/assets/button/read-note-edit/quotation-arrow.svg';
 
 import Toggle from '../../components/read-note-edit/toggle';
@@ -25,6 +26,7 @@ const ReadNoteEditPage = () => {
   const [selectedPhrasePage, setSelectedPhrasePage] = useState<
     number | string | null
   >(null);
+  const [textAreaContent, setTextAreaContent] = useState('');
   useEffect(() => {
     if (textContent === 'phrase') {
       setPlaceholderText('책에서 수집하고 싶은 문장을 작성해보세요.');
@@ -256,7 +258,11 @@ const ReadNoteEditPage = () => {
                     id="phraseTextArea"
                     placeholder={placeholderText}
                     className="w-full h-full text-white text-sm not-italic font-normal leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-11"
-                    onChange={(e) => setTextContent('quotation')}
+                    value={textAreaContent}
+                    onChange={(e) => {
+                      setTextContent('quotation');
+                      setTextAreaContent(e.target.value);
+                    }}
                   ></textarea>
                 </div>
               ) : (
@@ -265,6 +271,10 @@ const ReadNoteEditPage = () => {
                   id="phraseTextArea"
                   placeholder={placeholderText}
                   className="w-full h-full text-white text-sm not-italic font-normal leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-11"
+                  value={textAreaContent}
+                  onChange={(e) => {
+                    setTextAreaContent(e.target.value);
+                  }}
                 ></textarea>
               )}
 
@@ -273,15 +283,16 @@ const ReadNoteEditPage = () => {
                   isPhrase={textContent === 'phrase'}
                   setIsPhrase={setTextContent}
                   onClick={() => {
-                    const textArea = document.getElementById(
-                      'phraseTextArea',
-                    ) as HTMLTextAreaElement;
-                    if (textArea) {
-                      textArea.value = ''; // Clear the textarea when toggling
-                    }
+                    setTextAreaContent('');
                   }}
                 />
-                <img src={send_btn} alt="" className="w-12 h-12" />
+                <img
+                  src={
+                    textAreaContent.trim() === '' ? send_disable_btn : send_btn
+                  }
+                  alt="send"
+                  className="w-12 h-12"
+                />
               </div>
             </div>
           </div>
