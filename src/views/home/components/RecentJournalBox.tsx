@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import rightArrowIcon from '../../assets/button/home/chevron-right.png';
-import savedIcon from '../../assets/button/home/solar_pen.png';
+import rightArrowIcon from '../../../assets/button/home/chevron-right.png';
+import savedIcon from '../../../assets/button/home/solar_pen.png';
 
 const RecentJournalBox = () => {
   const navigate = useNavigate();
