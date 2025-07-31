@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import backIcon from '../../assets/button/home/chevron-left.png';
+import backIcon from '../../../assets/button/home/chevron-left.png';
 
 const ReadingGoalModal = ({
   onClose,

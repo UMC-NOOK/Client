@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import arrowIcon from '../../assets/button/home/chevron-right.png';
-import fireIllustration from '../../assets/button/home/fire.png';
-import userIcon from '../../assets/button/home/user.png';
+import arrowIcon from '../../../assets/button/home/chevron-right.png';
+import fireIllustration from '../../../assets/button/home/fire.png';
+import userIcon from '../../../assets/button/home/user.png';
 
 interface RecentReadingRoomBoxProps {
   hasRoom: boolean;
