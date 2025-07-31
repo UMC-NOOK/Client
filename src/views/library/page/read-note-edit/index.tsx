@@ -7,6 +7,7 @@ import quotation_arrow from '/src/assets/button/read-note-edit/quotation-arrow.s
 
 import Toggle from '../../components/read-note-edit/toggle';
 import Phrase from '../../components/read-note-edit/phrase';
+import Quotation from '../../components/read-note-edit/quotation';
 
 const ReadNoteEditPage = () => {
   const [isReadNoteExist, setIsReadNoteExist] = useState(true);
@@ -66,6 +67,24 @@ const ReadNoteEditPage = () => {
     { phraseId: 6, page: null, text: '이얍' },
   ];
 
+  const quotationData = [
+    {
+      phraseId: 1,
+      Quotation: 1,
+      text: '보이지 않지만 분명히 감각되는 감정의 결을 섬세하게 포착한 문장이다. 이해받기 어려운 내면의 진동을 조용히 꺼내 보여주는 듯해 마음이 오래 머문다.',
+    },
+    {
+      phraseId: 1,
+      Quotation: 2,
+      text: '하하',
+    },
+    {
+      phraseId: 3,
+      Quotation: 1,
+      text: '하하',
+    },
+  ];
+
   return (
     <div className="flex flex-col items-center justify-center h-400">
       <div className="flex flex-col items-center justify-center w-[1044px] h-full pt-30 pb-[40px] box-border">
@@ -88,26 +107,44 @@ const ReadNoteEditPage = () => {
           <div className="ml-40 flex flex-col items-center justify-start gap-4 box-border overflow-y-auto [&::-webkit-scrollbar]:hidden mb-17 w-full">
             {isReadNoteExist ? (
               <>
-                {phraseData.map((phrase) =>
-                  phrase.page == null ? (
-                    <Phrase
+                {phraseData.map((phrase) => {
+                  const matchingQuotations = quotationData.filter(
+                    (q) => q.phraseId === phrase.phraseId,
+                  );
+
+                  return phrase.page == null ? (
+                    <div
                       key={phrase.phraseId}
-                      text={phrase.text}
-                      setSelectedPhrasePage={setSelectedPhrasePage}
-                      setTextContent={setTextContent}
-                      clickPhrase={() => setClickPhraseId(phrase.phraseId)}
-                    />
+                      className="flex flex-col items-start justify-start w-full"
+                    >
+                      <Phrase
+                        text={phrase.text}
+                        setSelectedPhrasePage={setSelectedPhrasePage}
+                        setTextContent={setTextContent}
+                        clickPhrase={() => setClickPhraseId(phrase.phraseId)}
+                      />
+                      {matchingQuotations.map((q) => (
+                        <Quotation key={q.Quotation} text={q.text} />
+                      ))}
+                    </div>
                   ) : (
-                    <Phrase
+                    <div
                       key={phrase.phraseId}
-                      page={phrase.page}
-                      text={phrase.text}
-                      setSelectedPhrasePage={setSelectedPhrasePage}
-                      setTextContent={setTextContent}
-                      clickPhrase={() => setClickPhraseId(phrase.phraseId)}
-                    />
-                  ),
-                )}
+                      className="flex flex-col items-start justify-start w-full"
+                    >
+                      <Phrase
+                        page={phrase.page}
+                        text={phrase.text}
+                        setSelectedPhrasePage={setSelectedPhrasePage}
+                        setTextContent={setTextContent}
+                        clickPhrase={() => setClickPhraseId(phrase.phraseId)}
+                      />
+                      {matchingQuotations.map((q) => (
+                        <Quotation key={q.Quotation} text={q.text} />
+                      ))}
+                    </div>
+                  );
+                })}
               </>
             ) : (
               <div className="text-[rgba(255,255,255,0.50)] text-center text-sm not-italic font-normal leading-[22px]">
