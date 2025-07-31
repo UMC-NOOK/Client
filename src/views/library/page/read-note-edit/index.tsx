@@ -8,10 +8,12 @@ import quotation_arrow from '/src/assets/button/read-note-edit/quotation-arrow.s
 import Toggle from '../../components/read-note-edit/toggle';
 import Phrase from '../../components/read-note-edit/phrase';
 import Quotation from '../../components/read-note-edit/quotation';
+import Impression from '../../components/read-note-edit/impression';
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 
 const ReadNoteEditPage = () => {
   const [isReadNoteExist, setIsReadNoteExist] = useState(true);
+  const [isImpressionExist, setIsImpressionExist] = useState(true);
   const [clickPhraseId, setClickPhraseId] = useState<number | null>(null);
 
   // textArea 로직
@@ -82,6 +84,13 @@ const ReadNoteEditPage = () => {
       phraseId: 3,
       Quotation: 1,
       text: '하하',
+    },
+  ];
+
+  const impressionData = [
+    {
+      ImpressionId: 1,
+      text: '조예은 작가의 『칵테일, 러브, 좀비』는 좀비 아포칼립스 속에서도 사랑과 일상이 존재할 수 있다는 사실을 낯설지만 설득력 있게 보여준다. 현실적인 감정과 비현실적인 상황이 자연스럽게 섞이면서, 오히려 더 진짜 같은 이야기로 다가왔다. 주인공들의 관계는 감정에 휩쓸리기보다 조심스럽게 서로를 알아가는 과정이라 더 인상 깊었다. 좀비보다 더 위협적인 것은 사람들 사이의 오해나 무관심이라는 점도 묵직하게 남는다. 장르적 재미와 감정의 진심이 잘 어우러진, 독특하고도 따뜻한 작품이었다.',
     },
   ];
 
@@ -199,6 +208,23 @@ const ReadNoteEditPage = () => {
               <div className="text-[rgba(255,255,255,0.50)] text-center text-sm not-italic font-normal leading-[22px]">
                 작성한 독서 기록이 없습니다.
               </div>
+            )}
+            {isImpressionExist ? (
+              impressionData.map((data) => {
+                return (
+                  <Impression
+                    key={data.ImpressionId}
+                    text={data.text}
+                    clickImpression={() => {
+                      setClickPhraseId(data.ImpressionId);
+                      setDeleteOption('read-note-edit-impression');
+                    }}
+                    setIsDeleteModalOpen={setIsDeleteModalOpen}
+                  />
+                );
+              })
+            ) : (
+              <></>
             )}
           </div>
           <div className="w-402">
