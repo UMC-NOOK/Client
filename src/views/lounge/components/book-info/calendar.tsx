@@ -69,7 +69,7 @@ const Calendar = ({
           }}
         >
           <div
-            className={`relative text-center text-xs not-italic font-normal leading-[22px] font-bold p-2.5 rounded-[50%] ${format(currentDate, 'M') !== format(startDay, 'M') ? 'text-[rgba(255,255,255,0.20)]' : 'text-white'} `}
+            className={`relative text-center text-xs not-italic font-normal leading-[22px] p-2.5 rounded-[50%] ${format(currentDate, 'M') !== format(startDay, 'M') ? 'text-[rgba(255,255,255,0.20)]' : 'text-white'} `}
           >
             {formattedDate}
           </div>

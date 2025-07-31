@@ -59,7 +59,7 @@ const GridView = () => {
               }}
             />
           </div>
-          <div className="mt-6 w-[16.2rem]">
+          <div className="mt-6 w-[15rem]">
             <SaveList onClick={handleClick} />
           </div>
         </div>

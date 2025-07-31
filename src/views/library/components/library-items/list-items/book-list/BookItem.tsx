@@ -34,15 +34,15 @@ const BookItem = ({
   const year = publication_date.split('-')[0];
 
   return (
-    <div className="flex h-[21.3rem] py-8 border-b-1 border-[rgba(85,83,81,0.7)]">
+    <div className="flex items-center h-[21.3rem] py-10 border-b-1 border-[rgba(85,83,81,0.7)]">
       <div className="flex items-center mr-10">
         <div
-          className="h-[17.02rem] w-[11.1rem] bg-cover bg-center bg-no-repeat rounded-[6px]"
+          className="h-[15rem] w-[10rem] bg-cover bg-center bg-no-repeat rounded-[6px]"
           style={{ backgroundImage: `url(${img})` }}
         />
       </div>
 
-      <div className="flex flex-1 justify-between py-2">
+      <div className="flex flex-1 h-[15rem] justify-between">
         <div className="flex flex-col justify-between">
           <div className="space-y-3">
             <p className="text-md font-normal text-nook-100">{bookName}</p>
@@ -66,17 +66,17 @@ const BookItem = ({
         <div className="flex flex-col justify-end items-center gap-3">
           {useOnLibrary && (
             <>
+              <button className="w-[10rem] h-18 text-nook-100 bg-[rgba(55,50,44,0.5)] rounded-[8px] hover:border-1 hover:border-[rgba(85,83,81,1)]">
+                <InfoBtn />
+              </button>
+              <button className="w-[10rem] h-18 bg-nook-500 text-white rounded-[8px] hover:border-1 hover:border-[rgba(211,211,211,0.3)]">
+                <RecordBtn text="내 기록" />
+              </button>
               <button
-                className="w-[12.1rem] h-20 text-red-500 border-1 border-red-500 rounded-[8px] hover:bg-[rgba(22,17,11,1)]"
+                className="w-[10rem] h-18 text-red-500 rounded-[8px] bg-[rgba(241,73,75,0.2)] hover:border-1"
                 onClick={openModal}
               >
                 <DeleteBtn />
-              </button>
-              <button className="w-[12.1rem] h-20  text-nook-100 border-1 border-[rgba(85,83,81,1)] rounded-[8px] hover:bg-[rgba(22,17,11,1)]">
-                <InfoBtn />
-              </button>
-              <button className="w-[12.1rem] h-20 bg-nook-500 text-white rounded-[8px] hover:bg-[rgba(22,17,11,1)]">
-                <RecordBtn text="내 기록" />
               </button>
             </>
           )}
