@@ -74,7 +74,7 @@ const Quotation = ({
         <div className="flex items-center justify-center">
           <div className="w-3 h-[86px] shrink-0 rounded-[8px_0_0_8px] bg-nook-secondaey"></div>
           <div
-            className={` w-[677px] h-[86px] px-7 py-9 rounded-[0_8px_8px_0] bg-[rgba(43,34,23,0.5)] text-white text-sm not-italic font-normal leading-[25px] flex items-center justify-start`}
+            className={` w-[677px] h-[86px] px-7 py-9 rounded-[0_8px_8px_0] bg-[#2B2217] text-white text-sm not-italic font-normal leading-[25px] flex items-center justify-start`}
           >
             {textValue}
           </div>
