@@ -1,13 +1,15 @@
+type textContentType = 'phrase' | 'impression' | 'quotation';
 interface ToggleProps {
   isPhrase: boolean;
-  setIsPhrase: (value: boolean) => void;
+  setIsPhrase: (value: textContentType) => void;
   onClick: () => void; // Optional onClick handler
 }
 
 const Toggle = ({ isPhrase, setIsPhrase, onClick }: ToggleProps) => {
   const toggleHandler = () => {
     // isOn의 상태를 변경하는 메소드를 구현
-    setIsPhrase(!isPhrase);
+    const newValue: textContentType = isPhrase ? 'impression' : 'phrase';
+    setIsPhrase(newValue);
     if (onClick) onClick();
   };
 

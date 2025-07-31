@@ -1,35 +1,69 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import chevron_left from '/src/assets/button/read-note-edit/chevron-left.svg';
 import nook_chat from '/src/assets/button/read-note-edit/nook-chat.svg';
 import arroow_redo from '/src/assets/button/read-note-edit/arrow-redo-outline.svg';
 import send_btn from '/src/assets/button/read-note-edit/send-button.svg';
+import quotation_arrow from '/src/assets/button/read-note-edit/quotation-arrow.svg';
 
 import Toggle from '../../components/read-note-edit/toggle';
 import Phrase from '../../components/read-note-edit/phrase';
 
 const ReadNoteEditPage = () => {
-  const [isPhrase, setIsPhrase] = useState(true);
   const [isReadNoteExist, setIsReadNoteExist] = useState(true);
+
+  const [clickPhraseId, setClickPhraseId] = useState<number | null>(null);
+
+  // textArea 로직
+  type textContentType = 'phrase' | 'impression' | 'quotation';
+  const [textContent, setTextContent] = useState<textContentType>('phrase');
+  const [placeholderText, setPlaceholderText] = useState(
+    '책에서 수집하고 싶은 문장을 작성해보세요.',
+  );
+  const [selectedPhrasePage, setSelectedPhrasePage] = useState<
+    number | string | null
+  >(null);
+  useEffect(() => {
+    if (textContent === 'phrase') {
+      setPlaceholderText('책에서 수집하고 싶은 문장을 작성해보세요.');
+    } else if (textContent === 'impression') {
+      setPlaceholderText(
+        '이 책에 대한 감상을 남겨보세요. 수집한 문장을 선택해 인용할 수도 있습니다.',
+      );
+    } else {
+      console.log('selectedPhrasePage', selectedPhrasePage);
+      if (selectedPhrasePage == null) {
+        setPlaceholderText('- 페이지의 문장을 인용한 감상을 남겨보세요.');
+      } else {
+        setPlaceholderText(
+          `${selectedPhrasePage} 페이지의 문장을 인용한 감상을 남겨보세요.`,
+        );
+      }
+    }
+  }, [textContent, clickPhraseId]);
 
   const phraseData = [
     {
+      phraseId: 1,
       page: 17,
       text: '너무 사소해서 남에게 말하기조차 민망하지만 확실히 나의 신경을 자극하는 것. 존재하지 않지만 나에게는 느껴지는 것. 그런 걸 어떻게 다뤄야 하는지 나는 알지 못했다.',
     },
     {
+      phraseId: 2,
       page: 45,
       text: '시간이 많아지면 생각이 많아지고, 생각이 많아지면 우울이 찾아들기 마련이다.',
     },
-    { page: null, text: '이얍' },
+    { phraseId: 3, page: null, text: '이얍' },
     {
+      phraseId: 4,
       page: 17,
       text: '너무 사소해서 남에게 말하기조차 민망하지만 확실히 나의 신경을 자극하는 것. 존재하지 않지만 나에게는 느껴지는 것. 그런 걸 어떻게 다뤄야 하는지 나는 알지 못했다.',
     },
     {
+      phraseId: 5,
       page: 45,
       text: '시간이 많아지면 생각이 많아지고, 생각이 많아지면 우울이 찾아들기 마련이다.',
     },
-    { page: null, text: '이얍' },
+    { phraseId: 6, page: null, text: '이얍' },
   ];
 
   return (
@@ -54,11 +88,24 @@ const ReadNoteEditPage = () => {
           <div className="ml-40 flex flex-col items-center justify-start gap-4 box-border overflow-y-auto [&::-webkit-scrollbar]:hidden mb-17 w-full">
             {isReadNoteExist ? (
               <>
-                {phraseData.map((phrase, index) =>
+                {phraseData.map((phrase) =>
                   phrase.page == null ? (
-                    <Phrase key={index} text={phrase.text} />
+                    <Phrase
+                      key={phrase.phraseId}
+                      text={phrase.text}
+                      setSelectedPhrasePage={setSelectedPhrasePage}
+                      setTextContent={setTextContent}
+                      clickPhrase={() => setClickPhraseId(phrase.phraseId)}
+                    />
                   ) : (
-                    <Phrase key={index} page={phrase.page} text={phrase.text} />
+                    <Phrase
+                      key={phrase.phraseId}
+                      page={phrase.page}
+                      text={phrase.text}
+                      setSelectedPhrasePage={setSelectedPhrasePage}
+                      setTextContent={setTextContent}
+                      clickPhrase={() => setClickPhraseId(phrase.phraseId)}
+                    />
                   ),
                 )}
               </>
@@ -69,7 +116,7 @@ const ReadNoteEditPage = () => {
             )}
           </div>
           <div className="w-402">
-            {isPhrase ? (
+            {textContent === 'phrase' ? (
               <div className="flex w-full h-[38px] items-center gap-3 shrink-0 border px-[27px] py-[9px] rounded-[14px_14px_0_0] border-solid border-nook-br-100 bg-[#2B2217]">
                 <img src={arroow_redo} alt="" className="h-[13px] w-[13px]" />
                 <input
@@ -83,18 +130,36 @@ const ReadNoteEditPage = () => {
             )}
 
             <div
-              className={`flex w-full flex-col items-start gap-3 shrink-0 border px-[27px] py-[9px]  border-solid border-nook-br-100 px-[27px] py-[18px] ${isPhrase ? 'h-[137px] rounded-[0_0_14px_14px]' : 'h-[175px] rounded-[14px]'}`}
+              className={`flex w-full flex-col items-start gap-3 shrink-0 border px-[27px] py-[9px]  border-solid border-nook-br-100 px-[27px] py-[18px] ${textContent === 'phrase' ? 'h-[137px] rounded-[0_0_14px_14px]' : 'h-[175px] rounded-[14px]'}`}
             >
-              <textarea
-                name=""
-                id="phraseTextArea"
-                placeholder={`${isPhrase ? '책에서 수집하고 싶은 문장을 작성해보세요.' : '이 책에 대한 감상을 남겨보세요. 수집한 문장을 선택해 인용할 수도 있습니다.'}`}
-                className="w-full h-full text-white text-sm not-italic font-normal leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-11"
-              ></textarea>
+              {textContent === 'quotation' ? (
+                <div className="flex items-start justify-start gap-3 w-full h-full">
+                  <img
+                    src={quotation_arrow}
+                    alt="Quote"
+                    className="w-10 h-10 mr-3"
+                  />
+                  <textarea
+                    name=""
+                    id="phraseTextArea"
+                    placeholder={placeholderText}
+                    className="w-full h-full text-white text-sm not-italic font-normal leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-11"
+                    onChange={(e) => setTextContent('quotation')}
+                  ></textarea>
+                </div>
+              ) : (
+                <textarea
+                  name=""
+                  id="phraseTextArea"
+                  placeholder={placeholderText}
+                  className="w-full h-full text-white text-sm not-italic font-normal leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-11"
+                ></textarea>
+              )}
+
               <div className="flex items-center justify-end gap-4 w-full">
                 <Toggle
-                  isPhrase={isPhrase}
-                  setIsPhrase={setIsPhrase}
+                  isPhrase={textContent === 'phrase'}
+                  setIsPhrase={setTextContent}
                   onClick={() => {
                     const textArea = document.getElementById(
                       'phraseTextArea',

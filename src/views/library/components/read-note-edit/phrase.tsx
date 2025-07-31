@@ -5,28 +5,54 @@ import delete_btn from '/src/assets/button/read-note-edit/delete-btn.svg';
 import quotation_btn from '/src/assets/button/read-note-edit/quotation-btn.svg';
 import send_btn from '/src/assets/button/read-note-edit/send-button.svg';
 
+type textContentType = 'phrase' | 'impression' | 'quotation';
 interface PhraseProps {
   page?: number | string;
   text: string;
+  setSelectedPhrasePage: (page: number | string | null) => void;
+  setTextContent: (content: textContentType) => void;
+  clickPhrase: () => void;
 }
 
-const Phrase = ({ page = '-', text }: PhraseProps) => {
+const Phrase = ({
+  page = '-',
+  text,
+  setSelectedPhrasePage,
+  setTextContent,
+  clickPhrase,
+}: PhraseProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [textValue, setTextValue] = useState(text);
-  const [pageValue, setPageValue] = useState(page);
+  const [pageValue, setPageValue] = useState<number | string>(page);
 
+  // hover 로직
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
+
+  // 수정 로직
   const handleEdit = () => {
     setIsEditing(true);
+    clickPhrase();
   };
   const handleSend = () => {
     setIsEditing(false);
+    clickPhrase();
+  };
+
+  // 인용 로직
+  const handleQuote = () => {
+    if (pageValue !== '-') {
+      setSelectedPhrasePage(Number(pageValue));
+    } else {
+      setSelectedPhrasePage('-');
+    }
+    setTextContent('quotation');
+    clickPhrase();
   };
 
   return (
@@ -82,7 +108,12 @@ const Phrase = ({ page = '-', text }: PhraseProps) => {
                 className="w-14 h-14"
                 onClick={handleEdit}
               />
-              <img src={quotation_btn} alt="Quote" className="w-14 h-14" />
+              <img
+                src={quotation_btn}
+                alt="Quote"
+                className="w-14 h-14"
+                onClick={handleQuote}
+              />
               <img src={delete_btn} alt="Delete" className="w-14 h-14" />
             </div>
           ) : (
