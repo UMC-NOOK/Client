@@ -65,6 +65,28 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: #fff !important;
 }
 
+/* 스크롤바 넓이 지정 */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* 스크롤바 트랙 */
+::-webkit-scrollbar-track {
+  background: rgba(43, 34, 23, 0.5);
+  border-radius: 5px;
+}
+
+/* 스크롤바 손잡이*/
+::-webkit-scrollbar-thumb {
+  background: rgba(84, 77, 69, 1);
+  border-radius: 5px;
+}
+
+/* 스크롤바 손잡이 호버 시 색 */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 @media screen and (min-width: 640px) and (max-width: 767px) {
   html,
   body {
