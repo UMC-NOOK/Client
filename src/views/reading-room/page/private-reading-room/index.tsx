@@ -4,7 +4,7 @@ import ControlBar from '../../components/private-reading-room/control-bar/Contro
 import ReadingRoom from '../../components/private-reading-room/ReadingRoom';
 import Subway from '../../components/private-reading-room/Subway';
 import MemberPanel from '../../components/private-reading-room/panel/member/MemberPanel';
-import BookPanel from '../../components/private-reading-room/panel/book/bookPanel';
+import BookPanel from '../../components/private-reading-room/panel/book/BookPanel';
 
 const PrivateReadingRoom = () => {
   const [memberClick, setMemberClick] = useState(false);
