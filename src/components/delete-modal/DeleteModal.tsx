@@ -1,5 +1,10 @@
 interface DeleteBtnProps {
-  usage?: 'library' | 'book-info';
+  usage?:
+    | 'library'
+    | 'book-info'
+    | 'read-note-edit-quotation'
+    | 'read-note-edit-phrase'
+    | 'read-note-edit-impression';
   onDelete: () => void;
   closeModal: () => void;
 }
@@ -15,6 +20,24 @@ const DeleteBtn = ({ onDelete, closeModal, usage }: DeleteBtnProps) => {
             </p>
             <p className="text-md font-normal text-nook-100 mb-6">
               작성한 도서 기록도 함께 삭제됩니다.
+            </p>
+          </>
+        ) : usage === 'read-note-edit-quotation' ? (
+          <>
+            <p className="text-md font-normal text-nook-100 mb-2">
+              이 인용을 삭제하시겠습니까?
+            </p>
+          </>
+        ) : usage === 'read-note-edit-phrase' ? (
+          <>
+            <p className="text-md font-normal text-nook-100 mb-2">
+              이 문장을 삭제하시겠습니까?
+            </p>
+          </>
+        ) : usage === 'read-note-edit-impression' ? (
+          <>
+            <p className="text-md font-normal text-nook-100 mb-2">
+              이 감상을 삭제하시겠습니까?
             </p>
           </>
         ) : (

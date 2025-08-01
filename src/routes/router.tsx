@@ -10,6 +10,7 @@ import RootLayout from '../layouts/root-layout';
 import AuthRouter from './authRouter';
 import SearchResultPage from '../views/lounge/page/search/SearchResultPage';
 import ReadNotePage from '../views/library/page/read-note';
+import ReadNoteEditPage from '../views/library/page/read-note-edit';
 import ReadingRoomList from '../views/reading-room/components/views/ReadingRoomList';
 import CreateReadingRoom from '../views/reading-room/components/views/CreateReadingRoom';
 import DesignPage from '../views/home/page/DesignPage';
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
           {
             path: ':id',
             element: <ReadNotePage />,
+          },
+          {
+            path: ':id/edit',
+            element: <ReadNoteEditPage />,
           },
         ],
       },
