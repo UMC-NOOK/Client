@@ -84,11 +84,11 @@ const router = createBrowserRouter([
           },
           {
             path: 'all',
-            element: <ReadingRoomList/>
+            element: <ReadingRoomList/>,
           },
           {
             path: 'create',
-            element: <CreateReadingRoom/>
+            element: <CreateReadingRoom/>,
           }
         ],
       },
