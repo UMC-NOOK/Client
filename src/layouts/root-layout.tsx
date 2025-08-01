@@ -14,6 +14,9 @@ const RootLayout = () => {
             <Header isLogin={true} />
           </div>
         )}
+        <div className="flex justify-center">
+          {!shouldHideHeader && <Header isLogin={true} />}
+        </div>
         <Outlet />
       </div>
     </div>

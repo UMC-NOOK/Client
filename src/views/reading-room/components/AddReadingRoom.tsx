@@ -1,6 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AddReadingRoom = () => {
+    const navigate = useNavigate();
+
     return(
         <div 
             className='relative flex justify-center items-center w-124 h-200 group rounded-xl border border-dashed'
@@ -9,7 +12,8 @@ const AddReadingRoom = () => {
                 borderColor: 'rgba(66, 60, 53, 0.40)'}}>
             <button
                 className='flex justify-center items-center w-20 h-20 rounded-full border border-dashed'
-                style={{borderColor: 'rgba(121, 191, 201, 0.50)'}}>
+                style={{borderColor: 'rgba(121, 191, 201, 0.50)'}}
+                onClick={() => navigate('/reading-room/create')}>
                 <svg 
                     xmlns="http://www.w3.org/2000/svg" 
                     width="20" height="20" viewBox="0 0 22 22" fill="none">
