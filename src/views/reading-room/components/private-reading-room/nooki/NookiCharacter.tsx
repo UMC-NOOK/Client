@@ -21,16 +21,18 @@ const NookiCharacter = ({
 
   return (
     <>
-      <img
-        src={bodyImage}
-        alt=""
-        className={`${bodySize} object-contain absolute ${bodyPosition} ${flipStyle}`}
-      />
-      <img
-        src={headImage}
-        alt=""
-        className={`${headSize} object-contain absolute ${headPosition} ${flipStyle}`}
-      />
+      <div>
+        <img
+          src={bodyImage}
+          alt=""
+          className={`${bodySize} object-contain absolute ${bodyPosition} ${flipStyle}`}
+        />
+        <img
+          src={headImage}
+          alt=""
+          className={`${headSize} object-contain absolute ${headPosition} ${flipStyle}`}
+        />
+      </div>
     </>
   );
 };
