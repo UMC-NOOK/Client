@@ -79,7 +79,7 @@ const Quotation = ({
             {textValue}
           </div>
           {isHovered ? (
-            <div className="absolute flex gap-2 items-center justify-center right-59 top-0">
+            <div className="absolute flex gap-2 items-center justify-center right-[117px] top-0">
               <img
                 src={edit_btn}
                 alt="Edit"
