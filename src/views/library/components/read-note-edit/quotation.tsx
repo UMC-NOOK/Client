@@ -8,12 +8,14 @@ interface QuotationProps {
   text: string;
   clickPhrase: () => void;
   setIsDeleteModalOpen: (isOpen: boolean) => void;
+  isNookChatOpen: boolean;
 }
 
 const Quotation = ({
   text,
   clickPhrase,
   setIsDeleteModalOpen,
+  isNookChatOpen, // Optional prop for nook chat state
 }: QuotationProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -45,9 +47,9 @@ const Quotation = ({
 
   return (
     <div
-      className="flex w-full items-start justify-start gap-8 mt-7 relative ml-43"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className={`flex w-full items-start justify-start gap-8 mt-7 relative ${isNookChatOpen ? 'pl-43' : 'ml-43'}`}
+      onMouseEnter={isNookChatOpen ? undefined : handleMouseEnter}
+      onMouseLeave={isNookChatOpen ? undefined : handleMouseLeave}
     >
       <div className="flex items-center justify-center">
         <img src={quotation_arrow} alt="Quote" className="w-10 h-10" />
@@ -71,10 +73,10 @@ const Quotation = ({
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-center">
-          <div className="w-3 h-[86px] shrink-0 rounded-[8px_0_0_8px] bg-nook-secondaey"></div>
+        <div className="flex items-stretch justify-center">
+          <div className="w-3 shrink-0 rounded-[8px_0_0_8px] bg-nook-secondaey"></div>
           <div
-            className={` w-[677px] h-[86px] px-7 py-9 rounded-[0_8px_8px_0] bg-[#2B2217] text-white text-sm not-italic font-normal leading-[25px] flex items-center justify-start`}
+            className={`px-7 py-9 rounded-[0_8px_8px_0] bg-[#2B2217] text-white text-sm not-italic font-normal leading-[25px] flex items-center justify-start  ${isNookChatOpen ? 'w-[523px]' : 'w-[677px]'}`}
           >
             {textValue}
           </div>
