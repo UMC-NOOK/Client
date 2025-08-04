@@ -30,10 +30,11 @@ const ReadingRoom = () => {
         <NookiCharacter
           bodyImage={nb2}
           headImage={nh2}
-          bodySize="w-[213px] h-[151]"
+          bodySize="w-[213px] h-[151px]"
           headSize="w-[188px] h-[132px]"
           bodyPosition="bottom-265 left-365"
           headPosition="bottom-312 left-334"
+          textTransform="-translate-y-[126px] translate-x-[30px]"
         />
 
         <NookiCharacter
@@ -53,6 +54,7 @@ const ReadingRoom = () => {
           headSize="w-[198px] h-[132px]"
           bodyPosition="bottom-114 left-60"
           headPosition="bottom-151 left-20"
+          textTransform="-translate-y-[130px] translate-x-[40px]"
         />
       </div>
     </div>

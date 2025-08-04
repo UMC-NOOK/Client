@@ -26,10 +26,11 @@ const CampFire = () => {
         <NookiCharacter
           bodyImage={nb2}
           headImage={nh2}
-          bodySize="w-[200px] h-[141]"
+          bodySize="w-[200px] h-[141px]"
           headSize="w-[176px] h-[141px]"
           bodyPosition="bottom-30 left-305"
           headPosition="bottom-70 left-277"
+          textTransform="-translate-y-[130px] translate-x-[30px]"
         />
 
         <NookiCharacter
@@ -39,6 +40,7 @@ const CampFire = () => {
           headSize="w-[168px] h-[125px]"
           bodyPosition="bottom-118 left-135"
           headPosition="bottom-170 left-107"
+          textTransform="-translate-y-[155px] translate-x-[44px]"
         />
 
         {/* 뒤진힌놈 */}
@@ -50,6 +52,7 @@ const CampFire = () => {
           bodyPosition="bottom-145 left-64"
           headPosition="bottom-178 left-58"
           flipped={true}
+          textTransform="-translate-y-[120px] translate-x-[30px]"
         />
       </div>
     </div>

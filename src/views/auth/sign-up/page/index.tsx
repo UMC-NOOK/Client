@@ -17,13 +17,15 @@ const SignUpPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     getValues,
+    watch,
   } = useForm<FormData>({ mode: 'onChange' });
 
   const { mutate: signUpMutate } = useSignUp();
   const naviagte = useNavigate();
   const signUpSchema = signUnSchema(getValues);
+  const watchedValues = watch();
 
   const onSubmit = async (data: FormData) => {
     signUpMutate({
@@ -34,6 +36,8 @@ const SignUpPage = () => {
   };
 
   const hasErrors = Object.keys(errors).length > 0;
+  const isEmpty = !watchedValues.email || !watchedValues.password;
+  const isButtonDisabled = hasErrors || !isValid || isEmpty;
 
   // console.log(errors.name);
 
@@ -92,7 +96,7 @@ const SignUpPage = () => {
           </div>
 
           <div className="flex flex-col gap-6 mt-42">
-            <SubmitBtn hasErrors={hasErrors} text="동의하고 회원가입" />
+            <SubmitBtn hasErrors={isButtonDisabled} text="동의하고 회원가입" />
           </div>
         </div>
       </form>

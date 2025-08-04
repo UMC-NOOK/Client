@@ -21,7 +21,8 @@ const Subway = () => {
           bodySize="w-[95px] h-[157px]"
           headSize="w-[202px] h-[152px]"
           bodyPosition="bottom-[80px] left-[100px]"
-          headPosition="bottom-[200px] left-[70px]"
+          headPosition="bottom-100 left-35"
+          textTransform="-translate-y-[160px] translate-x-[50px]"
         />
 
         <NookiCharacter
@@ -30,7 +31,8 @@ const Subway = () => {
           bodySize="w-[239px] h-[169px]"
           headSize="w-[211px] h-[148px]"
           bodyPosition="bottom-[80px] left-[325px]"
-          headPosition="bottom-[186px] left-[255px]"
+          headPosition="bottom-93 left-128"
+          ver={2}
         />
 
         <NookiCharacter
@@ -39,7 +41,8 @@ const Subway = () => {
           bodySize="w-[77px] h-[160px]"
           headSize="w-[206px] h-[153px]"
           bodyPosition="bottom-[80px] right-[330px]"
-          headPosition="bottom-[206px] right-[280px]"
+          headPosition="bottom-103 right-140"
+          textTransform="-translate-y-[160px] -translate-x-[50px]"
         />
 
         <NookiCharacter
@@ -48,7 +51,8 @@ const Subway = () => {
           bodySize="w-[108px] h-[97px]"
           headSize="w-[221px] h-[147px]"
           bodyPosition="bottom-[130px] right-[90px]"
-          headPosition="bottom-[214px] right-[70px]"
+          headPosition="bottom-107 right-35"
+          textTransform="-translate-y-[150px] -translate-x-[60px]"
         />
       </div>
     </div>
