@@ -29,8 +29,8 @@ const PrivateReadingRoom = () => {
   return (
     <div className="max-w-[970px] h-[780px] m-auto relative">
       <CampFire />
-      <ReadingRoom />
-      <Subway />
+      {/* <ReadingRoom />
+      <Subway /> */}
 
       {isExitModalOpen && (
         <DeleteBtn
@@ -69,7 +69,7 @@ const PrivateReadingRoom = () => {
           </div>
         )}
         <ControlBar
-          roll="host"
+          roll="guest"
           onMemberClick={() => setMemberClick(!memberClick)}
           onBookClick={() => setBookClick(!bookClick)}
           onSettingClick={() => setSettingClick(!settingClick)}
