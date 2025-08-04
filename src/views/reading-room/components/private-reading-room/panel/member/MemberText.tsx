@@ -1,7 +1,20 @@
 import React from 'react';
 import userImg from '../../../../../../assets/button/book-info/usrImg.svg';
 
-function MemberText() {
+interface MemberTextProps {
+  name: string;
+  roll: string;
+}
+
+function MemberText({ name, roll }: MemberTextProps) {
+  // const selectPosition = (roll: string) => {
+  //   if (roll === 'host') {
+  //     roll = '호스트';
+  //   } else {
+  //     roll = '게스트';
+  //   }
+  // };
+
   return (
     <div className="flex w-138 justify-between items-center">
       <div className="flex items-center gap-3">
@@ -10,10 +23,10 @@ function MemberText() {
           alt="사용자"
           className="w-10 h-10 rounded-full object-cover"
         />
-        <span className="text-nook-100 text-md font-semibold">경민</span>
+        <span className="text-nook-100 text-md font-semibold">{name}</span>
       </div>
 
-      <span className="text-nook-100 text-sm font-normal">호스트</span>
+      <span className="text-nook-100 text-sm font-normal">{roll}</span>
     </div>
   );
 }
