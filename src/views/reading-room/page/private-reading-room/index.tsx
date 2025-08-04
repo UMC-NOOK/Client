@@ -9,6 +9,7 @@ import useModalStore from '../../../../store/private-reading-room/useModalStore'
 import DeleteBtn from '../../../../components/delete-modal/reading-room/DeleteModal';
 import SmallControlBar from '../../components/private-reading-room/control-bar/SmallControlBar';
 import useSoundStore from '../../../../store/private-reading-room/useSoundStore';
+import SpeechBubble from '../../components/private-reading-room/speech-bubble/SpeechBubble';
 
 const PrivateReadingRoom = () => {
   const [memberClick, setMemberClick] = useState(false);
@@ -28,9 +29,11 @@ const PrivateReadingRoom = () => {
 
   return (
     <div className="max-w-[970px] h-[780px] m-auto relative">
-      <CampFire />
-      {/* <ReadingRoom />
-      <Subway /> */}
+      {/* <CampFire /> */}
+      <ReadingRoom />
+      {/* <Subway /> */}
+
+      {/* <SpeechBubble /> */}
 
       {isExitModalOpen && (
         <DeleteBtn

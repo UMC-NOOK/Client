@@ -8,6 +8,9 @@ import nh1 from '../../../../assets/readingRoom/nooki-head/n1_g.png';
 import nh2 from '../../../../assets/readingRoom/nooki-head/nooki2_blue.png';
 import nh3 from '../../../../assets/readingRoom/nooki-head/nooki3_orange.png';
 import nh4 from '../../../../assets/readingRoom/nooki-head/nooki4_yellow.png';
+import SpeechBubble3 from './speech-bubble/SpeechBubble3';
+import SpeechBubble2 from './speech-bubble/SpeechBubble2';
+import SpeechBubble4 from './speech-bubble/SpeechBubble4';
 
 const ReadingRoom = () => {
   return (
@@ -25,6 +28,8 @@ const ReadingRoom = () => {
           headSize="w-[188px] h-[141px]"
           bodyPosition="bottom-87 left-172"
           headPosition="bottom-144 left-155"
+          speechBubbleOffset={{ x: 40, y: -263 }}
+          SpeechBubbleComponent={SpeechBubble2}
         />
 
         <NookiCharacter
@@ -35,6 +40,8 @@ const ReadingRoom = () => {
           bodyPosition="bottom-265 left-365"
           headPosition="bottom-312 left-334"
           textTransform="-translate-y-[126px] translate-x-[30px]"
+          speechBubbleOffset={{ x: -175, y: -140 }}
+          SpeechBubbleComponent={SpeechBubble4}
         />
 
         <NookiCharacter
@@ -44,6 +51,8 @@ const ReadingRoom = () => {
           headSize="w-[188px] h-[140px]"
           bodyPosition="bottom-219 left-84"
           headPosition="bottom-274 left-50"
+          speechBubbleOffset={{ x: 198, y: -187 }}
+          SpeechBubbleComponent={SpeechBubble3}
         />
 
         {/* 뒤진힌놈 */}
@@ -55,6 +64,7 @@ const ReadingRoom = () => {
           bodyPosition="bottom-114 left-60"
           headPosition="bottom-151 left-20"
           textTransform="-translate-y-[130px] translate-x-[40px]"
+          speechBubbleOffset={{ x: -10, y: -247 }}
         />
       </div>
     </div>
