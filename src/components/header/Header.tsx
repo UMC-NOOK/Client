@@ -11,7 +11,7 @@ const Header = ({ isLogin }: HeaderProps) => {
 
   return (
     <header className="h-35 w-[150rem] flex items-center justify-evenly bg-[rgba(0,0,0,0.1)]">
-      <Logo />
+      <Logo isLogin={isLogin} />
       <Navbar isLogin={isLogin} />
       <Profile isLogin={isLogin} />
     </header>

@@ -1,7 +1,8 @@
-//src/components/common/bookrow.tsx
+import { useState } from 'react';
 import saveIcon from '../../assets/button/search/save.png';
 import infoIcon from '../../assets/button/search/info.png';
 import dotIcon from '../../assets/button/search/Ellipse.png';
+import SearchModal from '../search/SearchModal'; 
 
 interface BookRowProps {
   book: {
@@ -21,6 +22,8 @@ export default function BookRow({
   onClickInfo,
   onClickAdd,
 }: BookRowProps) {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <div className="w-full max-w-[1040px] mx-auto">
       {/* 책 정보 박스 */}
@@ -43,7 +46,7 @@ export default function BookRow({
             </p>
             <p className="text-white text-[14px] my-[17px]">{book.author}</p>
             <p className="text-white text-[14px]">
-              {book.publisher}{' '}
+              {book.publisher}
               <img
                 src={dotIcon}
                 alt="dot"
@@ -53,7 +56,7 @@ export default function BookRow({
                   height: '1px',
                   margin: '6px',
                 }}
-              />{' '}
+              />
               {new Date(book.publication_date).getFullYear()}년
             </p>
           </div>
@@ -63,14 +66,7 @@ export default function BookRow({
         <div className="absolute bottom-4 right-6 flex flex-col gap-[8px] shrink-0">
           <button
             onClick={onClickInfo}
-            className="flex justify-center items-center gap-[8px] text-white w-[121px] h-[40px] px-[20px] py-[8px] rounded-[8px] border border-[#555351]"
-            style={{
-              backgroundColor: 'transparent',
-              fontSize: '15.4px',
-              fontStyle: 'normal',
-              fontWeight: 400,
-              lineHeight: '1.5625rem',
-            }}
+            className="flex justify-center items-center gap-[8px] text-white w-[121px] h-[40px] px-[20px] py-[8px] rounded-[8px] border border-[#555351] bg-transparent text-[15.4px] font-normal leading-[25px]"
           >
             <img
               src={infoIcon}
@@ -80,15 +76,8 @@ export default function BookRow({
             책 정보
           </button>
           <button
-            onClick={onClickAdd}
-            className="flex justify-center items-center gap-[8px] text-white w-[121px] h-[40px] px-[20px] py-[8px] rounded-[8px] border border-[#555351]"
-            style={{
-              background: '#2D2B29',
-              fontSize: '15.4px',
-              fontStyle: 'normal',
-              fontWeight: 400,
-              lineHeight: '25px',
-            }}
+            onClick={() => setShowModal(true)}
+            className="flex justify-center items-center gap-[8px] text-white w-[121px] h-[40px] px-[20px] py-[8px] rounded-[8px] border border-[#555351] bg-[#2D2B29] text-[15.4px] font-normal leading-[25px]"
           >
             <img
               src={saveIcon}
@@ -102,6 +91,13 @@ export default function BookRow({
 
       {/* 아래 선 */}
       <div className="w-full border-t border-[rgba(85,83,81,0.7)] my-[20px]" />
+
+      {/* 모달 */}
+      {showModal && (
+        <SearchModal onClose={() => setShowModal(false)} onGoToLibrary={function (): void {
+          throw new Error('Function not implemented.');
+        } } />
+      )}
     </div>
   );
 }

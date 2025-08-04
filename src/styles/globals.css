@@ -65,6 +65,32 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: #fff !important;
 }
 
+::-ms-reveal {
+  display: none;
+}
+
+/* 스크롤바 넓이 지정 */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* 스크롤바 트랙 */
+::-webkit-scrollbar-track {
+  background: rgba(43, 34, 23, 0.5);
+  border-radius: 5px;
+}
+
+/* 스크롤바 손잡이*/
+::-webkit-scrollbar-thumb {
+  background: rgba(84, 77, 69, 1);
+  border-radius: 5px;
+}
+
+/* 스크롤바 손잡이 호버 시 색 */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 @media screen and (min-width: 640px) and (max-width: 767px) {
   html,
   body {
@@ -76,5 +102,13 @@ input:-webkit-autofill:active {
   html,
   body {
     font-size: 37.5% !important;
+  }
+}
+
+@layer utilities {
+  .no-spinner::-webkit-inner-spin-button,
+  .no-spinner::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 }
