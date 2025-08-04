@@ -17,13 +17,22 @@ const SignInPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({ mode: 'onSubmit' });
+    formState: { errors, isValid },
+    watch,
+  } = useForm<FormData>({
+    mode: 'onSubmit',
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
   const { mutate: signInMutate } = useSignIn();
 
+  const watchedValues = watch();
+
   const onSubmit = (data: FormData) => {
-    console.log(data);
+    // console.log(data);
     signInMutate({
       email: data.email,
       password: data.password,
@@ -31,8 +40,10 @@ const SignInPage = () => {
   };
 
   const hasErrors = Object.keys(errors).length > 0;
+  const isEmpty = !watchedValues.email || !watchedValues.password;
+  const isButtonDisabled = hasErrors || !isValid || isEmpty;
 
-  console.log(errors);
+  // console.log(errors);
 
   return (
     <div className="flex flex-col items-center justify-center ">
@@ -62,7 +73,7 @@ const SignInPage = () => {
           </div>
           <LoginOptions />
           <div className="flex flex-col gap-6 mt-32">
-            <SubmitBtn hasErrors={hasErrors} text="로그인" />
+            <SubmitBtn hasErrors={isButtonDisabled} text="로그인" />
             <KakaoBtn />
           </div>
         </div>
