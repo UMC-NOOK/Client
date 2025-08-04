@@ -10,6 +10,7 @@ import Toggle from '../../components/read-note-edit/toggle';
 import Phrase from '../../components/read-note-edit/phrase';
 import Quotation from '../../components/read-note-edit/quotation';
 import Impression from '../../components/read-note-edit/impression';
+import NookChat from '../../components/read-note-edit/nook-chat';
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 
 const ReadNoteEditPage = () => {
@@ -331,11 +332,7 @@ const ReadNoteEditPage = () => {
                 </div>
               </div>
             </div>
-            {isNookChatOpen && (
-              <div className="flex items-center justify-center w-[327px] h-[600px] rounded-[20px] bg-[rgba(66,60,53,0.5)] ">
-                dldiq
-              </div>
-            )}
+            {isNookChatOpen && <NookChat />}
           </div>
         </div>
       </div>
