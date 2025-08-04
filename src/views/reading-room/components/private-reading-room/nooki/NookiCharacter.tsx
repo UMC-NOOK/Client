@@ -34,7 +34,7 @@ const NookiCharacter = ({
         />
 
         <p
-          className={`text-nook-100 absolute ${headPosition} ${textTransform} text-sm`}
+          className={`text-nook-100 absolute ${headPosition} ${textTransform} text-sm font-semibold`}
         >
           {textContent}
         </p>

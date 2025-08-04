@@ -34,7 +34,7 @@ const ReadingRoom = () => {
           headSize="w-[188px] h-[132px]"
           bodyPosition="bottom-265 left-365"
           headPosition="bottom-312 left-334"
-          textTransform="-translate-y-[130px] translate-x-[30px]"
+          textTransform="-translate-y-[126px] translate-x-[30px]"
         />
 
         <NookiCharacter
