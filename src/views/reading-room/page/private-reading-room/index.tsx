@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import CampFire from '../../components/private-reading-room/CampFire';
 import ControlBar from '../../components/private-reading-room/control-bar/ControlBar';
 import ReadingRoom from '../../components/private-reading-room/ReadingRoom';
@@ -16,10 +17,19 @@ const PrivateReadingRoom = () => {
   const [bookClick, setBookClick] = useState(false);
   const [settingClick, setSettingClick] = useState(false);
 
-  const isExitModalOpen = useModalStore((state) => state.isExitModalOpen);
-  const toggleExitModal = useModalStore((state) => state.toggleExitModal);
-  const isDeleteModalOpen = useModalStore((state) => state.isDeleteModalOpen);
-  const toggleDeleteModal = useModalStore((state) => state.toggleDeleteModal);
+  const {
+    isExitModalOpen,
+    toggleExitModal,
+    isDeleteModalOpen,
+    toggleDeleteModal,
+  } = useModalStore(
+    useShallow((state) => ({
+      isExitModalOpen: state.isExitModalOpen,
+      toggleExitModal: state.toggleExitModal,
+      isDeleteModalOpen: state.isDeleteModalOpen,
+      toggleDeleteModal: state.toggleDeleteModal,
+    })),
+  );
 
   const toggleSound = useSoundStore((state) => state.toggleSound);
 
