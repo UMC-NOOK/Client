@@ -28,9 +28,9 @@ const PrivateReadingRoom = () => {
 
   return (
     <div className="max-w-[970px] h-[780px] m-auto relative">
-      {/* <CampFire /> */}
+      <CampFire />
       <ReadingRoom />
-      {/* <Subway /> */}
+      <Subway />
 
       {isExitModalOpen && (
         <DeleteBtn

@@ -6,16 +6,21 @@ interface NookiCharacterProps {
   bodyPosition: string;
   headPosition: string;
   flipped?: boolean;
+  ver?: number;
+  textTransform?: string;
+  textContent?: string;
 }
 
 const NookiCharacter = ({
   bodyImage,
   headImage,
-  bodySize = 'w-80 h-80',
-  headSize = 'w-80 h-80',
+  bodySize,
+  headSize,
   bodyPosition,
   headPosition,
   flipped = false,
+  textTransform = '-translate-y-[145px] translate-x-[40px]',
+  textContent = '정혁 | 고독한 누키',
 }: NookiCharacterProps) => {
   const flipStyle = flipped ? '[transform:scaleX(-1)]' : '';
 
@@ -27,6 +32,13 @@ const NookiCharacter = ({
           alt=""
           className={`${bodySize} object-contain absolute ${bodyPosition} ${flipStyle}`}
         />
+
+        <p
+          className={`text-nook-100 absolute ${headPosition} ${textTransform} text-sm`}
+        >
+          {textContent}
+        </p>
+
         <img
           src={headImage}
           alt=""
