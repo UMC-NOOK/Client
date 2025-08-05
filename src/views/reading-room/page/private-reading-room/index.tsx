@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import CampFire from '../../components/private-reading-room/CampFire';
 import ControlBar from '../../components/private-reading-room/control-bar/ControlBar';
 import ReadingRoom from '../../components/private-reading-room/ReadingRoom';
@@ -9,16 +10,26 @@ import useModalStore from '../../../../store/private-reading-room/useModalStore'
 import DeleteBtn from '../../../../components/delete-modal/reading-room/DeleteModal';
 import SmallControlBar from '../../components/private-reading-room/control-bar/SmallControlBar';
 import useSoundStore from '../../../../store/private-reading-room/useSoundStore';
+import SpeechBubble from '../../components/private-reading-room/speech-bubble/SpeechBubble';
 
 const PrivateReadingRoom = () => {
   const [memberClick, setMemberClick] = useState(false);
   const [bookClick, setBookClick] = useState(false);
   const [settingClick, setSettingClick] = useState(false);
 
-  const isExitModalOpen = useModalStore((state) => state.isExitModalOpen);
-  const toggleExitModal = useModalStore((state) => state.toggleExitModal);
-  const isDeleteModalOpen = useModalStore((state) => state.isDeleteModalOpen);
-  const toggleDeleteModal = useModalStore((state) => state.toggleDeleteModal);
+  const {
+    isExitModalOpen,
+    toggleExitModal,
+    isDeleteModalOpen,
+    toggleDeleteModal,
+  } = useModalStore(
+    useShallow((state) => ({
+      isExitModalOpen: state.isExitModalOpen,
+      toggleExitModal: state.toggleExitModal,
+      isDeleteModalOpen: state.isDeleteModalOpen,
+      toggleDeleteModal: state.toggleDeleteModal,
+    })),
+  );
 
   const toggleSound = useSoundStore((state) => state.toggleSound);
 
@@ -28,9 +39,11 @@ const PrivateReadingRoom = () => {
 
   return (
     <div className="max-w-[970px] h-[780px] m-auto relative">
-      <CampFire />
-      {/* <ReadingRoom />
-      <Subway /> */}
+      {/* <CampFire /> */}
+      <ReadingRoom />
+      {/* <Subway /> */}
+
+      {/* <SpeechBubble /> */}
 
       {isExitModalOpen && (
         <DeleteBtn

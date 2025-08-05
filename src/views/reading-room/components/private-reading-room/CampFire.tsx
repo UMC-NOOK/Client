@@ -8,6 +8,8 @@ import nh2 from '../../../../assets/readingRoom/nooki-head/nooki2_green.png';
 import nh3 from '../../../../assets/readingRoom/nooki-head/nooki3_orange.png';
 import nh4 from '../../../../assets/readingRoom/nooki-head/nooki4_yellow.png';
 import NookiCharacter from './nooki/NookiCharacter';
+import SpeechBubble2 from './speech-bubble/SpeechBubble2';
+import SpeechBubble3 from './speech-bubble/SpeechBubble3';
 
 const CampFire = () => {
   return (
@@ -21,6 +23,8 @@ const CampFire = () => {
           headSize="w-[169px] h-[130px]"
           bodyPosition="bottom-115 left-342"
           headPosition="bottom-165 left-330"
+          speechBubbleOffset={{ x: 20, y: -270 }}
+          SpeechBubbleComponent={SpeechBubble2}
         />
 
         <NookiCharacter
@@ -31,6 +35,7 @@ const CampFire = () => {
           bodyPosition="bottom-30 left-305"
           headPosition="bottom-70 left-277"
           textTransform="-translate-y-[130px] translate-x-[30px]"
+          speechBubbleOffset={{ x: -10, y: -270 }}
         />
 
         <NookiCharacter
@@ -41,6 +46,8 @@ const CampFire = () => {
           bodyPosition="bottom-118 left-135"
           headPosition="bottom-170 left-107"
           textTransform="-translate-y-[155px] translate-x-[44px]"
+          speechBubbleOffset={{ x: 150, y: -270 }}
+          SpeechBubbleComponent={SpeechBubble3}
         />
 
         {/* 뒤진힌놈 */}
@@ -53,6 +60,7 @@ const CampFire = () => {
           headPosition="bottom-178 left-58"
           flipped={true}
           textTransform="-translate-y-[120px] translate-x-[30px]"
+          speechBubbleOffset={{ x: -30, y: -260 }}
         />
       </div>
     </div>
