@@ -2,21 +2,21 @@ import { useState } from 'react';
 
 import edit_btn from '/src/assets/button/read-note-edit/edit-btn.svg';
 import delete_btn from '/src/assets/button/read-note-edit/delete-btn.svg';
-import quotation_btn from '/src/assets/button/read-note-edit/quotation-btn.svg';
 import send_btn from '/src/assets/button/read-note-edit/send-button.svg';
 import impression_icon from '/src/assets/button/read-note-edit/impression-icon.svg';
 
-type textContentType = 'phrase' | 'impression' | 'quotation';
 interface ImpressionProps {
   text: string;
   clickImpression: () => void;
   setIsDeleteModalOpen: (isOpen: boolean) => void; // Optional prop for delete modal
+  isNookChatOpen: boolean;
 }
 
 const Impression = ({
   text,
   clickImpression,
   setIsDeleteModalOpen,
+  isNookChatOpen, // Optional prop for nook chat state
 }: ImpressionProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -51,8 +51,8 @@ const Impression = ({
   return (
     <div
       className="flex w-full items-center justify-start gap-8 mt-7 relative"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={isNookChatOpen ? undefined : handleMouseEnter}
+      onMouseLeave={isNookChatOpen ? undefined : handleMouseLeave}
     >
       <div
         className={`px-3 text-white text-center text-sm not-italic font-normal leading-[22px] flex items-center justify-center w-[59px] h-[59px]`}
@@ -85,7 +85,7 @@ const Impression = ({
         <div className=" flex items-stretch justify-center">
           <div className="w-3 shrink-0 rounded-[8px_0_0_8px] bg-nook-secondaey"></div>
           <div
-            className={` w-[723px] px-7 py-9 rounded-[0_8px_8px_0] bg-[#2B2217] text-white text-sm not-italic font-normal leading-[25px] flex items-center justify-start`}
+            className={` px-7 py-9 rounded-[0_8px_8px_0] bg-[#2B2217] text-white text-sm not-italic font-normal leading-[25px] flex items-center justify-start ${isNookChatOpen ? 'w-[569px]' : 'w-[723px]'}`}
           >
             {textValue}
           </div>

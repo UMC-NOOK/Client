@@ -10,6 +10,7 @@ import Toggle from '../../components/read-note-edit/toggle';
 import Phrase from '../../components/read-note-edit/phrase';
 import Quotation from '../../components/read-note-edit/quotation';
 import Impression from '../../components/read-note-edit/impression';
+import NookChat from '../../components/read-note-edit/nook-chat';
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 
 const ReadNoteEditPage = () => {
@@ -55,7 +56,7 @@ const ReadNoteEditPage = () => {
     {
       phraseId: 2,
       page: 45,
-      text: '시간이 많아지면 생각이 많아지고, 생각이 많아지면 우울이 찾아들기 마련이다.',
+      text: '시간이 많아지면 생각이 많아지고, 생각이 많아지면 우울이 찾아들기 마련이다. ',
     },
     { phraseId: 3, page: null, text: '이얍' },
     {
@@ -114,8 +115,14 @@ const ReadNoteEditPage = () => {
     setIsDeleteModalOpen(false);
   };
 
+  // nook chat 로직
+  const [isNookChatOpen, setIsNookChatOpen] = useState(false);
+  const toggleNookChat = () => {
+    setIsNookChatOpen((prev) => !prev);
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center h-400">
+    <div className="flex flex-col items-center justify-center h-350">
       {isDeleteModalOpen && (
         <DeleteBtn
           usage={deleteOption}
@@ -136,165 +143,196 @@ const ReadNoteEditPage = () => {
               </p>
             </div>
           </div>
-          <img src={nook_chat} alt="nook chat" className="h-16 w-16" />
+          <img
+            src={nook_chat}
+            alt="nook chat"
+            className="h-16 w-16"
+            onClick={toggleNookChat}
+          />
         </div>
-        <hr className="w-full h-0 outline outline-1 outline-offset-[-0.50px] outline-neutral-600/70 mt-14" />
-        <div className="flex flex-col items-center justify-center h-full w-450">
-          <div className="ml-40 flex flex-col items-center justify-start gap-4 box-border overflow-y-auto [&::-webkit-scrollbar]:hidden mb-17 w-full">
-            {isReadNoteExist ? (
-              <>
-                {phraseData.map((phrase) => {
-                  const matchingQuotations = quotationData.filter(
-                    (q) => q.phraseId === phrase.phraseId,
-                  );
+        <div
+          className={`w-full h-[600px] flex flex-col justify-center ${isNookChatOpen ? 'items-start' : 'items-center'}`}
+        >
+          <hr
+            className={`${isNookChatOpen ? 'w-[661px]' : 'w-full'} h-0 outline outline-1 outline-offset-[-0.50px] outline-neutral-600/70 mt-14`}
+          />
+          <div
+            className={`w-full h-full flex items-center gap-9 ${isNookChatOpen ? 'justify-between' : 'justify-center'}`}
+          >
+            <div
+              className={`flex flex-col items-center justify-center h-full  ${isNookChatOpen ? 'w-[650px]' : 'w-450'}`}
+            >
+              <div
+                className={`flex flex-col items-center justify-start gap-4 box-border overflow-y-auto [&::-webkit-scrollbar]:hidden mb-17 w-full ${isNookChatOpen ? '' : 'ml-40 '}`}
+              >
+                {isReadNoteExist ? (
+                  <>
+                    {phraseData.map((phrase) => {
+                      const matchingQuotations = quotationData.filter(
+                        (q) => q.phraseId === phrase.phraseId,
+                      );
 
-                  return phrase.page == null ? (
-                    <div
-                      key={phrase.phraseId}
-                      className="flex flex-col items-start justify-start w-full"
-                    >
-                      <Phrase
-                        text={phrase.text}
-                        setSelectedPhrasePage={setSelectedPhrasePage}
-                        setTextContent={setTextContent}
-                        clickPhrase={() => {
-                          setClickPhraseId(phrase.phraseId);
-                          setDeleteOption('read-note-edit-phrase');
+                      return phrase.page == null ? (
+                        <div
+                          key={phrase.phraseId}
+                          className="flex flex-col items-start justify-start w-full"
+                        >
+                          <Phrase
+                            text={phrase.text}
+                            setSelectedPhrasePage={setSelectedPhrasePage}
+                            setTextContent={setTextContent}
+                            clickPhrase={() => {
+                              setClickPhraseId(phrase.phraseId);
+                              setDeleteOption('read-note-edit-phrase');
+                            }}
+                            setIsDeleteModalOpen={setIsDeleteModalOpen}
+                            isNookChatOpen={isNookChatOpen}
+                          />
+                          {matchingQuotations.map((q) => (
+                            <Quotation
+                              key={q.Quotation}
+                              text={q.text}
+                              clickPhrase={() => {
+                                setClickPhraseId(phrase.phraseId);
+                                setDeleteOption('read-note-edit-quotation');
+                              }}
+                              setIsDeleteModalOpen={setIsDeleteModalOpen}
+                              isNookChatOpen={isNookChatOpen}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <div
+                          key={phrase.phraseId}
+                          className="flex flex-col items-start justify-start w-full"
+                        >
+                          <Phrase
+                            page={phrase.page}
+                            text={phrase.text}
+                            setSelectedPhrasePage={setSelectedPhrasePage}
+                            setTextContent={setTextContent}
+                            clickPhrase={() => {
+                              setClickPhraseId(phrase.phraseId);
+                              setDeleteOption('read-note-edit-phrase');
+                            }}
+                            setIsDeleteModalOpen={setIsDeleteModalOpen}
+                            isNookChatOpen={isNookChatOpen}
+                          />
+                          {matchingQuotations.map((q) => (
+                            <Quotation
+                              key={q.Quotation}
+                              text={q.text}
+                              clickPhrase={() => {
+                                setClickPhraseId(phrase.phraseId);
+                                setDeleteOption('read-note-edit-quotation');
+                              }}
+                              setIsDeleteModalOpen={setIsDeleteModalOpen}
+                              isNookChatOpen={isNookChatOpen}
+                            />
+                          ))}
+                        </div>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <div className="text-[rgba(255,255,255,0.50)] text-center text-sm not-italic font-normal leading-[22px]">
+                    작성한 독서 기록이 없습니다.
+                  </div>
+                )}
+                {isImpressionExist ? (
+                  impressionData.map((data) => {
+                    return (
+                      <Impression
+                        key={data.ImpressionId}
+                        text={data.text}
+                        clickImpression={() => {
+                          setClickPhraseId(data.ImpressionId);
+                          setDeleteOption('read-note-edit-impression');
                         }}
                         setIsDeleteModalOpen={setIsDeleteModalOpen}
+                        isNookChatOpen={isNookChatOpen}
                       />
-                      {matchingQuotations.map((q) => (
-                        <Quotation
-                          key={q.Quotation}
-                          text={q.text}
-                          clickPhrase={() => {
-                            setClickPhraseId(phrase.phraseId);
-                            setDeleteOption('read-note-edit-quotation');
-                          }}
-                          setIsDeleteModalOpen={setIsDeleteModalOpen}
-                        />
-                      ))}
+                    );
+                  })
+                ) : (
+                  <></>
+                )}
+              </div>
+              <div className={` ${isNookChatOpen ? 'w-[654px]' : 'w-402'}`}>
+                {textContent === 'phrase' ? (
+                  <div className="flex w-full h-[38px] items-center gap-3 shrink-0 border px-[27px] py-[9px] rounded-[14px_14px_0_0] border-solid border-nook-br-100 bg-[#2B2217]">
+                    <img
+                      src={arroow_redo}
+                      alt=""
+                      className="h-[13px] w-[13px]"
+                    />
+                    <input
+                      type="number"
+                      placeholder="페이지를 입력해주세요 (숫자만 입력)"
+                      className="no-spinner w-full text-white text-xs not-italic font-normal leading-5 bg-transparent outline-none placeholder:text-[#95908a] placeholder:text-xs placeholder:not-italic placeholder:font-normal placeholder:leading-5"
+                    />
+                  </div>
+                ) : (
+                  ''
+                )}
+
+                <div
+                  className={`flex w-full flex-col items-start gap-3 shrink-0 border px-[27px] py-[9px]  border-solid border-nook-br-100 px-[27px] py-[18px] ${textContent === 'phrase' ? 'h-[137px] rounded-[0_0_14px_14px]' : 'h-[175px] rounded-[14px]'}`}
+                >
+                  {textContent === 'quotation' ? (
+                    <div className="flex items-start justify-start gap-3 w-full h-full">
+                      <img
+                        src={quotation_arrow}
+                        alt="Quote"
+                        className="w-10 h-10 mr-3"
+                      />
+                      <textarea
+                        name=""
+                        id="phraseTextArea"
+                        placeholder={placeholderText}
+                        className="w-full h-full text-white text-sm not-italic font-normal leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-11"
+                        value={textAreaContent}
+                        onChange={(e) => {
+                          setTextContent('quotation');
+                          setTextAreaContent(e.target.value);
+                        }}
+                      ></textarea>
                     </div>
                   ) : (
-                    <div
-                      key={phrase.phraseId}
-                      className="flex flex-col items-start justify-start w-full"
-                    >
-                      <Phrase
-                        page={phrase.page}
-                        text={phrase.text}
-                        setSelectedPhrasePage={setSelectedPhrasePage}
-                        setTextContent={setTextContent}
-                        clickPhrase={() => {
-                          setClickPhraseId(phrase.phraseId);
-                          setDeleteOption('read-note-edit-phrase');
-                        }}
-                        setIsDeleteModalOpen={setIsDeleteModalOpen}
-                      />
-                      {matchingQuotations.map((q) => (
-                        <Quotation
-                          key={q.Quotation}
-                          text={q.text}
-                          clickPhrase={() => {
-                            setClickPhraseId(phrase.phraseId);
-                            setDeleteOption('read-note-edit-quotation');
-                          }}
-                          setIsDeleteModalOpen={setIsDeleteModalOpen}
-                        />
-                      ))}
-                    </div>
-                  );
-                })}
-              </>
-            ) : (
-              <div className="text-[rgba(255,255,255,0.50)] text-center text-sm not-italic font-normal leading-[22px]">
-                작성한 독서 기록이 없습니다.
-              </div>
-            )}
-            {isImpressionExist ? (
-              impressionData.map((data) => {
-                return (
-                  <Impression
-                    key={data.ImpressionId}
-                    text={data.text}
-                    clickImpression={() => {
-                      setClickPhraseId(data.ImpressionId);
-                      setDeleteOption('read-note-edit-impression');
-                    }}
-                    setIsDeleteModalOpen={setIsDeleteModalOpen}
-                  />
-                );
-              })
-            ) : (
-              <></>
-            )}
-          </div>
-          <div className="w-402">
-            {textContent === 'phrase' ? (
-              <div className="flex w-full h-[38px] items-center gap-3 shrink-0 border px-[27px] py-[9px] rounded-[14px_14px_0_0] border-solid border-nook-br-100 bg-[#2B2217]">
-                <img src={arroow_redo} alt="" className="h-[13px] w-[13px]" />
-                <input
-                  type="number"
-                  placeholder="페이지를 입력해주세요 (숫자만 입력)"
-                  className="no-spinner w-full text-white text-xs not-italic font-normal leading-5 bg-transparent outline-none placeholder:text-[#95908a] placeholder:text-xs placeholder:not-italic placeholder:font-normal placeholder:leading-5"
-                />
-              </div>
-            ) : (
-              ''
-            )}
+                    <textarea
+                      name=""
+                      id="phraseTextArea"
+                      placeholder={placeholderText}
+                      className="w-full h-full text-white text-sm not-italic font-normal leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-11"
+                      value={textAreaContent}
+                      onChange={(e) => {
+                        setTextAreaContent(e.target.value);
+                      }}
+                    ></textarea>
+                  )}
 
-            <div
-              className={`flex w-full flex-col items-start gap-3 shrink-0 border px-[27px] py-[9px]  border-solid border-nook-br-100 px-[27px] py-[18px] ${textContent === 'phrase' ? 'h-[137px] rounded-[0_0_14px_14px]' : 'h-[175px] rounded-[14px]'}`}
-            >
-              {textContent === 'quotation' ? (
-                <div className="flex items-start justify-start gap-3 w-full h-full">
-                  <img
-                    src={quotation_arrow}
-                    alt="Quote"
-                    className="w-10 h-10 mr-3"
-                  />
-                  <textarea
-                    name=""
-                    id="phraseTextArea"
-                    placeholder={placeholderText}
-                    className="w-full h-full text-white text-sm not-italic font-normal leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-11"
-                    value={textAreaContent}
-                    onChange={(e) => {
-                      setTextContent('quotation');
-                      setTextAreaContent(e.target.value);
-                    }}
-                  ></textarea>
+                  <div className="flex items-center justify-end gap-4 w-full">
+                    <Toggle
+                      isPhrase={textContent === 'phrase'}
+                      setIsPhrase={setTextContent}
+                      onClick={() => {
+                        setTextAreaContent('');
+                      }}
+                    />
+                    <img
+                      src={
+                        textAreaContent.trim() === ''
+                          ? send_disable_btn
+                          : send_btn
+                      }
+                      alt="send"
+                      className="w-12 h-12"
+                    />
+                  </div>
                 </div>
-              ) : (
-                <textarea
-                  name=""
-                  id="phraseTextArea"
-                  placeholder={placeholderText}
-                  className="w-full h-full text-white text-sm not-italic font-normal leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-11"
-                  value={textAreaContent}
-                  onChange={(e) => {
-                    setTextAreaContent(e.target.value);
-                  }}
-                ></textarea>
-              )}
-
-              <div className="flex items-center justify-end gap-4 w-full">
-                <Toggle
-                  isPhrase={textContent === 'phrase'}
-                  setIsPhrase={setTextContent}
-                  onClick={() => {
-                    setTextAreaContent('');
-                  }}
-                />
-                <img
-                  src={
-                    textAreaContent.trim() === '' ? send_disable_btn : send_btn
-                  }
-                  alt="send"
-                  className="w-12 h-12"
-                />
               </div>
             </div>
+            {isNookChatOpen && <NookChat />}
           </div>
         </div>
       </div>
