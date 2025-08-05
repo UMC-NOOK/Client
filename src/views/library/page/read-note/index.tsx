@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import chevron_left from '/src/assets/button/read-note-edit/chevron-left.svg';
 import edit_btn from '/src/assets/button/read-note-edit/edit-btn.svg';
 import delete_btn from '/src/assets/button/read-note-edit/delete-btn.svg';
@@ -8,10 +9,30 @@ import read_note_save_btn from '/src/assets/button/read-note/read-note-save-btn.
 import quotation_arrow from '/src/assets/button/read-note-edit/quotation-arrow.svg';
 import impression_icon from '/src/assets/button/read-note-edit/impression-icon.svg';
 
+import LibraryRegistration from '../../../lounge/components/book-info/libraryRegistration';
+
 const ReadNotePage = () => {
   const [isReadNoteExist, setIsReadNoteExist] = useState(false);
+  const [isLibraryRegistrationOpen, setIsLibraryRegistrationOpen] =
+    useState(false);
+
+  const handleLibrary = () => {
+    // 수정 로직 추가
+    setIsLibraryRegistrationOpen(false);
+  };
+
+  const libraryModalHandler = () => {
+    setIsLibraryRegistrationOpen((prev) => !prev);
+  };
+
   return (
     <div className="flex items-start justify-center w-full h-full gap-23 mt-20">
+      {isLibraryRegistrationOpen && (
+        <LibraryRegistration
+          onRegister={handleLibrary}
+          closeModal={libraryModalHandler}
+        />
+      )}
       <div className="flex flex-col items-center justify-start w-332">
         <div className="flex w-full h-35 items-center justify-between backdrop-blur-[20px] border-b border-solid border-b-[rgba(85,83,81,1)]">
           <div className="flex items-center gap-20">
@@ -26,9 +47,22 @@ const ReadNotePage = () => {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <img src={edit_btn} alt="Edit" className="w-17 h-17" />
-            <img src={info_edit_btn} alt="Info Edit" className="w-17 h-17" />
-            <img src={delete_btn} alt="Delete" className="w-17 h-17" />
+            <img
+              src={edit_btn}
+              alt="Edit"
+              className="w-17 h-17 cursor-pointer"
+              onClick={() => setIsLibraryRegistrationOpen(true)}
+            />
+            <img
+              src={info_edit_btn}
+              alt="Info Edit"
+              className="w-17 h-17 cursor-pointer"
+            />
+            <img
+              src={delete_btn}
+              alt="Delete"
+              className="w-17 h-17 cursor-pointer"
+            />
           </div>
         </div>
         {isReadNoteExist ? (
