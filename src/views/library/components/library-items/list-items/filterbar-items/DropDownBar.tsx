@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import leftButton from '../../../../../../assets/button/library/chevron-left.png';
 import clsx from 'clsx';
+import { useDropDownStore } from '../../../../../../store/library/useDropDownStore';
 
 const DropDownBar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectMenu, setSelectMenu] = useState<string>('최근 등록순');
+  // const [selectMenu, setSelectMenu] = useState<string>('최근 등록순');
+  const selectMenu = useDropDownStore((state) => state.selectMenu);
+  const setSelectMenu = useDropDownStore((state) => state.setSelectMenu);
   const menu = ['제목순', '최근 등록순', '최근 기록순', '내가 준 별점순'];
 
   const handleClick = (item: string) => {
