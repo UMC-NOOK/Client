@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import chevron_left from '/src/assets/button/read-note-edit/chevron-left.svg';
 import edit_btn from '/src/assets/button/read-note-edit/edit-btn.svg';
@@ -24,6 +25,9 @@ const ReadNotePage = () => {
   const libraryModalHandler = () => {
     setIsLibraryRegistrationOpen((prev) => !prev);
   };
+
+  const navigate = useNavigate();
+  const id = '3333'; // 예시 ID, 실제로는 props나 context에서 받아와야 함
 
   return (
     <div className="flex items-start justify-center w-full h-full gap-23 mt-20">
@@ -51,12 +55,13 @@ const ReadNotePage = () => {
               src={edit_btn}
               alt="Edit"
               className="w-17 h-17 cursor-pointer"
-              onClick={() => setIsLibraryRegistrationOpen(true)}
+              onClick={() => navigate(`/library/${id}/edit`)}
             />
             <img
               src={info_edit_btn}
               alt="Info Edit"
               className="w-17 h-17 cursor-pointer"
+              onClick={() => setIsLibraryRegistrationOpen(true)}
             />
             <img
               src={delete_btn}
