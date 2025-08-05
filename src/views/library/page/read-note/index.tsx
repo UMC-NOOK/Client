@@ -14,7 +14,7 @@ import LibraryRegistration from '../../../lounge/components/book-info/libraryReg
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 
 const ReadNotePage = () => {
-  const [isReadNoteExist, setIsReadNoteExist] = useState(false);
+  const [isReadNoteExist, setIsReadNoteExist] = useState(true);
   const [isLibraryRegistrationOpen, setIsLibraryRegistrationOpen] =
     useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
