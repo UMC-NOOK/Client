@@ -19,8 +19,9 @@ const InsertInfo = ({
     
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // const [roomName, setRoomName] = useState("");
-    // const [intro, setIntro] = useState("");
+
+    const nameVisualLength = Array.from(roomName).length;
+    const introVisualLength = Array.from(roomDescription).length;
 
     const toggleTag = (tag: string) => {
         setSelectedTags((prev) => {
@@ -39,7 +40,7 @@ const InsertInfo = ({
                     </div>
                     
                     <div className="text-white text-2xs">
-                        {roomName.length}/30
+                        {nameVisualLength}/30
                     </div>
                 </div>
 
@@ -63,7 +64,7 @@ const InsertInfo = ({
                     </div>
                     
                     <div className="text-white text-2xs">
-                        {roomDescription.length}/30
+                        {introVisualLength}/30
                     </div>
                 </div>
 
