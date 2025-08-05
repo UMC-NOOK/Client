@@ -1,14 +1,26 @@
 import React, { useState } from "react";
 import ShowMoreTagsModal from "./Modals/ShowMoreTagsModal";
 
-const InsertInfo = () => {
+interface Props {
+    roomName: string;
+    setRoomName: (value: string) => void;
+    roomDescription: string;
+    setRoomDescription: (value: string) => void;
+}
+
+const InsertInfo = ({
+    roomName,
+    setRoomName,
+    roomDescription,
+    setRoomDescription,
+    }: Props) => {
     const tag1 = ['자유 독서', '필사', '낮', '밤', '주말', '10대', '대학생', '직장인'];
     const tag2 = ['소설', '인문', '자기계발', '경제경영', '공학', '영어원서'];
     
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [roomName, setRoomName] = useState("");
-    const [intro, setIntro] = useState("");
+    // const [roomName, setRoomName] = useState("");
+    // const [intro, setIntro] = useState("");
 
     const toggleTag = (tag: string) => {
         setSelectedTags((prev) => {
@@ -51,16 +63,16 @@ const InsertInfo = () => {
                     </div>
                     
                     <div className="text-white text-2xs">
-                        {intro.length}/30
+                        {roomDescription.length}/30
                     </div>
                 </div>
 
                 <div className="w-224 h-20 rounded-lg"
                     style={{backgroundColor: 'rgba(31, 28, 25, 0.5)'}}>
                     <input 
-                        value={intro}
+                        value={roomDescription}
                         onChange={(e) => {
-                            if(e.target.value.length <= 30) setIntro(e.target.value);
+                            if(e.target.value.length <= 30) setRoomDescription(e.target.value);
                         }}
                         placeholder="리딩룸을 소개해주세요."
                         className="flex justify-start items-center ml-7 mt-6"
@@ -105,25 +117,6 @@ const InsertInfo = () => {
                         }
                 
                 </div>    
-{/* 
-                {selectedTags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 px-3 pt-2">
-                        {selectedTags.map((tag, idx) => (
-                            <div
-                                key={idx}
-                                className="flex justify-between items-center bg-[rgba(66,60,53,1)] text-white text-2xs px-3 py-2 gap-1 rounded-lg"> 
-                                {tag}
-                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="12" viewBox="0 0 11 12" fill="none"
-                                    onClick={() =>
-                                        setSelectedTags((prev) => prev.filter((t) => t !== tag))
-                                    }>
-                                    <path d="M5.91136 5.99758L9.00676 2.89916C9.06136 2.84428 9.092 2.77 9.09195 2.69258C9.09189 2.61516 9.06116 2.54092 9.00648 2.48611C8.89703 2.37721 8.70426 2.37666 8.59371 2.48666L5.49913 5.58508L2.40346 2.48583C2.29346 2.37721 2.10068 2.37776 1.99123 2.48638C1.96406 2.51344 1.94256 2.54564 1.92797 2.5811C1.91338 2.61656 1.906 2.65457 1.90626 2.69291C1.90626 2.77101 1.93651 2.84416 1.99123 2.89833L5.08663 5.99731L1.99151 9.09656C1.93689 9.15152 1.9063 9.22591 1.90645 9.30339C1.90661 9.38088 1.93749 9.45514 1.99233 9.50988C2.04541 9.56241 2.12048 9.59266 2.19803 9.59266H2.19968C2.27751 9.59238 2.35258 9.56186 2.40456 9.50878L5.49913 6.41036L8.59481 9.50961C8.64953 9.56406 8.72268 9.59431 8.80023 9.59431C8.83856 9.59435 8.87651 9.58682 8.91193 9.57217C8.94735 9.55752 8.97953 9.53603 9.00663 9.50893C9.03373 9.48183 9.05522 9.44965 9.06987 9.41423C9.08452 9.37882 9.09204 9.34086 9.09201 9.30254C9.09201 9.22471 9.06176 9.15128 9.00676 9.09711L5.91136 5.99758Z" fill="white"/>
-                                </svg>
-                            </div>
-                        ))}
-                    </div>
-                )} */}
-
 
                 <div className="flex flex-col w-224 mt-9">
                     <div className="flex flex-wrap gap-2">

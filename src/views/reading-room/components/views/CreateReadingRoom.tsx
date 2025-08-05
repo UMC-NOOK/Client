@@ -10,6 +10,12 @@ const CreateReadingRoom = () => {
     type ThemeType = 'Campfire' | 'Subway' | 'ReadingRoom';
     const[selected, setSelected] = useState<ThemeType>('Campfire');
 
+    const [roomName, setRoomName] = useState('');
+    const [roomDescription, setRoomDescription] = useState('');
+
+    const isCreatingValid = roomName.trim() !== "" && roomDescription.trim() !== "";
+
+
     const themeImages: Record<ThemeType, string> = {
         Campfire,
         Subway,
@@ -60,21 +66,30 @@ const CreateReadingRoom = () => {
                     </div>
 
                     <div className='flex flex-col justify-start mt-40'>
-                        <InsertInfo />
+                        <InsertInfo 
+                            roomName={roomName}
+                            setRoomName={setRoomName}
+                            roomDescription={roomDescription}
+                            setRoomDescription={setRoomDescription} />
 
                         <div 
-                                className='flex flex-row justify-center items-center w-81 h-20 rounded-lg mt-110 ml-150'
-                                style={{ backgroundColor: 'rgba(122,191,201,1)' }}>
-                                <div 
-                                    className='flex justify-center items-center rounded-full border mr-5 p-1'
-                                    style={{ borderColor: 'rgba(43, 34, 23, 1)' }}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 8" fill="none">
-                                        <path d="M4.44488 0.185547V4.00083M4.44488 7.8161V4.00083M4.44488 4.00083H0.722656M4.44488 4.00083H8.1671"
-                                        stroke="#2B2217" strokeWidth="0.372222" strokeLinecap="round" />
-                                    </svg>
-                                </div>
-                                <div className='text-sm'>리딩룸 생성하기</div>
+                            className='flex flex-row justify-center items-center w-81 h-20 rounded-lg mt-110 ml-150 border'
+                            style={{ 
+                                backgroundColor: isCreatingValid ? 'rgba(122,191,201,1)' : 'transparent',
+                                borderColor : isCreatingValid? 'transparent' : 'rgba(66, 60, 53,1)',
+                                pointerEvents: isCreatingValid? 'auto' : 'none',
+                                color: isCreatingValid? 'black': 'rgba(66,60,53,1)'
+                                }}>
+                            <div 
+                                className='flex justify-center items-center rounded-full border mr-5 p-1'
+                                style={{ borderColor: 'rgba(43, 34, 23, 1)' }}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 8" fill="none">
+                                    <path d="M4.44488 0.185547V4.00083M4.44488 7.8161V4.00083M4.44488 4.00083H0.722656M4.44488 4.00083H8.1671"
+                                    stroke="#2B2217" strokeWidth="0.372222" strokeLinecap="round" />
+                                </svg>
                             </div>
+                            <div className='text-sm'>리딩룸 생성하기</div>
+                        </div>
                     </div>
                 </div>
             </div>
