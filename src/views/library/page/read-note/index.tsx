@@ -11,11 +11,13 @@ import quotation_arrow from '/src/assets/button/read-note-edit/quotation-arrow.s
 import impression_icon from '/src/assets/button/read-note-edit/impression-icon.svg';
 
 import LibraryRegistration from '../../../lounge/components/book-info/libraryRegistration';
+import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 
 const ReadNotePage = () => {
   const [isReadNoteExist, setIsReadNoteExist] = useState(false);
   const [isLibraryRegistrationOpen, setIsLibraryRegistrationOpen] =
     useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleLibrary = () => {
     // 수정 로직 추가
@@ -24,6 +26,15 @@ const ReadNotePage = () => {
 
   const libraryModalHandler = () => {
     setIsLibraryRegistrationOpen((prev) => !prev);
+  };
+
+  const deleteModalHandler = () => {
+    setIsDeleteModalOpen((prev) => !prev);
+  };
+
+  const handleDelete = () => {
+    // 삭제 로직 추가
+    setIsDeleteModalOpen(false);
   };
 
   const navigate = useNavigate();
@@ -35,6 +46,13 @@ const ReadNotePage = () => {
         <LibraryRegistration
           onRegister={handleLibrary}
           closeModal={libraryModalHandler}
+        />
+      )}
+      {isDeleteModalOpen && (
+        <DeleteBtn
+          onDelete={handleDelete}
+          closeModal={deleteModalHandler}
+          usage="read-note"
         />
       )}
       <div className="flex flex-col items-center justify-start w-332">
@@ -61,12 +79,13 @@ const ReadNotePage = () => {
               src={info_edit_btn}
               alt="Info Edit"
               className="w-17 h-17 cursor-pointer"
-              onClick={() => setIsLibraryRegistrationOpen(true)}
+              onClick={libraryModalHandler}
             />
             <img
               src={delete_btn}
               alt="Delete"
               className="w-17 h-17 cursor-pointer"
+              onClick={deleteModalHandler}
             />
           </div>
         </div>

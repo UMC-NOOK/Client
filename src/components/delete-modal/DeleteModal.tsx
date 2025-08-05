@@ -4,7 +4,8 @@ interface DeleteBtnProps {
     | 'book-info'
     | 'read-note-edit-quotation'
     | 'read-note-edit-phrase'
-    | 'read-note-edit-impression';
+    | 'read-note-edit-impression'
+    | 'read-note';
   onDelete: () => void;
   closeModal: () => void;
 }
@@ -38,6 +39,15 @@ const DeleteBtn = ({ onDelete, closeModal, usage }: DeleteBtnProps) => {
           <>
             <p className="text-md font-normal text-nook-100 mb-2">
               이 감상을 삭제하시겠습니까?
+            </p>
+          </>
+        ) : usage === 'read-note' ? (
+          <>
+            <p className="text-md font-normal text-nook-100 mb-2">
+              서재에서 삭제하시겠습니까?
+            </p>
+            <p className="text-md font-normal text-nook-100 mb-6">
+              작성한 독서 기록도 함께 삭제됩니다.
             </p>
           </>
         ) : (
