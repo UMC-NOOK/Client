@@ -57,7 +57,7 @@ const ShowMoreTagsModal = ({
         });
 
     return(
-        <div className="fixed inset-0 z-50 flex justify-center items-center bg-opacity-50">
+        <div className="fixed i inset-0 z-50 flex justify-center items-center bg-opacity-50">
             <div 
                 className="relative w-224 h-304 rounded-3xl"
                 style={{backgroundColor: 'rgba(45, 40 ,34, 1'}}>
