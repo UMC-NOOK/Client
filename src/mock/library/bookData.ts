@@ -7,6 +7,7 @@ const tempBookData = [
     publisher: '곰출판',
     publication_date: '2025-05-2',
     star: 4,
+    bookId: 1,
   },
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
@@ -16,6 +17,7 @@ const tempBookData = [
     publisher: '곰출판',
     publication_date: '2025-05-04',
     star: 4,
+    bookId: 2,
   },
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
@@ -25,6 +27,7 @@ const tempBookData = [
     publisher: '곰출판',
     publication_date: '2025-05-09',
     star: 4,
+    bookId: 3,
   },
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
@@ -34,6 +37,7 @@ const tempBookData = [
     publisher: '곰출판',
     publication_date: '2025-05-11',
     star: 4,
+    bookId: 4,
   },
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
@@ -43,6 +47,7 @@ const tempBookData = [
     publisher: '곰출판',
     publication_date: '2025-05-16',
     star: 4,
+    bookId: 5,
   },
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
@@ -52,6 +57,7 @@ const tempBookData = [
     publisher: '곰출판',
     publication_date: '2025-05-21',
     star: 4,
+    bookId: 6,
   },
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
@@ -61,6 +67,7 @@ const tempBookData = [
     publisher: '곰출판',
     publication_date: '2025-05-22',
     star: 4,
+    bookId: 7,
   },
   {
     img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
@@ -70,6 +77,7 @@ const tempBookData = [
     publisher: '곰출판',
     publication_date: '2025-05-23',
     star: 4,
+    bookId: 8,
   },
 ];
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import SaveListItem from './SaveListItem';
 import tempBookData from '../../../../../mock/library/bookData';
 import leftButton from '../../../../../assets/button/library/chevron-left.png';
+import useGetBookState from '../../../hooks/useQuery/library-query/useGetBookState';
 
 interface SaveListProps {
   onClick: () => void;
@@ -9,6 +10,15 @@ interface SaveListProps {
 
 const SaveListView = ({ onClick }: SaveListProps) => {
   const [bookData, setBookData] = useState(tempBookData);
+
+  const { data, isLoading, isError, error, isSuccess, refetch } =
+    useGetBookState({
+      status: 'BOOKMARK',
+      size: 10,
+      sort: 'recent',
+    });
+
+  // console.log(data);
 
   return (
     <div className="w-[96rem] mx-auto">

@@ -4,6 +4,7 @@ import '../../styles/globalCalendar.css';
 import SaveList from '../library-items/grid-items/SaveList';
 import SaveListView from '../library-items/grid-items/SaveListView';
 import TileContent from '../calendar/TileContent';
+import useGetBookMonth from '../../hooks/useQuery/library-query/useGetBookMonth';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -12,9 +13,36 @@ type Toggle = boolean;
 const GridView = () => {
   const [value, onChange] = useState<Value>(new Date());
   const [istoggle, setIsToggle] = useState<Toggle>(false);
+  const [yearMonth, setYearMonth] = useState<string>(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    return `${year}-${month}`;
+  });
+
+  const { data, isLoading, isError, error, isSuccess, refetch } =
+    useGetBookMonth({ yearMonth });
+
+  // console.log(data);
 
   const handleClick = () => {
     setIsToggle((prev) => !prev);
+  };
+
+  const handleActiveStartDateChange = ({
+    activeStartDate,
+  }: {
+    activeStartDate: Date | null;
+  }) => {
+    if (activeStartDate) {
+      const year = activeStartDate.getFullYear();
+      const month = String(activeStartDate.getMonth() + 1).padStart(2, '0');
+      const newYearMonth = `${year}-${month}`;
+
+      if (newYearMonth !== yearMonth) {
+        setYearMonth(newYearMonth);
+      }
+    }
   };
 
   return (
@@ -37,6 +65,7 @@ const GridView = () => {
               tileContent={({ date, view }) => (
                 <TileContent date={date} view={view} />
               )}
+              onActiveStartDateChange={handleActiveStartDateChange}
               formatDay={(locale, date) => {
                 return date.getDate().toString().padStart(2, '0');
               }}
