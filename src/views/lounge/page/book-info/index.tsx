@@ -123,7 +123,7 @@ const BookInfoPage = () => {
         {/* 책소개 컴포넌트 */}
         <div className="relative w-full ">
           {/* 그라디언트 오버레이 */}
-          <div className="absolute w-full h-full inset-0 blur-sm">
+          <div className="absolute w-full h-full inset-0 blur-xs">
             <img
               src={book_cover}
               alt="배경 이미지"
@@ -189,7 +189,7 @@ const BookInfoPage = () => {
         </div>
         {/* 서재 등록 버튼 */}
         <div
-          className="flex self-end items-center justify-center gap-5 mt-15 mb-24 rounded-sm mt-15 px-22 py-5 bg-nook-br-100 cursor-pointer"
+          className="flex self-end items-center justify-center w-[176px] h-[40px] gap-5 mt-15 mb-24 rounded-sm px-22 py-5 bg-nook-br-100 cursor-pointer"
           onClick={libraryModalHandler}
         >
           <div className="w-[13px]">
@@ -198,7 +198,7 @@ const BookInfoPage = () => {
               alt=""
             />
           </div>
-          <div className="text-center text-white text-sm not-italic leading-[25px]">
+          <div className="text-center text-white text-sm font-semibold not-italic">
             {isRegistrationLibrary ? '서재로 이동' : '서재에 등록'}
           </div>
         </div>
