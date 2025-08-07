@@ -70,7 +70,7 @@ const Comment = ({
           2025.04.23
         </span>
       </div>
-      <div className="w-full text-white text-sm font-normal leading-[normal] mt-10  ">
+      <div className="w-full text-white text-sm font-normal mt-10  ">
         일상과 비일 상의 경계를 넘나들며, 익숙한 감정을 낯설게 풀어낸 점이
         인상적입니다. 일상과 비일 상의 경계를 넘나들며, 익숙한 감정을 낯설게
         풀어낸 점이 인상적입니다. 일상과 비일 상의 경계를 넘나들며, 익숙한
