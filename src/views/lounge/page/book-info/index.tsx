@@ -121,15 +121,17 @@ const BookInfoPage = () => {
           <div className="text-white text-xl  ">라운지</div>
         </div>
         {/* 책소개 컴포넌트 */}
-        <div className="relative w-full">
-          <img
-            src={book_cover}
-            alt="배경 이미지"
-            className="absolute inset-0 w-full h-full object-cover z-0"
-          />
-
+        <div className="relative w-full ">
           {/* 그라디언트 오버레이 */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black to-black/50" />
+          <div className="absolute w-full h-full inset-0 blur-sm">
+            <img
+              src={book_cover}
+              alt="배경 이미지"
+              className="w-[835px] h-[378px] object-cover"
+            />
+
+            <div className="absolute w-[835px] h-[378px] inset-0 bg-gradient-to-b from-black to-black/50" />
+          </div>
 
           <div className="px-11 py-8 w-full relative flex items-center justify-between box-border">
             {/* 책 이미지*/}
