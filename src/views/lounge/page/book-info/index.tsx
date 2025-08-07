@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+
 import chevron_left from '/src/assets/button/book-info/chevron-left.svg';
 import book_cover from '/src/assets/button/book-info/bookImgEx.png';
 import empty_star from '/src/assets/button/book-info/emptyStar.svg';
@@ -12,12 +15,26 @@ import Pagination from 'react-js-pagination';
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 import LibraryRegistration from '../../components/book-info/libraryRegistration';
 
+import bookInfoFetch from '../../apis/book-info/bookInfo';
+
 const BookInfoPage = () => {
+  const { id } = useParams<{ id: string }>();
+
+  // 책 정보 조회
+  const { data, isLoading } = useQuery({
+    queryKey: ['bookInfo', id],
+    queryFn: () => bookInfoFetch(id),
+    enabled: !!id,
+  });
+
   // 리뷰 작성 관련 상태
   const [reviewText, setReviewText] = useState('');
   const [reviewTextLength, setReviewTextLength] = useState(0);
   const [rating, setRating] = useState(0);
-  const [isReviewExist, setIsReviewExist] = useState(true);
+  const [isReviewExist, setIsReviewExist] = useState(
+    !!data?.result?.reviewData?.reviews &&
+      data.result.reviewData.reviews.length > 0,
+  );
   const [isUserReviewExist, setIsUserReviewExist] = useState(false);
   const [isUserEditReview, setIsUserEditReview] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -125,7 +142,7 @@ const BookInfoPage = () => {
           {/* 그라디언트 오버레이 */}
           <div className="absolute w-full h-full inset-0 blur-xs">
             <img
-              src={book_cover}
+              src={data?.result.book.coverImageUrl}
               alt="배경 이미지"
               className="w-[835px] h-[378px] object-cover"
             />
@@ -136,52 +153,71 @@ const BookInfoPage = () => {
           <div className="px-11 py-8 w-full relative flex items-center justify-between box-border">
             {/* 책 이미지*/}
             <div className="w-118 h-173">
-              <img src={book_cover} alt="Book Cover" className="rounded-lg" />
+              <img
+                src={data?.result.book.coverImageUrl}
+                alt="Book Cover"
+                className="rounded-lg"
+              />
             </div>
             {/* 책 정보 */}
             <div className="relative w-246 flex flex-col items-start justify-start gap-20">
               <div className="flex flex-col items-start justify-center gap-17">
                 <div className="text-white text-[22px] not-italic font-semibold leading-[normal] text-pretendard">
-                  칵테일, 러브, 좀비
+                  {data?.result.book.title}
                 </div>
                 <div className="text-white text-sm not-italic font-normal leading-[22px]  ">
-                  1965년 미국에서 발표된 후, 오랜 시간 동안 독자들에게
-                  잊힌《스토너》는 영국, 프랑스, 독일, 네덜란드 등 유럽 출판계와
-                  평론가, 독자들의 열렬한 반응을 이끌어내며 베스트셀러가 되었다.
-                  미국과 유럽을 넘어 전 세계에 ‘늦고도 새로운 감동’을 전한
-                  베스트셀러. 《스토너》가 드디어 한국 독자들을 찾아왔다.
+                  {data?.result.book.description
+                    ? data?.result.book.description
+                    : '책에 대한 설명이 없습니다.'}
                 </div>
               </div>
               <hr className="w-full border-nook-hr" />
               <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-sm text-white  ">
                 {/* 왼쪽 열 */}
-                <div className="flex gap-15">
-                  <span className="font-semibold">저자</span>
-                  <span className="font-normal">조예은</span>
+                <div className="flex justify-between gap-13">
+                  <span className="font-semibold w-[37px]">저자</span>
+                  <span className="font-normal">
+                    {data?.result.book.author}
+                  </span>
                 </div>
                 <div className="flex gap-15">
                   <span className="font-semibold">분야</span>
                   <span className="font-normal">
-                    국내도서 &gt; 소설/시/희곡
+                    {data?.result.book.mallType === 'BOOK'
+                      ? '국내도서 '
+                      : data?.result.book.mallType === 'FOREIGN'
+                        ? '해외도서 '
+                        : data?.result.book.mallType === 'EBOOK'
+                          ? '전자책 '
+                          : '기타 '}
+                    &gt; {data?.result.book.category}
                   </span>
                 </div>
 
                 <div className="flex gap-9">
                   <span className="font-semibold">출판사</span>
-                  <span className="font-normal">안전가옥</span>
+                  <span className="font-normal">
+                    {data?.result.book.publisher}
+                  </span>
                 </div>
                 <div className="flex gap-15">
                   <span className="font-semibold">분량</span>
-                  <span className="font-normal">162p</span>
+                  <span className="font-normal">
+                    {data?.result.book.pages}p
+                  </span>
                 </div>
 
                 <div className="flex gap-9">
                   <span className="font-semibold">출판일</span>
-                  <span className="font-normal">2020.04.10</span>
+                  <span className="font-normal">
+                    {data?.result.book.publicationDate}
+                  </span>
                 </div>
                 <div className="flex gap-12">
                   <span className="font-semibold">ISBN</span>
-                  <span className="font-normal">9791190174756</span>
+                  <span className="font-normal">
+                    {data?.result.book.isbn13}
+                  </span>
                 </div>
               </div>
             </div>
@@ -415,11 +451,11 @@ const BookInfoPage = () => {
             | 이 분야의 베스트
           </span>
           <div className="flex items-start justify-center gap-[35px] w-full">
-            <BestBook />
-            <BestBook />
-            <BestBook />
-            <BestBook />
-            <BestBook />
+            <BestBook bestBook={data?.result.bestInThisCategory[0]} />
+            <BestBook bestBook={data?.result.bestInThisCategory[1]} />
+            <BestBook bestBook={data?.result.bestInThisCategory[2]} />
+            <BestBook bestBook={data?.result.bestInThisCategory[3]} />
+            <BestBook bestBook={data?.result.bestInThisCategory[4]} />
           </div>
         </div>
       </div>
