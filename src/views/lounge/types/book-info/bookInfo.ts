@@ -13,23 +13,6 @@ export interface Book {
   registeredBookshelf: boolean;
 }
 
-export interface Review {
-  reviewId: number;
-  name: string;
-  nickname: string;
-  rating: number;
-  content: string;
-  reviewDate: string;
-  ownedByUser: boolean;
-}
-
-export interface ReviewPagination {
-  currentPage: number;
-  pageSize: number;
-  totalItems: number;
-  totalPages: number;
-}
-
 export interface BestBook {
   isbn13: string;
   title: string;
@@ -44,10 +27,6 @@ export interface BookInfoResponse {
   message: string;
   result: {
     book: Book;
-    reviewData: {
-      reviews: Review[];
-      pagination: ReviewPagination;
-    };
     bestInThisCategory: BestBook[];
   };
 }
