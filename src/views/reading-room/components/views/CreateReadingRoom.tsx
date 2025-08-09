@@ -58,17 +58,20 @@ const CreateReadingRoom = ({ usage, onCloseModal }: CreateReadingRoomProps) => {
 
                     <div className='flex flex-row justify-center items-start gap-13 mt-10 px-10'>
                         <div className='flex flex-col'>
-                            <div className='flex flex-row items-center mb-20'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                    onClick={() => navigate('/reading-room')}>
-                                    <path fillRule="evenodd" clipRule="evenodd"
-                                        d="M14.1919 2.05806C14.436 2.30214 14.436 2.69786 14.1919 2.94194L7.13388 10L14.1919 17.0581C14.436 17.3021 14.436 17.6979 14.1919 17.9419C13.9479 18.186 13.5521 18.186 13.3081 17.9419L5.80806 10.4419C5.56398 10.1979 5.56398 9.80214 5.80806 9.55806L13.3081 2.05806C13.5521 1.81398 13.9479 1.81398 14.1919 2.05806Z"
-                                        fill="white" fillOpacity="0.5" />
-                                </svg>
+                            {usage === 'create' && (
+                                <div className='flex flex-row items-center mb-20'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                        onClick={() => navigate('/reading-room')}>
+                                        <path fillRule="evenodd" clipRule="evenodd"
+                                            d="M14.1919 2.05806C14.436 2.30214 14.436 2.69786 14.1919 2.94194L7.13388 10L14.1919 17.0581C14.436 17.3021 14.436 17.6979 14.1919 17.9419C13.9479 18.186 13.5521 18.186 13.3081 17.9419L5.80806 10.4419C5.56398 10.1979 5.56398 9.80214 5.80806 9.55806L13.3081 2.05806C13.5521 1.81398 13.9479 1.81398 14.1919 2.05806Z"
+                                            fill="white" fillOpacity="0.5" />
+                                        </svg>
                             
-                                <div className='text-white text-xl ml-6'>내 리딩룸</div>
-                            </div>
-                            <img src={themeImages[selected]} alt={selected} className='w-270 h-221 rounded-xl' />
+                                    <div className='text-white text-xl ml-6'>내 리딩룸</div>
+                                </div>
+                            )}
+                            <img src={themeImages[selected]} alt={selected} 
+                            className={`${usage} === 'create' ? 'w-270 h-221 rounded-xl' : 'w-[446px] h-[365px] rounded-xl'}`} />
 
                             <div className='flex flex-col mt-6'>
                                 <div className='flex flex-row justify-start items-center gap-3'>
@@ -83,7 +86,7 @@ const CreateReadingRoom = ({ usage, onCloseModal }: CreateReadingRoomProps) => {
                                             src={themeImages[theme]}
                                             alt={theme}
                                             onClick={() => setSelected(theme)}
-                                            className={`cursor-pointer w-84 h-69 rounded-xl border transition-all duration-200 ${
+                                            className={`cursor-pointer ${usage === 'create' ? 'w-84 h-69' : 'w-[139.617px] h-[114.558px]'} rounded-xl border transition-all duration-200 ${
                                                 selected === theme
                                                     ? "border-[rgba(122,191,201,1)]"
                                                     : "border-transparent"
@@ -95,7 +98,7 @@ const CreateReadingRoom = ({ usage, onCloseModal }: CreateReadingRoomProps) => {
                             </div>
                         </div>
 
-                        <div className='flex flex-col justify-start mt-40'>
+                        <div className={`flex flex-col justify-start ${usage === 'create' ? 'mt-40' : 'mt-10'}`}>
                             <InsertInfo 
                                 roomName={roomName}
                                 setRoomName={setRoomName}

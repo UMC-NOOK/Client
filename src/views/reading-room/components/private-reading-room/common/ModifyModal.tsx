@@ -6,7 +6,7 @@ export default function Modal({
     }: { children: ReactNode; onClose: () => void }) {
         return (
         <div className="fixed inset-0 z-[9999] flex justify-center items-center">
-            <div className="w-462 h-280 backdrop-blur-md rounded-lg">
+            <div className="relative w-[924px] h-[560px] backdrop-blur-md rounded-lg">
                 {children}
             </div>
         </div>
