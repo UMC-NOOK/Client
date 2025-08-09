@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
 import arrowDownIcon from '../../../assets/button/home/Polygon_down.png';
 import arrowUpIcon from '../../../assets/button/home/Polygon_up.png';
@@ -8,6 +8,15 @@ type CategoryData = { name: string; count: number };
 
 // 적은 순서 → 많은 순서 컬러 팔레트
 const COLORS = ['#80CADD', '#38BDBF', '#86BD09', '#FFD857', '#FCAE04', '#FC9605'];
+
+// 0권(데이터 없음)일 때
+const EmptyDonut = () => (
+  <div className="relative flex items-center justify-center" style={{ width: 145, height: 145 }}>
+    <svg width={140} height={140} viewBox="0 0 140 140">
+      <circle cx="70" cy="70" r="50" fill="none" stroke="#423C3580" strokeWidth="20" />
+    </svg>
+  </div>
+);
 
 const BookCategoryChart: React.FC = () => {
   const { data } = useGetHomeCategories(); // Server: { categoryName, count }[]
@@ -49,45 +58,64 @@ const BookCategoryChart: React.FC = () => {
   }, [chartCategories]);
 
   return (
-    <div className="w-[246px] rounded-[12px] bg-[#423C35]/10 flex flex-col items-left py-[14px] transition-all duration-300">
+    <div className="w-[246px] rounded-[12px] bg-[#423C35]/10 flex flex-col items-left pt-[14px] pb-[49px] transition-all duration-300">
       <p className="text-white text-[12px] leading-[25px] font-[400] font-pretendard mb-[20px] pl-[25px]">
         이 분야의 책을 가장 많이 읽었어요.
       </p>
 
       <div className="w-full h-[145px] flex items-center justify-center relative">
-        <PieChart width={145} height={145}>
-          <Pie
-            data={dataWithColor}
-            dataKey="count"
-            nameKey="name"
-            innerRadius={50}
-            outerRadius={70}
-            startAngle={90}
-            endAngle={-270}
-            paddingAngle={2}
-            stroke="none"
-            cornerRadius={6}
-            isAnimationActive={false}
-          >
-            {dataWithColor.map((entry) => (
-              <Cell key={entry.name} fill={entry.color} />
-            ))}
-          </Pie>
-        </PieChart>
+        {total === 0 ? (
+          <>
+            {/* 0권 전용 회색 도넛 */}
+            <EmptyDonut />
+            {/* 중앙 텍스트 */}
+            <div className="absolute flex flex-col items-center justify-center">
+              <span className="text-white text-[10px] leading-[20px] font-[400] font-pretendard">
+                독서
+              </span>
+              <span className="text-white text-[12px] leading-[20px] font-[600] font-pretendard">
+                0권
+              </span>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* 정상 데이터 도넛 */}
+            <PieChart width={145} height={145}>
+              <Pie
+                data={dataWithColor}
+                dataKey="count"
+                nameKey="name"
+                innerRadius={50}
+                outerRadius={70}
+                startAngle={90}
+                endAngle={-270}
+                paddingAngle={2}
+                stroke="none"
+                cornerRadius={6}
+                isAnimationActive={false}
+              >
+                {dataWithColor.map((entry) => (
+                  <Cell key={entry.name} fill={entry.color} />
+                ))}
+              </Pie>
+            </PieChart>
 
-        {/* 중앙 텍스트 */}
-        <div className="absolute flex flex-col items-center justify-center">
-          <span className="text-white text-[10px] leading-[20px] font-[400] font-pretendard">
-            {topCategory.name}
-          </span>
-          <span className="text-white text-[12px] leading-[20px] font-[600] font-pretendard">
-            {topCategory.count}권
-          </span>
-        </div>
+            {/* 중앙 텍스트 */}
+            <div className="absolute flex flex-col items-center justify-center">
+              <span className="text-white text-[10px] leading-[20px] font-[400] font-pretendard">
+                {topCategory.name}
+              </span>
+              <span className="text-white text-[12px] leading-[20px] font-[600] font-pretendard">
+                {topCategory.count}권
+              </span>
+            </div>
+          </>
+        )}
       </div>
 
       {/* 전체 보기 토글 */}
-      {categories.length > 5 && (
+      {total > 0 && categories.length > 5 && (
         <button
           onClick={() => setExpanded((prev) => !prev)}
           className=" inline-flex items-center gap-[8px] text-[11px] leading-[25px] font-[400] text-white/50 font-pretendard mt-[12px]  pl-[25px]"
@@ -101,8 +129,8 @@ const BookCategoryChart: React.FC = () => {
         </button>
       )}
 
-      {/* 리스트 */}
-      {expanded && (
+      {/* 리스트 (0권일 때는 숨김) */}
+      {total > 0 && expanded && (
         <div className="mt-[12px] w-full px-[20px] text-white/80 text-[12px] font-[400] leading-[20px] font-pretendard">
           {chartCategories.map((cat) => (
             <div key={cat.name} className="flex justify-between items-center py-[2px]">

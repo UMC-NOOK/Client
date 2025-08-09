@@ -4,10 +4,18 @@ import { useGetHomeInsight } from '../hooks/useQuery/useGetHomeInsight';
 const BookSummaryCard = () => {
   const { data, isLoading } = useGetHomeInsight(); // { totalBookCount, totalRecordCount, statusCounts[] }
 
-  const reading =
+    const reading =
     data?.statusCounts.find((s) => s.readingStatus === 'READING')?.bookCount ?? 0;
+
   const finished =
-    data?.statusCounts.find((s) => s.readingStatus === 'DONE')?.bookCount ?? 0;
+    data?.statusCounts.find((s) =>
+      ['FINISHED', 'DONE', 'COMPLETED'].includes(s.readingStatus as string)
+    )?.bookCount ?? 0;
+
+  const bookmarked =
+    data?.statusCounts.find((s) =>
+      ['BOOKMARK', 'WISH'].includes(s.readingStatus as string)
+    )?.bookCount ?? 0;
 
   return (
     <div className="w-[246px] h-[154px] rounded-[12px] bg-[#423C351A] flex flex-col">
@@ -21,21 +29,22 @@ const BookSummaryCard = () => {
       </p>
 
       {/* 구분선 */}
-      <div className="w-[203px] h-[0.5px] bg-[#555351] ml-[25px] mt-[4px]" />
+      <div className="w-[203px] h-[0.5px] bg-[#555351] ml-[25px] mt-[4px] mb-[9px]" />
 
       {/* 책 상태 요약 */}
       <div className="flex flex-col gap-[1px] justify-start pl-[25px] pr-[27px]">
-        {[
+        {([
           ['독서 중', reading],
           ['완독', finished],
+          ['찜', bookmarked],            
           ['독서 기록', data?.totalRecordCount ?? 0],
-        ].map(([label, count]) => (
-          <div key={label as string} className="flex justify-between items-center h-[25px]">
+        ] as [string, number][]).map(([label, count]) => (
+          <div key={label} className="flex justify-between items-center h-[25px]">
             <span className="text-[12px] leading-[25px] text-white/50 font-[400]">
-              {label as string}
+              {label}
             </span>
             <span className="text-[12px] leading-[25px] text-white/50 font-[400]">
-              {count as number}권
+              {isLoading ? '-' : count}권
             </span>
           </div>
         ))}
