@@ -1,6 +1,6 @@
 // components/ActionButtons.tsx
 import React from 'react';
-import { useReadingRoomActions } from '../contexts/ReadingRoomActionsContext';
+import { useReadingRoomActions } from '../../contexts/ReadingRoomActionsContext';
 
 type ButtonType = 'create' | 'edit';
 

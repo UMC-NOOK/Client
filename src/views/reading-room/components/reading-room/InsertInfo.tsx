@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ShowMoreTagsModal from "./Modals/ShowMoreTagsModal";
+import ShowMoreTagsModal from "../Modals/ShowMoreTagsModal";
 
 interface Props {
     roomName: string;
