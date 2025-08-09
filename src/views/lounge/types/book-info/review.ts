@@ -24,3 +24,18 @@ export interface ReviewResponse {
     pagination: ReviewPagination;
   };
 }
+
+export interface ReviewCreateResponse {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+  result: {
+    reviewId: number;
+    name: string;
+    nickname: string;
+    rating: number;
+    content: string;
+    reviewDate: string;
+    ownedByUser: boolean;
+  };
+}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
 import chevron_left from '/src/assets/button/book-info/chevron-left.svg';
 import empty_star from '/src/assets/button/book-info/emptyStar.svg';
@@ -18,11 +18,9 @@ import bookInfoFetch from '../../apis/book-info/bookInfo';
 import { ReviewFetch, ReviewCreate } from '../../apis/book-info/review';
 
 import { Review } from '../../types/book-info/review';
-import { set } from 'date-fns';
 
 const BookInfoPage = () => {
   const { id } = useParams<{ id: string }>();
-  const queryClient = useQueryClient();
 
   // 책 정보 조회
   const { data: bookInfoData, isLoading } = useQuery({
@@ -72,6 +70,19 @@ const BookInfoPage = () => {
   const [userReview, setUserReview] = useState<Review>();
   const [isUserEditReview, setIsUserEditReview] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const reviewCreateClickHandler = () => {
+    if (reviewText.length > 0 || rating > 0) {
+      createReview({ rating, content: reviewText });
+      setReviewText('');
+      setReviewTextLength(0);
+      setRating(0);
+      setIsUserEditReview(false);
+    } else {
+      alert('리뷰 혹은 별점을 남겨주세요.');
+      window.location.reload();
+    }
+  };
 
   // 리뷰 Pagination 관련
   const [currentPost, setCurrentPost] = useState(1);
@@ -402,6 +413,7 @@ const BookInfoPage = () => {
                       className="w-[103px] h-[34px] rounded-sm bg-nook-br-200 text-white text-sm not-italic font-bold leading-[29.518px] tracking-[0.56px] flex items-center justify-center"
                       onClick={() => {
                         setIsUserReviewExist(true);
+                        reviewCreateClickHandler();
                       }}
                     >
                       리뷰 등록
