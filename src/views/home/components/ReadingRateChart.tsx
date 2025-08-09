@@ -8,38 +8,16 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
+import { useGetHomeRates } from '../hooks/useQuery/useGetHomeRates';
+
 interface MonthlyRate {
   month: string;
   rate: number | null;
 }
 
-const mockData: MonthlyRate[] = [
-  { month: '01월', rate: 30 },
-  { month: '02월', rate: 45 },
-  { month: '03월', rate: 50 },
-  { month: '04월', rate: 55 },
-  { month: '05월', rate: 65 },
-  { month: '06월', rate: 75 },
-  { month: '07월', rate: 20 },
-  { month: '08월', rate: 70 },
-  { month: '09월', rate: 10 },
-  { month: '10월', rate: 85 },
-  { month: '11월', rate: 60 },
-  { month: '12월', rate: 99 },
-];
-
 const CustomDot = ({ cx, cy, payload }: any) => {
   if (payload.rate === null) return <g />;
-  return (
-    <circle
-      cx={cx}
-      cy={cy}
-      r={1.6}
-      stroke="#7ABFC9"
-      strokeWidth={1}
-      fill="#7ABFC9"
-    />
-  );
+  return <circle cx={cx} cy={cy} r={1.6} stroke="#7ABFC9" strokeWidth={1} fill="#7ABFC9" />;
 };
 
 const CustomActiveDot = ({ cx, cy, payload }: any) => {
@@ -57,35 +35,36 @@ const CustomActiveDot = ({ cx, cy, payload }: any) => {
 };
 
 const ReadingRateChart: React.FC = () => {
-  const currentMonth = new Date().getMonth() + 1;
-  const isSecondHalf = currentMonth >= 7;
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1;
+  const year = String(now.getFullYear());
 
+  const { data } = useGetHomeRates(year); // { rates: [{month:number, rate:number}] }
+  const byMonth = new Map((data?.rates ?? []).map((r) => [r.month, r.rate]));
+
+  const isSecondHalf = currentMonth >= 7;
   const monthsToShow = isSecondHalf
     ? ['07월', '08월', '09월', '10월', '11월', '12월']
     : ['01월', '02월', '03월', '04월', '05월', '06월'];
 
-  const filled = monthsToShow.map((m) => {
-    const monthNum = parseInt(m);
-    const found = mockData.find((d) => d.month === m);
-    return {
-      month: m,
-      rate: monthNum <= currentMonth ? found?.rate ?? 0 : null,
-    };
+  const filled: MonthlyRate[] = monthsToShow.map((mLabel) => {
+    const m = parseInt(mLabel, 10);
+    const value = m <= currentMonth ? byMonth.get(m) ?? 0 : null;
+    return { month: mLabel, rate: value };
   });
 
   const thisMonthRate =
-    filled.find((d) => parseInt(d.month) === currentMonth)?.rate ?? 0;
+    filled.find((d) => parseInt(d.month, 10) === currentMonth)?.rate ?? 0;
 
   const chartHeight = 160;
-  const lineAreaHeight = 140; // 선이 그려질 실제 영역
+  const lineAreaHeight = 140;
   const lineCount = 11;
 
   return (
     <div className="w-[246px] h-[220px] flex-shrink-0 rounded-[12px] bg-[#423C35]/10 px-[26px] pt-[11px]">
       {/* 텍스트 */}
       <p className="text-white text-[12px] font-pretendard leading-[25px]">
-        이번 달 독서 기록률은{' '}
-        <span className="text-[16px]">{thisMonthRate}%</span> 입니다.
+        이번 달 독서 기록률은 <span className="text-[16px]">{thisMonthRate}%</span> 입니다.
       </p>
 
       {/* 차트 */}
@@ -111,10 +90,7 @@ const ReadingRateChart: React.FC = () => {
 
         {/* 라인 차트 */}
         <ResponsiveContainer width="100%" height={chartHeight + 20}>
-          <LineChart
-            data={filled}
-            margin={{ top: 0, right: 10, left: 10, bottom: 10 }} // ← 여백 줘서 텍스트 안 짤림
-          >
+          <LineChart data={filled} margin={{ top: 0, right: 10, left: 10, bottom: 10 }}>
             <XAxis
               dataKey="month"
               axisLine={false}
@@ -123,18 +99,13 @@ const ReadingRateChart: React.FC = () => {
               scale="point"
               tickMargin={10}
               tick={{
-          fill: 'rgba(255, 255, 255, 0.50)',
-          fontSize: 9,
-          fontFamily: 'AppleSDGothicNeoR00',
-          textAnchor: 'middle',
+                fill: 'rgba(255, 255, 255, 0.50)',
+                fontSize: 9,
+                fontFamily: 'AppleSDGothicNeoR00',
+                textAnchor: 'middle',
               }}
             />
-            <YAxis
-              hide
-              domain={[0, 100]}
-              type="number"
-              tick={false}
-            />
+            <YAxis hide domain={[0, 100]} type="number" tick={false} />
             <Tooltip content={() => null} cursor={false} />
             <Line
               type="linear"

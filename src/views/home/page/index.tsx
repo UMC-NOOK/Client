@@ -15,10 +15,10 @@ const Main = () => {
         
         {/* 왼쪽 섹션 */}
         <section className="w-[246px] flex flex-col gap-[10px]">
-          <BookStatusBox hasRegisteredBooks={false} />
+          <BookStatusBox />
           <CurrentlyReadingBox />
           <RecentJournalBox />
-          <RecentReadingRoomBox hasRoom={false} />
+          <RecentReadingRoomBox />
         </section>
 
         {/* 가운데 섹션: 중심 요소 */}
@@ -29,22 +29,13 @@ const Main = () => {
         {/* 오른쪽 섹션 */}
         <section className="w-[246px] flex flex-col gap-[10px]">
           <BookSummaryCard />
-          <BookCategoryChart
-            categories={[
-              { name: '에세이', count: 10, latestTimestamp: Date.parse('2025-07-25T10:00:00Z') },
-              { name: '자기계발', count: 8, latestTimestamp: Date.parse('2025-07-24T15:00:00Z') },
-              { name: '소설', count: 6, latestTimestamp: Date.parse('2025-07-23T09:30:00Z') },
-              { name: '시', count: 4, latestTimestamp: Date.parse('2025-07-22T08:10:00Z') },
-              { name: '과학', count: 2, latestTimestamp: Date.parse('2025-07-21T12:40:00Z') },
-              { name: '역사', count: 1, latestTimestamp: Date.parse('2025-07-20T11:20:00Z') },
-            ]}
-          />
+          <BookCategoryChart />
           <ReadingRateChart />
         </section>
 
       </div>
     </main>
-
   );
 };
+
 export default Main;
