@@ -45,11 +45,13 @@ instance.interceptors.response.use(
       error.response.status === 401 &&
       !originalRequest._retry
     ) {
+      console.log('재발급 로직 시작');
+
       originalRequest._retry = true;
 
       if (!isRefreshing) {
         isRefreshing = true;
-        const refreshToken = localStorage.getItem('refreshToken');
+        const refreshToken = sessionStorage.getItem('refreshToken');
 
         if (!refreshToken) {
           isRefreshing = false;
@@ -62,10 +64,8 @@ instance.interceptors.response.use(
 
         try {
           const { data } = await axios.post(
-            `${import.meta.env.VITE_SERVER_URL}/api/users/reissue`,
-            {
-              refreshToken,
-            },
+            `${import.meta.env.VITE_API_BASE_URL}api/users/reissue`,
+            { refreshToken },
           );
 
           const newAccessToken = data.accessToken;
