@@ -1,4 +1,3 @@
-// src/views/home/page/DesignPage.tsx
 import React, { useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 
@@ -32,7 +31,7 @@ type BackgroundPattern = 'NONE' | 'STRIPE' | 'ARGYLE' | 'DOT' | 'PLAID' | 'STAR'
 
 // 서버 enum <-> 로컬 키 매핑
 const lampKeyToEnum: Record<LampKey, CharacterColor> = {
-  base: 'RED',     // 디자인상 기본등 → RED로 매핑(서버에 없는 'BASE' 대신 폴백)
+  base: 'RED',
   orange: 'ORANGE',
   green: 'GREEN',
   blue: 'BLUE',
@@ -78,6 +77,7 @@ const wallpaperImages: Record<PatternKey, string> = {
 };
 
 const TABS = ['별명', '누키', '마이홈'] as const;
+type TabKey = typeof TABS[number];
 
 const DesignPage: React.FC = () => {
   const navigate = useNavigate();
@@ -94,10 +94,11 @@ const DesignPage: React.FC = () => {
   const [lampKey, setLampKey] = useState<LampKey>('base');
   const [patternKey, setPatternKey] = useState<PatternKey>('default');
 
+  const [activeTab, setActiveTab] = useState<TabKey>('별명');
+
   // 서버 값으로 초기화
   useEffect(() => {
     if (!profile) return;
-    // alias → 공백 기준 2 파트로 대충 분리(초기 진입 경험 개선, 저장 시에는 전체 문자열로 보냄)
     if (profile.alias?.trim()) {
       const parts = profile.alias.trim().split(/\s+/);
       setNicknamePrefix(parts[0] ?? '프로');
@@ -106,7 +107,6 @@ const DesignPage: React.FC = () => {
       setNicknamePrefix('프로');
       setNicknameSuffix('독자');
     }
-    // 색/배경
     setLampKey(enumToLampKey[profile.characterColor]);
     setPatternKey(enumToPatternKey[profile.backgroundPattern]);
   }, [profile]);
@@ -126,12 +126,7 @@ const DesignPage: React.FC = () => {
         characterColor: lampKeyToEnum[lampKey],
         backgroundPattern: patternKeyToEnum[patternKey],
       },
-      {
-        onSuccess: () => {
-          // 저장 후 홈으로
-          navigate('/home');
-        },
-      },
+      { onSuccess: () => navigate('/home') },
     );
   };
 
@@ -183,67 +178,47 @@ const DesignPage: React.FC = () => {
       {/* 오른쪽 탭 */}
       <div className="relative w-[432px] h-[568.407px] pt-0">
         {/* 탭 버튼 */}
-        <div className="relative z-10 flex ml-[14px] ">
-          {TABS.map((tab) => {
-            const [activeTab, setActiveTab] = [alias ? '별명' : '별명', () => {}]; // noop (버튼에서 변경)
-            return (
-              <button
-                key={tab}
-                onClick={() => {
-                  // 간단한 탭 상태 관리를 위해 버튼 안에서 처리
-                  const el = document.getElementById(`tab-${tab}`);
-                  document
-                    .querySelectorAll('[data-tabpane]')
-                    .forEach((n) => (n as HTMLElement).style.display = 'none');
-                  if (el) (el as HTMLElement).style.display = 'block';
-                  // 버튼 스타일은 clsx 안에서 active 판단하도록 className 처리
-                  document
-                    .querySelectorAll('[data-tabbtn]')
-                    .forEach((n) => n.classList.remove('bg-[#2D2822]','text-white'));
-                  (document.getElementById(`btn-${tab}`) as HTMLElement)?.classList.add('bg-[#2D2822]','text-white');
-                }}
-                id={`btn-${tab}`}
-                data-tabbtn
-                className={clsx(
-                  'w-[100px] h-[34.951px] flex justify-center items-center text-[14px] font-semibold',
-                  'rounded-t-[8px] overflow-hidden',
-                  'transform skew-x-[-12deg]',
-                  tab === '별명' ? 'bg-[#2D2822] text-white' : 'bg-[#211A11] text-white/60',
-                )}
-              >
-                <span className="transform skew-x-[12deg]">{tab}</span>
-              </button>
-            );
-          })}
+        <div className="relative z-10 flex ml-[14px]">
+          {TABS.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={clsx(
+                'w-[100px] h-[34.951px] flex justify-center items-center text-[14px] font-semibold',
+                'rounded-t-[8px] overflow-hidden',
+                'transform skew-x-[-12deg]',
+                activeTab === tab ? 'bg-[#2D2822] text-white' : 'bg-[#211A11] text-white/60'
+              )}
+            >
+              <span className="transform skew-x-[12deg]">{tab}</span>
+            </button>
+          ))}
         </div>
 
         {/* 탭 내용 */}
         <div className="relative z-20 w-full h-full rounded-[12px] bg-[#2D2822] px-[38px] pt-[21.41px] ">
-          {/* 별명 */}
-          <div id="tab-별명" data-tabpane style={{ display: 'block' }}>
+          {activeTab === '별명' && (
             <NicknameTab
               selectedPrefix={nicknamePrefix}
               setSelectedPrefix={setNicknamePrefix}
               selectedSuffix={nicknameSuffix}
               setSelectedSuffix={setNicknameSuffix}
             />
-          </div>
+          )}
 
-          {/* 누키 */}
-          <div id="tab-누키" data-tabpane style={{ display: 'none' }}>
+          {activeTab === '누키' && (
             <NookieTab
               selected={lampKey}
-              setSelected={setLampKey} // Dispatch<SetStateAction<LampKey>> 그대로 전달
+              setSelected={setLampKey}
             />
-          </div>
+          )}
 
-          {/* 마이홈 */}
-          <div id="tab-마이홈" data-tabpane style={{ display: 'none' }}>
+          {activeTab === '마이홈' && (
             <MyHomeTab
               selected={patternKey}
-              setSelected={setPatternKey} // Dispatch<SetStateAction<PatternKey>> 그대로 전달
+              setSelected={setPatternKey}
             />
-          </div>
+          )}
 
           {/* 저장 버튼 */}
           <div className="flex justify-center">
