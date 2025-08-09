@@ -15,6 +15,7 @@ interface ControlBarProps {
   onMemberClick: () => void;
   onBookClick: () => void;
   onSettingClick: () => void;
+  onBgmToggle: (bgmOn: boolean) => void;
 }
 
 function ControlBar({
@@ -22,11 +23,19 @@ function ControlBar({
   onMemberClick,
   onBookClick,
   onSettingClick,
+  onBgmToggle,
 }: ControlBarProps) {
   const [music, setMusic] = useState<boolean>(false);
   const toggleExitModal = useModalStore((state) => state.toggleExitModal);
   const toggleDeleteModal = useModalStore((state) => state.toggleDeleteModal);
   const navigate = useNavigate();
+
+  const handleMusicToggle = () => {
+    const newMusicState = !music;
+    setMusic(newMusicState);
+    // 웹소켓으로 BGM 토글 상태 전송
+    onBgmToggle(newMusicState);
+  };
 
   return (
     <div className="w-[288px] h-[60px] bg-[rgba(43,34,23,0.8)] gap-5 rounded-[12px] flex justify-center backdrop-blur-xl items-center absolute bottom-30 left-1/2 -translate-x-1/2">
@@ -36,14 +45,14 @@ function ControlBar({
           src={onMusicBtn}
           alt="소리켬"
           className="w-22 h-22 rounded-[8px] object-contain cursor-pointer"
-          onClick={() => setMusic((prev) => !prev)}
+          onClick={handleMusicToggle}
         />
       ) : (
         <img
           src={offMusicBtn}
           alt="소리끔"
           className="w-22 h-22 rounded-[8px] object-contain cursor-pointer"
-          onClick={() => setMusic((prev) => !prev)}
+          onClick={handleMusicToggle}
         />
       )}
 
