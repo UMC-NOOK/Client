@@ -144,15 +144,15 @@ const BookInfoPage = () => {
             <img
               src={data?.result.book.coverImageUrl}
               alt="배경 이미지"
-              className="w-[835px] h-[378px] object-cover"
+              className="w-[835px] h-full object-cover"
             />
 
-            <div className="absolute w-[835px] h-[378px] inset-0 bg-gradient-to-b from-black to-black/50" />
+            <div className="absolute w-[835px] h-full inset-0 bg-gradient-to-b from-black to-black/50" />
           </div>
 
           <div className="px-11 py-8 w-full relative flex items-center justify-between box-border">
             {/* 책 이미지*/}
-            <div className="w-118 h-173">
+            <div className="w-118 h-173 flex items-center justify-center">
               <img
                 src={data?.result.book.coverImageUrl}
                 alt="Book Cover"
@@ -174,9 +174,9 @@ const BookInfoPage = () => {
               <hr className="w-full border-nook-hr" />
               <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-sm text-white  ">
                 {/* 왼쪽 열 */}
-                <div className="flex justify-between gap-13">
+                <div className="flex justify-start gap-9">
                   <span className="font-semibold w-[37px]">저자</span>
-                  <span className="font-normal">
+                  <span className="font-normal w-[167px]">
                     {data?.result.book.author}
                   </span>
                 </div>
