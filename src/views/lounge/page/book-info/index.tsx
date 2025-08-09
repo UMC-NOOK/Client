@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import chevron_left from '/src/assets/button/book-info/chevron-left.svg';
 import empty_star from '/src/assets/button/book-info/emptyStar.svg';
@@ -15,13 +15,14 @@ import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 import LibraryRegistration from '../../components/book-info/libraryRegistration';
 
 import bookInfoFetch from '../../apis/book-info/bookInfo';
-import ReviewFetch from '../../apis/book-info/review';
+import { ReviewFetch, ReviewCreate } from '../../apis/book-info/review';
 
 import { Review } from '../../types/book-info/review';
 import { set } from 'date-fns';
 
 const BookInfoPage = () => {
   const { id } = useParams<{ id: string }>();
+  const queryClient = useQueryClient();
 
   // 책 정보 조회
   const { data: bookInfoData, isLoading } = useQuery({
@@ -34,13 +35,39 @@ const BookInfoPage = () => {
   const { data: reviewData } = useQuery({
     queryKey: ['reviewData', id],
     queryFn: () => ReviewFetch(id),
+    select: (data) => {
+      data?.result.reviews.length! > 0
+        ? setIsReviewExist(true)
+        : setIsReviewExist(false);
+      data?.result.reviews.map((review) =>
+        review.ownedByUser
+          ? (setIsUserReviewExist(true), setUserReview(review))
+          : (setIsUserReviewExist(false),
+            setIsReviewExist(true),
+            setPage((prev) => [
+              ...prev,
+              <Comment
+                key={review.reviewId}
+                setIsUserEditReview={setIsUserEditReview}
+                reviewData={review}
+              />,
+            ])),
+      );
+      setTotalItems(data?.result.pagination.totalItems!);
+    },
+  });
+  const { mutate: createReview } = useMutation({
+    mutationFn: (reviewData: { rating: number; content: string }) =>
+      ReviewCreate(id, reviewData),
+    onSuccess: (ownReview) => {
+      setIsUserReviewExist(true);
+      setUserReview(ownReview?.result);
+    },
   });
   const [reviewText, setReviewText] = useState('');
   const [reviewTextLength, setReviewTextLength] = useState(0);
   const [rating, setRating] = useState(0);
-  const [isReviewExist] = useState(
-    !!reviewData?.result?.reviews && reviewData.result.reviews.length > 0,
-  );
+  const [isReviewExist, setIsReviewExist] = useState(false);
   const [isUserReviewExist, setIsUserReviewExist] = useState(false);
   const [userReview, setUserReview] = useState<Review>();
   const [isUserEditReview, setIsUserEditReview] = useState(false);
@@ -48,22 +75,8 @@ const BookInfoPage = () => {
 
   // 리뷰 Pagination 관련
   const [currentPost, setCurrentPost] = useState(1);
-  const [page, setPage] = useState<JSX.Element[]>(() =>
-    (reviewData?.result.reviews ?? []).map((review) =>
-      review.ownedByUser ? (
-        <>
-          {setIsUserReviewExist(true)}
-          {setUserReview(review)}
-        </>
-      ) : (
-        <Comment
-          key={review.reviewId}
-          setIsUserEditReview={setIsUserEditReview}
-          reviewData={review}
-        />
-      ),
-    ),
-  );
+  const [page, setPage] = useState<JSX.Element[]>([]);
+  const [totalItems, setTotalItems] = useState(0);
   const postsPerPage = 5;
   const indexOfLastPost = currentPost * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -416,9 +429,7 @@ const BookInfoPage = () => {
                   <Pagination
                     activePage={currentPost}
                     itemsCountPerPage={postsPerPage}
-                    totalItemsCount={
-                      reviewData?.result.pagination.totalItems || 0
-                    }
+                    totalItemsCount={totalItems}
                     pageRangeDisplayed={5}
                     onChange={handlePageChange}
                     prevPageText=""
