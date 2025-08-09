@@ -92,7 +92,7 @@ const router = createBrowserRouter([
           },
           {
             path: 'create',
-            element: <CreateReadingRoom/>,
+            element: <CreateReadingRoom usage='create'/>,
           }
         ],
       },
