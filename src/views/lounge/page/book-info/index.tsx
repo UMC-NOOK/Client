@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
 import chevron_left from '/src/assets/button/book-info/chevron-left.svg';
-import book_cover from '/src/assets/button/book-info/bookImgEx.png';
 import empty_star from '/src/assets/button/book-info/emptyStar.svg';
 import filled_star from '/src/assets/button/book-info/fullStar.svg';
 import error_outline_rounded from '/src/assets/button/book-info/error-outline-rounded.svg';
@@ -16,29 +15,61 @@ import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 import LibraryRegistration from '../../components/book-info/libraryRegistration';
 
 import bookInfoFetch from '../../apis/book-info/bookInfo';
+import ReviewFetch from '../../apis/book-info/review';
+
+import { Review } from '../../types/book-info/review';
+import { set } from 'date-fns';
 
 const BookInfoPage = () => {
   const { id } = useParams<{ id: string }>();
 
   // 책 정보 조회
-  const { data, isLoading } = useQuery({
+  const { data: bookInfoData, isLoading } = useQuery({
     queryKey: ['bookInfo', id],
     queryFn: () => bookInfoFetch(id),
     enabled: !!id,
   });
 
-  // 리뷰 작성 관련 상태
+  // 리뷰 작성 및 조회
+  const { data: reviewData } = useQuery({
+    queryKey: ['reviewData', id],
+    queryFn: () => ReviewFetch(id),
+  });
   const [reviewText, setReviewText] = useState('');
   const [reviewTextLength, setReviewTextLength] = useState(0);
   const [rating, setRating] = useState(0);
-  const [isReviewExist, setIsReviewExist] = useState(
-    !!data?.result?.reviewData?.reviews &&
-      data.result.reviewData.reviews.length > 0,
+  const [isReviewExist] = useState(
+    !!reviewData?.result?.reviews && reviewData.result.reviews.length > 0,
   );
   const [isUserReviewExist, setIsUserReviewExist] = useState(false);
+  const [userReview, setUserReview] = useState<Review>();
   const [isUserEditReview, setIsUserEditReview] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  // 리뷰 Pagination 관련
+  const [currentPost, setCurrentPost] = useState(1);
+  const [page, setPage] = useState<JSX.Element[]>(() =>
+    (reviewData?.result.reviews ?? []).map((review) =>
+      review.ownedByUser ? (
+        <>
+          {setIsUserReviewExist(true)}
+          {setUserReview(review)}
+        </>
+      ) : (
+        <Comment
+          key={review.reviewId}
+          setIsUserEditReview={setIsUserEditReview}
+          reviewData={review}
+        />
+      ),
+    ),
+  );
+  const postsPerPage = 5;
+  const indexOfLastPost = currentPost * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPost(pageNumber);
+  };
   const handleDelete = () => {
     //삭제로직 추가
     setIsUserEditReview(false);
@@ -60,43 +91,6 @@ const BookInfoPage = () => {
       setRating(index + 1); // 새로운 별점 선택
     }
     console.log(`Selected rating: ${index + 1}`);
-  };
-
-  const commentList = [
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={1} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={2} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={3} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={4} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={5} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={6} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={7} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={8} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={9} />,
-    <Comment
-      isOwn={false}
-      setIsUserEditReview={setIsUserEditReview}
-      key={10}
-    />,
-    <Comment
-      isOwn={false}
-      setIsUserEditReview={setIsUserEditReview}
-      key={11}
-    />,
-    <Comment
-      isOwn={false}
-      setIsUserEditReview={setIsUserEditReview}
-      key={12}
-    />,
-  ];
-
-  // Pagination 관련
-  const [currentPost, setCurrentPost] = useState(1);
-  const [page, setPage] = useState<JSX.Element[]>(commentList);
-  const postsPerPage = 5;
-  const indexOfLastPost = currentPost * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPost(pageNumber);
   };
 
   // 서재 등록 관련
@@ -142,7 +136,7 @@ const BookInfoPage = () => {
           {/* 그라디언트 오버레이 */}
           <div className="absolute w-full h-full inset-0 blur-xs">
             <img
-              src={data?.result.book.coverImageUrl}
+              src={bookInfoData?.result.book.coverImageUrl}
               alt="배경 이미지"
               className="w-[835px] h-full object-cover"
             />
@@ -154,7 +148,7 @@ const BookInfoPage = () => {
             {/* 책 이미지*/}
             <div className="w-118 h-173 flex items-center justify-center">
               <img
-                src={data?.result.book.coverImageUrl}
+                src={bookInfoData?.result.book.coverImageUrl}
                 alt="Book Cover"
                 className="rounded-lg"
               />
@@ -163,11 +157,11 @@ const BookInfoPage = () => {
             <div className="relative w-246 flex flex-col items-start justify-start gap-20">
               <div className="flex flex-col items-start justify-center gap-17">
                 <div className="text-white text-[22px] not-italic font-semibold leading-[normal] text-pretendard">
-                  {data?.result.book.title}
+                  {bookInfoData?.result.book.title}
                 </div>
                 <div className="text-white text-sm not-italic font-normal leading-[22px]  ">
-                  {data?.result.book.description
-                    ? data?.result.book.description
+                  {bookInfoData?.result.book.description
+                    ? bookInfoData?.result.book.description
                     : '책에 대한 설명이 없습니다.'}
                 </div>
               </div>
@@ -177,46 +171,46 @@ const BookInfoPage = () => {
                 <div className="flex justify-start gap-9">
                   <span className="font-semibold w-[37px]">저자</span>
                   <span className="font-normal w-[167px]">
-                    {data?.result.book.author}
+                    {bookInfoData?.result.book.author}
                   </span>
                 </div>
                 <div className="flex gap-15">
                   <span className="font-semibold">분야</span>
                   <span className="font-normal">
-                    {data?.result.book.mallType === 'BOOK'
+                    {bookInfoData?.result.book.mallType === 'BOOK'
                       ? '국내도서 '
-                      : data?.result.book.mallType === 'FOREIGN'
+                      : bookInfoData?.result.book.mallType === 'FOREIGN'
                         ? '해외도서 '
-                        : data?.result.book.mallType === 'EBOOK'
+                        : bookInfoData?.result.book.mallType === 'EBOOK'
                           ? '전자책 '
                           : '기타 '}
-                    &gt; {data?.result.book.category}
+                    &gt; {bookInfoData?.result.book.category}
                   </span>
                 </div>
 
                 <div className="flex gap-9">
                   <span className="font-semibold">출판사</span>
                   <span className="font-normal">
-                    {data?.result.book.publisher}
+                    {bookInfoData?.result.book.publisher}
                   </span>
                 </div>
                 <div className="flex gap-15">
                   <span className="font-semibold">분량</span>
                   <span className="font-normal">
-                    {data?.result.book.pages}p
+                    {bookInfoData?.result.book.pages}p
                   </span>
                 </div>
 
                 <div className="flex gap-9">
                   <span className="font-semibold">출판일</span>
                   <span className="font-normal">
-                    {data?.result.book.publicationDate}
+                    {bookInfoData?.result.book.publicationDate}
                   </span>
                 </div>
                 <div className="flex gap-12">
                   <span className="font-semibold">ISBN</span>
                   <span className="font-normal">
-                    {data?.result.book.isbn13}
+                    {bookInfoData?.result.book.isbn13}
                   </span>
                 </div>
               </div>
@@ -326,7 +320,10 @@ const BookInfoPage = () => {
                 </div>
               </div>
             ) : (
-              <Comment isOwn={true} setIsUserEditReview={setIsUserEditReview} />
+              <Comment
+                setIsUserEditReview={setIsUserEditReview}
+                reviewData={userReview!}
+              />
             )
           ) : (
             <div className="flex flex-col items-start justify-center gap-12 w-full">
@@ -419,7 +416,9 @@ const BookInfoPage = () => {
                   <Pagination
                     activePage={currentPost}
                     itemsCountPerPage={postsPerPage}
-                    totalItemsCount={commentList.length}
+                    totalItemsCount={
+                      reviewData?.result.pagination.totalItems || 0
+                    }
                     pageRangeDisplayed={5}
                     onChange={handlePageChange}
                     prevPageText=""
@@ -451,11 +450,11 @@ const BookInfoPage = () => {
             | 이 분야의 베스트
           </span>
           <div className="flex items-start justify-center gap-[35px] w-full">
-            <BestBook bestBook={data?.result.bestInThisCategory[0]} />
-            <BestBook bestBook={data?.result.bestInThisCategory[1]} />
-            <BestBook bestBook={data?.result.bestInThisCategory[2]} />
-            <BestBook bestBook={data?.result.bestInThisCategory[3]} />
-            <BestBook bestBook={data?.result.bestInThisCategory[4]} />
+            <BestBook bestBook={bookInfoData?.result.bestInThisCategory[0]} />
+            <BestBook bestBook={bookInfoData?.result.bestInThisCategory[1]} />
+            <BestBook bestBook={bookInfoData?.result.bestInThisCategory[2]} />
+            <BestBook bestBook={bookInfoData?.result.bestInThisCategory[3]} />
+            <BestBook bestBook={bookInfoData?.result.bestInThisCategory[4]} />
           </div>
         </div>
       </div>
