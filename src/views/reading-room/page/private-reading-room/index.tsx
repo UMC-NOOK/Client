@@ -11,6 +11,8 @@ import DeleteBtn from '../../../../components/delete-modal/reading-room/DeleteMo
 import SmallControlBar from '../../components/private-reading-room/control-bar/SmallControlBar';
 import useSoundStore from '../../../../store/private-reading-room/useSoundStore';
 import SpeechBubble from '../../components/private-reading-room/speech-bubble/SpeechBubble';
+import CreateReadingRoom from '../../components/views/CreateReadingRoom';
+import Modal from '../../components/private-reading-room/common/ModifyModal';
 
 const PrivateReadingRoom = () => {
   const [memberClick, setMemberClick] = useState(false);
@@ -22,12 +24,18 @@ const PrivateReadingRoom = () => {
     toggleExitModal,
     isDeleteModalOpen,
     toggleDeleteModal,
+    isEditModalOpen,
+    openEditModal,
+    closeEditModal,
   } = useModalStore(
     useShallow((state) => ({
       isExitModalOpen: state.isExitModalOpen,
       toggleExitModal: state.toggleExitModal,
       isDeleteModalOpen: state.isDeleteModalOpen,
       toggleDeleteModal: state.toggleDeleteModal,
+      isEditModalOpen: state.isEditModalOpen,
+      openEditModal: state.openEditModal,
+      closeEditModal: state.closeEditModal,
     })),
   );
 
@@ -76,11 +84,16 @@ const PrivateReadingRoom = () => {
           <div className="absolute bottom-[130px] left-[394px]">
             <SmallControlBar
               onDelete={toggleDeleteModal}
-              // onEdit={}
+              onEdit={openEditModal}
               onSound={toggleSound}
             />
           </div>
         )}
+        {isEditModalOpen && (
+          <Modal onClose={closeEditModal}>
+            <CreateReadingRoom usage="edit" onCloseModal={closeEditModal} />
+          </Modal>
+        )}  
         <ControlBar
           roll="guest"
           onMemberClick={() => setMemberClick(!memberClick)}
