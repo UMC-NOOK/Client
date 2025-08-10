@@ -14,13 +14,11 @@ import Pagination from 'react-js-pagination';
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 import LibraryRegistration from '../../components/book-info/libraryRegistration';
 
-import bookInfoFetch from '../../apis/book-info/bookInfo';
-import {
-  ReviewFetch,
-  ReviewCreate,
-  ReviewDelete,
-  ReviewEdit,
-} from '../../apis/book-info/review';
+import useGetBookInfo from '../../hooks/useQuery/book-info-query/useGetBookInfo';
+import useGetReview from '../../hooks/useQuery/book-info-query/useGetReview';
+import usePostReview from '../../hooks/useMutation/book-info-mutation/usePostReview';
+import usePutReview from '../../hooks/useMutation/book-info-mutation/usePutReview';
+import useDeleteReview from '../../hooks/useMutation/book-info-mutation/useDeleteReview';
 
 import { Review } from '../../types/book-info/review';
 
@@ -29,25 +27,15 @@ const BookInfoPage = () => {
   const qc = useQueryClient();
 
   // 책 정보 조회
-  const { data: bookInfoData, isLoading } = useQuery({
-    queryKey: ['bookInfo', isbn],
-    queryFn: () => bookInfoFetch(isbn),
-    enabled: !!isbn,
-  });
-
+  const { data: bookInfoData } = useGetBookInfo(isbn!);
   const bookId = bookInfoData?.result.book.bookId;
 
-  // 리뷰 Pagination 관련
+  // 리뷰 Pagination
   const [currentPost, setCurrentPost] = useState(1);
   const postsPerPage = 5;
 
   // 리뷰 조회
-  const { data: reviewData, isFetching } = useQuery({
-    queryKey: ['reviewData', bookId, currentPost],
-    enabled: typeof bookId === 'number',
-    queryFn: () => ReviewFetch(bookId!, currentPost),
-    placeholderData: (prev) => prev, // keepPreviousData
-  });
+  const { data: reviewData } = useGetReview(bookId!, currentPost);
 
   // 파생값들(변수)
   const reviews = reviewData?.result.reviews ?? [];
@@ -66,44 +54,14 @@ const BookInfoPage = () => {
   }, [reviewData]);
 
   // 리뷰 작성
-  const { mutate: createReview, isPending: createReviewPending } = useMutation({
-    mutationFn: (payload: { rating: number; content: string }) =>
-      ReviewCreate(bookId, payload),
-    onSuccess: (res) => {
-      // setReviewText('');
-      setReviewTextLength(0);
-      setRating(0);
-      setIsUserEditReview(false);
-      setIsUserReviewExist(true);
-      // 새로 작성한 내 리뷰를 즉시 반영
-      setUserReview(res?.result ?? null);
-    },
-  });
+  const { mutate: createReview, isPending: createReviewPending } =
+    usePostReview(bookId!);
 
   // 리뷰 삭제
-  const { mutate: deleteReview } = useMutation({
-    mutationFn: () => ReviewDelete(userReview?.reviewId),
-    onSuccess: () => {
-      setIsUserEditReview(false);
-      setReviewText('');
-      setReviewTextLength(0);
-      setRating(0);
-      setIsDeleteModalOpen(false);
-      setUserReview(null);
-      qc.invalidateQueries({ queryKey: ['reviewData', bookId, currentPost] });
-    },
-  });
+  const { mutate: deleteReview } = useDeleteReview(userReview?.reviewId!);
 
   // 리뷰 수정
-  const { mutate: editReview } = useMutation({
-    mutationFn: (payload: { rating: number; content: string }) =>
-      ReviewEdit(userReview?.reviewId, payload),
-    onSuccess: (res) => {
-      setIsUserEditReview(false);
-      setUserReview(res?.result ?? null);
-      qc.invalidateQueries({ queryKey: ['reviewData', bookId, currentPost] });
-    },
-  });
+  const { mutate: editReview } = usePutReview(userReview?.reviewId!);
 
   // 폼/뷰 상태
   const [reviewText, setReviewText] = useState('');
@@ -119,10 +77,35 @@ const BookInfoPage = () => {
       alert('리뷰 혹은 별점을 남겨주세요.');
       return; // <- 페이지 리로드 금지!
     }
-    createReview({ rating, content: reviewText });
+    createReview(
+      { rating, content: reviewText },
+      {
+        onSuccess: (res) => {
+          // setReviewText('');
+          setReviewTextLength(0);
+          setRating(0);
+          setIsUserEditReview(false);
+          setIsUserReviewExist(true);
+          // 새로 작성한 내 리뷰를 즉시 반영
+          setUserReview(res?.result ?? null);
+        },
+      },
+    );
   };
   const handleDelete = () => {
-    deleteReview();
+    deleteReview(undefined, {
+      onSuccess: () => {
+        setIsUserEditReview(false);
+        setReviewText('');
+        setReviewTextLength(0);
+        setRating(0);
+        setIsDeleteModalOpen(false);
+        setUserReview(null);
+        qc.invalidateQueries({
+          queryKey: ['reviewData', bookId, currentPost],
+        });
+      },
+    });
   };
   const handleDeleteModal = () => {
     setIsDeleteModalOpen((prev) => !prev);
@@ -140,7 +123,18 @@ const BookInfoPage = () => {
       alert('리뷰 혹은 별점을 남겨주세요.');
       return;
     }
-    editReview({ rating, content: reviewText });
+    editReview(
+      { rating, content: reviewText },
+      {
+        onSuccess: (res) => {
+          setIsUserEditReview(false);
+          setUserReview(res?.result ?? null);
+          qc.invalidateQueries({
+            queryKey: ['reviewData', bookId, currentPost],
+          });
+        },
+      },
+    );
     setIsUserEditReview(false);
   };
 
