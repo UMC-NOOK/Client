@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 
 import wallpaperDefault from '../../../assets/button/home/default-wallpaper.png';
 import wallpaperStripe from '../../../assets/button/home/stripe-wallpaper.png';
@@ -7,12 +7,14 @@ import wallpaperDrop from '../../../assets/button/home/drop-wallpaper.png';
 import wallpaperCheck from '../../../assets/button/home/check-wallpaper.png';
 import wallpaperArgyle from '../../../assets/button/home/argyle-wallpaper.png';
 
+export type PatternKey = 'default' | 'stripe' | 'stars' | 'drop' | 'check' | 'argyle';
+
 interface MyHomeTabProps {
-  selected: string;
-  setSelected: (value: string) => void;
+  selected: PatternKey;
+  setSelected: React.Dispatch<React.SetStateAction<PatternKey>>;
 }
 
-const wallpapers = [
+const wallpapers: { name: PatternKey; src: string }[] = [
   { name: 'default', src: wallpaperDefault },
   { name: 'stripe', src: wallpaperStripe },
   { name: 'stars', src: wallpaperStars },

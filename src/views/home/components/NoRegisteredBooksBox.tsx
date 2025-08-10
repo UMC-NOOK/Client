@@ -6,7 +6,7 @@ const NoRegisteredBooksBox = () => {
   const navigate = useNavigate();
   const today = new Date();
 
-  // 오늘이 포함된 주의 월요일부터 시작 (한국 기준 월요일 시작)
+  // 오늘이 포함된 주의 월요일부터 시작 
   const weekStart = startOfWeek(today, { weekStartsOn: 1 });
   const datesOfWeek = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
