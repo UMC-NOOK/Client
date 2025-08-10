@@ -39,3 +39,10 @@ export interface ReviewCreateResponse {
     ownedByUser: boolean;
   };
 }
+
+export interface ReviewDeleteResponse {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+  result: {};
+}

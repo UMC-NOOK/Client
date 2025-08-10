@@ -2,6 +2,7 @@ import instance from '../../../../apis/instance';
 import {
   ReviewResponse,
   ReviewCreateResponse,
+  ReviewDeleteResponse,
 } from '../../types/book-info/review';
 
 export const ReviewFetch = async (
@@ -31,5 +32,18 @@ export const ReviewCreate = async (
     return res.data;
   } catch (err) {
     console.log('리뷰 생성 에러:', err);
+  }
+};
+
+export const ReviewDelete = async (
+  reviewId: number | undefined,
+): Promise<ReviewDeleteResponse | undefined> => {
+  try {
+    const res = await instance.delete<ReviewDeleteResponse>(
+      `api/reviews/${reviewId}`,
+    );
+    return res.data;
+  } catch (err) {
+    console.log('리뷰 삭제 에러:', err);
   }
 };

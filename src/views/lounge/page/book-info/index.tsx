@@ -15,7 +15,11 @@ import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 import LibraryRegistration from '../../components/book-info/libraryRegistration';
 
 import bookInfoFetch from '../../apis/book-info/bookInfo';
-import { ReviewFetch, ReviewCreate } from '../../apis/book-info/review';
+import {
+  ReviewFetch,
+  ReviewCreate,
+  ReviewDelete,
+} from '../../apis/book-info/review';
 
 import { Review } from '../../types/book-info/review';
 
@@ -48,9 +52,9 @@ const BookInfoPage = () => {
   const reviews = reviewData?.result.reviews ?? [];
   const totalItems = reviewData?.result.pagination.totalItems ?? 0;
   const [userReview, setUserReview] = useState<Review | null>(null);
+  const [isReviewExist, setIsUserReviewExist] = useState(reviews.length > 0);
   const isUserReviewExist = !!userReview;
   const others = reviews.filter((r) => !r.ownedByUser);
-  const isReviewExist = reviews.length > 0;
 
   useEffect(() => {
     if (!reviewData) return;
@@ -68,9 +72,23 @@ const BookInfoPage = () => {
       setReviewTextLength(0);
       setRating(0);
       setIsUserEditReview(false);
-
+      setIsUserReviewExist(true);
       // 새로 작성한 내 리뷰를 즉시 반영
       setUserReview(res?.result ?? null);
+    },
+  });
+
+  // 리뷰 삭제
+  const { mutate: deleteReview } = useMutation({
+    mutationFn: () => ReviewDelete(userReview?.reviewId),
+    onSuccess: () => {
+      setIsUserEditReview(false);
+      setReviewText('');
+      setReviewTextLength(0);
+      setRating(0);
+      setIsDeleteModalOpen(false);
+      setUserReview(null);
+      qc.invalidateQueries({ queryKey: ['reviewData', bookId, currentPost] });
     },
   });
 
@@ -92,12 +110,7 @@ const BookInfoPage = () => {
   };
   const handleDelete = () => {
     //삭제로직 추가
-    setIsUserEditReview(false);
-    // setIsUserReviewExist(false);
-    setReviewText('');
-    setReviewTextLength(0);
-    setRating(0);
-    setIsDeleteModalOpen(false);
+    deleteReview();
   };
   const handleDeleteModal = () => {
     setIsDeleteModalOpen((prev) => !prev);
