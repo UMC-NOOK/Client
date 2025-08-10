@@ -5,10 +5,13 @@ import {
 } from '../../types/book-info/review';
 
 export const ReviewFetch = async (
-  id: string | undefined,
+  id: number | undefined,
+  page: number = 1,
 ): Promise<ReviewResponse | undefined> => {
   try {
-    const res = await instance.get<ReviewResponse>(`api/books/${id}/reviews`);
+    const res = await instance.get<ReviewResponse>(`api/books/${id}/reviews`, {
+      params: { page },
+    });
     return res.data;
   } catch (err) {
     console.log('책정보 조회 에러:', err);
@@ -16,7 +19,7 @@ export const ReviewFetch = async (
 };
 
 export const ReviewCreate = async (
-  id: string | undefined,
+  id: number | undefined,
   reviewData: { rating: number; content: string },
 ): Promise<ReviewCreateResponse | undefined> => {
   try {

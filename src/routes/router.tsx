@@ -44,7 +44,7 @@ const router = createBrowserRouter([
             element: <Lounge />,
           },
           {
-            path: ':id',
+            path: ':isbn',
             element: <BookInfoPage />,
           },
           {

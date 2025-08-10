@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import chevron_left from '/src/assets/button/book-info/chevron-left.svg';
 import empty_star from '/src/assets/button/book-info/emptyStar.svg';
@@ -20,94 +20,88 @@ import { ReviewFetch, ReviewCreate } from '../../apis/book-info/review';
 import { Review } from '../../types/book-info/review';
 
 const BookInfoPage = () => {
-  const { id } = useParams<{ id: string }>();
+  const { isbn } = useParams<{ isbn: string }>();
+  const qc = useQueryClient();
 
   // 책 정보 조회
   const { data: bookInfoData, isLoading } = useQuery({
-    queryKey: ['bookInfo', id],
-    queryFn: () => bookInfoFetch(id),
-    enabled: !!id,
+    queryKey: ['bookInfo', isbn],
+    queryFn: () => bookInfoFetch(isbn),
+    enabled: !!isbn,
   });
 
-  // 리뷰 작성 및 조회
-  const { data: reviewData } = useQuery({
-    queryKey: ['reviewData', id],
-    queryFn: () => ReviewFetch(id),
-    select: (data) => {
-      data?.result.reviews.length! > 0
-        ? setIsReviewExist(true)
-        : setIsReviewExist(false);
-      data?.result.reviews.map((review) =>
-        review.ownedByUser
-          ? (setIsUserReviewExist(true), setUserReview(review))
-          : (setIsUserReviewExist(false),
-            setIsReviewExist(true),
-            setPage((prev) => [
-              ...prev,
-              <Comment
-                key={review.reviewId}
-                setIsUserEditReview={setIsUserEditReview}
-                reviewData={review}
-              />,
-            ])),
-      );
-      setTotalItems(data?.result.pagination.totalItems!);
-    },
-  });
-  const { mutate: createReview } = useMutation({
-    mutationFn: (reviewData: { rating: number; content: string }) =>
-      ReviewCreate(id, reviewData),
-    onSuccess: (ownReview) => {
-      setIsUserReviewExist(true);
-      setUserReview(ownReview?.result);
-    },
-  });
-  const [reviewText, setReviewText] = useState('');
-  const [reviewTextLength, setReviewTextLength] = useState(0);
-  const [rating, setRating] = useState(0);
-  const [isReviewExist, setIsReviewExist] = useState(false);
-  const [isUserReviewExist, setIsUserReviewExist] = useState(false);
-  const [userReview, setUserReview] = useState<Review>();
-  const [isUserEditReview, setIsUserEditReview] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const bookId = bookInfoData?.result.book.bookId;
 
-  const reviewCreateClickHandler = () => {
-    if (reviewText.length > 0 || rating > 0) {
-      createReview({ rating, content: reviewText });
+  // 리뷰 Pagination 관련
+  const [currentPost, setCurrentPost] = useState(1);
+  const postsPerPage = 5;
+
+  // 리뷰 조회
+  const { data: reviewData, isFetching } = useQuery({
+    queryKey: ['reviewData', bookId, currentPost],
+    enabled: typeof bookId === 'number',
+    queryFn: () => ReviewFetch(bookId!, currentPost),
+    placeholderData: (prev) => prev, // keepPreviousData
+  });
+
+  // 파생값들(변수)
+  const reviews = reviewData?.result.reviews ?? [];
+  const totalItems = reviewData?.result.pagination.totalItems ?? 0;
+  const [userReview, setUserReview] = useState<Review | null>(null);
+  const isUserReviewExist = !!userReview;
+  const others = reviews.filter((r) => !r.ownedByUser);
+  const isReviewExist = reviews.length > 0;
+
+  useEffect(() => {
+    if (!reviewData) return;
+    const reviews = reviewData.result.reviews ?? [];
+    const mine = reviews.find((r) => r.ownedByUser) ?? null;
+    setUserReview(mine); // ← 서버에 있으면 반영
+  }, [reviewData]);
+
+  // 리뷰 작성
+  const { mutate: createReview, isPending: createReviewPending } = useMutation({
+    mutationFn: (payload: { rating: number; content: string }) =>
+      ReviewCreate(bookId, payload),
+    onSuccess: (res) => {
       setReviewText('');
       setReviewTextLength(0);
       setRating(0);
       setIsUserEditReview(false);
-    } else {
-      alert('리뷰 혹은 별점을 남겨주세요.');
-      window.location.reload();
-    }
-  };
 
-  // 리뷰 Pagination 관련
-  const [currentPost, setCurrentPost] = useState(1);
-  const [page, setPage] = useState<JSX.Element[]>([]);
-  const [totalItems, setTotalItems] = useState(0);
-  const postsPerPage = 5;
-  const indexOfLastPost = currentPost * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPost(pageNumber);
+      // 새로 작성한 내 리뷰를 즉시 반영
+      setUserReview(res?.result ?? null);
+    },
+  });
+
+  // 폼/뷰 상태
+  const [reviewText, setReviewText] = useState('');
+  const [reviewTextLength, setReviewTextLength] = useState(0);
+  const [rating, setRating] = useState(0);
+  const [isUserEditReview, setIsUserEditReview] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  // 핸들러
+  const handlePageChange = (pageNumber: number) => setCurrentPost(pageNumber);
+  const handleReviewCreateClick = () => {
+    if (reviewText.trim().length === 0 && rating === 0) {
+      alert('리뷰 혹은 별점을 남겨주세요.');
+      return; // <- 페이지 리로드 금지!
+    }
+    createReview({ rating, content: reviewText });
   };
   const handleDelete = () => {
     //삭제로직 추가
     setIsUserEditReview(false);
-    setIsUserReviewExist(false);
+    // setIsUserReviewExist(false);
     setReviewText('');
     setReviewTextLength(0);
     setRating(0);
     setIsDeleteModalOpen(false);
   };
-
-  const modalHandler = () => {
+  const handleDeleteModal = () => {
     setIsDeleteModalOpen((prev) => !prev);
   };
-
   const handleStarClick = (index: number) => {
     if (rating === index + 1) {
       setRating(rating - 1); // 별점이 이미 선택된 경우, 선택 해제
@@ -127,7 +121,7 @@ const BookInfoPage = () => {
     setIsRegistrationLibrary(true);
   };
 
-  const libraryModalHandler = () => {
+  const handleLibraryModal = () => {
     setIsLibraryModalOpen((prev) => !prev);
   };
 
@@ -137,13 +131,13 @@ const BookInfoPage = () => {
         <DeleteBtn
           usage="book-info"
           onDelete={handleDelete}
-          closeModal={modalHandler}
+          closeModal={handleDeleteModal}
         />
       )}
       {isLibraryModalOpen && (
         <LibraryRegistration
           onRegister={handleLibrary}
-          closeModal={libraryModalHandler}
+          closeModal={handleLibraryModal}
         />
       )}
       {/* 상위 컴포넌트 */}
@@ -244,7 +238,7 @@ const BookInfoPage = () => {
         {/* 서재 등록 버튼 */}
         <div
           className="flex self-end items-center justify-center w-[176px] h-[40px] gap-5 mt-15 mb-24 rounded-sm px-22 py-5 bg-nook-br-100 cursor-pointer"
-          onClick={libraryModalHandler}
+          onClick={handleLibraryModal}
         >
           <div className="w-[13px]">
             <img
@@ -260,7 +254,7 @@ const BookInfoPage = () => {
         {/* 리뷰작성,리뷰 컴포넌트 */}
         <div className="w-full flex flex-col items-center justify-center gap-12  ">
           {/* 리뷰 작성 */}
-          {isUserReviewExist ? (
+          {isUserReviewExist && userReview ? (
             isUserEditReview ? (
               <div className="flex flex-col items-start justify-center gap-12 w-full">
                 {/* 별점 */}
@@ -325,7 +319,7 @@ const BookInfoPage = () => {
                         <button
                           className="w-[87px] h-[34px] rounded-sm bg-[#392121] text-[#E04F55] text-sm not-italic font-bold leading-[29.518px] tracking-[0.56px] flex items-center justify-center"
                           onClick={() => {
-                            modalHandler();
+                            handleDeleteModal();
                           }}
                         >
                           삭제
@@ -346,7 +340,7 @@ const BookInfoPage = () => {
             ) : (
               <Comment
                 setIsUserEditReview={setIsUserEditReview}
-                reviewData={userReview!}
+                reviewData={userReview}
               />
             )
           ) : (
@@ -410,13 +404,17 @@ const BookInfoPage = () => {
                       ({reviewTextLength}/200)
                     </span>
                     <button
-                      className="w-[103px] h-[34px] rounded-sm bg-nook-br-200 text-white text-sm not-italic font-bold leading-[29.518px] tracking-[0.56px] flex items-center justify-center"
+                      className={`w-[103px] h-[34px] rounded-sm text-sm font-bold flex items-center justify-center
+    ${
+      createReviewPending || (reviewText.trim().length === 0 && rating === 0)
+        ? 'bg-nook-br-200/50 cursor-not-allowed'
+        : 'bg-nook-br-200 text-white cursor-pointer'
+    }`}
                       onClick={() => {
-                        setIsUserReviewExist(true);
-                        reviewCreateClickHandler();
+                        handleReviewCreateClick();
                       }}
                     >
-                      리뷰 등록
+                      {createReviewPending ? '등록 중…' : '리뷰 등록'}
                     </button>
                   </div>
                 </div>
@@ -428,15 +426,15 @@ const BookInfoPage = () => {
           {isReviewExist ? (
             <div className="flex flex-col items-start justify-center gap-12 w-full">
               <div className="flex flex-col items-start justify-center w-full">
-                {/* 댓글 리스트 */}
-                {page
-                  .slice(indexOfFirstPost, indexOfLastPost)
-                  .map((comment, index) => (
-                    <div key={index} className="w-full">
-                      {comment}
-                    </div>
-                  ))}
-                {/* Pagination */}
+                {others.map((r) => (
+                  <Comment
+                    key={r.reviewId}
+                    setIsUserEditReview={setIsUserEditReview}
+                    reviewData={r}
+                  />
+                ))}
+
+                {/* Pagination: 서버 totalItems 그대로 사용 */}
                 <div className="flex items-center justify-center w-full mt-auto">
                   <Pagination
                     activePage={currentPost}
