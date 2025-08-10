@@ -1,17 +1,28 @@
 import { useState, useRef, useEffect } from 'react';
+
 import chevron_left from '/src/assets/button/book-info/chevron-left.svg';
 import calendar from '/src/assets/button/book-info/calendar.svg';
-import bookImgEx from '/src/assets/button/book-info/bookImgEx.png';
+
 import Calendar from './calendar';
+
+import usePostBookRegistration from '../../hooks/useMutation/book-info-mutation/usePostBookRegistration';
 
 interface LibraryRegistrationProps {
   onRegister: () => void;
   closeModal: () => void;
+  bookImg: string;
+  bookTitle: string;
+  bookAuthor: string;
+  bookId: number;
 }
 
 const LibraryRegistration = ({
   onRegister,
   closeModal,
+  bookImg,
+  bookTitle,
+  bookAuthor,
+  bookId,
 }: LibraryRegistrationProps) => {
   const formatDate = (date: Date) => {
     const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
@@ -22,10 +33,22 @@ const LibraryRegistration = ({
     return `${year}.${month}.${day} (${dayOfWeek})`;
   };
 
+  const serverFormatDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    const day = `${date.getDate()}`.padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const { mutate: postBookRegistration } = usePostBookRegistration(bookId); // bookId는 실제로 사용될 때 설정해야 합니다.
+
   const today = new Date();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedDateAsDate, setSelectedDateAsDate] = useState(today);
   const [selectedDate, setSelectedDate] = useState(formatDate(today));
+  const [serverSelectedDate, setServerSelectedDate] = useState(
+    serverFormatDate(today),
+  );
   const calendarRef = useRef<HTMLDivElement>(null);
 
   const calendarModalHandler = () => {
@@ -35,6 +58,7 @@ const LibraryRegistration = ({
   const calendarRegisterHandler = (date: Date) => {
     setSelectedDate(formatDate(date));
     setSelectedDateAsDate(date);
+    setServerSelectedDate(serverFormatDate(date));
   };
 
   // 외부 클릭 시 달력 닫기
@@ -77,16 +101,16 @@ const LibraryRegistration = ({
 
         <div className="flex items-center justify-between w-full gap-17 mb-20">
           <div className="w-[135px] h-[198px] ml-4">
-            <img src={bookImgEx} alt="" />
+            <img src={bookImg} alt="" />
           </div>
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-8 w-[207px]">
             <div className="flex flex-col gap-4 items-start">
               <div className="text-[rgba(255,255,255,0.50)] text-xs">제목</div>
-              <div className="text-white text-sm">칵테일, 러브, 좀비</div>
+              <div className="text-white text-sm">{bookTitle}</div>
             </div>
             <div className="flex flex-col gap-4 items-start">
               <div className="text-[rgba(255,255,255,0.50)] text-xs">저자</div>
-              <div className="text-white text-sm">조예은</div>
+              <div className="text-white text-sm">{bookAuthor}</div>
             </div>
             <div
               className="flex flex-col gap-4 items-start relative"
@@ -132,6 +156,20 @@ const LibraryRegistration = ({
         <div
           className="w-full h-20 px-10 py-2 rounded bg-nook-br-100 text-white text-base font-semibold text-center cursor-pointer flex items-center justify-center"
           onClick={() => {
+            readingStatus === 1
+              ? postBookRegistration({
+                  date: serverSelectedDate,
+                  readingStatus: 'READING',
+                })
+              : readingStatus === 2
+                ? postBookRegistration({
+                    date: serverSelectedDate,
+                    readingStatus: 'COMPLETED',
+                  })
+                : postBookRegistration({
+                    date: serverSelectedDate,
+                    readingStatus: 'WISH',
+                  });
             onRegister();
             handleClickSave();
           }}

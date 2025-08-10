@@ -171,6 +171,10 @@ const BookInfoPage = () => {
         <LibraryRegistration
           onRegister={handleLibrary}
           closeModal={handleLibraryModal}
+          bookImg={bookInfoData?.result.book.coverImageUrl || ''}
+          bookTitle={bookInfoData?.result.book.title || ''}
+          bookAuthor={bookInfoData?.result.book.author || ''}
+          bookId={bookId || 0}
         />
       )}
       {/* 상위 컴포넌트 */}
