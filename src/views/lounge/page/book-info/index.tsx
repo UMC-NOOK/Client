@@ -19,6 +19,7 @@ import {
   ReviewFetch,
   ReviewCreate,
   ReviewDelete,
+  ReviewEdit,
 } from '../../apis/book-info/review';
 
 import { Review } from '../../types/book-info/review';
@@ -61,6 +62,7 @@ const BookInfoPage = () => {
     const reviews = reviewData.result.reviews ?? [];
     const mine = reviews.find((r) => r.ownedByUser) ?? null;
     setUserReview(mine); // ← 서버에 있으면 반영
+    setIsUserReviewExist(reviews.length > 0);
   }, [reviewData]);
 
   // 리뷰 작성
@@ -68,7 +70,7 @@ const BookInfoPage = () => {
     mutationFn: (payload: { rating: number; content: string }) =>
       ReviewCreate(bookId, payload),
     onSuccess: (res) => {
-      setReviewText('');
+      // setReviewText('');
       setReviewTextLength(0);
       setRating(0);
       setIsUserEditReview(false);
@@ -92,6 +94,17 @@ const BookInfoPage = () => {
     },
   });
 
+  // 리뷰 수정
+  const { mutate: editReview } = useMutation({
+    mutationFn: (payload: { rating: number; content: string }) =>
+      ReviewEdit(userReview?.reviewId, payload),
+    onSuccess: (res) => {
+      setIsUserEditReview(false);
+      setUserReview(res?.result ?? null);
+      qc.invalidateQueries({ queryKey: ['reviewData', bookId, currentPost] });
+    },
+  });
+
   // 폼/뷰 상태
   const [reviewText, setReviewText] = useState('');
   const [reviewTextLength, setReviewTextLength] = useState(0);
@@ -109,7 +122,6 @@ const BookInfoPage = () => {
     createReview({ rating, content: reviewText });
   };
   const handleDelete = () => {
-    //삭제로직 추가
     deleteReview();
   };
   const handleDeleteModal = () => {
@@ -122,6 +134,14 @@ const BookInfoPage = () => {
       setRating(index + 1); // 새로운 별점 선택
     }
     console.log(`Selected rating: ${index + 1}`);
+  };
+  const handleReviewEdit = () => {
+    if (reviewText.trim().length === 0 && rating === 0) {
+      alert('리뷰 혹은 별점을 남겨주세요.');
+      return;
+    }
+    editReview({ rating, content: reviewText });
+    setIsUserEditReview(false);
   };
 
   // 서재 등록 관련
@@ -340,7 +360,7 @@ const BookInfoPage = () => {
                         <button
                           className="w-[87px] h-[34px] rounded-sm bg-nook-br-200 text-white text-sm not-italic font-bold leading-[29.518px] tracking-[0.56px] flex items-center justify-center"
                           onClick={() => {
-                            setIsUserEditReview(false);
+                            handleReviewEdit();
                           }}
                         >
                           저장

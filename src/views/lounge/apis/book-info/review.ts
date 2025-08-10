@@ -3,6 +3,7 @@ import {
   ReviewResponse,
   ReviewCreateResponse,
   ReviewDeleteResponse,
+  ReviewEditResponse,
 } from '../../types/book-info/review';
 
 export const ReviewFetch = async (
@@ -45,5 +46,20 @@ export const ReviewDelete = async (
     return res.data;
   } catch (err) {
     console.log('리뷰 삭제 에러:', err);
+  }
+};
+
+export const ReviewEdit = async (
+  reviewId: number | undefined,
+  reviewData: { rating: number; content: string },
+): Promise<ReviewEditResponse | undefined> => {
+  try {
+    const res = await instance.put<ReviewEditResponse>(
+      `api/reviews/${reviewId}`,
+      reviewData,
+    );
+    return res.data;
+  } catch (err) {
+    console.log('리뷰 수정 에러:', err);
   }
 };
