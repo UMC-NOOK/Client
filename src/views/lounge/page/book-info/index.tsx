@@ -1,25 +1,31 @@
+// library
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
+import Pagination from 'react-js-pagination';
 
+// imgs
 import chevron_left from '/src/assets/button/book-info/chevron-left.svg';
 import empty_star from '/src/assets/button/book-info/emptyStar.svg';
 import filled_star from '/src/assets/button/book-info/fullStar.svg';
 import error_outline_rounded from '/src/assets/button/book-info/error-outline-rounded.svg';
-import Comment from '../../components/book-info/comment';
-import BestBook from '../../components/book-info/bestBook';
 import download_icon from '/src/assets/button/book-info/download.svg';
 import move_icon from '/src/assets/button/book-info/move.svg';
-import Pagination from 'react-js-pagination';
+
+// components
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 import LibraryRegistration from '../../components/book-info/libraryRegistration';
+import Comment from '../../components/book-info/comment';
+import BestBook from '../../components/book-info/bestBook';
 
+// hooks
 import useGetBookInfo from '../../hooks/useQuery/book-info-query/useGetBookInfo';
 import useGetReview from '../../hooks/useQuery/book-info-query/useGetReview';
 import usePostReview from '../../hooks/useMutation/book-info-mutation/usePostReview';
 import usePutReview from '../../hooks/useMutation/book-info-mutation/usePutReview';
 import useDeleteReview from '../../hooks/useMutation/book-info-mutation/useDeleteReview';
 
+// types
 import { Review } from '../../types/book-info/review';
 
 const BookInfoPage = () => {

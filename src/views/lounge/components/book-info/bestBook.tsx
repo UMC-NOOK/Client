@@ -20,16 +20,20 @@ const BestBook = ({ bestBook }: { bestBook: BestBook | undefined }) => {
           className="rounded-lg w-full h-full object-cover"
         />
       </div>
-      <span className="self-stretch justify-center text-white text-base font-semibold  ">
+      <span className="self-stretch justify-center text-white text-base font-semibold text-ellipsis overflow-hidden whitespace-nowrap w-70">
         {bestBook?.title}
       </span>
-      <div className="flex items-center justify-start gap-3  justify-center text-white text-xs font-normal  ">
-        <span>{bestBook?.author}</span>
-        <div className="w-[1px] h-[1px]">
+      <div className="flex items-center justify-start gap-3 justify-center text-white text-xs font-normal ">
+        <span className="max-w-[64px] text-ellipsis overflow-hidden whitespace-nowrap">
+          {bestBook?.author}
+        </span>
+        <div className="w-[2px] h-[2px]">
           <img src={middle_point} alt="" />
         </div>
 
-        <span>{bestBook?.publisher}</span>
+        <span className="max-w-[64px] text-ellipsis overflow-hidden whitespace-nowrap">
+          {bestBook?.publisher}
+        </span>
       </div>
     </div>
   );
