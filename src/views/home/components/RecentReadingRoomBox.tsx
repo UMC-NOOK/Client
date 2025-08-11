@@ -1,3 +1,4 @@
+//리딩룸이랑 맞춰서 추후 수정예정
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import arrowIcon from '../../../assets/button/home/chevron-right.png';
@@ -76,7 +77,7 @@ const RecentReadingRoomBox: React.FC = () => {
               내 리딩룸 만들고
             </p>
 
-            <button className="mt-[16px] px-[12px] py-[8px] bg-[#423C35] rounded-[6px]">
+            <button className="mt-[8px] px-[12px] py-[8px] bg-[#423C35] rounded-[6px]">
               <span className="text-white text-[12px] font-[600] leading-[14.4px] ">
                 지금 책 읽으러 가기
               </span>
