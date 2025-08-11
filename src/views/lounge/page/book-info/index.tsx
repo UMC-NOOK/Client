@@ -1,6 +1,6 @@
 // library
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import Pagination from 'react-js-pagination';
 
@@ -31,6 +31,7 @@ import { Review } from '../../types/book-info/review';
 const BookInfoPage = () => {
   const { isbn } = useParams<{ isbn: string }>();
   const qc = useQueryClient();
+  const navigate = useNavigate();
 
   // 책 정보 조회
   const { data: bookInfoData } = useGetBookInfo(isbn!);
@@ -146,16 +147,18 @@ const BookInfoPage = () => {
 
   // 서재 등록 관련
   const [isLibraryModalOpen, setIsLibraryModalOpen] = useState(false);
-  const [isRegistrationLibrary, setIsRegistrationLibrary] = useState(false);
+  const isRegistrationLibrary =
+    bookInfoData?.result.book.registeredBookshelf || false;
 
   const handleLibrary = () => {
     //서재 등록 로직 추가
     setIsLibraryModalOpen(false);
-    setIsRegistrationLibrary(true);
   };
-
   const handleLibraryModal = () => {
     setIsLibraryModalOpen((prev) => !prev);
+  };
+  const handleMoveToLibrary = () => {
+    navigate('/library');
   };
 
   return (
@@ -275,7 +278,9 @@ const BookInfoPage = () => {
         {/* 서재 등록 버튼 */}
         <div
           className="flex self-end items-center justify-center w-[176px] h-[40px] gap-5 mt-15 mb-24 rounded-sm px-22 py-5 bg-nook-br-100 cursor-pointer"
-          onClick={handleLibraryModal}
+          onClick={
+            isRegistrationLibrary ? handleMoveToLibrary : handleLibraryModal
+          }
         >
           <div className="w-[13px]">
             <img
