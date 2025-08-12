@@ -3,17 +3,25 @@ import BookSkeleton from './BookSkelton';
 import { useBookStore } from '../../../../store/book-card/useBookStore';
 import tempBookData from '../../../../mock/library/bookData';
 import BookCard from './BookCard';
+import { LoungeSection } from '../../apis/lounge/types/lounge-types';
 
-const BookListSection = () => {
-  const books = useBookStore((state) => state.books);
+
+const BookListSection = ({section}: { section: LoungeSection;}) => {
   const isLoading = useBookStore((state) => state.isLoading);
-  const setBooks = useBookStore((state) => state.setBooks);
   const setIsLoading = useBookStore((state) => state.setIsLoading);
 
-  const [visibleCount, setVisibleCount] = useState(6);
-  const [currentPage, setCurrentPage] = useState(1);
+  const sectionId = section.sectionId ?? "";
+  const categoryId = section.categoryId ?? "";
+  
+  const [visibleCount, setVisibleCount] = useState(section.pagination.pageSize);
+  const [currentPage, setCurrentPage] = useState(section.pagination.currentPage);
+  
 
-  const totalPages = Math.ceil(books.length / visibleCount);
+  const totalPages = section.pagination.totalPages;
+  const currentPages = 
+
+  //API 재조회
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -116,9 +124,9 @@ const BookListSection = () => {
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-11">
         {isLoading
           ? Array.from({ length: visibleCount }).map((_, index) => (
-              <BookSkeleton />
+              <BookSkeleton key={index}/>
             ))
-          : currentBooks.map((book, index) => <BookCard index={index} />)}
+          : section.books.map((book, index) => <BookCard index={index} />)}
       </div>
     </div>
   );

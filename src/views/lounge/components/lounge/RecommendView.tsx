@@ -1,7 +1,13 @@
 import React from 'react';
 import BookListSection from './BookListSection';
+import { LoungeSection } from '../../apis/lounge/types/lounge-types';
 
-const RecommendView = () => {
+const RecommendView = ({sections}: { sections: LoungeSection[];}) => {
+
+  console.log(sections);
+  const bestSections = sections.find((section) => section.sectionId === 'best');
+  const favoriteSections = sections.find((section) => section.sectionId === 'favorite');
+
   return (
     <div className="flex flex-col items-start justify-center w-full">
       <div
@@ -13,7 +19,7 @@ const RecommendView = () => {
           놓치기 아쉬운 주간 베스트 셀러
         </div>
         <div className="flex items-center justify-center mt-10">
-          <BookListSection />
+            {bestSections && <BookListSection section={bestSections} />}
         </div>
       </div>
 
@@ -27,7 +33,7 @@ const RecommendView = () => {
           <span>을 추천해요.</span>
         </div>
         <div className="flex items-center justify-center mt-10">
-          <BookListSection />
+          {favoriteSections &&<BookListSection section={favoriteSections}/>}
         </div>
       </div>
     </div>

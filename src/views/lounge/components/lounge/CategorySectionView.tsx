@@ -1,38 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import RecommendView from './RecommendView';
 import BookListSection from './BookListSection';
+import { categoryToMallType } from '../../features/constants';
+import useGetLoungeBook from '../../hooks/useQuery/useGetLoungeBook';
+import { LoungeSection } from '../../apis/lounge/types/lounge-types';
 
-type Category = {
-  title: string;
-};
+const CategorySectionView = ({selectedCategory}: { selectedCategory: string;}) => {
+  const mallType = categoryToMallType(selectedCategory);
 
-const CategorySectionView = ({
-  selectedCategory,
-}: {
-  selectedCategory: string;
-}) => {
+  const { data } = useGetLoungeBook({mallType});
+
+  //Sections 별로 데이터 가져오기
+  const sections = data?.sections ?? []; //recommend
+  const newSections = data?.newSections ?? [];
+  const bestSections = data?.bestSections;
+
+
   const [selected, setSelected] = useState('');
-
-  const bestDomesticCategories = [
-    { title: '국내 · 경제경영' },
-    { title: '국내 · 소설 | 시 | 희곡' },
-    { title: '국내 · 인문학' },
-    { title: '국내 · 자기계발' },
-  ];
-
-  const bestForeignCategories = [
-    { title: '외국 · 경제경영' },
-    { title: '외국 · 에세이' },
-    { title: '외국 · 인문 | 사회' },
-    { title: '외국 · 문학' },
-  ];
-
-  const bestEbookCategories = [
-    { title: 'eBook · 과학' },
-    { title: 'eBook · 만화' },
-    { title: 'eBook · 소설 | 시 | 희곡' },
-    { title: 'eBook · 판타지 | 무협' },
-  ];
 
   useEffect(() => {
     if (selectedCategory === '국내도서') {
@@ -44,32 +28,24 @@ const CategorySectionView = ({
     }
   }, [selectedCategory]);
 
-  let bestCategories: Category[] = [];
-
-  if (selected === '국내') {
-    bestCategories = bestDomesticCategories;
-  } else if (selected === '외국') {
-    bestCategories = bestForeignCategories;
-  } else if (selected === 'eBook') {
-    bestCategories = bestEbookCategories;
+  
+  
+  if (mallType === 'RECOMMENDATION') {
+    return <RecommendView sections={sections?? []}/>;
   }
-
-  if (selectedCategory === '추천') {
-    return <RecommendView />;
-  }
-
-      return (
-        <div className="flex flex-col items-start justify-center w-full mt-10">
-          <div
-            className="flex flex-col items-start justify-center w-full mt-1 mb-10 text-white"
-            style={{ borderTop: '1px solid rgba(85, 83, 81, 0.7)' }}
-          >
-            <div className="text-base mt-10">{selected}</div>
+  
+  return (
+    <div className="flex flex-col items-start justify-center w-full mt-10">
+        <div
+          className="flex flex-col items-start justify-center w-full mt-1 mb-10 text-white"
+          style={{ borderTop: '1px solid rgba(85, 83, 81, 0.7)' }}
+        >
+          <div className="text-base mt-10">{selected}</div>
             <div className="text-lg font-semibold mt-1">
               따끈따끈 신간 도서를 만나보세요!
             </div>
             <div className="flex items-center justify-center mt-10">
-              <BookListSection />
+              <BookListSection section={newSections}/>
             </div>
           </div>
 
@@ -84,16 +60,16 @@ const CategorySectionView = ({
           />
         </div>
         <div className="flex flex-col w-full">
-          {bestCategories.map((cat, index) => (
-            <div key={index} className="text-white">
-              <div className="mt-20">
-                <span className="text-base">| {cat.title}</span>
+          {bestSections.map((sec:LoungeSection, index:number) => (
+            <div key={`${sec.sectionId}-${sec.categoryName}-${index}`} className='text-white'>
+              <div className='mt-20'>
+                <span className='text-lg'>| {selected} · {sec.categoryName}</span>
               </div>
-              <div className="flex items-center justify-center mt-10 mb-30">
-                <BookListSection />
+              <div className='flex items-center justify-center mt-10 mb-30'>
+                <BookListSection section={sec}/>
               </div>
 
-              {index !== bestCategories.length - 1 && (
+              {index !== bestSections.length - 1 && (
                 <div
                   className="flex-1"
                   style={{ borderTop: '1px solid rgba(85, 83, 81, 0.7)' }}
