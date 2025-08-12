@@ -43,6 +43,7 @@ const router = createBrowserRouter([
           {
             path: 'settings',
             element: <SettingsPage />,
+          },
           {
             path: 'lounge',
             errorElement: <NotFoundPage />,
