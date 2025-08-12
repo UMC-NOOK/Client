@@ -27,7 +27,7 @@ const SignInPage = () => {
     },
   });
 
-  const { mutate: signInMutate } = useSignIn();
+  const { mutate: signInMutate, isError: isMutationError } = useSignIn();
 
   const watchedValues = watch();
 
@@ -40,6 +40,8 @@ const SignInPage = () => {
   };
 
   const hasErrors = Object.keys(errors).length > 0;
+  const hasApiError = isMutationError;
+  const shouldShowErrorBox = hasErrors || hasApiError;
   const isEmpty = !watchedValues.email || !watchedValues.password;
   const isButtonDisabled = hasErrors || !isValid || isEmpty;
 
@@ -51,7 +53,7 @@ const SignInPage = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="bg-[rgba(66,60,53,0.2)] border-1 border-[rgba(243,238,220,1)] w-[54.1rem] h-[65.2rem] flex flex-col items-center rounded-[15px] relative"
       >
-        {hasErrors && <ErrorBox />}
+        {shouldShowErrorBox && <ErrorBox />}
 
         <div className="mt-40 mb-30">
           <Logo />
