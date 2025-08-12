@@ -26,6 +26,7 @@ const useWebSocket = ({ roomId, userId }: UseWebSocketProps) => {
     roomRemoved: false,
     bgmToggle: null,
     readingBooks: [],
+    allCurrentBooks: [],
   });
   const clientRef = useRef<Client | null>(null);
 
@@ -65,11 +66,11 @@ const useWebSocket = ({ roomId, userId }: UseWebSocketProps) => {
       setTimeout(() => {
         if (stompClient && stompClient.connected) {
           // 현재 방 상태 요청
-          // stompClient.publish({
-          //   destination: '/pub/room-state',
-          //   body: JSON.stringify({ roomId }),
-          //   headers: { 'content-type': 'application/json' },
-          // });
+          stompClient.publish({
+            destination: `/pub/all-reading-books/${roomId}`,
+            body: JSON.stringify({ roomId }),
+            headers: { 'content-type': 'application/json' },
+          });
 
           // 자동 입장
           const enterData = { roomId, userId };

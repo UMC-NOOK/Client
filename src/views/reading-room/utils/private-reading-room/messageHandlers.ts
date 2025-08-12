@@ -102,6 +102,22 @@ export const createMessageHandlers = (
     }
   };
 
+  const handleAllCurrentBooks = (message: IMessage) => {
+    try {
+      const data = JSON.parse(message.body);
+      console.log('📨 읽는 책 정보 데이터:', data);
+      setMessages((prev) => ({
+        ...prev,
+        allCurrentBooks: [
+          ...prev.allCurrentBooks,
+          { ...data, timestamp: Date.now() },
+        ],
+      }));
+    } catch (error) {
+      console.error('❌ 읽는 책 정보 메시지 파싱 실패:', error);
+    }
+  };
+
   return {
     handleUserEnter,
     handleUserLeave,
@@ -110,5 +126,6 @@ export const createMessageHandlers = (
     handleBgmToggle,
     handleReadingBooks,
     handleRoomState,
+    handleAllCurrentBooks,
   };
 };

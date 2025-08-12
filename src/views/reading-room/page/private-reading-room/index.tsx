@@ -110,10 +110,20 @@ const PrivateReadingRoom = () => {
   const setCurrentReadingBooks = useCurrentBookStore((state) => state.setBooks);
 
   useEffect(() => {
-    if (messages.userEnter.length > 0) {
-      const currentReadingBooks = messages?.readingBooks;
-      setCurrentReadingBooks(currentReadingBooks);
-      console.log('책조회', currentReadingBooks);
+    if (messages.allCurrentBooks && messages.allCurrentBooks.length > 0) {
+      // 배열의 마지막 요소(최신 데이터)를 가져옴
+      const latestBooksData =
+        messages.allCurrentBooks[messages.allCurrentBooks.length - 1];
+      setCurrentReadingBooks(latestBooksData.books || latestBooksData);
+      console.log('최신 책 정보 동기화:', latestBooksData);
+    }
+  }, [messages.allCurrentBooks, setCurrentReadingBooks]);
+
+  useEffect(() => {
+    // 기존 readingBooks 처리 로직
+    if (messages.readingBooks) {
+      setCurrentReadingBooks(messages.readingBooks);
+      console.log('실시간 책조회', messages.readingBooks);
     }
   }, [messages.readingBooks, setCurrentReadingBooks]);
 
@@ -150,12 +160,6 @@ const PrivateReadingRoom = () => {
       ) {
         setCurrentUsers(latestUsers);
         console.log('사용자 목록 업데이트:', latestUsers);
-      }
-
-      // 책 정보도 함께 동기화
-      if (shouldUpdateBooks && messages.readingBooks) {
-        setCurrentReadingBooks(messages.readingBooks);
-        console.log('재입장 시 책 정보 동기화:', messages.readingBooks);
       }
     };
 

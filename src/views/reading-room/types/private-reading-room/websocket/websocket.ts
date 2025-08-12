@@ -15,6 +15,7 @@ export interface ReceivedMessages {
   roomRemoved: boolean;
   bgmToggle: any | null;
   readingBooks: any[];
+  allCurrentBooks: any[];
 }
 
 export interface WebSocketActions {
@@ -29,6 +30,7 @@ export interface WebSocketActions {
   clearMessages: () => void;
   testPublish: () => void;
   checkConnection: () => void;
+  allCurrentBook: () => void;
 }
 
 export interface SubscriptionConfig {

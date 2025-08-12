@@ -114,6 +114,26 @@ export const useWebSocketActions = (
     [],
   );
 
+  const allCurrentBook = useCallback(() => {
+    if (clientRef.current && clientRef.current.connected) {
+      const allBookData = { roomId };
+      // console.log('📚 책 선택 메시지 발송:', bookData);
+
+      try {
+        clientRef.current.publish({
+          destination: `/pub/all-reading-books/${roomId}`,
+          body: JSON.stringify(allBookData),
+          headers: { 'content-type': 'application/json' },
+        });
+        console.log('✅ 모든 유저 책 선택 메시지 발송 완료');
+      } catch (error) {
+        console.error('❌ 책 선택 메시지 발송 실패:', error);
+      }
+    } else {
+      console.warn('⚠️ 클라이언트가 연결되지 않음 - 책 선택 메시지 발송 불가');
+    }
+  }, [roomId, userId]);
+
   // const clearMessages = useCallback(() => {
   //   setMessages({
   //     userEnter: [],
@@ -170,6 +190,7 @@ export const useWebSocketActions = (
     toggleBgm,
     subscribe,
     // clearMessages,
+    allCurrentBook,
     testPublish,
     checkConnection,
   };

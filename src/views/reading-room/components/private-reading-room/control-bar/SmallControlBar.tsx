@@ -13,7 +13,7 @@ interface SmallControlBarProps {
 }
 
 function SmallControlBar({ onEdit, onSound, onDelete }: SmallControlBarProps) {
-  const SoundState = useSoundStore((state) => state.Sound);
+  const SoundState = useSoundStore((state) => state.isSoundEnabled);
   return (
     <div className="relative">
       <img src={union} alt="" className="object-contain relative" />

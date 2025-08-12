@@ -137,8 +137,15 @@ const Subway = ({ currentUsers }: SubwayProps) => {
   }
 
   const getBookTitleByUserId = (userId: number): string => {
-    const book = currentReadingBooks?.find((book) => book.userId === userId);
-    return book?.title || '책 고르는 중..';
+    // 1차: 현재 스토어의 Books에서 검색
+    const currentBook = currentReadingBooks?.find(
+      (book) => book.userId === userId,
+    );
+
+    if (currentBook?.title) {
+      return currentBook.title;
+    }
+    return '책 고르는 중..';
   };
 
   // 최대 4명까지만 표시 (CHARACTER_POSITIONS 배열 길이에 따라)
