@@ -62,6 +62,7 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
             },
             edit: () => {
                 if(!room) return;
+                //이런 데이터를 보낼 예정
                 onEdit?.({
                     roomId: room.roomId,
                     name: roomName,
