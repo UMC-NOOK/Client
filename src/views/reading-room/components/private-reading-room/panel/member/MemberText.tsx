@@ -7,14 +7,6 @@ interface MemberTextProps {
 }
 
 function MemberText({ name, roll }: MemberTextProps) {
-  // const selectPosition = (roll: string) => {
-  //   if (roll === 'host') {
-  //     roll = '호스트';
-  //   } else {
-  //     roll = '게스트';
-  //   }
-  // };
-
   return (
     <div className="flex w-138 justify-between items-center">
       <div className="flex items-center gap-3">

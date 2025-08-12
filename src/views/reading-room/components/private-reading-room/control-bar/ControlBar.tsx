@@ -16,6 +16,7 @@ interface ControlBarProps {
   onBookClick: () => void;
   onSettingClick: () => void;
   onBgmToggle: (bgmOn: boolean) => void;
+  onLeave: () => void;
 }
 
 function ControlBar({
@@ -24,6 +25,7 @@ function ControlBar({
   onBookClick,
   onSettingClick,
   onBgmToggle,
+  onLeave,
 }: ControlBarProps) {
   const [music, setMusic] = useState<boolean>(false);
   const toggleExitModal = useModalStore((state) => state.toggleExitModal);
@@ -33,8 +35,12 @@ function ControlBar({
   const handleMusicToggle = () => {
     const newMusicState = !music;
     setMusic(newMusicState);
-    // 웹소켓으로 BGM 토글 상태 전송
     onBgmToggle(newMusicState);
+  };
+
+  const handleLeave = () => {
+    onLeave();
+    navigate('/reading-room');
   };
 
   return (
@@ -94,7 +100,7 @@ function ControlBar({
         src={deleteBtn}
         alt=""
         className="w-22 h-22 bg-[rgba(241,73,75,0.2)] rounded-[8px] object-contain cursor-pointer"
-        onClick={() => navigate(-1)}
+        onClick={handleLeave}
       />
     </div>
   );

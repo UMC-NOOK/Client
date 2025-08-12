@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import CampFire from '../../components/private-reading-room/CampFire';
 import ControlBar from '../../components/private-reading-room/control-bar/ControlBar';
@@ -14,14 +14,21 @@ import SpeechBubble from '../../components/private-reading-room/speech-bubble/Sp
 import CreateReadingRoom from '../../components/views/CreateReadingRoom';
 import Modal from '../../components/private-reading-room/common/ModifyModal';
 import useWebSocket from '../../hooks/private-reading-room/web-socket/useWebSocket';
+import useGetBookList from '../../hooks/private-reading-room/useQuery/useGetBookList';
+import useGetTheme from '../../hooks/private-reading-room/useQuery/useGetTheme';
+import NotFoundPage from '../../../404';
+import useCurrentBookStore from '../../../../store/private-reading-room/useCurrentBookStore';
+import { useParams } from 'react-router-dom';
+import useAudio from '../../hooks/private-reading-room/audio/useAudio';
 
 const PrivateReadingRoom = () => {
-  const [memberClick, setMemberClick] = useState(false);
-  const [bookClick, setBookClick] = useState(false);
-  const [settingClick, setSettingClick] = useState(false);
+  const [activePanel, setActivePanel] = useState<
+    'member' | 'book' | 'setting' | null
+  >(null);
 
-  const roomId = '123';
-  const userId = 'user456';
+  const { roomId, userId } = useParams();
+  const finalRoomId = roomId || '12';
+  const finalUserId = userId || '12';
 
   const {
     isExitModalOpen,
@@ -43,54 +50,157 @@ const PrivateReadingRoom = () => {
     })),
   );
 
+  const handlePanelToggle = (panelType: 'member' | 'book' | 'setting') => {
+    setActivePanel(activePanel === panelType ? null : panelType);
+  };
+
   const toggleSound = useSoundStore((state) => state.toggleSound);
 
   const handleDelete = () => {
     console.log('삭제로직');
   };
 
-  const { client, isConnected, connectionStatus, actions } = useWebSocket({
-    roomId,
-    userId,
+  const { data, isLoading, isError, error, isSuccess, refetch } = useGetTheme({
+    roomId: Number(roomId),
   });
+
+  const { play, pause, togglePlay, isPlaying } = useAudio(data?.bgmUrl || '', {
+    volume: 0.9,
+    loop: true,
+  });
+
+  const isSoundEnabled = useSoundStore((state) => state.isSoundEnabled);
+
+  useEffect(() => {
+    if (isSoundEnabled && data?.bgmUrl) {
+      play();
+    } else {
+      pause();
+    }
+  }, [isSoundEnabled, data?.bgmUrl, play, pause]);
+
+  console.log('배경', data?.bgmUrl);
+
+  const { messages, isConnected, actions } = useWebSocket({
+    roomId: finalRoomId,
+    userId: finalUserId,
+  });
+
+  const handleBgmToggle = () => {
+    toggleSound(); // 로컬 사운드 상태 토글
+    actions.toggleBgm; // WebSocket으로 다른 사용자들에게 전달
+  };
+
+  console.log('전체메세지', messages);
+
+  // 입장 정보 업데이트 감지
+  const [currentUsers, setCurrentUsers] = useState(null);
+
+  // useEffect(() => {
+  //   if (messages.userEnter.length > 0) {
+  //     const latestEnter =
+  //       messages.userEnter[messages.userEnter.length - 1].currentUsers;
+  //     setCurrentUsers(latestEnter);
+  //     console.log('새 사용자가 입장했습니다:', latestEnter);
+  //   }
+  // }, [messages.userEnter]);
+
+  // console.log('오나나', currentUsers);
+
+  const setCurrentReadingBooks = useCurrentBookStore((state) => state.setBooks);
+
+  useEffect(() => {
+    if (messages.userEnter.length > 0) {
+      const currentReadingBooks = messages?.readingBooks;
+      setCurrentReadingBooks(currentReadingBooks);
+      console.log('책조회', currentReadingBooks);
+    }
+  }, [messages.readingBooks, setCurrentReadingBooks]);
+
+  useEffect(() => {
+    // 사용자 입장/퇴장 시 전체 상태 동기화
+    const updateRoomState = () => {
+      let latestUsers = null;
+      let shouldUpdateBooks = false;
+
+      // 사용자 목록 업데이트
+      if (messages.userEnter && messages.userEnter.length > 0) {
+        latestUsers =
+          messages.userEnter[messages.userEnter.length - 1].currentUsers;
+        shouldUpdateBooks = true;
+      }
+
+      if (messages.userLeave && messages.userLeave.length > 0) {
+        const leaveUsers =
+          messages.userLeave[messages.userLeave.length - 1].currentUsers;
+        if (
+          !latestUsers ||
+          messages.userLeave[messages.userLeave.length - 1].timestamp >
+            messages.userEnter[messages.userEnter.length - 1].timestamp
+        ) {
+          latestUsers = leaveUsers;
+          shouldUpdateBooks = true;
+        }
+      }
+
+      // 사용자 목록 업데이트
+      if (
+        latestUsers &&
+        JSON.stringify(latestUsers) !== JSON.stringify(currentUsers)
+      ) {
+        setCurrentUsers(latestUsers);
+        console.log('사용자 목록 업데이트:', latestUsers);
+      }
+
+      // 책 정보도 함께 동기화
+      if (shouldUpdateBooks && messages.readingBooks) {
+        setCurrentReadingBooks(messages.readingBooks);
+        console.log('재입장 시 책 정보 동기화:', messages.readingBooks);
+      }
+    };
+
+    updateRoomState();
+  }, [
+    messages.userEnter,
+    messages.userLeave,
+    messages.readingBooks,
+    currentUsers,
+    setCurrentReadingBooks,
+  ]);
+
+  // console.log('zlzllz', currentReadingBooks);
+
+  // 룸 정보 업데이트 감지
+  // useEffect(() => {
+  //   if (messages.roomInfoUpdate) {
+  //     console.log('룸 정보가 업데이트되었습니다:', messages.roomInfoUpdate);
+  //   }
+  // }, [messages.roomInfoUpdate]);
+
+  // BGM 토글 감지
+  // useEffect(() => {
+  //   if (messages.bgmToggle) {
+  //     console.log('BGM 상태가 변경되었습니다:', messages.bgmToggle);
+  //   }
+  // }, [messages.bgmToggle]);
+
+  const themeComponent = useMemo(() => {
+    if (!data?.themeName) return <NotFoundPage />;
+
+    switch (data.themeName) {
+      case 'CAMPFIRE':
+        return <CampFire currentUsers={currentUsers} />;
+      case 'SUBWAY':
+        return <Subway currentUsers={currentUsers} />;
+      case 'READINGROOM':
+      default:
+        return <ReadingRoom currentUsers={currentUsers} />;
+    }
+  }, [data?.themeName, currentUsers]);
 
   return (
     <div className="max-w-[970px] h-[780px] m-auto relative">
-      <div className="absolute top-2 left-2 text-sm z-10 space-y-2">
-        <div>
-          <span
-            className={`px-2 py-1 rounded ${isConnected ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}
-          >
-            {isConnected ? '연결됨' : '연결 중...'}
-          </span>
-        </div>
-        <div className="text-xs bg-black bg-opacity-50 text-white p-2 rounded max-w-xs">
-          {connectionStatus}
-        </div>
-        <div className="space-x-2">
-          <button
-            onClick={actions.testPublish}
-            className="px-2 py-1 bg-blue-500 text-white text-xs rounded"
-          >
-            테스트 메시지
-          </button>
-          <button
-            onClick={actions.checkConnection}
-            className="px-2 py-1 bg-purple-500 text-white text-xs rounded"
-          >
-            연결 체크
-          </button>
-          <button
-            onClick={() => actions.toggleBgm(true)}
-            className="px-2 py-1 bg-yellow-500 text-white text-xs rounded"
-          >
-            BGM ON 테스트
-          </button>
-        </div>
-      </div>
-      {/* <CampFire /> */}
-      <ReadingRoom />
-      {/* <Subway /> */}
+      {themeComponent}
 
       {/* <SpeechBubble /> */}
 
@@ -111,17 +221,17 @@ const PrivateReadingRoom = () => {
       )}
 
       <div className="relative">
-        {memberClick === true && (
+        {activePanel === 'member' && (
           <div className="absolute bottom-[130px] left-[300px]">
             <MemberPanel />
           </div>
         )}
-        {bookClick === true && (
+        {activePanel === 'book' && (
           <div className="absolute bottom-[130px] left-[285px]">
-            <BookPanel />
+            <BookPanel onChoose={actions.selectBook} />
           </div>
         )}
-        {settingClick === true && (
+        {activePanel === 'setting' && (
           <div className="absolute bottom-[130px] left-[394px]">
             <SmallControlBar
               onDelete={toggleDeleteModal}
@@ -137,10 +247,11 @@ const PrivateReadingRoom = () => {
         )}
         <ControlBar
           roll="host"
-          onMemberClick={() => setMemberClick(!memberClick)}
-          onBookClick={() => setBookClick(!bookClick)}
-          onSettingClick={() => setSettingClick(!settingClick)}
-          onBgmToggle={actions.toggleBgm} // BGM 토글 함수 전달
+          onMemberClick={() => handlePanelToggle('member')}
+          onBookClick={() => handlePanelToggle('book')}
+          onSettingClick={() => handlePanelToggle('setting')}
+          onBgmToggle={handleBgmToggle} // BGM 토글 함수 전달
+          onLeave={actions.leaveRoom}
         />
       </div>
     </div>

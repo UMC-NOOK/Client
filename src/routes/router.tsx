@@ -32,9 +32,8 @@ const router = createBrowserRouter([
       },
       {
         path: 'home/DesignPage',
-        element: <DesignPage />, 
+        element: <DesignPage />,
       },
-      
 
       {
         path: 'lounge',
@@ -87,13 +86,13 @@ const router = createBrowserRouter([
             element: <ReadingRoomList />,
           },
           {
-            path: ':id',
+            path: ':roomId/:userId',
             element: <PrivateReadingRoom />,
           },
           {
             path: 'create',
-            element: <CreateReadingRoom usage='create'/>,
-          }
+            element: <CreateReadingRoom usage="create" />,
+          },
         ],
       },
 
