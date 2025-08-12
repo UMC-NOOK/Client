@@ -32,10 +32,10 @@ const MyReadingRoomCardList = () => {
             <div className='flex grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-12 overflow-hidden'>
                 {isLoading
                     ? Array.from({length: 4}).map((_,index) => (
-                        <ReadingRoomSkeleton/>
+                        <ReadingRoomSkeleton key={index}/>
                     ))
                     : myRooms.map((room, index) => (
-                        <ReadingRoomCard room={room}/>
+                        <ReadingRoomCard room={room} key={index}/>
                     ))
                 }
                 <AddReadingRoom/>
