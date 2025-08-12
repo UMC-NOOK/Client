@@ -42,7 +42,7 @@ const Input = <T extends FieldValues>({
   // console.log(error);
 
   return (
-    <div className="w-full h-[6.3rem] flex flex-col gap-4 border-b border-[rgba(255,255,255,0.5)]">
+    <div className="w-full h-[5.75rem] flex flex-col gap-4 border-b border-[rgba(255,255,255,0.5)]">
       <p className="text-[1.6rem] font-normal text-nook-100">{formName}</p>
       <div className="relative w-full">
         <input
@@ -53,7 +53,7 @@ const Input = <T extends FieldValues>({
           }
           placeholder={placeholder}
           {...register(name, { ...schema })}
-          className="w-full text-md text-nook-100 font-normal pr-10 bg-transparent outline-none autofill:shadow-[inset_0_0_0px_1000px_transparent] autofill:[-webkit-text-fill-color:inherit]"
+          className="w-full text-md text-nook-100 font-normal pr-10 bg-transparent outline-none placeholder:text-md placeholder:font-normal placeholder:opacity-50 autofill:shadow-[inset_0_0_0px_1000px_transparent] autofill:[-webkit-text-fill-color:inherit]"
         />
 
         {hideBtn && (
@@ -71,7 +71,7 @@ const Input = <T extends FieldValues>({
         )}
 
         {typeof error?.message === 'string' && (
-          <p className="text-[rgba(241,73,75,1)] text-sm absolute top-17">
+          <p className="text-[rgba(241,73,75,1)] text-sm absolute top-13">
             {error.message}
           </p>
         )}
