@@ -16,6 +16,8 @@ import PrivateReadingRoom from '../views/reading-room/page/private-reading-room'
 import CreateReadingRoom from '../views/reading-room/components/views/CreateReadingRoom';
 import DesignPage from '../views/home/page/DesignPage';
 import ProtectedRoute from './ProtectedRoute';
+import SettingsPage from '../views/home/components/ProfileSettingPage';
+
 
 const router = createBrowserRouter([
   {
@@ -27,7 +29,6 @@ const router = createBrowserRouter([
         index: true,
         element: <Main />,
       },
-
       {
         element: <ProtectedRoute />,
         children: [
@@ -39,6 +40,9 @@ const router = createBrowserRouter([
             path: 'home/DesignPage',
             element: <DesignPage />,
           },
+          {
+            path: 'settings',
+            element: <SettingsPage />,
           {
             path: 'lounge',
             errorElement: <NotFoundPage />,

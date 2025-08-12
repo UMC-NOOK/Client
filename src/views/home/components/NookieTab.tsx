@@ -1,16 +1,18 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 
 import baseNookie from '../../../assets/button/home/base-nookie-c.png';
 import orangeNookie from '../../../assets/button/home/orange-nookie-c.png';
 import greenNookie from '../../../assets/button/home/green-nookie-c.png';
 import blueNookie from '../../../assets/button/home/blue-nookie-c.png';
 
+export type LampKey = 'base' | 'orange' | 'green' | 'blue';
+
 interface NookieTabProps {
-  selected: string;
-  setSelected: (value: string) => void;
+  selected: LampKey;
+  setSelected: React.Dispatch<React.SetStateAction<LampKey>>;
 }
 
-const characters = [
+const characters: { name: LampKey; src: string }[] = [
   { name: 'base', src: baseNookie },
   { name: 'orange', src: orangeNookie },
   { name: 'green', src: greenNookie },
