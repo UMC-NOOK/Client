@@ -137,7 +137,7 @@ const DesignPage: React.FC = () => {
         className="w-[528px] h-[648px] rounded-[12px] bg-[#423C35]/10 flex items-center justify-center relative overflow-hidden"
         style={{ flexShrink: 0 }}
       >
-        <div className="absolute z-10 w-full h-full">
+        <div className="absolute z-10 w-full h-full ">
           {/* 배경 */}
           <img
             src={previewWallpaperImg}
@@ -156,7 +156,7 @@ const DesignPage: React.FC = () => {
           <img
             src={previewLampImg}
             alt="Lamp"
-            className="absolute z-[30] top-[-115px] left-[300px] w-[140px] h-full object-contain"
+            className="absolute z-[30] top-[-115px] left-[300px] w-[140px] h-full object-contain "
           />
 
           {/* 안내 박스(디자인 유지용) */}
@@ -175,8 +175,8 @@ const DesignPage: React.FC = () => {
         </div>
       </div>
 
-      {/* 오른쪽 탭 */}
-      <div className="relative w-[432px] h-[568.407px] pt-0">
+      {/* 오른쪽: 탭 박스(고정) + 바깥 저장 버튼(간격 고정) */}
+      <div className="w-[432px]">
         {/* 탭 버튼 */}
         <div className="relative z-10 flex ml-[14px]">
           {TABS.map((tab) => (
@@ -195,41 +195,50 @@ const DesignPage: React.FC = () => {
           ))}
         </div>
 
-        {/* 탭 내용 */}
-        <div className="relative z-20 w-full h-full rounded-[12px] bg-[#2D2822] px-[38px] pt-[21.41px] ">
-          {activeTab === '별명' && (
-            <NicknameTab
-              selectedPrefix={nicknamePrefix}
-              setSelectedPrefix={setNicknamePrefix}
-              selectedSuffix={nicknameSuffix}
-              setSelectedSuffix={setNicknameSuffix}
-            />
-          )}
+        {/* 탭 내용 박스: 고정 크기 유지 (내부만 스크롤) */}
+        <div
+          className="relative z-20 w-[432px] h-[568.407px] rounded-[12px] bg-[#2D2822] px-[38px] pt-[21.41px]"
+          style={{ boxSizing: 'border-box' }}
+        >
+          {/* 내부 스크롤 영역: 스크롤바로 폭이 변하지 않도록 고정 */}
+          <div
+            className="h-full overflow-y-auto"
+            style={{ scrollbarGutter: 'stable' }}
+          >
+            {activeTab === '별명' && (
+              <NicknameTab
+                selectedPrefix={nicknamePrefix}
+                setSelectedPrefix={setNicknamePrefix}
+                selectedSuffix={nicknameSuffix}
+                setSelectedSuffix={setNicknameSuffix}
+              />
+            )}
 
-          {activeTab === '누키' && (
-            <NookieTab
-              selected={lampKey}
-              setSelected={setLampKey}
-            />
-          )}
+            {activeTab === '누키' && (
+              <NookieTab
+                selected={lampKey}
+                setSelected={setLampKey}
+              />
+            )}
 
-          {activeTab === '마이홈' && (
-            <MyHomeTab
-              selected={patternKey}
-              setSelected={setPatternKey}
-            />
-          )}
-
-          {/* 저장 버튼 */}
-          <div className="flex justify-center">
-            <button
-              className="w-[88px] h-[33px] rounded-[8px] bg-[#423C35] text-white text-[14px] font-semibold mt-[18px] disabled:opacity-60"
-              onClick={handleSave}
-              disabled={isPending}
-            >
-              {isPending ? '저장 중…' : '저장'}
-            </button>
+            {activeTab === '마이홈' && (
+              <MyHomeTab
+                selected={patternKey}
+                setSelected={setPatternKey}
+              />
+            )}
           </div>
+        </div>
+
+        {/* 저장 버튼: 박스 바깥, 간격 고정 */}
+        <div className="flex justify-center mt-[18px]">
+          <button
+            className="w-[88px] h-[33px] rounded-[8px] bg-[#423C35] text-white text-[14px] font-semibold disabled:opacity-60"
+            onClick={handleSave}
+            disabled={isPending}
+          >
+            {isPending ? '저장 중…' : '저장'}
+          </button>
         </div>
       </div>
     </div>

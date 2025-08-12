@@ -5,6 +5,7 @@ import Logo from '../../components/Logo';
 import { signUnSchema } from '../../schemas/sign-up/validateSignUp';
 import useSignUp from '../../hook/useMutaion/useSignUp';
 import { useNavigate } from 'react-router-dom';
+import SignUpbox from '../../../../assets/auth/SignUpbox.png';
 
 type FormData = {
   name: string;
@@ -45,7 +46,13 @@ const SignUpPage = () => {
     <div className="flex flex-col items-center justify-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-[rgba(66,60,53,0.2)] border-1 border-[rgba(243,238,220,1)] w-[54.1rem] h-[79rem] flex flex-col items-center rounded-[15px] relative mb-45"
+        className="w-[54.1rem] h-[76rem] flex flex-col items-center rounded-[15px] relative mb-45"
+        style={{
+          backgroundImage: `url(${SignUpbox})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
       >
         <div className="mt-40 mb-30">
           <Logo />

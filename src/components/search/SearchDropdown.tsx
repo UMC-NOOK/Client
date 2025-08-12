@@ -1,14 +1,19 @@
-import { useSearchStore } from '../../store/search/useSearchStore';
+// src/components/search/SearchDropdown.tsx
+import { useRecentQueries } from '../../views/search/hooks/useQuery/useRecentQueries';
+import { useDeleteRecentQuery } from '../../views/search/hooks/useMutation/useDeleteRecentQuery';
+import { useClearRecentQueries } from '../../views/search/hooks/useMutation/useClearRecentQueries';
 
 interface Props {
   onSelect: (val: string) => void;
 }
 
 export default function SearchDropdown({ onSelect }: Props) {
-  const { recentSearches, removeRecentSearch, clearAllSearches } =
-    useSearchStore();
+  const { data, isLoading } = useRecentQueries();
+  const { mutate: removeOne } = useDeleteRecentQuery();
+  const { mutate: clearAll } = useClearRecentQueries();
 
-  if (recentSearches.length === 0) return null;
+  const recent = data?.recentQueries ?? [];
+  if (isLoading || recent.length === 0) return null;
 
   return (
     <div
@@ -32,23 +37,38 @@ export default function SearchDropdown({ onSelect }: Props) {
       </div>
 
       <ul>
-        {recentSearches.map((item, idx) => (
-          <li
-            key={idx}
-            className="flex justify-between items-center py-3 cursor-pointer hover:bg-[#2b2825]"
-          >
-            <span
-              onClick={() => onSelect(item)} 
-              style={{ fontSize: '12px', color: '#D3D3D3' }}
+        {recent.map((item) => (
+          <li key={item.recentQueryId}>
+            <div
+              className="flex justify-between items-center py-3 cursor-pointer hover:bg-[#2b2825] rounded-[6px] px-[6px]"
+              // 👇 mousedown에서 처리하면 input의 blur보다 먼저 실행되어 드롭다운이 닫히기 전에 검색이 트리거됩니다.
+              onMouseDown={(e) => {
+                e.preventDefault(); // input blur 방지
+                onSelect(item.query);
+              }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') onSelect(item.query);
+              }}
             >
-              {item}
-            </span>
-            <button
-              onClick={() => removeRecentSearch(item)}
-              className="text-white/60 hover:text-white text-[14px]"
-            >
-              ✕
-            </button>
+              <span style={{ fontSize: '12px', color: '#D3D3D3' }}>
+                {item.query}
+              </span>
+
+              <button
+                // 삭제 버튼은 클릭 버블링 막아 선택과 충돌하지 않게 처리
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeOne(item.recentQueryId);
+                }}
+                className="text-white/60 hover:text-white text-[14px]"
+                aria-label="최근 검색어 삭제"
+              >
+                ✕
+              </button>
+            </div>
           </li>
         ))}
       </ul>
@@ -64,7 +84,8 @@ export default function SearchDropdown({ onSelect }: Props) {
       <div className="flex items-center" style={{ padding: '16px 0px' }}>
         <button
           className="text-white text-[12px] font-light"
-          onClick={clearAllSearches}
+          onMouseDown={(e) => e.preventDefault()} // blur 방지
+          onClick={() => clearAll()}
         >
           검색 기록 삭제
         </button>

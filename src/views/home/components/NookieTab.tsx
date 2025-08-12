@@ -22,22 +22,36 @@ const characters: { name: LampKey; src: string }[] = [
 const NookieTab: FC<NookieTabProps> = ({ selected, setSelected }) => {
   return (
     <div className="w-full h-full text-white">
-      <div className="grid grid-cols-2 gap-y-[20px] gap-x-[20px] rounded-[12px]">
-        {characters.map((char) => (
-          <div
-            key={char.name}
-            onClick={() => setSelected(char.name)}
-            className={`w-[168px] h-[168px] rounded-[40px] flex items-center justify-center bg-[#373029] cursor-pointer
-              ${selected === char.name ? 'outline outline-[#7ABFC9]' : ''}
-            `}
-          >
-            <img
-              src={char.src}
-              alt={char.name}
-              className="w-[168px] h-[168px] object-contain"
-            />
-          </div>
-        ))}
+      {/* padding을 추가하여 ring이 잘리지 않도록 함 */}
+      <div className="grid grid-cols-2 gap-x-[20px] gap-y-[10px] rounded-[12px] p-[2px]">
+        {characters.map((char) => {
+          const isActive = selected === char.name;
+          return (
+            <button
+              key={char.name}
+              onClick={() => setSelected(char.name)}
+              aria-pressed={isActive}
+              className={[
+                'w-[168px] h-[168px] rounded-[30px]',
+                'relative select-none cursor-pointer',
+                isActive ? 'ring-[1px] ring-[#7ABFC9]' : 'ring-0 hover:ring-[1px]',
+                'ring-offset-0 ring-offset-transparent',
+                'focus:outline-none outline-none',
+                'transition-[box-shadow,transform] duration-150 ease-out active:scale-[0.98]',
+              ].join(' ')}
+            >
+              {/* 안쪽 마스크: 이미지 튀어나옴 방지 */}
+              <div className="w-full h-full rounded-[30px] overflow-hidden bg-[#373029]">
+                <img
+                  src={char.src}
+                  alt={char.name}
+                  className="w-full h-full object-contain pointer-events-none"
+                  draggable={false}
+                />
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

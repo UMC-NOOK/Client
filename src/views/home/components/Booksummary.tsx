@@ -9,12 +9,12 @@ const BookSummaryCard = () => {
 
   const finished =
     data?.statusCounts.find((s) =>
-      ['FINISHED', 'DONE', 'COMPLETED'].includes(s.readingStatus as string)
+      ['FINISHED', 'COMPLETED'].includes(s.readingStatus as string)
     )?.bookCount ?? 0;
 
   const bookmarked =
     data?.statusCounts.find((s) =>
-      ['BOOKMARK', 'WISH'].includes(s.readingStatus as string)
+      ['BOOKMARK'].includes(s.readingStatus as string)
     )?.bookCount ?? 0;
 
   return (

@@ -114,7 +114,7 @@ const MiddleNookie = () => {
 
         {/* 별명(alias) */}
         <p
-          className="absolute top-[124px] left-[369px] transform -translate-x-1/2 text-white text-[13.135px] font-[400] text-center z-30"
+          className="absolute top-[124px] left-[369px] transform -translate-x-1/2 text-white text-[13.135px] font-[400] text-center z-20"
           style={{ fontFamily: 'Pretendard' }}
         >
           {profileLoading ? '' : (profile?.alias || '')}
@@ -122,7 +122,7 @@ const MiddleNookie = () => {
 
         {/* 디자인 아이콘 */}
         <button
-          className="absolute top-[26px] right-[23px] w-[28px] h-[28px] flex items-center justify-center z-30"
+          className="absolute top-[26px] right-[23px] w-[28px] h-[28px] flex items-center justify-center z-10" //z-index 수정
           onClick={() => navigate('/home/DesignPage')}
         >
           <img src={designIcon} alt="lamp" className="w-[28px] h-[28px]" />
