@@ -53,7 +53,7 @@ const router = createBrowserRouter([
                 element: <Lounge />,
               },
               {
-                path: 'book-info',
+                path: 'book-info/:bookId',
                 element: <BookInfoPage />,
               },
               {
@@ -71,11 +71,11 @@ const router = createBrowserRouter([
                 element: <Library />,
               },
               {
-                path: ':id',
+                path: ':bookId',
                 element: <ReadNotePage />,
               },
               {
-                path: ':id/edit',
+                path: ':bookId/edit',
                 element: <ReadNoteEditPage />,
               },
             ],

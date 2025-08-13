@@ -27,6 +27,7 @@ export const menuMapping: Record<
 const VerticalView = () => {
   const [bookData, setBookData] = useState(tempBookData);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
   const currentTab = useTabStore((state) => state.selectedTab);
   const currentMenu = useDropDownStore((state) => state.selectMenu);
 
@@ -42,23 +43,31 @@ const VerticalView = () => {
     return menuMapping[koreanTab] || 'recent';
   };
 
-  const deleteBook = useDeleteBook();
+  const deleteBookMutation = useDeleteBook();
 
   const handleDelete = () => {
-    // deleteBook.mutate(bookId);
-    setIsModalOpen(false);
+    if (selectedBookId) {
+      deleteBookMutation.mutate({ bookId: selectedBookId });
+      setIsModalOpen(false);
+      setSelectedBookId(null);
+    }
   };
 
-  const modalHandler = () => {
+  const modalHandler = (bookId?: number) => {
+    if (bookId) {
+      setSelectedBookId(bookId);
+    }
     setIsModalOpen((prev) => !prev);
   };
 
   const { data, isLoading, isError, error, isSuccess, refetch } =
     useGetBookState({
       status: convertTabToEnglish(currentTab),
-      size: 10,
+      size: 8,
       sort: convertMenuToEnglish(currentMenu),
     });
+
+  console.log(data);
 
   return (
     <div className="w-full">
@@ -73,9 +82,9 @@ const VerticalView = () => {
       <div className="flex flex-col">
         {bookData.map((data, idx) => (
           <BookItem
-            key={idx}
+            key={data?.bookId}
             {...data}
-            openModal={modalHandler}
+            openModal={() => modalHandler(data.bookId)}
             useOnLibrary={true}
             useOnSearch={false}
           />
