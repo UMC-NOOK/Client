@@ -20,6 +20,11 @@ import NotFoundPage from '../../../404';
 import useCurrentBookStore from '../../../../store/private-reading-room/useCurrentBookStore';
 import { useParams } from 'react-router-dom';
 import useAudio from '../../hooks/private-reading-room/audio/useAudio';
+import audio1 from '/audio/readingroom_campfire.mp3';
+import audio2 from '/audio/readingroom_library.mp3';
+import audio3 from '/audio/readingroom_subway.mp3';
+
+type ThemeName = 'CAMPFIRE' | 'READINGROOM' | 'SUBWAY';
 
 const PrivateReadingRoom = () => {
   const [activePanel, setActivePanel] = useState<
@@ -29,6 +34,10 @@ const PrivateReadingRoom = () => {
   const { roomId, userId } = useParams();
   const finalRoomId = roomId || '12';
   const finalUserId = userId || '12';
+
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const [music, setMusic] = useState<boolean>(true);
 
   const {
     isExitModalOpen,
@@ -50,6 +59,58 @@ const PrivateReadingRoom = () => {
     })),
   );
 
+  const { data, isLoading, isError, error, isSuccess, refetch } = useGetTheme({
+    roomId: Number(roomId),
+  });
+
+  const audioMap: Record<ThemeName, string> = useMemo(
+    () => ({
+      CAMPFIRE: audio1,
+      READINGROOM: audio2,
+      SUBWAY: audio3,
+    }),
+    [],
+  );
+
+  // 현재 테마에 맞는 오디오 소스
+  const currentAudioSrc = useMemo(() => {
+    const themeName = data?.themeName as ThemeName | undefined;
+
+    if (themeName && themeName in audioMap) {
+      return audioMap[themeName];
+    }
+    return audioMap['READINGROOM']; // 기본값
+  }, [data?.themeName, audioMap]);
+
+  useEffect(() => {
+    const audioElement = audioRef.current;
+    if (audioElement && currentAudioSrc) {
+      const wasPlaying = !audioElement.paused;
+
+      audioElement.src = currentAudioSrc;
+      audioElement.load();
+
+      if (wasPlaying) {
+        audioElement.play().catch((error) => {
+          console.error('Audio play failed:', error);
+        });
+      }
+    }
+  }, [currentAudioSrc]);
+
+  const handleBgm = () => {
+    const audioElement = audioRef.current;
+    if (audioElement) {
+      if (audioElement.paused) {
+        audioElement.play().catch((error) => {
+          console.error('Audio play failed:', error);
+        });
+      } else {
+        audioElement.pause();
+      }
+    }
+  };
+
   const handlePanelToggle = (panelType: 'member' | 'book' | 'setting') => {
     setActivePanel(activePanel === panelType ? null : panelType);
   };
@@ -60,26 +121,9 @@ const PrivateReadingRoom = () => {
     console.log('삭제로직');
   };
 
-  const { data, isLoading, isError, error, isSuccess, refetch } = useGetTheme({
-    roomId: Number(roomId),
-  });
+  // console.log('asdfadf', data);
 
-  const { play, pause, togglePlay, isPlaying } = useAudio(data?.bgmUrl || '', {
-    volume: 0.9,
-    loop: true,
-  });
-
-  const isSoundEnabled = useSoundStore((state) => state.isSoundEnabled);
-
-  useEffect(() => {
-    if (isSoundEnabled && data?.bgmUrl) {
-      play();
-    } else {
-      pause();
-    }
-  }, [isSoundEnabled, data?.bgmUrl, play, pause]);
-
-  console.log('배경', data?.bgmUrl);
+  // console.log('배경', data?.bgmUrl);
 
   const { messages, isConnected, actions } = useWebSocket({
     roomId: finalRoomId,
@@ -88,7 +132,9 @@ const PrivateReadingRoom = () => {
 
   const handleBgmToggle = () => {
     toggleSound(); // 로컬 사운드 상태 토글
-    actions.toggleBgm; // WebSocket으로 다른 사용자들에게 전달
+    const newMusicState = !music;
+    setMusic(newMusicState);
+    actions.toggleBgm(newMusicState); // WebSocket으로 다른 사용자들에게 전달
   };
 
   console.log('전체메세지', messages);
@@ -115,7 +161,7 @@ const PrivateReadingRoom = () => {
       const latestBooksData =
         messages.allCurrentBooks[messages.allCurrentBooks.length - 1];
       setCurrentReadingBooks(latestBooksData.books || latestBooksData);
-      console.log('최신 책 정보 동기화:', latestBooksData);
+      // console.log('최신 책 정보 동기화:', latestBooksData);
     }
   }, [messages.allCurrentBooks, setCurrentReadingBooks]);
 
@@ -123,7 +169,7 @@ const PrivateReadingRoom = () => {
     // 기존 readingBooks 처리 로직
     if (messages.readingBooks) {
       setCurrentReadingBooks(messages.readingBooks);
-      console.log('실시간 책조회', messages.readingBooks);
+      // console.log('실시간 책조회', messages.readingBooks);
     }
   }, [messages.readingBooks, setCurrentReadingBooks]);
 
@@ -159,7 +205,7 @@ const PrivateReadingRoom = () => {
         JSON.stringify(latestUsers) !== JSON.stringify(currentUsers)
       ) {
         setCurrentUsers(latestUsers);
-        console.log('사용자 목록 업데이트:', latestUsers);
+        // console.log('사용자 목록 업데이트:', latestUsers);
       }
     };
 
@@ -182,11 +228,12 @@ const PrivateReadingRoom = () => {
   // }, [messages.roomInfoUpdate]);
 
   // BGM 토글 감지
-  // useEffect(() => {
-  //   if (messages.bgmToggle) {
-  //     console.log('BGM 상태가 변경되었습니다:', messages.bgmToggle);
-  //   }
-  // }, [messages.bgmToggle]);
+  useEffect(() => {
+    if (messages.bgmToggle) {
+      console.log('BGM 상태가 변경되었습니다:', messages.bgmToggle);
+      handleBgm();
+    }
+  }, [messages.bgmToggle]);
 
   const themeComponent = useMemo(() => {
     if (!data?.themeName) return <NotFoundPage />;
@@ -207,6 +254,14 @@ const PrivateReadingRoom = () => {
       {themeComponent}
 
       {/* <SpeechBubble /> */}
+
+      <audio
+        ref={audioRef}
+        src={currentAudioSrc}
+        loop
+        preload="auto"
+        style={{ display: 'none' }}
+      />
 
       {isExitModalOpen && (
         <DeleteBtn
@@ -240,7 +295,7 @@ const PrivateReadingRoom = () => {
             <SmallControlBar
               onDelete={toggleDeleteModal}
               onEdit={openEditModal}
-              onSound={toggleSound}
+              onSound={handleBgmToggle}
             />
           </div>
         )}
@@ -254,7 +309,7 @@ const PrivateReadingRoom = () => {
           onMemberClick={() => handlePanelToggle('member')}
           onBookClick={() => handlePanelToggle('book')}
           onSettingClick={() => handlePanelToggle('setting')}
-          onBgmToggle={handleBgmToggle} // BGM 토글 함수 전달
+          onBgmToggle={handleBgm} // BGM 토글 함수 전달
           onLeave={actions.leaveRoom}
         />
       </div>

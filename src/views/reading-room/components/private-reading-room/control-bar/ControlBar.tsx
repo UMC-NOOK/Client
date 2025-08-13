@@ -27,7 +27,7 @@ function ControlBar({
   onBgmToggle,
   onLeave,
 }: ControlBarProps) {
-  const [music, setMusic] = useState<boolean>(false);
+  const [music, setMusic] = useState<boolean>(true);
   const toggleExitModal = useModalStore((state) => state.toggleExitModal);
   const toggleDeleteModal = useModalStore((state) => state.toggleDeleteModal);
   const navigate = useNavigate();

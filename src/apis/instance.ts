@@ -51,7 +51,6 @@ instance.interceptors.response.use(
     if (
       error.response &&
       (error.response.status === 401 ||
-        error.response.status === 500 ||
         error.response?.data?.message?.includes('token') ||
         error.response?.data?.message?.includes('expired')) &&
       !originalRequest._retry
