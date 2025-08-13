@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import BookInfoImg from '../../../../../../../assets/button/library/file.png';
-import BookInfoImg2 from '../../../../../../../assets/button/library/reading.png';
+import BookInfoImg from '../../../../../../../assets/button/library/myRecordImg.svg';
 import { useTabStore } from '../../../../../../../store/library/useTabStore';
 
 interface InfoBtnProps {
