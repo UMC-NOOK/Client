@@ -21,6 +21,7 @@ interface NookiCharacterProps {
     content?: string;
     isVisible?: boolean;
   }>;
+  userId: number;
 }
 
 const NookiCharacter = ({
@@ -37,6 +38,7 @@ const NookiCharacter = ({
   speechContent = '독서중',
   enableSpeechBubble = true,
   SpeechBubbleComponent = SpeechBubble,
+  userId,
 }: NookiCharacterProps) => {
   const flipStyle = flipped ? '[transform:scaleX(-1)]' : '';
   const [isHovered, setIsHovered] = useState<boolean>(false);

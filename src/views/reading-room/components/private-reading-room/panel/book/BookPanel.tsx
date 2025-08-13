@@ -1,15 +1,30 @@
 import bookUnion from '../../../../../../assets/readingRoom/controll-icon/bookUnion.svg';
+import useGetBookList from '../../../../hooks/private-reading-room/useQuery/useGetBookList';
 import BookItem from './BookItem';
 
-function BookPanel() {
-  const mockData = [
-    { title: '키에에엣' },
-    { title: '키에에엣' },
-    { title: '키에에엣' },
-    { title: '키에에엣' },
-    { title: '키에에엣' },
-    { title: '키에에엣' },
-    { title: '키에에엣' },
+interface BookPanelActionProps {
+  onChoose: (title: string) => void;
+}
+
+interface BookPanelProps {
+  bookId: number;
+  title: string;
+}
+
+function BookPanel({ onChoose }: BookPanelActionProps) {
+  const { data, isLoading, isError, error, isSuccess, refetch } =
+    useGetBookList();
+  // console.log('bookpanel', data);
+
+  // const books = (data as BookPanelProps[]) || [];
+  const books: BookPanelProps[] = [
+    { title: '살려줘', bookId: 12 },
+    { title: '죽여줘', bookId: 13 },
+    { title: '할래?', bookId: 14 },
+    { title: '말래?', bookId: 15 },
+    { title: '히이이이익', bookId: 16 },
+    { title: '키이이이익', bookId: 17 },
+    { title: '저리가', bookId: 18 },
   ];
   return (
     <div className="relative">
@@ -25,8 +40,13 @@ function BookPanel() {
                 scrollbar-thin scrollbar-thumb-transparent scrollbar-track-transparent
                 hover:scrollbar-thumb-white/20 scrollbar-thumb-rounded-full"
           >
-            {mockData.map((data) => (
-              <BookItem bookTitle={data.title} />
+            {books?.map((books) => (
+              <BookItem
+                key={books.bookId}
+                bookId={books.bookId}
+                title={books.title}
+                onClick={onChoose}
+              />
             ))}
           </div>
         </div>

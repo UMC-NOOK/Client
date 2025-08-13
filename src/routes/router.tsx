@@ -30,6 +30,8 @@ const router = createBrowserRouter([
         element: <Main />,
       },
       {
+        path: 'lounge',
+        errorElement: <NotFoundPage />,
         element: <ProtectedRoute />,
         children: [
           {
@@ -93,7 +95,7 @@ const router = createBrowserRouter([
                 element: <ReadingRoomList />,
               },
               {
-                path: ':id',
+                 path: ':roomId/:userId',
                 element: <PrivateReadingRoom />,
               },
               {
