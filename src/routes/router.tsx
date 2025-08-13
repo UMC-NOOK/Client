@@ -18,7 +18,6 @@ import DesignPage from '../views/home/page/DesignPage';
 import ProtectedRoute from './ProtectedRoute';
 import SettingsPage from '../views/home/components/ProfileSettingPage';
 
-
 const router = createBrowserRouter([
   {
     path: '/',
@@ -30,7 +29,6 @@ const router = createBrowserRouter([
         element: <Main />,
       },
       {
-        path: 'lounge',
         errorElement: <NotFoundPage />,
         element: <ProtectedRoute />,
         children: [
@@ -95,7 +93,7 @@ const router = createBrowserRouter([
                 element: <ReadingRoomList />,
               },
               {
-                 path: ':roomId/:userId',
+                path: ':roomId/:userId',
                 element: <PrivateReadingRoom />,
               },
               {
