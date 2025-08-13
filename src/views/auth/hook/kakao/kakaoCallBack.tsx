@@ -28,7 +28,7 @@ const KakaoCallback = () => {
         navigate('/home');
       }
     } catch (error) {
-      console.error('카카오 로그인 실패:', error);
+      alert(error);
       navigate('/login');
     }
   };
