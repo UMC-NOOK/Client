@@ -1,25 +1,32 @@
+import { useNavigate } from 'react-router-dom';
 import BookInfoImg from '../../../../../../../assets/button/library/file.png';
 import BookInfoImg2 from '../../../../../../../assets/button/library/reading.png';
 import { useTabStore } from '../../../../../../../store/library/useTabStore';
 
-const InfoBtn = () => {
+interface InfoBtnProps {
+  bookId: number;
+}
+
+const InfoBtn = ({ bookId }: InfoBtnProps) => {
   const selectecTab = useTabStore((state) => state.selectedTab);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    // console.log(bookId);
+    navigate(`/lounge/book-info/${bookId}`);
+  };
 
   return (
-    <div className="flex justify-center items-center gap-4">
-      {selectecTab === '찜' ? (
-        <img
-          src={BookInfoImg2}
-          alt="책정보 아이콘(찜)"
-          className="w-7 h-7 max-w-[14px] max-h-[14px] object-contain"
-        />
-      ) : (
-        <img
-          src={BookInfoImg}
-          alt="책정보 아이콘"
-          className="w-7 h-7 max-w-[14px] max-h-[14px] object-contain"
-        />
-      )}
+    <div
+      className="flex justify-center items-center gap-4"
+      onClick={handleClick}
+    >
+      <img
+        src={BookInfoImg}
+        alt="책정보 아이콘"
+        className="w-7 h-7 max-w-[14px] max-h-[14px] object-contain"
+      />
+
       <span className="text-sm font-normal pt-0.1">책정보</span>
     </div>
   );
