@@ -37,13 +37,19 @@ interface ProfileProps {
   isLogin: boolean;
 }
 
+// S 사이즈 아바타(이미지 자체 크기)
+const AVATAR_S = 'w-[92px] h-[82px] shrink-0 object-contain';
+
+// 드롭다운 상단 박스의 표시 높이(여기서 세로를 좁힘)
+const DROPDOWN_HEADER_H = 54; // px
+
 const Profile = ({ isLogin }: ProfileProps) => {
   const navigate = useNavigate();
   const [isClick, setIsClick] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   // me
-  const { data: me } = useGetMe(); // { email, nickname }
+  const { data: me } = useGetMe();
   const userName = me?.nickname ?? '사용자';
   const userEmail = me?.email ?? '';
 
@@ -67,7 +73,6 @@ const Profile = ({ isLogin }: ProfileProps) => {
     };
     return map;
   }, []);
-
   const profileIconSrc = profile ? profileIconByColor[profile.characterColor] : profileBlue;
 
   // 바깥 클릭 시 닫기
@@ -82,9 +87,7 @@ const Profile = ({ isLogin }: ProfileProps) => {
 
   const onLogout = async () => {
     try {
-      await SignOut(); // 서버 로그아웃
-    } catch {
-      // 서버 실패해도 클라이언트 토큰 제거는 진행
+      await SignOut();
     } finally {
       localStorage.removeItem('accessToken');
       sessionStorage.removeItem('refreshToken');
@@ -96,55 +99,47 @@ const Profile = ({ isLogin }: ProfileProps) => {
   return (
     <div
       ref={ref}
-      className={clsx('relative', {
-        invisible: !isLogin,
-        visible: isLogin,
-      })}
+      className={clsx('relative', { invisible: !isLogin, visible: isLogin })}
     >
       {/* 프로필 토글 버튼 (상단 우측 아이콘) */}
       <button onClick={() => setIsClick((prev) => !prev)}>
-        <img
-          src={profileIconSrc}
-          alt="프로필 이미지"
-          className="w-14 h-14 max-w-[28px] max-h-[28px] object-contain"
-        />
+        <img src={profileIconSrc} alt="프로필 이미지" className={AVATAR_S} />
       </button>
 
-      {/* 드롭다운: 내용 길이에 맞춰 확대 (최소/최대 폭 제한) */}
+      {/* 드롭다운 */}
       <div
         className={clsx(
-          'absolute top-full -right-2 mt-3 z-30',
+          'absolute -right-[10px] mt-0 z-30',
+          'top-[calc(100%-16px)]',
           'bg-[rgba(31,28,25,1)] rounded-[8px]',
           'flex flex-col items-start gap-3 pt-[17px] pb-[18px] px-[10px]',
           'w-max min-w-[20rem] max-w-[90vw] md:max-w-[36rem]',
           { hidden: !isClick, block: isClick },
         )}
       >
-        {/* 상단 사용자 영역 */}
-        <button
-          className="w-full px-7 flex items-center hover:bg-[rgba(66,60,53,0.3)] hover:rounded-xl"
+        {/* 상단 사용자 영역: 세로 높이 축소 + overflow-hidden */}
+        <button 
+          className="w-full px-7 relative overflow-hidden flex items-center hover:bg-[rgba(66,60,53,0.3)] hover:rounded-xl "
           onClick={() => {
             setIsClick(false);
             navigate('/settings');
           }}
+          style={{ height: DROPDOWN_HEADER_H }} // ← 세로 길이 좁힘(64px)
         >
-          <div className="flex gap-5 items-center max-w-full">
-            {/* 드롭다운 상단 아바타도 색상 아이콘 */}
-            <img
-              src={profileIconSrc}
-              alt="프로필 이미지"
-              className="w-14 h-14 max-w-[30px] max-h-[30px] object-contain"
-            />
-            {/* 이메일 길이 대응: min-w-0 + truncate */}
-            <div className="flex flex-col items-start min-w-0">
-              <p className="text-sm font-normal text-nook-100">{userName}</p>
-              <p
-                className="text-xs font-normal text-nook-100 whitespace-nowrap truncate max-w-[32rem]"
-                title={userEmail}
-              >
-                {userEmail}
-              </p>
-            </div>
+          <img
+            src={profileIconSrc}
+            alt="프로필 이미지"
+            className={`${AVATAR_S} -ml-[28px] -mt-[-5px] relative z-0`}
+          />
+
+          <div className="flex flex-col items-start min-w-0 relative z-10 -ml-10 ">
+            <p className="text-sm leading-[18px] font-normal text-nook-100">{userName}</p>
+            <p
+              className="text-xs leading-[16px] font-normal text-nook-100 whitespace-nowrap truncate max-w-[32rem]"
+              title={userEmail}
+            >
+              {userEmail}
+            </p>
           </div>
         </button>
 
@@ -160,11 +155,7 @@ const Profile = ({ isLogin }: ProfileProps) => {
               navigate('/settings');
             }}
           >
-            <img
-              src={settingImg}
-              alt="설정"
-              className="w-6 h-6 max-w-[12px] max-h-[12px] object-contain"
-            />
+            <img src={settingImg} alt="설정" className="w-6 h-6 max-w-[12px] max-h-[12px] object-contain" />
             <p className="text-sm font-normal text-nook-100">설정</p>
           </button>
 
@@ -175,11 +166,7 @@ const Profile = ({ isLogin }: ProfileProps) => {
             rel="noreferrer"
             onClick={() => setIsClick(false)}
           >
-            <img
-              src={questionImg}
-              alt="도움말"
-              className="w-6 h-6 max-w-[12px] max-h-[12px] object-contain"
-            />
+            <img src={questionImg} alt="도움말" className="w-6 h-6 max-w-[12px] max-h-[12px] object-contain" />
             <p className="text-sm font-normal text-nook-100">도움말</p>
           </a>
         </div>
@@ -193,11 +180,7 @@ const Profile = ({ isLogin }: ProfileProps) => {
           onClick={onLogout}
         >
           <div className="flex justify-center items-center gap-4 min-w-0">
-            <img
-              src={logoutImg}
-              alt="로그아웃"
-              className="w-6 h-6 max-w-[12px] max-h-[18px] object-contain"
-            />
+            <img src={logoutImg} alt="로그아웃" className="w-6 h-6 max-w-[12px] max-h-[18px] object-contain" />
             <p className="text-sm font-normal text-nook-100">로그아웃</p>
           </div>
         </button>
