@@ -6,16 +6,16 @@ const useDeleteBook = () => {
   return useMutation({
     mutationFn: ({ bookId }: { bookId: number }) => bookDelete({ bookId }),
     onSuccess: (_data, { bookId }) => {
-      console.log('성공');
+      // console.log('성공');
 
-      queryClient.setQueryData(['bookState'], (old: any) => {
+      queryClient.setQueryData(['bookData'], (old: any) => {
         if (!old) return old;
         return {
           ...old,
           data: old.data?.filter((b: any) => b.bookId !== bookId),
         };
       });
-      queryClient.invalidateQueries({ queryKey: ['bookState'] });
+      queryClient.invalidateQueries({ queryKey: ['bookData'] });
     },
   });
 };
