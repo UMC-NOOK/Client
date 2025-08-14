@@ -17,7 +17,7 @@ const Lounge = () => {
 
   return (
     <div className="flex justify-center mt-25 flex-col">
-      <div className="flex w-full justify-evenly items-center">
+      <div className="flex w-full justify-center items-center gap-[295px]">
         <Tap selected={selectedCategory} onSelect={setSelectedCategory} />
         <SearchBar
           variant="lounge"

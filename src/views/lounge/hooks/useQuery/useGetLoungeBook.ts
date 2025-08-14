@@ -4,7 +4,7 @@ import { loungeQueryKeys, LoungeSection } from '../../apis/lounge/types/lounge-t
 
 const useGetLoungeBook = ({ mallType, sectionId, categoryId, page }: LoungeBookListGetProps) => {
     return useQuery({
-        queryKey: loungeQueryKeys.books( mallType, sectionId ?? '', categoryId ?? '', page ?? 1),
+        queryKey: loungeQueryKeys.books( mallType, sectionId ?? '', categoryId ?? '', page ?? 0),
         queryFn: () => LoungeBookListGet({ mallType, sectionId, categoryId, page }),
         staleTime: 0,
         enabled: !!mallType,
