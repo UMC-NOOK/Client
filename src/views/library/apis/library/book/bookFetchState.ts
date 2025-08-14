@@ -4,7 +4,7 @@ export interface bookFetchStateProps {
   status: 'BOOKMARK' | 'READING' | 'FINISHED';
   cursorBookId?: number;
   size: number;
-  sort: 'recent' | 'latest' | 'title' | 'rating';
+  sort: 'RECENT' | 'LATEST' | 'TITLE' | 'RATING';
 }
 
 const bookFetchState = async ({
