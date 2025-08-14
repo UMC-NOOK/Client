@@ -2,7 +2,7 @@ import { useState } from 'react';
 import saveIcon from '../../assets/button/search/save.png';
 import infoIcon from '../../assets/button/search/info.png';
 import dotIcon from '../../assets/button/search/Ellipse.png';
-import SearchModal from '../search/SearchModal'; 
+import SearchModal from '../search/SearchModal';
 
 interface BookRowProps {
   book: {
@@ -14,7 +14,7 @@ interface BookRowProps {
     publication_date: string;
   };
   onClickInfo: () => void;
-  onClickAdd: () => void;
+  onClickAdd: () => void; 
 }
 
 export default function BookRow({
@@ -76,7 +76,9 @@ export default function BookRow({
             책 정보
           </button>
           <button
-            onClick={() => setShowModal(true)}
+            onClick={() => {
+              setShowModal(true);
+            }}
             className="flex justify-center items-center gap-[8px] text-white w-[121px] h-[40px] px-[20px] py-[8px] rounded-[8px] border border-[#555351] bg-[#2D2B29] text-[15.4px] font-normal leading-[25px]"
           >
             <img
@@ -94,9 +96,7 @@ export default function BookRow({
 
       {/* 모달 */}
       {showModal && (
-        <SearchModal onClose={() => setShowModal(false)} onGoToLibrary={function (): void {
-          throw new Error('Function not implemented.');
-        } } />
+        <SearchModal onClose={() => setShowModal(false)} />
       )}
     </div>
   );
