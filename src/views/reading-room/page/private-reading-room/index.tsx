@@ -20,6 +20,11 @@ import NotFoundPage from '../../../404';
 import useCurrentBookStore from '../../../../store/private-reading-room/useCurrentBookStore';
 import { useParams } from 'react-router-dom';
 import useAudio from '../../hooks/private-reading-room/audio/useAudio';
+import audio1 from '/audio/readingroom_campfire.mp3';
+import audio2 from '/audio/readingroom_library.mp3';
+import audio3 from '/audio/readingroom_subway.mp3';
+
+type ThemeName = 'CAMPFIRE' | 'READINGROOM' | 'SUBWAY';
 
 const PrivateReadingRoom = () => {
   const [activePanel, setActivePanel] = useState<
@@ -29,6 +34,10 @@ const PrivateReadingRoom = () => {
   const { roomId, userId } = useParams();
   const finalRoomId = roomId || '12';
   const finalUserId = userId || '12';
+
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const [music, setMusic] = useState<boolean>(true);
 
   const {
     isExitModalOpen,
@@ -50,36 +59,95 @@ const PrivateReadingRoom = () => {
     })),
   );
 
-  const handlePanelToggle = (panelType: 'member' | 'book' | 'setting') => {
-    setActivePanel(activePanel === panelType ? null : panelType);
-  };
-
-  const toggleSound = useSoundStore((state) => state.toggleSound);
-
-  const handleDelete = () => {
-    console.log('삭제로직');
-  };
+  const {
+    isEntSoundEnabled,
+    isSoundEnabled,
+    setEntSound,
+    setSound,
+    toggleSound,
+    toggleEntSound,
+    onSound,
+    offSound,
+    onEntSound,
+    offEntSound,
+  } = useSoundStore(
+    useShallow((state) => ({
+      isSoundEnabled: state.isSoundEnabled,
+      isEntSoundEnabled: state.isEntSoundEnabled,
+      setEntSound: state.setEntSound,
+      setSound: state.setSound,
+      toggleSound: state.toggleSound,
+      toggleEntSound: state.toggleEntSound,
+      onSound: state.onSound,
+      offSound: state.offSound,
+      onEntSound: state.onEntSound,
+      offEntSound: state.offEntSound,
+    })),
+  );
 
   const { data, isLoading, isError, error, isSuccess, refetch } = useGetTheme({
     roomId: Number(roomId),
   });
 
-  const { play, pause, togglePlay, isPlaying } = useAudio(data?.bgmUrl || '', {
-    volume: 0.9,
-    loop: true,
-  });
+  const audioMap: Record<ThemeName, string> = useMemo(
+    () => ({
+      CAMPFIRE: audio1,
+      READINGROOM: audio2,
+      SUBWAY: audio3,
+    }),
+    [],
+  );
 
-  const isSoundEnabled = useSoundStore((state) => state.isSoundEnabled);
+  // 현재 테마에 맞는 오디오 소스
+  const currentAudioSrc = useMemo(() => {
+    const themeName = data?.themeName as ThemeName | undefined;
+
+    if (themeName && themeName in audioMap) {
+      return audioMap[themeName];
+    }
+    return audioMap['READINGROOM']; // 기본값
+  }, [data?.themeName, audioMap]);
 
   useEffect(() => {
-    if (isSoundEnabled && data?.bgmUrl) {
-      play();
-    } else {
-      pause();
-    }
-  }, [isSoundEnabled, data?.bgmUrl, play, pause]);
+    const audioElement = audioRef.current;
+    if (audioElement && currentAudioSrc) {
+      const wasPlaying = !audioElement.paused;
 
-  console.log('배경', data?.bgmUrl);
+      audioElement.src = currentAudioSrc;
+      audioElement.load();
+
+      if (wasPlaying) {
+        audioElement.play().catch((error) => {
+          console.error('Audio play failed:', error);
+        });
+      }
+    }
+  }, [currentAudioSrc]);
+
+  const handleBgm = () => {
+    const audioElement = audioRef.current;
+    if (audioElement) {
+      if (audioElement.paused) {
+        audioElement.play().catch((error) => {
+          console.error('Audio play failed:', error);
+        });
+      } else {
+        audioElement.pause();
+      }
+    }
+  };
+
+  const handlePanelToggle = (panelType: 'member' | 'book' | 'setting') => {
+    setActivePanel(activePanel === panelType ? null : panelType);
+  };
+
+  const handleDelete = () => {
+    console.log('삭제로직');
+  };
+
+  // console.log('asdfadf', data);
+
+  // console.log('배경', data?.bgmUrl);
 
   const { messages, isConnected, actions } = useWebSocket({
     roomId: finalRoomId,
@@ -87,8 +155,26 @@ const PrivateReadingRoom = () => {
   });
 
   const handleBgmToggle = () => {
-    toggleSound(); // 로컬 사운드 상태 토글
-    actions.toggleBgm; // WebSocket으로 다른 사용자들에게 전달
+    const newEntSoundState = !isEntSoundEnabled;
+    setEntSound(newEntSoundState);
+    actions.toggleBgm(newEntSoundState);
+
+    // 전체 소리가 꺼지면 개인 소리도 강제로 끄기
+    if (!newEntSoundState) {
+      setSound(false);
+    }
+  };
+
+  const handlePersonalBgmToggle = (bgmOn: boolean) => {
+    // 실제 오디오 재생/정지는 전체 소리와 개인 소리 모두 고려
+    if (isEntSoundEnabled && bgmOn) {
+      handleBgm(); // 오디오 재생
+    } else {
+      const audioElement = audioRef.current;
+      if (audioElement && !audioElement.paused) {
+        audioElement.pause(); // 오디오 정지
+      }
+    }
   };
 
   console.log('전체메세지', messages);
@@ -115,7 +201,7 @@ const PrivateReadingRoom = () => {
       const latestBooksData =
         messages.allCurrentBooks[messages.allCurrentBooks.length - 1];
       setCurrentReadingBooks(latestBooksData.books || latestBooksData);
-      console.log('최신 책 정보 동기화:', latestBooksData);
+      // console.log('최신 책 정보 동기화:', latestBooksData);
     }
   }, [messages.allCurrentBooks, setCurrentReadingBooks]);
 
@@ -123,7 +209,7 @@ const PrivateReadingRoom = () => {
     // 기존 readingBooks 처리 로직
     if (messages.readingBooks) {
       setCurrentReadingBooks(messages.readingBooks);
-      console.log('실시간 책조회', messages.readingBooks);
+      // console.log('실시간 책조회', messages.readingBooks);
     }
   }, [messages.readingBooks, setCurrentReadingBooks]);
 
@@ -159,7 +245,7 @@ const PrivateReadingRoom = () => {
         JSON.stringify(latestUsers) !== JSON.stringify(currentUsers)
       ) {
         setCurrentUsers(latestUsers);
-        console.log('사용자 목록 업데이트:', latestUsers);
+        // console.log('사용자 목록 업데이트:', latestUsers);
       }
     };
 
@@ -182,11 +268,22 @@ const PrivateReadingRoom = () => {
   // }, [messages.roomInfoUpdate]);
 
   // BGM 토글 감지
-  // useEffect(() => {
-  //   if (messages.bgmToggle) {
-  //     console.log('BGM 상태가 변경되었습니다:', messages.bgmToggle);
-  //   }
-  // }, [messages.bgmToggle]);
+  useEffect(() => {
+    if (messages.bgmToggle) {
+      const bgmState = messages.bgmToggle.bgmOn;
+      setEntSound(bgmState);
+
+      // 전체 소리 상태에 따른 오디오 처리
+      if (bgmState && isSoundEnabled) {
+        handleBgm(); // 재생
+      } else {
+        const audioElement = audioRef.current;
+        if (audioElement && !audioElement.paused) {
+          audioElement.pause(); // 정지
+        }
+      }
+    }
+  }, [messages.bgmToggle, isSoundEnabled]);
 
   const themeComponent = useMemo(() => {
     if (!data?.themeName) return <NotFoundPage />;
@@ -207,6 +304,14 @@ const PrivateReadingRoom = () => {
       {themeComponent}
 
       {/* <SpeechBubble /> */}
+
+      <audio
+        ref={audioRef}
+        src={currentAudioSrc}
+        loop
+        preload="auto"
+        style={{ display: 'none' }}
+      />
 
       {isExitModalOpen && (
         <DeleteBtn
@@ -236,11 +341,11 @@ const PrivateReadingRoom = () => {
           </div>
         )}
         {activePanel === 'setting' && (
-          <div className="absolute bottom-[130px] left-[394px]">
+          <div className="absolute bottom-[130px] left-[475px]">
             <SmallControlBar
               onDelete={toggleDeleteModal}
               onEdit={openEditModal}
-              onSound={toggleSound}
+              onSound={handleBgmToggle}
             />
           </div>
         )}
@@ -254,7 +359,7 @@ const PrivateReadingRoom = () => {
           onMemberClick={() => handlePanelToggle('member')}
           onBookClick={() => handlePanelToggle('book')}
           onSettingClick={() => handlePanelToggle('setting')}
-          onBgmToggle={handleBgmToggle} // BGM 토글 함수 전달
+          onBgmToggle={handleBgm} // BGM 토글 함수 전달
           onLeave={actions.leaveRoom}
         />
       </div>
