@@ -73,7 +73,7 @@ const Profile = ({ isLogin }: ProfileProps) => {
     };
     return map;
   }, []);
-  const profileIconSrc = profile ? profileIconByColor[profile.characterColor] : profileBlue;
+  const profileIconSrc = profile ? profileIconByColor[profile.characterColor] : profileOrange;
 
   // 바깥 클릭 시 닫기
   useEffect(() => {

@@ -77,7 +77,7 @@ const MiddleNookie = () => {
 
   const lampKey: LampKey = profile?.characterColor
     ? enumToLampKey[profile.characterColor]
-    : 'base';
+    : 'orange';
 
   const patternKey: PatternKey = profile?.backgroundPattern
     ? enumToPatternKey[profile.backgroundPattern]
