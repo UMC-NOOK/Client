@@ -1,12 +1,10 @@
 import React from 'react';
 import BookListSection from './BookListSection';
-import { LoungeSection } from '../../apis/lounge/types/lounge-types';
+import { LoungeSection, MallType } from '../../apis/lounge/types/lounge-types';
 
-const RecommendView = ({sections}: { sections: LoungeSection[];}) => {
-
-  console.log(sections);
-  const bestSections = sections.find((section) => section.sectionId === 'best');
-  const favoriteSections = sections.find((section) => section.sectionId === 'favorite');
+const RecommendView = ({ mallType, sections }: { mallType: MallType; sections: LoungeSection[] }) => {
+  const bestSection = sections.find((section) => section.sectionId === 'best') || null;
+  const favoriteSection = sections.find((section) => section.sectionId === 'favorite_best') || null;
 
   return (
     <div className="flex flex-col items-start justify-center w-full">
@@ -15,11 +13,9 @@ const RecommendView = ({sections}: { sections: LoungeSection[];}) => {
         style={{ borderTop: '1px solid rgba(85, 83, 81, 0.7)' }}
       >
         <div className="text-base mt-10">지금 서재에 등록하세요!</div>
-        <div className="text-lg font-semibold mt-1">
-          놓치기 아쉬운 주간 베스트 셀러
-        </div>
+        <div className="text-lg font-semibold mt-1">놓치기 아쉬운 주간 베스트 셀러</div>
         <div className="flex items-center justify-center mt-10">
-            {bestSections && <BookListSection section={bestSections} />}
+          {bestSection && <BookListSection mallType={mallType} section={bestSection} />}
         </div>
       </div>
 
@@ -33,7 +29,7 @@ const RecommendView = ({sections}: { sections: LoungeSection[];}) => {
           <span>을 추천해요.</span>
         </div>
         <div className="flex items-center justify-center mt-10">
-          {favoriteSections &&<BookListSection section={favoriteSections}/>}
+          {favoriteSection && <BookListSection mallType={mallType} section={favoriteSection} />}
         </div>
       </div>
     </div>
