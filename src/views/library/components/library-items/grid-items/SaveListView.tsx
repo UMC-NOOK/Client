@@ -26,7 +26,7 @@ const SaveListView = ({ onClick }: SaveListProps) => {
     });
 
   const booksData: ApiBookData[] = data?.content || [];
-  console.log('asdf', data);
+  // console.log('asdf', data);
 
   return (
     <div className="w-[96rem] mx-auto">

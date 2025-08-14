@@ -3,16 +3,16 @@ import BookInfoImg from '../../../../../../../assets/button/library/myRecordImg.
 import { useTabStore } from '../../../../../../../store/library/useTabStore';
 
 interface InfoBtnProps {
-  bookId: number;
+  isbn13: string;
 }
 
-const InfoBtn = ({ bookId }: InfoBtnProps) => {
+const InfoBtn = ({ isbn13 }: InfoBtnProps) => {
   const selectecTab = useTabStore((state) => state.selectedTab);
   const navigate = useNavigate();
 
   const handleClick = () => {
     // console.log(bookId);
-    navigate(`/lounge/book-info/${bookId}`);
+    navigate(`/lounge/book-info/${isbn13}`);
   };
 
   return (

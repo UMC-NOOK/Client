@@ -14,9 +14,10 @@ interface ApiBookData {
   title: string;
   author: string;
   publisher: string;
-  publication_date: string;
+  publication_date?: string;
   myRating: number;
   bookId: number;
+  isbn13: string;
 }
 
 export const tabMapping: Record<string, 'READING' | 'FINISHED' | 'BOOKMARK'> = {
@@ -78,7 +79,7 @@ const VerticalView = () => {
     });
 
   const booksData: ApiBookData[] = data?.content || [];
-  console.log('asdf', booksData);
+  // console.log('asdf', booksData);
 
   return (
     <div className="w-full">

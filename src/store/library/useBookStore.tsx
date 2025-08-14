@@ -1,23 +1,24 @@
 import { create } from 'zustand';
 
-export type DataProps = {
+export type BookProps = {
   bookId: number;
   thumbnailUrl: string;
+  title: string | null;
 };
 
-export type Book = {
-  date: string;
-  books: DataProps[];
+export type BookData = {
+  date: [number, number, number];
+  books: BookProps[];
 };
 
 interface BookStoreProps {
-  booksData: Book[];
-  setBooksData: (data: Book[]) => void;
+  books: BookData[];
+  setBooks: (data: BookData[]) => void;
 }
 
 export const useBookStore = create<BookStoreProps>((set) => ({
-  booksData: [],
-  setBooksData: (data: Book[]) => {
-    set({ booksData: data });
+  books: [],
+  setBooks: (data: BookData[]) => {
+    set({ books: data });
   },
 }));

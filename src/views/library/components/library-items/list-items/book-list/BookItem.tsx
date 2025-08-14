@@ -8,9 +8,10 @@ interface BookItemProps {
   title: string;
   author: string;
   publisher: string;
-  publication_date: string;
+  publication_date?: string;
   myRating: number;
   bookId: number;
+  isbn13: string;
   openModal?: () => void;
 }
 
@@ -26,11 +27,12 @@ const BookItem = ({
   title,
   author,
   publisher,
-  publication_date,
+  publication_date = '2015-10',
   myRating,
   useOnLibrary,
   useOnSearch,
   bookId,
+  isbn13,
   openModal,
 }: BookItemAllProps) => {
   const year = publication_date.split('-')[0];
@@ -69,7 +71,7 @@ const BookItem = ({
           {useOnLibrary && (
             <>
               <button className="w-[10rem] h-18 text-nook-100 bg-[rgba(55,50,44,0.5)] rounded-[8px] hover:border-1 hover:border-[rgba(85,83,81,1)]">
-                <InfoBtn bookId={bookId} />
+                <InfoBtn isbn13={isbn13} />
               </button>
               <button className="w-[10rem] h-18 bg-nook-500 text-white rounded-[8px] hover:border-1 hover:border-[rgba(211,211,211,0.3)]">
                 <RecordBtn text="내 기록" bookId={bookId} />
@@ -85,7 +87,7 @@ const BookItem = ({
           {useOnSearch && (
             <>
               <button className="w-[12.1rem] h-20  text-nook-100 border-1 border-[rgba(85,83,81,1)] rounded-[8px] hover:bg-[rgba(22,17,11,1)]">
-                <InfoBtn bookId={bookId} />
+                <InfoBtn isbn13={isbn13} />
               </button>
               <button
                 className="w-[12.1rem] h-20 bg-nook-500 text-white rounded-[8px] hover:bg-[rgba(22,17, 1,1)]"

@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import '../../styles/globalCalendar.css';
 import SaveList from '../library-items/grid-items/SaveList';
 import SaveListView from '../library-items/grid-items/SaveListView';
 import TileContent from '../calendar/TileContent';
 import useGetBookMonth from '../../hooks/useQuery/library-query/useGetBookMonth';
-import { useBookStore } from '../../../../store/book-card/useBookStore';
+import { useBookStore } from '../../../../store/library/useBookStore';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -26,8 +26,19 @@ const GridView = () => {
   const { data, isLoading, isError, error, isSuccess, refetch } =
     useGetBookMonth({ yearMonth });
 
-  // console.log('zzzz', data?.books);
-  setBooks(data);
+  useEffect(() => {
+    if (isSuccess && data) {
+      if (Array.isArray(data)) {
+        setBooks(data);
+      } else {
+        setBooks([]);
+      }
+    } else if (isError) {
+      setBooks([]);
+    }
+  }, [data, isSuccess, isError, error, setBooks]);
+
+  // console.log('zzzz', data);
 
   const handleClick = () => {
     setIsToggle((prev) => !prev);
@@ -48,6 +59,21 @@ const GridView = () => {
       }
     }
   };
+
+  // useEffect(() => {
+  //   if (isSuccess && data) {
+  //     console.log('API 데이터:', data);
+  //     if (Array.isArray(data)) {
+  //       setBooks(data);
+  //     } else {
+  //       console.error('API 데이터가 배열이 아닙니다:', data);
+  //       setBooks([]);
+  //     }
+  //   } else if (isError) {
+  //     console.error('API 데이터 로드 실패:', error);
+  //     setBooks([]);
+  //   }
+  // }, [data, isSuccess, isError, error, setBooks]);
 
   return (
     <div className="w-full flex">

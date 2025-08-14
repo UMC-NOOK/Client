@@ -32,8 +32,12 @@ const SaveListItem = ({
           style={{ backgroundImage: `url(${coverImageUrl})` }}
         />
         <div className="w-full flex flex-col items-start gap-3 pb-6">
-          <p className="text-sm text-nook-100 text-center">{title}</p>
-          <p className="text-[1.2rem] text-nook-100 text-center">{author}</p>
+          <p className="text-sm text-nook-100 text-center line-clamp-1">
+            {title}
+          </p>
+          <p className="text-[1.2rem] text-nook-100 text-center line-clamp-1">
+            {author}
+          </p>
         </div>
       </div>
     </div>
