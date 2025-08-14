@@ -25,7 +25,7 @@ const Tap = ({
           </button>
           {index !== categories.length - 1 && (
             <svg xmlns="http://www.w3.org/2000/svg" width="2" height="13" viewBox="0 0 2 13" fill="none">
-              <path d="M1 0V13" stroke="white" stroke-opacity="0.5"/>
+              <path d="M1 0V13" stroke="white" strokeOpacity="0.5"/>
             </svg>
           )}
         </React.Fragment>
