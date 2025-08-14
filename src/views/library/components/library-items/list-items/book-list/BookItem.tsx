@@ -4,12 +4,12 @@ import InfoBtn from './bookitem-items/InfoBtn';
 import RecordBtn from './bookitem-items/RecordBtn';
 
 interface BookItemProps {
-  img: string;
-  bookName: string;
+  coverImageUrl: string;
+  title: string;
   author: string;
   publisher: string;
   publication_date: string;
-  star: number;
+  myRating: number;
   bookId: number;
   openModal?: () => void;
 }
@@ -22,12 +22,12 @@ interface VisibleOptionProps {
 type BookItemAllProps = BookItemProps & VisibleOptionProps;
 
 const BookItem = ({
-  img,
-  bookName,
+  coverImageUrl,
+  title,
   author,
   publisher,
   publication_date,
-  star,
+  myRating,
   useOnLibrary,
   useOnSearch,
   bookId,
@@ -40,14 +40,14 @@ const BookItem = ({
       <div className="flex items-center mr-10">
         <div
           className="h-[15rem] w-[10rem] bg-cover bg-center bg-no-repeat rounded-[6px]"
-          style={{ backgroundImage: `url(${img})` }}
+          style={{ backgroundImage: `url(${coverImageUrl})` }}
         />
       </div>
 
       <div className="flex flex-1 h-[15rem] justify-between">
         <div className="flex flex-col justify-between">
           <div className="space-y-3">
-            <p className="text-md font-normal text-nook-100">{bookName}</p>
+            <p className="text-md font-normal text-nook-100">{title}</p>
             <p className="text-sm font-normal text-nook-100">{author}</p>
             <p className="text-sm font-normal text-nook-100 flex items-center">
               {publisher}
@@ -60,7 +60,7 @@ const BookItem = ({
               <p className="text-[1.3rem] font-normal text-nook-100 mb-3">
                 내 별점
               </p>
-              <StarMaker star={star} />
+              <StarMaker star={myRating} />
             </div>
           )}
         </div>

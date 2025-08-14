@@ -7,6 +7,17 @@ import useGetBookState from '../../hooks/useQuery/library-query/useGetBookState'
 import { useTabStore } from '../../../../store/library/useTabStore';
 import useDeleteBook from '../../hooks/useMutation/library-mutation/useDeleteBook';
 import { useDropDownStore } from '../../../../store/library/useDropDownStore';
+import type BookItemProps from '../library-items/list-items/book-list/BookItem';
+
+interface ApiBookData {
+  coverImageUrl: string;
+  title: string;
+  author: string;
+  publisher: string;
+  publication_date: string;
+  myRating: number;
+  bookId: number;
+}
 
 export const tabMapping: Record<string, 'READING' | 'FINISHED' | 'BOOKMARK'> = {
   독서중: 'READING',
@@ -16,16 +27,15 @@ export const tabMapping: Record<string, 'READING' | 'FINISHED' | 'BOOKMARK'> = {
 
 export const menuMapping: Record<
   string,
-  'recent' | 'latest' | 'title' | 'rating'
+  'RECENT' | 'LATEST' | 'TITLE' | 'RATING'
 > = {
-  제목순: 'title',
-  '최근 등록순': 'latest',
-  '최근 기록순': 'recent',
-  '내가 준 별점순': 'rating',
+  제목순: 'TITLE',
+  '최근 등록순': 'LATEST',
+  '최근 기록순': 'RECENT',
+  '내가 준 별점순': 'RATING',
 };
 
 const VerticalView = () => {
-  const [bookData, setBookData] = useState(tempBookData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
   const currentTab = useTabStore((state) => state.selectedTab);
@@ -39,8 +49,8 @@ const VerticalView = () => {
 
   const convertMenuToEnglish = (
     koreanTab: string,
-  ): 'recent' | 'latest' | 'title' | 'rating' => {
-    return menuMapping[koreanTab] || 'recent';
+  ): 'RECENT' | 'LATEST' | 'TITLE' | 'RATING' => {
+    return menuMapping[koreanTab] || 'RECENT';
   };
 
   const deleteBookMutation = useDeleteBook();
@@ -67,7 +77,8 @@ const VerticalView = () => {
       sort: convertMenuToEnglish(currentMenu),
     });
 
-  console.log(data);
+  const booksData: ApiBookData[] = data?.content || [];
+  console.log('asdf', booksData);
 
   return (
     <div className="w-full">
@@ -80,11 +91,11 @@ const VerticalView = () => {
       )}
       <FilterBar />
       <div className="flex flex-col">
-        {bookData.map((data, idx) => (
+        {booksData.map((book: ApiBookData) => (
           <BookItem
-            key={data?.bookId}
-            {...data}
-            openModal={() => modalHandler(data.bookId)}
+            key={book.bookId}
+            {...book}
+            openModal={() => modalHandler(book.bookId)}
             useOnLibrary={true}
             useOnSearch={false}
           />

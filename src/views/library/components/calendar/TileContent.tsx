@@ -1,14 +1,26 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom'; // React Router 사용 시
 import tempBookData from '../../../../mock/library/bookData';
+import { useBookStore } from '../../../../store/book-card/useBookStore';
 
 interface TileContentProps {
   date: Date;
   view: string;
 }
 
+type ApiDataProps = {
+  date: string;
+  books: DataProps[];
+};
+
+type DataProps = {
+  bookId: number;
+  thumbnailUrl: string;
+};
+
 const TileContent = ({ date, view }: TileContentProps) => {
   const navigate = useNavigate();
+  const booksData = useBookStore((state) => state.books);
 
   const booksByDate = useMemo(() => {
     const groupedBooks: { [key: string]: (typeof tempBookData)[0][] } = {};
@@ -36,14 +48,14 @@ const TileContent = ({ date, view }: TileContentProps) => {
       return (
         <div className="absolute inset-3 flex justify-center items-center py-2 px-1 overflow-hidden">
           <img
-            src={booksOnThisDate[0].img}
+            src={booksOnThisDate[0].thumbnailUrl}
             alt={booksOnThisDate[0].bookName}
             style={{
               width: '100%',
               height: '100%',
               objectFit: 'cover',
               borderRadius: '5px',
-              cursor: 'pointer', // 클릭 가능하다는 시각적 피드백
+              cursor: 'pointer',
             }}
             onClick={(e) => handleBookClick(booksOnThisDate[0].bookId, e)}
           />

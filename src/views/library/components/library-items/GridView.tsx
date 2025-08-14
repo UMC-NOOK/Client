@@ -5,6 +5,7 @@ import SaveList from '../library-items/grid-items/SaveList';
 import SaveListView from '../library-items/grid-items/SaveListView';
 import TileContent from '../calendar/TileContent';
 import useGetBookMonth from '../../hooks/useQuery/library-query/useGetBookMonth';
+import { useBookStore } from '../../../../store/book-card/useBookStore';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -20,10 +21,13 @@ const GridView = () => {
     return `${year}-${month}`;
   });
 
+  const setBooks = useBookStore((state) => state.setBooks);
+
   const { data, isLoading, isError, error, isSuccess, refetch } =
     useGetBookMonth({ yearMonth });
 
-  console.log(data);
+  // console.log('zzzz', data?.books);
+  setBooks(data);
 
   const handleClick = () => {
     setIsToggle((prev) => !prev);

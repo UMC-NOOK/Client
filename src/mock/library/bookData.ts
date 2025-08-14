@@ -1,6 +1,7 @@
 const tempBookData = [
   {
-    img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
+    thumbnailUrl:
+      'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
     category: '국내도서',
     author: '누키',
@@ -10,7 +11,8 @@ const tempBookData = [
     bookId: 1,
   },
   {
-    img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
+    thumbnailUrl:
+      'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
     category: '국내도서',
     author: '누키',
@@ -20,7 +22,8 @@ const tempBookData = [
     bookId: 2,
   },
   {
-    img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
+    thumbnailUrl:
+      'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
     category: '국내도서',
     author: '누키',
@@ -30,7 +33,8 @@ const tempBookData = [
     bookId: 3,
   },
   {
-    img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
+    thumbnailUrl:
+      'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
     category: '국내도서',
     author: '누키',
@@ -40,7 +44,8 @@ const tempBookData = [
     bookId: 4,
   },
   {
-    img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
+    thumbnailUrl:
+      'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
     category: '국내도서',
     author: '누키',
@@ -50,7 +55,8 @@ const tempBookData = [
     bookId: 5,
   },
   {
-    img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
+    thumbnailUrl:
+      'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
     category: '국내도서',
     author: '누키',
@@ -60,7 +66,8 @@ const tempBookData = [
     bookId: 6,
   },
   {
-    img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
+    thumbnailUrl:
+      'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
     category: '국내도서',
     author: '누키',
@@ -70,7 +77,8 @@ const tempBookData = [
     bookId: 7,
   },
   {
-    img: 'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
+    thumbnailUrl:
+      'https://image.bugsm.co.kr/album/images/500/40752/4075248.jpg',
     bookName: '누크누크누크',
     category: '국내도서',
     author: '누키',

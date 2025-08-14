@@ -2,15 +2,32 @@ import { useState } from 'react';
 import leftButton from '../../../../../assets/button/library/chevron-left.png';
 import SaveListItem from './SaveListItem';
 import tempBookData from '../../../../../mock/library/bookData';
+import useGetBookState from '../../../hooks/useQuery/library-query/useGetBookState';
 
 interface SaveListProps {
   onClick: () => void;
 }
 
+interface ApiBookData {
+  coverImageUrl: string;
+  title: string;
+  author: string;
+  bookId: number;
+}
+
 const SaveList = ({ onClick }: SaveListProps) => {
   const [bookData, setBookData] = useState(tempBookData);
 
-  const displayData = bookData.slice(0, 3);
+  const { data, isLoading, isError, error, isSuccess, refetch } =
+    useGetBookState({
+      status: 'BOOKMARK',
+      size: 4,
+      sort: 'LATEST',
+    });
+
+  const booksData: ApiBookData[] = data?.content || [];
+
+  const displayData = booksData.slice(0, 3);
 
   return (
     <div>
@@ -33,10 +50,10 @@ const SaveList = ({ onClick }: SaveListProps) => {
         내가 찜한 책을 확인해보세요
       </p>
       <div className="flex flex-col items-center gap-9">
-        {displayData.map((data, idx) => (
-          <SaveListItem key={idx} {...data} />
+        {displayData.map((book: ApiBookData) => (
+          <SaveListItem key={book.bookId} {...book} />
         ))}
-        {bookData.length > 3 && (
+        {booksData.length > 3 && (
           <div className="flex flex-col text-center gap-5 text-[rgba(66,60,53,1)]">
             <div className="w-2 h-2 bg-[rgba(66,60,53,1)] rounded-full" />
             <div className="w-2 h-2 bg-[rgba(66,60,53,1)] rounded-full" />
