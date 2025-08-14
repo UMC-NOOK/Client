@@ -17,7 +17,7 @@ const bookFetchState = async ({
     const res = await instance.get(`api/bookshelf`, {
       params: { status, cursorBookId, size, sort },
     });
-    return res.data;
+    return res.data.result;
   } catch (err) {
     console.log('월별책조회', err);
   }

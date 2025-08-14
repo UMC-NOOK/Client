@@ -9,7 +9,7 @@ const bookFetchMonth = async ({ yearMonth }: bookFetchMonthProps) => {
     const res = await instance.get(`api/bookshelf/my-books/monthly`, {
       params: { yearMonth },
     });
-    return res.data;
+    return res.data.result;
   } catch (err) {
     console.log('월별책조회', err);
   }

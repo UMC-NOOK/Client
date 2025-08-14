@@ -23,7 +23,7 @@ const GridView = () => {
   const { data, isLoading, isError, error, isSuccess, refetch } =
     useGetBookMonth({ yearMonth });
 
-  // console.log(data);
+  console.log(data);
 
   const handleClick = () => {
     setIsToggle((prev) => !prev);

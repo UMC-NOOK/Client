@@ -6,9 +6,7 @@ export interface bookDeleteProps {
 
 const bookDelete = async ({ bookId }: bookDeleteProps) => {
   try {
-    const res = await instance.delete(`api/bookshelf/delete`, {
-      params: { bookId },
-    });
+    const res = await instance.delete(`api/bookshelf/delete/${bookId}`);
     return res.data;
   } catch (err) {
     console.log('월별책조회', err);

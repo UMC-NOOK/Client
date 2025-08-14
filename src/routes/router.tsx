@@ -18,7 +18,6 @@ import DesignPage from '../views/home/page/DesignPage';
 import ProtectedRoute from './ProtectedRoute';
 import SettingsPage from '../views/home/components/ProfileSettingPage';
 
-
 const router = createBrowserRouter([
   {
     path: '/',
@@ -30,6 +29,7 @@ const router = createBrowserRouter([
         element: <Main />,
       },
       {
+        errorElement: <NotFoundPage />,
         element: <ProtectedRoute />,
         children: [
           {
@@ -53,7 +53,7 @@ const router = createBrowserRouter([
                 element: <Lounge />,
               },
               {
-                path: 'book-info',
+                path: 'book-info/:bookId',
                 element: <BookInfoPage />,
               },
               {
@@ -71,11 +71,11 @@ const router = createBrowserRouter([
                 element: <Library />,
               },
               {
-                path: ':id',
+                path: ':bookId',
                 element: <ReadNotePage />,
               },
               {
-                path: ':id/edit',
+                path: ':bookId/edit',
                 element: <ReadNoteEditPage />,
               },
             ],
@@ -93,7 +93,7 @@ const router = createBrowserRouter([
                 element: <ReadingRoomList />,
               },
               {
-                path: ':id',
+                path: ':roomId/:userId',
                 element: <PrivateReadingRoom />,
               },
               {
