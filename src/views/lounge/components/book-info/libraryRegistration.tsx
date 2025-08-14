@@ -46,7 +46,7 @@ const LibraryRegistration = ({
   };
   const [yearMonth, setYearMonth] = useState(serverFormatDateYM(new Date()));
 
-  const { mutate: postBookRegistration } = usePostBookRegistration(bookId); // bookId는 실제로 사용될 때 설정해야 합니다.
+  const { mutate: postBookRegistration } = usePostBookRegistration(bookId);
   const { data: getCalendar, disabledDateSet } = useGetCalendar(yearMonth);
 
   const list: number[] = disabledDateSet ?? [];
@@ -90,9 +90,6 @@ const LibraryRegistration = ({
   }, [isCalendarOpen]);
 
   const [readingStatus, setReadingStatus] = useState(1);
-  const handleClickSave = () => {
-    console.log('저장 버튼 클릭됨', readingStatus);
-  };
 
   return (
     <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center">
@@ -189,7 +186,6 @@ const LibraryRegistration = ({
                     readingStatus: 'WISH',
                   });
             onRegister();
-            handleClickSave();
           }}
         >
           저장
