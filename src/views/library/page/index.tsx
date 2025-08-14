@@ -2,20 +2,21 @@ import { useState } from 'react';
 import GridView from '../components/library-items/GridView';
 import VerticalView from '../components/library-items/VerticalView';
 import TopBar from '../components/library-items/topbar/TopBar';
+import useLoginStore from '../../../store/sign-in/useLoginStore';
 
 type LibraryView = 'grid' | 'vertical';
-type UserNameProps = string;
 
 const Library = () => {
   const [view, setView] = useState<LibraryView>('grid');
-  const [userName] = useState<UserNameProps>('경민');
+  const userNameData = sessionStorage.getItem('nickName') || '경민';
+  const [userName, setUserName] = useState<string>(userNameData);
 
   const handleChangeGrid = () => {
-    setView((prev) => (prev = 'grid'));
+    setView('grid');
   };
 
   const handleChangeVertical = () => {
-    setView((prev) => (prev = 'vertical'));
+    setView('vertical');
   };
 
   // console.log(view);

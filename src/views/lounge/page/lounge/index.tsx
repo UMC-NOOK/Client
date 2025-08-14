@@ -23,6 +23,7 @@ const Lounge = () => {
           variant="lounge"
           customWidth="340px"
           iconSrc={LsearchIcon}
+          syncToStore={false}
         />
       </div>
 

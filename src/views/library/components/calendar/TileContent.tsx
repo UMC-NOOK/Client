@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom'; // React Router 사용 시
 import tempBookData from '../../../../mock/library/bookData';
 
 interface TileContentProps {
@@ -7,6 +8,8 @@ interface TileContentProps {
 }
 
 const TileContent = ({ date, view }: TileContentProps) => {
+  const navigate = useNavigate();
+
   const booksByDate = useMemo(() => {
     const groupedBooks: { [key: string]: (typeof tempBookData)[0][] } = {};
     tempBookData.forEach((book) => {
@@ -18,6 +21,12 @@ const TileContent = ({ date, view }: TileContentProps) => {
     });
     return groupedBooks;
   }, []);
+
+  const handleBookClick = (bookId: number, event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    navigate(`/lounge/book-info/${bookId}`);
+  };
 
   if (view === 'month') {
     const dateString = date.toISOString().split('T')[0];
@@ -34,9 +43,11 @@ const TileContent = ({ date, view }: TileContentProps) => {
               height: '100%',
               objectFit: 'cover',
               borderRadius: '5px',
+              cursor: 'pointer', // 클릭 가능하다는 시각적 피드백
             }}
+            onClick={(e) => handleBookClick(booksOnThisDate[0].bookId, e)}
           />
-          {/* {booksOnThisDate.length > 1 && (
+          {booksOnThisDate.length > 1 && (
             <span
               style={{
                 position: 'absolute',
@@ -48,11 +59,13 @@ const TileContent = ({ date, view }: TileContentProps) => {
                 padding: '2px 4px',
                 borderRadius: '3px',
                 zIndex: 1,
+                cursor: 'pointer',
               }}
+              onClick={(e) => handleBookClick(booksOnThisDate[0].bookId, e)}
             >
               +{booksOnThisDate.length - 1}
             </span>
-          )} */}
+          )}
         </div>
       );
     }

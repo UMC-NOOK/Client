@@ -3,20 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import rightArrowIcon from '../../../assets/button/home/chevron-right.png';
 import savedIcon from '../../../assets/button/home/solar_pen.png';
 
+// ✅ API 훅
+import { useGetHomeRecent } from '../hooks/useQuery/useGetHomeRecent';
+
 const RecentJournalBox = () => {
   const navigate = useNavigate();
+  const { data, isLoading } = useGetHomeRecent(); // { bookId, title, thumbnailUrl } | undefined
 
-  // ✅ 최근 남긴 독서 기록 mock 데이터
-  const recentJournals = [
-    { id: '101', title: '스토너' },
-    // { id: '102', title: '데미안' },
-    // { id: '103', title: '코스모스' },
-  ]; // ← 지금은 데이터 없다고 가정 중 (주석 처리 상태)
-
-  const hasJournals = recentJournals.length > 0;
-  const randomJournal = hasJournals
-    ? recentJournals[Math.floor(Math.random() * recentJournals.length)]
-    : null;
+  const hasJournals = !!data;
+  const randomJournal = hasJournals ? { id: String(data.bookId), title: data.title } : null;
 
   return (
     <div className="w-[246px] h-[60px] bg-[#423C35]/10 rounded-[12px] py-0 flex items-start justify-between">
@@ -33,22 +28,20 @@ const RecentJournalBox = () => {
 
         {/* 텍스트 블록 */}
         <div className="flex flex-col gap-[2px]">
-          {/* 제목 */}
           <p className="text-[12px] leading-[14.4px] font-[400] text-white/50">
             {hasJournals ? '최근 남긴 독서기록' : '작성 한 독서 기록이 없어요'}
           </p>
 
-          {/* 내용 (버튼 or 독서 기록 남기기) */}
           {hasJournals ? (
             <button
               onClick={() => randomJournal && navigate(`/library/${randomJournal.id}`)}
               className="text-[12px] leading-[14.4px] font-[400] text-white text-left"
             >
-              {randomJournal?.title}
+              {isLoading ? '로딩 중…' : randomJournal?.title}
             </button>
           ) : (
             <button
-              onClick={() => navigate('/reading-room')} 
+              onClick={() => navigate('/reading-room')}
               className="text-[12px] leading-[14.4px] font-[400] text-white text-left"
             >
               독서 기록 남기기

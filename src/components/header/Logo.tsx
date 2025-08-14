@@ -10,6 +10,8 @@ const Logo = ({ isLogin }: LogoProps) => {
   const gotoHome = (isLogin: boolean) => {
     if (isLogin) {
       navigate('/home');
+    } else {
+      navigate('/Login');
     }
   };
   return (
