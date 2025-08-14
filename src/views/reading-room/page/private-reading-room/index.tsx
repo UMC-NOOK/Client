@@ -59,6 +59,32 @@ const PrivateReadingRoom = () => {
     })),
   );
 
+  const {
+    isEntSoundEnabled,
+    isSoundEnabled,
+    setEntSound,
+    setSound,
+    toggleSound,
+    toggleEntSound,
+    onSound,
+    offSound,
+    onEntSound,
+    offEntSound,
+  } = useSoundStore(
+    useShallow((state) => ({
+      isSoundEnabled: state.isSoundEnabled,
+      isEntSoundEnabled: state.isEntSoundEnabled,
+      setEntSound: state.setEntSound,
+      setSound: state.setSound,
+      toggleSound: state.toggleSound,
+      toggleEntSound: state.toggleEntSound,
+      onSound: state.onSound,
+      offSound: state.offSound,
+      onEntSound: state.onEntSound,
+      offEntSound: state.offEntSound,
+    })),
+  );
+
   const { data, isLoading, isError, error, isSuccess, refetch } = useGetTheme({
     roomId: Number(roomId),
   });
@@ -115,8 +141,6 @@ const PrivateReadingRoom = () => {
     setActivePanel(activePanel === panelType ? null : panelType);
   };
 
-  const toggleSound = useSoundStore((state) => state.toggleSound);
-
   const handleDelete = () => {
     console.log('삭제로직');
   };
@@ -131,10 +155,26 @@ const PrivateReadingRoom = () => {
   });
 
   const handleBgmToggle = () => {
-    toggleSound(); // 로컬 사운드 상태 토글
-    const newMusicState = !music;
-    setMusic(newMusicState);
-    actions.toggleBgm(newMusicState); // WebSocket으로 다른 사용자들에게 전달
+    const newEntSoundState = !isEntSoundEnabled;
+    setEntSound(newEntSoundState);
+    actions.toggleBgm(newEntSoundState);
+
+    // 전체 소리가 꺼지면 개인 소리도 강제로 끄기
+    if (!newEntSoundState) {
+      setSound(false);
+    }
+  };
+
+  const handlePersonalBgmToggle = (bgmOn: boolean) => {
+    // 실제 오디오 재생/정지는 전체 소리와 개인 소리 모두 고려
+    if (isEntSoundEnabled && bgmOn) {
+      handleBgm(); // 오디오 재생
+    } else {
+      const audioElement = audioRef.current;
+      if (audioElement && !audioElement.paused) {
+        audioElement.pause(); // 오디오 정지
+      }
+    }
   };
 
   console.log('전체메세지', messages);
@@ -230,10 +270,20 @@ const PrivateReadingRoom = () => {
   // BGM 토글 감지
   useEffect(() => {
     if (messages.bgmToggle) {
-      console.log('BGM 상태가 변경되었습니다:', messages.bgmToggle);
-      handleBgm();
+      const bgmState = messages.bgmToggle.bgmOn;
+      setEntSound(bgmState);
+
+      // 전체 소리 상태에 따른 오디오 처리
+      if (bgmState && isSoundEnabled) {
+        handleBgm(); // 재생
+      } else {
+        const audioElement = audioRef.current;
+        if (audioElement && !audioElement.paused) {
+          audioElement.pause(); // 정지
+        }
+      }
     }
-  }, [messages.bgmToggle]);
+  }, [messages.bgmToggle, isSoundEnabled]);
 
   const themeComponent = useMemo(() => {
     if (!data?.themeName) return <NotFoundPage />;
@@ -291,7 +341,7 @@ const PrivateReadingRoom = () => {
           </div>
         )}
         {activePanel === 'setting' && (
-          <div className="absolute bottom-[130px] left-[394px]">
+          <div className="absolute bottom-[130px] left-[475px]">
             <SmallControlBar
               onDelete={toggleDeleteModal}
               onEdit={openEditModal}
