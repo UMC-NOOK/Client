@@ -42,7 +42,7 @@ const BookInfoPage = () => {
   const postsPerPage = 5;
 
   // 리뷰 조회
-  const { data: reviewData } = useGetReview(bookId!, currentPost);
+  const { data: reviewData } = useGetReview(bookId!, currentPost - 1);
 
   // 파생값들(변수)
   const reviews = reviewData?.result.reviews ?? [];
