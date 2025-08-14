@@ -43,7 +43,7 @@ const CategorySectionView = ({ selectedCategory }: { selectedCategory: string })
         <div className="mt-[26px] w-[960px] border-t border-[#555351]/70" />
 
         <div className="text-lg mt-[26px]">{selected}</div>
-        <div className="mt-[5px] text-[22px] font-semibold">따끈따끈 신간 도서를 만나보세요!</div>
+        <div className="gap-[5px] text-[22px] font-semibold">따끈따끈 신간 도서를 만나보세요!</div>
         <div className="flex items-center justify-center mt-[36px]">
           {newSection && <BookListSection mallType={mallType} section={newSection} />}
         </div>

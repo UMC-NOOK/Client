@@ -14,7 +14,7 @@ const RecommendView = ({ mallType, sections }: { mallType: MallType; sections: L
           <div className="mt-[26px] w-[960px] border-t border-[#555351]/70" />
 
           <h3 className="mt-[26px] text-lg font-normal">지금 서재에 등록하세요!</h3>
-          <h2 className="mt-[5px] text-[22px] font-semibold">놓치기 아쉬운 주간 베스트셀러</h2>
+          <h2 className="text-[22px] font-semibold gap-[5px]">놓치기 아쉬운 주간 베스트셀러</h2>
 
           <div className="mt-[36px]">
             {bestSection && <BookListSection mallType={mallType} section={bestSection} />}
