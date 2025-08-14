@@ -48,7 +48,7 @@ const TileContent = ({ date, view }: TileContentProps) => {
       return (
         <div className="absolute inset-3 flex justify-center items-center py-2 px-1 overflow-hidden">
           <img
-            src={booksOnThisDate[0].thumbnailUrl}
+            src={booksOnThisDate[0].img}
             alt={booksOnThisDate[0].bookName}
             style={{
               width: '100%',
