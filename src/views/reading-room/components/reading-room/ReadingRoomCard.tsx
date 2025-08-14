@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import card from '../../../assets/readingRoom/card/card.png';
-import { useMyReadingRoomStore, MyReadingRoom } from '../../../store/reading-room/useMyReadingRoomStore';
-import myReadingRoomData from '../../../mock/readingRoom/myReadingRoomData';
+import card from "../../../../assets/readingRoom/card/card.png";
+import { useMyReadingRoomStore, MyReadingRoom } from '../../../../store/reading-room/useMyReadingRoomStore';
+//import myReadingRoomData from '../../../../mock/readingRoom/myReadingRoomData';
+import myReadingRoomData from '../../../../mock/readingRoom/myReadingRoomData';
 
 interface ReadingRoomCardProps {
     room: MyReadingRoom;

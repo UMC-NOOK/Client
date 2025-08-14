@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import ReadingRoomCard from '../ReadingRoomCard';
-import SectionTitle from '../SectionTitle';
-import AddReadingRoom from '../AddReadingRoom';
+import SectionTitle from '../reading-room/SectionTitle';
+import AddReadingRoom from '../reading-room/AddReadingRoom';
 import { useMyReadingRoomStore } from '../../../../store/reading-room/useMyReadingRoomStore';
 import myReadingRoomData from '../../../../mock/readingRoom/myReadingRoomData';
-import ReadingRoomSkeleton from '../ReadingRoomSkelton';
+import ReadingRoomSkeleton from '../reading-room/ReadingRoomSkelton';
+import ReadingRoomCard from '../reading-room/ReadingRoomCard';
 
 const MyReadingRoomCardList = () => {
     const myRooms = useMyReadingRoomStore((state) => state.rooms);
@@ -32,10 +32,10 @@ const MyReadingRoomCardList = () => {
             <div className='flex grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-12 overflow-hidden'>
                 {isLoading
                     ? Array.from({length: 4}).map((_,index) => (
-                        <ReadingRoomSkeleton/>
+                        <ReadingRoomSkeleton key={index}/>
                     ))
                     : myRooms.map((room, index) => (
-                        <ReadingRoomCard room={room}/>
+                        <ReadingRoomCard room={room} key={index}/>
                     ))
                 }
                 <AddReadingRoom/>
