@@ -6,6 +6,7 @@ import calendar from '/src/assets/button/book-info/calendar.svg';
 import Calendar from './calendar';
 
 import usePostBookRegistration from '../../hooks/useMutation/book-info-mutation/usePostBookRegistration';
+import useGetCalendar from '../../hooks/useQuery/book-info-query/useGetCalendar';
 
 interface LibraryRegistrationProps {
   onRegister: () => void;
@@ -32,15 +33,23 @@ const LibraryRegistration = ({
     const dayOfWeek = dayNames[date.getDay()];
     return `${year}.${month}.${day} (${dayOfWeek})`;
   };
-
   const serverFormatDate = (date: Date) => {
     const year = date.getFullYear();
     const month = `${date.getMonth() + 1}`.padStart(2, '0');
     const day = `${date.getDate()}`.padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
+  const serverFormatDateYM = (date: Date) => {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    return `${year}-${month}`;
+  };
+  const [yearMonth, setYearMonth] = useState(serverFormatDateYM(new Date()));
 
   const { mutate: postBookRegistration } = usePostBookRegistration(bookId); // bookId는 실제로 사용될 때 설정해야 합니다.
+  const { data: getCalendar, disabledDateSet } = useGetCalendar(yearMonth);
+
+  const list: number[] = disabledDateSet ?? [];
 
   const today = new Date();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -57,6 +66,7 @@ const LibraryRegistration = ({
 
   const calendarRegisterHandler = (date: Date) => {
     setSelectedDate(formatDate(date));
+    setYearMonth(serverFormatDateYM(date));
     setSelectedDateAsDate(date);
     setServerSelectedDate(serverFormatDate(date));
   };
@@ -70,6 +80,7 @@ const LibraryRegistration = ({
         !calendarRef.current.contains(e.target as Node)
       ) {
         setIsCalendarOpen(false);
+        setYearMonth(serverFormatDateYM(selectedDateAsDate));
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -129,9 +140,16 @@ const LibraryRegistration = ({
               {isCalendarOpen && (
                 <Calendar
                   onRegister={calendarRegisterHandler}
-                  closeModal={() => setIsCalendarOpen(false)}
+                  closeModal={() => {
+                    setIsCalendarOpen(false);
+                    setYearMonth(serverFormatDateYM(selectedDateAsDate));
+                  }}
                   currentSelectedDate={selectedDate}
                   currentDateAsDate={selectedDateAsDate}
+                  disabledDateSet={list}
+                  onMonthChange={(yyyyMM) => {
+                    setYearMonth(yyyyMM);
+                  }}
                 />
               )}
             </div>

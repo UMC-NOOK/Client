@@ -13,12 +13,13 @@ const useGetCalendar = (yearMonth: string) => {
 
   // 서버 응답: { result: { dates: [[2025,8,10], ...] } }
   const disabledDateSet = useMemo(() => {
+    var list: number[] = [];
     const tuples: YMD[] = data?.result?.dates ?? [];
-    const dayList = tuples.map((tuple) => {
+    tuples.map((tuple) => {
       const [year, month, day] = tuple;
-      return new Date(year, month - 1, day); // month is 0-indexed in Date
+      list.push(day);
     });
-    return new Set(dayList.map((date) => date.toISOString().split('T')[0]));
+    return list;
   }, [data]);
 
   return { data, disabledDateSet, ...rest };
