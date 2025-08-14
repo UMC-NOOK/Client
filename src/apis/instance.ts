@@ -33,6 +33,22 @@ function addRefreshSubscriber(callback: (token: string) => void) {
 // 요청 인터셉터
 instance.interceptors.request.use(
   (config) => {
+    const authPaths = ['/login', '/signup', '/kakao/callback'];
+    const isAuthPage = authPaths.some((path) =>
+      window.location.pathname.includes(path),
+    );
+    const blockedApiPaths = ['user', 'profiles', 'settings'];
+
+    if (
+      isAuthPage &&
+      blockedApiPaths.some((path) => config.url?.includes(path))
+    ) {
+      console.log('인증 페이지에서 사용자 API 호출 차단:', config.url);
+      return Promise.reject(
+        new Error('인증 페이지에서는 사용자 데이터를 불러오지 않습니다'),
+      );
+    }
+
     const token = localStorage.getItem('accessToken');
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
