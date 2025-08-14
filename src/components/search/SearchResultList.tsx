@@ -1,10 +1,9 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import BookRow from '../common/BookRow';
 import NookiIcon from '../../assets/button/search/none_book.png';
 import { useSearchBooks } from '../../views/search/hooks/useQuery/useSearchBooks';
-import BookAlreadyAddedModal from './SearchModal';
-import { getBookDetail } from '../../views/search/apis/book';
+import LibraryRegistration from '../../views/lounge/components/book-info/libraryRegistration';
 
 import jumpLeftIcon from '../../assets/button/search/chevron-double-left.png';
 import prevIcon      from '../../assets/button/search/chevron-left.png';
@@ -20,15 +19,6 @@ type SearchBook = {
   coverImageUrl: string;
   publicationDate: string;
   mallType: string;
-};
-
-type BookRowBook = {
-  img: string;
-  bookName: string;
-  category: string;
-  author: string;
-  publisher: string;
-  publication_date: string;
 };
 
 interface Props {
@@ -63,46 +53,38 @@ export default function SearchResultList({
   const books = (data?.books ?? []) as SearchBook[];
   const totalPages = data?.pagination?.totalPages ?? 0;
 
-  const rows: BookRowBook[] = useMemo(
-    () =>
-      books.map((b) => ({
+  // 등록 모달 상태 (상위에서 제어)
+  const [registerModal, setRegisterModal] = useState<{
+    open: boolean;
+    book?: {
+      bookId: number;
+      img: string;
+      title: string;
+      author: string;
+    };
+  }>({ open: false });
+
+  const openRegisterModal = (b: SearchBook) => {
+    setRegisterModal({
+      open: true,
+      book: {
+        bookId: b.bookId,
         img: b.coverImageUrl ?? '',
-        bookName: b.title ?? '',
-        category: b.mallType ?? '',
+        title: b.title ?? '',
         author: b.author ?? '',
-        publisher: b.publisher ?? '',
-        publication_date: b.publicationDate ?? '',
-      })),
-    [books],
-  );
-
-  // 모달 상태
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const handleGoToLibrary = () => {
-    setModalOpen(false);
-    navigate('/library'); // 내 서재로 이동
+      },
+    });
   };
 
+  const closeRegisterModal = () => setRegisterModal({ open: false });
+
   const goDetail = (isbn13: string) => {
-    navigate(`/lounge/book-info?isbn13=${encodeURIComponent(isbn13)}`);
+    // 라우터: /lounge/book-info/:isbn
+    navigate(`/lounge/book-info/${encodeURIComponent(isbn13)}`);
   };
 
   const handleClickInfo = (isbn13: string) => {
     goDetail(isbn13);
-  };
-
-  const handleClickAdd = async (isbn13: string) => {
-    try {
-      const detail = await getBookDetail(isbn13);
-      if (detail.book.registeredBookshelf) {
-        setModalOpen(true);
-      } else {
-        goDetail(isbn13);
-      }
-    } catch {
-      goDetail(isbn13);
-    }
   };
 
   // ---------- 페이지네이션(10단위 그룹) ----------
@@ -120,7 +102,6 @@ export default function SearchResultList({
     const next = new URLSearchParams(searchParams);
     next.set('page', String(target));
     setSearchParams(next, opts);
-    // UX: 페이지 이동 시 상단으로
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -147,7 +128,7 @@ export default function SearchResultList({
     return <div className="flex justify-center items-center w-full h-[200px] text-white/70">로딩 중…</div>;
   }
 
-  if (rows.length === 0) {
+  if (books.length === 0) {
     return (
       <div className="w-full bg-transparent pt-[40px]">
         <div className="mx-auto" style={{ width: '1040px', borderTop: '1px solid rgba(85, 83, 81, 0.7)' }} />
@@ -182,16 +163,17 @@ export default function SearchResultList({
                 author: b.author ?? '',
                 publisher: b.publisher ?? '',
                 publication_date: b.publicationDate ?? '',
+                bookId: b.bookId,                  // 🔑 BookRow에 필수 전달
               }}
               onClickInfo={() => handleClickInfo(b.isbn13)}
-              onClickAdd={() => handleClickAdd(b.isbn13)}
+              onClickAdd={() => openRegisterModal(b)} // 사전 체크 없이 바로 등록 모달
             />
           ))}
         </div>
 
         {totalPages > 1 && (
           <div className="flex justify-center items-center mb-[154px] mt-[70px]">
-            {/* 왼쪽 화살표 그룹: « ‹  (내부 간격 6px) */}
+            {/* 왼쪽 화살표 그룹: « ‹ */}
             <div className="flex items-center h-[24px] gap-[6px] mr-[33px]">
               <button
                 onClick={goPrev10}
@@ -211,7 +193,7 @@ export default function SearchResultList({
               </button>
             </div>
 
-            {/* 숫자 그룹: 숫자 간격 20px + 활성 밑줄(absolute) */}
+            {/* 숫자 그룹 */}
             <div className="flex items-center h-[24px] gap-[20px]">
               {Array.from({ length: groupEnd - groupStart + 1 }, (_, i) => {
                 const n = groupStart + i;
@@ -233,7 +215,7 @@ export default function SearchResultList({
               })}
             </div>
 
-            {/* 오른쪽 화살표 그룹: › »  (내부 간격 6px) */}
+            {/* 오른쪽 화살표 그룹: › » */}
             <div className="flex items-center h-[24px] gap-[6px] ml-[33px]">
               <button
                 onClick={goNext1}
@@ -256,10 +238,18 @@ export default function SearchResultList({
         )}
       </div>
 
-      {modalOpen && (
-        <BookAlreadyAddedModal
-          onClose={() => setModalOpen(false)}
-          onGoToLibrary={handleGoToLibrary}
+      {/* 서재 등록 모달 */}
+      {registerModal.open && registerModal.book && (
+        <LibraryRegistration
+          onRegister={() => {
+            // 성공 후 액션(토스트/리프레시) 필요하면 추가
+            closeRegisterModal();
+          }}
+          closeModal={closeRegisterModal}
+          bookImg={registerModal.book.img}
+          bookTitle={registerModal.book.title}
+          bookAuthor={registerModal.book.author}
+          bookId={registerModal.book.bookId}  
         />
       )}
     </>

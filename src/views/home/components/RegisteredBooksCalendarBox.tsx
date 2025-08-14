@@ -1,4 +1,4 @@
-//지금 검색하러 가기 - 추후 
+
 import React from 'react';
 import { startOfWeek, addDays, format } from 'date-fns';
 
@@ -32,7 +32,7 @@ const RegisteredBooksCalendarBox = ({ monthly }: { monthly: MonthlyDayBooks[] })
   const SEGMENT_W = LINE_WIDTH / 7;
 
   return (
-    <div className="w-[246px] h-[157px] bg-[#423C35]/10 rounded-[12px] px-[21px] pt-[12px] pb-[14px] flex flex-col justify-start">
+    <div className="w-[246px] h-[157px] bg-[#423C35]/10 rounded-[12px] px-[21px] pt-[32px] pb-[14px] flex flex-col justify-start">
       {/* 요일 */}
       <div className="grid grid-cols-7 gap-[18px] text-center">
         {week.map((day, i) => (
@@ -61,24 +61,26 @@ const RegisteredBooksCalendarBox = ({ monthly }: { monthly: MonthlyDayBooks[] })
           const hasBook = !!image;
 
           return (
-            <div key={dateStr} className="flex flex-col items-center gap-[12px] w-[15px]">
-              <span
-                className={`text-[12px] leading-[14.4px] font-normal text-center ${
-                  hasBook ? 'text-white/50' : 'text-white/50'
-                }`}
-              >
-                {day}
-              </span>
-              {hasBook ? (
-                <img
-                  src={image as string}
-                  alt={`Book on ${dateStr}`}
-                  className="w-[27.2px] h-[40px] object-cover rounded-[4px]"
-                />
-              ) : (
-                <div className="w-[27.2px] h-[40px]" />
-              )}
-            </div>
+            <div key={dateStr} className="flex flex-col items-center gap-[12px] w-[15px] overflow-visible">
+  <span
+    className="text-[12px] leading-[14.4px] font-normal text-center text-white/50"
+  >
+    {day}
+  </span>
+
+  {hasBook ? (
+          <div className="w-[27.2px] h-[40px] shrink-0 overflow-visible">
+            <img
+              src={image as string}
+              alt={`Book on ${dateStr}`}
+              className="w-full h-full object-cover rounded-[4px] shrink-0 [aspect-ratio:17/25]"
+            />
+          </div>
+        ) : (
+          <div className="w-[27.2px] h-[40px]" />
+        )}
+      </div>
+
           );
         })}
       </div>
