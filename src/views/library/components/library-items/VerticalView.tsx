@@ -7,14 +7,13 @@ import useGetBookState from '../../hooks/useQuery/library-query/useGetBookState'
 import { useTabStore } from '../../../../store/library/useTabStore';
 import useDeleteBook from '../../hooks/useMutation/library-mutation/useDeleteBook';
 import { useDropDownStore } from '../../../../store/library/useDropDownStore';
-import type BookItemProps from '../library-items/list-items/book-list/BookItem';
 
 interface ApiBookData {
   coverImageUrl: string;
   title: string;
   author: string;
   publisher: string;
-  publication_date?: string;
+  publicationDate: string;
   myRating: number;
   bookId: number;
   isbn13: string;
