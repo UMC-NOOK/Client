@@ -11,10 +11,10 @@ import useGetCalendar from '../../hooks/useQuery/book-info-query/useGetCalendar'
 interface LibraryRegistrationProps {
   onRegister: () => void;
   closeModal: () => void;
-  bookImg: string;
-  bookTitle: string;
-  bookAuthor: string;
-  bookId: number;
+  bookImg?: string;
+  bookTitle?: string;
+  bookAuthor?: string;
+  bookId?: number;
 }
 
 const LibraryRegistration = ({
@@ -46,7 +46,7 @@ const LibraryRegistration = ({
   };
   const [yearMonth, setYearMonth] = useState(serverFormatDateYM(new Date()));
 
-  const { mutate: postBookRegistration } = usePostBookRegistration(bookId);
+  const { mutate: postBookRegistration } = usePostBookRegistration(bookId!);
   const { data: getCalendar, disabledDateSet } = useGetCalendar(yearMonth);
 
   const list: number[] = disabledDateSet ?? [];
