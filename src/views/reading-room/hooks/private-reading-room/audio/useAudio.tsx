@@ -1,91 +1,82 @@
 // hooks/useAudio.ts
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-interface UseAudioOptions {
-  volume?: number;
-  loop?: boolean;
-  autoPlay?: boolean;
+interface UseAudioReturn {
+  isPlaying: boolean;
+  isLoaded: boolean;
+  volume: number;
+  play: () => void;
+  pause: () => void;
+  toggle: () => void;
+  setVolume: (volume: number) => void;
 }
 
-const useAudio = (url: string, options: UseAudioOptions = {}) => {
+const useAudio = (src: string | null): UseAudioReturn => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const fullUrl = `${import.meta.env.VITE_API_BASE_URL}${url}`.replace(
-    /([^:]\/)\/+/g,
-    '$1',
-  );
-  console.log(fullUrl);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [volume, setVolumeState] = useState<number>(0.5);
 
   useEffect(() => {
-    if (url) {
-      audioRef.current = new Audio(url);
-      audioRef.current.loop = options.loop ?? true;
-      audioRef.current.volume = options.volume ?? 0.5;
+    if (src) {
+      audioRef.current = new Audio(src);
+      audioRef.current.loop = true; // BGM이므로 반복 재생
+      audioRef.current.volume = volume;
 
       const audio = audioRef.current;
 
-      const handleLoadStart = () => setIsLoading(true);
-      const handleCanPlay = () => setIsLoading(false);
-      const handlePlay = () => setIsPlaying(true);
-      const handlePause = () => setIsPlaying(false);
-      const handleEnded = () => setIsPlaying(false);
+      const handleLoadedData = (): void => setIsLoaded(true);
+      const handleEnded = (): void => setIsPlaying(false);
 
-      audio.addEventListener('loadstart', handleLoadStart);
-      audio.addEventListener('canplay', handleCanPlay);
-      audio.addEventListener('play', handlePlay);
-      audio.addEventListener('pause', handlePause);
+      audio.addEventListener('loadeddata', handleLoadedData);
       audio.addEventListener('ended', handleEnded);
 
       return () => {
-        audio.removeEventListener('loadstart', handleLoadStart);
-        audio.removeEventListener('canplay', handleCanPlay);
-        audio.removeEventListener('play', handlePlay);
-        audio.removeEventListener('pause', handlePause);
+        audio.removeEventListener('loadeddata', handleLoadedData);
         audio.removeEventListener('ended', handleEnded);
         audio.pause();
-        audioRef.current = null;
+        audio.currentTime = 0;
       };
     }
-  }, [url, options.loop, options.volume]);
+  }, [src, volume]);
 
-  const play = async () => {
-    if (audioRef.current) {
-      try {
-        await audioRef.current.play();
-      } catch (error) {
-        console.error('Audio play failed:', error);
-      }
+  const play = (): void => {
+    if (audioRef.current && isLoaded) {
+      audioRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((error: Error) => console.error('Audio play failed:', error));
     }
   };
 
-  const pause = () => {
+  const pause = (): void => {
     if (audioRef.current) {
       audioRef.current.pause();
+      setIsPlaying(false);
     }
   };
 
-  const togglePlay = () => {
-    if (isPlaying) {
-      pause();
-    } else {
-      play();
-    }
+  const toggle = (): void => {
+    isPlaying ? pause() : play();
   };
 
-  const setVolume = (volume: number) => {
+  const setVolume = (newVolume: number): void => {
+    const clampedVolume = Math.max(0, Math.min(1, newVolume));
+    setVolumeState(clampedVolume);
+
     if (audioRef.current) {
-      audioRef.current.volume = Math.max(0, Math.min(1, volume));
+      audioRef.current.volume = clampedVolume;
     }
   };
 
   return {
+    isPlaying,
+    isLoaded,
+    volume,
     play,
     pause,
-    togglePlay,
+    toggle,
     setVolume,
-    isPlaying,
-    isLoading,
   };
 };
 

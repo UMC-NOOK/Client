@@ -19,6 +19,9 @@ import lampOrange from '../../../assets/button/home/orange-nookie.png';
 import lampGreen from '../../../assets/button/home/green-nookie.png';
 import lampBlue from '../../../assets/button/home/blue-nookie.png';
 
+import tabBgActive from '../../../assets/button/home/tab-on.png';
+import tabBgInactive from '../../../assets/button/home/tab-off.png';
+
 import { useNavigate } from 'react-router-dom';
 import { useGetProfile } from '../hooks/useQuery/useGetProfile';
 import { usePatchProfile } from '../hooks/useMutation/usePatchProfile';
@@ -177,30 +180,43 @@ const DesignPage: React.FC = () => {
 
       {/* 오른쪽: 탭 박스(고정) + 바깥 저장 버튼(간격 고정) */}
       <div className="w-[432px]">
-        {/* 탭 버튼 */}
-        <div className="relative z-10 flex ml-[14px]">
-          {TABS.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={clsx(
-                'w-[100px] h-[34.951px] flex justify-center items-center text-[14px] font-semibold',
-                'rounded-t-[8px] overflow-hidden',
-                'transform skew-x-[-12deg]',
-                activeTab === tab ? 'bg-[#2D2822] text-white' : 'bg-[#211A11] text-white/60'
-              )}
-            >
-              <span className="transform skew-x-[12deg]">{tab}</span>
-            </button>
-          ))}
+        <div className="relative z-30 flex ml-[14px] overflow-visible isolate" role="tablist" aria-label="디자인 설정 탭">
+          {TABS.map((tab, i) => {
+            const active = activeTab === tab;
+            return (
+              <button
+                key={tab}
+                role="tab"
+                aria-selected={active}
+                aria-controls={`panel-${tab}`}
+                onClick={() => setActiveTab(tab)}
+                className={clsx(
+                  'relative w-[100px] h-[27.59px] flex items-center justify-center text-[14px] font-[400] bg-transparent',
+                  // ✨ 활성 탭이 위로 오게
+                  active ? 'z-20' : 'z-10',
+                  // 경계 살짝 겹치기(필요시 숫자 조정)
+                  i > 0 && '-ml-[6px]'
+                )}
+              >
+                <img
+                  src={active ? tabBgActive : tabBgInactive}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none"
+                />
+                <span className={clsx('relative z-10', active ? 'text-white' : 'text-white/60')}>
+                  {tab}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* 탭 내용 박스: 고정 크기 유지 (내부만 스크롤) */}
+
+        {/* 탭 내용 박스: 탭 아래에 깔림 */}
         <div
-          className="relative z-20 w-[432px] h-[568.407px] rounded-[12px] bg-[#2D2822] px-[38px] pt-[21.41px]"
+          className="relative z-20 w-[432px] h-[568.407px] rounded-[12px] bg-[#2D2822] px-[38px] pt-[21.41px] mt-0"
           style={{ boxSizing: 'border-box' }}
         >
-          {/* 내부 스크롤 영역: 스크롤바로 폭이 변하지 않도록 고정 */}
           <div
             className="h-full overflow-y-auto"
             style={{ scrollbarGutter: 'stable' }}
@@ -230,7 +246,7 @@ const DesignPage: React.FC = () => {
           </div>
         </div>
 
-        {/* 저장 버튼: 박스 바깥, 간격 고정 */}
+        {/* 저장 버튼 */}
         <div className="flex justify-center mt-[18px]">
           <button
             className="w-[88px] h-[33px] rounded-[8px] bg-[#423C35] text-white text-[14px] font-semibold disabled:opacity-60"

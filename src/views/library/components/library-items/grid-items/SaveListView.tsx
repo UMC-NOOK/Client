@@ -38,7 +38,7 @@ const SaveListView = ({ onClick }: SaveListProps) => {
         </span>
       </div>
       <div className="w-full flex justify-center">
-        <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 auto-rows-max">
+        <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 auto-rows-max">
           {bookData.map((data, idx) => (
             <SaveListItem key={idx} {...data} />
           ))}

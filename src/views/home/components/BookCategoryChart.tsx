@@ -58,7 +58,7 @@ const BookCategoryChart: React.FC = () => {
   }, [chartCategories]);
 
   return (
-    <div className="w-[246px] rounded-[12px] bg-[#423C35]/10 flex flex-col items-left pt-[14px] pb-[49px] transition-all duration-300">
+    <div className="w-[246px] rounded-[12px] bg-[#423C35]/10 flex flex-col items-left pt-[14px] pb-[14px] transition-all duration-300">
       <p className="text-white text-[12px] leading-[25px] font-[400] font-pretendard mb-[20px] pl-[25px]">
         이 분야의 책을 가장 많이 읽었어요.
       </p>
@@ -115,7 +115,7 @@ const BookCategoryChart: React.FC = () => {
       </div>
 
       {/* 전체 보기 토글 */}
-      {total > 0 && categories.length > 5 && (
+      {total > 0 && categories.length > 0 && (
         <button
           onClick={() => setExpanded((prev) => !prev)}
           className=" inline-flex items-center gap-[8px] text-[11px] leading-[25px] font-[400] text-white/50 font-pretendard mt-[12px]  pl-[25px]"
