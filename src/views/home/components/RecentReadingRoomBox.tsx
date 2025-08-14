@@ -1,23 +1,17 @@
+//리딩룸이랑 맞춰서 추후 수정예정
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import arrowIcon from '../../../assets/button/home/chevron-right.png';
 import fireIllustration from '../../../assets/button/home/fire.png';
 import userIcon from '../../../assets/button/home/user.png';
 
-interface RecentReadingRoomBoxProps {
-  hasRoom: boolean;
-  roomTitle?: string;
-  roomDesc?: string;
-  userCount?: number;
-}
+// ✅ API Hook(임시- 리딩룸)
+import { useGetReadingRoomLastAccessed } from '../hooks/useQuery/useGetReadingRoomLastAccessed';
 
-const RecentReadingRoomBox: React.FC<RecentReadingRoomBoxProps> = ({
-  hasRoom,
-  roomTitle = '',
-  roomDesc = '',
-  userCount = 0,
-}) => {
+const RecentReadingRoomBox: React.FC = () => {
   const navigate = useNavigate();
+  const { data: room, isLoading, isError } = useGetReadingRoomLastAccessed();
+  const hasRoom = !!room;
 
   return (
     <div
@@ -26,7 +20,7 @@ const RecentReadingRoomBox: React.FC<RecentReadingRoomBoxProps> = ({
         ${!hasRoom ? 'bg-[#423C35]/10' : ''}  
       `}
     >
-      {/* ✅ 배경 이미지: hasRoom이 true일 때만 */}
+      {/* 배경 이미지: hasRoom이 true일 때만 */}
       {hasRoom && (
         <img
           src={fireIllustration}
@@ -50,13 +44,21 @@ const RecentReadingRoomBox: React.FC<RecentReadingRoomBoxProps> = ({
         </div>
 
         {/* 메인 콘텐츠 */}
-        {hasRoom ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-white/50 text-sm">로딩중...</p>
+          </div>
+        ) : isError ? (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-white/50 text-sm">불러오기 실패</p>
+          </div>
+        ) : hasRoom ? (
           <div className="flex flex-col items-start pb-[20px] pl-[24px]">
             <p className="text-white text-[16px] font-[600] leading-[25px]">
-              {roomTitle}
+              {room?.name}
             </p>
             <p className="text-white/80 text-[12px] font-[400] leading-[25px] mt-[2px]">
-              {roomDesc}
+              {room?.description}
             </p>
             <div className="flex items-center gap-[4px] mt-[8px]">
               <img
@@ -65,7 +67,7 @@ const RecentReadingRoomBox: React.FC<RecentReadingRoomBoxProps> = ({
                 className="w-[12px] h-[12px] object-contain"
               />
               <p className="text-white text-[10px] font-[400] leading-[25px]">
-                {userCount}
+                {room?.currentUserCount ?? 0}
               </p>
             </div>
           </div>
@@ -75,8 +77,8 @@ const RecentReadingRoomBox: React.FC<RecentReadingRoomBoxProps> = ({
               내 리딩룸 만들고
             </p>
 
-            <button className="mt-[16px] px-[12px] py-[8px] bg-[#423C35] rounded-[6px]">
-              <span className="text-white text-[12px] font-[600] leading-[14.4px] " >
+            <button className="mt-[8px] px-[12px] py-[8px] bg-[#423C35] rounded-[6px]">
+              <span className="text-white text-[12px] font-[600] leading-[14.4px] ">
                 지금 책 읽으러 가기
               </span>
             </button>

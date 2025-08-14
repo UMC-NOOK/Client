@@ -1,8 +1,11 @@
+import { useNavigate } from 'react-router-dom';
+
 interface SaveListProps {
   img: string;
   bookName: string;
   author: string;
   className?: string;
+  bookId: number;
 }
 
 const SaveListItem = ({
@@ -10,10 +13,18 @@ const SaveListItem = ({
   bookName,
   author,
   className = '',
+  bookId,
 }: SaveListProps) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/library/${bookId}`);
+  };
+
   return (
     <div
-      className={`w-[15rem] h-[24rem] bg-[rgba(66,60,53,0.2)] rounded-[8px] flex justify-center items-start ${className} mb-5`}
+      className={`w-[15rem] h-[24rem] bg-[rgba(66,60,53,0.2)] rounded-[8px] flex justify-center items-start ${className} mb-5 cursor-pointer`}
+      onClick={handleClick}
     >
       <div className="flex flex-col justify-start items-center gap-3 pt-12 px-12">
         <div

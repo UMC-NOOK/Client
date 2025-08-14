@@ -14,6 +14,7 @@ interface SearchBarProps {
   inputStyle?: React.CSSProperties;
   iconSrc?: string;
   variant?: 'default' | 'lounge';
+  syncToStore?: boolean;
 }
 
 export default function SearchBar({
@@ -26,23 +27,28 @@ export default function SearchBar({
   inputStyle,
   iconSrc,
   variant = 'default',
+  syncToStore = true,
 }: SearchBarProps) {
-  const { addRecentSearch, setSearchTerm, searchTerm } = useSearchStore();
+  const { setSearchTerm, searchTerm } = useSearchStore();
   const [input, setInput] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [isComposing, setIsComposing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
+  // 전역과 동기화가 켜져 있을 때만 store 값을 input에 반영
   useEffect(() => {
-    setInput(searchTerm);
-  }, [searchTerm]);
+    if (syncToStore) setInput(searchTerm);
+  }, [searchTerm, syncToStore]);
 
   const handleSearch = (term: string) => {
     const trimmed = term.trim();
     if (!trimmed) return;
-    setSearchTerm(trimmed);
-    addRecentSearch(trimmed);
+
+    if (syncToStore) {
+      setSearchTerm(trimmed);
+    }
+
     navigate(`/lounge/search-result?query=${encodeURIComponent(trimmed)}`);
     setShowDropdown(false);
   };
@@ -53,7 +59,6 @@ export default function SearchBar({
     }
   };
 
-  // ✅ Lounge 전용 스타일 조건 분기
   const isLounge = variant === 'lounge';
   const finalInputStyle = isLounge
     ? {
@@ -76,12 +81,10 @@ export default function SearchBar({
       };
 
   return (
-    <div
-      className={`flex flex-col items-center justify-center ${wrapperClassName}`}
-    >
+    <div className={`flex flex-col items-center justify-center ${wrapperClassName}`}>
       <div className="relative" style={{ width: customWidth }}>
         {isLounge && (
-            <style>{`
+          <style>{`
             .lounge-placeholder::placeholder {
               color: #797979;
               font-family: Pretendard;
@@ -90,7 +93,7 @@ export default function SearchBar({
               font-weight: 400;
               line-height: 25px;
             }
-            `}</style>
+          `}</style>
         )}
         <div
           className={`flex items-center gap-[10px] px-[12px] py-[7px] w-full ${
@@ -106,26 +109,26 @@ export default function SearchBar({
             className={`${iconClassName || ''} pointer-events-none`}
             style={
               isLounge
-          ? {
-              display: 'flex',
-              width: '22px',
-              height: '22px',
-              padding: '5.042px 4.584px 4.583px 5.042px',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexShrink: 0,
-              aspectRatio: '1 / 1',
-            }
-          : {
-              display: 'flex',
-              width: '28px',
-              height: '28px',
-              padding: '6.416px 5.832px 5.834px 6.417px',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexShrink: 0,
-              aspectRatio: '1 / 1',
-            }
+                ? {
+                    display: 'flex',
+                    width: '22px',
+                    height: '22px',
+                    padding: '5.042px 4.584px 4.583px 5.042px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexShrink: 0,
+                    aspectRatio: '1 / 1',
+                  }
+                : {
+                    display: 'flex',
+                    width: '28px',
+                    height: '28px',
+                    padding: '6.416px 5.832px 5.834px 6.417px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexShrink: 0,
+                    aspectRatio: '1 / 1',
+                  }
             }
           />
           <input
@@ -135,8 +138,8 @@ export default function SearchBar({
             className={`flex-1 outline-none border-none bg-transparent ${
               inputClassName ||
               (isLounge
-          ? 'lounge-placeholder'
-          : 'text-white text-[16px] font-medium leading-[25px] placeholder:text-white')
+                ? 'lounge-placeholder'
+                : 'text-white text-[16px] font-medium leading-[25px] placeholder:text-white')
             } ${placeholderClassName || ''}`}
             style={finalInputStyle}
             value={input}

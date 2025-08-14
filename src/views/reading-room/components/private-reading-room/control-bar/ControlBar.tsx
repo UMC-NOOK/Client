@@ -15,6 +15,8 @@ interface ControlBarProps {
   onMemberClick: () => void;
   onBookClick: () => void;
   onSettingClick: () => void;
+  onBgmToggle: (bgmOn: boolean) => void;
+  onLeave: () => void;
 }
 
 function ControlBar({
@@ -22,11 +24,24 @@ function ControlBar({
   onMemberClick,
   onBookClick,
   onSettingClick,
+  onBgmToggle,
+  onLeave,
 }: ControlBarProps) {
   const [music, setMusic] = useState<boolean>(false);
   const toggleExitModal = useModalStore((state) => state.toggleExitModal);
   const toggleDeleteModal = useModalStore((state) => state.toggleDeleteModal);
   const navigate = useNavigate();
+
+  const handleMusicToggle = () => {
+    const newMusicState = !music;
+    setMusic(newMusicState);
+    onBgmToggle(newMusicState);
+  };
+
+  const handleLeave = () => {
+    onLeave();
+    navigate('/reading-room');
+  };
 
   return (
     <div className="w-[288px] h-[60px] bg-[rgba(43,34,23,0.8)] gap-5 rounded-[12px] flex justify-center backdrop-blur-xl items-center absolute bottom-30 left-1/2 -translate-x-1/2">
@@ -36,14 +51,14 @@ function ControlBar({
           src={onMusicBtn}
           alt="소리켬"
           className="w-22 h-22 rounded-[8px] object-contain cursor-pointer"
-          onClick={() => setMusic((prev) => !prev)}
+          onClick={handleMusicToggle}
         />
       ) : (
         <img
           src={offMusicBtn}
           alt="소리끔"
           className="w-22 h-22 rounded-[8px] object-contain cursor-pointer"
-          onClick={() => setMusic((prev) => !prev)}
+          onClick={handleMusicToggle}
         />
       )}
 
@@ -85,7 +100,7 @@ function ControlBar({
         src={deleteBtn}
         alt=""
         className="w-22 h-22 bg-[rgba(241,73,75,0.2)] rounded-[8px] object-contain cursor-pointer"
-        onClick={() => navigate(-1)}
+        onClick={handleLeave}
       />
     </div>
   );

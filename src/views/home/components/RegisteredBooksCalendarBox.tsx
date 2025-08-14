@@ -1,55 +1,78 @@
+//지금 검색하러 가기 - 추후 
 import React from 'react';
+import { startOfWeek, addDays, format } from 'date-fns';
 
-const RegisteredBooksCalendarBox = () => {
+type MonthlyDayBooks = {
+  date: string; // 'YYYY-MM-DD'
+  books: { bookId: number; thumbnailUrl: string }[];
+};
+
+const RegisteredBooksCalendarBox = ({ monthly }: { monthly: MonthlyDayBooks[] }) => {
   const week = ['월', '화', '수', '목', '금', '토', '일'];
 
-  // 목업 이미지 데이터 (2~8일)
-  const bookThumbnails: { [day: number]: string } = {
-    2: '/mock/book1.png',
-    5: '/mock/book2.png',
-    7: '/mock/book3.png',
-  };
+  // 이번 주 날짜 스트링 배열
+  const today = new Date();
+  const weekStart = startOfWeek(today, { weekStartsOn: 1 });
+  const dates = Array.from({ length: 7 }, (_, i) => format(addDays(weekStart, i), 'yyyy-MM-dd'));
+
+  // 오늘 인덱스 (월=0)
+  const todayStr = format(today, 'yyyy-MM-dd');
+  const todayIdx = dates.findIndex((d) => d === todayStr);
+
+  // 날짜 → 대표 썸네일 매핑
+  const thumbMap: Record<string, string | undefined> = {};
+  for (const d of monthly) {
+    if (!d?.date || !Array.isArray(d.books)) continue;
+    const thumb = d.books[0]?.thumbnailUrl;
+    if (thumb) thumbMap[d.date] = thumb;
+  }
+
+  // 구분선 설정 (디자인 고정값)
+  const LINE_WIDTH = 203; // px
+  const SEGMENT_W = LINE_WIDTH / 7;
 
   return (
-    <div className="w-[246px] h-[157px] bg-[#423C35]/10 rounded-[12px] px-[12px] pt-[12px] pb-[14px] flex flex-col justify-start">
+    <div className="w-[246px] h-[157px] bg-[#423C35]/10 rounded-[12px] px-[21px] pt-[12px] pb-[14px] flex flex-col justify-start">
       {/* 요일 */}
       <div className="grid grid-cols-7 gap-[18px] text-center">
         {week.map((day, i) => (
-          <div
-            key={i}
-            className="text-[12px] leading-[14.4px] font-normal text-white/50"
-          >
+          <div key={i} className="text-[12px] leading-[14.4px] font-normal text-white/50">
             {day}
           </div>
         ))}
       </div>
 
-      {/* 선 */}
-      <div className="w-[203px] h-[0.5px] bg-[#555351] mx-auto mt-[8px]" />
+      {/* 긴 구분선(옅은) + 오늘 구간(진한) */}
+      <div className="relative mx-auto mt-[8px]" style={{ width: LINE_WIDTH }}>
+        <div className="h-[0.5px] w-full bg-[#555351]" />
+        {todayIdx >= 0 && (
+          <div
+            className="absolute top-1/2 -translate-y-1/2 h-[2px] bg-white rounded"
+            style={{ width: SEGMENT_W, left: todayIdx * SEGMENT_W }}
+          />
+        )}
+      </div>
 
       {/* 날짜 + 썸네일 */}
-      <div className="flex flex-row justify-between mt-[10px]">
-        {Array.from({ length: 7 }, (_, i) => {
-          const day = i + 2; // 2~8일
-          const hasBook = !!bookThumbnails[day];
-          const image = bookThumbnails[day];
+      <div className="flex flex-row justify-between mt-[10px] mx-auto" style={{ width: LINE_WIDTH }}>
+        {dates.map((dateStr) => {
+          const day = parseInt(dateStr.slice(-2), 10);
+          const image = thumbMap[dateStr];
+          const hasBook = !!image;
 
           return (
-            <div key={day} className="flex flex-col items-center gap-[12px] w-[15px]">
-              {/* 날짜 숫자 */}
+            <div key={dateStr} className="flex flex-col items-center gap-[12px] w-[15px]">
               <span
                 className={`text-[12px] leading-[14.4px] font-normal text-center ${
-                  hasBook ? 'text-white' : 'text-white/50'
+                  hasBook ? 'text-white/50' : 'text-white/50'
                 }`}
               >
                 {day}
               </span>
-
-              {/* 썸네일 or 빈칸 */}
               {hasBook ? (
                 <img
-                  src={image}
-                  alt={`Book on ${day}`}
+                  src={image as string}
+                  alt={`Book on ${dateStr}`}
                   className="w-[27.2px] h-[40px] object-cover rounded-[4px]"
                 />
               ) : (

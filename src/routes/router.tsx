@@ -15,6 +15,8 @@ import ReadingRoomList from '../views/reading-room/components/views/ReadingRoomL
 import PrivateReadingRoom from '../views/reading-room/page/private-reading-room';
 import CreateReadingRoom from '../views/reading-room/components/views/CreateReadingRoom';
 import DesignPage from '../views/home/page/DesignPage';
+import ProtectedRoute from './ProtectedRoute';
+import SettingsPage from '../views/home/components/ProfileSettingPage';
 
 const router = createBrowserRouter([
   {
@@ -27,82 +29,88 @@ const router = createBrowserRouter([
         element: <Main />,
       },
       {
-        path: 'home',
-        element: <Main />,
-      },
-      {
-        path: 'home/DesignPage',
-        element: <DesignPage />,
-      },
-
-      {
-        path: 'lounge',
         errorElement: <NotFoundPage />,
+        element: <ProtectedRoute />,
         children: [
           {
-            index: true,
-            element: <Lounge />,
+            path: 'home',
+            element: <Main />,
           },
           {
-            path: ':isbn',
-            element: <BookInfoPage />,
+            path: 'home/DesignPage',
+            element: <DesignPage />,
           },
           {
-            path: 'search-result',
-            element: <SearchResultPage />,
-          },
-        ],
-      },
-
-      {
-        path: 'library',
-        errorElement: <NotFoundPage />,
-        children: [
-          {
-            index: true,
-            element: <Library />,
+            path: 'settings',
+            element: <SettingsPage />,
           },
           {
-            path: ':id',
-            element: <ReadNotePage />,
+            path: 'lounge',
+            errorElement: <NotFoundPage />,
+            children: [
+              {
+                index: true,
+                element: <Lounge />,
+              },
+              {
+                path: 'book-info/:isbn',
+                element: <BookInfoPage />,
+              },
+              {
+                path: 'search-result',
+                element: <SearchResultPage />,
+              },
+            ],
           },
           {
-            path: ':id/edit',
-            element: <ReadNoteEditPage />,
-          },
-        ],
-      },
-
-      {
-        path: 'reading-room',
-        errorElement: <NotFoundPage />,
-        children: [
-          {
-            index: true,
-            element: <ReadingRoom />,
-          },
-          {
-            path: 'all',
-            element: <ReadingRoomList />,
-          },
-          {
-            path: ':id',
-            element: <PrivateReadingRoom />,
+            path: 'library',
+            errorElement: <NotFoundPage />,
+            children: [
+              {
+                index: true,
+                element: <Library />,
+              },
+              {
+                path: ':bookId',
+                element: <ReadNotePage />,
+              },
+              {
+                path: ':bookId/edit',
+                element: <ReadNoteEditPage />,
+              },
+            ],
           },
           {
-            path: 'create',
-            element: <CreateReadingRoom />,
+            path: 'reading-room',
+            errorElement: <NotFoundPage />,
+            children: [
+              {
+                index: true,
+                element: <ReadingRoom />,
+              },
+              {
+                path: 'all',
+                element: <ReadingRoomList />,
+              },
+              {
+                path: ':roomId/:userId',
+                element: <PrivateReadingRoom />,
+              },
+              {
+                path: 'create',
+                element: <CreateReadingRoom usage="create" />,
+              },
+            ],
           },
-        ],
-      },
-
-      {
-        path: 'mypage',
-        errorElement: <NotFoundPage />,
-        children: [
           {
-            index: true,
-            element: <MyPage />,
+            path: 'mypage',
+            errorElement: <NotFoundPage />,
+            children: [
+              {
+                index: true,
+                element: <MyPage />,
+              },
+            ],
           },
         ],
       },

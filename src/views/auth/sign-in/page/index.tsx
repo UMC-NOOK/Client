@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { signInSchema } from '../../schemas/sign-in/validateSignIn';
 import ErrorBox from '../../components/ErrorBox';
 import useSignIn from '../../hook/useMutaion/useSignIn';
+import loginBox from '../../../../assets/auth/Loginbox.png';
 
 type FormData = {
   email: string;
@@ -27,7 +28,7 @@ const SignInPage = () => {
     },
   });
 
-  const { mutate: signInMutate } = useSignIn();
+  const { mutate: signInMutate, isError: isMutationError } = useSignIn();
 
   const watchedValues = watch();
 
@@ -40,6 +41,8 @@ const SignInPage = () => {
   };
 
   const hasErrors = Object.keys(errors).length > 0;
+  const hasApiError = isMutationError;
+  const shouldShowErrorBox = hasErrors || hasApiError;
   const isEmpty = !watchedValues.email || !watchedValues.password;
   const isButtonDisabled = hasErrors || !isValid || isEmpty;
 
@@ -49,9 +52,15 @@ const SignInPage = () => {
     <div className="flex flex-col items-center justify-center ">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-[rgba(66,60,53,0.2)] border-1 border-[rgba(243,238,220,1)] w-[54.1rem] h-[65.2rem] flex flex-col items-center rounded-[15px] relative"
+        className="bg-[rgba(66,60,53,0.2)]  w-[54.1rem] h-[65.2rem] flex flex-col items-center rounded-[15px] relative"
+        style={{
+          backgroundImage: `url(${loginBox})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
       >
-        {hasErrors && <ErrorBox />}
+        {shouldShowErrorBox && <ErrorBox />}
 
         <div className="mt-40 mb-30">
           <Logo />
