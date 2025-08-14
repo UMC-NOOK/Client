@@ -53,7 +53,7 @@ const router = createBrowserRouter([
                 element: <Lounge />,
               },
               {
-                path: 'book-info/:bookId',
+                path: 'book-info/:isbn',
                 element: <BookInfoPage />,
               },
               {
