@@ -10,7 +10,7 @@ const BestBook = ({ bestBook }: { bestBook: BestBook | undefined }) => {
     <div
       className="flex flex-col items-start justify-center gap-3 w-full"
       onClick={() => {
-        navigate(`/lounge/${bestBook?.isbn13}`);
+        navigate(`/lounge/book-info/${bestBook?.isbn13}`);
       }}
     >
       <div className="w-70 h-102 rounded-lg">
