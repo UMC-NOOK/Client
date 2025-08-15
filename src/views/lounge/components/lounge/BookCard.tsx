@@ -1,7 +1,11 @@
 import React from 'react';
 import { LoungeBook } from '../../apis/lounge/types/lounge-types';
+import { useNavigate } from 'react-router-dom';
 
 const BookCard = ({ book }: { book: LoungeBook }) => {
+    const navigate = useNavigate();
+    const isbn = book.isbn13;
+
     if (!book) {
         return (
             <div className="flex justify-center items-center text-[#B8AFA5] text-sm w-[141px] h-[260px]">
@@ -11,7 +15,8 @@ const BookCard = ({ book }: { book: LoungeBook }) => {
     }
 
     return (
-        <div className="flex flex-col w-[141px]">
+        <div className="flex flex-col w-[141px]"
+        onClick={() => navigate(`book-info/${isbn}`)}>
             <div className="flex justify-center items-center">
                 <img
                     src={book.coverImageUrl}
@@ -20,7 +25,8 @@ const BookCard = ({ book }: { book: LoungeBook }) => {
                 />
             </div>
 
-            <div className="text-white mt-[6px]">
+            <div 
+                className="text-white mt-[6px]">
                 <div className="h-10 text-base font-semibold w-[141px] truncate">
                     {book.title}
                 </div>

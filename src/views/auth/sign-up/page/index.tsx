@@ -6,6 +6,7 @@ import { signUnSchema } from '../../schemas/sign-up/validateSignUp';
 import useSignUp from '../../hook/useMutaion/useSignUp';
 import { useNavigate } from 'react-router-dom';
 import SignUpbox from '../../../../assets/auth/SignUpbox.png';
+import errorBox from '../../../../assets/auth/errorBox.svg';
 
 type FormData = {
   name: string;
@@ -23,7 +24,7 @@ const SignUpPage = () => {
     watch,
   } = useForm<FormData>({ mode: 'onChange' });
 
-  const { mutate: signUpMutate } = useSignUp();
+  const { mutate: signUpMutate, isError, error } = useSignUp();
   const naviagte = useNavigate();
   const signUpSchema = signUnSchema(getValues);
   const watchedValues = watch();
@@ -40,6 +41,7 @@ const SignUpPage = () => {
   const isEmpty = !watchedValues.email || !watchedValues.password;
   const isButtonDisabled = hasErrors || !isValid || isEmpty;
 
+  const isDuplicateEmailError = isError && error?.response?.status === 409;
   // console.log(errors.name);
 
   return (
@@ -54,6 +56,12 @@ const SignUpPage = () => {
           backgroundRepeat: 'no-repeat',
         }}
       >
+        {isDuplicateEmailError && (
+          <div className="absolute top-9 z-10 object-contain">
+            <img src={errorBox} alt="에러박스" />
+          </div>
+        )}
+
         <div className="mt-40 mb-30">
           <Logo />
         </div>

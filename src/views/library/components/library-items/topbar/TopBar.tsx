@@ -2,7 +2,7 @@ import gridButton from '../../../../../assets/button/library/Frame 25.png';
 import hamburger from '../../../../../assets/button/library/Frame 26.png';
 
 interface TopBarProps {
-  userName: string;
+  userName: string | null;
   onChangeGrid: () => void;
   onChangeVertical: () => void;
   activeView: 'grid' | 'vertical';

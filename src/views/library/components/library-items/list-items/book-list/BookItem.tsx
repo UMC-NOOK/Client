@@ -8,7 +8,7 @@ interface BookItemProps {
   title: string;
   author: string;
   publisher: string;
-  publication_date?: string;
+  publicationDate: string;
   myRating: number;
   bookId: number;
   isbn13: string;
@@ -27,7 +27,7 @@ const BookItem = ({
   title,
   author,
   publisher,
-  publication_date = '2015-10',
+  publicationDate,
   myRating,
   useOnLibrary,
   useOnSearch,
@@ -35,7 +35,7 @@ const BookItem = ({
   isbn13,
   openModal,
 }: BookItemAllProps) => {
-  const year = publication_date.split('-')[0];
+  const year = publicationDate.split('-')[0];
 
   return (
     <div className="flex items-center h-[21.3rem] py-10 border-b-1 border-[rgba(85,83,81,0.7)]">
@@ -49,7 +49,9 @@ const BookItem = ({
       <div className="flex flex-1 h-[15rem] justify-between">
         <div className="flex flex-col justify-between">
           <div className="space-y-3">
-            <p className="text-md font-normal text-nook-100">{title}</p>
+            <p className="text-md font-normal text-nook-100 line-clamp-1">
+              {title}
+            </p>
             <p className="text-sm font-normal text-nook-100">{author}</p>
             <p className="text-sm font-normal text-nook-100 flex items-center">
               {publisher}

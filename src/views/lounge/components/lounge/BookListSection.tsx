@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import BookSkeleton from './BookSkelton';
 import BookCard from './BookCard';
 import {
@@ -18,12 +18,12 @@ const BookListSection = ({ mallType, section }: BookListSectionProps) => {
   const sectionId = section.sectionId ?? '';
   const sectionCategoryId = section.categoryId ?? null;
 
-  const [books, setBooks] = useState<LoungeBook[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [books, setBooks] = React.useState<LoungeBook[]>([]);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [visibleCount, setVisibleCount] = useState<number>(section.pagination.pageSize || 6);
-  const [pagination, setPagination] = useState<LoungePagination>({
+  const [currentPage, setCurrentPage] = React.useState<number>(0);
+  const [visibleCount, setVisibleCount] = React.useState<number>(section.pagination.pageSize || 6);
+  const [pagination, setPagination] = React.useState<LoungePagination>({
     currentPage: 0,
     pageSize: section.pagination.pageSize || 6,
     totalItems: section.pagination.totalItems || 0,
@@ -31,52 +31,73 @@ const BookListSection = ({ mallType, section }: BookListSectionProps) => {
   });
 
   const totalPages = pagination.totalPages || 1;
+  const pageSize = pagination.pageSize || 6;
 
-  const categoryIdParam = useMemo(() => {
-    return sectionCategoryId == null ? undefined : String(sectionCategoryId);
+  const renderCount = Math.min(books.length, pageSize, visibleCount);
+
+  const categoryIdParam = React.useMemo(() => {
+    const raw = sectionCategoryId;
+    const s = raw == null ? '' : String(raw).trim();
+    return s === '' ? undefined : s;
   }, [sectionCategoryId]);
 
+  const reqIdRef = React.useRef(0);
+
   const fetchBooks = async (page: number) => {
+    const reqId = ++reqIdRef.current;
+
     setIsLoading(true);
+    setBooks([]);
+
     try {
       const res = await LoungeBookListGet({
         mallType,
         sectionId,
         categoryId: categoryIdParam,
-        page,
+        page, 
       });
 
-      if (res?.isSuccess) {
-        const updated = res.result.sections.find((sec: LoungeSection) => {
-          const a = sec.categoryId ?? null;
-          const b = sectionCategoryId ?? null;
-          return sec.sectionId === sectionId && String(a) === String(b);
-        });
+      const sections = res?.result?.sections ?? [];
+      const updated = sections.find((sec: LoungeSection) => {
+        const a = sec.categoryId ?? null;
+        const b = sectionCategoryId ?? null;
+        return sec.sectionId === sectionId && String(a) === String(b);
+      });
+
+      if (reqId === reqIdRef.current) {
         if (updated) {
-          setBooks(updated.books || []);
-          setPagination(updated.pagination || pagination);
+          setBooks(updated.books ?? []);
+          setPagination(updated.pagination ?? { ...pagination, pageSize: 6 });
+        } else {
+          setBooks([]); 
+          setPagination((p) => ({ ...p, currentPage: page }));
         }
       }
     } catch (e) {
       console.error('도서 목록 조회 실패', e);
+      if (reqId === reqIdRef.current) {
+        setBooks([]); // 에러 시에도 잔상 방지
+      }
     } finally {
-      setIsLoading(false);
+      if (reqId === reqIdRef.current) {
+        setIsLoading(false);
+      }
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
+    reqIdRef.current++;      
     setCurrentPage(0);
-    setBooks([]);
+    setBooks([]);          
+    setIsLoading(true);      
     fetchBooks(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mallType, sectionId, categoryIdParam]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     fetchBooks(currentPage);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const updateVisibleCount = () => {
       const w = window.innerWidth;
       if (w < 640) setVisibleCount(3);
@@ -96,9 +117,10 @@ const BookListSection = ({ mallType, section }: BookListSectionProps) => {
     if (currentPage < totalPages - 1) setCurrentPage((p) => p + 1);
   };
 
+  const gridKey = `${sectionId}-${sectionCategoryId ?? 'x'}-${currentPage}-${isLoading ? 'L' : 'D'}`;
+
   return (
     <div className="relative w-full group">
-      {/* 왼쪽 화살표 */}
       <button
         onClick={handlePrev}
         disabled={currentPage <= 0}
@@ -126,7 +148,6 @@ const BookListSection = ({ mallType, section }: BookListSectionProps) => {
         </svg>
       </button>
 
-      {/* 오른쪽 화살표 */}
       <button
         onClick={handleNext}
         disabled={currentPage >= totalPages - 1}
@@ -154,12 +175,20 @@ const BookListSection = ({ mallType, section }: BookListSectionProps) => {
         </svg>
       </button>
 
-      {/* 리스트 */}
       <div className="w-full overflow-hidden">
-        <div className="grid grid-flow-col auto-cols-[141px] gap-[23px]">
+        <div
+          key={gridKey}
+          className={`grid grid-flow-col auto-cols-[141px] gap-[23px] transition-opacity duration-100 ${
+            isLoading ? 'opacity-0' : 'opacity-100'
+          }`}
+        >
           {isLoading
-            ? Array.from({ length: visibleCount }).map((_, i) => <BookSkeleton key={i} />)
-            : books.slice(0, visibleCount).map((book) => <BookCard key={book.isbn13} book={book} />)}
+            ? Array.from({ length: Math.min(visibleCount, pageSize) }).map((_, i) => (
+                <BookSkeleton key={`s-${i}`} />
+              ))
+            : books.slice(0, renderCount).map((book) => (
+                <BookCard key={`${book.isbn13}-${currentPage}`} book={book} />
+              ))}
         </div>
       </div>
     </div>
@@ -167,4 +196,3 @@ const BookListSection = ({ mallType, section }: BookListSectionProps) => {
 };
 
 export default BookListSection;
- 

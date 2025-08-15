@@ -122,7 +122,7 @@ const SettingsPage = () => {
     return map;
   }, []);
 
-  const profileIconSrc = profile ? profileIconByColor[profile.characterColor] : profileBlue;
+  const profileIconSrc = profile ? profileIconByColor[profile.characterColor] : profileOrange;
 
   // L 사이즈 프로필 이미지 고정 클래스 (127×99)
   const AVATAR_L = 'w-[127px] h-[99px] shrink-0 object-contain';

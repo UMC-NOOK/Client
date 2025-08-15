@@ -1,14 +1,16 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import BookRow from '../common/BookRow';
 import NookiIcon from '../../assets/button/search/none_book.png';
 import { useSearchBooks } from '../../views/search/hooks/useQuery/useSearchBooks';
-import BookAlreadyAddedModal from './SearchModal';
+import SearchLibraryRegistration from '../../views/home/components/SearchLibraryRegistration';
+import BookAlreadyAddedModal from '../search/SearchModal'; 
+
 import { getBookDetail } from '../../views/search/apis/book';
 
 import jumpLeftIcon from '../../assets/button/search/chevron-double-left.png';
-import prevIcon      from '../../assets/button/search/chevron-left.png';
-import nextIcon      from '../../assets/button/search/chevron-right.png';
+import prevIcon from '../../assets/button/search/chevron-left.png';
+import nextIcon from '../../assets/button/search/chevron-right.png';
 import jumpRightIcon from '../../assets/button/search/chevron-double-right.png';
 
 type SearchBook = {
@@ -20,15 +22,6 @@ type SearchBook = {
   coverImageUrl: string;
   publicationDate: string;
   mallType: string;
-};
-
-type BookRowBook = {
-  img: string;
-  bookName: string;
-  category: string;
-  author: string;
-  publisher: string;
-  publication_date: string;
 };
 
 interface Props {
@@ -63,45 +56,56 @@ export default function SearchResultList({
   const books = (data?.books ?? []) as SearchBook[];
   const totalPages = data?.pagination?.totalPages ?? 0;
 
-  const rows: BookRowBook[] = useMemo(
-    () =>
-      books.map((b) => ({
+  // 등록 모달 상태 (상위에서 제어)
+  const [registerModal, setRegisterModal] = useState<{
+    open: boolean;
+    book?: {
+      bookId: number;
+      img: string;
+      title: string;
+      author: string;
+    };
+  }>({ open: false });
+
+  // “이미 등록” 모달 상태
+  const [alreadyOpen, setAlreadyOpen] = useState(false);
+
+  const openRegisterModal = (b: SearchBook) => {
+    setRegisterModal({
+      open: true,
+      book: {
+        bookId: b.bookId,
         img: b.coverImageUrl ?? '',
-        bookName: b.title ?? '',
-        category: b.mallType ?? '',
+        title: b.title ?? '',
         author: b.author ?? '',
-        publisher: b.publisher ?? '',
-        publication_date: b.publicationDate ?? '',
-      })),
-    [books],
-  );
-
-  // 모달 상태
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const handleGoToLibrary = () => {
-    setModalOpen(false);
-    navigate('/library'); // 내 서재로 이동
+      },
+    });
   };
+  const closeRegisterModal = () => setRegisterModal({ open: false });
 
   const goDetail = (isbn13: string) => {
-    navigate(`/lounge/book-info?isbn13=${encodeURIComponent(isbn13)}`);
+    // 라우터: /lounge/book-info/:isbn
+    navigate(`/lounge/book-info/${encodeURIComponent(isbn13)}`);
   };
 
   const handleClickInfo = (isbn13: string) => {
     goDetail(isbn13);
   };
 
-  const handleClickAdd = async (isbn13: string) => {
+  // 등록 버튼 클릭 → 사전 체크 후 분기
+  const handleClickAdd = async (b: SearchBook) => {
     try {
-      const detail = await getBookDetail(isbn13);
+      const detail = await getBookDetail(b.isbn13);
       if (detail.book.registeredBookshelf) {
-        setModalOpen(true);
+        // 이미 등록: 안내 모달
+        setAlreadyOpen(true);
       } else {
-        goDetail(isbn13);
+        // 미등록: 등록 모달
+        openRegisterModal(b);
       }
     } catch {
-      goDetail(isbn13);
+      // 상세 조회 실패 시엔 보수적으로 등록 모달을 열어 사용자가 진행 가능
+      openRegisterModal(b);
     }
   };
 
@@ -120,22 +124,33 @@ export default function SearchResultList({
     const next = new URLSearchParams(searchParams);
     next.set('page', String(target));
     setSearchParams(next, opts);
-    // UX: 페이지 이동 시 상단으로
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const goPrev10 = () => setPageInUrl(page - 10);
   const goNext10 = () => setPageInUrl(page + 10);
-  const goPrev1  = () => setPageInUrl(page - 1);
-  const goNext1  = () => setPageInUrl(page + 1);
+  const goPrev1 = () => setPageInUrl(page - 1);
+  const goNext1 = () => setPageInUrl(page + 1);
 
   // ---------- 화면 렌더 ----------
   if (isInitial) {
     return (
       <div className="w-full bg-transparent pt-[40px] relative">
-        <div className="mx-auto" style={{ width: '1040px', borderTop: '1px solid rgba(85, 83, 81, 0.7)' }} />
-        <div className="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3" style={{ top: '487px' }}>
-          <p className="text-white text-[16px] font-normal opacity-50 text-center" style={{ marginTop: '-90%' }}>
+        <div
+          className="mx-auto"
+          style={{
+            width: '1040px',
+            borderTop: '1px solid rgba(85, 83, 81, 0.7)',
+          }}
+        />
+        <div
+          className="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3"
+          style={{ top: '487px' }}
+        >
+          <p
+            className="text-white text-[16px] font-normal opacity-50 text-center"
+            style={{ marginTop: '-90%' }}
+          >
             책을 검색하고 서재에 등록하세요.
           </p>
         </div>
@@ -144,16 +159,35 @@ export default function SearchResultList({
   }
 
   if (isLoading) {
-    return <div className="flex justify-center items-center w-full h-[200px] text-white/70">로딩 중…</div>;
+    return (
+      <div className="flex justify-center items-center w-full h-[200px] text-white/70">
+        로딩 중…
+      </div>
+    );
   }
 
-  if (rows.length === 0) {
+  if (books.length === 0) {
     return (
       <div className="w-full bg-transparent pt-[40px]">
-        <div className="mx-auto" style={{ width: '1040px', borderTop: '1px solid rgba(85, 83, 81, 0.7)' }} />
-        <div className="flex justify-center items-center gap-2 mt-[142px]" style={{ transform: 'translateX(-4%)' }}>
-          <img src={NookiIcon} alt="검색 결과 없음" className="w-[125.586px] h-[169px]" />
-          <p className="text-white text-base font-medium opacity-50">{emptyMessage}</p>
+        <div
+          className="mx-auto"
+          style={{
+            width: '1040px',
+            borderTop: '1px solid rgba(85, 83, 81, 0.7)',
+          }}
+        />
+        <div
+          className="flex justify-center items-center gap-2 mt-[142px]"
+          style={{ transform: 'translateX(-4%)' }}
+        >
+          <img
+            src={NookiIcon}
+            alt="검색 결과 없음"
+            className="w-[125.586px] h-[169px]"
+          />
+          <p className="text-white text-base font-medium opacity-50">
+            {emptyMessage}
+          </p>
         </div>
       </div>
     );
@@ -182,46 +216,60 @@ export default function SearchResultList({
                 author: b.author ?? '',
                 publisher: b.publisher ?? '',
                 publication_date: b.publicationDate ?? '',
+                bookId: b.bookId, 
               }}
               onClickInfo={() => handleClickInfo(b.isbn13)}
-              onClickAdd={() => handleClickAdd(b.isbn13)}
+              onClickAdd={() => handleClickAdd(b)} 
             />
           ))}
         </div>
 
         {totalPages > 1 && (
           <div className="flex justify-center items-center mb-[154px] mt-[70px]">
-            {/* 왼쪽 화살표 그룹: « ‹  (내부 간격 6px) */}
+            {/* 왼쪽 화살표: « ‹ */}
             <div className="flex items-center h-[24px] gap-[6px] mr-[33px]">
               <button
                 onClick={goPrev10}
                 disabled={!canPrev10}
-                className={`w-6 h-6 flex items-center justify-center ${canPrev10 ? 'opacity-100' : 'opacity-30 cursor-not-allowed'}`}
+                className={`w-6 h-6 flex items-center justify-center ${
+                  canPrev10 ? 'opacity-100' : 'opacity-30 cursor-not-allowed'
+                }`}
                 aria-label="이전 10페이지"
               >
-                <img src={jumpLeftIcon} alt="이전 10페이지" className="w-4 h-4" />
+                <img
+                  src={jumpLeftIcon}
+                  alt="이전 10페이지"
+                  className="w-4 h-4"
+                />
               </button>
               <button
                 onClick={goPrev1}
                 disabled={!canPrev1}
-                className={`w-6 h-6 flex items-center justify-center ${canPrev1 ? 'opacity-100' : 'opacity-30 cursor-not-allowed'}`}
+                className={`w-6 h-6 flex items-center justify-center ${
+                  canPrev1 ? 'opacity-100' : 'opacity-30 cursor-not-allowed'
+                }`}
                 aria-label="이전 페이지"
               >
                 <img src={prevIcon} alt="이전 페이지" className="w-4 h-4" />
               </button>
             </div>
 
-            {/* 숫자 그룹: 숫자 간격 20px + 활성 밑줄(absolute) */}
+            {/* 숫자 그룹 */}
             <div className="flex items-center h-[24px] gap-[20px]">
-              {Array.from({ length: groupEnd - groupStart + 1 }, (_, i) => {
-                const n = groupStart + i;
+              {Array.from(
+                { length: groupEnd - groupStart + 1 },
+                (_, i) => groupStart + i,
+              ).map((n) => {
                 const active = n === page;
                 return (
                   <button
                     key={n}
                     onClick={() => setPageInUrl(n)}
-                    className={`relative w-[18px] h-[24px] flex items-center justify-center transition
-                      ${active ? 'text-white font-semibold' : 'text-white/60 hover:text-white'}`}
+                    className={`relative w-[18px] h-[24px] flex items-center justify-center transition ${
+                      active
+                        ? 'text-white font-semibold'
+                        : 'text-white/60 hover:text-white'
+                    }`}
                     aria-current={active ? 'page' : undefined}
                   >
                     <span className="leading-none">{n}</span>
@@ -233,12 +281,14 @@ export default function SearchResultList({
               })}
             </div>
 
-            {/* 오른쪽 화살표 그룹: › »  (내부 간격 6px) */}
+            {/* 오른쪽 화살표: › » */}
             <div className="flex items-center h-[24px] gap-[6px] ml-[33px]">
               <button
                 onClick={goNext1}
                 disabled={!canNext1}
-                className={`w-6 h-6 flex items-center justify-center ${canNext1 ? 'opacity-100' : 'opacity-30 cursor-not-allowed'}`}
+                className={`w-6 h-6 flex items-center justify-center ${
+                  canNext1 ? 'opacity-100' : 'opacity-30 cursor-not-allowed'
+                }`}
                 aria-label="다음 페이지"
               >
                 <img src={nextIcon} alt="다음 페이지" className="w-4 h-4" />
@@ -246,21 +296,39 @@ export default function SearchResultList({
               <button
                 onClick={goNext10}
                 disabled={!canNext10}
-                className={`w-6 h-6 flex items-center justify-center ${canNext10 ? 'opacity-100' : 'opacity-30 cursor-not-allowed'}`}
+                className={`w-6 h-6 flex items-center justify-center ${
+                  canNext10 ? 'opacity-100' : 'opacity-30 cursor-not-allowed'
+                }`}
                 aria-label="다음 10페이지"
               >
-                <img src={jumpRightIcon} alt="다음 10페이지" className="w-4 h-4" />
+                <img
+                  src={jumpRightIcon}
+                  alt="다음 10페이지"
+                  className="w-4 h-4"
+                />
               </button>
             </div>
           </div>
         )}
       </div>
 
-      {modalOpen && (
-        <BookAlreadyAddedModal
-          onClose={() => setModalOpen(false)}
-          onGoToLibrary={handleGoToLibrary}
+      {/* 서재 등록 모달 */}
+      {registerModal.open && registerModal.book && (
+        <SearchLibraryRegistration
+          onRegister={() => {
+            closeRegisterModal();
+          }}
+          closeModal={closeRegisterModal}
+          bookImg={registerModal.book.img}
+          bookTitle={registerModal.book.title}
+          bookAuthor={registerModal.book.author}
+          bookId={registerModal.book.bookId}
         />
+      )}
+
+      {/* 이미 등록 모달 */}
+      {alreadyOpen && (
+        <BookAlreadyAddedModal onClose={() => setAlreadyOpen(false)} />
       )}
     </>
   );

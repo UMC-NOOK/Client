@@ -8,6 +8,7 @@ const SignUp = async (userData: SignUpProps) => {
     return response.data;
   } catch (error) {
     console.log('signup error:', error);
+    throw error;
   }
 };
 

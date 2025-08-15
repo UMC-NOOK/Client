@@ -10,8 +10,12 @@ const useSignUp = () => {
   return useMutation({
     mutationFn: (userData: SignUpProps) => SignUp(userData),
     onSuccess: (data) => {
-      //   console.log(data);
+      // console.log(data);
       navigate('/login');
+    },
+    onError: (error: any) => {
+      // console.error('회원가입 에러:', error);
+      throw error;
     },
   });
 };
