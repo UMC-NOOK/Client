@@ -68,7 +68,7 @@ instance.interceptors.response.use(
         isRefreshing = true;
         try {
           // 쿠키에 있는 리프래시 토큰이 자동으로 전송됨
-          const { data } = await refreshInstance.post('/api/users/reissue');
+          const { data } = await refreshInstance.post('api/users/reissue');
           const newAccessToken = data.accessToken;
           const newRefreshToken = data.refreshToken;
           localStorage.setItem('accessToken', newAccessToken);
