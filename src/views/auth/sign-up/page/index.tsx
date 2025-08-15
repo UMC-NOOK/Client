@@ -31,7 +31,7 @@ const SignUpPage = () => {
 
   const onSubmit = async (data: FormData) => {
     signUpMutate({
-      name: data.name,
+      nickname: data.name,
       email: data.email,
       password: data.password,
     });
