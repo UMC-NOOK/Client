@@ -1,5 +1,8 @@
-import { bookRegistration } from '../../../apis/book-info/bookRegistration';
+// src/views/lounge/hooks/useMutation/book-info-mutation/usePostBookRegistration.ts
 import { useMutation } from '@tanstack/react-query';
+import { bookRegistration } from '../../apis/bookRegistration';
+
+export type ReadingStatus = 'READING' | 'FINISHED' | 'BOOKMARK';
 
 const usePostBookRegistration = (bookId: number) => {
   return useMutation({
@@ -8,7 +11,7 @@ const usePostBookRegistration = (bookId: number) => {
       readingStatus,
     }: {
       date: string;
-      readingStatus: string;
+      readingStatus: ReadingStatus; // ← string → 유니온 타입으로 변경
     }) => bookRegistration(bookId, date, readingStatus),
   });
 };

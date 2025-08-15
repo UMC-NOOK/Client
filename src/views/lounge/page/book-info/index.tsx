@@ -14,7 +14,7 @@ import move_icon from '/src/assets/button/book-info/move.svg';
 
 // components
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
-import LibraryRegistration from '../../components/book-info/libraryRegistration';
+import LibraryRegistration from '../../../lounge/components/book-info/libraryRegistration';
 import Comment from '../../components/book-info/comment';
 import BestBook from '../../components/book-info/bestBook';
 

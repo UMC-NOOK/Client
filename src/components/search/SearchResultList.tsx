@@ -4,7 +4,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import BookRow from '../common/BookRow';
 import NookiIcon from '../../assets/button/search/none_book.png';
 import { useSearchBooks } from '../../views/search/hooks/useQuery/useSearchBooks';
-import LibraryRegistration from '../../views/lounge/components/book-info/libraryRegistration';
+import LibraryRegistration from '../../views/home/components/libraryRegistration';
 import BookAlreadyAddedModal from '../search/SearchModal'; // ← 이미 등록 모달 복귀
 
 import { getBookDetail } from '../../views/search/apis/book';

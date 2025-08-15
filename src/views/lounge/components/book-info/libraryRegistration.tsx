@@ -5,7 +5,7 @@ import calendar from '/src/assets/button/book-info/calendar.svg';
 
 import Calendar from './calendar';
 
-import usePostBookRegistration from '../../hooks/useMutation/book-info-mutation/usePostBookRegistration';
+import usePostBookRegistration from '../../hooks/useMutation/usePostBookRegistration';
 import useGetCalendar from '../../hooks/useQuery/book-info-query/useGetCalendar';
 
 interface LibraryRegistrationProps {
@@ -44,23 +44,25 @@ const LibraryRegistration = ({
     const month = `${date.getMonth() + 1}`.padStart(2, '0');
     return `${year}-${month}`;
   };
-
   const [yearMonth, setYearMonth] = useState(serverFormatDateYM(new Date()));
 
-  // bookId가 없으면 0을 넘기지만, 실제 호출 전에 가드함.
-  const { mutate: postBookRegistration, isPending } = usePostBookRegistration(bookId ?? 0);
-  const { disabledDateSet } = useGetCalendar(yearMonth);
+  const { mutate: postBookRegistration } = usePostBookRegistration(bookId!);
+  const { data: getCalendar, disabledDateSet } = useGetCalendar(yearMonth);
 
-  const disabledList: number[] = disabledDateSet ?? [];
+  const list: number[] = disabledDateSet ?? [];
 
   const today = new Date();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedDateAsDate, setSelectedDateAsDate] = useState(today);
   const [selectedDate, setSelectedDate] = useState(formatDate(today));
-  const [serverSelectedDate, setServerSelectedDate] = useState(serverFormatDate(today));
+  const [serverSelectedDate, setServerSelectedDate] = useState(
+    serverFormatDate(today),
+  );
   const calendarRef = useRef<HTMLDivElement>(null);
 
-  const calendarModalHandler = () => setIsCalendarOpen((prev) => !prev);
+  const calendarModalHandler = () => {
+    setIsCalendarOpen((prev) => !prev);
+  };
 
   const calendarRegisterHandler = (date: Date) => {
     setSelectedDate(formatDate(date));
@@ -72,49 +74,37 @@ const LibraryRegistration = ({
   // 외부 클릭 시 달력 닫기
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (isCalendarOpen && calendarRef.current && !calendarRef.current.contains(e.target as Node)) {
+      if (
+        isCalendarOpen &&
+        calendarRef.current &&
+        !calendarRef.current.contains(e.target as Node)
+      ) {
         setIsCalendarOpen(false);
         setYearMonth(serverFormatDateYM(selectedDateAsDate));
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isCalendarOpen, selectedDateAsDate]);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isCalendarOpen]);
 
-  // 1=READING, 2=FINISHED, 3=BOOKMARK 로 매핑
   const [readingStatus, setReadingStatus] = useState(1);
-  const statusToServer: 'READING' | 'FINISHED' | 'BOOKMARK' =
-    readingStatus === 1 ? 'READING' : readingStatus === 2 ? 'FINISHED' : 'BOOKMARK';
-
-  const handleSave = () => {
-    if (!bookId) {
-      alert('bookId가 없습니다. 다시 시도해 주세요.');
-      return;
-    }
-
-    postBookRegistration(
-      { date: serverSelectedDate, readingStatus: statusToServer },
-      {
-        onSuccess: () => {
-          onRegister();   // ✅ 성공시에만 후속처리
-          closeModal();
-        },
-        onError: (err: any) => {
-          console.error('도서 등록 실패:', err);
-          alert(err?.response?.data?.message || '도서 등록에 실패했습니다.');
-        },
-      },
-    );
-  };
 
   return (
     <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center">
       <div className="w-[440px] flex flex-col justify-start items-center bg-[rgba(45,40,34,1)] rounded-2xl px-17 relative pb-10">
         <div className="w-full h-11 mt-15 mb-17">
           <div className="absolute top-16 left-14 flex items-center gap-2">
-            <img src={chevron_left} alt="Chevron Left Icon" onClick={closeModal} />
+            <img
+              src={chevron_left}
+              alt="Chevron Left Icon"
+              onClick={closeModal}
+            />
           </div>
-          <div className="text-white text-center text-lg font-semibold">서재 등록</div>
+          <div className="text-white text-center text-lg font-semibold">
+            서재 등록
+          </div>
         </div>
 
         <div className="flex items-center justify-between w-full gap-17 mb-20">
@@ -130,7 +120,10 @@ const LibraryRegistration = ({
               <div className="text-[rgba(255,255,255,0.50)] text-xs">저자</div>
               <div className="text-white text-sm">{bookAuthor}</div>
             </div>
-            <div className="flex flex-col gap-4 items-start relative" ref={calendarRef}>
+            <div
+              className="flex flex-col gap-4 items-start relative"
+              ref={calendarRef}
+            >
               <div className="text-[rgba(255,255,255,0.50)] text-xs">날짜</div>
               <div
                 className="flex items-center justify-between w-[207px] rounded-sm bg-[rgba(31,28,25,0.5)] px-5 py-[9px] cursor-pointer"
@@ -150,8 +143,10 @@ const LibraryRegistration = ({
                   }}
                   currentSelectedDate={selectedDate}
                   currentDateAsDate={selectedDateAsDate}
-                  disabledDateSet={disabledList}
-                  onMonthChange={(yyyyMM) => setYearMonth(yyyyMM)}
+                  disabledDateSet={list}
+                  onMonthChange={(yyyyMM) => {
+                    setYearMonth(yyyyMM);
+                  }}
                 />
               )}
             </div>
@@ -164,9 +159,7 @@ const LibraryRegistration = ({
             {[1, 2, 3].map((status, idx) => (
               <button
                 key={status}
-                className={`w-[117px] h-[38px] rounded border border-solid border-nook-br-100 px-10 py-2 text-sm ${
-                  readingStatus === status ? 'bg-nook-br-100 text-white' : 'text-[rgba(255,255,255,0.50)]'
-                }`}
+                className={`w-[117px] h-[38px] rounded border border-solid border-nook-br-100 px-10 py-2 text-sm ${readingStatus === status ? 'bg-nook-br-100 text-white' : 'text-[rgba(255,255,255,0.50)]'}`}
                 onClick={() => setReadingStatus(status)}
               >
                 {['독서중', '완독', '찜'][idx]}
@@ -175,14 +168,28 @@ const LibraryRegistration = ({
           </div>
         </div>
 
-        <button
-          type="button"
-          disabled={isPending}
-          className="w-full h-20 px-10 py-2 rounded bg-nook-br-100 text-white text-base font-semibold text-center cursor-pointer flex items-center justify-center disabled:opacity-60"
-          onClick={handleSave}
+        <div
+          className="w-full h-20 px-10 py-2 rounded bg-nook-br-100 text-white text-base font-semibold text-center cursor-pointer flex items-center justify-center"
+          onClick={() => {
+            readingStatus === 1
+              ? postBookRegistration({
+                  date: serverSelectedDate,
+                  readingStatus: 'READING',
+                })
+              : readingStatus === 2
+                ? postBookRegistration({
+                    date: serverSelectedDate,
+                    readingStatus: 'COMPLETED',
+                  })
+                : postBookRegistration({
+                    date: serverSelectedDate,
+                    readingStatus: 'WISH',
+                  });
+            onRegister();
+          }}
         >
-          {isPending ? '저장 중…' : '저장'}
-        </button>
+          저장
+        </div>
       </div>
     </div>
   );

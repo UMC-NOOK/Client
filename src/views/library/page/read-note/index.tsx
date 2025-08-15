@@ -10,7 +10,7 @@ import read_note_save_btn from '/src/assets/button/read-note/read-note-save-btn.
 import quotation_arrow from '/src/assets/button/read-note-edit/quotation-arrow.svg';
 import impression_icon from '/src/assets/button/read-note-edit/impression-icon.svg';
 
-import LibraryRegistration from '../../../lounge/components/book-info/libraryRegistration';
+import LibraryRegistration from '../../../home/components/LibraryRegistration';
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 
 const ReadNotePage = () => {
