@@ -14,9 +14,9 @@ const useGetBookState = ({
   sort,
 }: UseGetBookStateProps) => {
   return useQuery({
-    queryKey: ['bookData', status, sort, page],
+    queryKey: ['bookData'],
     queryFn: () => bookFetchState({ status, page, size, sort }),
-    staleTime: 1000 * 60 * 5,
+    staleTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
     enabled: typeof page === 'number' && page >= 0,
