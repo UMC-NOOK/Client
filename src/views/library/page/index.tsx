@@ -8,7 +8,7 @@ type LibraryView = 'grid' | 'vertical';
 
 const Library = () => {
   const [view, setView] = useState<LibraryView>('grid');
-  const userNameData = sessionStorage.getItem('nickName') || '경민';
+  const userNameData = sessionStorage.getItem('nickName') || '정혁';
   const [userName, setUserName] = useState<string>(userNameData);
 
   const handleChangeGrid = () => {
@@ -19,6 +19,13 @@ const Library = () => {
     setView('vertical');
   };
 
+  const handleNullData = (userNameData: string | null) => {
+    if (userNameData === 'null') {
+      return '정혁';
+    }
+    return userNameData;
+  };
+
   // console.log(view);
 
   return (
@@ -26,7 +33,7 @@ const Library = () => {
       <div className="flex justify-center min-h-full mt-9">
         <div className="flex flex-col w-[106rem] justify-center items-center mt-5 mb-40 gap-10">
           <TopBar
-            userName={userName}
+            userName={handleNullData(userName)}
             onChangeGrid={handleChangeGrid}
             onChangeVertical={handleChangeVertical}
             activeView={view}

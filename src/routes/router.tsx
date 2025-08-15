@@ -30,6 +30,10 @@ const router = createBrowserRouter([
         element: <Navigate to="/login" replace />,
       },
       {
+        path: '/',
+        element: <Navigate to="/signup" replace />,
+      },
+      {
         errorElement: <NotFoundPage />,
         element: <ProtectedRoute />,
         children: [
