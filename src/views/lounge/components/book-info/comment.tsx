@@ -3,6 +3,7 @@ import fullStar from '/src/assets/button/book-info/fullStar.svg';
 import emptyStar from '/src/assets/button/book-info/emptyStar.svg';
 
 import { Review } from '../../types/book-info/review';
+import { useGetMe } from '../../../../views/home/hooks/useQuery/useGetMe';
 
 interface CommentProps {
   setIsUserEditReview: (value: boolean) => void;
@@ -22,10 +23,10 @@ const Comment = ({ setIsUserEditReview, reviewData }: CommentProps) => {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-white text-sm not-italic font-semibold leading-[normal] leading-[normal]  ">
-                승민
+                {reviewData.name ?? '사용자'}
               </span>
               <span className="text-white text-xs not-italic font-normal leading-[normal]  ">
-                이 구역의 책벌레
+                {reviewData.nickname ?? '닉네임 없음'}
               </span>
             </div>
           </div>
