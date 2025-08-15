@@ -5,7 +5,7 @@ import calendar from '/src/assets/button/book-info/calendar.svg';
 
 import Calendar from './calendar';
 
-import usePostBookRegistration from '../../hooks/useMutation/usePostBookRegistration';
+import usePostBookRegistration from '../../hooks/useMutation/book-info-mutation/usePostBookRegistration';
 import useGetCalendar from '../../hooks/useQuery/book-info-query/useGetCalendar';
 
 interface LibraryRegistrationProps {

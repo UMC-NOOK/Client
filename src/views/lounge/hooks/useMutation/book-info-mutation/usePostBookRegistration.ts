@@ -1,4 +1,4 @@
-import { bookRegistration } from '../../apis/book-info/bookRegistration';
+import { bookRegistration } from '../../../apis/book-info/bookRegistration';
 import { useMutation } from '@tanstack/react-query';
 
 const usePostBookRegistration = (bookId: number) => {
