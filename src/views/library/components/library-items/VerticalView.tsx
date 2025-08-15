@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FilterBar from '../library-items/list-items/FilterBar';
 import tempBookData from '../../../../mock/library/bookData';
 import BookItem from './list-items/book-list/BookItem';
@@ -7,6 +7,7 @@ import useGetBookState from '../../hooks/useQuery/library-query/useGetBookState'
 import { useTabStore } from '../../../../store/library/useTabStore';
 import useDeleteBook from '../../hooks/useMutation/library-mutation/useDeleteBook';
 import { useDropDownStore } from '../../../../store/library/useDropDownStore';
+import Pagination from './list-items/pagenation/Pagination';
 
 interface ApiBookData {
   coverImageUrl: string;
@@ -40,6 +41,7 @@ const VerticalView = () => {
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
   const currentTab = useTabStore((state) => state.selectedTab);
   const currentMenu = useDropDownStore((state) => state.selectMenu);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const convertTabToEnglish = (
     koreanTab: string,
@@ -75,10 +77,11 @@ const VerticalView = () => {
       status: convertTabToEnglish(currentTab),
       size: 8,
       sort: convertMenuToEnglish(currentMenu),
+      page: currentPage - 1,
     });
 
   const booksData: ApiBookData[] = data?.content || [];
-  // console.log('asdf', booksData);
+  const hasNext = data?.hasNext || false;
 
   return (
     <div className="w-full">

@@ -6,7 +6,9 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
-      <ReactQueryDevtools />
+      <div className="text-sm">
+        <ReactQueryDevtools />
+      </div>
     </>
   );
 }
