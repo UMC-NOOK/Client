@@ -1,7 +1,9 @@
 import { bookRegistration } from '../../../apis/book-info/bookRegistration';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const usePostBookRegistration = (bookId: number) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: ({
       date,
@@ -10,6 +12,9 @@ const usePostBookRegistration = (bookId: number) => {
       date: string;
       readingStatus: string;
     }) => bookRegistration(bookId, date, readingStatus),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['bookInfo'] });
+    },
   });
 };
 
