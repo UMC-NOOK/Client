@@ -52,7 +52,7 @@ const SignInPage = () => {
     <div className="flex flex-col items-center justify-center ">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-[rgba(66,60,53,0.2)]  w-[54.1rem] h-[65.2rem] flex flex-col items-center rounded-[15px] relative"
+        className=" w-[54.1rem] h-[65.2rem] flex flex-col items-center rounded-[15px] relative"
         style={{
           backgroundImage: `url(${loginBox})`,
           backgroundSize: 'cover',
