@@ -1,5 +1,5 @@
 export interface SignUpProps {
-  name: string;
+  nickname: string;
   email: string;
   password: string;
 }
