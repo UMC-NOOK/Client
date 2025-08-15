@@ -184,9 +184,14 @@ const BookInfoPage = () => {
       <div className="flex flex-col w-[840px] items-center justify-start h-screen mr-150 ml-150 overflow-y-auto [&::-webkit-scrollbar]:hidden">
         {/* 상단바 */}
         <div className="self-start flex items-center justify-center mb-25">
-          <div className="w-10 h-10 mr-6">
+                <button
+            type="button"
+            onClick={() => navigate(-1)}          // ← 뒤로가기
+            className="w-10 h-10 mr-6 inline-flex items-center justify-center cursor-pointer"
+            aria-label="뒤로가기"
+          >
             <img src={chevron_left} alt="Lounge Top Bar" />
-          </div>
+            </button>
           <div className="text-white text-xl  ">라운지</div>
         </div>
         {/* 책소개 컴포넌트 */}

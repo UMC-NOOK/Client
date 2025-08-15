@@ -1,11 +1,10 @@
-// src/components/search/SearchResultList.tsx
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import BookRow from '../common/BookRow';
 import NookiIcon from '../../assets/button/search/none_book.png';
 import { useSearchBooks } from '../../views/search/hooks/useQuery/useSearchBooks';
 import LibraryRegistration from '../../views/home/components/libraryRegistration';
-import BookAlreadyAddedModal from '../search/SearchModal'; // ← 이미 등록 모달 복귀
+import BookAlreadyAddedModal from '../search/SearchModal'; 
 
 import { getBookDetail } from '../../views/search/apis/book';
 
@@ -217,10 +216,10 @@ export default function SearchResultList({
                 author: b.author ?? '',
                 publisher: b.publisher ?? '',
                 publication_date: b.publicationDate ?? '',
-                bookId: b.bookId, // 🔑 BookRow에 필수 전달
+                bookId: b.bookId, 
               }}
               onClickInfo={() => handleClickInfo(b.isbn13)}
-              onClickAdd={() => handleClickAdd(b)} // 사전 체크 후 분기
+              onClickAdd={() => handleClickAdd(b)} 
             />
           ))}
         </div>
@@ -317,7 +316,6 @@ export default function SearchResultList({
       {registerModal.open && registerModal.book && (
         <LibraryRegistration
           onRegister={() => {
-            // 성공 후 액션(토스트/리프레시) 필요하면 추가
             closeRegisterModal();
           }}
           closeModal={closeRegisterModal}
