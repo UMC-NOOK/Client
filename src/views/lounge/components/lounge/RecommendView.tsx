@@ -34,7 +34,7 @@ const RecommendView = ({ mallType, sections }: { mallType: MallType; sections: L
             <span className="text-lg">을 추천해요.</span>
           </div>
 
-          <div className="mt-[36px]">
+          <div className="mt-[36px] mb-[144px]">
             {favoriteSection && <BookListSection mallType={mallType} section={favoriteSection} />}
           </div>
         </div>

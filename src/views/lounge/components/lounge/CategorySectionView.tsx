@@ -2,20 +2,16 @@ import React, { useEffect, useMemo, useState } from 'react';
 import RecommendView from './RecommendView';
 import BookListSection from './BookListSection';
 import { categoryToMallType } from '../../features/constants';
-import useGetLoungeBook from '../../hooks/useQuery/useGetLoungeBook';
 import { LoungeSection, MallType } from '../../apis/lounge/types/lounge-types';
 import { renderCategoryName } from '../../utils/formatCategory';
-
+import useGetLoungeBook from '../../hooks/useQuery/lounge/useGetLoungeBook';
 const CategorySectionView = ({ selectedCategory }: { selectedCategory: string }) => {
   const mallType: MallType = categoryToMallType(selectedCategory);
 
-  // mallType별 섹션 세트 로드
   const { data } = useGetLoungeBook({ mallType });
 
-  // 추천 탭에서 사용할 전체 섹션 배열
   const sections = data?.sections ?? [];
 
-  // 일반 탭(국내/외국/eBook)용: new/best 분리되어 온다고 가정하되, 방어적으로 처리
   const newSectionsRaw = (data)?.newSections ?? null;
   const newSection: LoungeSection | null = useMemo(() => {
     if (!newSectionsRaw) return null;
