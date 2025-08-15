@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import BookRow from '../common/BookRow';
 import NookiIcon from '../../assets/button/search/none_book.png';
 import { useSearchBooks } from '../../views/search/hooks/useQuery/useSearchBooks';
-import LibraryRegistration from '../../views/home/components/libraryRegistration';
+import SearchLibraryRegistration from '../../views/home/components/SearchLibraryRegistration';
 import BookAlreadyAddedModal from '../search/SearchModal'; 
 
 import { getBookDetail } from '../../views/search/apis/book';
@@ -314,7 +314,7 @@ export default function SearchResultList({
 
       {/* 서재 등록 모달 */}
       {registerModal.open && registerModal.book && (
-        <LibraryRegistration
+        <SearchLibraryRegistration
           onRegister={() => {
             closeRegisterModal();
           }}
