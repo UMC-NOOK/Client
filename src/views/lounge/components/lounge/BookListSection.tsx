@@ -1,91 +1,127 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import BookSkeleton from './BookSkelton';
-import { useBookStore } from '../../../../store/book-card/useBookStore';
-import tempBookData from '../../../../mock/library/bookData';
 import BookCard from './BookCard';
+import {
+  LoungeBook,
+  LoungeSection,
+  MallType,
+  LoungePagination
+} from '../../apis/lounge/types/lounge-types';
+import LoungeBookListGet from '../../apis/lounge/lounge-book/LoungeBookListGet';
 
-const BookListSection = () => {
-  const books = useBookStore((state) => state.books);
-  const isLoading = useBookStore((state) => state.isLoading);
-  const setBooks = useBookStore((state) => state.setBooks);
-  const setIsLoading = useBookStore((state) => state.setIsLoading);
+interface BookListSectionProps {
+  mallType: MallType;
+  section: LoungeSection;
+}
 
-  const [visibleCount, setVisibleCount] = useState(6);
-  const [currentPage, setCurrentPage] = useState(1);
+const BookListSection = ({ mallType, section }: BookListSectionProps) => {
+  const sectionId = section.sectionId ?? '';
+  const sectionCategoryId = section.categoryId ?? null;
 
-  const totalPages = Math.ceil(books.length / visibleCount);
+  const [books, setBooks] = useState<LoungeBook[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [visibleCount, setVisibleCount] = useState<number>(section.pagination.pageSize || 6);
+  const [pagination, setPagination] = useState<LoungePagination>({
+    currentPage: 0,
+    pageSize: section.pagination.pageSize || 6,
+    totalItems: section.pagination.totalItems || 0,
+    totalPages: section.pagination.totalPages || 1,
+  });
+
+  const totalPages = pagination.totalPages || 1;
+
+  const categoryIdParam = useMemo(() => {
+    return sectionCategoryId == null ? undefined : String(sectionCategoryId);
+  }, [sectionCategoryId]);
+
+  const fetchBooks = async (page: number) => {
+    setIsLoading(true);
+    try {
+      const res = await LoungeBookListGet({
+        mallType,
+        sectionId,
+        categoryId: categoryIdParam,
+        page,
+      });
+
+      if (res?.isSuccess) {
+        const updated = res.result.sections.find((sec: LoungeSection) => {
+          const a = sec.categoryId ?? null;
+          const b = sectionCategoryId ?? null;
+          return sec.sectionId === sectionId && String(a) === String(b);
+        });
+        if (updated) {
+          setBooks(updated.books || []);
+          setPagination(updated.pagination || pagination);
+        }
+      }
+    } catch (e) {
+      console.error('도서 목록 조회 실패', e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setBooks(tempBookData);
-      setIsLoading(false);
-    }, 500);
-  }, []);
+    setCurrentPage(0);
+    setBooks([]);
+    fetchBooks(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mallType, sectionId, categoryIdParam]);
+
+  useEffect(() => {
+    fetchBooks(currentPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
 
   useEffect(() => {
     const updateVisibleCount = () => {
-      const width = window.innerWidth;
-      //sm 이하
-      if (width < 640) {
-        setVisibleCount(3);
-      }
-      //sm~md
-      else if (width < 768) {
-        setVisibleCount(4);
-      }
-      //m ~ lg
-      else if (width < 1024) {
-        setVisibleCount(5);
-      } else {
-        setVisibleCount(6);
-      }
+      const w = window.innerWidth;
+      if (w < 640) setVisibleCount(3);
+      else if (w < 768) setVisibleCount(4);
+      else if (w < 1024) setVisibleCount(5);
+      else setVisibleCount(6);
     };
-
-    updateVisibleCount(); // 초기 설정
-    window.addEventListener('resize', updateVisibleCount); // 창 사이즈가 변경될 때마다 해당 함수를 실행하겠다는 의미
-
-    return () => {
-      window.removeEventListener('resize', updateVisibleCount); // 컴포넌트 사라질 때 리스너도 제거
-    };
+    updateVisibleCount();
+    window.addEventListener('resize', updateVisibleCount);
+    return () => window.removeEventListener('resize', updateVisibleCount);
   }, []);
 
   const handlePrev = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
+    if (currentPage > 0) setCurrentPage((p) => p - 1);
   };
-
   const handleNext = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-    }
+    if (currentPage < totalPages - 1) setCurrentPage((p) => p + 1);
   };
-
-  const startIndex = (currentPage - 1) * visibleCount;
-  const currentBooks = books.slice(startIndex, startIndex + visibleCount);
 
   return (
     <div className="relative w-full group">
       {/* 왼쪽 화살표 */}
       <button
         onClick={handlePrev}
-        className="flex hidden group-hover:flex absolute -left-10 top-[40%] -translate-y-1/2
-                            w-20 h-20 z-10 rounded-full items-center justify-center"
+        disabled={currentPage <= 0}
+        aria-label="prev-page"
         style={{ backgroundColor: 'rgba(94, 89, 83, 0.8)' }}
+        className="
+          absolute -left-10 top-[40%] -translate-y-1/2 z-10
+          w-[40px] h-[40px] rounded-full items-center justify-center
+          flex
+          opacity-0 pointer-events-none
+          group-hover:enabled:opacity-100 group-hover:enabled:pointer-events-auto
+          group-hover:disabled:opacity-40
+          focus-visible:opacity-100 focus-visible:pointer-events-auto
+          transition-opacity duration-150
+        "
       >
-        <svg
-          className="flex w-10 h-10"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="none"
-        >
+        <svg className="w-[20px] h-[20px]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
           <path
             d="M8.75 3.75L2.5 10M2.5 10L8.75 16.25M2.5 10H17.5"
             stroke="#B7E3E6"
-            stroke-width="1.36364"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="1.36"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </button>
@@ -93,35 +129,42 @@ const BookListSection = () => {
       {/* 오른쪽 화살표 */}
       <button
         onClick={handleNext}
-        className="flex hidden group-hover:flex absolute -right-10 top-[40%] -translate-y-1/2
-                            w-20 h-20 z-10 rounded-full items-center justify-center"
+        disabled={currentPage >= totalPages - 1}
+        aria-label="next-page"
         style={{ backgroundColor: 'rgba(94, 89, 83, 0.8)' }}
+        className="
+          absolute -right-10 top-[40%] -translate-y-1/2 z-10
+          w-[40px] h-[40px] rounded-full items-center justify-center
+          flex
+          opacity-0 pointer-events-none
+          group-hover:enabled:opacity-100 group-hover:enabled:pointer-events-auto
+          group-hover:disabled:opacity-40
+          focus-visible:opacity-100 focus-visible:pointer-events-auto
+          transition-opacity duration-150
+        "
       >
-        <svg
-          className="flex w-10 h-10"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="none"
-        >
+        <svg className="w-[20px] h-[20px]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
           <path
             d="M11.25 3.75L17.5 10M17.5 10L11.25 16.25M17.5 10H2.5"
             stroke="#B7E3E6"
-            stroke-width="1.36364"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="1.36"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </button>
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-11">
-        {isLoading
-          ? Array.from({ length: visibleCount }).map((_, index) => (
-              <BookSkeleton />
-            ))
-          : currentBooks.map((book, index) => <BookCard index={index} />)}
+      {/* 리스트 */}
+      <div className="w-full overflow-hidden">
+        <div className="grid grid-flow-col auto-cols-[141px] gap-[23px]">
+          {isLoading
+            ? Array.from({ length: visibleCount }).map((_, i) => <BookSkeleton key={i} />)
+            : books.slice(0, visibleCount).map((book) => <BookCard key={book.isbn13} book={book} />)}
+        </div>
       </div>
     </div>
   );
 };
 
 export default BookListSection;
+ 

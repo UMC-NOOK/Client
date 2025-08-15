@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Campfire from '../../../../assets/readingRoom/bg/Campfire.png';
 import Subway from '../../../../assets/readingRoom/bg/Subway.png';
 import ReadingRoom from '../../../../assets/readingRoom/bg/ReadingRoom.png';
-import InsertInfo from '../InsertInfo';
-import ActionButtons from '../ActionButtons';
+import ActionButtons from '../reading-room/ActionButtons';
 import { ReadingRoomActionsProvider } from '../../contexts/ReadingRoomActionsContext';
+import InsertInfo from '../reading-room/InsertInfo';
 
 
 type ThemeType = 'Campfire' | 'Subway' | 'ReadingRoom';

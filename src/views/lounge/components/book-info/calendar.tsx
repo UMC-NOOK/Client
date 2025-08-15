@@ -10,6 +10,7 @@ import {
   addDays,
 } from 'date-fns';
 import { useState } from 'react';
+
 import chevron_left from '/src/assets/button/book-info/chevron-left2.svg';
 import chevron_right from '/src/assets/button/book-info/chevron-right.svg';
 
@@ -18,6 +19,8 @@ interface CalendarProps {
   closeModal: () => void;
   currentSelectedDate: String;
   currentDateAsDate: Date;
+  disabledDateSet: number[];
+  onMonthChange: (yyyyMM: string) => void;
 }
 
 const Calendar = ({
@@ -25,6 +28,8 @@ const Calendar = ({
   closeModal,
   currentSelectedDate,
   currentDateAsDate,
+  disabledDateSet = [],
+  onMonthChange,
 }: CalendarProps) => {
   const [currentDate, setCurrentDate] = useState(currentDateAsDate);
   const monthStart = startOfMonth(currentDate);
@@ -58,18 +63,20 @@ const Calendar = ({
     for (let i = 0; i < 7; i++) {
       const formattedDate = format(startDay, 'd');
       const dateForClick = startDay;
+      const isDisabled = disabledDateSet.includes(startDay.getDate());
       days.push(
         <div
           key={startDay.toISOString()}
-          className={`w-[14.28%] flex flex-col justify-center items-center rounded-sm cursor-pointer
-          ${formatDate(dateForClick) == currentSelectedDate ? 'bg-nook-br-100' : ''}`}
+          className={`w-[14.28%] flex flex-col justify-center items-center rounded-sm
+          ${formatDate(dateForClick) == currentSelectedDate ? 'bg-nook-br-100' : ''} ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
           onClick={() => {
+            if (isDisabled) return; // 클릭 방지
             onRegister(dateForClick);
             closeModal();
           }}
         >
           <div
-            className={`relative text-center text-xs not-italic font-normal leading-[22px] p-2.5 rounded-[50%] ${format(currentDate, 'M') !== format(startDay, 'M') ? 'text-[rgba(255,255,255,0.20)]' : 'text-white'} `}
+            className={`relative text-center text-xs not-italic font-normal leading-[22px] p-2.5 rounded-[50%] ${format(currentDate, 'M') !== format(startDay, 'M') ? 'text-[rgba(255,255,255,0.20)]' : disabledDateSet.includes(startDay.getDate()) ? 'text-[#79BFC9]' : 'text-white'}`}
           >
             {formattedDate}
           </div>
@@ -92,7 +99,10 @@ const Calendar = ({
           src={chevron_left}
           alt="prev"
           className="cursor-pointer w-[15px] h-[15px]"
-          onClick={() => setCurrentDate(subMonths(currentDate, 1))}
+          onClick={() => {
+            setCurrentDate(subMonths(currentDate, 1));
+            onMonthChange?.(format(subMonths(currentDate, 1), 'yyyy-MM'));
+          }}
         />
         <span className="text-white text-center text-sm not-italic font-normal leading-[normal]">
           {format(currentDate, 'yyyy')}.
@@ -106,7 +116,10 @@ const Calendar = ({
           src={chevron_right}
           alt="next"
           className="cursor-pointer w-[15px] h-[15px]"
-          onClick={() => setCurrentDate(addMonths(currentDate, 1))}
+          onClick={() => {
+            setCurrentDate(addMonths(currentDate, 1));
+            onMonthChange?.(format(addMonths(currentDate, 1), 'yyyy-MM'));
+          }}
         />
       </div>
       <div className="flex">{weeks}</div>

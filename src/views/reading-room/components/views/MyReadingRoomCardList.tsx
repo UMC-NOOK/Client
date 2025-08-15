@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import ReadingRoomCard from '../ReadingRoomCard';
-import SectionTitle from '../SectionTitle';
-import AddReadingRoom from '../AddReadingRoom';
+import SectionTitle from '../reading-room/SectionTitle';
+import AddReadingRoom from '../reading-room/AddReadingRoom';
 import { useMyReadingRoomStore } from '../../../../store/reading-room/useMyReadingRoomStore';
 import myReadingRoomData from '../../../../mock/readingRoom/myReadingRoomData';
-import ReadingRoomSkeleton from '../ReadingRoomSkelton';
+import ReadingRoomSkeleton from '../reading-room/ReadingRoomSkelton';
+import ReadingRoomCard from '../reading-room/ReadingRoomCard';
 
 const MyReadingRoomCardList = () => {
     const myRooms = useMyReadingRoomStore((state) => state.rooms);

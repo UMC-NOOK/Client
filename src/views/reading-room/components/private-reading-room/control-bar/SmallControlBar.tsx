@@ -1,5 +1,5 @@
 import React from 'react';
-import union from '../../../../../assets/readingRoom/controll-icon/smallUnion.svg';
+import union from '../../../../../assets/readingRoom/controll-icon/middleUnion.svg';
 import editBtn from '../../../../../assets/readingRoom/small-control-icon/edit.svg';
 import deleteBtn from '../../../../../assets/readingRoom/small-control-icon/delete.svg';
 import AsoundBtn from '../../../../../assets/readingRoom/small-control-icon/Asound.svg';
@@ -13,7 +13,7 @@ interface SmallControlBarProps {
 }
 
 function SmallControlBar({ onEdit, onSound, onDelete }: SmallControlBarProps) {
-  const SoundState = useSoundStore((state) => state.Sound);
+  const SoundState = useSoundStore((state) => state.isEntSoundEnabled);
   return (
     <div className="relative">
       <img src={union} alt="" className="object-contain relative" />
@@ -25,21 +25,21 @@ function SmallControlBar({ onEdit, onSound, onDelete }: SmallControlBarProps) {
           className="object-contain cursor-pointer"
           onClick={onEdit}
         />
-        {SoundState ? (
-          <img
-            src={AsoundBtn}
-            alt="소리설정"
-            className="object-contain cursor-pointer"
-            onClick={onSound}
-          />
-        ) : (
+        {/* {SoundState ? (
           <img
             src={AsoundOffBtn}
             alt="소리설정"
             className="object-contain cursor-pointer"
             onClick={onSound}
           />
-        )}
+        ) : (
+          <img
+            src={AsoundBtn}
+            alt="소리설정"
+            className="object-contain cursor-pointer"
+            onClick={onSound}
+          />
+        )} */}
 
         <img
           src={deleteBtn}

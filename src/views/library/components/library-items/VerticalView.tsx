@@ -7,6 +7,18 @@ import useGetBookState from '../../hooks/useQuery/library-query/useGetBookState'
 import { useTabStore } from '../../../../store/library/useTabStore';
 import useDeleteBook from '../../hooks/useMutation/library-mutation/useDeleteBook';
 import { useDropDownStore } from '../../../../store/library/useDropDownStore';
+import type BookItemProps from '../library-items/list-items/book-list/BookItem';
+
+interface ApiBookData {
+  coverImageUrl: string;
+  title: string;
+  author: string;
+  publisher: string;
+  publication_date?: string;
+  myRating: number;
+  bookId: number;
+  isbn13: string;
+}
 
 export const tabMapping: Record<string, 'READING' | 'FINISHED' | 'BOOKMARK'> = {
   독서중: 'READING',
@@ -16,17 +28,17 @@ export const tabMapping: Record<string, 'READING' | 'FINISHED' | 'BOOKMARK'> = {
 
 export const menuMapping: Record<
   string,
-  'recent' | 'latest' | 'title' | 'rating'
+  'RECENT' | 'LATEST' | 'TITLE' | 'RATING'
 > = {
-  제목순: 'title',
-  '최근 등록순': 'latest',
-  '최근 기록순': 'recent',
-  '내가 준 별점순': 'rating',
+  제목순: 'TITLE',
+  '최근 등록순': 'LATEST',
+  '최근 기록순': 'RECENT',
+  '내가 준 별점순': 'RATING',
 };
 
 const VerticalView = () => {
-  const [bookData, setBookData] = useState(tempBookData);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
   const currentTab = useTabStore((state) => state.selectedTab);
   const currentMenu = useDropDownStore((state) => state.selectMenu);
 
@@ -38,27 +50,36 @@ const VerticalView = () => {
 
   const convertMenuToEnglish = (
     koreanTab: string,
-  ): 'recent' | 'latest' | 'title' | 'rating' => {
-    return menuMapping[koreanTab] || 'recent';
+  ): 'RECENT' | 'LATEST' | 'TITLE' | 'RATING' => {
+    return menuMapping[koreanTab] || 'RECENT';
   };
 
-  const deleteBook = useDeleteBook();
+  const deleteBookMutation = useDeleteBook();
 
   const handleDelete = () => {
-    // deleteBook.mutate(bookId);
-    setIsModalOpen(false);
+    if (selectedBookId) {
+      deleteBookMutation.mutate({ bookId: selectedBookId });
+      setIsModalOpen(false);
+      setSelectedBookId(null);
+    }
   };
 
-  const modalHandler = () => {
+  const modalHandler = (bookId?: number) => {
+    if (bookId) {
+      setSelectedBookId(bookId);
+    }
     setIsModalOpen((prev) => !prev);
   };
 
   const { data, isLoading, isError, error, isSuccess, refetch } =
     useGetBookState({
       status: convertTabToEnglish(currentTab),
-      size: 10,
+      size: 8,
       sort: convertMenuToEnglish(currentMenu),
     });
+
+  const booksData: ApiBookData[] = data?.content || [];
+  // console.log('asdf', booksData);
 
   return (
     <div className="w-full">
@@ -71,11 +92,11 @@ const VerticalView = () => {
       )}
       <FilterBar />
       <div className="flex flex-col">
-        {bookData.map((data, idx) => (
+        {booksData.map((book: ApiBookData) => (
           <BookItem
-            key={idx}
-            {...data}
-            openModal={modalHandler}
+            key={book.bookId}
+            {...book}
+            openModal={() => modalHandler(book.bookId)}
             useOnLibrary={true}
             useOnSearch={false}
           />

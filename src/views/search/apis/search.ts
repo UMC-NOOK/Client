@@ -10,13 +10,13 @@ export type RecentQueriesResponse = {
 };
 
 export async function getRecentQueries() {
-  const { data } = await instance.get('/api/search/recentQueries');
+  const { data } = await instance.get('/api/searchQueries');
   // 백엔드 공통 포맷 { isSuccess, code, message, result }
   return (data.result ?? data) as RecentQueriesResponse;
 }
 
 export async function deleteRecentQuery(recentQueryId: number) {
-  const { data } = await instance.delete(`/api/search/recentQueries/${recentQueryId}`);
+  const { data } = await instance.delete(`/api/searchQueries/${recentQueryId}`);
   return data.result ?? true;
 }
 

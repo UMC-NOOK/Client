@@ -1,33 +1,42 @@
 import React from 'react';
 import BookListSection from './BookListSection';
+import { LoungeSection, MallType } from '../../apis/lounge/types/lounge-types';
+import { renderCategoryName } from '../../utils/formatCategory';
 
-const RecommendView = () => {
+const RecommendView = ({ mallType, sections }: { mallType: MallType; sections: LoungeSection[] }) => {
+  const bestSection = sections.find((section) => section.sectionId === 'best') || null;
+  const favoriteSection = sections.find((section) => section.sectionId === 'favorite_best') || null;
+
   return (
-    <div className="flex flex-col items-start justify-center w-full">
-      <div
-        className="flex flex-col items-start justify-center w-full mt-10 mb-10 text-white"
-        style={{ borderTop: '1px solid rgba(85, 83, 81, 0.7)' }}
-      >
-        <div className="text-base mt-10">지금 서재에 등록하세요!</div>
-        <div className="text-lg font-semibold mt-1">
-          놓치기 아쉬운 주간 베스트 셀러
-        </div>
-        <div className="flex items-center justify-center mt-10">
-          <BookListSection />
-        </div>
-      </div>
+    <div className="w-full">
+      <div className="px-[240px] text-white">
+        <div>
+          <div className="mt-[26px] w-[960px] border-t border-[#555351]/70" />
 
-      <div
-        className="flex flex-col items-start justify-center w-full mt-15 text-white"
-        style={{ borderTop: '1px solid rgba(85, 83, 81, 0.7)' }}
-      >
-        <div className="mt-20">
-          <span className="text-base">경민 님이 좋아하는 </span>
-          <span className="text-lg font-semibold">소설 | 시 | 희곡</span>
-          <span>을 추천해요.</span>
+          <h3 className="mt-[26px] text-lg font-normal">지금 서재에 등록하세요!</h3>
+          <h2 className="text-[22px] font-semibold gap-[5px]">놓치기 아쉬운 주간 베스트셀러</h2>
+
+          <div className="mt-[36px]">
+            {bestSection && <BookListSection mallType={mallType} section={bestSection} />}
+          </div>
         </div>
-        <div className="flex items-center justify-center mt-10">
-          <BookListSection />
+
+        <div>
+          <div className="mt-[63px] w-[960px] border-t border-[#555351]/70" />
+
+          <div className="mt-[26px]">
+            <span className="text-lg">경민 님이 좋아하는 </span>
+            <span className="text-[22px] font-semibold">
+              {renderCategoryName(favoriteSection?.categoryName, {
+                pipeClass: "text-[22px] font-semibold",
+              })}
+            </span>
+            <span className="text-lg">을 추천해요.</span>
+          </div>
+
+          <div className="mt-[36px]">
+            {favoriteSection && <BookListSection mallType={mallType} section={favoriteSection} />}
+          </div>
         </div>
       </div>
     </div>

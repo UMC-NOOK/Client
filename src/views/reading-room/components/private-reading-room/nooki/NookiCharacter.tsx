@@ -21,6 +21,7 @@ interface NookiCharacterProps {
     content?: string;
     isVisible?: boolean;
   }>;
+  userId: number;
 }
 
 const NookiCharacter = ({
@@ -34,12 +35,20 @@ const NookiCharacter = ({
   textTransform = '-translate-y-[145px] translate-x-[40px]',
   textContent = '정혁 | 고독한 누키',
   speechBubbleOffset = '-translate-y-12 translate-x-2',
-  speechContent = '독서중',
+  speechContent,
   enableSpeechBubble = true,
   SpeechBubbleComponent = SpeechBubble,
+  userId,
 }: NookiCharacterProps) => {
   const flipStyle = flipped ? '[transform:scaleX(-1)]' : '';
   const [isHovered, setIsHovered] = useState<boolean>(false);
+
+  const fullSpeechContent = (speechContent: string | undefined) => {
+    if (speechContent === '책 고르는 중..') {
+      return speechContent;
+    }
+    return speechContent + ' 독서중';
+  };
 
   return (
     <>
@@ -61,7 +70,7 @@ const NookiCharacter = ({
             }
           >
             <SpeechBubbleComponent
-              content={speechContent}
+              content={fullSpeechContent(speechContent)}
               isVisible={isHovered}
             />
           </div>

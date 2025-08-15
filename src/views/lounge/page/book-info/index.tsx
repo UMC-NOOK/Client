@@ -1,41 +1,122 @@
-import React, { useState } from 'react';
+// library
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import Pagination from 'react-js-pagination';
+
+// imgs
 import chevron_left from '/src/assets/button/book-info/chevron-left.svg';
-import book_cover from '/src/assets/button/book-info/bookImgEx.png';
 import empty_star from '/src/assets/button/book-info/emptyStar.svg';
 import filled_star from '/src/assets/button/book-info/fullStar.svg';
 import error_outline_rounded from '/src/assets/button/book-info/error-outline-rounded.svg';
-import Comment from '../../components/book-info/comment';
-import BestBook from '../../components/book-info/bestBook';
 import download_icon from '/src/assets/button/book-info/download.svg';
 import move_icon from '/src/assets/button/book-info/move.svg';
-import Pagination from 'react-js-pagination';
+
+// components
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 import LibraryRegistration from '../../components/book-info/libraryRegistration';
+import Comment from '../../components/book-info/comment';
+import BestBook from '../../components/book-info/bestBook';
+
+// hooks
+import useGetBookInfo from '../../hooks/useQuery/book-info-query/useGetBookInfo';
+import useGetReview from '../../hooks/useQuery/book-info-query/useGetReview';
+import usePostReview from '../../hooks/useMutation/book-info-mutation/usePostReview';
+import usePutReview from '../../hooks/useMutation/book-info-mutation/usePutReview';
+import useDeleteReview from '../../hooks/useMutation/book-info-mutation/useDeleteReview';
+
+// types
+import { Review } from '../../types/book-info/review';
 
 const BookInfoPage = () => {
-  // 리뷰 작성 관련 상태
+  const { isbn } = useParams<{ isbn: string }>();
+  const qc = useQueryClient();
+  const navigate = useNavigate();
+
+  // 책 정보 조회
+  const { data: bookInfoData } = useGetBookInfo(isbn!);
+  const bookId = bookInfoData?.result.book.bookId;
+
+  // 리뷰 Pagination
+  const [currentPost, setCurrentPost] = useState(1);
+  const postsPerPage = 5;
+
+  // 리뷰 조회
+  const { data: reviewData } = useGetReview(bookId!, currentPost - 1);
+
+  // 파생값들(변수)
+  const reviews = reviewData?.result.reviews ?? [];
+  const totalItems = reviewData?.result.pagination.totalItems ?? 0;
+  const [userReview, setUserReview] = useState<Review | null>(null);
+  const [isReviewExist, setIsUserReviewExist] = useState(reviews.length > 0);
+  const isUserReviewExist = !!userReview;
+  const others = reviews.filter((r) => !r.ownedByUser);
+
+  useEffect(() => {
+    if (!reviewData) return;
+    const reviews = reviewData.result.reviews ?? [];
+    const mine = reviews.find((r) => r.ownedByUser) ?? null;
+    setUserReview(mine); // ← 서버에 있으면 반영
+    setIsUserReviewExist(reviews.length > 0);
+  }, [reviewData]);
+
+  // 리뷰 작성
+  const { mutate: createReview, isPending: createReviewPending } =
+    usePostReview(bookId!);
+
+  // 리뷰 삭제
+  const { mutate: deleteReview } = useDeleteReview(userReview?.reviewId!);
+
+  // 리뷰 수정
+  const { mutate: editReview } = usePutReview(userReview?.reviewId!);
+
+  // 폼/뷰 상태
   const [reviewText, setReviewText] = useState('');
   const [reviewTextLength, setReviewTextLength] = useState(0);
   const [rating, setRating] = useState(0);
-  const [isReviewExist, setIsReviewExist] = useState(true);
-  const [isUserReviewExist, setIsUserReviewExist] = useState(false);
   const [isUserEditReview, setIsUserEditReview] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const handleDelete = () => {
-    //삭제로직 추가
-    setIsUserEditReview(false);
-    setIsUserReviewExist(false);
-    setReviewText('');
-    setReviewTextLength(0);
-    setRating(0);
-    setIsDeleteModalOpen(false);
+  // 핸들러
+  const handlePageChange = (pageNumber: number) => setCurrentPost(pageNumber);
+  const handleReviewCreateClick = () => {
+    if (reviewText.trim().length === 0 && rating === 0) {
+      alert('리뷰 혹은 별점을 남겨주세요.');
+      return; // <- 페이지 리로드 금지!
+    }
+    createReview(
+      { rating, content: reviewText },
+      {
+        onSuccess: (res) => {
+          // setReviewText('');
+          setReviewTextLength(0);
+          setRating(0);
+          setIsUserEditReview(false);
+          setIsUserReviewExist(true);
+          // 새로 작성한 내 리뷰를 즉시 반영
+          setUserReview(res?.result ?? null);
+        },
+      },
+    );
   };
-
-  const modalHandler = () => {
+  const handleDelete = () => {
+    deleteReview(undefined, {
+      onSuccess: () => {
+        setIsUserEditReview(false);
+        setReviewText('');
+        setReviewTextLength(0);
+        setRating(0);
+        setIsDeleteModalOpen(false);
+        setUserReview(null);
+        qc.invalidateQueries({
+          queryKey: ['reviewData', bookId, currentPost],
+        });
+      },
+    });
+  };
+  const handleDeleteModal = () => {
     setIsDeleteModalOpen((prev) => !prev);
   };
-
   const handleStarClick = (index: number) => {
     if (rating === index + 1) {
       setRating(rating - 1); // 별점이 이미 선택된 경우, 선택 해제
@@ -44,75 +125,63 @@ const BookInfoPage = () => {
     }
     console.log(`Selected rating: ${index + 1}`);
   };
-
-  const commentList = [
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={1} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={2} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={3} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={4} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={5} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={6} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={7} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={8} />,
-    <Comment isOwn={false} setIsUserEditReview={setIsUserEditReview} key={9} />,
-    <Comment
-      isOwn={false}
-      setIsUserEditReview={setIsUserEditReview}
-      key={10}
-    />,
-    <Comment
-      isOwn={false}
-      setIsUserEditReview={setIsUserEditReview}
-      key={11}
-    />,
-    <Comment
-      isOwn={false}
-      setIsUserEditReview={setIsUserEditReview}
-      key={12}
-    />,
-  ];
-
-  // Pagination 관련
-  const [currentPost, setCurrentPost] = useState(1);
-  const [page, setPage] = useState<JSX.Element[]>(commentList);
-  const postsPerPage = 5;
-  const indexOfLastPost = currentPost * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPost(pageNumber);
+  const handleReviewEdit = () => {
+    if (reviewText.trim().length === 0 && rating === 0) {
+      alert('리뷰 혹은 별점을 남겨주세요.');
+      return;
+    }
+    editReview(
+      { rating, content: reviewText },
+      {
+        onSuccess: (res) => {
+          setIsUserEditReview(false);
+          setUserReview(res?.result ?? null);
+          qc.invalidateQueries({
+            queryKey: ['reviewData', bookId, currentPost],
+          });
+        },
+      },
+    );
+    setIsUserEditReview(false);
   };
 
   // 서재 등록 관련
   const [isLibraryModalOpen, setIsLibraryModalOpen] = useState(false);
-  const [isRegistrationLibrary, setIsRegistrationLibrary] = useState(false);
+  const isRegistrationLibrary =
+    bookInfoData?.result.book.registeredBookshelf || false;
 
   const handleLibrary = () => {
     //서재 등록 로직 추가
     setIsLibraryModalOpen(false);
-    setIsRegistrationLibrary(true);
   };
-
-  const libraryModalHandler = () => {
+  const handleLibraryModal = () => {
     setIsLibraryModalOpen((prev) => !prev);
+  };
+  const handleMoveToLibrary = () => {
+    navigate('/library');
   };
 
   return (
-    <div className="mt-11 w-full h-full">
+    <div className="mt-11 w-full h-full flex flex-col items-center justify-center">
       {isDeleteModalOpen && (
         <DeleteBtn
           usage="book-info"
           onDelete={handleDelete}
-          closeModal={modalHandler}
+          closeModal={handleDeleteModal}
         />
       )}
       {isLibraryModalOpen && (
         <LibraryRegistration
           onRegister={handleLibrary}
-          closeModal={libraryModalHandler}
+          closeModal={handleLibraryModal}
+          bookImg={bookInfoData?.result.book.coverImageUrl || ''}
+          bookTitle={bookInfoData?.result.book.title || ''}
+          bookAuthor={bookInfoData?.result.book.author || ''}
+          bookId={bookId || 0}
         />
       )}
       {/* 상위 컴포넌트 */}
-      <div className="flex flex-col items-center justify-start h-screen mr-150 ml-150 overflow-y-auto [&::-webkit-scrollbar]:hidden">
+      <div className="flex flex-col w-[840px] items-center justify-start h-screen mr-150 ml-150 overflow-y-auto [&::-webkit-scrollbar]:hidden">
         {/* 상단바 */}
         <div className="self-start flex items-center justify-center mb-25">
           <div className="w-10 h-10 mr-6">
@@ -121,65 +190,86 @@ const BookInfoPage = () => {
           <div className="text-white text-xl  ">라운지</div>
         </div>
         {/* 책소개 컴포넌트 */}
-        <div className="relative w-full">
-          <img
-            src={book_cover}
-            alt="배경 이미지"
-            className="absolute inset-0 w-full h-full object-cover z-0"
-          />
-
+        <div className="relative w-full ">
           {/* 그라디언트 오버레이 */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black to-black/50" />
+          <div className="absolute w-full h-full inset-0 blur-xs">
+            <img
+              src={bookInfoData?.result.book.coverImageUrl}
+              alt="배경 이미지"
+              className="w-[835px] h-full object-cover"
+            />
+
+            <div className="absolute w-[835px] h-full inset-0 bg-gradient-to-b from-black to-black/50" />
+          </div>
 
           <div className="px-11 py-8 w-full relative flex items-center justify-between box-border">
             {/* 책 이미지*/}
-            <div className="w-118 h-173">
-              <img src={book_cover} alt="Book Cover" className="rounded-lg" />
+            <div className="w-118 h-173 flex items-center justify-center">
+              <img
+                src={bookInfoData?.result.book.coverImageUrl}
+                alt="Book Cover"
+                className="rounded-lg"
+              />
             </div>
             {/* 책 정보 */}
             <div className="relative w-246 flex flex-col items-start justify-start gap-20">
               <div className="flex flex-col items-start justify-center gap-17">
                 <div className="text-white text-[22px] not-italic font-semibold leading-[normal] text-pretendard">
-                  칵테일, 러브, 좀비
+                  {bookInfoData?.result.book.title}
                 </div>
                 <div className="text-white text-sm not-italic font-normal leading-[22px]  ">
-                  1965년 미국에서 발표된 후, 오랜 시간 동안 독자들에게
-                  잊힌《스토너》는 영국, 프랑스, 독일, 네덜란드 등 유럽 출판계와
-                  평론가, 독자들의 열렬한 반응을 이끌어내며 베스트셀러가 되었다.
-                  미국과 유럽을 넘어 전 세계에 ‘늦고도 새로운 감동’을 전한
-                  베스트셀러. 《스토너》가 드디어 한국 독자들을 찾아왔다.
+                  {bookInfoData?.result.book.description
+                    ? bookInfoData?.result.book.description
+                    : '책에 대한 설명이 없습니다.'}
                 </div>
               </div>
               <hr className="w-full border-nook-hr" />
               <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-sm text-white  ">
                 {/* 왼쪽 열 */}
-                <div className="flex gap-15">
-                  <span className="font-semibold">저자</span>
-                  <span className="font-normal">조예은</span>
+                <div className="flex justify-start gap-9">
+                  <span className="font-semibold w-[37px]">저자</span>
+                  <span className="font-normal w-[167px]">
+                    {bookInfoData?.result.book.author}
+                  </span>
                 </div>
                 <div className="flex gap-15">
                   <span className="font-semibold">분야</span>
                   <span className="font-normal">
-                    국내도서 &gt; 소설/시/희곡
+                    {bookInfoData?.result.book.mallType === 'BOOK'
+                      ? '국내도서 '
+                      : bookInfoData?.result.book.mallType === 'FOREIGN'
+                        ? '해외도서 '
+                        : bookInfoData?.result.book.mallType === 'EBOOK'
+                          ? '전자책 '
+                          : '기타 '}
+                    &gt; {bookInfoData?.result.book.category}
                   </span>
                 </div>
 
                 <div className="flex gap-9">
                   <span className="font-semibold">출판사</span>
-                  <span className="font-normal">안전가옥</span>
+                  <span className="font-normal">
+                    {bookInfoData?.result.book.publisher}
+                  </span>
                 </div>
                 <div className="flex gap-15">
                   <span className="font-semibold">분량</span>
-                  <span className="font-normal">162p</span>
+                  <span className="font-normal">
+                    {bookInfoData?.result.book.pages}p
+                  </span>
                 </div>
 
                 <div className="flex gap-9">
                   <span className="font-semibold">출판일</span>
-                  <span className="font-normal">2020.04.10</span>
+                  <span className="font-normal">
+                    {bookInfoData?.result.book.publicationDate}
+                  </span>
                 </div>
                 <div className="flex gap-12">
                   <span className="font-semibold">ISBN</span>
-                  <span className="font-normal">9791190174756</span>
+                  <span className="font-normal">
+                    {bookInfoData?.result.book.isbn13}
+                  </span>
                 </div>
               </div>
             </div>
@@ -187,8 +277,10 @@ const BookInfoPage = () => {
         </div>
         {/* 서재 등록 버튼 */}
         <div
-          className="flex self-end items-center justify-center gap-5 mt-15 mb-24 rounded-sm mt-15 px-22 py-5 bg-nook-br-100 cursor-pointer"
-          onClick={libraryModalHandler}
+          className="flex self-end items-center justify-center w-[176px] h-[40px] gap-5 mt-15 mb-24 rounded-sm px-22 py-5 bg-nook-br-100 cursor-pointer"
+          onClick={
+            isRegistrationLibrary ? handleMoveToLibrary : handleLibraryModal
+          }
         >
           <div className="w-[13px]">
             <img
@@ -196,7 +288,7 @@ const BookInfoPage = () => {
               alt=""
             />
           </div>
-          <div className="text-center text-white text-sm not-italic leading-[25px]">
+          <div className="text-center text-white text-sm font-semibold not-italic">
             {isRegistrationLibrary ? '서재로 이동' : '서재에 등록'}
           </div>
         </div>
@@ -204,7 +296,7 @@ const BookInfoPage = () => {
         {/* 리뷰작성,리뷰 컴포넌트 */}
         <div className="w-full flex flex-col items-center justify-center gap-12  ">
           {/* 리뷰 작성 */}
-          {isUserReviewExist ? (
+          {isUserReviewExist && userReview ? (
             isUserEditReview ? (
               <div className="flex flex-col items-start justify-center gap-12 w-full">
                 {/* 별점 */}
@@ -269,7 +361,7 @@ const BookInfoPage = () => {
                         <button
                           className="w-[87px] h-[34px] rounded-sm bg-[#392121] text-[#E04F55] text-sm not-italic font-bold leading-[29.518px] tracking-[0.56px] flex items-center justify-center"
                           onClick={() => {
-                            modalHandler();
+                            handleDeleteModal();
                           }}
                         >
                           삭제
@@ -277,7 +369,7 @@ const BookInfoPage = () => {
                         <button
                           className="w-[87px] h-[34px] rounded-sm bg-nook-br-200 text-white text-sm not-italic font-bold leading-[29.518px] tracking-[0.56px] flex items-center justify-center"
                           onClick={() => {
-                            setIsUserEditReview(false);
+                            handleReviewEdit();
                           }}
                         >
                           저장
@@ -288,7 +380,10 @@ const BookInfoPage = () => {
                 </div>
               </div>
             ) : (
-              <Comment isOwn={true} setIsUserEditReview={setIsUserEditReview} />
+              <Comment
+                setIsUserEditReview={setIsUserEditReview}
+                reviewData={userReview}
+              />
             )
           ) : (
             <div className="flex flex-col items-start justify-center gap-12 w-full">
@@ -351,12 +446,17 @@ const BookInfoPage = () => {
                       ({reviewTextLength}/200)
                     </span>
                     <button
-                      className="w-[103px] h-[34px] rounded-sm bg-nook-br-200 text-white text-sm not-italic font-bold leading-[29.518px] tracking-[0.56px] flex items-center justify-center"
+                      className={`w-[103px] h-[34px] rounded-sm text-sm font-bold flex items-center justify-center
+    ${
+      createReviewPending || (reviewText.trim().length === 0 && rating === 0)
+        ? 'bg-nook-br-200/50 cursor-not-allowed'
+        : 'bg-nook-br-200 text-white cursor-pointer'
+    }`}
                       onClick={() => {
-                        setIsUserReviewExist(true);
+                        handleReviewCreateClick();
                       }}
                     >
-                      리뷰 등록
+                      {createReviewPending ? '등록 중…' : '리뷰 등록'}
                     </button>
                   </div>
                 </div>
@@ -368,20 +468,20 @@ const BookInfoPage = () => {
           {isReviewExist ? (
             <div className="flex flex-col items-start justify-center gap-12 w-full">
               <div className="flex flex-col items-start justify-center w-full">
-                {/* 댓글 리스트 */}
-                {page
-                  .slice(indexOfFirstPost, indexOfLastPost)
-                  .map((comment, index) => (
-                    <div key={index} className="w-full">
-                      {comment}
-                    </div>
-                  ))}
-                {/* Pagination */}
+                {others.map((r) => (
+                  <Comment
+                    key={r.reviewId}
+                    setIsUserEditReview={setIsUserEditReview}
+                    reviewData={r}
+                  />
+                ))}
+
+                {/* Pagination: 서버 totalItems 그대로 사용 */}
                 <div className="flex items-center justify-center w-full mt-auto">
                   <Pagination
                     activePage={currentPost}
                     itemsCountPerPage={postsPerPage}
-                    totalItemsCount={commentList.length}
+                    totalItemsCount={totalItems}
                     pageRangeDisplayed={5}
                     onChange={handlePageChange}
                     prevPageText=""
@@ -413,11 +513,11 @@ const BookInfoPage = () => {
             | 이 분야의 베스트
           </span>
           <div className="flex items-start justify-center gap-[35px] w-full">
-            <BestBook />
-            <BestBook />
-            <BestBook />
-            <BestBook />
-            <BestBook />
+            <BestBook bestBook={bookInfoData?.result.bestInThisCategory[0]} />
+            <BestBook bestBook={bookInfoData?.result.bestInThisCategory[1]} />
+            <BestBook bestBook={bookInfoData?.result.bestInThisCategory[2]} />
+            <BestBook bestBook={bookInfoData?.result.bestInThisCategory[3]} />
+            <BestBook bestBook={bookInfoData?.result.bestInThisCategory[4]} />
           </div>
         </div>
       </div>

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useReadingRoomStore } from '../../../../store/reading-room/useReadingRoomStore';
-import ReadingRoomCard from '../ReadingRoomCard';
 import ReadingRoomData from '../../../../mock/readingRoom/readingRoomData';
-import ReadingRoomSkeleton from '../ReadingRoomSkelton';
+import ReadingRoomSkeleton from '../reading-room/ReadingRoomSkelton';
 import { useNavigate } from 'react-router-dom';
+import ReadingRoomCard from '../reading-room/ReadingRoomCard';
 
 const ReadingRoomList = () => {
     const ITEMS_PER_PAGE = 12;
@@ -48,10 +48,10 @@ const ReadingRoomList = () => {
                     <div className='grid grid-cols-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-5 mt-12'>
                         {isLoading
                             ? Array.from({length: ITEMS_PER_PAGE}).map((_, idx) => (
-                                <ReadingRoomSkeleton/>
+                                <ReadingRoomSkeleton key={idx}/>
                             ))
                             : currentRooms.map((room, idx) => (
-                                <ReadingRoomCard room={room}/>
+                                <ReadingRoomCard room={room} key={idx}/>
                             ))
                         }
                     </div>

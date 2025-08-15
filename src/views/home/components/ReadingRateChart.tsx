@@ -64,7 +64,8 @@ const ReadingRateChart: React.FC = () => {
     <div className="w-[246px] h-[220px] flex-shrink-0 rounded-[12px] bg-[#423C35]/10 px-[26px] pt-[11px]">
       {/* 텍스트 */}
       <p className="text-white text-[12px] font-pretendard leading-[25px]">
-        이번 달 독서 기록률은 <span className="text-[16px]">{thisMonthRate}%</span> 입니다.
+        이번 달 독서 기록률은 <span className="text-[16px]">{Math.round(thisMonthRate)}%
+        </span> 입니다.
       </p>
 
       {/* 차트 */}

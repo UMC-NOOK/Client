@@ -9,7 +9,13 @@ const CurrentlyReadingBox = () => {
   const { data, isLoading } = useGetHomeReading(); // { bookId, title, thumbnailUrl } | undefined
 
   const hasBooks = !!data;
-  const randomBook = hasBooks ? { id: String(data.bookId), title: data.title } : null;
+  const randomBook = hasBooks ? { id: String(data!.bookId), title: data!.title } : null;
+  const targetPath = hasBooks && randomBook ? `/library/${randomBook.id}` : '/lounge';
+
+  const handleGo = () => {
+    if (isLoading) return;
+    navigate(targetPath);
+  };
 
   return (
     <div className="w-[246px] h-[60px] bg-[#423C35]/10 rounded-[12px] py-0 flex items-start justify-between">
@@ -30,23 +36,31 @@ const CurrentlyReadingBox = () => {
             지금 독서 중인 책
           </p>
           <button
-            disabled={!hasBooks || isLoading}
-            onClick={() => randomBook && navigate(`/library/${randomBook.id}`)}
-            className="text-[12px] leading-[14.4px] font-[400] text-white text-left disabled:opacity-50"
+            disabled={isLoading}             // 로딩 중에만 비활성화
+            onClick={handleGo}               // 있으면 독서기록, 없으면 라운지
+            className="text-[12px] leading-[14.4px] font-[400] text-white text-left disabled:opacity-50
+            overflow-hidden whitespace-nowrap text-ellipsis max-w-[150px]"
           >
-            {isLoading ? '로딩 중…' : hasBooks ? randomBook?.title : '독서 중인 책이 없어요'}
+            {isLoading
+              ? '로딩 중…'
+              : hasBooks
+              ? randomBook?.title
+              : '독서 중인 책이 없어요'}
           </button>
         </div>
       </div>
 
       {/* 오른쪽 아이콘 */}
       <button
-        onClick={() => navigate('/lounge/search-result')}
-        className="mt-[25px] mr-[20.33px] w-[6.667px] h-[12px] flex-shrink-0"
+        onClick={handleGo} // 동일 로직: 있으면 독서기록, 없으면 라운지
+        disabled={isLoading}
+        className="mt-[25px] mr-[20.33px] w-[6.667px] h-[12px] flex-shrink-0 disabled:opacity-50"
+        aria-label={hasBooks ? '독서 기록으로 이동' : '라운지로 이동'}
+        title={hasBooks ? '독서 기록으로 이동' : '라운지로 이동'}
       >
         <img
           src={rightArrowIcon}
-          alt="go"
+          alt=""
           className="w-[6.667px] h-[12px] object-contain"
         />
       </button>

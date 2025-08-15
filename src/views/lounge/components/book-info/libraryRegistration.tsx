@@ -1,17 +1,29 @@
 import { useState, useRef, useEffect } from 'react';
+
 import chevron_left from '/src/assets/button/book-info/chevron-left.svg';
 import calendar from '/src/assets/button/book-info/calendar.svg';
-import bookImgEx from '/src/assets/button/book-info/bookImgEx.png';
+
 import Calendar from './calendar';
+
+import usePostBookRegistration from '../../hooks/useMutation/book-info-mutation/usePostBookRegistration';
+import useGetCalendar from '../../hooks/useQuery/book-info-query/useGetCalendar';
 
 interface LibraryRegistrationProps {
   onRegister: () => void;
   closeModal: () => void;
+  bookImg?: string;
+  bookTitle?: string;
+  bookAuthor?: string;
+  bookId?: number;
 }
 
 const LibraryRegistration = ({
   onRegister,
   closeModal,
+  bookImg,
+  bookTitle,
+  bookAuthor,
+  bookId,
 }: LibraryRegistrationProps) => {
   const formatDate = (date: Date) => {
     const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
@@ -21,11 +33,31 @@ const LibraryRegistration = ({
     const dayOfWeek = dayNames[date.getDay()];
     return `${year}.${month}.${day} (${dayOfWeek})`;
   };
+  const serverFormatDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    const day = `${date.getDate()}`.padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  const serverFormatDateYM = (date: Date) => {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    return `${year}-${month}`;
+  };
+  const [yearMonth, setYearMonth] = useState(serverFormatDateYM(new Date()));
+
+  const { mutate: postBookRegistration } = usePostBookRegistration(bookId!);
+  const { data: getCalendar, disabledDateSet } = useGetCalendar(yearMonth);
+
+  const list: number[] = disabledDateSet ?? [];
 
   const today = new Date();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedDateAsDate, setSelectedDateAsDate] = useState(today);
   const [selectedDate, setSelectedDate] = useState(formatDate(today));
+  const [serverSelectedDate, setServerSelectedDate] = useState(
+    serverFormatDate(today),
+  );
   const calendarRef = useRef<HTMLDivElement>(null);
 
   const calendarModalHandler = () => {
@@ -34,7 +66,9 @@ const LibraryRegistration = ({
 
   const calendarRegisterHandler = (date: Date) => {
     setSelectedDate(formatDate(date));
+    setYearMonth(serverFormatDateYM(date));
     setSelectedDateAsDate(date);
+    setServerSelectedDate(serverFormatDate(date));
   };
 
   // 외부 클릭 시 달력 닫기
@@ -46,6 +80,7 @@ const LibraryRegistration = ({
         !calendarRef.current.contains(e.target as Node)
       ) {
         setIsCalendarOpen(false);
+        setYearMonth(serverFormatDateYM(selectedDateAsDate));
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -55,9 +90,6 @@ const LibraryRegistration = ({
   }, [isCalendarOpen]);
 
   const [readingStatus, setReadingStatus] = useState(1);
-  const handleClickSave = () => {
-    console.log('저장 버튼 클릭됨', readingStatus);
-  };
 
   return (
     <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center">
@@ -77,16 +109,16 @@ const LibraryRegistration = ({
 
         <div className="flex items-center justify-between w-full gap-17 mb-20">
           <div className="w-[135px] h-[198px] ml-4">
-            <img src={bookImgEx} alt="" />
+            <img src={bookImg} alt="" />
           </div>
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-8 w-[207px]">
             <div className="flex flex-col gap-4 items-start">
               <div className="text-[rgba(255,255,255,0.50)] text-xs">제목</div>
-              <div className="text-white text-sm">칵테일, 러브, 좀비</div>
+              <div className="text-white text-sm">{bookTitle}</div>
             </div>
             <div className="flex flex-col gap-4 items-start">
               <div className="text-[rgba(255,255,255,0.50)] text-xs">저자</div>
-              <div className="text-white text-sm">조예은</div>
+              <div className="text-white text-sm">{bookAuthor}</div>
             </div>
             <div
               className="flex flex-col gap-4 items-start relative"
@@ -105,9 +137,16 @@ const LibraryRegistration = ({
               {isCalendarOpen && (
                 <Calendar
                   onRegister={calendarRegisterHandler}
-                  closeModal={() => setIsCalendarOpen(false)}
+                  closeModal={() => {
+                    setIsCalendarOpen(false);
+                    setYearMonth(serverFormatDateYM(selectedDateAsDate));
+                  }}
                   currentSelectedDate={selectedDate}
                   currentDateAsDate={selectedDateAsDate}
+                  disabledDateSet={list}
+                  onMonthChange={(yyyyMM) => {
+                    setYearMonth(yyyyMM);
+                  }}
                 />
               )}
             </div>
@@ -132,8 +171,21 @@ const LibraryRegistration = ({
         <div
           className="w-full h-20 px-10 py-2 rounded bg-nook-br-100 text-white text-base font-semibold text-center cursor-pointer flex items-center justify-center"
           onClick={() => {
+            readingStatus === 1
+              ? postBookRegistration({
+                  date: serverSelectedDate,
+                  readingStatus: 'READING',
+                })
+              : readingStatus === 2
+                ? postBookRegistration({
+                    date: serverSelectedDate,
+                    readingStatus: 'COMPLETED',
+                  })
+                : postBookRegistration({
+                    date: serverSelectedDate,
+                    readingStatus: 'WISH',
+                  });
             onRegister();
-            handleClickSave();
           }}
         >
           저장

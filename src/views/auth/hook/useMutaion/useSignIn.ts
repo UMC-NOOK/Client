@@ -14,6 +14,7 @@ const useSignIn = () => {
       console.log(data);
       localStorage.setItem('accessToken', data.token.accessToken);
       sessionStorage.setItem('refreshToken', data.token.refreshToken);
+      sessionStorage.setItem('nickName', data.nickname);
       onLogin();
       navigate('/home');
     },
