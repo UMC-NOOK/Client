@@ -11,7 +11,7 @@ const Logo = ({ isLogin }: LogoProps) => {
     if (isLogin) {
       navigate('/home');
     } else {
-      navigate('/Login');
+      navigate('/login');
     }
   };
   return (
