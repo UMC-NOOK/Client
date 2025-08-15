@@ -179,11 +179,11 @@ const LibraryRegistration = ({
               : readingStatus === 2
                 ? postBookRegistration({
                     date: serverSelectedDate,
-                    readingStatus: 'COMPLETED',
+                    readingStatus: 'FINISHED',
                   })
                 : postBookRegistration({
                     date: serverSelectedDate,
-                    readingStatus: 'WISH',
+                    readingStatus: 'BOOKMARK',
                   });
             onRegister();
           }}
