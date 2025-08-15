@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import Main from '../views/home/page';
 import Lounge from '../views/lounge/page/lounge';
 import BookInfoPage from '../views/lounge/page/book-info';
@@ -17,6 +17,7 @@ import CreateReadingRoom from '../views/reading-room/components/views/CreateRead
 import DesignPage from '../views/home/page/DesignPage';
 import ProtectedRoute from './ProtectedRoute';
 import SettingsPage from '../views/home/components/ProfileSettingPage';
+import SignInPage from '../views/auth/sign-in/page';
 
 const router = createBrowserRouter([
   {
@@ -25,8 +26,8 @@ const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
     children: [
       {
-        index: true,
-        element: <Main />,
+        path: '/',
+        element: <Navigate to="/login" replace />,
       },
       {
         errorElement: <NotFoundPage />,
