@@ -17,15 +17,15 @@ function BookPanel({ onChoose }: BookPanelActionProps) {
   // console.log('bookpanel', data);
 
   // const books = (data as BookPanelProps[]) || [];
-  const books: BookPanelProps[] = [
-    { title: '살려줘', bookId: 12 },
-    { title: '죽여줘', bookId: 13 },
-    { title: '할래?', bookId: 14 },
-    { title: '말래?', bookId: 15 },
-    { title: '히이이이익', bookId: 16 },
-    { title: '키이이이익', bookId: 17 },
-    { title: '저리가', bookId: 18 },
-  ];
+  // const books: BookPanelProps[] = [
+  //   { title: '살려줘', bookId: 12 },
+  //   { title: '죽여줘', bookId: 13 },
+  //   { title: '할래?', bookId: 14 },
+  //   { title: '말래?', bookId: 15 },
+  //   { title: '히이이이익', bookId: 16 },
+  //   { title: '키이이이익', bookId: 17 },
+  //   { title: '저리가', bookId: 18 },
+  // ];
   return (
     <div className="relative">
       <img src={bookUnion} alt="말풍선 배경" className="object-contain" />
@@ -36,11 +36,11 @@ function BookPanel({ onChoose }: BookPanelActionProps) {
             무슨 책을 읽고 있나요?
           </span>
           <div
-            className="flex flex-col w-full gap-5 overflow-y-auto h-full 
+            className="flex flex-col w-full gap-5 overflow-y-auto h-full
                 scrollbar-thin scrollbar-thumb-transparent scrollbar-track-transparent
                 hover:scrollbar-thumb-white/20 scrollbar-thumb-rounded-full"
           >
-            {books?.map((books) => (
+            {data?.map((books: any) => (
               <BookItem
                 key={books.bookId}
                 bookId={books.bookId}
