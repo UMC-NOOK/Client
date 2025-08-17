@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import bookUnion from '../../../../../../assets/readingRoom/controll-icon/bookUnion.svg';
 import useGetBookList from '../../../../hooks/private-reading-room/useQuery/useGetBookList';
 import BookItem from './BookItem';
@@ -14,6 +15,8 @@ interface BookPanelProps {
 function BookPanel({ onChoose }: BookPanelActionProps) {
   const { data, isLoading, isError, error, isSuccess, refetch } =
     useGetBookList();
+
+  const shouldShowScrollbar = data && data.length > 5;
   // console.log('bookpanel', data);
 
   // const books = (data as BookPanelProps[]) || [];
@@ -36,15 +39,21 @@ function BookPanel({ onChoose }: BookPanelActionProps) {
             무슨 책을 읽고 있나요?
           </span>
           <div
-            className="flex flex-col w-full gap-5 overflow-y-auto h-full
-                scrollbar-thin scrollbar-thumb-transparent scrollbar-track-transparent
-                hover:scrollbar-thumb-white/20 scrollbar-thumb-rounded-full"
+            className={clsx(
+              'flex flex-col w-full gap-5 h-full',
+              shouldShowScrollbar && [
+                'overflow-y-auto',
+                'scrollbar-thin scrollbar-thumb-transparent scrollbar-track-transparent',
+                'hover:scrollbar-thumb-white/20 scrollbar-thumb-rounded-full',
+              ],
+            )}
           >
             {data?.map((books: any) => (
               <BookItem
                 key={books.bookId}
                 bookId={books.bookId}
                 title={books.title}
+                shouldShowScrollbar={shouldShowScrollbar}
                 onClick={onChoose}
               />
             ))}
