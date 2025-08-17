@@ -23,6 +23,7 @@ import useAudio from '../../hooks/private-reading-room/audio/useAudio';
 import audio1 from '/audio/readingroom_campfire.mp3';
 import audio2 from '/audio/readingroom_library.mp3';
 import audio3 from '/audio/readingroom_subway.mp3';
+import usePatchRoomInfo from '../../hooks/private-reading-room/useMutation/usePatchRoomInfo';
 
 type ThemeName = 'CAMPFIRE' | 'READINGROOM' | 'SUBWAY';
 
@@ -38,6 +39,7 @@ const PrivateReadingRoom = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const [music, setMusic] = useState<boolean>(true);
+  const [currentTheme, setCurrentTheme] = useState('');
 
   const {
     isExitModalOpen,
@@ -88,6 +90,10 @@ const PrivateReadingRoom = () => {
   const { data, isLoading, isError, error, isSuccess, refetch } = useGetTheme({
     roomId: Number(roomId),
   });
+  // setCurrentTheme(data?.themeName);
+  useEffect(() => {
+    setCurrentTheme(data?.themeName);
+  }, [data]);
 
   const audioMap: Record<ThemeName, string> = useMemo(
     () => ({
@@ -100,13 +106,13 @@ const PrivateReadingRoom = () => {
 
   // 현재 테마에 맞는 오디오 소스
   const currentAudioSrc = useMemo(() => {
-    const themeName = data?.themeName as ThemeName | undefined;
+    const themeName = currentTheme as ThemeName | undefined;
 
     if (themeName && themeName in audioMap) {
       return audioMap[themeName];
     }
     return audioMap['READINGROOM']; // 기본값
-  }, [data?.themeName, audioMap]);
+  }, [data?.themeName, audioMap, currentTheme]);
 
   useEffect(() => {
     const audioElement = audioRef.current;
@@ -122,7 +128,7 @@ const PrivateReadingRoom = () => {
         });
       }
     }
-  }, [currentAudioSrc]);
+  }, [currentAudioSrc, currentTheme]);
 
   const handleBgm = () => {
     const audioElement = audioRef.current;
@@ -260,12 +266,44 @@ const PrivateReadingRoom = () => {
 
   // console.log('zlzllz', currentReadingBooks);
 
+  const patchRoomInfo = usePatchRoomInfo();
+
+  const handleUpdateRoom = (data: any) => {
+    patchRoomInfo.mutate({
+      roomId: data?.roomId,
+      themeName: convertThemeName(data?.theme),
+      hashtags: data?.tags,
+      requestBody: {
+        name: data?.name,
+        description: data?.description,
+      },
+    });
+  };
+
+  const convertThemeName = (theme: string) => {
+    switch (theme) {
+      case 'Campfire':
+        return 'CAMPFIRE';
+      case 'Subway':
+        return 'SUBWAY';
+      case 'ReadingRoom':
+      default:
+        return 'LIBRARY';
+    }
+  };
+
   // 룸 정보 업데이트 감지
-  // useEffect(() => {
-  //   if (messages.roomInfoUpdate) {
-  //     console.log('룸 정보가 업데이트되었습니다:', messages.roomInfoUpdate);
-  //   }
-  // }, [messages.roomInfoUpdate]);
+  useEffect(() => {
+    if (messages.roomInfoUpdate) {
+      console.log(
+        '룸 정보가 업데이트되었습니다:',
+        messages.roomInfoUpdate.themeName,
+      );
+      setCurrentTheme(messages?.roomInfoUpdate.themeName);
+    } else if (data?.themeName) {
+      setCurrentTheme(data?.themeName);
+    }
+  }, [messages.roomInfoUpdate, data?.themeName]);
 
   // BGM 토글 감지
   useEffect(() => {
@@ -286,9 +324,9 @@ const PrivateReadingRoom = () => {
   }, [messages.bgmToggle, isSoundEnabled]);
 
   const themeComponent = useMemo(() => {
-    if (!data?.themeName) return <NotFoundPage />;
+    if (!currentTheme) return <NotFoundPage />;
 
-    switch (data.themeName) {
+    switch (currentTheme) {
       case 'CAMPFIRE':
         return <CampFire currentUsers={currentUsers} />;
       case 'SUBWAY':
@@ -297,7 +335,9 @@ const PrivateReadingRoom = () => {
       default:
         return <ReadingRoom currentUsers={currentUsers} />;
     }
-  }, [data?.themeName, currentUsers]);
+  }, [currentTheme, currentUsers]);
+
+  console.log('zldpdpdpd', currentTheme);
 
   return (
     <div className="max-w-[970px] h-[780px] m-auto relative">
@@ -351,7 +391,21 @@ const PrivateReadingRoom = () => {
         )}
         {isEditModalOpen && (
           <Modal onClose={closeEditModal}>
-            <CreateReadingRoom usage="edit" onCloseModal={closeEditModal} />
+            <CreateReadingRoom
+              usage="edit"
+              onCloseModal={closeEditModal}
+              onEdit={(data) => {
+                console.log('변경된 룸 정보', data);
+                handleUpdateRoom(data);
+              }}
+              room={{
+                roomId: Number(finalRoomId),
+                name: '',
+                description: '',
+                theme: 'Subway',
+                tags: [],
+              }}
+            />
           </Modal>
         )}
         <ControlBar
