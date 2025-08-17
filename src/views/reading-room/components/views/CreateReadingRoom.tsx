@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Campfire from '../../../../assets/readingRoom/bg/Campfire.png';
 import Subway from '../../../../assets/readingRoom/bg/Subway.png';
@@ -14,17 +14,24 @@ type UsageType = 'create' | 'edit';
 interface CreateReadingRoomProps {
     usage: UsageType; 
     onCloseModal?: () => void;
+
+    //콜백 분리
+    onCreate? :(payload: {name: string; description: string; theme: ThemeType; tags: string[]}) => void;
+    onEdit? : (payload : {roomId: number; name: string; description: string; theme: ThemeType; tags: string[]}) => void;
+
+    //기존 정보
+    room?: { roomId: number; name: string; description: string; theme: ThemeType; tags: string[];};
 }
 
-const CreateReadingRoom = ({ usage, onCloseModal }: CreateReadingRoomProps) => {
+const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: CreateReadingRoomProps) => {
     const navigate = useNavigate();
     const[selected, setSelected] = useState<ThemeType>('Campfire');
 
     const [roomName, setRoomName] = useState('');
     const [roomDescription, setRoomDescription] = useState('');
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
     const isCreatingValid = roomName.trim() !== "" && roomDescription.trim() !== "";
-
 
     const themeImages: Record<ThemeType, string> = {
         Campfire,
@@ -32,15 +39,37 @@ const CreateReadingRoom = ({ usage, onCloseModal }: CreateReadingRoomProps) => {
         ReadingRoom,
     };
 
+    useEffect(() => {
+        if(usage === 'edit' && room){
+            setSelected(room.theme);
+            setRoomName(room.name);
+            setRoomDescription(room.description);
+            setSelectedTags(room.tags ?? []);
+        }
+    }, [usage, room]);
+
     const actions = useMemo(() => {
         return {
             create: () => {
                 if (!isCreatingValid) return;
-                // TODO: 생성 로직 (API 요청 등)
+                onCreate?.({
+                    name: roomName,
+                    description: roomDescription,
+                    theme: selected,
+                    tags: selectedTags,
+                });
                 console.log('리딩룸 생성!', { roomName, roomDescription, theme: selected });
             },
             edit: () => {
-                // TODO: 정보 수정 로직
+                if(!room) return;
+                //이런 데이터를 보낼 예정
+                onEdit?.({
+                    roomId: room.roomId,
+                    name: roomName,
+                    description: roomDescription,
+                    theme: selected,
+                    tags: selectedTags,
+                })
                 console.log('정보 수정!', { roomName, roomDescription, theme: selected });
             },
             cancel: () => {
@@ -49,7 +78,7 @@ const CreateReadingRoom = ({ usage, onCloseModal }: CreateReadingRoomProps) => {
                 console.log('취소/닫기');
             },
         };
-    }, [isCreatingValid, roomName, roomDescription, selected, onCloseModal]);
+    }, [isCreatingValid, roomName, roomDescription, selected, selectedTags, onCreate, onEdit, onCloseModal, room]);
 
     return(
         <ReadingRoomActionsProvider value={actions}>
@@ -71,7 +100,7 @@ const CreateReadingRoom = ({ usage, onCloseModal }: CreateReadingRoomProps) => {
                                 </div>
                             )}
                             <img src={themeImages[selected]} alt={selected} 
-                            className={`${usage} === 'create' ? 'w-270 h-221 rounded-xl' : 'w-[446px] h-[365px] rounded-xl'}`} />
+                            className={`${usage === 'create' ? 'w-270 h-221 rounded-xl' : 'w-[446px] h-[365px] rounded-xl'}`} />
 
                             <div className='flex flex-col mt-6'>
                                 <div className='flex flex-row justify-start items-center gap-3'>
@@ -103,7 +132,9 @@ const CreateReadingRoom = ({ usage, onCloseModal }: CreateReadingRoomProps) => {
                                 roomName={roomName}
                                 setRoomName={setRoomName}
                                 roomDescription={roomDescription}
-                                setRoomDescription={setRoomDescription} />
+                                setRoomDescription={setRoomDescription}
+                                selectedTags={selectedTags}
+                                setSelectedTags={setSelectedTags} />
 
                                 <ActionButtons 
                                     usage={usage} 
