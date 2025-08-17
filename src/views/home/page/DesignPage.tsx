@@ -145,7 +145,7 @@ const DesignPage: React.FC = () => {
           <img
             src={previewWallpaperImg}
             alt="Wallpaper"
-            className="absolute inset-0 w-[528px] h-full object-cover rounded-[12px]"
+            className="absolute inset-0 object-cover rounded-[12px]"
           />
 
           {/* 누키 베이스 */}
