@@ -84,13 +84,12 @@ const NookiCharacter = ({
           />
 
           {/* div 태그로 조진다음에 너비 정해두고 justify-content: center로 조지면 되지 않을까 */}
-          {/* <div> */}
+
           <p
             className={`text-nook-100 absolute ${headPosition} ${textTransform} text-sm font-semibold`}
           >
             {textContent}
           </p>
-          {/* </div> */}
 
           <img
             src={headImage}
