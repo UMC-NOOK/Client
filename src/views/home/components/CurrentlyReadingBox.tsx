@@ -20,7 +20,7 @@ const CurrentlyReadingBox = () => {
   return (
     <div className="w-[246px] h-[60px] bg-[#423C35]/10 rounded-[12px] py-0 flex items-start justify-between">
       {/* 왼쪽: 아이콘 + 텍스트 */}
-      <div className="flex items-start gap-[14px] pt-[16px] pb-[14px] ml-[15px]">
+      <div className="flex items-start gap-[14px] pt-[16px] pb-[14px] ml-[24px]">
         {/* 아이콘 박스 */}
         <div className="w-[30px] h-[30px] bg-[#423C35] rounded-[8px] flex items-center justify-center flex-shrink-0">
           <img
@@ -33,7 +33,7 @@ const CurrentlyReadingBox = () => {
         {/* 텍스트 블록 */}
         <div className="flex flex-col gap-[2px]">
           <p className="text-[12px] leading-[14.4px] font-[400] text-white/50">
-            지금 독서 중인 책
+            독서 중인 책이 없어요.
           </p>
           <button
             disabled={isLoading}             // 로딩 중에만 비활성화
@@ -45,7 +45,7 @@ const CurrentlyReadingBox = () => {
               ? '로딩 중…'
               : hasBooks
               ? randomBook?.title
-              : '독서 중인 책이 없어요'}
+              : '추천 책 보기'}
           </button>
         </div>
       </div>
