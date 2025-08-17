@@ -183,7 +183,7 @@ const PrivateReadingRoom = () => {
     }
   };
 
-  console.log('전체메세지', messages);
+  // console.log('전체메세지', messages);
 
   // 입장 정보 업데이트 감지
   const [currentUsers, setCurrentUsers] = useState(null);
