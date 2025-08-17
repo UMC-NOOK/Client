@@ -20,8 +20,8 @@ const TopBar = ({
   // 본명 (nickname)
   const { data: me } = useGetMe();
 
-  const alias = profile?.alias?.trim() || '별명 없음';
-  const realName = me?.nickname?.trim() || '이름 없음';
+  const alias = profile?.alias?.trim() || '프로 독자';
+  const realName = me?.nickname?.trim() || '사용자';
 
   return (
     <div className="w-full h-34 bg-[rgba(66,60,53,0.2)] text-nook-100 flex justify-between items-center px-20 rounded-[8px]">
