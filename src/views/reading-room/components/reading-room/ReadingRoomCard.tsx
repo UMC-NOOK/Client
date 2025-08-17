@@ -87,7 +87,7 @@ const ReadingRoomCard: React.FC<ReadingRoomCardProps> = ({ room, onClick }) => {
 
         <div className="flex flex-col absolute top-13 left-12 z-20 text-white">
             <span className="text-base font-semibold">{name}</span>
-            <span className="text-2xs font-thin">{description}</span>
+            <span className="text-xs font-thin">{description}</span>
 
             <div className="flex flex-row items-start text-2xs font-thin gap-2 mt-5">
                 {displayTags.map((tag, idx) => (
