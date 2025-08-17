@@ -90,7 +90,7 @@ const BookCategoryChart: React.FC = () => {
 
       {/* 도넛 영역: 컨테이너 높이도 도넛 크기에 맞춰 보정 */}
       <div
-        className="w-full flex items-center justify-center relative mb-[35px]"
+        className={`w-full flex items-center justify-center relative ${total === 0 ? 'mb-[35px]' : ''}`}
         style={{ height: DONUT_SIZE }}
       >
         {total === 0 ? (
