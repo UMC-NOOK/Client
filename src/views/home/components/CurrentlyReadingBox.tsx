@@ -42,7 +42,7 @@ const CurrentlyReadingBox = () => {
             overflow-hidden whitespace-nowrap text-ellipsis max-w-[150px]"
           >
             {isLoading
-              ? '로딩 중…'
+              ? '추천 책 보기'
               : hasBooks
               ? randomBook?.title
               : '추천 책 보기'}

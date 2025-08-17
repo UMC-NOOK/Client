@@ -26,16 +26,16 @@ const RecentJournalBox = () => {
           </p>
           {hasJournals ? (
             <button
-              onClick={() => navigate(`/library/${data.bookId}`)}
-              className="text-[12px] leading-[14.4px] font-[400] text-white text-left truncate max-w-[150px] disabled:opacity-50"
+              onClick={() => navigate(`/library/${data!.bookId}`)}
+              className="text-[12px] leading-[14.4px] font-[400] text-white text-left truncate max-w-[150px]"
               disabled={isLoading}
             >
-              {isLoading ? '로딩 중…' : data.title}
+              {isLoading ? '로딩 중…' : data!.title}
             </button>
           ) : (
             <button
               onClick={() => navigate('/library')}
-              className="text-[12px] leading-[14.4px] font-[400] text-white text-left"
+              className={`text-[12px] leading-[14.4px] font-[400] text-white text-left ${isLoading ? 'opacity-50' : ''}`}
             >
               독서 기록 남기기
             </button>

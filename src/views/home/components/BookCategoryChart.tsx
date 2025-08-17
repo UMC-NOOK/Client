@@ -6,17 +6,42 @@ import { useGetHomeCategories } from '../hooks/useQuery/useGetHomeCategories';
 
 type CategoryData = { name: string; count: number };
 
+// ===== 크기/반경 설정(여기 숫자만 바꾸면 도넛 크기 조절 가능) =====
+const DONUT_SIZE = 145;     // px (예: 145 -> 160/180 등)
+const INNER_R = 50;         // px
+const OUTER_R = 73;         // px  => 링 두께 = 20
+
 // 적은 순서 → 많은 순서 컬러 팔레트
 const COLORS = ['#80CADD', '#38BDBF', '#86BD09', '#FFD857', '#FCAE04', '#FC9605'];
 
-// 0권(데이터 없음)일 때
-const EmptyDonut = () => (
-  <div className="relative flex items-center justify-center" style={{ width: 145, height: 145 }}>
-    <svg width={140} height={140} viewBox="0 0 140 140">
-      <circle cx="70" cy="70" r="50" fill="none" stroke="#423C3580" strokeWidth="20" />
-    </svg>
-  </div>
-);
+// 0권(데이터 없음)일 때 도넛 (링 두께/반경 계산 일치)
+const EmptyDonut: React.FC<{
+  size: number;
+  inner: number;
+  outer: number;
+}> = ({ size, inner, outer }) => {
+  const ring = outer - inner;                // strokeWidth
+  const r = inner + ring / 2;                // 가운데 반경
+  const center = size / 2;
+
+  return (
+    <div
+      className="relative flex items-center justify-center"
+      style={{ width: size, height: size }}
+    >
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        <circle
+          cx={center}
+          cy={center}
+          r={r}
+          fill="none"
+          stroke="#423C3580"
+          strokeWidth={ring}
+        />
+      </svg>
+    </div>
+  );
+};
 
 const BookCategoryChart: React.FC = () => {
   const { data } = useGetHomeCategories(); // Server: { categoryName, count }[]
@@ -58,18 +83,23 @@ const BookCategoryChart: React.FC = () => {
   }, [chartCategories]);
 
   return (
-    <div className="w-[246px] rounded-[12px] bg-[#423C35]/10 flex flex-col items-left pt-[14px] pb-[14px] transition-all duration-300">
+    <div className="w-[246px] rounded-[12px] bg-[#423C35]/10 flex flex-col items-start pt-[14px] pb-[14px] transition-all duration-300">
       <p className="text-white text-[12px] leading-[25px] font-[400] font-pretendard mb-[20px] pl-[25px]">
         이 분야의 책을 가장 많이 읽었어요.
       </p>
 
-      <div className="w-full h-[145px] flex items-center justify-center relative">
+      {/* 도넛 영역: 컨테이너 높이도 도넛 크기에 맞춰 보정 */}
+      <div
+        className="w-full flex items-center justify-center relative mb-[35px]"
+        style={{ height: DONUT_SIZE }}
+      >
         {total === 0 ? (
           <>
-            {/* 0권 전용 회색 도넛 */}
-            <EmptyDonut />
+            {/* 0권 전용 회색 도넛 (크기/두께 동일 규칙 적용) */}
+            <EmptyDonut size={DONUT_SIZE} inner={INNER_R} outer={OUTER_R} />
+
             {/* 중앙 텍스트 */}
-            <div className="absolute flex flex-col items-center justify-center">
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-white text-[10px] leading-[20px] font-[400] font-pretendard">
                 독서
               </span>
@@ -81,13 +111,13 @@ const BookCategoryChart: React.FC = () => {
         ) : (
           <>
             {/* 정상 데이터 도넛 */}
-            <PieChart width={145} height={145}>
+            <PieChart width={DONUT_SIZE} height={DONUT_SIZE}>
               <Pie
                 data={dataWithColor}
                 dataKey="count"
                 nameKey="name"
-                innerRadius={50}
-                outerRadius={70}
+                innerRadius={INNER_R}
+                outerRadius={OUTER_R}
                 startAngle={90}
                 endAngle={-270}
                 paddingAngle={2}
@@ -102,7 +132,7 @@ const BookCategoryChart: React.FC = () => {
             </PieChart>
 
             {/* 중앙 텍스트 */}
-            <div className="absolute flex flex-col items-center justify-center">
+            <div className="absolute inset-0 flex flex-col items-center justify-center pt-[4px]">
               <span className="text-white text-[10px] leading-[20px] font-[400] font-pretendard">
                 {topCategory.name}
               </span>
@@ -118,10 +148,10 @@ const BookCategoryChart: React.FC = () => {
       {total > 0 && categories.length > 0 && (
         <button
           onClick={() => setExpanded((prev) => !prev)}
-          className=" inline-flex items-center gap-[8px] text-[11px] leading-[25px] font-[400] text-white/50 font-pretendard mt-[12px]  pl-[25px]"
+          className="inline-flex items-center gap-[8px] text-[11px] leading-[25px] font-[400] text-white/50 font-pretendard mt-[12px] pl-[24px]"
         >
           <img
-            src={expanded ? arrowUpIcon : arrowDownIcon}
+            src={expanded ? arrowDownIcon : arrowUpIcon}
             alt="toggle"
             className="w-[7px] h-[7px] object-contain"
           />
@@ -131,9 +161,9 @@ const BookCategoryChart: React.FC = () => {
 
       {/* 리스트 (0권일 때는 숨김) */}
       {total > 0 && expanded && (
-        <div className="mt-[12px] w-full px-[20px] text-white/80 text-[12px] font-[400] leading-[20px] font-pretendard">
+        <div className="mt-[12px] w-full px-[20px] text-white/80 text-[12px] font-[400] leading-[20px] pl-[39px]">
           {chartCategories.map((cat) => (
-            <div key={cat.name} className="flex justify-between items-center py-[2px]">
+            <div key={cat.name} className="flex justify-items-start py-[2px]">
               <div className="flex items-center gap-[8px]">
                 <div
                   className="w-[9px] h-[9px] rounded-[2px]"
@@ -143,7 +173,7 @@ const BookCategoryChart: React.FC = () => {
                 />
                 <span>{cat.name}</span>
               </div>
-              <span>{cat.count}권</span>
+              <span>&nbsp;({cat.count}권)</span>
             </div>
           ))}
         </div>

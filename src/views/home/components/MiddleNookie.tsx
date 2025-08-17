@@ -111,7 +111,7 @@ const MiddleNookie = () => {
         <img
           src={lampImages[lampKey]}
           alt="lamp"
-          className="absolute z-20 left-[288px] bottom-[385px] w-[169px] h-[130px] object-contain"
+          className="absolute z-20 left-[288px] bottom-[384px] w-[169px] h-[130px] object-contain"
         />
 
         {/* 별명(alias) */}
