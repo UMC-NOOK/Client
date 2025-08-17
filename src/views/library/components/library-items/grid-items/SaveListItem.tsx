@@ -18,7 +18,14 @@ const SaveListItem = ({
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/library/${bookId}`);
+    navigate(`/library/${bookId}`, {
+      state: {
+        bookId,
+        coverImageUrl,
+        title,
+        author,
+      },
+    });
   };
 
   return (

@@ -5,14 +5,30 @@ import { useTabStore } from '../../../../../../../store/library/useTabStore';
 type RecordBtnProps = {
   text: string;
   bookId: number;
+  coverImageUrl: string;
+  title: string;
+  author: string;
 };
 
-const RecordBtn = ({ text, bookId }: RecordBtnProps) => {
+const RecordBtn = ({
+  text,
+  bookId,
+  coverImageUrl,
+  title,
+  author,
+}: RecordBtnProps) => {
   const selectedTab = useTabStore((state) => state.selectedTab);
   const navigate = useNavigate();
   const handleClick = () => {
     // console.log(bookId);
-    navigate(`/library/${bookId}`);
+    navigate(`/library/${bookId}`, {
+      state: {
+        bookId,
+        coverImageUrl,
+        title,
+        author,
+      },
+    });
   };
   return (
     <div

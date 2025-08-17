@@ -1,6 +1,8 @@
+// librarys
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// imgs
 import chevron_left from '/src/assets/button/read-note-edit/chevron-left.svg';
 import edit_btn from '/src/assets/button/read-note-edit/edit-btn.svg';
 import delete_btn from '/src/assets/button/read-note-edit/delete-btn.svg';
@@ -10,14 +12,20 @@ import read_note_save_btn from '/src/assets/button/read-note/read-note-save-btn.
 import quotation_arrow from '/src/assets/button/read-note-edit/quotation-arrow.svg';
 import impression_icon from '/src/assets/button/read-note-edit/impression-icon.svg';
 
+// components
 import LibraryRegistration from '../../../lounge/components/book-info/libraryRegistration';
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
+
+// hooks
+import useGetSentenceList from '../../hooks/useMutation/read-note/useGetSentenceList';
 
 const ReadNotePage = () => {
   const [isReadNoteExist, setIsReadNoteExist] = useState(true);
   const [isLibraryRegistrationOpen, setIsLibraryRegistrationOpen] =
     useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const { data: sentenceList } = useGetSentenceList('bookId123'); // 예시 bookId, 실제로는 props나 context에서 받아와야 함
 
   const handleLibrary = () => {
     // 수정 로직 추가
