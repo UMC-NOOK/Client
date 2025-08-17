@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import BookListSection from './BookListSection';
 import { LoungeSection, MallType } from '../../apis/lounge/types/lounge-types';
 import { renderCategoryName } from '../../utils/formatCategory';
+import { useGetMe } from '../../../home/hooks/useQuery/useGetMe';
 
 const RecommendView = ({ mallType, sections }: { mallType: MallType; sections: LoungeSection[] }) => {
-  const bestSection = sections.find((section) => section.sectionId === 'best') || null;
-  const favoriteSection = sections.find((section) => section.sectionId === 'favorite_best') || null;
+  const { data: me } = useGetMe();
+  const name = useMemo(() => (me?.nickname?.trim?.() || '회원'), [me?.nickname]);
+
+  const bestSection = useMemo(
+    () => sections.find((section) => section.sectionId === 'best') || null,
+    [sections]
+  );
+  const favoriteSection = useMemo(
+    () => sections.find((section) => section.sectionId === 'favorite_best') || null,
+    [sections]
+  );
 
   return (
     <div className="w-full">
@@ -25,10 +35,10 @@ const RecommendView = ({ mallType, sections }: { mallType: MallType; sections: L
           <div className="mt-[63px] w-[960px] border-t border-[#555351]/70" />
 
           <div className="mt-[26px]">
-            <span className="text-lg">경민 님이 좋아하는 </span>
+            <span className="text-lg">{me?.nickname}님이 좋아하는 </span>
             <span className="text-[22px] font-semibold">
               {renderCategoryName(favoriteSection?.categoryName, {
-                pipeClass: "text-[22px] font-semibold",
+                pipeClass: 'text-[22px] font-semibold',
               })}
             </span>
             <span className="text-lg">을 추천해요.</span>
@@ -44,3 +54,4 @@ const RecommendView = ({ mallType, sections }: { mallType: MallType; sections: L
 };
 
 export default RecommendView;
+

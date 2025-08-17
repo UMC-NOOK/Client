@@ -95,7 +95,7 @@ const MiddleNookie = () => {
         <img
           src={wallpaperImages[patternKey]}
           alt="wallpaper"
-          className="absolute inset-0 w-full h-full object-cover z-0 rounded-[12px]"
+          className="absolute inset-0  object-cover z-0 rounded-[12px]"
         />
 
         {/* 베이스 */}

@@ -31,7 +31,7 @@ const SignUpPage = () => {
 
   const onSubmit = async (data: FormData) => {
     signUpMutate({
-      name: data.name,
+      nickname: data.name,
       email: data.email,
       password: data.password,
     });
@@ -43,6 +43,10 @@ const SignUpPage = () => {
 
   const isDuplicateEmailError = isError && error?.response?.status === 409;
   // console.log(errors.name);
+
+  const handleClick = () => {
+    window.open('https://policynook.oopy.io/', '_blank');
+  };
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -102,8 +106,17 @@ const SignUpPage = () => {
           </div>
           <div className="flex justify-center items-start relative top-30">
             <p className="text-[1.3rem] text-nook-100 font-normal">
-              <span className="border-b-1 border-nook-100">이용약관</span>과{' '}
-              <span className="border-b-1 border-nook-100">
+              <span
+                className="border-b-1 border-nook-100 cursor-pointer"
+                onClick={handleClick}
+              >
+                이용약관
+              </span>
+              과{' '}
+              <span
+                className="border-b-1 border-nook-100 cursor-pointer"
+                onClick={handleClick}
+              >
                 개인정보취급방침
               </span>
               을 확인했고, 동의합니다.

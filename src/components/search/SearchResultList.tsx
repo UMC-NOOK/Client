@@ -37,14 +37,14 @@ export default function SearchResultList({
 
   // URL → query, page
   const query = (searchParams.get('query') ?? '').trim();
-  const pageParam = Number(searchParams.get('page') || 1);
-  const page = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+  const pageParam = Number(searchParams.get('page') || 0);
+  const page = Number.isNaN(pageParam) || pageParam < 0 ? 0 : pageParam;
 
   // query 변경 시 page를 1로 리셋 (URL에 반영)
   useEffect(() => {
     if (page !== 1) {
       const next = new URLSearchParams(searchParams);
-      next.set('page', '1');
+      next.set('page', '0');
       setSearchParams(next, { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -272,7 +272,7 @@ export default function SearchResultList({
                     }`}
                     aria-current={active ? 'page' : undefined}
                   >
-                    <span className="leading-none">{n}</span>
+                    <span className="leading-none">{n + 1}</span>
                     {active && (
                       <span className="absolute bottom-0 block w-[11px] h-0 border-t-2 border-white flex-shrink-0" />
                     )}
