@@ -15,6 +15,7 @@ import impression_icon from '/src/assets/button/read-note-edit/impression-icon.s
 // components
 import LibraryRegistration from '../../../lounge/components/book-info/libraryRegistration';
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
+import DownloadModal from '../../components/read-note/downloadModal';
 
 // hooks
 import useGetSentenceList from '../../hooks/useMutation/read-note/useGetSentenceList';
@@ -29,31 +30,41 @@ const ReadNotePage = () => {
   const [isLibraryRegistrationOpen, setIsLibraryRegistrationOpen] =
     useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
-  const handleLibrary = () => {
+  const libraryCloseHandler = () => {
     // 수정 로직 추가
     setIsLibraryRegistrationOpen(false);
   };
 
-  const libraryModalHandler = () => {
+  const libraryHandler = () => {
     setIsLibraryRegistrationOpen((prev) => !prev);
   };
 
-  const deleteModalHandler = () => {
+  const deleteHandler = () => {
     setIsDeleteModalOpen((prev) => !prev);
   };
 
-  const handleDelete = () => {
+  const deleteCloseHandler = () => {
     // 삭제 로직 추가
     setIsDeleteModalOpen(false);
+  };
+
+  const downloadHandler = () => {
+    setIsDownloadModalOpen((prev) => !prev);
+  };
+
+  const downloadCloseHandler = () => {
+    // 다운로드 로직 추가
+    setIsDownloadModalOpen(false);
   };
 
   return (
     <div className="flex items-start justify-center w-full h-full gap-23 mt-20">
       {isLibraryRegistrationOpen && (
         <LibraryRegistration
-          onRegister={handleLibrary}
-          closeModal={libraryModalHandler}
+          onRegister={libraryHandler}
+          closeModal={libraryCloseHandler}
           bookImg={location.state?.bookImg}
           bookTitle={location.state?.title}
           bookAuthor={location.state?.author}
@@ -62,9 +73,19 @@ const ReadNotePage = () => {
       )}
       {isDeleteModalOpen && (
         <DeleteBtn
-          onDelete={handleDelete}
-          closeModal={deleteModalHandler}
+          onDelete={deleteHandler}
+          closeModal={deleteCloseHandler}
           usage="read-note"
+        />
+      )}
+      {isDownloadModalOpen && (
+        <DownloadModal
+          onDownload={downloadHandler}
+          closeModal={downloadCloseHandler}
+          bookImg={location.state?.bookImg}
+          bookTitle={location.state?.title}
+          bookAuthor={location.state?.author}
+          bookId={location.state?.bookId}
         />
       )}
       <div className="flex flex-col items-center justify-start w-332">
@@ -104,13 +125,13 @@ const ReadNotePage = () => {
               src={info_edit_btn}
               alt="Info Edit"
               className="w-17 h-17 cursor-pointer"
-              onClick={libraryModalHandler}
+              onClick={libraryCloseHandler}
             />
             <img
               src={delete_btn}
               alt="Delete"
               className="w-17 h-17 cursor-pointer"
-              onClick={deleteModalHandler}
+              onClick={deleteCloseHandler}
             />
           </div>
         </div>
@@ -145,7 +166,10 @@ const ReadNotePage = () => {
           <div className="text-[#222020] text-center text-xs not-italic font-normal">
             독서 카드 만들고
           </div>
-          <div className="flex items-center justify-center gap-2 px-6 py-4 rounded-md bg-[#2c251d]">
+          <div
+            className="flex items-center justify-center gap-2 px-6 py-4 rounded-md bg-[#2c251d]"
+            onClick={downloadHandler}
+          >
             <img src={read_note_save_btn} alt="" className="w-9 h-9" />
             <div className="text-white text-xs not-italic font-semibold">
               이미지로 저장하기
