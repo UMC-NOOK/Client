@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import download from '../../../../../../../assets/button/library/bookInfoImg.svg';
+import download from '../../../../../../../assets/button/library/newDownloadBtn.svg';
 import { useTabStore } from '../../../../../../../store/library/useTabStore';
 
 type RecordBtnProps = {
