@@ -33,7 +33,7 @@ const CurrentlyReadingBox = () => {
         {/* 텍스트 블록 */}
         <div className="flex flex-col gap-[2px]">
           <p className="text-[12px] leading-[14.4px] font-[400] text-white/50">
-            독서 중인 책이 없어요.
+            지금 독서 중인 책
           </p>
           <button
             disabled={isLoading}             // 로딩 중에만 비활성화
@@ -45,7 +45,7 @@ const CurrentlyReadingBox = () => {
               ? '추천 책 보기'
               : hasBooks
               ? randomBook?.title
-              : '추천 책 보기'}
+              : '독서 중인 책이 없어요'}
           </button>
         </div>
       </div>

@@ -54,5 +54,3 @@ export default function WeeklyRegisteredBooksCard() {
 
   return <RegisteredBooksCalendarBox monthly={monthly} />;
 }
-
-
