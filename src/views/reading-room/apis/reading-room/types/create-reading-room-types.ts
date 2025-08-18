@@ -1,4 +1,4 @@
-export type ThemeType = 'LIBRARY' | 'CAMPFIRE' | 'SUBWAY' | 'READINGROOM';
+export type ThemeType = 'LIBRARY' | 'CAMPFIRE' | 'SUBWAY';
 
 export interface CreateReadingRoomParams {
     themeName: ThemeType;
