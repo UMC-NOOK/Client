@@ -13,7 +13,7 @@ const BookStatusBox = () => {
   if (isLoading)
     return (
       <div className="w-[246px] h-[157px] bg-[#423C35]/10 rounded-[12px] px-[12px] pt-[12px] pb-[14px] flex items-center justify-center text-white/70">
-        로딩…
+        로딩중…
       </div>
     );
 
