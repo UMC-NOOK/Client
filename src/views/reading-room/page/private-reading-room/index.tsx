@@ -183,7 +183,7 @@ const PrivateReadingRoom = () => {
     }
   };
 
-  console.log('전체메세지', messages);
+  // console.log('전체메세지', messages);
 
   // 입장 정보 업데이트 감지
   const [currentUsers, setCurrentUsers] = useState(null);
@@ -295,10 +295,10 @@ const PrivateReadingRoom = () => {
   // 룸 정보 업데이트 감지
   useEffect(() => {
     if (messages.roomInfoUpdate) {
-      console.log(
-        '룸 정보가 업데이트되었습니다:',
-        messages.roomInfoUpdate.themeName,
-      );
+      // console.log(
+      //   '룸 정보가 업데이트되었습니다:',
+      //   messages.roomInfoUpdate.themeName,
+      // );
       setCurrentTheme(messages?.roomInfoUpdate.themeName);
     } else if (data?.themeName) {
       setCurrentTheme(data?.themeName);
