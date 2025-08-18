@@ -48,7 +48,7 @@ const BookItem = ({
 
       <div className="flex flex-1 h-[15rem] justify-between">
         <div className="flex flex-col justify-between">
-          <div className="space-y-3">
+          <div className="space-y-4">
             <p className="text-md font-normal text-nook-100 line-clamp-1">
               {title}
             </p>

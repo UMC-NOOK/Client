@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import download from '../../../../../../../assets/button/library/bookInfoImg.svg';
+import download from '../../../../../../../assets/button/library/newDownloadBtn.svg';
 import { useTabStore } from '../../../../../../../store/library/useTabStore';
 
 type RecordBtnProps = {
@@ -19,11 +19,7 @@ const RecordBtn = ({ text, bookId }: RecordBtnProps) => {
       className="flex justify-center items-center gap-4"
       onClick={handleClick}
     >
-      <img
-        src={download}
-        alt="내 기록 버튼"
-        className="w-7 h-7 max-w-[14px] max-h-[14px] object-contain"
-      />
+      <img src={download} alt="내 기록 버튼" className="object-contain" />
 
       <span className="text-sm font-normal pt-0.1">{text}</span>
     </div>
