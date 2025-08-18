@@ -90,7 +90,15 @@ const ReadNotePage = () => {
               src={edit_btn}
               alt="Edit"
               className="w-17 h-17 cursor-pointer"
-              onClick={() => navigate(`/library/${location.state.bookId}/edit`)}
+              onClick={() =>
+                navigate(`/library/${location.state.bookId}/edit`, {
+                  state: {
+                    bookId: location.state.bookId,
+                    title: location.state.title,
+                    author: location.state.author,
+                  },
+                })
+              }
             />
             <img
               src={info_edit_btn}
