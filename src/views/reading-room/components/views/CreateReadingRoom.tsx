@@ -6,9 +6,8 @@ import READINGROOM from '../../../../assets/readingRoom/bg/ReadingRoom.png';
 import ActionButtons from '../reading-room/ActionButtons';
 import { ReadingRoomActionsProvider } from '../../contexts/ReadingRoomActionsContext';
 import InsertInfo from '../reading-room/InsertInfo';
+import { ThemeType } from '../../apis/reading-room/CreateReadingRoom';
 
-
-type ThemeType = 'CAMPFIRE' | 'SUBWAY' | 'READINGROOM';
 type UsageType = 'create' | 'edit';
 
 interface CreateReadingRoomProps {
@@ -37,6 +36,7 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
         CAMPFIRE,
         SUBWAY,
         READINGROOM,
+        LIBRARY,
     };
 
     useEffect(() => {
