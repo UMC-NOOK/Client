@@ -17,7 +17,7 @@ function MemberPanel() {
       roomId: Number(roomId),
     });
 
-  // console.log('맴바', data);
+  console.log('맴바??', data);
 
   const hostMember: Member | undefined = data?.find(
     (member: Member) => member.isMe === true,

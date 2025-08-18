@@ -18,16 +18,20 @@ import useGetBookList from '../../hooks/private-reading-room/useQuery/useGetBook
 import useGetTheme from '../../hooks/private-reading-room/useQuery/useGetTheme';
 import NotFoundPage from '../../../404';
 import useCurrentBookStore from '../../../../store/private-reading-room/useCurrentBookStore';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useAudio from '../../hooks/private-reading-room/audio/useAudio';
 import audio1 from '/audio/readingroom_campfire.mp3';
 import audio2 from '/audio/readingroom_library.mp3';
 import audio3 from '/audio/readingroom_subway.mp3';
 import usePatchRoomInfo from '../../hooks/private-reading-room/useMutation/usePatchRoomInfo';
+import useDeleteRoom from '../../hooks/private-reading-room/useMutation/useDeleteRoom';
+import useExitRoom from '../../hooks/private-reading-room/useMutation/useExitRoom';
+import useGetMyRole from '../../hooks/private-reading-room/useQuery/useGetMyRole';
 
 type ThemeName = 'CAMPFIRE' | 'READINGROOM' | 'SUBWAY';
 
 const PrivateReadingRoom = () => {
+  const navigate = useNavigate();
   const [activePanel, setActivePanel] = useState<
     'member' | 'book' | 'setting' | null
   >(null);
@@ -95,6 +99,12 @@ const PrivateReadingRoom = () => {
     setCurrentTheme(data?.themeName);
   }, [data]);
 
+  const { data: myRoleData } = useGetMyRole({
+    roomId: Number(roomId),
+  });
+
+  console.log('내다리나놔', myRoleData);
+
   const audioMap: Record<ThemeName, string> = useMemo(
     () => ({
       CAMPFIRE: audio1,
@@ -147,8 +157,24 @@ const PrivateReadingRoom = () => {
     setActivePanel(activePanel === panelType ? null : panelType);
   };
 
-  const handleDelete = () => {
-    console.log('삭제로직');
+  const deleteRoomMutation = useDeleteRoom({
+    onSuccess: () => {
+      navigate('/reading-rooms');
+    },
+    onError: (error) => {},
+  });
+  const handleDelete = (roomId: number) => {
+    deleteRoomMutation.mutate({ roomId });
+  };
+
+  const exitRoomMutation = useExitRoom({
+    onSuccess: () => {
+      navigate('/reading-rooms');
+    },
+    onError: (error) => {},
+  });
+  const handleExit = (roomId: number) => {
+    exitRoomMutation.mutate({ roomId });
   };
 
   // console.log('asdfadf', data);
@@ -356,7 +382,7 @@ const PrivateReadingRoom = () => {
       {isExitModalOpen && (
         <DeleteBtn
           usage="exit"
-          onDelete={handleDelete}
+          onDelete={() => handleExit(Number(finalRoomId))}
           closeModal={toggleExitModal}
         />
       )}
@@ -364,7 +390,7 @@ const PrivateReadingRoom = () => {
       {isDeleteModalOpen && (
         <DeleteBtn
           usage="delete"
-          onDelete={handleDelete}
+          onDelete={() => handleDelete(Number(finalRoomId))}
           closeModal={toggleDeleteModal}
         />
       )}
@@ -409,7 +435,8 @@ const PrivateReadingRoom = () => {
           </Modal>
         )}
         <ControlBar
-          roll="host"
+          roll={myRoleData === 'HOST' ? 'host' : 'guest'}
+          // roll={'host'}
           onMemberClick={() => handlePanelToggle('member')}
           onBookClick={() => handlePanelToggle('book')}
           onSettingClick={() => handlePanelToggle('setting')}
