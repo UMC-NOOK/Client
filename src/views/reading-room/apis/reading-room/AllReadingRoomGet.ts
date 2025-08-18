@@ -1,0 +1,26 @@
+import instance from '../../../../apis/instance';
+
+export interface GetReadingRoomsParams {
+    page?: number;
+}
+
+const AllReadingRoomGet = async({page = 0} : GetReadingRoomsParams ) => {
+  try{
+    const res = await instance.get(
+      '/api/reading-rooms',
+      {
+        params: { page }
+      });
+
+      return res.data;
+  }catch(err){
+    console.log('전채 리딩룸 목록 조회 실패', err);
+    throw err;
+  }
+}
+
+export default AllReadingRoomGet;
+
+export const allReadingRoomQueryKeys = {
+    rooms: (page: number) => ['readingRooms', page] as const,
+};

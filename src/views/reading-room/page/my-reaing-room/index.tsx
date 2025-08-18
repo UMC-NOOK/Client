@@ -1,4 +1,4 @@
-import MyReadingRoomCardList from '../components/views/MyReadingRoomCardList';
+import MyReadingRoomCardList from '../../components/views/MyReadingRoomCardList';
 //import CreateReadingRoom from '../components/views/CreateReadingRoom';
 
 const ReadingRoom = () => {
