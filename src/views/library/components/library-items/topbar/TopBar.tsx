@@ -28,7 +28,7 @@ const TopBar = ({
       <div className="flex items-baseline gap-1">
         {/* 별명 */}
         <span
-          className="text-white"
+          className="text-[#7ABFC9]"
           style={{
             fontFamily: 'Pretendard',
             fontSize: '18px',
@@ -42,7 +42,7 @@ const TopBar = ({
 
         {/* 닉네임 */}
         <span
-          className="text-[#7ABFC9]"
+          className=" text-nook-100"
           style={{
             fontFamily: 'Pretendard',
             fontSize: '18px',
@@ -56,7 +56,7 @@ const TopBar = ({
 
         {/* 님의 서재 */}
         <span
-          className="text-white"
+          className=" text-nook-100"
           style={{
             fontFamily: 'Pretendard',
             fontSize: '17px',

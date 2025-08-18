@@ -20,13 +20,9 @@ const InfoBtn = ({ isbn13 }: InfoBtnProps) => {
       className="flex justify-center items-center gap-4"
       onClick={handleClick}
     >
-      <img
-        src={BookInfoImg}
-        alt="책정보 아이콘"
-        className="w-7 h-7 max-w-[14px] max-h-[14px] object-contain"
-      />
+      <img src={BookInfoImg} alt="책정보 아이콘" className="object-contain" />
 
-      <span className="text-sm font-normal pt-0.1">책정보</span>
+      <span className="text-sm font-normal pt-0.1">책 정보</span>
     </div>
   );
 };

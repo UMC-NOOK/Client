@@ -23,7 +23,7 @@ body {
   box-sizing: border-box;
   font-size: 62.5% !important;
   font-family: 'Pretendard' !important;
-  font-family: var(--font-pretendard);
+  /* font-family: var(--font-pretendard); */
 }
 
 img:not([class]),

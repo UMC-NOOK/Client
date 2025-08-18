@@ -46,7 +46,7 @@ const DropDownBar = () => {
           <li
             key={index}
             className={clsx(
-              'text-nook-100 px-4 py-8 text-sm cursor-pointer hover:bg-nook-500 relative',
+              'text-nook-100 px-4 py-9 text-[12px] cursor-pointer hover:bg-nook-500 relative',
               {
                 'hover:rounded-t-[8px]': index === 0,
                 'hover:rounded-b-[8px]': index === menu.length - 1,
