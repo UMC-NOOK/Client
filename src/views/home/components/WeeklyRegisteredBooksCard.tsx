@@ -13,7 +13,6 @@ const OFFSET_SUNDAY0 = 0;
 
 export default function WeeklyRegisteredBooksCard() {
   const { data = [], isLoading, isError } = useGetWeeklyBooks();
-
   // 이번 주 월요일 시작
   const weekStart = useMemo(() => startOfWeek(new Date(), { weekStartsOn: 1 }), []);
   const dates = useMemo(
@@ -27,7 +26,12 @@ export default function WeeklyRegisteredBooksCard() {
 
     for (const item of data) {
       if (item == null) continue;
-      const idx = (item.day + OFFSET_SUNDAY0) % 7; // 서버 day 보정
+      const today = new Date();
+      const currentYear = today.getFullYear();
+      const currentMonth = today.getMonth(); // 0부터 시작 (8월 = 7)
+      const bookDate = new Date(currentYear, currentMonth, item.day);
+      const dayOfWeek = bookDate.getDay();
+      const idx = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // 일요일을 마지막으로
       if (idx < 0 || idx > 6) continue;
 
       const dateStr = dates[idx];
