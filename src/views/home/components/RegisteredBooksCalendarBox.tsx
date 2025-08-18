@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { startOfWeek, addDays, format } from 'date-fns';
 
@@ -32,55 +31,60 @@ const RegisteredBooksCalendarBox = ({ monthly }: { monthly: MonthlyDayBooks[] })
   const SEGMENT_W = LINE_WIDTH / 7;
 
   return (
-    <div className="w-[246px] h-[157px] bg-[#423C35]/10 rounded-[12px] px-[21px] pt-[32px] pb-[14px] flex flex-col justify-start">
+    <div className="w-[246px] h-[157px] bg-[#423C35]/10 rounded-[12px] 
+                    pt-[17px] pb-[14px] pl-[30px] pr-[22px] flex flex-col justify-start">
+      
       {/* 요일 */}
-      <div className="grid grid-cols-7 gap-[18px] text-center">
+      <div className="flex w-[203px] mb-[0px]">
         {week.map((day, i) => (
-          <div key={i} className="text-[12px] leading-[14.4px] font-normal text-white/50">
+          <div
+            key={i}
+            className="flex w-[29px] h-[30px] items-center justify-center 
+                       text-[12px] leading-[14.4px] font-[400] text-white/50"
+          >
             {day}
           </div>
         ))}
       </div>
 
       {/* 긴 구분선(옅은) + 오늘 구간(진한) */}
-      <div className="relative mx-auto mt-[8px]" style={{ width: LINE_WIDTH }}>
+      <div className="relative mx-auto mb-[2px]" style={{ width: LINE_WIDTH }}>
         <div className="h-[0.5px] w-full bg-[#555351]" />
         {todayIdx >= 0 && (
           <div
-            className="absolute top-1/2 -translate-y-1/2 h-[2px] bg-white rounded"
+            className="absolute top-1/2 -translate-y-1/2 h-[0.5px] bg-white rounded"
             style={{ width: SEGMENT_W, left: todayIdx * SEGMENT_W }}
           />
         )}
       </div>
 
       {/* 날짜 + 썸네일 */}
-      <div className="flex flex-row justify-between mt-[10px] mx-auto" style={{ width: LINE_WIDTH }}>
+      <div className="flex w-[203px]">
         {dates.map((dateStr) => {
           const day = parseInt(dateStr.slice(-2), 10);
           const image = thumbMap[dateStr];
           const hasBook = !!image;
 
           return (
-            <div key={dateStr} className="flex flex-col items-center gap-[12px] w-[15px] overflow-visible">
-  <span
-    className="text-[12px] leading-[14.4px] font-normal text-center text-white/50"
-  >
-    {day}
-  </span>
-
-  {hasBook ? (
-          <div className="w-[27.2px] h-[40px] shrink-0 overflow-visible">
-            <img
-              src={image as string}
-              alt={`Book on ${dateStr}`}
-              className="w-full h-full object-cover rounded-[4px] shrink-0 [aspect-ratio:17/25]"
-            />
-          </div>
-        ) : (
-          <div className="w-[27.2px] h-[40px]" />
-        )}
-      </div>
-
+            <div key={dateStr} className="flex flex-col items-center justify-start w-[29px]">
+              {/* 날짜 */}
+              <div className="flex w-[29px] h-[30px] items-center justify-center 
+                              text-[12px] leading-[14.4px] font-[400] text-white/50">
+                {day}
+              </div>
+              {/* 썸네일 */}
+              {hasBook ? (
+                <div className="w-[27.2px] h-[40px] shrink-0 overflow-visible">
+                  <img
+                    src={image as string}
+                    alt={`Book on ${dateStr}`}
+                    className="w-full h-full object-cover rounded-[4px] shrink-0 [aspect-ratio:17/25]"
+                  />
+                </div>
+              ) : (
+                <div className="w-[27.2px] h-[40px]" />
+              )}
+            </div>
           );
         })}
       </div>

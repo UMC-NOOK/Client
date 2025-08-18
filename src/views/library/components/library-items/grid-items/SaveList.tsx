@@ -35,7 +35,7 @@ const SaveList = ({ onClick }: SaveListProps) => {
         className="flex items-baseline gap-4 cursor-pointer group border-b-transparent hover:border-nook-300"
         onClick={onClick}
       >
-        <span className="text-[2rem] text-nook-100 group-hover:text-nook-300">
+        <span className="text-[2rem] font-normal text-nook-100 group-hover:text-nook-300">
           찜
         </span>
         <button className="w-10 h-10 flex items-center justify-center translate-y-[2px]">

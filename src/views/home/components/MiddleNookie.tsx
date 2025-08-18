@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import profileIcon from '../../../assets/button/home/profile.png';
-import penIcon from '../../../assets/button/home/solar_pen.png';
+import penIcon from '../../../assets/button/home/solar_penN.png';
 import designIcon from '../../../assets/button/home/design.png';
 import ReadingGoalModal from './ReadingGoalModal';
 
@@ -72,7 +72,9 @@ const MiddleNookie = () => {
 
   const goalBooks = goals?.goal ?? 50;
   const currentBooks = goals?.bookCount ?? 0;
+  const achievedBooks = Math.min(goalBooks, Math.max(0, currentBooks)); // 표기용 (초과분 캡)
   const remainingDays = 193;
+
   const progressPercent = Math.min(100, (currentBooks / Math.max(1, goalBooks)) * 100);
 
   const lampKey: LampKey = profile?.characterColor
@@ -95,7 +97,7 @@ const MiddleNookie = () => {
         <img
           src={wallpaperImages[patternKey]}
           alt="wallpaper"
-          className="absolute inset-0  object-cover z-0 rounded-[12px]"
+          className="absolute inset-0 object-cover z-0 rounded-[12px]"
         />
 
         {/* 베이스 */}
@@ -109,12 +111,12 @@ const MiddleNookie = () => {
         <img
           src={lampImages[lampKey]}
           alt="lamp"
-          className="absolute z-20 top-[-115px] left-[300px] w-[140px] h-full object-contain"
+          className="absolute z-20 left-[288px] bottom-[384px] w-[169px] h-[130px] object-contain"
         />
 
         {/* 별명(alias) */}
         <p
-          className="absolute top-[124px] left-[369px] transform -translate-x-1/2 text-white text-[13.135px] font-[400] text-center z-20"
+          className="absolute top-[106px] left-[373px] transform -translate-x-1/2 text-white text-[13.135px] font-[400] text-center z-20"
           style={{ fontFamily: 'Pretendard' }}
         >
           {profileLoading ? '' : (profile?.alias || '')}
@@ -122,7 +124,7 @@ const MiddleNookie = () => {
 
         {/* 디자인 아이콘 */}
         <button
-          className="absolute top-[26px] right-[23px] w-[28px] h-[28px] flex items-center justify-center z-10" //z-index 수정
+          className="absolute top-[26px] right-[23px] w-[28px] h-[28px] flex items-center justify-center z-10"
           onClick={() => navigate('/home/DesignPage')}
         >
           <img src={designIcon} alt="lamp" className="w-[28px] h-[28px]" />
@@ -138,18 +140,10 @@ const MiddleNookie = () => {
             <img src={penIcon} alt="edit" className="w-[16px] h-[16px]" />
           </button>
 
-          {/* 회원가입 이름 */}
-          <div className="flex flex-col items-center">
-            <img src={profileIcon} alt="profile" className="w-[53px] h-[53px]" />
-            <p className="mt-[10px] text-white text-[14px] font-[600]">
-              {me?.nickname ?? '사용자'}
-            </p>
-          </div>
-
           {/* 목표 정보 */}
           <div className="flex flex-col justify-center">
             <p className="text-white/50 text-[12px] font-[400]">
-              D-{remainingDays} | 올해 독서 목표 {goalBooks}권
+              D - {remainingDays}  &nbsp;| &nbsp;올해 독서 목표 {goalBooks}권
             </p>
 
             <div className="h-[11px]" />
@@ -158,15 +152,28 @@ const MiddleNookie = () => {
               목표까지 {Math.max(0, goalBooks - currentBooks)}권 남았어요!
             </p>
 
-            <div className="mt-[11px] w-[352px] h-[10px] bg-[#423C35]/50 rounded-[12px] overflow-hidden">
+            {/* 진행 바 + 우측 하단 통계 텍스트 */}
+            <div className="mt-[11px] w-[427px]">
+              {/* 진행 바 */}
+              <div className="w-full h-[10px] bg-[#423C35]/50 rounded-[12px] overflow-hidden">
+                <div
+                  className="h-full rounded-[12px]"
+                  style={{
+                    width: `${progressPercent}%`,
+                    background: 'linear-gradient(90deg, #42ABAF 0%, #7ABFC9 100%)',
+                  }}
+                />
+              </div>
+
+              {/* 통계 텍스트: 하단 오른쪽 */}
               <div
-                className="h-full rounded-[12px]"
-                style={{
-                  width: `${progressPercent}%`,
-                  background: 'linear-gradient(90deg, #42ABAF 0%, #7ABFC9 100%)',
-                }}
-              />
+                className="mt-[4px] text-right text-white/50 text-[10px] font-normal"
+                style={{ fontFamily: 'Pretendard', lineHeight: 'normal' }}
+              >
+                {achievedBooks}/{goalBooks}
+              </div>
             </div>
+
           </div>
         </div>
       </div>

@@ -38,8 +38,9 @@ const ReadingGoalModal = ({
   const updateSelectedByPosition = (clientX: number) => {
     if (!sliderRef.current) return;
     const rect = sliderRef.current.getBoundingClientRect();
-    const relativeX = clientX - rect.left;
-    const stepWidth = rect.width / (options.length - 1);
+    const relativeX = clientX - rect.left - 15; // 15px 여백 고려
+    const sliderWidth = rect.width - 30; // 양쪽 15px 여백 제외
+    const stepWidth = sliderWidth / (options.length - 1);
     const index = Math.round(relativeX / stepWidth);
     const clampedIndex = Math.max(0, Math.min(options.length - 1, index));
     setSelected(options[clampedIndex]);
@@ -82,7 +83,7 @@ const ReadingGoalModal = ({
         <p className="mt-[38px] text-white text-[18px] font-[600] leading-[22px]">독서 목표 설정</p>
 
         <div className="mt-[66px] flex flex-col items-center">
-          <div className="flex flex-row justify-between w-[323px] px-[2px]">
+          <div className="flex flex-row justify-between w-[323px]">
             {options.map((num) => (
               <p
                 key={num}
@@ -98,21 +99,32 @@ const ReadingGoalModal = ({
 
           <div
             ref={sliderRef}
-            className="relative mt-[16px] w-[323px] h-[20px] touch-none"
+            className="relative mt-[17px] w-[323px] h-[20px] touch-none "
             onClick={handleSliderClick}
             onMouseDown={handleDrag}
             onTouchStart={handleDrag}
           >
-            <div className="absolute top-[10px] left-0 w-full h-[1px] bg-white" />
-            <div className="absolute top-[6px] left-0 w-full flex justify-between">
+            {/* 가로선 */}
+            <div className="absolute top-[10px] left-0 right-0 h-[1px] bg-white/50" />
+            
+            {/* 세로선들 */}
+            <div className="absolute top-[2px] left-[15px] right-[15px] h-[18px]">
               {options.map((_, idx) => (
-                <div key={idx} className="w-[1px] h-[10px] bg-white" />
+                <div 
+                  key={idx} 
+                  className="absolute w-[1px] h-[18px] bg-white/50"
+                  style={{
+                    left: `${(idx / (options.length - 1)) * 100}%`,
+                  }}
+                />
               ))}
             </div>
+            
+            {/* 슬라이더 동그라미 - 세로선과 정확히 일치하도록 조정 */}
             <div
-              className="absolute top-[1px] w-[18px] h-[18px] rounded-full bg-white cursor-pointer"
+              className="absolute top-[6px] w-[8px] h-[8px] rounded-full bg-white cursor-pointer transform -translate-x-1/2"
               style={{
-                left: `calc(${(options.indexOf(selected) / (options.length - 1)) * 100}% - 9px)`,
+                left: `${15 + (options.indexOf(selected) / (options.length - 1)) * (323 - 30)}px`,
               }}
               onDragStart={(e) => e.preventDefault()}
               onMouseDown={handleDrag}

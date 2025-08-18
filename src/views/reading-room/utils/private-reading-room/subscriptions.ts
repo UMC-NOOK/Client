@@ -62,7 +62,7 @@ export const setupSubscriptions = (
         handler(message);
       });
 
-      console.log(`✅ 구독 성공: ${destination}`, subscription);
+      // console.log(`✅ 구독 성공: ${destination}`, subscription);
     } catch (subError) {
       console.error(`❌ 구독 실패: ${destination}`, subError);
     }

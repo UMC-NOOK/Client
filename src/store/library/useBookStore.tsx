@@ -1,14 +1,15 @@
 import { create } from 'zustand';
 
-export type BookProps = {
+export type BookInfo = {
+  author: string;
   bookId: number;
   thumbnailUrl: string;
-  title: string | null;
+  title: string;
 };
 
 export type BookData = {
-  date: [number, number, number];
-  books: BookProps[];
+  date: number[];
+  bookInfo: BookInfo;
 };
 
 interface BookStoreProps {

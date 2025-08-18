@@ -1,7 +1,7 @@
 import instance from '../../../apis/instance';
 
 export type WeeklyItem = {
-  day: number; // 0~6 (서버 기준)
+  day: number; // 0~6
   bookInfo?: {
     bookId: number;
     title: string;
@@ -16,9 +16,8 @@ export type WeeklyResponse = {
   result: WeeklyItem[];
 };
 
-export async function getWeeklyBooks(): Promise<WeeklyItem[]> {
+export async function getBooks(): Promise<WeeklyItem[]> {
   const { data } = await instance.get<WeeklyResponse>('/api/bookshelf/weekly');
-  // 실패/빈 응답 방어
   if (!data?.isSuccess || !Array.isArray(data.result)) return [];
   return data.result;
 }

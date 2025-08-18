@@ -35,14 +35,14 @@ export default function SearchResultList({
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // URL → query, page
+  // URL → query, page (0 기반)
   const query = (searchParams.get('query') ?? '').trim();
   const pageParam = Number(searchParams.get('page') || 0);
   const page = Number.isNaN(pageParam) || pageParam < 0 ? 0 : pageParam;
 
-  // query 변경 시 page를 1로 리셋 (URL에 반영)
+  // query 변경 시 page를 0으로 리셋 (URL에 반영)
   useEffect(() => {
-    if (page !== 1) {
+    if (page !== 0) {
       const next = new URLSearchParams(searchParams);
       next.set('page', '0');
       setSearchParams(next, { replace: true });
@@ -109,18 +109,18 @@ export default function SearchResultList({
     }
   };
 
-  // ---------- 페이지네이션(10단위 그룹) ----------
+  // ---------- 페이지네이션(10단위 그룹, 0 기반) ----------
   const GROUP = 10;
-  const groupStart = Math.floor((page - 1) / GROUP) * GROUP + 1;
-  const groupEnd = Math.min(totalPages, groupStart + GROUP - 1);
+  const groupStart = Math.floor(page / GROUP) * GROUP;
+  const groupEnd = Math.min(totalPages - 1, groupStart + GROUP - 1);
 
-  const canPrev1 = page > 1;
-  const canNext1 = page < totalPages;
-  const canPrev10 = groupStart > 1;
-  const canNext10 = groupEnd < totalPages;
+  const canPrev1 = page > 0;
+  const canNext1 = page < totalPages - 1;
+  const canPrev10 = groupStart > 0;
+  const canNext10 = groupEnd < totalPages - 1;
 
   const setPageInUrl = (n: number, opts?: { replace?: boolean }) => {
-    const target = Math.max(1, Math.min(totalPages || 1, n));
+    const target = Math.max(0, Math.min((totalPages || 1) - 1, n));
     const next = new URLSearchParams(searchParams);
     next.set('page', String(target));
     setSearchParams(next, opts);

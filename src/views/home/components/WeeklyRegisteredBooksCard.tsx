@@ -45,11 +45,7 @@ export default function WeeklyRegisteredBooksCard() {
   const hasAny = monthly.some(m => m.books.length > 0);
 
   if (isLoading) {
-    return (
-      <div className="w-[246px] h-[157px] bg-[#423C35]/10 rounded-[12px] flex items-center justify-center">
-        <span className="text-white/70 text-sm">불러오는 중…</span>
-      </div>
-    );
+    return <NoRegisteredBooksBox />;
   }
 
   if (isError || !hasAny) {
@@ -58,5 +54,3 @@ export default function WeeklyRegisteredBooksCard() {
 
   return <RegisteredBooksCalendarBox monthly={monthly} />;
 }
-
-

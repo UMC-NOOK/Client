@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useBookStore } from '../../../../store/library/useBookStore';
 import type {
   BookData,
-  BookProps,
+  BookInfo,
 } from '../../../../store/library/useBookStore';
 
 interface TileContentProps {
@@ -16,11 +16,30 @@ const TileContent = ({ date, view }: TileContentProps) => {
   const books = useBookStore((state) => state.books);
 
   const booksByDate = useMemo(() => {
-    const groupedBooks: { [key: string]: BookProps[] } = {};
+    const groupedBooks: { [key: string]: BookInfo[] } = {};
+
+    if (!books || books.length === 0) {
+      return groupedBooks;
+    }
+
     books.forEach((bookData: BookData) => {
+      if (!bookData.date || !bookData.bookInfo) {
+        return;
+      }
+
       const [year, month, day] = bookData.date;
+
+      if (!year || !month || !day) {
+        return;
+      }
+
       const dateString = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      groupedBooks[dateString] = bookData.books;
+
+      if (groupedBooks[dateString]) {
+        groupedBooks[dateString].push(bookData.bookInfo);
+      } else {
+        groupedBooks[dateString] = [bookData.bookInfo];
+      }
     });
 
     return groupedBooks;
@@ -41,11 +60,13 @@ const TileContent = ({ date, view }: TileContentProps) => {
     const booksOnThisDate = booksByDate[dateString];
 
     if (booksOnThisDate && booksOnThisDate.length > 0) {
+      const firstBook: BookInfo = booksOnThisDate[0];
+
       return (
         <div className="absolute inset-3 flex justify-center items-center py-2 px-1 overflow-hidden">
           <img
-            src={booksOnThisDate[0].thumbnailUrl}
-            alt={booksOnThisDate[0].title || '책 제목 없음'}
+            src={firstBook.thumbnailUrl}
+            alt={firstBook.title || '책 제목 없음'}
             style={{
               width: '100%',
               height: '100%',
@@ -53,7 +74,7 @@ const TileContent = ({ date, view }: TileContentProps) => {
               borderRadius: '5px',
               cursor: 'pointer',
             }}
-            onClick={(e) => handleBookClick(booksOnThisDate[0].bookId, e)}
+            onClick={(e) => handleBookClick(firstBook.bookId, e)}
           />
           {booksOnThisDate.length > 1 && (
             <span
@@ -69,7 +90,7 @@ const TileContent = ({ date, view }: TileContentProps) => {
                 zIndex: 1,
                 cursor: 'pointer',
               }}
-              onClick={(e) => handleBookClick(booksOnThisDate[0].bookId, e)}
+              onClick={(e) => handleBookClick(firstBook.bookId, e)}
             >
               +{booksOnThisDate.length - 1}
             </span>

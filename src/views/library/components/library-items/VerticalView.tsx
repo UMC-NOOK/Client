@@ -21,7 +21,7 @@ interface ApiBookData {
 }
 
 export const tabMapping: Record<string, 'READING' | 'FINISHED' | 'BOOKMARK'> = {
-  독서중: 'READING',
+  '독서 중': 'READING',
   완독: 'FINISHED',
   찜: 'BOOKMARK',
 };

@@ -53,11 +53,11 @@
 @font-face {
   font-family: Pretendard;
   font-style: normal;
-  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
-    format('woff');
+  src: url('/fonts/pretendard/Pretendard-SemiBold.woff2') format('woff2');
   font-weight: 600;
   font-display: swap;
 }
+
 
 /* Bold: 700 */
 @font-face {
