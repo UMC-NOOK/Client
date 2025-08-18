@@ -125,13 +125,13 @@ const ReadNotePage = () => {
               src={info_edit_btn}
               alt="Info Edit"
               className="w-17 h-17 cursor-pointer"
-              onClick={libraryCloseHandler}
+              onClick={libraryHandler}
             />
             <img
               src={delete_btn}
               alt="Delete"
               className="w-17 h-17 cursor-pointer"
-              onClick={deleteCloseHandler}
+              onClick={deleteHandler}
             />
           </div>
         </div>
