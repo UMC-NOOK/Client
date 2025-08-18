@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Campfire from '../../../../assets/readingRoom/bg/Campfire.png';
-import Subway from '../../../../assets/readingRoom/bg/Subway.png';
-import ReadingRoom from '../../../../assets/readingRoom/bg/ReadingRoom.png';
+import CAMPFIRE from '../../../../assets/readingRoom/bg/Campfire.png';
+import SUBWAY from '../../../../assets/readingRoom/bg/Subway.png';
+import READINGROOM from '../../../../assets/readingRoom/bg/ReadingRoom.png';
 import ActionButtons from '../reading-room/ActionButtons';
 import { ReadingRoomActionsProvider } from '../../contexts/ReadingRoomActionsContext';
 import InsertInfo from '../reading-room/InsertInfo';
 
 
-type ThemeType = 'Campfire' | 'Subway' | 'ReadingRoom';
+type ThemeType = 'CAMPFIRE' | 'SUBWAY' | 'READINGROOM';
 type UsageType = 'create' | 'edit';
 
 interface CreateReadingRoomProps {
@@ -25,7 +25,7 @@ interface CreateReadingRoomProps {
 
 const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: CreateReadingRoomProps) => {
     const navigate = useNavigate();
-    const[selected, setSelected] = useState<ThemeType>('Campfire');
+    const[selected, setSelected] = useState<ThemeType>('CAMPFIRE');
 
     const [roomName, setRoomName] = useState('');
     const [roomDescription, setRoomDescription] = useState('');
@@ -34,9 +34,9 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
     const isCreatingValid = roomName.trim() !== "" && roomDescription.trim() !== "";
 
     const themeImages: Record<ThemeType, string> = {
-        Campfire,
-        Subway,
-        ReadingRoom,
+        CAMPFIRE,
+        SUBWAY,
+        READINGROOM,
     };
 
     useEffect(() => {
@@ -109,7 +109,7 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
                                 </div>
 
                                 <div className='flex flex-row justify-start items-center gap-5 mt-7 mb-10'>
-                                    {(['Campfire', 'Subway', 'ReadingRoom'] as ThemeType[]).map((theme) => (
+                                    {(['CAMPFIRE', 'SUBWAY', 'READINGROOM'] as ThemeType[]).map((theme) => (
                                         <img
                                             key={theme}
                                             src={themeImages[theme]}
