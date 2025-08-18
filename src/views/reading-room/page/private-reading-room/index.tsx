@@ -103,8 +103,6 @@ const PrivateReadingRoom = () => {
     roomId: Number(roomId),
   });
 
-  console.log('내다리나놔', myRoleData);
-
   const audioMap: Record<ThemeName, string> = useMemo(
     () => ({
       CAMPFIRE: audio1,
@@ -191,14 +189,12 @@ const PrivateReadingRoom = () => {
     setEntSound(newEntSoundState);
     actions.toggleBgm(newEntSoundState);
 
-    // 전체 소리가 꺼지면 개인 소리도 강제로 끄기
     if (!newEntSoundState) {
       setSound(false);
     }
   };
 
   const handlePersonalBgmToggle = (bgmOn: boolean) => {
-    // 실제 오디오 재생/정지는 전체 소리와 개인 소리 모두 고려
     if (isEntSoundEnabled && bgmOn) {
       handleBgm(); // 오디오 재생
     } else {
@@ -229,7 +225,6 @@ const PrivateReadingRoom = () => {
 
   useEffect(() => {
     if (messages.allCurrentBooks && messages.allCurrentBooks.length > 0) {
-      // 배열의 마지막 요소(최신 데이터)를 가져옴
       const latestBooksData =
         messages.allCurrentBooks[messages.allCurrentBooks.length - 1];
       setCurrentReadingBooks(latestBooksData.books || latestBooksData);
@@ -321,10 +316,6 @@ const PrivateReadingRoom = () => {
   // 룸 정보 업데이트 감지
   useEffect(() => {
     if (messages.roomInfoUpdate) {
-      // console.log(
-      //   '룸 정보가 업데이트되었습니다:',
-      //   messages.roomInfoUpdate.themeName,
-      // );
       setCurrentTheme(messages?.roomInfoUpdate.themeName);
     } else if (data?.themeName) {
       setCurrentTheme(data?.themeName);
@@ -363,8 +354,6 @@ const PrivateReadingRoom = () => {
     }
   }, [currentTheme, currentUsers]);
 
-  console.log('zldpdpdpd', currentTheme);
-
   return (
     <div className="max-w-[970px] h-[780px] m-auto relative">
       {themeComponent}
@@ -398,7 +387,7 @@ const PrivateReadingRoom = () => {
       <div className="relative">
         {activePanel === 'member' && (
           <div className="absolute bottom-[130px] left-[300px]">
-            <MemberPanel />
+            <MemberPanel roomId={Number(finalRoomId)} />
           </div>
         )}
         {activePanel === 'book' && (

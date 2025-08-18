@@ -10,22 +10,21 @@ interface Member {
   isMe: boolean;
 }
 
-function MemberPanel() {
-  const roomId = 12;
+interface MemberPanelProps {
+  roomId: number;
+}
+
+function MemberPanel({ roomId }: MemberPanelProps) {
   const { data, isLoading, isError, error, isSuccess, refetch } =
     useGetMemberList({
       roomId: Number(roomId),
     });
-
-  console.log('맴바??', data);
 
   const hostMember: Member | undefined = data?.find(
     (member: Member) => member.isMe === true,
   );
   const guestMembers: Member[] =
     data?.filter((member: Member) => member.isMe === false) || [];
-
-  // console.log('맴바', guestMembers);
 
   // 역할 번역 함수
   const translateRole = (role: string) => {
