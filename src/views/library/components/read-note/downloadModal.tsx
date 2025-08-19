@@ -11,7 +11,7 @@ import fullStar from '/src/assets/button/book-info/fullStar.svg';
 import emptyStar from '/src/assets/button/book-info/emptyStar.svg';
 
 // hooks
-import useGetSentenceList from '../../hooks/useMutation/read-note/useGetSentenceList';
+import useGetSentenceList from '../../hooks/useQuery/read-note/useGetSentenceList';
 
 interface DownloadModalProps {
   onDownload: () => void;

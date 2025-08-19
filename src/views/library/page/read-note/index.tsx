@@ -18,7 +18,7 @@ import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 import DownloadModal from '../../components/read-note/downloadModal';
 
 // hooks
-import useGetSentenceList from '../../hooks/useMutation/read-note/useGetSentenceList';
+import useGetSentenceList from '../../hooks/useQuery/read-note/useGetSentenceList';
 
 const ReadNotePage = () => {
   const navigate = useNavigate();
