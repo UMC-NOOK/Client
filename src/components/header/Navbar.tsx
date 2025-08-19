@@ -29,7 +29,7 @@ const Navbar = ({ isLogin }: NavbarProps) => {
             className={`px-6 py-3 transition 
               ${
                 location.pathname === menu.path
-                  ? 'text-nook-secondaey text-center font-semibold border-b-2 border-nook-secondaey'
+                  ? 'text-nook-secondaey text-center font-semibold border-b-1 border-nook-secondaey'
                   : 'text-[rgba(211,211,211,0.5)] font-normal text-[1.6rem]'
               }`}
           >

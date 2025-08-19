@@ -6,7 +6,7 @@ export interface roomExitProps {
 
 const roomExit = async ({ roomId }: roomExitProps) => {
   try {
-    const res = await instance.get(`api/reading-rooms/${roomId}/guest`, {
+    const res = await instance.delete(`api/reading-rooms/${roomId}/guest`, {
       params: { roomId },
     });
     return res.data.result;

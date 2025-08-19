@@ -35,7 +35,7 @@ const SaveList = ({ onClick }: SaveListProps) => {
         className="flex items-baseline gap-4 cursor-pointer group border-b-transparent hover:border-nook-300"
         onClick={onClick}
       >
-        <span className="text-[2rem] font-normal text-nook-100 group-hover:text-nook-300">
+        <span className="text-[2rem] font-semibold text-nook-100 group-hover:text-nook-300">
           찜
         </span>
         <button className="w-10 h-10 flex items-center justify-center translate-y-[2px]">
@@ -46,7 +46,7 @@ const SaveList = ({ onClick }: SaveListProps) => {
           />
         </button>
       </div>
-      <p className="text-[1.3rem] text-nook-100 font-light mt-5 mb-11">
+      <p className="text-[1.3rem] text-nook-100 font-extralight mt-5 mb-11">
         내가 찜한 책을 확인해보세요
       </p>
       <div className="flex flex-col items-center gap-9">
