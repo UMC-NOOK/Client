@@ -49,6 +49,7 @@ const TopBar = ({
             fontStyle: 'normal',
             fontWeight: 400,
             lineHeight: '25px',
+            marginLeft: '4px',
           }}
         >
           {realName}
