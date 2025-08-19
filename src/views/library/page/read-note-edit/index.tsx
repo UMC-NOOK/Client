@@ -21,6 +21,7 @@ import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 // hooks
 import useGetSentenceList from '../../hooks/useQuery/read-note/useGetSentenceList';
 import useDeleteSentence from '../../hooks/useMutation/read-note-edit/useDeleteSentence';
+import useDeleteComment from '../../hooks/useMutation/read-note-edit/useDeleteComment';
 
 const ReadNoteEditPage = () => {
   const navigate = useNavigate();
@@ -29,6 +30,8 @@ const ReadNoteEditPage = () => {
   const [clickPhraseId, setClickPhraseId] = useState<number>();
 
   const { data: sentenceList } = useGetSentenceList(location.state.bookId);
+  const { mutate: deleteSentence } = useDeleteSentence(clickPhraseId ?? -1);
+  const { mutate: deleteComment } = useDeleteComment(clickPhraseId ?? -1);
 
   // textArea 로직
   type textContentType = 'phrase' | 'impression' | 'quotation';
@@ -107,6 +110,13 @@ const ReadNoteEditPage = () => {
     setIsDeleteModalOpen((prev) => !prev);
   };
   const handleDelete = () => {
+    if (deleteOption === 'read-note-edit-phrase') {
+      deleteSentence();
+    } else if (deleteOption === 'read-note-edit-impression') {
+      deleteComment();
+    } else if (deleteOption === 'read-note-edit-quotation') {
+      deleteComment();
+    }
     setIsDeleteModalOpen(false);
   };
 
