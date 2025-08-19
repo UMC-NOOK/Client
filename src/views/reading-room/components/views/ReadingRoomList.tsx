@@ -77,7 +77,11 @@ const ReadingRoomList = () => {
                             fillOpacity="0.5"
                         />
                         </svg>
-                    <div className="text-white text-xl ml-6">내 리딩룸</div>
+                    <div 
+                        className="text-white text-xl ml-6 cursor-pointer"
+                        onClick={() => navigate('/reading-room')}>
+                            내 리딩룸
+                    </div>
                 </div>
 
             <div className="grid grid-cols-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-5 mt-12">
