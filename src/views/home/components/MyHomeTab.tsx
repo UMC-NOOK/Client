@@ -17,15 +17,17 @@ interface MyHomeTabProps {
 const wallpapers: { name: PatternKey; src: string }[] = [
   { name: 'default', src: wallpaperDefault },
   { name: 'stripe', src: wallpaperStripe },
-  { name: 'stars', src: wallpaperStars },
+  { name: 'argyle', src: wallpaperArgyle },
+
   { name: 'drop', src: wallpaperDrop },
   { name: 'check', src: wallpaperCheck },
-  { name: 'argyle', src: wallpaperArgyle },
+  { name: 'stars', src: wallpaperStars },
+
 ];
 
 const MyHomeTab: FC<MyHomeTabProps> = ({ selected, setSelected }) => {
   return (
-    <div className="grid grid-cols-2 gap-y-[10px] gap-x-[20px] p-[2px]"> {/* p-[2px] 추가 */}
+    <div className="grid grid-cols-2 mt-[21.41px] gap-y-[10px] gap-x-[20px] p-[2px]"> 
       {wallpapers.map((wall) => {
         const isActive = selected === wall.name;
         return (
@@ -36,7 +38,7 @@ const MyHomeTab: FC<MyHomeTabProps> = ({ selected, setSelected }) => {
             className={[
               'w-[168px] h-[168px] rounded-[30px]',
               'relative select-none cursor-pointer',
-              isActive ? 'ring-[1px] ring-[#7ABFC9]' : 'ring-0 hover:ring-[1px]',
+              isActive ? 'ring-[1px] ring-[#7ABFC9]' : 'ring-0 hover:ring-[1px] hover:ring-[#FFFFFF33]',
               'ring-offset-0 ring-offset-transparent',
               'focus:outline-none outline-none',
               'transition-[box-shadow,transform] duration-150 ease-out active:scale-[0.98]',

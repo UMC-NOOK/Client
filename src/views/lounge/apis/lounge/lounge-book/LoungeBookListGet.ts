@@ -21,7 +21,7 @@ const LoungeBookListGet = async ({ mallType, sectionId, categoryId, page = 0,  }
         return res.data;
     }catch(err){
         console.log('라운지 도서 리스트', err);
-        throw err; // ← 이거 필수
+        throw err;
     }
 }
 

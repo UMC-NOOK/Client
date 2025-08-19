@@ -1,28 +1,75 @@
 import gridButton from '../../../../../assets/button/library/Frame 25.png';
 import hamburger from '../../../../../assets/button/library/Frame 26.png';
 
+import { useGetProfile } from '../../../../home/hooks/useQuery/useGetProfile';
+import { useGetMe } from '../../../../home/hooks/useQuery/useGetMe';
+
 interface TopBarProps {
-  userName: string | null;
   onChangeGrid: () => void;
   onChangeVertical: () => void;
   activeView: 'grid' | 'vertical';
 }
 
 const TopBar = ({
-  userName,
   onChangeGrid,
   onChangeVertical,
   activeView,
 }: TopBarProps) => {
+  // alias (별명)
+  const { data: profile } = useGetProfile();
+  // 본명 (nickname)
+  const { data: me } = useGetMe();
+
+  const alias = profile?.alias?.trim() || '프로 독자';
+  const realName = me?.nickname?.trim() || '사용자';
+
   return (
     <div className="w-full h-34 bg-[rgba(66,60,53,0.2)] text-nook-100 flex justify-between items-center px-20 rounded-[8px]">
-      <div className="text-lg font-normal">
-        프로 독자&nbsp;
-        <span className="text-nook-secondaey text-lg font-normal">
-          {userName}
+      <div className="flex items-baseline gap-1">
+        {/* 별명 */}
+        <span
+          className="text-[#7ABFC9]"
+          style={{
+            fontFamily: 'Pretendard',
+            fontSize: '18px',
+            fontStyle: 'normal',
+            fontWeight: 600,
+            lineHeight: '25px',
+          }}
+        >
+          {alias}
         </span>
-        &nbsp;님의 서재
+
+        {/* 닉네임 */}
+        <span
+          className=" text-nook-100"
+          style={{
+            fontFamily: 'Pretendard',
+            fontSize: '18px',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: '25px',
+            marginLeft: '4px',
+          }}
+        >
+          {realName}
+        </span>
+
+        {/* 님의 서재 */}
+        <span
+          className=" text-nook-100"
+          style={{
+            fontFamily: 'Pretendard',
+            fontSize: '17px',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: '25px',
+          }}
+        >
+          님의 서재
+        </span>
       </div>
+
       <div className="flex gap-2">
         <button
           className={`w-14 h-14 object-contain rounded-md  ${

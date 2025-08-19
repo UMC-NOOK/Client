@@ -18,15 +18,20 @@ import useGetBookList from '../../hooks/private-reading-room/useQuery/useGetBook
 import useGetTheme from '../../hooks/private-reading-room/useQuery/useGetTheme';
 import NotFoundPage from '../../../404';
 import useCurrentBookStore from '../../../../store/private-reading-room/useCurrentBookStore';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useAudio from '../../hooks/private-reading-room/audio/useAudio';
 import audio1 from '/audio/readingroom_campfire.mp3';
 import audio2 from '/audio/readingroom_library.mp3';
 import audio3 from '/audio/readingroom_subway.mp3';
+import usePatchRoomInfo from '../../hooks/private-reading-room/useMutation/usePatchRoomInfo';
+import useDeleteRoom from '../../hooks/private-reading-room/useMutation/useDeleteRoom';
+import useExitRoom from '../../hooks/private-reading-room/useMutation/useExitRoom';
+import useGetMyRole from '../../hooks/private-reading-room/useQuery/useGetMyRole';
 
 type ThemeName = 'CAMPFIRE' | 'READINGROOM' | 'SUBWAY';
 
 const PrivateReadingRoom = () => {
+  const navigate = useNavigate();
   const [activePanel, setActivePanel] = useState<
     'member' | 'book' | 'setting' | null
   >(null);
@@ -38,6 +43,7 @@ const PrivateReadingRoom = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const [music, setMusic] = useState<boolean>(true);
+  const [currentTheme, setCurrentTheme] = useState('');
 
   const {
     isExitModalOpen,
@@ -88,6 +94,14 @@ const PrivateReadingRoom = () => {
   const { data, isLoading, isError, error, isSuccess, refetch } = useGetTheme({
     roomId: Number(roomId),
   });
+  // setCurrentTheme(data?.themeName);
+  useEffect(() => {
+    setCurrentTheme(data?.themeName);
+  }, [data]);
+
+  const { data: myRoleData } = useGetMyRole({
+    roomId: Number(roomId),
+  });
 
   const audioMap: Record<ThemeName, string> = useMemo(
     () => ({
@@ -100,13 +114,13 @@ const PrivateReadingRoom = () => {
 
   // 현재 테마에 맞는 오디오 소스
   const currentAudioSrc = useMemo(() => {
-    const themeName = data?.themeName as ThemeName | undefined;
+    const themeName = currentTheme as ThemeName | undefined;
 
     if (themeName && themeName in audioMap) {
       return audioMap[themeName];
     }
     return audioMap['READINGROOM']; // 기본값
-  }, [data?.themeName, audioMap]);
+  }, [data?.themeName, audioMap, currentTheme]);
 
   useEffect(() => {
     const audioElement = audioRef.current;
@@ -122,7 +136,7 @@ const PrivateReadingRoom = () => {
         });
       }
     }
-  }, [currentAudioSrc]);
+  }, [currentAudioSrc, currentTheme]);
 
   const handleBgm = () => {
     const audioElement = audioRef.current;
@@ -141,8 +155,24 @@ const PrivateReadingRoom = () => {
     setActivePanel(activePanel === panelType ? null : panelType);
   };
 
-  const handleDelete = () => {
-    console.log('삭제로직');
+  const deleteRoomMutation = useDeleteRoom({
+    onSuccess: () => {
+      navigate('/reading-rooms');
+    },
+    onError: (error) => {},
+  });
+  const handleDelete = (roomId: number) => {
+    deleteRoomMutation.mutate({ roomId });
+  };
+
+  const exitRoomMutation = useExitRoom({
+    onSuccess: () => {
+      navigate('/reading-rooms');
+    },
+    onError: (error) => {},
+  });
+  const handleExit = (roomId: number) => {
+    exitRoomMutation.mutate({ roomId });
   };
 
   // console.log('asdfadf', data);
@@ -159,14 +189,12 @@ const PrivateReadingRoom = () => {
     setEntSound(newEntSoundState);
     actions.toggleBgm(newEntSoundState);
 
-    // 전체 소리가 꺼지면 개인 소리도 강제로 끄기
     if (!newEntSoundState) {
       setSound(false);
     }
   };
 
   const handlePersonalBgmToggle = (bgmOn: boolean) => {
-    // 실제 오디오 재생/정지는 전체 소리와 개인 소리 모두 고려
     if (isEntSoundEnabled && bgmOn) {
       handleBgm(); // 오디오 재생
     } else {
@@ -177,7 +205,7 @@ const PrivateReadingRoom = () => {
     }
   };
 
-  console.log('전체메세지', messages);
+  // console.log('전체메세지', messages);
 
   // 입장 정보 업데이트 감지
   const [currentUsers, setCurrentUsers] = useState(null);
@@ -197,7 +225,6 @@ const PrivateReadingRoom = () => {
 
   useEffect(() => {
     if (messages.allCurrentBooks && messages.allCurrentBooks.length > 0) {
-      // 배열의 마지막 요소(최신 데이터)를 가져옴
       const latestBooksData =
         messages.allCurrentBooks[messages.allCurrentBooks.length - 1];
       setCurrentReadingBooks(latestBooksData.books || latestBooksData);
@@ -260,12 +287,40 @@ const PrivateReadingRoom = () => {
 
   // console.log('zlzllz', currentReadingBooks);
 
+  const patchRoomInfo = usePatchRoomInfo();
+
+  const handleUpdateRoom = (data: any) => {
+    patchRoomInfo.mutate({
+      roomId: data?.roomId,
+      themeName: convertThemeName(data?.theme),
+      hashtags: data?.tags,
+      requestBody: {
+        name: data?.name,
+        description: data?.description,
+      },
+    });
+  };
+
+  const convertThemeName = (theme: string) => {
+    switch (theme) {
+      case 'CAMPFIRE':
+        return 'CAMPFIRE';
+      case 'SUBWAY':
+        return 'SUBWAY';
+      case 'LIBRARY':
+      default:
+        return 'LIBRARY';
+    }
+  };
+
   // 룸 정보 업데이트 감지
-  // useEffect(() => {
-  //   if (messages.roomInfoUpdate) {
-  //     console.log('룸 정보가 업데이트되었습니다:', messages.roomInfoUpdate);
-  //   }
-  // }, [messages.roomInfoUpdate]);
+  useEffect(() => {
+    if (messages.roomInfoUpdate) {
+      setCurrentTheme(messages?.roomInfoUpdate.themeName);
+    } else if (data?.themeName) {
+      setCurrentTheme(data?.themeName);
+    }
+  }, [messages.roomInfoUpdate, data?.themeName]);
 
   // BGM 토글 감지
   useEffect(() => {
@@ -286,9 +341,9 @@ const PrivateReadingRoom = () => {
   }, [messages.bgmToggle, isSoundEnabled]);
 
   const themeComponent = useMemo(() => {
-    if (!data?.themeName) return <NotFoundPage />;
+    if (!currentTheme) return <NotFoundPage />;
 
-    switch (data.themeName) {
+    switch (currentTheme) {
       case 'CAMPFIRE':
         return <CampFire currentUsers={currentUsers} />;
       case 'SUBWAY':
@@ -297,7 +352,7 @@ const PrivateReadingRoom = () => {
       default:
         return <ReadingRoom currentUsers={currentUsers} />;
     }
-  }, [data?.themeName, currentUsers]);
+  }, [currentTheme, currentUsers]);
 
   return (
     <div className="max-w-[970px] h-[780px] m-auto relative">
@@ -316,7 +371,7 @@ const PrivateReadingRoom = () => {
       {isExitModalOpen && (
         <DeleteBtn
           usage="exit"
-          onDelete={handleDelete}
+          onDelete={() => handleExit(Number(finalRoomId))}
           closeModal={toggleExitModal}
         />
       )}
@@ -324,7 +379,7 @@ const PrivateReadingRoom = () => {
       {isDeleteModalOpen && (
         <DeleteBtn
           usage="delete"
-          onDelete={handleDelete}
+          onDelete={() => handleDelete(Number(finalRoomId))}
           closeModal={toggleDeleteModal}
         />
       )}
@@ -332,7 +387,7 @@ const PrivateReadingRoom = () => {
       <div className="relative">
         {activePanel === 'member' && (
           <div className="absolute bottom-[130px] left-[300px]">
-            <MemberPanel />
+            <MemberPanel roomId={Number(finalRoomId)} />
           </div>
         )}
         {activePanel === 'book' && (
@@ -351,11 +406,26 @@ const PrivateReadingRoom = () => {
         )}
         {isEditModalOpen && (
           <Modal onClose={closeEditModal}>
-            <CreateReadingRoom usage="edit" onCloseModal={closeEditModal} />
+            <CreateReadingRoom
+              usage="edit"
+              onCloseModal={closeEditModal}
+              onEdit={(data) => {
+                console.log('변경된 룸 정보', data);
+                handleUpdateRoom(data);
+              }}
+              room={{
+                roomId: Number(finalRoomId),
+                name: '',
+                description: '',
+                theme: 'Subway',
+                tags: [],
+              }}
+            />
           </Modal>
         )}
         <ControlBar
-          roll="host"
+          roll={myRoleData === 'HOST' ? 'host' : 'guest'}
+          // roll={'host'}
           onMemberClick={() => handlePanelToggle('member')}
           onBookClick={() => handlePanelToggle('book')}
           onSettingClick={() => handlePanelToggle('setting')}

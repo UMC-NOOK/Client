@@ -20,7 +20,7 @@ const CurrentlyReadingBox = () => {
   return (
     <div className="w-[246px] h-[60px] bg-[#423C35]/10 rounded-[12px] py-0 flex items-start justify-between">
       {/* 왼쪽: 아이콘 + 텍스트 */}
-      <div className="flex items-start gap-[14px] pt-[16px] pb-[14px] ml-[15px]">
+      <div className="flex items-start gap-[14px] pt-[16px] pb-[14px] ml-[24px]">
         {/* 아이콘 박스 */}
         <div className="w-[30px] h-[30px] bg-[#423C35] rounded-[8px] flex items-center justify-center flex-shrink-0">
           <img
@@ -42,7 +42,7 @@ const CurrentlyReadingBox = () => {
             overflow-hidden whitespace-nowrap text-ellipsis max-w-[150px]"
           >
             {isLoading
-              ? '로딩 중…'
+              ? '추천 책 보기'
               : hasBooks
               ? randomBook?.title
               : '독서 중인 책이 없어요'}

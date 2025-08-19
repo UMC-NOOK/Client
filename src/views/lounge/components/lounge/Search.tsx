@@ -29,7 +29,7 @@ const Search = () => {
                     placeholder:text-[rgba(184, 175, 165, 0.5)]
                     placeholder:text-xs
                     "
-          placeholder={isFocused ? '' : '제목, 저자, ISBN으로 검색'}
+          placeholder={isFocused ? '' : ', ISBN으로 검색'}
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           onFocus={() => setIsFocused(true)}

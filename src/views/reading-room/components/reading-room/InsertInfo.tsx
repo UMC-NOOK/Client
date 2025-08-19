@@ -6,6 +6,8 @@ interface Props {
     setRoomName: (value: string) => void;
     roomDescription: string;
     setRoomDescription: (value: string) => void;
+    selectedTags: string[];
+    setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const InsertInfo = ({
@@ -13,11 +15,12 @@ const InsertInfo = ({
     setRoomName,
     roomDescription,
     setRoomDescription,
+    selectedTags,
+    setSelectedTags
     }: Props) => {
     const tag1 = ['자유 독서', '필사', '낮', '밤', '주말', '10대', '대학생', '직장인'];
     const tag2 = ['소설', '인문', '자기계발', '경제경영', '공학', '영어원서'];
-    
-    const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const nameVisualLength = Array.from(roomName).length;
@@ -52,7 +55,7 @@ const InsertInfo = ({
                             if(e.target.value.length <= 30) setRoomName(e.target.value);
                         }}
                         placeholder="리딩룸의 이름을 입력해주세요."
-                        className="flex justify-start items-center ml-7 mt-6"
+                        className="flex justify-start items-center ml-7 mt-6 w-224"
                         style={{color: 'rgba(255, 255, 255,0.5)'}}/>
                 </div>
             </div>
@@ -76,7 +79,7 @@ const InsertInfo = ({
                             if(e.target.value.length <= 30) setRoomDescription(e.target.value);
                         }}
                         placeholder="리딩룸을 소개해주세요."
-                        className="flex justify-start items-center ml-7 mt-6"
+                        className="flex justify-start items-center ml-7 mt-6 w-224"
                         style={{color: 'rgba(255, 255, 255,0.5)'}}/>
                 </div>
             </div>
