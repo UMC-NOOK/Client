@@ -20,16 +20,15 @@ import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 
 // hooks
 import useGetSentenceList from '../../hooks/useQuery/read-note/useGetSentenceList';
+import useDeleteSentence from '../../hooks/useMutation/read-note-edit/useDeleteSentence';
 
 const ReadNoteEditPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { data: sentenceList } = useGetSentenceList(location.state.bookId);
+  const [clickPhraseId, setClickPhraseId] = useState<number>();
 
-  const [isReadNoteExist, setIsReadNoteExist] = useState(true);
-  const [isImpressionExist, setIsImpressionExist] = useState(true);
-  const [clickPhraseId, setClickPhraseId] = useState<number | null>(null);
+  const { data: sentenceList } = useGetSentenceList(location.state.bookId);
 
   // textArea 로직
   type textContentType = 'phrase' | 'impression' | 'quotation';
@@ -106,8 +105,6 @@ const ReadNoteEditPage = () => {
     setIsDeleteModalOpen((prev) => !prev);
   };
   const handleDelete = () => {
-    // 삭제 로직을 여기에 구현
-    console.log('삭제되었습니다.');
     setIsDeleteModalOpen(false);
   };
 
@@ -179,6 +176,7 @@ const ReadNoteEditPage = () => {
                         <Phrase
                           page={phrase.page ?? undefined}
                           text={phrase.text}
+                          phraseId={phrase.phraseId}
                           setSelectedPhrasePage={setSelectedPhrasePage}
                           setTextContent={setTextContent}
                           clickPhrase={() => {

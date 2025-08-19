@@ -1,14 +1,19 @@
 import { useState } from 'react';
 
+// imgs
 import edit_btn from '/src/assets/button/read-note-edit/edit-btn.svg';
 import delete_btn from '/src/assets/button/read-note-edit/delete-btn.svg';
 import quotation_btn from '/src/assets/button/read-note-edit/quotation-btn.svg';
 import send_btn from '/src/assets/button/read-note-edit/send-button.svg';
 
+// hooks
+import usePutSentence from '../../hooks/useMutation/read-note-edit/usePutSentence';
+
 type textContentType = 'phrase' | 'impression' | 'quotation';
 interface PhraseProps {
   page?: number | string;
   text: string;
+  phraseId: number; // Optional prop for phrase ID
   setSelectedPhrasePage: (page: number | string | null) => void;
   setTextContent: (content: textContentType) => void;
   clickPhrase: () => void;
@@ -19,6 +24,7 @@ interface PhraseProps {
 const Phrase = ({
   page = '-',
   text,
+  phraseId,
   setSelectedPhrasePage,
   setTextContent,
   clickPhrase,
@@ -29,6 +35,8 @@ const Phrase = ({
   const [isEditing, setIsEditing] = useState(false);
   const [textValue, setTextValue] = useState(text);
   const [pageValue, setPageValue] = useState<number | string>(page);
+
+  const { mutate: putSentence } = usePutSentence(phraseId);
 
   // hover 로직
   const handleMouseEnter = () => {
@@ -44,6 +52,14 @@ const Phrase = ({
     clickPhrase();
   };
   const handleSend = () => {
+    if (textValue.trim() === '') {
+      alert('내용을 입력해주세요.');
+      return;
+    }
+    putSentence({
+      page: pageValue.toString(),
+      content: textValue,
+    });
     setIsEditing(false);
     clickPhrase();
   };
