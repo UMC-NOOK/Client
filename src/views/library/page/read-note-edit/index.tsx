@@ -22,19 +22,16 @@ import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 import useGetSentenceList from '../../hooks/useQuery/read-note/useGetSentenceList';
 import useDeleteSentence from '../../hooks/useMutation/read-note-edit/useDeleteSentence';
 import useDeleteComment from '../../hooks/useMutation/read-note-edit/useDeleteComment';
+import usePostComment from '../../hooks/useMutation/read-note-edit/usePostComment';
+import usePostSentence from '../../hooks/useMutation/read-note-edit/usePostSentence';
 
 const ReadNoteEditPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [clickPhraseId, setClickPhraseId] = useState<number>();
-
-  const { data: sentenceList } = useGetSentenceList(location.state.bookId);
-  const { mutate: deleteSentence } = useDeleteSentence(clickPhraseId ?? -1);
-  const { mutate: deleteComment } = useDeleteComment(clickPhraseId ?? -1);
-
   // textArea 로직
   type textContentType = 'phrase' | 'impression' | 'quotation';
+  const [clickPhraseId, setClickPhraseId] = useState<number>();
   const [textContent, setTextContent] = useState<textContentType>('phrase');
   const [placeholderText, setPlaceholderText] = useState(
     '책에서 수집하고 싶은 문장을 작성해보세요.',
@@ -61,6 +58,15 @@ const ReadNoteEditPage = () => {
       }
     }
   }, [textContent, selectedPhrasePage]);
+
+  const { data: sentenceList } = useGetSentenceList(location.state.bookId);
+  const { mutate: deleteSentence } = useDeleteSentence(clickPhraseId ?? -1);
+  const { mutate: deleteComment } = useDeleteComment(clickPhraseId ?? -1);
+  const { mutate: postComment } = usePostComment(location.state.bookId);
+  const { mutate: postSentence } = usePostSentence(location.state.bookId);
+
+  const [textValue, setTextValue] = useState();
+  const [pageValue, setPageValue] = useState<string | null>();
 
   const phrases = useMemo(
     () =>
@@ -247,6 +253,9 @@ const ReadNoteEditPage = () => {
                       type="number"
                       placeholder="페이지를 입력해주세요 (숫자만 입력)"
                       className="no-spinner w-full text-white text-xs not-italic font-normal leading-5 bg-transparent outline-none placeholder:text-[#95908a] placeholder:text-xs placeholder:not-italic placeholder:font-normal placeholder:leading-5"
+                      onChange={(e) => {
+                        setPageValue(e.target.value || null);
+                      }}
                     />
                   </div>
                 ) : (
@@ -304,6 +313,29 @@ const ReadNoteEditPage = () => {
                       }
                       alt="send"
                       className="w-12 h-12"
+                      onClick={() => {
+                        if (textAreaContent.trim() !== '') {
+                          if (textContent === 'phrase') {
+                            postSentence({
+                              content: textAreaContent,
+                              page: pageValue ?? null,
+                            });
+                          } else if (textContent === 'impression') {
+                            postComment({
+                              content: textAreaContent,
+                              parentRecordId: null,
+                            });
+                          } else if (textContent === 'quotation') {
+                            postComment({
+                              content: textAreaContent,
+                              parentRecordId: clickPhraseId ?? null,
+                            });
+                          }
+                          setTextAreaContent('');
+                          setPageValue('');
+                          setTextContent('phrase');
+                        }
+                      }}
                     />
                   </div>
                 </div>
