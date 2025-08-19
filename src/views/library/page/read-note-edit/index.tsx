@@ -61,11 +61,13 @@ const ReadNoteEditPage = () => {
 
   const phrases = useMemo(
     () =>
-      (sentenceList?.result ?? []).map((s) => ({
-        phraseId: s.recordId,
-        page: s.page ? Number(s.page) : null,
-        text: s.content,
-      })),
+      (sentenceList?.result ?? [])
+        .filter((s) => s.recordType === 'RECORD')
+        .map((s) => ({
+          phraseId: s.recordId,
+          page: s.page ? Number(s.page) : null,
+          text: s.content,
+        })),
     [sentenceList],
   );
 
@@ -190,6 +192,7 @@ const ReadNoteEditPage = () => {
                           <Quotation
                             key={q.quotationId}
                             text={q.text}
+                            quotationId={q.quotationId}
                             clickPhrase={() => {
                               setClickPhraseId(phrase.phraseId);
                               setDeleteOption('read-note-edit-quotation');
