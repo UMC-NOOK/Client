@@ -1,4 +1,4 @@
-import Nook from '../../assets/logo/NOOK.png';
+import Nook from '../../assets/header/NOOK.svg';
 import { useNavigate } from 'react-router-dom';
 
 interface LogoProps {
