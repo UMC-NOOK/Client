@@ -1,6 +1,3 @@
-// src/components/common/BookRow.tsx
-
-import { useState } from 'react';
 import saveIcon from '../../assets/button/search/save.png';
 import infoIcon from '../../assets/button/search/info.png';
 import dotIcon from '../../assets/button/search/Ellipse.png';
@@ -13,17 +10,18 @@ interface BookRowProps {
     author: string;
     publisher: string;
     publication_date: string;
-    bookId: number; // ← 이미 요구됨
+    bookId: number;
   };
   onClickInfo: () => void;
-  onClickAdd: () => void;   // ← 부모에서 모달 열기
+  onClickAdd: () => void;
 }
 
 export default function BookRow({ book, onClickInfo, onClickAdd }: BookRowProps) {
   return (
     <div className="w-full max-w-[1040px] mx-auto">
       <div className="relative flex justify-between items-center w-full h-[173px] rounded-md mb-4">
-        <div className="flex items-center gap-[8px]">
+        {/* 이미지 + 정보 */}
+        <div className="flex items-start gap-[21.56px]">
           <img
             src={book.img}
             alt={book.bookName}
@@ -35,28 +33,86 @@ export default function BookRow({ book, onClickInfo, onClickAdd }: BookRowProps)
             <p className="text-white text-[14px] my-[17px]">{book.author}</p>
             <p className="text-white text-[14px]">
               {book.publisher}
-              <img src={dotIcon} alt="dot" className="inline-block" style={{ width: '1px', height: '1px', margin: '6px' }} />
+              <img
+                src={dotIcon}
+                alt="dot"
+                className="inline-block"
+                style={{ width: '1px', height: '1px', margin: '6px' }}
+              />
               {new Date(book.publication_date).getFullYear()}년
             </p>
           </div>
         </div>
 
-        <div className="absolute bottom-4 right-6 flex flex-col gap-[8px] shrink-0">
+        {/* 액션 버튼들 */}
+        <div className="absolute bottom-0 right-6 flex flex-col gap-[8px] shrink-0">
+          {/* 책 정보 버튼 */}
           <button
-            type="button"                   // ← 폼 제출 방지
-            onClick={onClickInfo}           // ← 부모 핸들러 사용
-            className="flex justify-center items-center gap-[8px] text-white w-[121px] h-[40px] px-[20px] py-[8px] rounded-[8px] border border-[#555351] bg-transparent text-[15.4px] font-normal leading-[25px]"
+            type="button"
+            onClick={onClickInfo}
+            className="flex justify-center items-center gap-[8px] text-white rounded-[8px] border border-transparent transition-colors"
+            style={{
+              width: '100px',
+              height: '36px',
+              padding: '8px 20px',
+              background: 'rgba(55, 50, 44, 0.50)',
+              fontFamily: 'Pretendard',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '25px',
+              flexShrink: 0,
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget.style.borderColor = '#555351');
+              (e.currentTarget.style.background as any) = 'rgba(55, 50, 44, 0.50)';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget.style.borderColor = 'transparent');
+              (e.currentTarget.style.background as any) = 'rgba(55, 50, 44, 0.50)';
+            }}
           >
-            <img src={infoIcon} alt="책 정보" className="w-[12.74px] h-[18.31px] shrink-0" />
+            <img
+              src={infoIcon}
+              alt="책 정보"
+              className="shrink-0"
+              style={{ width: '9px', height: '12.938px' }}
+            />
             책 정보
           </button>
 
+          {/* 서재 등록 버튼 */}
           <button
-            type="button"                   // ← 폼 제출 방지
-            onClick={onClickAdd}            // ← 부모에서 등록 모달 열기
-            className="flex justify-center items-center gap-[8px] text-white w-[121px] h-[40px] px-[20px] py-[8px] rounded-[8px] border border-[#555351] bg-[#2D2B29] text-[15.4px] font-normal leading-[25px]"
+            type="button"
+            onClick={onClickAdd}
+            className="flex justify-center items-center gap-[8px] text-white rounded-[8px] border border-transparent transition-colors"
+            style={{
+              width: '100px',
+              height: '36px',
+              padding: '8px 12px',
+              background: '#37322C',
+              fontFamily: 'Pretendard',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '25px',
+              flexShrink: 0,
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget.style.borderColor = 'rgba(211, 211, 211, 0.30)');
+              (e.currentTarget.style.background as any) = '#37322C';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget.style.borderColor = 'transparent');
+              (e.currentTarget.style.background as any) = '#37322C';
+            }}
           >
-            <img src={saveIcon} alt="서재 등록" className="w-[13.56px] h-[10.34px] shrink-0" />
+            <img
+              src={saveIcon}
+              alt="서재 등록"
+              className="shrink-0"
+              style={{ width: '11px', height: '9.151px' }}
+            />
             서재 등록
           </button>
         </div>
