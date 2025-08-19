@@ -101,7 +101,10 @@ const Profile = ({ isLogin }: ProfileProps) => {
   return (
     <div
       ref={ref}
-      className={clsx('relative', { invisible: !isLogin, visible: isLogin })}
+      className={clsx('relative left-15', {
+        invisible: !isLogin,
+        visible: isLogin,
+      })}
     >
       {/* 프로필 토글 버튼 (상단 우측 아이콘) */}
       <button onClick={() => setIsClick((prev) => !prev)}>
