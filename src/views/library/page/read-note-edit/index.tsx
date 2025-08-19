@@ -215,6 +215,7 @@ const ReadNoteEditPage = () => {
                     <Impression
                       key={it.impressionId}
                       text={it.text}
+                      recordId={it.impressionId}
                       clickImpression={() => {
                         setClickPhraseId(it.impressionId);
                         setDeleteOption('read-note-edit-impression');
