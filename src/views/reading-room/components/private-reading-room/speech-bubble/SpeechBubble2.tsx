@@ -19,7 +19,7 @@ function SpeechBubble2({
         className="object-contain max-w-90 max-h-90"
       />
       <div className="absolute flex justify-center w-[110px] top-19 left-17">
-        <p className="text-sm text-nook-100 font-normal line-clamp-1">
+        <p className="text-sm text-[#1D160D] font-normal line-clamp-1">
           {content}
         </p>
       </div>

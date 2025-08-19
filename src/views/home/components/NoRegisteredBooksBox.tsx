@@ -20,7 +20,7 @@ const NoRegisteredBooksBox = () => {
 
   return (
     <div className="w-[246px] h-[157px] bg-[#423C35]/10 rounded-[12px] 
-                    pt-[17px] pb-[14px] pl-[30px] pr-[22px] flex flex-col justify-center">
+                    pt-[17px] pb-[14px] pl-[21px] pr-[22px] flex flex-col justify-center">
       
       {/* 요일 */}
       <div className="flex gap-[0px] mb-[0px] w-[203px]">

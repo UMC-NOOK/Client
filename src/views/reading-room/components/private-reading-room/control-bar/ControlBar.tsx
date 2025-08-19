@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import memberBtn from '../../../../../assets/readingRoom/controll-icon/member.svg';
 import moreBtn from '../../../../../assets/readingRoom/controll-icon/more.svg';
 import offMusicBtn from '../../../../../assets/readingRoom/controll-icon/music.svg';
@@ -30,10 +30,12 @@ function ControlBar({
   onLeave,
 }: ControlBarProps) {
   const [music, setMusic] = useState<boolean>(true);
-  const { isSoundEnabled, setSound } = useSoundStore(
+  const { isSoundEnabled, setSound, offSound, onSound } = useSoundStore(
     useShallow((state) => ({
       isSoundEnabled: state.isSoundEnabled,
       setSound: state.setSound,
+      offSound: state.offSound,
+      onSound: state.onSound,
     })),
   );
   const toggleExitModal = useModalStore((state) => state.toggleExitModal);
@@ -41,14 +43,15 @@ function ControlBar({
   const navigate = useNavigate();
 
   const handleMusicToggle = () => {
-    const newMusicState = !isSoundEnabled; // 상태 반전
+    const newMusicState = !isSoundEnabled;
     setSound(newMusicState);
     onBgmToggle(newMusicState);
   };
 
-  console.log(isSoundEnabled);
+  // console.log(isSoundEnabled);
 
   const handleLeave = () => {
+    setSound(false);
     onLeave();
     navigate('/reading-room');
   };

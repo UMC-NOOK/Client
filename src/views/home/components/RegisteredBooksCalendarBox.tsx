@@ -18,7 +18,7 @@ const RegisteredBooksCalendarBox = ({ monthly }: { monthly: MonthlyDayBooks[] })
   const todayStr = format(today, 'yyyy-MM-dd');
   const todayIdx = dates.findIndex((d) => d === todayStr);
 
-  // 날짜 → 대표 썸네일 매핑
+  // 날짜 → 대표 썸네일 매핑d
   const thumbMap: Record<string, string | undefined> = {};
   for (const d of monthly) {
     if (!d?.date || !Array.isArray(d.books)) continue;
@@ -32,7 +32,7 @@ const RegisteredBooksCalendarBox = ({ monthly }: { monthly: MonthlyDayBooks[] })
 
   return (
     <div className="w-[246px] h-[157px] bg-[#423C35]/10 rounded-[12px] 
-                    pt-[17px] pb-[14px] pl-[30px] pr-[22px] flex flex-col justify-start">
+                    pt-[17px] pb-[14px] pl-[21px] pr-[22px] flex flex-col justify-start">
       
       {/* 요일 */}
       <div className="flex w-[203px] mb-[0px]">
