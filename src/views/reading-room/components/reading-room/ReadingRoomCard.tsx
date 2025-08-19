@@ -5,8 +5,7 @@ import SUBWAY_IMG   from '../../../../assets/readingRoom/bg/Subway.png';
 import LIBRARY_IMG  from '../../../../assets/readingRoom/bg/ReadingRoom.png';   
 
 import { ReadingRoom } from '../../apis/reading-room/types/reading-room-types';
-
-type ThemeKey = 'CAMPFIRE' | 'SUBWAY' | 'LIBRARY';
+import { ThemeType } from '../../apis/reading-room/types/create-reading-room-types';
 
 interface ReadingRoomCardProps {
     room: ReadingRoom;    
@@ -14,16 +13,16 @@ interface ReadingRoomCardProps {
     variant?: 'all' | 'my';
 }
 
-const THEME_IMAGE_MAP: Record<ThemeKey, string> = {
+const THEME_IMAGE_MAP: Record<ThemeType, string> = {
     CAMPFIRE: CAMPFIRE_IMG,
     SUBWAY: SUBWAY_IMG,
     LIBRARY: LIBRARY_IMG,
 };
 
-function normalizeThemeKey(raw?: string): ThemeKey | null {
+function normalizeThemeKey(raw?: string): ThemeType | null {
     if (!raw) return null;
     const key = raw.trim().toUpperCase();
-    return key === 'CAMPFIRE' || key === 'SUBWAY' || key === 'LIBRARY' ? (key as ThemeKey) : null;
+    return key === 'CAMPFIRE' || key === 'SUBWAY' || key === 'LIBRARY' ? (key as ThemeType) : null;
 }
 
 const ReadingRoomCard: React.FC<ReadingRoomCardProps> = ({ room, onClick }) => {
