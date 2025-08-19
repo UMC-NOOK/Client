@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import CAMPFIRE_IMG from '../../../../assets/readingRoom/bg/Campfire.png';
@@ -14,6 +14,9 @@ import { normalizeTagsForApi, normalizeThemeForApi } from '../../utils/reading-r
 import type { ThemeType } from '../../apis/reading-room/types/create-reading-room-types';
 import type { CreateReadingRoomRequest } from '../../apis/reading-room/CreateReadingRoom';
 import useInfo from '../../../auth/hook/useQuery/useInfo';
+import CampfireBGM from '../../../../../public/audio/readingroom_campfire.mp3';
+import LibraryBGM from '../../../../../public/audio/readingroom_library.mp3';
+import SubwayBGM from '../../../../../public/audio/readingroom_subway.mp3';
 
 type UsageType = 'create' | 'edit';
 
@@ -36,10 +39,18 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const isCreatingValid = roomName.trim() !== '' && roomDescription.trim() !== '';
 
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
     const themeImages: Record<ThemeType, string> = {
         CAMPFIRE: CAMPFIRE_IMG,
         SUBWAY: SUBWAY_IMG,
         LIBRARY: LIBRARY_IMG,
+    };
+
+    const themeAudios: Record<ThemeType, string> = {
+        CAMPFIRE: CampfireBGM,
+        SUBWAY: SubwayBGM,
+        LIBRARY: LibraryBGM,
     };
 
     useEffect(() => {
@@ -50,6 +61,73 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
             setSelectedTags(room.tags ?? []);
         }
     }, [usage, room]);
+
+    const addOneTimeUnlockListeners = (playFn: () => Promise<void>) => {
+        const unlock = async () => {
+            try { 
+                await playFn(); 
+            } finally {
+                window.removeEventListener('pointerdown', unlock);
+                window.removeEventListener('keydown', unlock);
+            }
+        };
+        window.addEventListener('pointerdown', unlock, { once: true });
+        window.addEventListener('keydown', unlock, { once: true });
+    };
+
+    useEffect(() => {
+        const el = new Audio();
+        el.loop = true;
+        el.volume = 1;
+        audioRef.current = el;
+
+
+        const tryAutoStart = async () => {
+            if (!audioRef.current) return;
+            const src = themeAudios[selected];      // 'CAMPFIRE'가 기본값
+            el.src = src;
+            el.currentTime = 0;
+            try {
+                await el.play();
+            } catch {
+                addOneTimeUnlockListeners(async () => { await el.play(); });
+            }
+        };
+        void tryAutoStart();
+        
+        return() => {
+            el.pause();
+            el.src = '';
+            el.load();
+            audioRef.current = null;
+        }
+    }, []);
+
+    const playBGM = async (theme: ThemeType) => {
+        const el = audioRef.current;
+        
+        if(!el) return;
+        const nextSrc = themeAudios[theme];
+
+        if(el.src.includes(nextSrc)) {
+            try{
+                await el.play();
+            } catch (err) {
+                console.error('[CreateReadingRoom] BGM 재생 실패:', err);
+                return;
+            }
+        }
+
+        try{
+            el.pause();
+            el.src = nextSrc;
+            el.currentTime = 0;
+            await el.play();
+        }catch (err) {
+            console.error('[CreateReadingRoom] BGM 재생 실패:', err);
+            return;
+        }
+    }
 
     const { mutate: createRoom, isPending: creating } = useCreateReadingRoom();
 
@@ -144,7 +222,10 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
                                 key={theme}
                                 src={themeImages[theme]}
                                 alt={theme}
-                                onClick={() => setSelected(theme)}
+                                onClick={() => {
+                                    setSelected(theme);
+                                    void playBGM(theme);
+                                }}
                                 className={`cursor-pointer ${
                                     usage === 'create' ? 'w-84 h-69' : 'w-[139.617px] h-[114.558px]'
                                     } rounded-xl border transition-all duration-200 ${
