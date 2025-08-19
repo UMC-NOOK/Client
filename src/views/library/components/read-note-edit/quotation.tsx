@@ -1,11 +1,17 @@
 import { useState } from 'react';
+
+// imgs
 import edit_btn from '/src/assets/button/read-note-edit/edit-btn.svg';
 import delete_btn from '/src/assets/button/read-note-edit/delete-btn.svg';
 import quotation_arrow from '/src/assets/button/read-note-edit/quotation-arrow.svg';
 import send_btn from '/src/assets/button/read-note-edit/send-button.svg';
 
+// hooks
+import usePutComment from '../../hooks/useMutation/read-note-edit/usePutComment';
+
 interface QuotationProps {
   text: string;
+  quotationId: number;
   clickPhrase: () => void;
   setIsDeleteModalOpen: (isOpen: boolean) => void;
   isNookChatOpen: boolean;
@@ -13,6 +19,7 @@ interface QuotationProps {
 
 const Quotation = ({
   text,
+  quotationId,
   clickPhrase,
   setIsDeleteModalOpen,
   isNookChatOpen, // Optional prop for nook chat state
@@ -20,6 +27,8 @@ const Quotation = ({
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [textValue, setTextValue] = useState(text);
+
+  const { mutate: putComment } = usePutComment(quotationId);
 
   // hover 로직
   const handleMouseEnter = () => {
@@ -34,6 +43,11 @@ const Quotation = ({
     setIsEditing(true);
   };
   const handleSend = () => {
+    if (textValue.trim() === '') {
+      alert('내용을 입력해주세요.');
+      return;
+    }
+    putComment(textValue);
     setIsEditing(false);
   };
 

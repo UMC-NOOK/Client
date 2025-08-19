@@ -76,7 +76,13 @@ const BookItem = ({
                 <InfoBtn isbn13={isbn13} />
               </button>
               <button className="w-[10rem] h-18 bg-nook-500 text-white rounded-[8px] hover:border-1 hover:border-[rgba(211,211,211,0.3)]">
-                <RecordBtn text="내 기록" bookId={bookId} />
+                <RecordBtn
+                  text="내 기록"
+                  bookId={bookId}
+                  coverImageUrl={coverImageUrl}
+                  title={title}
+                  author={author}
+                />
               </button>
               <button
                 className="w-[10rem] h-18 text-red-500 rounded-[8px] bg-[rgba(241,73,75,0.2)] hover:border-1"
@@ -95,7 +101,13 @@ const BookItem = ({
                 className="w-[12.1rem] h-20 bg-nook-500 text-white rounded-[8px] hover:bg-[rgba(22,17, 1,1)]"
                 onClick={openModal}
               >
-                <RecordBtn text="서재 등록" bookId={bookId} />
+                <RecordBtn
+                  text="서재 등록"
+                  bookId={bookId}
+                  coverImageUrl={coverImageUrl}
+                  title={title}
+                  author={author}
+                />
               </button>
             </>
           )}

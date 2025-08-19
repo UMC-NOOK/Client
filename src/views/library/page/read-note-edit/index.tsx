@@ -1,4 +1,8 @@
-import { useState, useEffect } from 'react';
+// librarys
+import { useState, useEffect, useMemo } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+// imgs
 import chevron_left from '/src/assets/button/read-note-edit/chevron-left.svg';
 import nook_chat from '/src/assets/button/read-note-edit/nook-chat.svg';
 import arroow_redo from '/src/assets/button/read-note-edit/arrow-redo-outline.svg';
@@ -6,6 +10,7 @@ import send_btn from '/src/assets/button/read-note-edit/send-button.svg';
 import send_disable_btn from '/src/assets/button/read-note-edit/send-disable-button.svg';
 import quotation_arrow from '/src/assets/button/read-note-edit/quotation-arrow.svg';
 
+// components
 import Toggle from '../../components/read-note-edit/toggle';
 import Phrase from '../../components/read-note-edit/phrase';
 import Quotation from '../../components/read-note-edit/quotation';
@@ -13,13 +18,20 @@ import Impression from '../../components/read-note-edit/impression';
 import NookChat from '../../components/read-note-edit/nook-chat';
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
 
+// hooks
+import useGetSentenceList from '../../hooks/useQuery/read-note/useGetSentenceList';
+import useDeleteSentence from '../../hooks/useMutation/read-note-edit/useDeleteSentence';
+import useDeleteComment from '../../hooks/useMutation/read-note-edit/useDeleteComment';
+import usePostComment from '../../hooks/useMutation/read-note-edit/usePostComment';
+import usePostSentence from '../../hooks/useMutation/read-note-edit/usePostSentence';
+
 const ReadNoteEditPage = () => {
-  const [isReadNoteExist, setIsReadNoteExist] = useState(true);
-  const [isImpressionExist, setIsImpressionExist] = useState(true);
-  const [clickPhraseId, setClickPhraseId] = useState<number | null>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // textArea 로직
   type textContentType = 'phrase' | 'impression' | 'quotation';
+  const [clickPhraseId, setClickPhraseId] = useState<number>();
   const [textContent, setTextContent] = useState<textContentType>('phrase');
   const [placeholderText, setPlaceholderText] = useState(
     '책에서 수집하고 싶은 문장을 작성해보세요.',
@@ -45,57 +57,51 @@ const ReadNoteEditPage = () => {
         );
       }
     }
-  }, [textContent, clickPhraseId]);
+  }, [textContent, selectedPhrasePage]);
 
-  const phraseData = [
-    {
-      phraseId: 1,
-      page: 17,
-      text: '너무 사소해서 남에게 말하기조차 민망하지만 확실히 나의 신경을 자극하는 것. 존재하지 않지만 나에게는 느껴지는 것. 그런 걸 어떻게 다뤄야 하는지 나는 알지 못했다.',
-    },
-    {
-      phraseId: 2,
-      page: 45,
-      text: '시간이 많아지면 생각이 많아지고, 생각이 많아지면 우울이 찾아들기 마련이다. ',
-    },
-    { phraseId: 3, page: null, text: '이얍' },
-    {
-      phraseId: 4,
-      page: 17,
-      text: '너무 사소해서 남에게 말하기조차 민망하지만 확실히 나의 신경을 자극하는 것. 존재하지 않지만 나에게는 느껴지는 것. 그런 걸 어떻게 다뤄야 하는지 나는 알지 못했다.',
-    },
-    {
-      phraseId: 5,
-      page: 45,
-      text: '시간이 많아지면 생각이 많아지고, 생각이 많아지면 우울이 찾아들기 마련이다.',
-    },
-    { phraseId: 6, page: null, text: '이얍' },
-  ];
+  const { data: sentenceList } = useGetSentenceList(location.state.bookId);
+  const { mutate: deleteSentence } = useDeleteSentence(clickPhraseId ?? -1);
+  const { mutate: deleteComment } = useDeleteComment(clickPhraseId ?? -1);
+  const { mutate: postComment } = usePostComment(location.state.bookId);
+  const { mutate: postSentence } = usePostSentence(location.state.bookId);
 
-  const quotationData = [
-    {
-      phraseId: 1,
-      Quotation: 1,
-      text: '보이지 않지만 분명히 감각되는 감정의 결을 섬세하게 포착한 문장이다. 이해받기 어려운 내면의 진동을 조용히 꺼내 보여주는 듯해 마음이 오래 머문다.',
-    },
-    {
-      phraseId: 1,
-      Quotation: 2,
-      text: '하하',
-    },
-    {
-      phraseId: 3,
-      Quotation: 1,
-      text: '하하',
-    },
-  ];
+  const [textValue, setTextValue] = useState();
+  const [pageValue, setPageValue] = useState<string | null>();
 
-  const impressionData = [
-    {
-      ImpressionId: 1,
-      text: '조예은 작가의 『칵테일, 러브, 좀비』는 좀비 아포칼립스 속에서도 사랑과 일상이 존재할 수 있다는 사실을 낯설지만 설득력 있게 보여준다. 현실적인 감정과 비현실적인 상황이 자연스럽게 섞이면서, 오히려 더 진짜 같은 이야기로 다가왔다. 주인공들의 관계는 감정에 휩쓸리기보다 조심스럽게 서로를 알아가는 과정이라 더 인상 깊었다. 좀비보다 더 위협적인 것은 사람들 사이의 오해나 무관심이라는 점도 묵직하게 남는다. 장르적 재미와 감정의 진심이 잘 어우러진, 독특하고도 따뜻한 작품이었다.',
-    },
-  ];
+  const phrases = useMemo(
+    () =>
+      (sentenceList?.result ?? [])
+        .filter((s) => s.recordType === 'RECORD')
+        .map((s) => ({
+          phraseId: s.recordId,
+          page: s.page ? Number(s.page) : null,
+          text: s.content,
+        })),
+    [sentenceList],
+  );
+
+  const quotations = useMemo(
+    () =>
+      (sentenceList?.result ?? []).flatMap((s) =>
+        (s.comments ?? []).map((c) => ({
+          quotationId: c.commentId,
+          phraseId: s.recordId,
+          text: c.content,
+        })),
+      ),
+    [sentenceList],
+  );
+
+  const impressions = useMemo(
+    () =>
+      (sentenceList?.result ?? [])
+        .filter((s) => s.recordType === 'COMMENTARY')
+        .map((s) => ({
+          impressionId: s.recordId,
+          text: s.content,
+        })),
+    [sentenceList],
+  );
 
   // 삭제 로직
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -110,8 +116,13 @@ const ReadNoteEditPage = () => {
     setIsDeleteModalOpen((prev) => !prev);
   };
   const handleDelete = () => {
-    // 삭제 로직을 여기에 구현
-    console.log('삭제되었습니다.');
+    if (deleteOption === 'read-note-edit-phrase') {
+      deleteSentence();
+    } else if (deleteOption === 'read-note-edit-impression') {
+      deleteComment();
+    } else if (deleteOption === 'read-note-edit-quotation') {
+      deleteComment();
+    }
     setIsDeleteModalOpen(false);
   };
 
@@ -133,13 +144,18 @@ const ReadNoteEditPage = () => {
       <div className="flex flex-col items-center justify-center w-[1044px] h-full pt-30 pb-[40px] box-border">
         <div className="flex w-full justify-between">
           <div className="flex items-center gap-20">
-            <img src={chevron_left} alt="chevron left" className="h-10 w-10" />
+            <img
+              src={chevron_left}
+              alt="chevron left"
+              className="h-10 w-10"
+              onClick={() => navigate(-1)}
+            />
             <div className="flex items-end gap-7">
               <span className="text-white text-[22px] not-italic font-semibold leading-[25px]">
-                칵테일, 러브, 좀비
+                {location.state?.title}
               </span>
               <p className="text-white text-xs not-italic font-normal">
-                조예은
+                {location.state?.author}
               </p>
             </div>
           </div>
@@ -157,106 +173,73 @@ const ReadNoteEditPage = () => {
             className={`${isNookChatOpen ? 'w-[661px]' : 'w-full'} h-0 outline outline-1 outline-offset-[-0.50px] outline-neutral-600/70 mt-14`}
           />
           <div
-            className={`w-full h-full flex items-center gap-9 ${isNookChatOpen ? 'justify-between' : 'justify-center'}`}
+            className={`w-full h-[600px] flex items-center gap-9 ${isNookChatOpen ? 'justify-between' : 'justify-center'}`}
           >
             <div
-              className={`flex flex-col items-center justify-center h-full  ${isNookChatOpen ? 'w-[650px]' : 'w-450'}`}
+              className={`flex flex-col items-center justify-between h-full  ${isNookChatOpen ? 'w-[650px]' : 'w-450'}`}
             >
               <div
-                className={`flex flex-col items-center justify-start gap-4 box-border overflow-y-auto [&::-webkit-scrollbar]:hidden mb-17 w-full ${isNookChatOpen ? '' : 'ml-40 '}`}
+                className={`flex flex-col items-center justify-start gap-4 box-border overflow-y-auto [&::-webkit-scrollbar]:hidden mb-17 w-full ${isNookChatOpen ? '' : sentenceList?.code == 'SUCCESS-204' ? 'mt-[200px]' : 'ml-40 '}`}
               >
-                {isReadNoteExist ? (
-                  <>
-                    {phraseData.map((phrase) => {
-                      const matchingQuotations = quotationData.filter(
-                        (q) => q.phraseId === phrase.phraseId,
-                      );
-
-                      return phrase.page == null ? (
-                        <div
-                          key={phrase.phraseId}
-                          className="flex flex-col items-start justify-start w-full"
-                        >
-                          <Phrase
-                            text={phrase.text}
-                            setSelectedPhrasePage={setSelectedPhrasePage}
-                            setTextContent={setTextContent}
+                {phrases.length ? (
+                  phrases.map((phrase) => {
+                    const matching = quotations.filter(
+                      (q) => q.phraseId === phrase.phraseId,
+                    );
+                    return (
+                      <div
+                        key={phrase.phraseId}
+                        className="flex flex-col items-start w-full"
+                      >
+                        <Phrase
+                          page={phrase.page ?? undefined}
+                          text={phrase.text}
+                          phraseId={phrase.phraseId}
+                          setSelectedPhrasePage={setSelectedPhrasePage}
+                          setTextContent={setTextContent}
+                          clickPhrase={() => {
+                            setClickPhraseId(phrase.phraseId);
+                            setDeleteOption('read-note-edit-phrase');
+                          }}
+                          setIsDeleteModalOpen={setIsDeleteModalOpen}
+                          isNookChatOpen={isNookChatOpen}
+                        />
+                        {matching.map((q) => (
+                          <Quotation
+                            key={q.quotationId}
+                            text={q.text}
+                            quotationId={q.quotationId}
                             clickPhrase={() => {
                               setClickPhraseId(phrase.phraseId);
-                              setDeleteOption('read-note-edit-phrase');
+                              setDeleteOption('read-note-edit-quotation');
                             }}
                             setIsDeleteModalOpen={setIsDeleteModalOpen}
                             isNookChatOpen={isNookChatOpen}
                           />
-                          {matchingQuotations.map((q) => (
-                            <Quotation
-                              key={q.Quotation}
-                              text={q.text}
-                              clickPhrase={() => {
-                                setClickPhraseId(phrase.phraseId);
-                                setDeleteOption('read-note-edit-quotation');
-                              }}
-                              setIsDeleteModalOpen={setIsDeleteModalOpen}
-                              isNookChatOpen={isNookChatOpen}
-                            />
-                          ))}
-                        </div>
-                      ) : (
-                        <div
-                          key={phrase.phraseId}
-                          className="flex flex-col items-start justify-start w-full"
-                        >
-                          <Phrase
-                            page={phrase.page}
-                            text={phrase.text}
-                            setSelectedPhrasePage={setSelectedPhrasePage}
-                            setTextContent={setTextContent}
-                            clickPhrase={() => {
-                              setClickPhraseId(phrase.phraseId);
-                              setDeleteOption('read-note-edit-phrase');
-                            }}
-                            setIsDeleteModalOpen={setIsDeleteModalOpen}
-                            isNookChatOpen={isNookChatOpen}
-                          />
-                          {matchingQuotations.map((q) => (
-                            <Quotation
-                              key={q.Quotation}
-                              text={q.text}
-                              clickPhrase={() => {
-                                setClickPhraseId(phrase.phraseId);
-                                setDeleteOption('read-note-edit-quotation');
-                              }}
-                              setIsDeleteModalOpen={setIsDeleteModalOpen}
-                              isNookChatOpen={isNookChatOpen}
-                            />
-                          ))}
-                        </div>
-                      );
-                    })}
-                  </>
+                        ))}
+                      </div>
+                    );
+                  })
                 ) : (
                   <div className="text-[rgba(255,255,255,0.50)] text-center text-sm not-italic font-normal leading-[22px]">
                     작성한 독서 기록이 없습니다.
                   </div>
                 )}
-                {isImpressionExist ? (
-                  impressionData.map((data) => {
-                    return (
-                      <Impression
-                        key={data.ImpressionId}
-                        text={data.text}
-                        clickImpression={() => {
-                          setClickPhraseId(data.ImpressionId);
-                          setDeleteOption('read-note-edit-impression');
-                        }}
-                        setIsDeleteModalOpen={setIsDeleteModalOpen}
-                        isNookChatOpen={isNookChatOpen}
-                      />
-                    );
-                  })
-                ) : (
-                  <></>
-                )}
+
+                {impressions.length > 0 &&
+                  impressions.map((it) => (
+                    <Impression
+                      key={it.impressionId}
+                      text={it.text}
+                      recordId={it.impressionId}
+                      clickImpression={() => {
+                        setClickPhraseId(it.impressionId);
+                        setDeleteOption('read-note-edit-impression');
+                      }}
+                      setIsDeleteModalOpen={setIsDeleteModalOpen}
+                      isNookChatOpen={isNookChatOpen}
+                    />
+                  ))}
               </div>
               <div className={` ${isNookChatOpen ? 'w-[654px]' : 'w-402'}`}>
                 {textContent === 'phrase' ? (
@@ -270,6 +253,9 @@ const ReadNoteEditPage = () => {
                       type="number"
                       placeholder="페이지를 입력해주세요 (숫자만 입력)"
                       className="no-spinner w-full text-white text-xs not-italic font-normal leading-5 bg-transparent outline-none placeholder:text-[#95908a] placeholder:text-xs placeholder:not-italic placeholder:font-normal placeholder:leading-5"
+                      onChange={(e) => {
+                        setPageValue(e.target.value || null);
+                      }}
                     />
                   </div>
                 ) : (
@@ -327,6 +313,29 @@ const ReadNoteEditPage = () => {
                       }
                       alt="send"
                       className="w-12 h-12"
+                      onClick={() => {
+                        if (textAreaContent.trim() !== '') {
+                          if (textContent === 'phrase') {
+                            postSentence({
+                              content: textAreaContent,
+                              page: pageValue ?? null,
+                            });
+                          } else if (textContent === 'impression') {
+                            postComment({
+                              content: textAreaContent,
+                              parentRecordId: null,
+                            });
+                          } else if (textContent === 'quotation') {
+                            postComment({
+                              content: textAreaContent,
+                              parentRecordId: clickPhraseId ?? null,
+                            });
+                          }
+                          setTextAreaContent('');
+                          setPageValue('');
+                          setTextContent('phrase');
+                        }
+                      }}
                     />
                   </div>
                 </div>
