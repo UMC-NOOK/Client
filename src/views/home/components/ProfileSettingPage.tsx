@@ -138,16 +138,6 @@ const SettingsPage = () => {
   // - 박스: inline-flex / padding: 4px 20px / border-radius: 4px / border: 1px solid #423C35
   // - 텍스트: color #423C35, Pretendard 14px, 600, line-height 22px
   const actionBtnStyle = (hover: boolean, pressed: boolean): React.CSSProperties => {
-    const text: React.CSSProperties = {
-      color: '#423C35',
-      textAlign: 'center' as const,
-      fontFamily: 'Pretendard',
-      fontSize: 14,
-      fontStyle: 'normal',
-      fontWeight: 600,
-      lineHeight: '22px',
-    };
-
     const base: React.CSSProperties = {
       display: 'inline-flex',
       padding: '4px 20px',
@@ -158,13 +148,19 @@ const SettingsPage = () => {
       border: '1px solid #423C35',
       cursor: 'pointer',
       userSelect: 'none',
-      transition: 'background-color 120ms ease, border-color 120ms ease',
+      transition: 'background-color 120ms ease, border-color 120ms ease, color 120ms ease',
       background: 'transparent',
-      ...text,
+      color: '#423C35',
+      textAlign: 'center' as const,
+      fontFamily: 'Pretendard',
+      fontSize: 14,
+      fontStyle: 'normal',
+      fontWeight: 600,
+      lineHeight: '22px',
     };
 
     if (pressed) return { ...base, background: 'rgba(66, 60, 53, 0.25)' };
-    if (hover) return { ...base, background: '#423C35' };
+    if (hover) return { ...base, background: '#423C35', color: '#FFFFFF' };
     return base;
   };
 
