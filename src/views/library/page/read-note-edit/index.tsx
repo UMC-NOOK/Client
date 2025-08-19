@@ -158,13 +158,13 @@ const ReadNoteEditPage = () => {
             className={`${isNookChatOpen ? 'w-[661px]' : 'w-full'} h-0 outline outline-1 outline-offset-[-0.50px] outline-neutral-600/70 mt-14`}
           />
           <div
-            className={`w-full h-full flex items-center gap-9 ${isNookChatOpen ? 'justify-between' : 'justify-center'}`}
+            className={`w-full h-[600px] flex items-center gap-9 ${isNookChatOpen ? 'justify-between' : 'justify-center'}`}
           >
             <div
-              className={`flex flex-col items-center justify-center h-full  ${isNookChatOpen ? 'w-[650px]' : 'w-450'}`}
+              className={`flex flex-col items-center justify-between h-full  ${isNookChatOpen ? 'w-[650px]' : 'w-450'}`}
             >
               <div
-                className={`flex flex-col items-center justify-start gap-4 box-border overflow-y-auto [&::-webkit-scrollbar]:hidden mb-17 w-full ${isNookChatOpen ? '' : 'ml-40 '}`}
+                className={`flex flex-col items-center justify-start gap-4 box-border overflow-y-auto [&::-webkit-scrollbar]:hidden mb-17 w-full ${isNookChatOpen ? '' : sentenceList?.code == 'SUCCESS-204' ? 'mt-[200px]' : 'ml-40 '}`}
               >
                 {phrases.length ? (
                   phrases.map((phrase) => {
