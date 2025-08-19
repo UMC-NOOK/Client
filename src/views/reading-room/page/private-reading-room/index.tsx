@@ -303,11 +303,11 @@ const PrivateReadingRoom = () => {
 
   const convertThemeName = (theme: string) => {
     switch (theme) {
-      case 'Campfire':
+      case 'CAMPFIRE':
         return 'CAMPFIRE';
-      case 'Subway':
+      case 'SUBWAY':
         return 'SUBWAY';
-      case 'ReadingRoom':
+      case 'LIBRARY':
       default:
         return 'LIBRARY';
     }

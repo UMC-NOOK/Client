@@ -50,6 +50,22 @@ const NookiCharacter = ({
     return speechContent + ' 독서중';
   };
 
+  const renderStyledText = (text: string) => {
+    const parts = text.split(' | ');
+    if (parts.length === 2) {
+      return (
+        <>
+          <span>{parts[0]}</span>
+          <span className="text-sm text-[rgba(255,255,255,0.5)] font-light mx-1">
+            |
+          </span>
+          <span>{parts[1]}</span>
+        </>
+      );
+    }
+    return <span>{text}</span>;
+  };
+
   return (
     <>
       <div
@@ -88,7 +104,7 @@ const NookiCharacter = ({
           <p
             className={`text-nook-100 absolute ${headPosition} ${textTransform} text-sm font-semibold`}
           >
-            {textContent}
+            {renderStyledText(textContent)}
           </p>
 
           <img
