@@ -1,5 +1,5 @@
 import React from 'react';
-import union from '../../../../../assets/readingRoom/controll-icon/middleUnion.svg';
+import union from '../../../../../assets/readingRoom/small-control-icon/Union.svg';
 import editBtn from '../../../../../assets/readingRoom/small-control-icon/edit.svg';
 import deleteBtn from '../../../../../assets/readingRoom/small-control-icon/delete.svg';
 import AsoundBtn from '../../../../../assets/readingRoom/small-control-icon/Asound.svg';

@@ -10,7 +10,7 @@ const Header = ({ isLogin }: HeaderProps) => {
   // const isLogin = useSignInStore((state) => state.isLogin);
 
   return (
-    <header className="h-35 w-[150rem] flex items-center justify-evenly bg-[rgba(0,0,0,0.1)]">
+    <header className="h-35 w-[1060px] flex items-center justify-between bg-[rgba(0,0,0,0.1)]">
       <Logo isLogin={isLogin} />
       <Navbar isLogin={isLogin} />
       <Profile isLogin={isLogin} />

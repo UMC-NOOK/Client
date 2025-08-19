@@ -3,7 +3,7 @@ import Main from '../views/home/page';
 import Lounge from '../views/lounge/page/lounge';
 import BookInfoPage from '../views/lounge/page/book-info';
 import Library from '../views/library/page';
-import ReadingRoom from '../views/reading-room/page';
+import ReadingRoom from '../views/reading-room/page/my-reaing-room';
 import NotFoundPage from '../views/404';
 import MyPage from '../views/mypage/page';
 import RootLayout from '../layouts/root-layout';
@@ -46,7 +46,7 @@ const router = createBrowserRouter([
             element: <DesignPage />,
           },
           {
-            path: 'settings',
+            path: 'home/settings',
             element: <SettingsPage />,
           },
           {

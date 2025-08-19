@@ -1,5 +1,6 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 @import 'tailwindcss';
-@import './font.css';
+/* @import './font.css'; */
 @import './colors.css';
 @import './size.css';
 
@@ -23,7 +24,7 @@ body {
   box-sizing: border-box;
   font-size: 62.5% !important;
   font-family: 'Pretendard' !important;
-  font-family: var(--font-Sorts-Mill-Groudy), var(--font-pretendard);
+  /* font-family: var(--font-pretendard); */
 }
 
 img:not([class]),

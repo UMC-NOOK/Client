@@ -16,11 +16,11 @@ export default function SearchResultPage() {
   }, [query, setSearchTerm]);
 
   return (
-    <div className="flex flex-col items-center px-4 pt-8">
+    <div className="flex flex-col items-center px-4 pt-[62px]">
       <div className="relative w-full max-w-[470px] ">
         <button
           onClick={() => navigate(-1)}
-          className="absolute left-[-265px] top-1/2 transform -translate-y-1/2 w-[28px] h-[28px] z-10"
+          className="absolute left-[-265px] top-1/2 transform -translate-y-1/2 w-[12.2px] h-[22.8px] z-10"
         >
           <img
             src={arrowLeftIcon}

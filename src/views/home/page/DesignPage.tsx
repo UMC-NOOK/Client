@@ -22,6 +22,9 @@ import lampBlue from '../../../assets/button/home/blue-nookie.png';
 import tabBgActive from '../../../assets/button/home/tab-on.png';
 import tabBgInactive from '../../../assets/button/home/tab-off.png';
 
+// ⬅️ 홈으로 아이콘 (경로 확인해서 맞춰줘)
+import chevronLeft from '../../../assets/button/home/chevron-leftT.png';
+
 import { useNavigate } from 'react-router-dom';
 import { useGetProfile } from '../hooks/useQuery/useGetProfile';
 import { usePatchProfile } from '../hooks/useMutation/usePatchProfile';
@@ -73,10 +76,11 @@ const lampImages: Record<LampKey, string> = {
 const wallpaperImages: Record<PatternKey, string> = {
   default: wallpaperDefault,
   stripe: wallpaperStripe,
-  stars: wallpaperStars,
+  argyle: wallpaperArgyle,
   drop: wallpaperDrop,
   check: wallpaperCheck,
-  argyle: wallpaperArgyle,
+  stars: wallpaperStars,
+
 };
 
 const TABS = ['별명', '누키', '마이홈'] as const;
@@ -133,19 +137,35 @@ const DesignPage: React.FC = () => {
     );
   };
 
+  const handleGoHome = () => navigate('/home');
+
   return (
-    <div className="w-full h-full flex justify-center items-start gap-[16px] py-[27px] relative rounded-[12px]">
-      {/* 왼쪽 미리보기 */}
-      <div
-        className="w-[528px] h-[648px] rounded-[12px] bg-[#423C35]/10 flex items-center justify-center relative overflow-hidden"
-        style={{ flexShrink: 0 }}
+    <div className="w-full h-full flex justify-center items-start gap-[18px] py-[27px] relative rounded-[12px]">
+      {/* ⬅️ 상단 좌측 홈 버튼 */}
+      <button
+        type="button"
+        onClick={handleGoHome}
+        aria-label="홈으로"
+        className="top-[27px] z-40 flex items-center gap-[12px] bg-transparent"
       >
+        <img
+          src={chevronLeft}
+          alt=""
+          className="w-[20px] h-[20px] select-none pointer-events-none"
+        />
+        <span className="text-white text-[20px] font-normal leading-none flex-shrink-0 [font-family:Pretendard]">
+          홈
+        </span>
+      </button>
+
+      {/* 왼쪽 미리보기 */}
+      <div className="w-[528px] h-[648px] rounded-[12px] bg-[#423C35]/10 flex relative overflow-hidden shrink-0">
         <div className="absolute z-10 w-full h-full ">
           {/* 배경 */}
           <img
             src={previewWallpaperImg}
             alt="Wallpaper"
-            className="absolute inset-0 w-[528px] h-full object-cover rounded-[12px]"
+            className="absolute inset-0 object-cover rounded-[12px]"
           />
 
           {/* 누키 베이스 */}
@@ -159,20 +179,14 @@ const DesignPage: React.FC = () => {
           <img
             src={previewLampImg}
             alt="Lamp"
-            className="absolute z-[30] top-[-115px] left-[300px] w-[140px] h-full object-contain "
+            className="absolute z-[30] bottom-[382px] left-[290px] w-[164px] h-[130px] object-contain"
           />
 
           {/* 안내 박스(디자인 유지용) */}
-          <div
-            className="absolute z-20 left-[25px] bottom-[14px] w-[477px] h-[137px] rounded-[12px] border border-dashed"
-            style={{ borderColor: 'rgba(211, 211, 211, 0.2)', flexShrink: 0 }}
-          />
+          <div className="absolute z-20 left-[25px] bottom-[14px] w-[477px] h-[137px] rounded-[12px] border border-dashed border-[rgba(211,211,211,0.2)] shrink-0" />
 
           {/* 누키 위 텍스트 = 별명(alias) 미리보기 */}
-          <div
-            className="absolute z-[40] top-[124px] left-[369px] transform -translate-x-1/2 text-white text-[13.135px] font-[400] text-center"
-            style={{ fontFamily: 'Pretendard' }}
-          >
+          <div className="absolute z-[40] top-[112px] left-[380px] -translate-x-1/2 transform text-white text-[13.135px] font-[400] text-center [font-family:Pretendard]">
             {alias}
           </div>
         </div>
@@ -180,7 +194,11 @@ const DesignPage: React.FC = () => {
 
       {/* 오른쪽: 탭 박스(고정) + 바깥 저장 버튼(간격 고정) */}
       <div className="w-[432px]">
-        <div className="relative z-30 flex ml-[14px] overflow-visible isolate" role="tablist" aria-label="디자인 설정 탭">
+        <div
+          className="relative z-20 flex ml-[14px] overflow-visible isolate"
+          role="tablist"
+          aria-label="디자인 설정 탭"
+        >
           {TABS.map((tab, i) => {
             const active = activeTab === tab;
             return (
@@ -191,11 +209,9 @@ const DesignPage: React.FC = () => {
                 aria-controls={`panel-${tab}`}
                 onClick={() => setActiveTab(tab)}
                 className={clsx(
-                  'relative w-[100px] h-[27.59px] flex items-center justify-center text-[14px] font-[400] bg-transparent',
-                  // ✨ 활성 탭이 위로 오게
+                  'relative w-[100px] h-[27.6px] flex items-center justify-center bg-transparent pt-[7.36px] pb-[4.6px]' ,
                   active ? 'z-20' : 'z-10',
-                  // 경계 살짝 겹치기(필요시 숫자 조정)
-                  i > 0 && '-ml-[6px]'
+                  i > 0 && '-ml-[10px]',
                 )}
               >
                 <img
@@ -203,7 +219,14 @@ const DesignPage: React.FC = () => {
                   alt=""
                   className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none"
                 />
-                <span className={clsx('relative z-10', active ? 'text-white' : 'text-white/60')}>
+                <span
+                  className={clsx(
+                    'relative z-10 flex justify-center items-center flex-shrink-0',
+                    'text-[14px] font-normal leading-none',
+                    active ? 'text-white' : 'text-white/50',
+                    '[font-family:Pretendard]',
+                  )}
+                >
                   {tab}
                 </span>
               </button>
@@ -211,16 +234,9 @@ const DesignPage: React.FC = () => {
           })}
         </div>
 
-
-        {/* 탭 내용 박스: 탭 아래에 깔림 */}
-        <div
-          className="relative z-20 w-[432px] h-[568.407px] rounded-[12px] bg-[#2D2822] px-[38px] pt-[21.41px] mt-0"
-          style={{ boxSizing: 'border-box' }}
-        >
-          <div
-            className="h-full overflow-y-auto"
-            style={{ scrollbarGutter: 'stable' }}
-          >
+        {/* 탭 내용 박스 */}
+        <div className="relative z-20 w-[432px] h-[568.407px] rounded-[12px] bg-[#2C251D] px-[36px] mt-0 box-border ">
+          <div className="h-full overflow-y-hidden ">
             {activeTab === '별명' && (
               <NicknameTab
                 selectedPrefix={nicknamePrefix}
@@ -231,17 +247,11 @@ const DesignPage: React.FC = () => {
             )}
 
             {activeTab === '누키' && (
-              <NookieTab
-                selected={lampKey}
-                setSelected={setLampKey}
-              />
+              <NookieTab selected={lampKey} setSelected={setLampKey} />
             )}
 
             {activeTab === '마이홈' && (
-              <MyHomeTab
-                selected={patternKey}
-                setSelected={setPatternKey}
-              />
+              <MyHomeTab selected={patternKey} setSelected={setPatternKey} />
             )}
           </div>
         </div>
@@ -249,11 +259,11 @@ const DesignPage: React.FC = () => {
         {/* 저장 버튼 */}
         <div className="flex justify-center mt-[18px]">
           <button
-            className="w-[88px] h-[33px] rounded-[8px] bg-[#423C35] text-white text-[14px] font-semibold disabled:opacity-60"
+            className="w-[88px] h-[34px] rounded-[8px] bg-[#423C35] text-white text-[14px] font-[300]" //font-300 임시조치
             onClick={handleSave}
             disabled={isPending}
           >
-            {isPending ? '저장 중…' : '저장'}
+            {isPending ? '저장' : '저장'}
           </button>
         </div>
       </div>

@@ -73,7 +73,9 @@ const Profile = ({ isLogin }: ProfileProps) => {
     };
     return map;
   }, []);
-  const profileIconSrc = profile ? profileIconByColor[profile.characterColor] : profileOrange;
+  const profileIconSrc = profile
+    ? profileIconByColor[profile.characterColor]
+    : profileOrange;
 
   // 바깥 클릭 시 닫기
   useEffect(() => {
@@ -99,7 +101,10 @@ const Profile = ({ isLogin }: ProfileProps) => {
   return (
     <div
       ref={ref}
-      className={clsx('relative', { invisible: !isLogin, visible: isLogin })}
+      className={clsx('relative left-15', {
+        invisible: !isLogin,
+        visible: isLogin,
+      })}
     >
       {/* 프로필 토글 버튼 (상단 우측 아이콘) */}
       <button onClick={() => setIsClick((prev) => !prev)}>
@@ -118,7 +123,7 @@ const Profile = ({ isLogin }: ProfileProps) => {
         )}
       >
         {/* 상단 사용자 영역: 세로 높이 축소 + overflow-hidden */}
-        <button 
+        <button
           className="w-full px-7 relative overflow-hidden flex items-center hover:bg-[rgba(66,60,53,0.3)] hover:rounded-xl "
           onClick={() => {
             setIsClick(false);
@@ -133,7 +138,9 @@ const Profile = ({ isLogin }: ProfileProps) => {
           />
 
           <div className="flex flex-col items-start min-w-0 relative z-10 -ml-10 ">
-            <p className="text-sm leading-[18px] font-normal text-nook-100">{userName}</p>
+            <p className="text-sm leading-[18px] font-normal text-nook-100">
+              {userName}
+            </p>
             <p
               className="text-xs leading-[16px] font-normal text-nook-100 whitespace-nowrap truncate max-w-[32rem]"
               title={userEmail}
@@ -144,7 +151,7 @@ const Profile = ({ isLogin }: ProfileProps) => {
         </button>
 
         {/* 구분선 */}
-        <p className="self-center w-[85%] border-b-1 border-[rgba(211,211,211,0.6)]" />
+        <p className="self-center w-[85%] border-b-1 border-[rgba(85,83,81,1)]" />
 
         {/* 메뉴 */}
         <div className="flex flex-col items-start gap-1.5 w-full">
@@ -155,7 +162,11 @@ const Profile = ({ isLogin }: ProfileProps) => {
               navigate('/settings');
             }}
           >
-            <img src={settingImg} alt="설정" className="w-6 h-6 max-w-[12px] max-h-[12px] object-contain" />
+            <img
+              src={settingImg}
+              alt="설정"
+              className="w-6 h-6 max-w-[12px] max-h-[12px] object-contain"
+            />
             <p className="text-sm font-normal text-nook-100">설정</p>
           </button>
 
@@ -166,13 +177,17 @@ const Profile = ({ isLogin }: ProfileProps) => {
             rel="noreferrer"
             onClick={() => setIsClick(false)}
           >
-            <img src={questionImg} alt="도움말" className="w-6 h-6 max-w-[12px] max-h-[12px] object-contain" />
+            <img
+              src={questionImg}
+              alt="도움말"
+              className="w-6 h-6 max-w-[12px] max-h-[12px] object-contain"
+            />
             <p className="text-sm font-normal text-nook-100">도움말</p>
           </a>
         </div>
 
         {/* 구분선 */}
-        <p className="self-center w-[85%] border-b-1 border-[rgba(211,211,211,0.6)]" />
+        <p className="self-center w-[85%] border-b-1 border-[rgba(85,83,81,1)]" />
 
         {/* 로그아웃 */}
         <button
@@ -180,7 +195,11 @@ const Profile = ({ isLogin }: ProfileProps) => {
           onClick={onLogout}
         >
           <div className="flex justify-center items-center gap-4 min-w-0">
-            <img src={logoutImg} alt="로그아웃" className="w-6 h-6 max-w-[12px] max-h-[18px] object-contain" />
+            <img
+              src={logoutImg}
+              alt="로그아웃"
+              className="w-6 h-6 max-w-[12px] max-h-[18px] object-contain"
+            />
             <p className="text-sm font-normal text-nook-100">로그아웃</p>
           </div>
         </button>

@@ -6,7 +6,7 @@ interface TabStore {
 }
 
 export const useTabStore = create<TabStore>((set) => ({
-  selectedTab: '독서중',
+  selectedTab: '독서 중',
   setSelectedTab: (tab: string) => {
     set({ selectedTab: tab });
   },
