@@ -1,12 +1,16 @@
 import { useState } from 'react';
 
+// imgs
 import edit_btn from '/src/assets/button/read-note-edit/edit-btn.svg';
 import delete_btn from '/src/assets/button/read-note-edit/delete-btn.svg';
 import send_btn from '/src/assets/button/read-note-edit/send-button.svg';
 import impression_icon from '/src/assets/button/read-note-edit/impression-icon.svg';
 
+// hooks
+import usePutComment from '../../hooks/useMutation/read-note-edit/usePutComment';
 interface ImpressionProps {
   text: string;
+  recordId: number;
   clickImpression: () => void;
   setIsDeleteModalOpen: (isOpen: boolean) => void; // Optional prop for delete modal
   isNookChatOpen: boolean;
@@ -14,6 +18,7 @@ interface ImpressionProps {
 
 const Impression = ({
   text,
+  recordId,
   clickImpression,
   setIsDeleteModalOpen,
   isNookChatOpen, // Optional prop for nook chat state
@@ -21,6 +26,8 @@ const Impression = ({
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [textValue, setTextValue] = useState(text);
+
+  const { mutate: putComment } = usePutComment(recordId);
 
   // hover 로직
   const handleMouseEnter = () => {
@@ -36,6 +43,11 @@ const Impression = ({
     clickImpression();
   };
   const handleSend = () => {
+    if (textValue.trim() === '') {
+      alert('내용을 입력해주세요.');
+      return;
+    }
+    putComment(textValue);
     setIsEditing(false);
     clickImpression();
   };

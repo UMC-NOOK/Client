@@ -6,7 +6,7 @@ export interface roomDeleteProps {
 
 const roomDelete = async ({ roomId }: roomDeleteProps) => {
   try {
-    const res = await instance.get(`api/reading-rooms/${roomId}/host`, {
+    const res = await instance.delete(`api/reading-rooms/${roomId}/host`, {
       params: { roomId },
     });
     return res.data.result;

@@ -96,4 +96,14 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-} */
+
+}*/
+
+@font-face {
+  font-family: 'NanumBaeEunHyeCe';
+  src: url('/fonts/NanumBaeEunHyeCe/NanumBaeEunHyeCe.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+

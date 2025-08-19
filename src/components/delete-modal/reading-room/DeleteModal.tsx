@@ -35,7 +35,7 @@ const DeleteBtn = ({ onDelete, closeModal, usage }: DeleteBtnProps) => {
               </button>
               <button
                 onClick={closeModal}
-                className="w-34 h-15 bg-transparent rounded-[4px] border-2 border-nook-300 text-sm text-nook-300 font-semibold"
+                className="w-34 h-15 bg-transparent rounded-[4px] border-1 border-nook-300 text-sm text-nook-300 font-semibold"
               >
                 취소
               </button>
@@ -50,7 +50,7 @@ const DeleteBtn = ({ onDelete, closeModal, usage }: DeleteBtnProps) => {
               </button>
               <button
                 onClick={closeModal}
-                className="w-34 h-15 bg-transparent rounded-[4px] border-2 border-nook-300 text-sm text-nook-300 font-semibold"
+                className="w-34 h-15 bg-transparent rounded-[4px] border-1 border-nook-300 text-sm text-nook-300 font-semibold"
               >
                 취소
               </button>

@@ -157,7 +157,7 @@ const PrivateReadingRoom = () => {
 
   const deleteRoomMutation = useDeleteRoom({
     onSuccess: () => {
-      navigate('/reading-rooms');
+      navigate('/reading-room');
     },
     onError: (error) => {},
   });
@@ -167,7 +167,7 @@ const PrivateReadingRoom = () => {
 
   const exitRoomMutation = useExitRoom({
     onSuccess: () => {
-      navigate('/reading-rooms');
+      navigate('/reading-room');
     },
     onError: (error) => {},
   });
