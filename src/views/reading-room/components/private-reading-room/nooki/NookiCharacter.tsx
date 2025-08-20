@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SpeechBubble from '../speech-bubble/SpeechBubble';
 import clsx from 'clsx';
+import { useBookStore } from '../../../../../store/private-reading-room/useBookStore';
 
 interface NookiCharacterProps {
   bodyImage: string;
@@ -46,8 +47,10 @@ const NookiCharacter = ({
   const fullSpeechContent = (speechContent: string | undefined) => {
     if (speechContent === '책 고르는 중..') {
       return speechContent;
+    } else if ((speechContent?.length as number) <= 5) {
+      return speechContent + ' 독서중';
     }
-    return speechContent + ' 독서중';
+    return speechContent;
   };
 
   const renderStyledText = (text: string) => {

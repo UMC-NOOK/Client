@@ -119,7 +119,7 @@ const PrivateReadingRoom = () => {
     if (themeName && themeName in audioMap) {
       return audioMap[themeName];
     }
-    return audioMap['READINGROOM']; // 기본값
+    return audioMap['READINGROOM'];
   }, [data?.themeName, audioMap, currentTheme]);
 
   useEffect(() => {
@@ -157,6 +157,7 @@ const PrivateReadingRoom = () => {
 
   const deleteRoomMutation = useDeleteRoom({
     onSuccess: () => {
+      toggleDeleteModal();
       navigate('/reading-room');
     },
     onError: (error) => {},
@@ -167,6 +168,7 @@ const PrivateReadingRoom = () => {
 
   const exitRoomMutation = useExitRoom({
     onSuccess: () => {
+      toggleDeleteModal();
       navigate('/reading-room');
     },
     onError: (error) => {},
@@ -174,10 +176,6 @@ const PrivateReadingRoom = () => {
   const handleExit = (roomId: number) => {
     exitRoomMutation.mutate({ roomId });
   };
-
-  // console.log('asdfadf', data);
-
-  // console.log('배경', data?.bgmUrl);
 
   const { messages, isConnected, actions } = useWebSocket({
     roomId: finalRoomId,
@@ -392,7 +390,10 @@ const PrivateReadingRoom = () => {
         )}
         {activePanel === 'book' && (
           <div className="absolute bottom-[130px] left-[285px]">
-            <BookPanel onChoose={actions.selectBook} />
+            <BookPanel
+              onChoose={actions.selectBook}
+              onBookClick={() => handlePanelToggle('book')}
+            />
           </div>
         )}
         {activePanel === 'setting' && (
@@ -412,6 +413,7 @@ const PrivateReadingRoom = () => {
               onEdit={(data) => {
                 console.log('변경된 룸 정보', data);
                 handleUpdateRoom(data);
+                offSound();
               }}
               room={{
                 roomId: Number(finalRoomId),

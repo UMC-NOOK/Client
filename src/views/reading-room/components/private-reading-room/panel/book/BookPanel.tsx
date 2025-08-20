@@ -5,6 +5,7 @@ import BookItem from './BookItem';
 
 interface BookPanelActionProps {
   onChoose: (title: string) => void;
+  onBookClick: () => void;
 }
 
 interface BookPanelProps {
@@ -12,7 +13,7 @@ interface BookPanelProps {
   title: string;
 }
 
-function BookPanel({ onChoose }: BookPanelActionProps) {
+function BookPanel({ onChoose, onBookClick }: BookPanelActionProps) {
   const { data, isLoading, isError, error, isSuccess, refetch } =
     useGetBookList();
 
@@ -55,6 +56,7 @@ function BookPanel({ onChoose }: BookPanelActionProps) {
                 title={books.title}
                 shouldShowScrollbar={shouldShowScrollbar}
                 onClick={onChoose}
+                onBookClick={onBookClick}
               />
             ))}
           </div>
