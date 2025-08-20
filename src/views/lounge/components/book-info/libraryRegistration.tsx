@@ -111,9 +111,11 @@ const LibraryRegistration = ({
           <div className="w-[135px] h-[198px] ml-4">
             <img src={bookImg} alt="" />
           </div>
-          <div className="flex flex-col gap-8 w-[207px]">
+          <div className="flex flex-col gap-8 w-[207px] h-[182px]">
             <div className="flex flex-col gap-4 items-start">
-              <div className="text-[rgba(255,255,255,0.50)] text-xs">제목</div>
+              <div className="text-[rgba(255,255,255,0.50)] text-xs w-[207px]">
+                제목
+              </div>
               <div className="text-white text-sm">{bookTitle}</div>
             </div>
             <div className="flex flex-col gap-4 items-start">
@@ -125,15 +127,19 @@ const LibraryRegistration = ({
               ref={calendarRef}
             >
               <div className="text-[rgba(255,255,255,0.50)] text-xs">날짜</div>
-              <div
-                className="flex items-center justify-between w-[207px] rounded-sm bg-[rgba(31,28,25,0.5)] px-5 py-[9px] cursor-pointer"
-                onClick={calendarModalHandler}
-              >
-                <div className="text-white text-sm">{selectedDate}</div>
-                <div className="w-7 h-7">
-                  <img src={calendar} alt="" />
+              {readingStatus == 1 || readingStatus == 2 ? (
+                <div
+                  className="flex items-center justify-between w-[207px] rounded-sm bg-[rgba(31,28,25,0.5)] px-5 py-[9px] cursor-pointer"
+                  onClick={calendarModalHandler}
+                >
+                  <div className="text-white text-sm">{selectedDate}</div>
+                  <div className="w-7 h-7">
+                    <img src={calendar} alt="" />
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="text-white text-sm">{selectedDate}</div>
+              )}
               {isCalendarOpen && (
                 <Calendar
                   onRegister={calendarRegisterHandler}
@@ -171,6 +177,7 @@ const LibraryRegistration = ({
         <div
           className="w-full h-20 px-10 py-2 rounded bg-nook-br-100 text-white text-base font-semibold text-center cursor-pointer flex items-center justify-center"
           onClick={() => {
+            console.log('독서 상태:', readingStatus);
             readingStatus === 1
               ? postBookRegistration({
                   date: serverSelectedDate,
