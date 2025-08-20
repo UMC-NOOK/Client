@@ -14,9 +14,9 @@ import { normalizeTagsForApi, normalizeThemeForApi } from '../../utils/reading-r
 import type { ThemeType } from '../../apis/reading-room/types/create-reading-room-types';
 import type { CreateReadingRoomRequest } from '../../apis/reading-room/CreateReadingRoom';
 import useInfo from '../../../auth/hook/useQuery/useInfo';
-import CampfireBGM from '../../../../../public/audio/readingroom_campfire.mp3';
-import LibraryBGM from '../../../../../public/audio/readingroom_library.mp3';
-import SubwayBGM from '../../../../../public/audio/readingroom_subway.mp3';
+import CampfireBGM from '/audio/readingroom_campfire.mp3';
+import LibraryBGM from '/audio/readingroom_library.mp3';
+import SubwayBGM from '/audio/readingroom_subway.mp3';
 
 type UsageType = 'create' | 'edit';
 
