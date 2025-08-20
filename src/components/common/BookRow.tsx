@@ -1,4 +1,4 @@
-import saveIcon from '../../assets/button/search/save.png';
+import saveIcon from '../../assets/button/search/saved.png';
 import infoIcon from '../../assets/button/search/info.png';
 import dotIcon from '../../assets/button/search/Ellipse.png';
 

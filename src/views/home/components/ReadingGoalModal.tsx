@@ -82,14 +82,18 @@ const ReadingGoalModal = ({
         />
         <p className="mt-[38px] text-white text-[18px] font-[600] leading-[22px]">독서 목표 설정</p>
 
-        <div className="mt-[66px] flex flex-col items-center">
-          <div className="flex flex-row justify-between w-[323px]">
-            {options.map((num) => (
+        <div className="mt-[79px] flex flex-col items-center">
+          {/* 텍스트들을 절대 위치로 배치하여 세로선과 정확히 일치시킴 */}
+          <div className="relative w-[323px] h-[22px]">
+            {options.map((num, idx) => (
               <p
                 key={num}
-                className={`text-[16px] leading-[22px] cursor-pointer ${
+                className={`absolute text-[16px] leading-[22px] cursor-pointer transform -translate-x-1/2 whitespace-nowrap ${
                   selected === num ? 'text-white font-[600]' : 'text-white/50 font-[400]'
                 }`}
+                style={{
+                  left: `${15 + (idx / (options.length - 1)) * (323 - 30)}px`,
+                }}
                 onClick={() => setSelected(num)}
               >
                 {num}권
@@ -99,7 +103,7 @@ const ReadingGoalModal = ({
 
           <div
             ref={sliderRef}
-            className="relative mt-[17px] w-[323px] h-[20px] touch-none "
+            className="relative mt-[17px] w-[323px] h-[20px] touch-none"
             onClick={handleSliderClick}
             onMouseDown={handleDrag}
             onTouchStart={handleDrag}

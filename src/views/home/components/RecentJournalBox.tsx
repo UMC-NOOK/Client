@@ -62,11 +62,11 @@ const RecentJournalBox = () => {
         type="button"
         onClick={handleGo}
         disabled={isLoading}
-        className="mt-[25px] mr-[20px] w-[6px] h-[12px] flex-shrink-0 disabled:opacity-50"
+        className="mt-[25px] mr-[20.33px] w-[6.667px] h-[12px] flex-shrink-0 disabled:opacity-50"
         aria-label={rightButtonAria}
         title={rightButtonAria}
       >
-        <img src={rightArrowIcon} alt="" className="w-[6px] h-[12px] object-contain" />
+        <img src={rightArrowIcon} alt="" className="w-[6.667px] h-[12px] object-contain" />
       </button>
     </div>
   );

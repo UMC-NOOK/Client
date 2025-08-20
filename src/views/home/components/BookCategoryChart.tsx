@@ -29,7 +29,7 @@ const EmptyDonut: React.FC<{
       className="relative flex items-center justify-center"
       style={{ width: size, height: size }}
     >
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <svg width={size + 10 } height={size + 10} viewBox={`0 0 ${size + 10 } ${size + 10}`}>
         <circle
           cx={center}
           cy={center}
@@ -99,7 +99,7 @@ const BookCategoryChart: React.FC = () => {
             <EmptyDonut size={DONUT_SIZE} inner={INNER_R} outer={OUTER_R} />
 
             {/* 중앙 텍스트 */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <div className="absolute inset-0 flex flex-col items-center mt-[46px] mr-[6px]">
               <span className="text-white text-[10px] leading-[20px] font-[400] font-pretendard">
                 독서
               </span>
@@ -111,7 +111,7 @@ const BookCategoryChart: React.FC = () => {
         ) : (
           <>
             {/* 정상 데이터 도넛 */}
-            <PieChart width={DONUT_SIZE} height={DONUT_SIZE}>
+            <PieChart width={DONUT_SIZE + 10 } height={DONUT_SIZE + 10}>
               <Pie
                 data={dataWithColor}
                 dataKey="count"
