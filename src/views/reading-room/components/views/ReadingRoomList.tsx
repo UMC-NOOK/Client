@@ -59,7 +59,7 @@ const ReadingRoomList = () => {
         <div className="flex flex-col justify-center items-center">
             <div className="flex items-center justify-center">
                 <div className="relative w-full group">
-                    <div className="flex flex-row items-center mt-31">
+                    <div className="flex flex-row items-center mt-[60px]">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="20"
@@ -77,10 +77,14 @@ const ReadingRoomList = () => {
                             fillOpacity="0.5"
                         />
                         </svg>
-                    <div className="text-white text-xl ml-6">내 리딩룸</div>
+                    <div 
+                        className="text-white text-xl ml-6 cursor-pointer"
+                        onClick={() => navigate('/reading-room')}>
+                            내 리딩룸
+                    </div>
                 </div>
 
-            <div className="grid grid-cols-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-5 mt-12">
+            <div className="grid grid-cols-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-[16px] gap-y-[20px] mt-12">
                 {isLoading
                 ? Array.from({ length: ITEMS_PER_PAGE }).map((_, idx) => <ReadingRoomSkeleton key={idx} />)
                 : rooms.map((room: ReadingRoom) => (
@@ -94,7 +98,7 @@ const ReadingRoomList = () => {
             </div>
 
             {!isLoading && (
-                <div className="flex justify-center items-center mt-47 gap-8">
+                <div className="flex justify-center items-center mt-47 gap-8 mb-[144px]">
                     {Array.from({ length: totalPages }).map((_, i) => (
                         <div
                             key={i}

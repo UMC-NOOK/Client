@@ -1,6 +1,7 @@
 export function shouldHideHeader(pathname: string): boolean {
   if (pathname === '/reading-room') return false;
-  if (pathname.startsWith('/reading-room/')) return true;
+  //if (pathname.startsWith('/reading-room/:roomId/:userId')) return true;
+  if (/^\/reading-room\/\d+\/\d+(?:\/.*)?$/.test(pathname)) return true;
 
   // 독서 기록
   if (pathname.match(/^\/library\/[^\/]+\/edit$/)) return true;

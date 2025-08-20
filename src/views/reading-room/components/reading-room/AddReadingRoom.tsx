@@ -6,7 +6,7 @@ const AddReadingRoom = () => {
 
     return(
         <div 
-            className='relative flex justify-center items-center w-124 h-200 group rounded-xl border border-dashed'
+            className='relative flex justify-center items-center w-124 h-200 group rounded-xl border border-[2px] border-dashed'
             style={{
                 backgroundColor: 'rgba(66, 60, 53, 0.10)',
                 borderColor: 'rgba(66, 60, 53, 0.40)'}}>

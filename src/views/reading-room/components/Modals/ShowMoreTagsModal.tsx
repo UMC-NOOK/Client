@@ -9,7 +9,7 @@ const ShowMoreTagsModal = ({
         setSelected: Dispatch<SetStateAction<string[]>>;
         onClose: () => void;
     }) => {
-    const goalTags = ['자유독서', '필사', '독서기록', '뽀모도로', '루틴'];
+    const goalTags = ['자유 독서', '필사', '독서 기록', '뽀모도로', '루틴'];
     const timeTags = ['아침', '낮', '밤', '주말', '퇴근길', '출근길'];
     const ageTags = ['10대','20대', '30대', '40대', '50대'];
     const particularTags = ['중학생', '고등학생', '대학생', '직장인'];
