@@ -7,13 +7,7 @@ const instance = axios.create({
   },
   withCredentials: true,
 });
-const refreshInstance = axios.create({
-  baseURL: `${import.meta.env.VITE_API_BASE_URL}`,
-  headers: {
-    accept: 'application/json',
-  },
-  withCredentials: true,
-});
+
 let isRefreshing = false;
 let refreshSubscribers: Array<(token: string) => void> = [];
 function onTokenRefreshed(token: string) {
@@ -26,6 +20,12 @@ function addRefreshSubscriber(callback: (token: string) => void) {
 // 요청 인터셉터
 instance.interceptors.request.use(
   (config) => {
+    if (
+      config.baseURL?.includes('refresh') ||
+      config.url?.includes('reissue')
+    ) {
+      return config;
+    }
     const authPaths = ['/login', '/signup', '/kakao/callback'];
     const isAuthPage = authPaths.some((path) =>
       window.location.pathname.includes(path),
@@ -68,15 +68,16 @@ instance.interceptors.response.use(
         isRefreshing = true;
         try {
           // 쿠키에 있는 리프래시 토큰이 자동으로 전송됨
-          const { data } = await refreshInstance.post('api/users/reissue');
-          const newAccessToken = data.accessToken;
-          const newRefreshToken = data.refreshToken;
+          const res = await instance.post('api/users/reissue');
+          const newToken = res.data?.result?.accessToken;
+          const newAccessToken = newToken;
+          // const newRefreshToken = data.refreshToken;
           localStorage.setItem('accessToken', newAccessToken);
           // 새로운 리프래시 토큰이 응답에 포함되어 있다면 쿠키로 설정
           // (보통 서버에서 자동으로 Set-Cookie 헤더로 설정함)
-          if (newRefreshToken) {
-            // 필요시 추가 처리
-          }
+          // if (newRefreshToken) {
+          //   // 필요시 추가 처리
+          // }
           useLoginStore.getState().setLogin(true);
           onTokenRefreshed(newAccessToken);
           isRefreshing = false;

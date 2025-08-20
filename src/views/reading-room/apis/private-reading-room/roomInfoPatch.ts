@@ -28,7 +28,7 @@ const roomInfoPatch = async ({
       requestBody,
     );
 
-    console.log('독서방 정보 수정', res.data.result);
+    // console.log('독서방 정보 수정', res.data.result);
     return res.data.result;
   } catch (err) {
     console.log('독서방 정보 수정 에러', err);

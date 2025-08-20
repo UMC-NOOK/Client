@@ -55,7 +55,7 @@ const useWebSocket = ({ roomId, userId }: UseWebSocketProps) => {
     // 연결 이벤트 핸들러들
     // hooks/useWebSocket.ts의 handleConnect에 추가
     const handleConnect = (frame: any) => {
-      console.log('🎉 STOMP 연결 성공!', frame);
+      // console.log('🎉 STOMP 연결 성공!', frame);
       setIsConnected(true);
       setConnectionStatus('연결됨');
 
@@ -84,7 +84,7 @@ const useWebSocket = ({ roomId, userId }: UseWebSocketProps) => {
     };
 
     const handleStompError = (frame: any) => {
-      console.error('💥 STOMP 브로커 오류:', frame);
+      // console.error('💥 STOMP 브로커 오류:', frame);
       setIsConnected(false);
       setConnectionStatus(
         `STOMP 오류: ${frame.headers?.message || '알 수 없는 오류'}`,
@@ -92,19 +92,19 @@ const useWebSocket = ({ roomId, userId }: UseWebSocketProps) => {
     };
 
     const handleWebSocketError = (error: any) => {
-      console.error('🔌 WebSocket 오류:', error);
+      // console.error('🔌 WebSocket 오류:', error);
       setIsConnected(false);
       setConnectionStatus('WebSocket 오류');
     };
 
     const handleWebSocketClose = (event: any) => {
-      console.log('🔌 WebSocket 연결 종료:', event);
+      // console.log('🔌 WebSocket 연결 종료:', event);
       setIsConnected(false);
       setConnectionStatus(`연결 종료: ${event.code} - ${event.reason}`);
     };
 
     const handleDisconnect = (frame: any) => {
-      console.log('👋 STOMP 연결 해제:', frame);
+      // console.log('👋 STOMP 연결 해제:', frame);
       setIsConnected(false);
       setConnectionStatus('연결 해제됨');
     };
@@ -119,13 +119,13 @@ const useWebSocket = ({ roomId, userId }: UseWebSocketProps) => {
       setConnectionStatus,
     );
 
-    console.log('🔄 STOMP 클라이언트 활성화...');
+    // console.log('🔄 STOMP 클라이언트 활성화...');
     stompClient.activate();
     setClient(stompClient);
     clientRef.current = stompClient;
 
     return () => {
-      console.log('🧹 컴포넌트 언마운트 - 연결 정리');
+      // console.log('🧹 컴포넌트 언마운트 - 연결 정리');
       if (clientRef.current && clientRef.current.connected) {
         actions.leaveRoom();
         setTimeout(() => {
