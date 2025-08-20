@@ -35,7 +35,7 @@ const RegisteredBooksCalendarBox = ({ monthly }: { monthly: MonthlyDayBooks[] })
                     pt-[17px] pb-[14px] pl-[21px] pr-[22px] flex flex-col justify-start">
       
       {/* 요일 */}
-      <div className="flex w-[203px] mb-[0px]">
+      <div className="flex w-[203px] mb-[0px] ">
         {week.map((day, i) => (
           <div
             key={i}
@@ -69,7 +69,7 @@ const RegisteredBooksCalendarBox = ({ monthly }: { monthly: MonthlyDayBooks[] })
             <div key={dateStr} className="flex flex-col items-center justify-start w-[29px]">
               {/* 날짜 */}
               <div className="flex w-[29px] h-[30px] items-center justify-center 
-                              text-[12px] leading-[14.4px] font-[400] text-white/50">
+                              text-[12px] leading-[14.4px] font-[400] text-white/50 mb-[4px]">
                 {day}
               </div>
               {/* 썸네일 */}

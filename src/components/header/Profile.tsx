@@ -127,7 +127,7 @@ const Profile = ({ isLogin }: ProfileProps) => {
           className="w-full px-7 relative overflow-hidden flex items-center hover:bg-[rgba(66,60,53,0.3)] hover:rounded-xl "
           onClick={() => {
             setIsClick(false);
-            navigate('/settings');
+            navigate('home/settings');
           }}
           style={{ height: DROPDOWN_HEADER_H }} // ← 세로 길이 좁힘(64px)
         >
