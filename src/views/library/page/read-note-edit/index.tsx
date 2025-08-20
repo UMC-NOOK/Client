@@ -341,7 +341,9 @@ const ReadNoteEditPage = () => {
                 </div>
               </div>
             </div>
-            {isNookChatOpen && <NookChat />}
+            {isNookChatOpen && (
+              <NookChat bookId={Number(location.state.bookId)} />
+            )}
           </div>
         </div>
       </div>
