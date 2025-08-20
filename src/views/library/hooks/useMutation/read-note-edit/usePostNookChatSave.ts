@@ -8,6 +8,9 @@ const usePostNookChatSave = (bookId: number) => {
     mutationFn: (messageId: number) => nookChatMessageSaveFetch(messageId),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['nookChat', bookId] });
+      await queryClient.invalidateQueries({
+        queryKey: ['sentenceList', bookId],
+      });
     },
   });
 };

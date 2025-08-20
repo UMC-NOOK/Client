@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import chat_send_btn from '/src/assets/button/read-note-edit/chat-send-button.svg';
 import chat_send_disable_btn from '/src/assets/button/read-note-edit/chat-send-disable-button.svg';
 import nook_chat from '/src/assets/button/read-note-edit/nook-chat.svg';
+import divide_line from '/src/assets/button/read-note-edit/divide-line.svg';
 
 // hooks
 import useGetNookChat from '../../hooks/useQuery/read-note-edit-query/useGetNookChat';
@@ -41,7 +42,21 @@ const NookChat = ({ bookId }: NookChatProps) => {
               <NookSay message={chat.message} />
             ) : chat.chatType === 'USER' ? (
               <UserSay message={chat.message} />
-            ) : null}
+            ) : (
+              <>
+                <NookSay message="대화 내용에 기반해 감상문을 생성합니다." />
+                <img src={divide_line} alt="" className="w-full my-[18.5px]" />
+                <div className="w-[332px] text-white text-sm not-italic font-normal">
+                  {chat.message}
+                </div>
+                <div
+                  className="flex w-[180px] h-10 justify-center items-center gap-2.5 shrink-0 border p-2.5 rounded-lg border-solid border-[#7ABFC9] text-[#7ABFC9] text-sm not-italic font-semibold"
+                  onClick={() => postNookChatSave(chat.chatRecordId)}
+                >
+                  내 감상으로 붙여넣기
+                </div>
+              </>
+            )}
           </div>
         ))}
       </div>

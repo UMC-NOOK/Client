@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { nookChatPostFetch } from '../../../apis/read-note-edit/nookChat';
 import {
   NookChatSendRequest,
-  NookChatSendResponse,
   getNookChatResponse,
   NookChat,
 } from '../../../types/read-note-edit/nookChat';
