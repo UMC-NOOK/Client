@@ -159,7 +159,7 @@ const Profile = ({ isLogin }: ProfileProps) => {
             className="flex justify-start w-full h-15 px-7 items-center gap-4 hover:bg-[rgba(66,60,53,0.3)] hover:rounded-xl"
             onClick={() => {
               setIsClick(false);
-              navigate('/settings');
+              navigate('home/settings');
             }}
           >
             <img
