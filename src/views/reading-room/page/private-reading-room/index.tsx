@@ -385,7 +385,10 @@ const PrivateReadingRoom = () => {
       <div className="relative">
         {activePanel === 'member' && (
           <div className="absolute bottom-[130px] left-[300px]">
-            <MemberPanel roomId={Number(finalRoomId)} />
+            <MemberPanel
+              roomId={Number(finalRoomId)}
+              currentUsers={currentUsers}
+            />
           </div>
         )}
         {activePanel === 'book' && (

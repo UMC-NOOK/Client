@@ -20,7 +20,7 @@ const useAudio = (src: string | null): UseAudioReturn => {
   useEffect(() => {
     if (src) {
       audioRef.current = new Audio(src);
-      audioRef.current.loop = true; // BGM이므로 반복 재생
+      audioRef.current.loop = true;
       audioRef.current.volume = volume;
 
       const audio = audioRef.current;
