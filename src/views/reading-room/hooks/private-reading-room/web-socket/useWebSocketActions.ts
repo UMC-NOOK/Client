@@ -23,7 +23,7 @@ export const useWebSocketActions = (
           body: JSON.stringify(enterData),
           headers: { 'content-type': 'application/json' },
         });
-        console.log('✅ 입장 메시지 발송 완료');
+        // console.log('✅ 입장 메시지 발송 완료');
       } catch (error) {
         console.error('❌ 입장 메시지 발송 실패:', error);
       }
@@ -35,7 +35,7 @@ export const useWebSocketActions = (
   const leaveRoom = useCallback(() => {
     if (clientRef.current && clientRef.current.connected) {
       const leaveData = { roomId, userId };
-      console.log('🚪 퇴장 메시지 발송:', leaveData);
+      // console.log('🚪 퇴장 메시지 발송:', leaveData);
 
       try {
         clientRef.current.publish({
@@ -43,7 +43,7 @@ export const useWebSocketActions = (
           body: JSON.stringify(leaveData),
           headers: { 'content-type': 'application/json' },
         });
-        console.log('✅ 퇴장 메시지 발송 완료');
+        // console.log('✅ 퇴장 메시지 발송 완료');
       } catch (error) {
         console.error('❌ 퇴장 메시지 발송 실패:', error);
       }
@@ -62,14 +62,15 @@ export const useWebSocketActions = (
             body: JSON.stringify(bookData),
             headers: { 'content-type': 'application/json' },
           });
-          console.log('✅ 책 선택 메시지 발송 완료');
+          // console.log('✅ 책 선택 메시지 발송 완료');
         } catch (error) {
           console.error('❌ 책 선택 메시지 발송 실패:', error);
         }
       } else {
-        console.warn(
-          '⚠️ 클라이언트가 연결되지 않음 - 책 선택 메시지 발송 불가',
-        );
+        console
+          .warn
+          // '⚠️ 클라이언트가 연결되지 않음 - 책 선택 메시지 발송 불가',
+          ();
       }
     },
     [roomId, userId],
@@ -87,7 +88,7 @@ export const useWebSocketActions = (
             body: JSON.stringify(bgmData),
             headers: { 'content-type': 'application/json' },
           });
-          console.log('✅ BGM 토글 메시지 발송 완료');
+          // console.log('✅ BGM 토글 메시지 발송 완료');
         } catch (error) {
           console.error('❌ BGM 토글 메시지 발송 실패:', error);
         }
@@ -103,9 +104,9 @@ export const useWebSocketActions = (
   const subscribe = useCallback(
     (destination: string, callback: (message: IMessage) => void) => {
       if (clientRef.current && clientRef.current.connected) {
-        console.log('📝 새 구독 추가:', destination);
+        // console.log('📝 새 구독 추가:', destination);
         const subscription = clientRef.current.subscribe(destination, callback);
-        console.log('✅ 구독 추가 완료:', destination);
+        // console.log('✅ 구독 추가 완료:', destination);
         return subscription;
       } else {
         console.warn('⚠️ 클라이언트가 연결되지 않음 - 구독 불가');
@@ -125,7 +126,7 @@ export const useWebSocketActions = (
           body: JSON.stringify(allBookData),
           headers: { 'content-type': 'application/json' },
         });
-        console.log('✅ 모든 유저 책 선택 메시지 발송 완료');
+        // console.log('✅ 모든 유저 책 선택 메시지 발송 완료');
       } catch (error) {
         console.error('❌ 책 선택 메시지 발송 실패:', error);
       }
@@ -148,7 +149,7 @@ export const useWebSocketActions = (
 
   const testPublish = useCallback(() => {
     if (clientRef.current && clientRef.current.connected) {
-      console.log('🧪 테스트 메시지 발송...');
+      // console.log('🧪 테스트 메시지 발송...');
       try {
         clientRef.current.publish({
           destination: '/pub/enter',
@@ -159,7 +160,7 @@ export const useWebSocketActions = (
           }),
           headers: { 'content-type': 'application/json' },
         });
-        console.log('✅ 테스트 메시지 발송 완료');
+        // console.log('✅ 테스트 메시지 발송 완료');
       } catch (error) {
         console.error('❌ 테스트 메시지 발송 실패:', error);
       }

@@ -10,11 +10,19 @@ interface Member {
   isMe: boolean;
 }
 
-interface MemberPanelProps {
-  roomId: number;
+interface CurrentUser {
+  alias: string;
+  characterColor: 'ORANGE' | 'BLUE' | 'GREEN' | 'YELLOW';
+  nickname: string;
+  userId: number;
 }
 
-function MemberPanel({ roomId }: MemberPanelProps) {
+interface MemberPanelProps {
+  roomId: number;
+  currentUsers: CurrentUser[] | null;
+}
+
+function MemberPanel({ roomId, currentUsers }: MemberPanelProps) {
   const { data, isLoading, isError, error, isSuccess, refetch } =
     useGetMemberList({
       roomId: Number(roomId),
@@ -29,6 +37,11 @@ function MemberPanel({ roomId }: MemberPanelProps) {
   // 역할 번역 함수
   const translateRole = (role: string) => {
     return role === 'HOST' ? '호스트' : '게스트';
+  };
+
+  const isUserOnline = (userId: number) => {
+    if (!currentUsers) return false;
+    return currentUsers.some((user: CurrentUser) => user.userId === userId);
   };
 
   // const mockData = [
@@ -47,6 +60,7 @@ function MemberPanel({ roomId }: MemberPanelProps) {
               name={hostMember.nickname + ' (나)'}
               roll={translateRole(hostMember.role)}
               isMe={true}
+              isOnline={isUserOnline(hostMember.userId)}
             />
           )}
           <p className="w-138 border-b-1 my-14 border-[rgba(255,255,255,0.5)]" />
@@ -56,6 +70,7 @@ function MemberPanel({ roomId }: MemberPanelProps) {
               name={member.nickname}
               roll={translateRole(member.role)}
               isMe={false}
+              isOnline={isUserOnline(member.userId)}
             />
           ))}
         </div>
