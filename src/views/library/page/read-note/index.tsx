@@ -65,7 +65,7 @@ const ReadNotePage = () => {
         <LibraryRegistration
           onRegister={libraryHandler}
           closeModal={libraryCloseHandler}
-          bookImg={location.state?.bookImg}
+          bookImg={location.state?.coverImageUrl}
           bookTitle={location.state?.title}
           bookAuthor={location.state?.author}
           bookId={location.state?.bookId}
@@ -82,7 +82,7 @@ const ReadNotePage = () => {
         <DownloadModal
           onDownload={downloadHandler}
           closeModal={downloadCloseHandler}
-          bookImg={location.state?.bookImg}
+          bookImg={location.state?.coverImageUrl}
           bookTitle={location.state?.title}
           bookAuthor={location.state?.author}
           bookId={location.state?.bookId}
