@@ -84,7 +84,7 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
 
         const tryAutoStart = async () => {
             if (!audioRef.current) return;
-            const src = themeAudios[selected];      // 'CAMPFIRE'가 기본값
+            const src = themeAudios[selected];    
             el.src = src;
             el.currentTime = 0;
             try {
@@ -180,7 +180,9 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
         <ReadingRoomActionsProvider value={actions}>
             <div className="flex flex-col justify-center items-center">
                 <div className="relative w-full">
-                    <div className="flex flex-row justify-center items-start gap-13 mt-10 px-10">
+                    <div
+                        className={`flex flex-row justify-center items-start mt-10 px-10 
+                            ${usage === 'create' ? 'gap-[52px]' : 'gap-[40px]'}`}>
                         <div className="flex flex-col">
                             {usage === 'create' && (
                                 <div className="flex flex-row items-center mb-20">
@@ -200,23 +202,36 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
                                             fillOpacity="0.5"
                                         />
                                     </svg>
-                                <div className="text-white text-xl ml-6">내 리딩룸</div>
+                                <div 
+                                    className="text-white text-xl ml-6 cursor-pointer"
+                                    onClick={() => navigate('/reading-room')}>
+                                        내 리딩룸
+                                </div>
                             </div>
                         )}
 
                     <img
                         src={themeImages[selected]}
                         alt={selected}
-                        className={`${usage === 'create' ? 'w-270 h-221 rounded-xl' : 'w-[446px] h-[365px] rounded-xl'}`}
+                        className={`${usage === 'create' ? 'w-[540px] h-[380px] rounded-xl' : 'w-[447px] h-[380px] rounded-xl'}`}
                     />
 
-                <div className="flex flex-col mt-6">
-                    <div className="flex flex-row justify-start items-center gap-3">
-                        <div className="text-white text-sm">테마 선택</div>
-                        <div className="text-white text-2xs">리딩룸 생성 후 테마를 변경할 수 있습니다.</div>
+                <div className="flex flex-col mt-[20px]">
+                    <div className="flex flex-row gap-[14px]">
+                        <div className="flex text-white text-sm/[25px] items-center">테마 선택</div>
+                        {usage === 'create' && (
+                            <div className="flex text-white text-[10px]/[25px] items-end">
+                                리딩룸 생성 후 테마를 변경할 수 있습니다.
+                            </div>
+                        )}
                     </div>
 
-                    <div className="flex flex-row justify-start items-center gap-5 mt-7 mb-10">
+                    <div
+                        className={`flex flex-row justify-start items-center 
+                            ${usage === 'create'
+                                ? 'gap-[15.31px] mt-[18px] mb-[74px]'
+                                : 'gap-[14.38px] mt-[10px] mb-[48px]'
+                            }`}>
                         {(['CAMPFIRE', 'SUBWAY', 'LIBRARY'] as ThemeType[]).map((theme) => (
                             <img
                                 key={theme}
@@ -227,7 +242,7 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
                                     void playBGM(theme);
                                 }}
                                 className={`cursor-pointer ${
-                                    usage === 'create' ? 'w-84 h-69' : 'w-[139.617px] h-[114.558px]'
+                                    usage === 'create' ? 'w-[169px] h-[119px]' : 'w-[169px] h-[119px]'
                                     } rounded-xl border transition-all duration-200 ${
                                     selected === theme ? 'border-[rgba(122,191,201,1)]' : 'border-transparent'
                                 }`}
@@ -238,7 +253,7 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
                 </div>
             </div>
 
-                <div className={`flex flex-col justify-start ${usage === 'create' ? 'mt-40' : 'mt-10'}`}>
+                <div className={`flex flex-col justify-start ${usage === 'create' ? 'mt-[67px]' : 'mt-10'}`}>
                     <InsertInfo
                         roomName={roomName}
                         setRoomName={setRoomName}
