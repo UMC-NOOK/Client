@@ -22,7 +22,7 @@ const RecentJournalBox = () => {
         {/* 텍스트 영역 */}
         <div className="flex flex-col gap-[2px]">
           <p className="text-[12px] leading-[14.4px] font-[400] text-white/50">
-            {hasJournals ? '최근 남긴 독서기록' : '작성한 독서 기록이 없어요'}
+            {hasJournals ? '최근 남긴 독서기록' : '작성한 독서 기록이 없어요.'}
           </p>
           {hasJournals ? (
             <button

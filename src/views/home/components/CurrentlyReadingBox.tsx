@@ -8,13 +8,34 @@ const CurrentlyReadingBox = () => {
   const navigate = useNavigate();
   const { data, isLoading } = useGetHomeReading(); // { bookId, title, thumbnailUrl } | undefined
 
-  const hasBooks = !!data;
-  const randomBook = hasBooks ? { id: String(data!.bookId), title: data!.title } : null;
-  const targetPath = hasBooks && randomBook ? `/library/${randomBook.id}` : '/lounge';
+  // bookId가 0일 수도 있으니 null/undefined만 배제
+  const hasReading = data?.bookId != null;
+
+  const labelText = hasReading ? '지금 독서 중인 책' : '독서 중인 책이 없어요.';
+  const mainText = isLoading
+    ? '추천 책 보기'
+    : hasReading
+    ? data!.title
+    : '추천 책 보기';
+
+  const rightButtonAria = hasReading ? '독서 기록으로 이동' : '라운지로 이동';
 
   const handleGo = () => {
     if (isLoading) return;
-    navigate(targetPath);
+
+    if (hasReading) {
+      // 상세 페이지로 이동하면서 state 전달
+      navigate(`/library/${data!.bookId}`, {
+        state: {
+          bookId: data!.bookId,
+          bookImg: data!.thumbnailUrl, // API의 thumbnailUrl을 페이지에서 기대하는 bookImg 키로 매핑
+          title: data!.title,
+          // author: ... // 필요하면 상세 페이지에서 별도 API로 보강
+        },
+      });
+    } else {
+      navigate('/lounge');
+    }
   };
 
   return (
@@ -32,31 +53,30 @@ const CurrentlyReadingBox = () => {
 
         {/* 텍스트 블록 */}
         <div className="flex flex-col gap-[2px]">
+          {/* 상태에 따라 변경되는 라벨 */}
           <p className="text-[12px] leading-[14.4px] font-[400] text-white/50">
-            지금 독서 중인 책
+            {labelText}
           </p>
+
+          {/* 제목/가이드 문구 */}
           <button
-            disabled={isLoading}             // 로딩 중에만 비활성화
-            onClick={handleGo}               // 있으면 독서기록, 없으면 라운지
+            disabled={isLoading}
+            onClick={handleGo}
             className="text-[12px] leading-[14.4px] font-[400] text-white text-left disabled:opacity-50
-            overflow-hidden whitespace-nowrap text-ellipsis max-w-[150px]"
+                       max-w-[150px] overflow-hidden whitespace-nowrap text-ellipsis"
           >
-            {isLoading
-              ? '추천 책 보기'
-              : hasBooks
-              ? randomBook?.title
-              : '독서 중인 책이 없어요'}
+            {mainText}
           </button>
         </div>
       </div>
 
       {/* 오른쪽 아이콘 */}
       <button
-        onClick={handleGo} // 동일 로직: 있으면 독서기록, 없으면 라운지
+        onClick={handleGo}
         disabled={isLoading}
         className="mt-[25px] mr-[20.33px] w-[6.667px] h-[12px] flex-shrink-0 disabled:opacity-50"
-        aria-label={hasBooks ? '독서 기록으로 이동' : '라운지로 이동'}
-        title={hasBooks ? '독서 기록으로 이동' : '라운지로 이동'}
+        aria-label={rightButtonAria}
+        title={rightButtonAria}
       >
         <img
           src={rightArrowIcon}
