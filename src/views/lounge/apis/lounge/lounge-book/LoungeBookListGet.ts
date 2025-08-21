@@ -3,19 +3,13 @@ import { MallType } from '../types/lounge-types';
 
 export interface LoungeBookListGetProps {
     mallType: MallType;
-    sectionId?: string;
-    categoryId?: string;
-    page?: number;
 }
 
-const LoungeBookListGet = async ({ mallType, sectionId, categoryId, page = 0,  }: LoungeBookListGetProps) => {
+const LoungeBookListGet = async ({ mallType}: LoungeBookListGetProps) => {
     try{
         const res = await instance.get('/api/lounge/books',{
             params: { 
-                mallType, 
-                sectionId: sectionId || undefined, 
-                categoryId: categoryId || undefined, 
-                page },
+                mallType},
         });
 
         return res.data;

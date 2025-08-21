@@ -2,10 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import LoungeBookListGet, { LoungeBookListGetProps } from '../../../apis/lounge/lounge-book/LoungeBookListGet';
 import { loungeQueryKeys, LoungeSection } from '../../../apis/lounge/types/lounge-types';
 
-const useGetLoungeBook = ({ mallType, sectionId, categoryId, page }: LoungeBookListGetProps) => {
+const useGetLoungeBook = ({ mallType }: LoungeBookListGetProps) => {
     return useQuery({
-        queryKey: loungeQueryKeys.books( mallType, sectionId ?? '', categoryId ?? '', page ?? 0),
-        queryFn: () => LoungeBookListGet({ mallType, sectionId, categoryId, page }),
+        queryKey: loungeQueryKeys.books( mallType),
+        queryFn: () => LoungeBookListGet({ mallType}),
         staleTime: 0,
         enabled: !!mallType,
         select : (data) => {
