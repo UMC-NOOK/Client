@@ -19,7 +19,7 @@ const ActionButtons = ({ usage, disabled = false }: ActionButtonsProps) => {
           type="button"
           onClick={() => !disabled && create()}
           disabled={disabled}                        
-          className="flex justify-center items-center w-81 h-20 rounded-lg border mt-70"
+          className="flex justify-center items-center w-81 h-20 rounded-lg border mt-[150px]"
           style={{
             backgroundColor: disabled ? 'transparent' : 'rgba(122,191,201,1)',
             borderColor: disabled ? 'rgba(66, 60, 53,1)' : 'transparent',
@@ -47,11 +47,11 @@ const ActionButtons = ({ usage, disabled = false }: ActionButtonsProps) => {
 
   if (usage === 'edit') {
     return (
-      <div className="flex flex-row justify-end gap-3 mt-6 mt-60">
+      <div className="flex flex-row justify-end gap-3 mt-[100px]">
         <button
           type="button"
           onClick={edit}
-          className="flex items-center w-46 h-16 bg-[rgba(122,191,201,1)] text-sm px-10 py-4 rounded-lg"
+          className="flex items-center w-46 h-16 bg-[rgba(122,191,201,1)] text-sm font-semibold px-10 py-4 rounded-lg"
           style={{ color: 'rgba(43, 34, 23, 1)' }}
         >
           정보 수정
@@ -59,7 +59,7 @@ const ActionButtons = ({ usage, disabled = false }: ActionButtonsProps) => {
         <button
           type="button"
           onClick={cancel}
-          className="flex justify-center items-center w-32 h-16 border text-sm px-8 py-4 rounded-lg"
+          className="flex justify-center items-center w-32 h-16 border text-sm font-semibold px-8 py-4 rounded-lg"
           style={{
             borderColor: 'rgba(255,255,255,0.5)',
             color: 'rgba(255,255,255,0.5)',
