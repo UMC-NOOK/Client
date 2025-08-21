@@ -82,6 +82,18 @@ const VerticalView = () => {
 
   const booksData: ApiBookData[] = data?.content || [];
   const hasNext = data?.hasNext || false;
+  const totalPages = data?.totalPage || 0;
+
+  console.log(totalPages);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [currentTab, currentMenu]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="w-full">
@@ -104,6 +116,15 @@ const VerticalView = () => {
           />
         ))}
       </div>
+
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          hasNext={hasNext}
+        />
+      )}
     </div>
   );
 };

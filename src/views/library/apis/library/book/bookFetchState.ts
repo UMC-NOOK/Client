@@ -10,7 +10,7 @@ export interface bookFetchStateProps {
 const bookFetchState = async ({
   status = 'BOOKMARK',
   page,
-  size = 10,
+  size = 8,
   sort,
 }: bookFetchStateProps) => {
   try {
