@@ -15,6 +15,14 @@ const Navbar = ({ isLogin }: NavbarProps) => {
 
   const location = useLocation();
 
+  // 현재 경로가 메뉴 경로로 시작하는지 확인
+  const isActiveMenu = (menuPath: string) => {
+    return (
+      location.pathname === menuPath ||
+      location.pathname.startsWith(menuPath + '/')
+    );
+  };
+
   return (
     <nav
       className={clsx('w-1/4 h-full py-4', {
@@ -26,17 +34,16 @@ const Navbar = ({ isLogin }: NavbarProps) => {
         {menus.map((menu) => (
           <li
             key={menu.path}
-            className={`px-6 py-3 transition 
-              ${
-                location.pathname === menu.path
-                  ? 'text-nook-secondaey text-center font-semibold border-b-1 border-nook-secondaey'
-                  : 'text-[rgba(211,211,211,0.5)] font-normal text-[1.6rem]'
-              }`}
+            className={`px-6 py-3 transition ${
+              isActiveMenu(menu.path)
+                ? 'text-nook-secondaey text-center font-semibold border-b-1 border-nook-secondaey'
+                : 'text-[rgba(211,211,211,0.5)] font-normal text-[1.6rem]'
+            }`}
           >
             <NavLink
               to={menu.path}
               className={({ isActive }) =>
-                isActive
+                isActive || location.pathname.startsWith(menu.path + '/')
                   ? 'text-nook-secondaey text-center font-semibold'
                   : 'text-[rgba(211,211,211,0.5)] font-normal text-[1.6rem]'
               }
