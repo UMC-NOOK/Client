@@ -107,7 +107,7 @@ const LibraryRegistration = ({
           </div>
         </div>
 
-        <div className="flex items-center justify-between w-full gap-17 mb-20">
+        <div className="flex items-start justify-between w-full gap-17 mb-20">
           <div className="w-[135px] h-[198px] ml-4">
             <img src={bookImg} alt="" />
           </div>
@@ -132,10 +132,8 @@ const LibraryRegistration = ({
                   className="flex items-center justify-between w-[207px] rounded-sm bg-[rgba(31,28,25,0.5)] px-5 py-[9px] cursor-pointer"
                   onClick={calendarModalHandler}
                 >
-                  <div className="text-white text-sm">{selectedDate}</div>
-                  <div className="w-7 h-7">
-                    <img src={calendar} alt="" />
-                  </div>
+                  <div className="text-white text-sm/1">{selectedDate}</div>
+                  <img src={calendar} alt="" className="w-[14px] h-[14px]" />
                 </div>
               ) : (
                 <div className="text-white text-sm">{selectedDate}</div>
