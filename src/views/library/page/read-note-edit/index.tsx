@@ -1,5 +1,5 @@
 // librarys
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 // imgs
@@ -28,6 +28,51 @@ import usePostSentence from '../../hooks/useMutation/read-note-edit/usePostSente
 const ReadNoteEditPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const taRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleSubmit = () => {
+    if (textAreaContent.trim() === '') return;
+
+    if (textContent === 'phrase') {
+      postSentence({ content: textAreaContent, page: pageValue ?? null });
+    } else if (textContent === 'impression') {
+      postComment({ content: textAreaContent, parentRecordId: null });
+    } else if (textContent === 'quotation') {
+      postComment({
+        content: textAreaContent,
+        parentRecordId: clickPhraseId ?? null,
+      });
+    }
+
+    setTextAreaContent('');
+    setPageValue('');
+    setTextContent('phrase');
+
+    // UX: 전송 후 포커스 유지
+    setTimeout(() => taRef.current?.focus(), 0);
+  };
+
+  const handleTextAreaKeyDown = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>,
+  ) => {
+    if (e.key !== 'Enter') return;
+
+    // 한글 입력 조합 중(IME) Enter는 무시
+    // (React 17+에선 e.nativeEvent.isComposing, 일부 브라우저는 e.isComposing)
+    // @ts-ignore
+    if (e.isComposing || (e.nativeEvent && (e.nativeEvent as any).isComposing))
+      return;
+
+    if (e.shiftKey) {
+      // Shift+Enter는 기본 동작(줄바꿈) 유지
+      return;
+    }
+
+    // Enter 단독: 줄바꿈 막고 등록
+    e.preventDefault();
+    handleSubmit();
+  };
 
   // textArea 로직
   type textContentType = 'phrase' | 'impression' | 'quotation';
@@ -203,6 +248,7 @@ const ReadNoteEditPage = () => {
                           }}
                           setIsDeleteModalOpen={setIsDeleteModalOpen}
                           isNookChatOpen={isNookChatOpen}
+                          handleTextAreaKeyDown={handleTextAreaKeyDown}
                         />
                         {matching.map((q) => (
                           <Quotation
@@ -273,6 +319,8 @@ const ReadNoteEditPage = () => {
                         className="w-10 h-10 mr-3"
                       />
                       <textarea
+                        ref={taRef}
+                        onKeyDown={handleTextAreaKeyDown}
                         name=""
                         id="phraseTextArea"
                         placeholder={placeholderText}
@@ -286,6 +334,8 @@ const ReadNoteEditPage = () => {
                     </div>
                   ) : (
                     <textarea
+                      ref={taRef}
+                      onKeyDown={handleTextAreaKeyDown}
                       name=""
                       id="phraseTextArea"
                       placeholder={placeholderText}
@@ -314,27 +364,7 @@ const ReadNoteEditPage = () => {
                       alt="send"
                       className="w-12 h-12"
                       onClick={() => {
-                        if (textAreaContent.trim() !== '') {
-                          if (textContent === 'phrase') {
-                            postSentence({
-                              content: textAreaContent,
-                              page: pageValue ?? null,
-                            });
-                          } else if (textContent === 'impression') {
-                            postComment({
-                              content: textAreaContent,
-                              parentRecordId: null,
-                            });
-                          } else if (textContent === 'quotation') {
-                            postComment({
-                              content: textAreaContent,
-                              parentRecordId: clickPhraseId ?? null,
-                            });
-                          }
-                          setTextAreaContent('');
-                          setPageValue('');
-                          setTextContent('phrase');
-                        }
+                        if (textAreaContent.trim() !== '') handleSubmit();
                       }}
                     />
                   </div>

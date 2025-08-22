@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 // imgs
 import edit_btn from '/src/assets/button/read-note-edit/edit-btn.svg';
@@ -19,6 +19,7 @@ interface PhraseProps {
   clickPhrase: () => void;
   setIsDeleteModalOpen: (isOpen: boolean) => void; // Optional prop for delete modal
   isNookChatOpen: boolean; // Optional prop for nook chat state
+  handleTextAreaKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void; // Optional prop for handling key down events
 }
 
 const Phrase = ({
@@ -30,6 +31,7 @@ const Phrase = ({
   clickPhrase,
   setIsDeleteModalOpen,
   isNookChatOpen, // Default to false if not provided
+  handleTextAreaKeyDown,
 }: PhraseProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -37,6 +39,8 @@ const Phrase = ({
   const [pageValue, setPageValue] = useState<number | string>(page);
 
   const { mutate: putSentence } = usePutSentence(phraseId);
+
+  const taRef = useRef<HTMLTextAreaElement>(null);
 
   // hover 로직
   const handleMouseEnter = () => {
@@ -51,7 +55,7 @@ const Phrase = ({
     setIsEditing(true);
     clickPhrase();
   };
-  const handleSend = () => {
+  const handleSubmit = () => {
     if (textValue.trim() === '') {
       alert('내용을 입력해주세요.');
       return;
@@ -62,6 +66,7 @@ const Phrase = ({
     });
     setIsEditing(false);
     clickPhrase();
+    setTimeout(() => taRef.current?.focus(), 0);
   };
 
   // 인용 로직
@@ -105,6 +110,8 @@ const Phrase = ({
       {isEditing ? (
         <div className="flex w-[729px] h-64 flex-col items-start gap-2.5 shrink-0 border px-7 py-9 rounded-lg border-solid border-nook-br-100 ">
           <textarea
+            ref={taRef}
+            onKeyDown={handleTextAreaKeyDown}
             name="editPhrase"
             id="editPhrase"
             className="no-spinner w-full h-full bg-transparent border-none outline-none text-white text-sm not-italic font-normal leading-[22px] resize-none"
@@ -116,7 +123,7 @@ const Phrase = ({
               src={send_btn}
               alt="Send"
               className="w-12 h-12"
-              onClick={handleSend}
+              onClick={handleSubmit}
             />
           </div>
         </div>

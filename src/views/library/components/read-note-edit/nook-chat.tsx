@@ -32,6 +32,35 @@ const NookChat = ({ bookId }: NookChatProps) => {
     }
   }, [value]);
 
+  const handleTextAreaKeyDown = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>,
+  ) => {
+    if (e.key !== 'Enter') return;
+
+    // 한글 입력 조합 중(IME) Enter는 무시
+    // (React 17+에선 e.nativeEvent.isComposing, 일부 브라우저는 e.isComposing)
+    // @ts-ignore
+    if (e.isComposing || (e.nativeEvent && (e.nativeEvent as any).isComposing))
+      return;
+
+    if (e.shiftKey) {
+      // Shift+Enter는 기본 동작(줄바꿈) 유지
+      return;
+    }
+
+    // Enter 단독: 줄바꿈 막고 등록
+    e.preventDefault();
+    handleSubmit();
+  };
+
+  const handleSubmit = () => {
+    if (value.trim()) {
+      postNookChat(value);
+      setValue('');
+    }
+    setTimeout(() => textareaRef.current?.focus(), 0);
+  };
+
   return (
     <div className="flex flex-col items-center justify-between w-[372px] h-[600px] rounded-[20px] bg-[rgba(66,60,53,0.5)] px-5 pb-4">
       <div className="w-full px-3 overflow-y-auto [&::-webkit-scrollbar]:hidden">
@@ -63,6 +92,7 @@ const NookChat = ({ bookId }: NookChatProps) => {
       <div className="w-[352px] flex flex-col gap-5 bg-nook-br-100 rounded-[14px] px-10 py-5  mt-25 self-end">
         <textarea
           ref={textareaRef}
+          onKeyDown={handleTextAreaKeyDown}
           className="w-full resize-none overflow-auto text-sm outline-none text-black max-h-[87px] bg-transparent text-white text-sm not-italic font-normal placeholder:text-[rgba(255,255,255,0.50)] placeholder:text-sm placeholder:not-italic placeholder:font-normal
           "
           value={value}
@@ -74,10 +104,7 @@ const NookChat = ({ bookId }: NookChatProps) => {
           alt=""
           className="w-[25px] h-[25px] self-end cursor-pointer"
           onClick={() => {
-            if (value.trim()) {
-              postNookChat(value);
-              setValue('');
-            }
+            handleSubmit();
           }}
         />
       </div>

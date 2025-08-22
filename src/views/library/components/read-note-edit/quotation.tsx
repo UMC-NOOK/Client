@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 // imgs
 import edit_btn from '/src/assets/button/read-note-edit/edit-btn.svg';
@@ -30,6 +30,8 @@ const Quotation = ({
 
   const { mutate: putComment } = usePutComment(quotationId);
 
+  const taRef = useRef<HTMLTextAreaElement>(null);
+
   // hover 로직
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -42,13 +44,14 @@ const Quotation = ({
   const handleEdit = () => {
     setIsEditing(true);
   };
-  const handleSend = () => {
+  const handleSubmit = () => {
     if (textValue.trim() === '') {
       alert('내용을 입력해주세요.');
       return;
     }
     putComment(textValue);
     setIsEditing(false);
+    setTimeout(() => taRef.current?.focus(), 0);
   };
 
   // 삭제로직
@@ -57,6 +60,27 @@ const Quotation = ({
     console.log('삭제되었습니다.');
     clickPhrase();
     setIsDeleteModalOpen(true);
+  };
+
+  const handleTextAreaKeyDown = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>,
+  ) => {
+    if (e.key !== 'Enter') return;
+
+    // 한글 입력 조합 중(IME) Enter는 무시
+    // (React 17+에선 e.nativeEvent.isComposing, 일부 브라우저는 e.isComposing)
+    // @ts-ignore
+    if (e.isComposing || (e.nativeEvent && (e.nativeEvent as any).isComposing))
+      return;
+
+    if (e.shiftKey) {
+      // Shift+Enter는 기본 동작(줄바꿈) 유지
+      return;
+    }
+
+    // Enter 단독: 줄바꿈 막고 등록
+    e.preventDefault();
+    handleSubmit();
   };
 
   return (
@@ -71,6 +95,8 @@ const Quotation = ({
       {isEditing ? (
         <div className="flex w-[683px] h-64 flex-col items-start gap-2.5 shrink-0 border px-7 py-9 rounded-lg border-solid border-nook-br-100 ">
           <textarea
+            ref={taRef}
+            onKeyDown={handleTextAreaKeyDown}
             name="editPhrase"
             id="editPhrase"
             className="no-spinner w-full h-full bg-transparent border-none outline-none text-white text-sm not-italic font-normal leading-[22px] resize-none"
@@ -82,7 +108,7 @@ const Quotation = ({
               src={send_btn}
               alt="Send"
               className="w-12 h-12"
-              onClick={handleSend}
+              onClick={handleSubmit}
             />
           </div>
         </div>
