@@ -524,7 +524,7 @@ const BookInfoPage = () => {
           )}
         </div>
         {/* 이 분야의 베스트 */}
-        <div className="flex flex-col items-start justify-center gap-12 mt-27 mb-27 w-full  ">
+        <div className="flex flex-col items-start justify-center gap-12 mt-27 mb-70 w-full  ">
           <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
             | 이 분야의 베스트
           </span>
