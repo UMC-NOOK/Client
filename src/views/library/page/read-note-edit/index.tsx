@@ -215,7 +215,7 @@ const ReadNoteEditPage = () => {
           className={`w-full h-[600px] flex flex-col justify-center ${isNookChatOpen ? 'items-start' : 'items-center'}`}
         >
           <hr
-            className={`${isNookChatOpen ? 'w-[661px]' : 'w-full'} h-0 outline outline-1 outline-offset-[-0.50px] outline-neutral-600/70 mt-14`}
+            className={`${isNookChatOpen ? 'w-[661px]' : 'w-full'} h-0 outline outline-1 outline-offset-[-0.50px] outline-neutral-600/70 mt-14 mb-7`}
           />
           <div
             className={`w-full h-[600px] flex items-center gap-9 ${isNookChatOpen ? 'justify-between' : 'justify-center'}`}
