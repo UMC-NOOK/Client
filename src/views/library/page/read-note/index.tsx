@@ -135,7 +135,7 @@ const ReadNotePage = () => {
               src={delete_btn}
               alt="Delete"
               className="w-17 h-17 cursor-pointer"
-              onClick={deleteHandler}
+              onClick={() => setIsDeleteModalOpen((prev) => !prev)}
             />
           </div>
         </div>
