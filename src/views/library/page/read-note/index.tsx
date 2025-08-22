@@ -137,20 +137,28 @@ const ReadNotePage = () => {
         </div>
         {isReadNoteExist ? (
           <div className="flex flex-col items-start justify-start w-[634px] h-[478px] gap-7 mt-20 overflow-y-auto  [&::-webkit-scrollbar]:hidden">
-            {sentenceList?.result.map((sentence, index) => (
+            {sentenceList?.result?.map((sentence) => (
               <>
                 {sentence.recordType === 'RECORD' ? (
                   <Phrase
-                    key={sentence.recordId}
                     text={sentence.content}
                     page={parseInt(sentence.page, 10)}
                   />
                 ) : (
-                  <Impression key={sentence.recordId} text={sentence.content} />
+                  <></>
                 )}
-                {sentence.comments.map((comment) => (
+                {sentence.comments?.map((comment) => (
                   <Quotation key={comment.commentId} text={comment.content} />
                 ))}
+              </>
+            ))}
+            {sentenceList?.result?.map((sentence) => (
+              <>
+                {sentence.recordType === 'COMMENTARY' ? (
+                  <Impression text={sentence.content} />
+                ) : (
+                  <></>
+                )}
               </>
             ))}
           </div>

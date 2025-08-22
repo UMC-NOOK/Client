@@ -129,7 +129,7 @@ const DownloadModal = ({
                         page={parseInt(sentence.page, 10)}
                       />
                     ) : (
-                      <Impression text={sentence.content} />
+                      <></>
                     )}
                     {sentence.comments?.map((comment) => (
                       <Quotation
@@ -137,6 +137,15 @@ const DownloadModal = ({
                         text={comment.content}
                       />
                     ))}
+                  </Fragment>
+                ))}
+                {sentenceList?.result?.map((sentence) => (
+                  <Fragment key={sentence.recordId}>
+                    {sentence.recordType === 'COMMENTARY' ? (
+                      <Impression text={sentence.content} />
+                    ) : (
+                      <></>
+                    )}
                   </Fragment>
                 ))}
               </div>
