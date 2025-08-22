@@ -72,6 +72,7 @@ const ReadNotePage = () => {
           bookTitle={location.state?.title}
           bookAuthor={location.state?.author}
           bookId={location.state?.bookId}
+          type="edit"
         />
       )}
       {isDeleteModalOpen && (

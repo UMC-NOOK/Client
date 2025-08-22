@@ -186,6 +186,7 @@ const BookInfoPage = () => {
           bookTitle={bookInfoData?.result.book.title || ''}
           bookAuthor={bookInfoData?.result.book.author || ''}
           bookId={bookId || 0}
+          type={isRegistrationLibrary ? 'edit' : 'register'}
         />
       )}
       {/* 상위 컴포넌트 */}

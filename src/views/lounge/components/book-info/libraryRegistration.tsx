@@ -7,7 +7,7 @@ import Calendar from './calendar';
 
 import usePostBookRegistration from '../../hooks/useMutation/book-info-mutation/usePostBookRegistration';
 import useGetCalendar from '../../hooks/useQuery/book-info-query/useGetCalendar';
-import useGetBookState from '../../../library/hooks/useQuery/library-query/useGetBookState';
+import usePatchBookState from '../../../library/hooks/useMutation/read-note-mutation/usePatchBookState';
 
 interface LibraryRegistrationProps {
   onRegister: () => void;
@@ -16,6 +16,7 @@ interface LibraryRegistrationProps {
   bookTitle?: string;
   bookAuthor?: string;
   bookId?: number;
+  type: 'edit' | 'register';
 }
 
 const LibraryRegistration = ({
@@ -25,6 +26,7 @@ const LibraryRegistration = ({
   bookTitle,
   bookAuthor,
   bookId,
+  type,
 }: LibraryRegistrationProps) => {
   const formatDate = (date: Date) => {
     const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
@@ -49,6 +51,7 @@ const LibraryRegistration = ({
 
   const { mutate: postBookRegistration } = usePostBookRegistration(bookId!);
   const { data: getCalendar, disabledDateSet } = useGetCalendar(yearMonth);
+  const { mutate: patchBookState } = usePatchBookState(bookId!);
 
   const list: number[] = disabledDateSet ?? [];
 
@@ -104,7 +107,7 @@ const LibraryRegistration = ({
             />
           </div>
           <div className="text-white text-center text-lg font-semibold">
-            서재 등록
+            {type === 'register' ? '서재 등록' : '정보 수정'}
           </div>
         </div>
 
@@ -187,21 +190,28 @@ const LibraryRegistration = ({
                 return;
               }
             });
-
-            readingStatus === 1
-              ? postBookRegistration({
-                  date: serverSelectedDate,
-                  readingStatus: 'READING',
-                })
-              : readingStatus === 2
+            type === 'edit'
+              ? patchBookState(
+                  readingStatus === 1
+                    ? 'READING'
+                    : readingStatus === 2
+                      ? 'FINISHED'
+                      : 'BOOKMARK',
+                )
+              : readingStatus === 1
                 ? postBookRegistration({
                     date: serverSelectedDate,
-                    readingStatus: 'FINISHED',
+                    readingStatus: 'READING',
                   })
-                : postBookRegistration({
-                    date: null,
-                    readingStatus: 'BOOKMARK',
-                  });
+                : readingStatus === 2
+                  ? postBookRegistration({
+                      date: serverSelectedDate,
+                      readingStatus: 'FINISHED',
+                    })
+                  : postBookRegistration({
+                      date: null,
+                      readingStatus: 'BOOKMARK',
+                    });
             onRegister();
           }}
         >

@@ -29,7 +29,7 @@ export const bookRegistrationStart = async (
   bookId: number | undefined,
 ): Promise<BookRegistrationStartResponse | undefined> => {
   try {
-    const response = await instance.post<BookRegistrationStartResponse>(
+    const response = await instance.patch<BookRegistrationStartResponse>(
       `/api/bookshelf/start-reading/${bookId}`,
     );
     return response.data;
@@ -43,7 +43,7 @@ export const bookRegistrationFinish = async (
   bookId: number | undefined,
 ): Promise<BookRegistrationResponse | undefined> => {
   try {
-    const response = await instance.post<BookRegistrationResponse>(
+    const response = await instance.patch<BookRegistrationResponse>(
       `/api/bookshelf/finish-reading/${bookId}`,
     );
     return response.data;
