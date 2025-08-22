@@ -34,10 +34,7 @@ const DownloadModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-      <div
-        className="relative w-[413px] h-[642px] rounded-2xl bg-[rgba(45,40,34,1)] px-[61px] pb-[24px] pt-[42px] text-[#7A7A7A]"
-        style={{ fontFamily: 'NanumBaeEunHyeCe, Pretendard, sans-serif' }}
-      >
+      <div className="relative w-[413px] h-[642px] rounded-2xl bg-[rgba(45,40,34,1)] px-[61px] pb-[24px] pt-[42px] text-[#7A7A7A]">
         {/* 닫기 버튼 */}
         <button
           className="absolute right-12 top-12 w-7 h-7"
@@ -48,7 +45,10 @@ const DownloadModal = ({
         </button>
 
         {/* 노트 미리보기 카드 */}
-        <div className="flex w-full justify-center">
+        <div
+          className="flex w-full justify-center"
+          style={{ fontFamily: 'NanumBaeEunHyeCe' }}
+        >
           <div
             id="reading-card"
             className="relative inline-block rounded-xl overflow-hidden shadow-[0_8px_28px_rgba(0,0,0,0.45)]"
