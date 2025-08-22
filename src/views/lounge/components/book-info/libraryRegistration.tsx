@@ -93,7 +93,7 @@ const LibraryRegistration = ({
 
   return (
     <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center">
-      <div className="w-[440px] flex flex-col justify-start items-center bg-[rgba(45,40,34,1)] rounded-2xl px-17 relative pb-10">
+      <div className="w-[440px] h-min-[476px] flex flex-col justify-start items-center bg-[rgba(45,40,34,1)] rounded-2xl px-17 relative pb-10">
         <div className="w-full h-11 mt-15 mb-17">
           <div className="absolute top-16 left-14 flex items-center gap-2">
             <img
@@ -165,7 +165,7 @@ const LibraryRegistration = ({
             {[1, 2, 3].map((status, idx) => (
               <button
                 key={status}
-                className={`w-[117px] h-[38px] rounded border border-solid border-nook-br-100 px-10 py-2 text-sm ${readingStatus === status ? 'bg-nook-br-100 text-white' : 'text-[rgba(255,255,255,0.50)]'}`}
+                className={`w-[117px] h-[38px] rounded-[4px] border border-solid border-nook-br-100 px-10 py-2 text-sm ${readingStatus === status ? 'bg-nook-br-100 text-white' : 'text-[rgba(255,255,255,0.50)]'}`}
                 onClick={() => setReadingStatus(status)}
               >
                 {['독서중', '완독', '찜'][idx]}
@@ -175,7 +175,7 @@ const LibraryRegistration = ({
         </div>
 
         <div
-          className="w-full h-20 px-10 py-2 rounded bg-nook-br-100 text-white text-base font-semibold text-center cursor-pointer flex items-center justify-center"
+          className="w-full h-20 px-10 py-2 rounded-[4px] bg-nook-br-100 text-white text-base font-semibold text-center cursor-pointer flex items-center justify-center"
           onClick={() => {
             list.map((date) => {
               if (date === selectedDateAsDate.getDate()) {
