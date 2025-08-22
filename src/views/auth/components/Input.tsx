@@ -63,7 +63,7 @@ const Input = <T extends FieldValues>({
             className="absolute right-0 top-1/2 -translate-y-1/2"
           >
             <img
-              src={isHide ? openeye : closeeye}
+              src={isHide ? closeeye : openeye}
               alt="toggle visibility"
               className="w-[1.8rem] h-[1.8rem] object-contain"
             />

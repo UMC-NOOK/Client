@@ -36,18 +36,18 @@ const InsertInfo = ({
 
     return(
         <div className="flex flex-col justify-start">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-[8px]">
                 <div className="flex flex-row justify-between">
-                    <div className="text-white text-sm font-semibold">
-                        룸 이름*
+                    <div className="text-white text-sm leading-[25px]">
+                        룸 이름 *
                     </div>
                     
-                    <div className="text-white text-2xs">
+                    <div className="text-white font-light text-[10px] leading-[25px]">
                         {nameVisualLength}/30
                     </div>
                 </div>
 
-                <div className="w-224 h-20 rounded-lg"
+                <div className="w-[448px] h-[40px] rounded-lg text-sm"
                     style={{backgroundColor: 'rgba(31, 28, 25, 0.5)'}}>
                     <input 
                         value={roomName}
@@ -55,23 +55,23 @@ const InsertInfo = ({
                             if(e.target.value.length <= 30) setRoomName(e.target.value);
                         }}
                         placeholder="리딩룸의 이름을 입력해주세요."
-                        className="flex justify-start items-center ml-7 mt-6 w-224"
-                        style={{color: 'rgba(255, 255, 255,0.5)'}}/>
+                        className="flex justify-start items-center ml-[14px] mt-[10px] w-[444px] placeholder:text-[rgba(255,255,255,0.5)] placeholder:opacity-50"
+                        style={{color: 'rgba(255, 255, 255, 1)'}}/>
                 </div>
             </div>
 
-            <div className="flex flex-col gap-2 mt-20">
+            <div className="flex flex-col gap-[8px] mt-[40px]">
                 <div className="flex flex-row justify-between">
-                    <div className="text-white text-sm font-semibold">
-                        한 줄 소개*
+                    <div className="text-white text-sm leading-[25px]">
+                        한 줄 소개 *
                     </div>
                     
-                    <div className="text-white text-2xs">
+                    <div className="text-white font-light text-[10px] leading-[25px]">
                         {introVisualLength}/30
                     </div>
                 </div>
 
-                <div className="w-224 h-20 rounded-lg"
+                <div className="w-[448px] h-[40px] rounded-lg text-sm"
                     style={{backgroundColor: 'rgba(31, 28, 25, 0.5)'}}>
                     <input 
                         value={roomDescription}
@@ -79,29 +79,29 @@ const InsertInfo = ({
                             if(e.target.value.length <= 30) setRoomDescription(e.target.value);
                         }}
                         placeholder="리딩룸을 소개해주세요."
-                        className="flex justify-start items-center ml-7 mt-6 w-224"
-                        style={{color: 'rgba(255, 255, 255,0.5)'}}/>
+                        className="flex justify-start items-center ml-[14px] mt-[10px] w-[444px] placeholder:text-[rgba(255,255,255,0.5)] placeholder:opacity-50"
+                        style={{color: 'rgba(255, 255, 255, 1)'}}/>
                 </div>
             </div>
 
-            <div className="flex flex-col gap-2 mt-20">
+            <div className="flex flex-col gap-[8px] mt-[40px]">
                 <div className="flex flex-row justify-between">
-                    <div className="text-white text-sm font-semibold">
+                    <div className="text-white text-sm leading-[25px]">
                         태그
                     </div>
                     
-                    <div className="text-white text-2xs">
+                    <div className="text-white font-light text-[10px] leading-[25px]">
                         {selectedTags.length} /3
                     </div>
                 </div>
                 
-                <div className="flex flex-wrap w-224 h-20 rounded-lg items-start gap-2"
+                <div className="flex flex-wrap w-[448px] h-[40px] rounded-lg text-sm items-start gap-[8px] pl-[12px]"
                     style={{backgroundColor: 'rgba(31, 28, 25, 0.5)'}}>
                         {selectedTags.length > 0 ? (
                             selectedTags.map((tag,idx)=> (
                                 <div
                                     key={idx}
-                                    className="flex justify-start items-center bg-[rgba(66,60,53,1)] text-white text-2xs px-3 py-2 gap-1 rounded-lg mt-3">
+                                    className="flex justify-start items-center bg-[rgba(66,60,53,1)] text-white text-[10px]/[25px] px-[14px] py-[2px] gap-[6px] rounded-lg mt-3">
                                     {tag}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="12" viewBox="0 0 11 12" fill="none"
                                         onClick={() =>
@@ -113,8 +113,7 @@ const InsertInfo = ({
                             ))
                         )
                         : (
-                            <div className="flex justify-start items-center w-224 h-20 ml-7"
-                                style={{color: 'rgba(255, 255, 255,0.5)'}}>
+                            <div className="flex justify-start items-center text-sm font-light ml-[2px] mt-[10px] w-[444px] text-[rgba(255,255,255,0.5)] opacity-70">
                                 리딩룸을 대표하는 키워드를 선택해주세요.
                             </div>
                         )
@@ -122,8 +121,8 @@ const InsertInfo = ({
                 
                 </div>    
 
-                <div className="flex flex-col w-224 mt-9">
-                    <div className="flex flex-wrap gap-2">
+                <div className="flex flex-col w-[448px] mt-[10px] gap-y-[8px]">
+                    <div className="flex flex-wrap gap-x-[6px]">
                         {tag1.map((lable, idx) => {
                             const isSelected = selectedTags.includes(lable);
 
@@ -131,12 +130,7 @@ const InsertInfo = ({
                                 <div
                                     key={idx}
                                     onClick={() => toggleTag(lable)}
-                                    className={`cursor-pointer flex justify-center items-center text-2xs text-white rounded-md px-7 py-2 border transition-all duration-200
-                                    ${
-                                        isSelected
-                                            ? "text-white border-[rgba(255,255,255,0.5)]"
-                                            : "border-transparent"
-                                    }`}
+                                    className={`cursor-pointer flex justify-center items-center text-[10px]/[25px] px-[14px] py-[2px] text-white rounded-md transition-all duration-200`}
                                         
                                     style={{
                                         backgroundColor: isSelected
@@ -149,7 +143,7 @@ const InsertInfo = ({
                         })}
                     </div>
 
-                    <div className="flex flex-wrap gap-2 mt-4">
+                    <div className="flex flex-wrap gap-x-[6px]">
                         {tag2.map((lable, idx) => {
                             const isSelected = selectedTags.includes(lable);
 
@@ -157,12 +151,7 @@ const InsertInfo = ({
                                 <div
                                     key={idx}
                                     onClick={() => toggleTag(lable)}
-                                    className={`cursor-pointer flex justify-center items-center text-2xs text-white rounded-md px-7 py-2 border transition-all duration-200
-                                    ${
-                                        isSelected
-                                            ? "text-white border-[rgba(255,255,255,0.5)]"
-                                            : "border-transparent"
-                                    }`}
+                                    className={`cursor-pointer flex justify-center items-center text-[10px]/[25px] px-[14px] py-[2px] text-white rounded-md transition-all duration-200`}
                                         
                                     style={{
                                         backgroundColor: isSelected

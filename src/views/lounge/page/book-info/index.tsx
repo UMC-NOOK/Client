@@ -1,5 +1,5 @@
 // library
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import Pagination from 'react-js-pagination';
@@ -51,6 +51,14 @@ const BookInfoPage = () => {
   const [isReviewExist, setIsUserReviewExist] = useState(reviews.length > 0);
   const isUserReviewExist = !!userReview;
   const others = reviews.filter((r) => !r.ownedByUser);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // isbn(또는 pathname) 바뀔 때 컨테이너 맨 위로
+  useLayoutEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [isbn]);
 
   useEffect(() => {
     if (!reviewData) return;
@@ -181,17 +189,20 @@ const BookInfoPage = () => {
         />
       )}
       {/* 상위 컴포넌트 */}
-      <div className="flex flex-col w-[840px] items-center justify-start h-screen mr-150 ml-150 overflow-y-auto [&::-webkit-scrollbar]:hidden">
+      <div
+        ref={scrollRef}
+        className="flex flex-col w-[840px] items-center justify-start h-screen mr-150 ml-150 overflow-y-auto [&::-webkit-scrollbar]:hidden"
+      >
         {/* 상단바 */}
         <div className="self-start flex items-center justify-center mb-25">
-                <button
+          <button
             type="button"
-            onClick={() => navigate(-1)}          // ← 뒤로가기
+            onClick={() => navigate(-1)} // ← 뒤로가기
             className="w-10 h-10 mr-6 inline-flex items-center justify-center cursor-pointer"
             aria-label="뒤로가기"
           >
             <img src={chevron_left} alt="Lounge Top Bar" />
-            </button>
+          </button>
           <div className="text-white text-xl  ">라운지</div>
         </div>
         {/* 책소개 컴포넌트 */}
@@ -299,13 +310,15 @@ const BookInfoPage = () => {
         </div>
 
         {/* 리뷰작성,리뷰 컴포넌트 */}
-        <div className="w-full flex flex-col items-center justify-center gap-12  ">
+        <div
+          className={`w-full flex flex-col items-center justify-center ${isUserReviewExist && userReview && !isUserEditReview ? '' : 'gap-12'}`}
+        >
           {/* 리뷰 작성 */}
           {isUserReviewExist && userReview ? (
             isUserEditReview ? (
               <div className="flex flex-col items-start justify-center gap-12 w-full">
                 {/* 별점 */}
-                <div className="flex flex-col self-start items-start justify-center gap-6 mt-12 w-full">
+                <div className="flex flex-col self-start items-start justify-center gap-6 w-full">
                   <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
                     이 작품을 평가해 주세요!
                   </span>
@@ -513,7 +526,7 @@ const BookInfoPage = () => {
           )}
         </div>
         {/* 이 분야의 베스트 */}
-        <div className="flex flex-col items-start justify-center gap-12 mt-27 mb-27 w-full  ">
+        <div className="flex flex-col items-start justify-center gap-12 mt-27 mb-70 w-full  ">
           <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
             | 이 분야의 베스트
           </span>

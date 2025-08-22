@@ -1,51 +1,107 @@
+import React from 'react';
+import pageButton from '../../../../../../assets/button/home/chevron-right.png';
+
 interface PaginationProps {
   currentPage: number;
-  hasNext: boolean;
-  hasPrevious: boolean;
+  totalPages: number;
   onPageChange: (page: number) => void;
+  hasNext: boolean;
 }
 
-const Pagination = ({
+const Pagination: React.FC<PaginationProps> = ({
   currentPage,
-  hasNext,
-  hasPrevious,
+  totalPages,
   onPageChange,
-}: PaginationProps) => {
+  hasNext,
+}) => {
+  const currentGroup = Math.ceil(currentPage / 10);
+  const groupStartPage = (currentGroup - 1) * 10 + 1;
+  const groupEndPage = Math.min(currentGroup * 10, totalPages);
+
+  const getVisiblePages = () => {
+    const pages = [];
+    for (let i = groupStartPage; i <= groupEndPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+
+  const visiblePages = getVisiblePages();
+
+  const hasPrevGroup = groupStartPage > 1;
+  const hasNextGroup = groupEndPage < totalPages;
+
+  const getNextJumpPage = () => {
+    const nextJumpPage = currentPage + 10;
+    return nextJumpPage <= totalPages ? nextJumpPage : null;
+  };
+
+  const nextJumpPage = getNextJumpPage();
+
+  if (totalPages <= 1) {
+    return null;
+  }
+
   return (
-    <div className="flex justify-center items-center gap-4 py-6">
-      {/* 이전 페이지 버튼 */}
+    <div className="flex justify-center items-center mt-44">
       <button
         onClick={() => onPageChange(currentPage - 1)}
-        disabled={!hasPrevious}
-        className={`px-4 py-2 text-sm border rounded-lg transition-colors ${
-          hasPrevious
-            ? 'border-blue-500 text-blue-500 hover:bg-blue-50'
-            : 'border-gray-300 text-gray-400 cursor-not-allowed'
-        }`}
+        disabled={currentPage === 1}
+        className={`pr-18 py-2 rounded-md`}
       >
-        이전
+        <img
+          src={pageButton}
+          alt=""
+          className="object-contain w-[11.37px] h-[21.12px] rotate-180"
+        />
       </button>
 
-      {/* 현재 페이지 표시 */}
-      <div className="flex items-center gap-2">
-        <span className="px-3 py-2 text-sm bg-blue-500 text-white rounded-lg">
-          {currentPage}
-        </span>
-        <span className="text-gray-500 text-sm">페이지</span>
-      </div>
+      {visiblePages.map((pageNum) => (
+        <button
+          key={pageNum}
+          onClick={() => onPageChange(pageNum)}
+          className={`px-1 font-normal text-[18px] mx-6 ${
+            currentPage === pageNum
+              ? 'text-white border-b-2'
+              : 'text-[rgba(255,255,255,0.5)]'
+          }`}
+        >
+          {pageNum}
+        </button>
+      ))}
 
-      {/* 다음 페이지 버튼 */}
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={!hasNext}
-        className={`px-4 py-2 text-sm border rounded-lg transition-colors ${
-          hasNext
-            ? 'border-blue-500 text-blue-500 hover:bg-blue-50'
-            : 'border-gray-300 text-gray-400 cursor-not-allowed'
+        className={`pl-18 py-2 rounded-md ${
+          !hasNext ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700'
         }`}
       >
-        다음
+        <img
+          src={pageButton}
+          alt=""
+          className="object-contain w-[11.37px] h-[21.12px]"
+        />
       </button>
+
+      {/* {totalPages > 10 && nextJumpPage && (
+        <button
+          onClick={() => onPageChange(nextJumpPage)}
+          className="px-3 py-2 rounded-md text-blue-600 hover:bg-blue-50 border border-blue-200"
+          title={`${nextJumpPage}페이지로 이동`}
+        >
+          +10
+        </button>
+      )} */}
+
+      {/* {hasPrevGroup && (
+        <button
+          onClick={() => onPageChange(groupStartPage - 1)}
+          className="px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100"
+        >
+          <img src={pageButton} alt="" className="object-contain" />
+        </button>
+      )} */}
     </div>
   );
 };

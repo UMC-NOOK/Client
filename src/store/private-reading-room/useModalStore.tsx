@@ -13,18 +13,21 @@ interface ModalStore {
 
   toggleExitModal: () => void;
   toggleDeleteModal: () => void;
-  toggleEditModal: () => void; 
+  toggleEditModal: () => void;
+
+  resetAllModals: () => void;
 }
 
 const useModalStore = create<ModalStore>((set) => {
   const initialModalState = false;
+  const initialExitModalState = false;
 
   return {
-    isExitModalOpen: initialModalState,
+    isExitModalOpen: initialExitModalState,
     isDeleteModalOpen: initialModalState,
     isEditModalOpen: initialModalState,
     openEditModal: () => set({ isEditModalOpen: true }),
-    closeEditModal: () => set({ isEditModalOpen: false }),  
+    closeEditModal: () => set({ isEditModalOpen: false }),
     setExitModalOpen: (state) => set({ isExitModalOpen: state }),
     setDeleteModalOpen: (state) => set({ isDeleteModalOpen: state }),
     setEditModalOpen: (state) => set({ isEditModalOpen: state }),
@@ -34,6 +37,12 @@ const useModalStore = create<ModalStore>((set) => {
       set((prev) => ({ isDeleteModalOpen: !prev.isDeleteModalOpen })),
     toggleEditModal: () =>
       set((prev) => ({ isEditModalOpen: !prev.isEditModalOpen })),
+    resetAllModals: () =>
+      set({
+        isExitModalOpen: false,
+        isDeleteModalOpen: false,
+        isEditModalOpen: false,
+      }),
   };
 });
 

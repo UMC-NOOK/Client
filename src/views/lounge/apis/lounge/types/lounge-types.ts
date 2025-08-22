@@ -37,5 +37,5 @@ export interface ApiResponse<T> {
 export type LoungeBookListResponse = ApiResponse<LoungeTotalBooksResponse>;
 
 export const loungeQueryKeys = {
-    books: (mallType: MallType, sectionId:string, categoryId:string, page=1) => ['loungeBooks', mallType, sectionId, categoryId, page] as const,
+    books: (mallType: MallType) => ['loungeBooks', mallType] as const,
 };

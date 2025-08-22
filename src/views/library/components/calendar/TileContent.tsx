@@ -45,10 +45,23 @@ const TileContent = ({ date, view }: TileContentProps) => {
     return groupedBooks;
   }, [books]);
 
-  const handleBookClick = (bookId: number, event: React.MouseEvent) => {
+  const handleBookClick = (
+    bookId: number,
+    coverImageUrl: string,
+    title: string,
+    author: string,
+    event: React.MouseEvent,
+  ) => {
     event.preventDefault();
     event.stopPropagation();
-    navigate(`/library/${bookId}`);
+    navigate(`/library/${bookId}`, {
+      state: {
+        bookId,
+        coverImageUrl,
+        title,
+        author,
+      },
+    });
   };
 
   if (view === 'month') {
@@ -74,7 +87,15 @@ const TileContent = ({ date, view }: TileContentProps) => {
               borderRadius: '5px',
               cursor: 'pointer',
             }}
-            onClick={(e) => handleBookClick(firstBook.bookId, e)}
+            onClick={(e) =>
+              handleBookClick(
+                firstBook.bookId,
+                firstBook.thumbnailUrl,
+                firstBook.title,
+                firstBook.author,
+                e,
+              )
+            }
           />
           {booksOnThisDate.length > 1 && (
             <span
@@ -90,7 +111,15 @@ const TileContent = ({ date, view }: TileContentProps) => {
                 zIndex: 1,
                 cursor: 'pointer',
               }}
-              onClick={(e) => handleBookClick(firstBook.bookId, e)}
+              onClick={(e) =>
+                handleBookClick(
+                  firstBook.bookId,
+                  firstBook.thumbnailUrl,
+                  firstBook.title,
+                  firstBook.author,
+                  e,
+                )
+              }
             >
               +{booksOnThisDate.length - 1}
             </span>
