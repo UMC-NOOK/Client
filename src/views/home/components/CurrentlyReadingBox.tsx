@@ -28,9 +28,8 @@ const CurrentlyReadingBox = () => {
       navigate(`/library/${data!.bookId}`, {
         state: {
           bookId: data!.bookId,
-          bookImg: data!.thumbnailUrl, // API의 thumbnailUrl을 페이지에서 기대하는 bookImg 키로 매핑
           title: data!.title,
-          // author: ... // 필요하면 상세 페이지에서 별도 API로 보강
+          author: data!.author,       
         },
       });
     } else {

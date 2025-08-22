@@ -7,6 +7,7 @@ export type ApiEnvelope<T> = {
   };
   
   export type LastAccessedReadingRoomResponseDTO = {
+    hashtags: boolean;
     roomId: number;
     name: string;
     description: string;

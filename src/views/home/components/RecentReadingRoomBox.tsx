@@ -1,14 +1,62 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import arrowIcon from '../../../assets/button/home/chevron-right.png';
 import fireIllustration from '../../../assets/button/home/fire.png';
+import bookroomIllustration from '../../../assets/button/home/bookroom.png'
+import subwayIllustration from '../../../assets/button/home/subway.png'
+
 import userIcon from '../../../assets/button/home/user.png';
 import { useGetReadingRoomLastAccessed } from '../hooks/useQuery/useGetReadingRoomLastAccessed';
+import instance from '../../../apis/instance';
+
+// 전체 리딩룸 조회 API 타입
+interface ReadingRoom {
+  roomId: number;
+  name: string;
+  description: string;
+  hashtags: string[];
+  currentUserCount: number;
+  totalUserCount: number;
+  themeImageUrl: string;
+}
+
+interface ReadingRoomsResponse {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+  result: ReadingRoom[];
+}
 
 const RecentReadingRoomBox: React.FC = () => {
   const navigate = useNavigate();
-  const { data: room, isLoading, isError } = useGetReadingRoomLastAccessed();
-  const hasRoom = !!room;
+  const { data: lastAccessedRoom, isLoading: isLastAccessedLoading, isError: isLastAccessedError } = useGetReadingRoomLastAccessed();
+  
+  // 전체 리딩룸 목록 조회 (첫 번째 페이지만)
+  const { data: allRooms, isLoading: isAllRoomsLoading } = useQuery({
+    queryKey: ['reading-rooms', 0],
+    queryFn: async (): Promise<ReadingRoom[]> => {
+      const { data } = await instance.get<ReadingRoomsResponse>('/api/reading-rooms?page=0');
+      return data.result;
+    },
+    staleTime: 5 * 60 * 1000, // 5분
+    retry: (failureCount, error: any) => {
+      const status = error?.response?.status;
+      if (!status) return failureCount < 1;
+      return status >= 500 && failureCount < 1;
+    },
+  });
+
+  // 최근 접속한 리딩룸이 있으면 해당 룸의 상세 정보를 전체 목록에서 찾기
+  const currentRoom = lastAccessedRoom && allRooms 
+    ? allRooms.find(room => room.roomId === lastAccessedRoom.roomId) || lastAccessedRoom
+    : lastAccessedRoom;
+
+  const hasRoom = !!currentRoom;
+  const isLoading = isLastAccessedLoading || isAllRoomsLoading;
+
+  // 배경 이미지 결정: themeImageUrl이 있으면 사용, 없으면 기본 fire illustration
+  const backgroundImage = currentRoom?.themeImageUrl || fireIllustration;
 
   return (
     <div
@@ -19,9 +67,14 @@ const RecentReadingRoomBox: React.FC = () => {
     >
       {hasRoom && (
         <img
-          src={fireIllustration}
+          src={backgroundImage}
           alt="bg"
           className="absolute top-0 left-0 w-full h-full object-cover z-0"
+          onError={(e) => {
+            // 이미지 로드 실패 시 기본 이미지로 fallback
+            const target = e.target as HTMLImageElement;
+            target.src = fireIllustration;
+          }}
         />
       )}
 
@@ -37,7 +90,7 @@ const RecentReadingRoomBox: React.FC = () => {
           <div className="flex items-center justify-center h-full">
             <p className="text-white/50 text-sm">로딩중...</p>
           </div>
-        ) : isError ? (
+        ) : isLastAccessedError ? (
           // ❌ 진짜 에러(5xx 등)일 때만 실패 UI
           <div className="flex items-center justify-center h-full">
             <p className="text-white/50 text-sm">불러오기 실패</p>
@@ -45,16 +98,29 @@ const RecentReadingRoomBox: React.FC = () => {
         ) : hasRoom ? (
           // ✅ 정상 데이터
           <div className="flex flex-col items-start pb-[20px] pl-[24px]">
-            <p className="text-white text-[16px] font-[600] leading-[25px]">{room?.name}</p>
+            <p className="text-white text-[16px] font-[600] leading-[25px]">{currentRoom?.name}</p>
             <p className="text-white/80 text-[12px] font-[400] leading-[25px] mt-[2px]">
-              {room?.description}
+              {currentRoom?.description}
             </p>
             <div className="flex items-center gap-[4px] mt-[8px]">
               <img src={userIcon} alt="user-count" className="w-[12px] h-[12px] object-contain" />
               <p className="text-white text-[10px] font-[400] leading-[25px]">
-                {room?.currentUserCount ?? 0}
+                {currentRoom?.currentUserCount ?? 0}
               </p>
             </div>
+            {/* 해시태그 표시 (선택사항) */}
+            {currentRoom?.hashtags && Array.isArray(currentRoom.hashtags) && currentRoom.hashtags.length > 0 && (
+              <div className="flex flex-wrap gap-[4px] mt-[4px]">
+                {currentRoom.hashtags.slice(0, 3).map((tag: string, index: number) => (
+                  <span
+                    key={index}
+                    className="px-[6px] py-[2px] bg-white/20 rounded-[4px] text-white text-[8px] font-[400]"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         ) : (
           // ✅ room === null → 최근 접속 리딩룸 없음 (정상)

@@ -24,6 +24,7 @@ export default function BookRow({ book, onClickInfo, onClickAdd }: BookRowProps)
         <div className="flex items-start gap-[21.56px]">
           <img
             src={book.img}
+
             alt={book.bookName}
             className="object-cover rounded"
             style={{ width: '111px', height: '170.2px', borderRadius: '7.2px' }}
@@ -54,7 +55,7 @@ export default function BookRow({ book, onClickInfo, onClickAdd }: BookRowProps)
             style={{
               width: '100px',
               height: '36px',
-              padding: '8px 20px',
+              padding: '5.5px 20px',
               background: 'rgba(55, 50, 44, 0.50)',
               fontFamily: 'Pretendard',
               fontSize: '14px',
@@ -76,7 +77,7 @@ export default function BookRow({ book, onClickInfo, onClickAdd }: BookRowProps)
               src={infoIcon}
               alt="책 정보"
               className="shrink-0"
-              style={{ width: '9px', height: '12.938px' }}
+              style={{ width: '9.707px', height: '13.645px' }}
             />
             책 정보
           </button>
@@ -89,7 +90,7 @@ export default function BookRow({ book, onClickInfo, onClickAdd }: BookRowProps)
             style={{
               width: '100px',
               height: '36px',
-              padding: '8px 12px',
+              padding: '5.5px 0px 5.5px 0px',
               background: '#37322C',
               fontFamily: 'Pretendard',
               fontSize: '14px',
@@ -111,7 +112,8 @@ export default function BookRow({ book, onClickInfo, onClickAdd }: BookRowProps)
               src={saveIcon}
               alt="서재 등록"
               className="shrink-0"
-              style={{ width: '11px', height: '9.151px' }}
+              style={{ width: '16px', height: '16px', marginBottom: '2px', marginRight: '0px', paddingRight: '0px'
+              }}
             />
             서재 등록
           </button>
