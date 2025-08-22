@@ -14,14 +14,10 @@ const Pagination: React.FC<PaginationProps> = ({
   onPageChange,
   hasNext,
 }) => {
-  // 현재 페이지 그룹 계산 (1-10, 11-20, 21-30, ...)
   const currentGroup = Math.ceil(currentPage / 10);
-
-  // 현재 그룹의 시작과 끝 페이지
   const groupStartPage = (currentGroup - 1) * 10 + 1;
   const groupEndPage = Math.min(currentGroup * 10, totalPages);
 
-  // 표시할 페이지 번호들 생성
   const getVisiblePages = () => {
     const pages = [];
     for (let i = groupStartPage; i <= groupEndPage; i++) {
@@ -32,11 +28,9 @@ const Pagination: React.FC<PaginationProps> = ({
 
   const visiblePages = getVisiblePages();
 
-  // 이전/다음 그룹 존재 여부
   const hasPrevGroup = groupStartPage > 1;
   const hasNextGroup = groupEndPage < totalPages;
 
-  // 다음 그룹 점프 페이지 계산 (현재 페이지 + 10)
   const getNextJumpPage = () => {
     const nextJumpPage = currentPage + 10;
     return nextJumpPage <= totalPages ? nextJumpPage : null;
@@ -44,18 +38,16 @@ const Pagination: React.FC<PaginationProps> = ({
 
   const nextJumpPage = getNextJumpPage();
 
-  // 페이지가 1개 이하면 페이지네이션을 표시하지 않음
   if (totalPages <= 1) {
     return null;
   }
 
   return (
     <div className="flex justify-center items-center mt-44">
-      {/* 이전 페이지 버튼 */}
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className={`pr-15 py-2 rounded-md`}
+        className={`pr-18 py-2 rounded-md`}
       >
         <img
           src={pageButton}
@@ -68,7 +60,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           key={pageNum}
           onClick={() => onPageChange(pageNum)}
-          className={`py-2 px-1 font-normal text-[22px] mx-6 ${
+          className={`px-1 font-normal text-[18px] mx-6 ${
             currentPage === pageNum
               ? 'text-white border-b-2'
               : 'text-[rgba(255,255,255,0.5)]'
@@ -81,7 +73,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={!hasNext}
-        className={`pl-15 py-2 rounded-md ${
+        className={`pl-18 py-2 rounded-md ${
           !hasNext ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700'
         }`}
       >
