@@ -1,6 +1,7 @@
 import userImg from '/src/assets/button/book-info/usrImg.svg';
 import fullStar from '/src/assets/button/book-info/fullStar.svg';
 import emptyStar from '/src/assets/button/book-info/emptyStar.svg';
+import divide_line from '/src/assets/button/book-info/divide-line.svg';
 
 import { Review } from '../../types/book-info/review';
 import { useGetMe } from '../../../../views/home/hooks/useQuery/useGetMe';
@@ -17,7 +18,7 @@ const Comment = ({ setIsUserEditReview, reviewData }: CommentProps) => {
     <div className="flex flex-col w-full">
       {isOwn ? (
         <>
-          <hr className="w-full h-0 outline outline-1 outline-offset-[-0.50px] outline-neutral-600/70 mt-[54px] mb-12" />
+          <img src={divide_line} alt="" className="mt-12 mb-12" />
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-5">
@@ -74,7 +75,7 @@ const Comment = ({ setIsUserEditReview, reviewData }: CommentProps) => {
       <div className="w-full text-white text-sm font-normal mt-10  ">
         {reviewData.content}
       </div>
-      <hr className="w-full h-0 outline outline-1 outline-offset-[-0.50px] outline-neutral-600/70 mt-12 mb-12" />
+      <img src={divide_line} alt="" className="mt-12 mb-12" />
     </div>
   );
 };

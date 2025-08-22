@@ -11,6 +11,7 @@ import filled_star from '/src/assets/button/book-info/fullStar.svg';
 import error_outline_rounded from '/src/assets/button/book-info/error-outline-rounded.svg';
 import download_icon from '/src/assets/button/book-info/download.svg';
 import move_icon from '/src/assets/button/book-info/move.svg';
+import divider_line from '/src/assets/button/book-info/divide-line.svg';
 
 // components
 import DeleteBtn from '../../../../components/delete-modal/DeleteModal';
@@ -240,7 +241,7 @@ const BookInfoPage = () => {
                     : '책에 대한 설명이 없습니다.'}
                 </div>
               </div>
-              <hr className="w-full border-nook-hr" />
+              <img src={divider_line} alt="" className="w-full" />
               <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-sm text-white  ">
                 {/* 왼쪽 열 */}
                 <div className="flex justify-start gap-9">
