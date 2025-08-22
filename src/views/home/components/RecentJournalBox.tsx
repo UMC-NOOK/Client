@@ -22,7 +22,6 @@ const RecentJournalBox = () => {
       navigate(`/library/${data!.bookId}`, {
         state: {
           bookId: data!.bookId,
-          bookImg: data!.thumbnailUrl,
           title: data!.title,
           author: data!.author, 
         },

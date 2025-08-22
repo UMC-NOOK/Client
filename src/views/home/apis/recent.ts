@@ -9,3 +9,4 @@ export const getHomeRecentRecord = async (): Promise<RecentRecordDTO | null> => 
   if (res.status === 404) return null;
   return res.data?.result ?? null;
 };
+ 
