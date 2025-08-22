@@ -17,6 +17,7 @@ import useInfo from '../../../auth/hook/useQuery/useInfo';
 import CampfireBGM from '/audio/readingroom_campfire.mp3';
 import LibraryBGM from '/audio/readingroom_library.mp3';
 import SubwayBGM from '/audio/readingroom_subway.mp3';
+import AnimatedEqIcon from '../reading-room/AnimatedEqIcon';
 
 type UsageType = 'create' | 'edit';
 
@@ -40,6 +41,8 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
     const isCreatingValid = roomName.trim() !== '' && roomDescription.trim() !== '';
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    
+    const [isPlaying, setIsPlaying] = useState(false);
 
     const themeImages: Record<ThemeType, string> = {
         CAMPFIRE: CAMPFIRE_IMG,
@@ -81,10 +84,15 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
         el.volume = 1;
         audioRef.current = el;
 
+        const handlePlay = () => setIsPlaying(true);
+        const handlePause = () => setIsPlaying(false);
+
+        el.addEventListener("play", handlePlay);
+        el.addEventListener("pause", handlePause);
 
         const tryAutoStart = async () => {
             if (!audioRef.current) return;
-            const src = themeAudios[selected];    
+            const src = themeAudios[selected];
             el.src = src;
             el.currentTime = 0;
             try {
@@ -94,13 +102,15 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
             }
         };
         void tryAutoStart();
-        
-        return() => {
+
+        return () => {
             el.pause();
-            el.src = '';
+            el.src = "";
             el.load();
+            el.removeEventListener("play", handlePlay);
+            el.removeEventListener("pause", handlePause);
             audioRef.current = null;
-        }
+        };  
     }, []);
 
     const playBGM = async (theme: ThemeType) => {
@@ -137,7 +147,7 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
                 if (!isCreatingValid) return;
                 if (creating) return;
         
-                const themeName = normalizeThemeForApi(selected);
+                const themeName = selected;
                 const hashtags = normalizeTagsForApi(selectedTags);
 
                 const req: CreateReadingRoomRequest = {
@@ -210,11 +220,17 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
                             </div>
                         )}
 
-                    <img
+                    <div className='relative inline-block'>
+                        <img
                         src={themeImages[selected]}
                         alt={selected}
                         className={`${usage === 'create' ? 'w-[540px] h-[380px] rounded-xl' : 'w-[447px] h-[380px] rounded-xl'}`}
-                    />
+                        />
+
+                        <div className="absolute right-[22px] bottom-[27px] z-10 pointer-events-none">
+                            <AnimatedEqIcon key={selected}  isPlaying={isPlaying} className="text-white" speedMs={240} phase={2} />
+                        </div>
+                    </div>
 
                 <div className="flex flex-col mt-[20px]">
                     <div className="flex flex-row gap-[14px]">
