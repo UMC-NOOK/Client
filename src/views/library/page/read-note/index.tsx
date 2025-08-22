@@ -94,7 +94,7 @@ const ReadNotePage = () => {
       )}
       <div className="flex flex-col items-start justify-start w-332">
         <div className="flex w-full h-35 items-center justify-between backdrop-blur-[20px] border-b border-solid border-b-[rgba(85,83,81,1)]">
-          <div className="flex items-center gap-20">
+          <div className="flex items-center gap-[25px]">
             <img
               src={chevron_left}
               alt="chevron left"
