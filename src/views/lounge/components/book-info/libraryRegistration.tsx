@@ -7,6 +7,7 @@ import Calendar from './calendar';
 
 import usePostBookRegistration from '../../hooks/useMutation/book-info-mutation/usePostBookRegistration';
 import useGetCalendar from '../../hooks/useQuery/book-info-query/useGetCalendar';
+import useGetBookState from '../../../library/hooks/useQuery/library-query/useGetBookState';
 
 interface LibraryRegistrationProps {
   onRegister: () => void;
