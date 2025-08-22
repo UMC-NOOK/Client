@@ -111,7 +111,7 @@ const ReadNoteEditPage = () => {
   const { mutate: postSentence } = usePostSentence(location.state.bookId);
 
   const [textValue, setTextValue] = useState();
-  const [pageValue, setPageValue] = useState<string | null>();
+  const [pageValue, setPageValue] = useState<string | null>('');
 
   const phrases = useMemo(
     () =>
@@ -303,8 +303,14 @@ const ReadNoteEditPage = () => {
                     />
                     <input
                       type="number"
+                      value={pageValue ?? ''}
                       placeholder="페이지를 입력해주세요 (숫자만 입력)"
                       className="no-spinner w-full text-white text-xs not-italic font-[300] leading-5 bg-transparent outline-none placeholder:text-[#95908a] placeholder:text-xs placeholder:not-italic placeholder:font-[300] placeholder:leading-5"
+                      onFocus={(e) => (e.currentTarget.placeholder = '')}
+                      onBlur={(e) =>
+                        (e.currentTarget.placeholder =
+                          '페이지를 입력해주세요 (숫자만 입력)')
+                      }
                       onChange={(e) => {
                         setPageValue(e.target.value || null);
                       }}
@@ -332,6 +338,10 @@ const ReadNoteEditPage = () => {
                         placeholder={placeholderText}
                         className="w-full h-full text-white text-sm not-italic font-[300] leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-[300] placeholder:leading-11"
                         value={textAreaContent}
+                        onFocus={(e) => (e.currentTarget.placeholder = '')}
+                        onBlur={(e) =>
+                          (e.currentTarget.placeholder = placeholderText)
+                        }
                         onChange={(e) => {
                           setTextContent('quotation');
                           setTextAreaContent(e.target.value);
@@ -347,6 +357,10 @@ const ReadNoteEditPage = () => {
                       placeholder={placeholderText}
                       className="w-full h-full text-white text-sm not-italic font-[300] leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-[300] placeholder:leading-11"
                       value={textAreaContent}
+                      onFocus={(e) => (e.currentTarget.placeholder = '')}
+                      onBlur={(e) =>
+                        (e.currentTarget.placeholder = placeholderText)
+                      }
                       onChange={(e) => {
                         setTextAreaContent(e.target.value);
                       }}
