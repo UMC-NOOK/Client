@@ -19,6 +19,7 @@ export type ApiEnvelope<T> = {
   export type BookThumbnail = {
     bookId: number;
     title: string;
+    author: string;        
     thumbnailUrl: string;
   };
   

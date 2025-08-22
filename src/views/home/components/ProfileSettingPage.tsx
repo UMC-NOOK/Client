@@ -134,9 +134,6 @@ const SettingsPage = () => {
   // L 사이즈 프로필 이미지 고정 클래스 (127×99)
   const AVATAR_L = 'w-[127px] h-[99px] shrink-0 object-contain';
 
-  // 액션 버튼 스타일 (요구 사양 반영)
-  // - 박스: inline-flex / padding: 4px 20px / border-radius: 4px / border: 1px solid #423C35
-  // - 텍스트: color #423C35, Pretendard 14px, 600, line-height 22px
   const actionBtnStyle = (hover: boolean, pressed: boolean): React.CSSProperties => {
     const base: React.CSSProperties = {
       display: 'inline-flex',
@@ -232,7 +229,7 @@ const SettingsPage = () => {
                 계정
                 <i
                   className={clsx(
-                    'absolute left-0 -bottom-[4px] h-px bg-white',
+                    'absolute left-0 -bottom-[4px] h-[1px]  bg-white',
                     tab === '계정' ? 'w-full opacity-100' : 'w-0 opacity-0',
                   )}
                 />
@@ -241,7 +238,7 @@ const SettingsPage = () => {
 
             {/* 도움말 링크 */}
             <a
-              href="https://nook-app.help"
+              href="https://policynook.oopy.io/"
               target="_blank"
               rel="noopener noreferrer"
               style={navItemHoverStyle(hoverHelp, false)}
@@ -258,7 +255,9 @@ const SettingsPage = () => {
 
             {/* 이용약관 링크 */}
             <a
-              href="/terms"
+              href="https://policynook.oopy.io/"
+              target="_blank"
+              rel="noopener noreferrer"
               style={navItemHoverStyle(hoverTerms, false)}
               onMouseEnter={() => setHoverTerms(true)}
               onMouseLeave={() => setHoverTerms(false)}
@@ -273,7 +272,9 @@ const SettingsPage = () => {
 
             {/* 개인정보취급방침 링크 */}
             <a
-              href="/privacy"
+              href="https://policynook.oopy.io/"
+              target="_blank"
+              rel="noopener noreferrer"
               style={navItemHoverStyle(hoverPrivacy, false)}
               onMouseEnter={() => setHoverPrivacy(true)}
               onMouseLeave={() => setHoverPrivacy(false)}
@@ -330,12 +331,17 @@ const SettingsPage = () => {
                 <input
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter') onSaveNickname(); }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') onSaveNickname();
+                  }}
                   maxLength={30}
                   placeholder="이름을 입력하세요."
+                  onFocus={(e) => (e.target.placeholder = '')}   // 클릭 시 placeholder 제거
+                  onBlur={(e) => (e.target.placeholder = '이름을 입력하세요.')} // 포커스 해제 시 복구
                   className="w-full bg-transparent outline-none text-white placeholder-white/50"
                   style={{ fontFamily: 'Pretendard', fontSize: 16, fontWeight: 400, lineHeight: '22px' }}
                 />
+
                 <span
                   className="ml-[8px] text-white/50"
                   style={{ fontFamily: 'Pretendard', fontSize: 16, fontWeight: 400, lineHeight: '22px' }}
@@ -348,7 +354,6 @@ const SettingsPage = () => {
 
           {tab === '계정' && (
             <div className="w-[491px] text-white">
-              {/* '이메일' 라벨을 '내 계정'으로 변경 + 스타일 적용 */}
               <div
                 style={{
                   width: 51.555,

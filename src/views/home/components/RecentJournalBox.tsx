@@ -24,6 +24,7 @@ const RecentJournalBox = () => {
           bookId: data!.bookId,
           bookImg: data!.thumbnailUrl,
           title: data!.title,
+          author: data!.author, 
         },
       });
     } else {
