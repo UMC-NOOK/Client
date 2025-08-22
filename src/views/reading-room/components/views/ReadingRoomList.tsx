@@ -103,7 +103,8 @@ const ReadingRoomList = () => {
                         <div
                             key={i}
                             onClick={() => setCurrentPage(i + 1)}
-                            className={`text-white text-base ${currentPage === i + 1 ? 'font-bold' : 'font-base'}`}
+                            className={`text-base`}
+                            style={{ color: currentPage === i + 1 ? '#FFFFFF' : 'rgba(255, 255, 255, 0.5)',}}
                         >
                             {i + 1}
                         </div>
