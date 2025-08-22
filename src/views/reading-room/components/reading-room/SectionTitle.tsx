@@ -6,18 +6,18 @@ const SectionTitle = () => {
 
     return (
         <div className='flex flex-col w-full text-white mt-45'>
-            <div className='flex items-start text-xl font-semibold'>
+            <div className='flex items-start text-[22px] font-semibold'>
                 내 리딩룸
             </div>  
             
             <div className='flex flex-row justify-between w-full items-center'>
-                <div className='flex justify-center items-center text-lg font-light'>
+                <div className='flex justify-center items-center text-[18px] font-normal'>
                     오늘은 어떤 룸에서 책을 읽을까요?
                 </div>
                 
                 <div className='flex flex-row items-center gap-5'>
                     <div 
-                        className='flex justify-center items-center text-sm cursor-pointer'
+                        className='flex justify-center items-center text-[14px] font-normal cursor-pointer'
                         onClick={() => navigate('/reading-room/all')}>
                         모든 리딩룸 보기
                     </div>

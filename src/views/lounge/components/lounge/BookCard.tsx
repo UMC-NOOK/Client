@@ -27,7 +27,7 @@ const BookCard = ({ book }: { book: LoungeBook }) => {
 
             <div 
                 className="text-white mt-[6px]">
-                <div className="h-10 text-base font-semibold w-[141px] truncate">
+                <div className="h-10 text-[16px] font-semibold w-[141px] truncate">
                     {book.title}
                 </div>
 

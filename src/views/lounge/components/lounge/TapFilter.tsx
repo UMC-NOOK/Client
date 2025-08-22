@@ -10,14 +10,14 @@ const Tap = ({
   onSelect: (c: string) => void;
 }) => {
   return (
-    <div className="flex items-center text-base gap-5">
+    <div className="flex items-center gap-5">
       {categories.map((cat, index) => (
         <React.Fragment key={cat}>
           <button
             key={cat}
             onClick={() => onSelect(cat)}
             className={`text-white text-base px-5 py-2 
-                            ${selected === cat ? 'font-semibold' : 'font-light'}
+                            ${selected === cat ? 'font-semibold' : 'font-extra-light'}
                         `}
             style={{color: selected === cat ? '#FFFFFF' : 'rgba(255, 255, 255, 0.50)'}}
           >

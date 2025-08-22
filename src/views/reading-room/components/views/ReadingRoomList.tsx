@@ -78,7 +78,7 @@ const ReadingRoomList = () => {
                         />
                         </svg>
                     <div 
-                        className="text-white text-xl ml-6 cursor-pointer"
+                        className="flex text-white items-center text-[20px] ml-6 cursor-pointer"
                         onClick={() => navigate('/reading-room')}>
                             내 리딩룸
                     </div>
