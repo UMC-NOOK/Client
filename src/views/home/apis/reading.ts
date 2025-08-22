@@ -1,7 +1,15 @@
+// src/views/home/apis/reading.ts
 import instance from '../../../apis/instance';
-import type { ApiEnvelope, ReadingNowDTO } from '../../home/type/home';
+import { HomeReading } from '../hooks/useQuery/useGetHomeReading';
 
-export const getHomeReadingNow = async () => {
-  const { data } = await instance.get<ApiEnvelope<ReadingNowDTO>>('/api/bookshelf/reading');
+export async function getHomeReadingNow(): Promise<HomeReading | undefined> {
+  const { data } = await instance.get<{
+    isSuccess: boolean;
+    code: string;
+    message: string;
+    result: HomeReading | null;
+  }>('/api/bookshelf/reading');
+
+  if (!data.isSuccess || !data.result) return undefined;
   return data.result;
-};
+}
