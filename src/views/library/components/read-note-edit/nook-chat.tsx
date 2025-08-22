@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 
 // imgs
 import chat_send_btn from '/src/assets/button/read-note-edit/chat-send-button.svg';
@@ -19,6 +19,7 @@ interface NookChatProps {
 const NookChat = ({ bookId }: NookChatProps) => {
   const [value, setValue] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const { data: nookChatData } = useGetNookChat(bookId);
   const { mutate: postNookChat } = usePostNookChat(bookId);
@@ -61,9 +62,18 @@ const NookChat = ({ bookId }: NookChatProps) => {
     setTimeout(() => textareaRef.current?.focus(), 0);
   };
 
+  useLayoutEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [nookChatData]);
+
   return (
     <div className="flex flex-col items-center justify-between w-[372px] h-[600px] rounded-[20px] bg-[rgba(66,60,53,0.5)] px-5 pb-4">
-      <div className="w-full px-3 overflow-y-auto [&::-webkit-scrollbar]:hidden">
+      <div
+        ref={scrollRef}
+        className="w-full px-3 overflow-y-auto [&::-webkit-scrollbar]:hidden"
+      >
         <NookSay message="독서 후 기억에 남는 장면이나 떠오른 감상이 있나요?" />
         {nookChatData?.result.map((chat) => (
           <div key={chat.chatRecordId} className="mb-4">
@@ -78,11 +88,14 @@ const NookChat = ({ bookId }: NookChatProps) => {
                 <div className="w-[332px] text-white text-sm not-italic font-normal">
                   {chat.message}
                 </div>
-                <div
-                  className="flex w-[180px] h-10 justify-center items-center gap-2.5 shrink-0 border p-2.5 rounded-lg border-solid border-[#7ABFC9] text-[#7ABFC9] text-sm not-italic font-semibold"
-                  onClick={() => postNookChatSave(chat.chatRecordId)}
-                >
-                  내 감상으로 붙여넣기
+                <div className="flex justify-center items-center w-full">
+                  {' '}
+                  <div
+                    className="flex w-[180px] justify-center items-center mt-[24px] border p-5 rounded-[8px] border-solid border-[#7ABFC9] text-[#7ABFC9] text-sm not-italic font-semibold"
+                    onClick={() => postNookChatSave(chat.chatRecordId)}
+                  >
+                    내 감상으로 붙여넣기
+                  </div>
                 </div>
               </>
             )}
