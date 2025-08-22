@@ -5,6 +5,7 @@ const AuthInstance = axios.create({
   headers: {
     accept: 'application/json',
   },
+  withCredentials: true,
 });
 
 export default AuthInstance;

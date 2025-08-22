@@ -8,6 +8,9 @@ import { signInSchema } from '../../schemas/sign-in/validateSignIn';
 import ErrorBox from '../../components/ErrorBox';
 import useSignIn from '../../hook/useMutaion/useSignIn';
 import loginBox from '../../../../assets/auth/Loginbox.png';
+import forPCBtn from '../../../../assets/auth/plzPC.svg';
+import { useEffect, useState } from 'react';
+import MobileModal from '../../components/MobileModal';
 
 type FormData = {
   email: string;
@@ -46,10 +49,36 @@ const SignInPage = () => {
   const isEmpty = !watchedValues.email || !watchedValues.password;
   const isButtonDisabled = hasErrors || !isValid || isEmpty;
 
+  const [isMobile, setIsMobile] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const onMobileClick = () => {
+    setShowModal(true);
+  };
+
+  const offMobileClick = () => {
+    setShowModal(false);
+  };
   // console.log(errors);
 
   return (
-    <div className="flex flex-col items-center justify-center ">
+    <div className="flex flex-col items-center justify-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className=" w-[54.1rem] h-[65.2rem] flex flex-col items-center rounded-[15px] relative"
@@ -60,6 +89,7 @@ const SignInPage = () => {
           backgroundRepeat: 'no-repeat',
         }}
       >
+        {showModal && <MobileModal onClose={offMobileClick} />}
         {shouldShowErrorBox && <ErrorBox />}
 
         <div className="mt-40 mb-30">
@@ -82,7 +112,12 @@ const SignInPage = () => {
           </div>
           <LoginOptions />
           <div className="flex flex-col gap-6 mt-32">
-            <SubmitBtn hasErrors={isButtonDisabled} text="로그인" />
+            <SubmitBtn
+              hasErrors={isButtonDisabled}
+              text="로그인"
+              type={isMobile ? 'button' : 'submit'}
+              onClick={isMobile ? onMobileClick : undefined}
+            />
             <KakaoBtn />
           </div>
         </div>
