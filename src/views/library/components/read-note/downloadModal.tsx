@@ -124,10 +124,17 @@ const DownloadModal = ({
                 {sentenceList?.result?.map((sentence) => (
                   <Fragment key={sentence.recordId}>
                     {sentence.recordType === 'RECORD' ? (
-                      <Phrase
-                        text={sentence.content}
-                        page={parseInt(sentence.page, 10)}
-                      />
+                      sentence.page === null ? (
+                        <Phrase
+                          text={sentence.content}
+                          page="-" // 페이지 정보가 없을 경우 -1로 표시
+                        />
+                      ) : (
+                        <Phrase
+                          text={sentence.content}
+                          page={parseInt(sentence.page, 10)}
+                        />
+                      )
                     ) : (
                       <></>
                     )}
@@ -170,7 +177,7 @@ const DownloadModal = ({
 
 export default DownloadModal;
 
-const Phrase = ({ text, page }: { text: string; page: number }) => (
+const Phrase = ({ text, page }: { text: string; page: number | string }) => (
   <div className="w-full flex items-start justify-start gap-7 mb-[7.01px] ">
     <div className=" h-[14px] flex items-center text-[6.714px] font-pretendard text-[#737373]">
       P.{page}

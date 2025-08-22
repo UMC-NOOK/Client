@@ -143,10 +143,17 @@ const ReadNotePage = () => {
             {sentenceList?.result?.map((sentence) => (
               <>
                 {sentence.recordType === 'RECORD' ? (
-                  <Phrase
-                    text={sentence.content}
-                    page={parseInt(sentence.page, 10)}
-                  />
+                  sentence.page === null ? (
+                    <Phrase
+                      text={sentence.content}
+                      page="-" // 페이지 정보가 없을 경우 -1로 표시
+                    />
+                  ) : (
+                    <Phrase
+                      text={sentence.content}
+                      page={parseInt(sentence.page, 10)}
+                    />
+                  )
                 ) : (
                   <></>
                 )}
@@ -194,7 +201,7 @@ const ReadNotePage = () => {
 
 export default ReadNotePage;
 
-const Phrase = ({ text, page }: { text: string; page: number }) => {
+const Phrase = ({ text, page }: { text: string; page: number | string }) => {
   return (
     <div className="w-full flex items-start justify-start gap-10 text-white text-sm not-italic font-normal">
       <div className="w-20 ">P.{page}</div>
