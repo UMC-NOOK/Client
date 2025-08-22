@@ -113,7 +113,7 @@ const LibraryRegistration = ({
 
         <div className="flex items-center justify-between w-full gap-17 mb-20">
           <div className="w-[135px] h-[198px] ml-4">
-            <img src={bookImg} alt="" />
+            <img src={bookImg} alt="" className="rounded-[5px]" />
           </div>
           <div className="flex flex-col gap-8 w-[207px] h-[182px]">
             <div className="flex flex-col gap-4 items-start">
