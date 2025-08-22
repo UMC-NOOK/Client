@@ -19,12 +19,14 @@ import DownloadModal from '../../components/read-note/downloadModal';
 
 // hooks
 import useGetSentenceList from '../../hooks/useQuery/read-note/useGetSentenceList';
+import useDeleteBook from '../../hooks/useMutation/library-mutation/useDeleteBook';
 
 const ReadNotePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const { data: sentenceList } = useGetSentenceList(location.state.bookId);
+  const { mutate: deleteBook } = useDeleteBook();
 
   const isReadNoteExist = (sentenceList?.result?.length ?? 0) > 0;
   const [isLibraryRegistrationOpen, setIsLibraryRegistrationOpen] =
@@ -42,11 +44,12 @@ const ReadNotePage = () => {
   };
 
   const deleteHandler = () => {
+    deleteBook({ bookId: location.state.bookId });
     setIsDeleteModalOpen((prev) => !prev);
+    navigate('/library', { replace: true });
   };
 
   const deleteCloseHandler = () => {
-    // 삭제 로직 추가
     setIsDeleteModalOpen(false);
   };
 
