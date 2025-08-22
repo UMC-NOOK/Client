@@ -107,7 +107,7 @@ const LibraryRegistration = ({
           </div>
         </div>
 
-        <div className="flex items-start justify-between w-full gap-17 mb-20">
+        <div className="flex items-center justify-between w-full gap-17 mb-20">
           <div className="w-[135px] h-[198px] ml-4">
             <img src={bookImg} alt="" />
           </div>
@@ -136,7 +136,9 @@ const LibraryRegistration = ({
                   <img src={calendar} alt="" className="w-[14px] h-[14px]" />
                 </div>
               ) : (
-                <div className="text-white text-sm">{selectedDate}</div>
+                <div className="flex items-center justify-between w-[207px] h-[32px] rounded-sm bg-[rgba(31,28,25,0.5)] px-5 py-[9px] cursor-pointer">
+                  <div className="text-white text-sm/1">-</div>
+                </div>
               )}
               {isCalendarOpen && (
                 <Calendar
@@ -176,7 +178,10 @@ const LibraryRegistration = ({
           className="w-full h-20 px-10 py-2 rounded-[4px] bg-nook-br-100 text-white text-base font-semibold text-center cursor-pointer flex items-center justify-center"
           onClick={() => {
             list.map((date) => {
-              if (date === selectedDateAsDate.getDate()) {
+              if (
+                date === selectedDateAsDate.getDate() &&
+                readingStatus !== 3
+              ) {
                 alert('이미 등록된 날짜입니다.');
                 return;
               }
@@ -193,7 +198,7 @@ const LibraryRegistration = ({
                     readingStatus: 'FINISHED',
                   })
                 : postBookRegistration({
-                    date: serverSelectedDate,
+                    date: null,
                     readingStatus: 'BOOKMARK',
                   });
             onRegister();

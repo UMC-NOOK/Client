@@ -3,7 +3,7 @@ import { BookRegistrationResponse } from '../../types/book-info/bookRegistration
 
 export const bookRegistration = async (
   bookId: number | undefined,
-  date: string,
+  date: string | null,
   readingStatus: string,
 ): Promise<BookRegistrationResponse | undefined> => {
   try {

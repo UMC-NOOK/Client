@@ -9,7 +9,7 @@ const usePostBookRegistration = (bookId: number) => {
       date,
       readingStatus,
     }: {
-      date: string;
+      date: string | null;
       readingStatus: string;
     }) => bookRegistration(bookId, date, readingStatus),
     onSuccess: async () => {
