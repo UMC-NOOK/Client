@@ -100,7 +100,7 @@ const Impression = ({
         />
       </div>
       {isEditing ? (
-        <div className="flex w-[729px] h-[144px] flex-col items-start gap-2.5 shrink-0 border px-7 py-9 rounded-lg border-solid border-nook-br-100 ">
+        <div className="flex w-[729px] h-[144px] flex-col items-start gap-2.5 shrink-0 border px-7 py-9 rounded-[8px] border-solid border-nook-br-100 ">
           <textarea
             ref={taRef}
             onKeyDown={handleTextAreaKeyDown}
