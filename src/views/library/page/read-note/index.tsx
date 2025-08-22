@@ -179,7 +179,11 @@ const ReadNotePage = () => {
         )}
       </div>
       <div className="flex items-center justify-center mt-35 relative ">
-        <img src={read_note_save} alt="Save" className="w-[290px] h-[516px]" />
+        <img
+          src={read_note_save}
+          alt="Save"
+          className="w-[290px] h-[516px] rounded-[4px]"
+        />
         <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center gap-2 cursor-pointer">
           <div className="text-[#222020] text-center text-xs not-italic font-normal">
             독서 카드 만들고
