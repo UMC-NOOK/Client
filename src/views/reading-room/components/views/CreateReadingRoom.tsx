@@ -14,9 +14,10 @@ import { normalizeTagsForApi, normalizeThemeForApi } from '../../utils/reading-r
 import type { ThemeType } from '../../apis/reading-room/types/create-reading-room-types';
 import type { CreateReadingRoomRequest } from '../../apis/reading-room/CreateReadingRoom';
 import useInfo from '../../../auth/hook/useQuery/useInfo';
-import CampfireBGM from '../../../../../public/audio/readingroom_campfire.mp3';
-import LibraryBGM from '../../../../../public/audio/readingroom_library.mp3';
-import SubwayBGM from '../../../../../public/audio/readingroom_subway.mp3';
+import CampfireBGM from '/audio/readingroom_campfire.mp3';
+import LibraryBGM from '/audio/readingroom_library.mp3';
+import SubwayBGM from '/audio/readingroom_subway.mp3';
+import AnimatedEqIcon from '../reading-room/AnimatedEqIcon';
 
 type UsageType = 'create' | 'edit';
 
@@ -40,6 +41,8 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
     const isCreatingValid = roomName.trim() !== '' && roomDescription.trim() !== '';
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    
+    const [isPlaying, setIsPlaying] = useState(false);
 
     const themeImages: Record<ThemeType, string> = {
         CAMPFIRE: CAMPFIRE_IMG,
@@ -81,10 +84,15 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
         el.volume = 1;
         audioRef.current = el;
 
+        const handlePlay = () => setIsPlaying(true);
+        const handlePause = () => setIsPlaying(false);
+
+        el.addEventListener("play", handlePlay);
+        el.addEventListener("pause", handlePause);
 
         const tryAutoStart = async () => {
             if (!audioRef.current) return;
-            const src = themeAudios[selected];      // 'CAMPFIRE'가 기본값
+            const src = themeAudios[selected];
             el.src = src;
             el.currentTime = 0;
             try {
@@ -94,13 +102,15 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
             }
         };
         void tryAutoStart();
-        
-        return() => {
+
+        return () => {
             el.pause();
-            el.src = '';
+            el.src = "";
             el.load();
+            el.removeEventListener("play", handlePlay);
+            el.removeEventListener("pause", handlePause);
             audioRef.current = null;
-        }
+        };  
     }, []);
 
     const playBGM = async (theme: ThemeType) => {
@@ -137,7 +147,7 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
                 if (!isCreatingValid) return;
                 if (creating) return;
         
-                const themeName = normalizeThemeForApi(selected);
+                const themeName = selected;
                 const hashtags = normalizeTagsForApi(selectedTags);
 
                 const req: CreateReadingRoomRequest = {
@@ -180,7 +190,9 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
         <ReadingRoomActionsProvider value={actions}>
             <div className="flex flex-col justify-center items-center">
                 <div className="relative w-full">
-                    <div className="flex flex-row justify-center items-start gap-13 mt-10 px-10">
+                    <div
+                        className={`flex flex-row justify-center items-start mt-10 px-10 
+                            ${usage === 'create' ? 'gap-[52px]' : 'gap-[40px]'}`}>
                         <div className="flex flex-col">
                             {usage === 'create' && (
                                 <div className="flex flex-row items-center mb-20">
@@ -200,23 +212,42 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
                                             fillOpacity="0.5"
                                         />
                                     </svg>
-                                <div className="text-white text-xl ml-6">내 리딩룸</div>
+                                <div 
+                                    className="text-white text-xl ml-6 cursor-pointer"
+                                    onClick={() => navigate('/reading-room')}>
+                                        내 리딩룸
+                                </div>
                             </div>
                         )}
 
-                    <img
+                    <div className='relative inline-block'>
+                        <img
                         src={themeImages[selected]}
                         alt={selected}
-                        className={`${usage === 'create' ? 'w-270 h-221 rounded-xl' : 'w-[446px] h-[365px] rounded-xl'}`}
-                    />
+                        className={`${usage === 'create' ? 'w-[540px] h-[380px] rounded-xl' : 'w-[447px] h-[380px] rounded-xl'}`}
+                        />
 
-                <div className="flex flex-col mt-6">
-                    <div className="flex flex-row justify-start items-center gap-3">
-                        <div className="text-white text-sm">테마 선택</div>
-                        <div className="text-white text-2xs">리딩룸 생성 후 테마를 변경할 수 있습니다.</div>
+                        <div className="absolute right-[22px] bottom-[27px] z-10 pointer-events-none">
+                            <AnimatedEqIcon key={selected}  isPlaying={isPlaying} className="text-white" speedMs={240} phase={2} />
+                        </div>
                     </div>
 
-                    <div className="flex flex-row justify-start items-center gap-5 mt-7 mb-10">
+                <div className="flex flex-col mt-[20px]">
+                    <div className="flex flex-row gap-[14px]">
+                        <div className="flex text-white text-sm/[25px] items-center">테마 선택</div>
+                        {usage === 'create' && (
+                            <div className="flex text-white text-[10px]/[25px] items-end">
+                                리딩룸 생성 후 테마를 변경할 수 있습니다.
+                            </div>
+                        )}
+                    </div>
+
+                    <div
+                        className={`flex flex-row justify-start items-center 
+                            ${usage === 'create'
+                                ? 'gap-[15.31px] mt-[18px] mb-[74px]'
+                                : 'gap-[14.38px] mt-[10px] mb-[48px]'
+                            }`}>
                         {(['CAMPFIRE', 'SUBWAY', 'LIBRARY'] as ThemeType[]).map((theme) => (
                             <img
                                 key={theme}
@@ -227,7 +258,7 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
                                     void playBGM(theme);
                                 }}
                                 className={`cursor-pointer ${
-                                    usage === 'create' ? 'w-84 h-69' : 'w-[139.617px] h-[114.558px]'
+                                    usage === 'create' ? 'w-[169px] h-[119px]' : 'w-[169px] h-[119px]'
                                     } rounded-xl border transition-all duration-200 ${
                                     selected === theme ? 'border-[rgba(122,191,201,1)]' : 'border-transparent'
                                 }`}
@@ -238,7 +269,7 @@ const CreateReadingRoom = ({ usage, onCloseModal, onCreate, onEdit, room }: Crea
                 </div>
             </div>
 
-                <div className={`flex flex-col justify-start ${usage === 'create' ? 'mt-40' : 'mt-10'}`}>
+                <div className={`flex flex-col justify-start ${usage === 'create' ? 'mt-[67px]' : 'mt-10'}`}>
                     <InsertInfo
                         roomName={roomName}
                         setRoomName={setRoomName}
