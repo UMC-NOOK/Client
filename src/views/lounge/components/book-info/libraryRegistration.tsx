@@ -139,7 +139,7 @@ const LibraryRegistration = ({
                   onClick={calendarModalHandler}
                 >
                   <div className="text-white text-sm/1">{selectedDate}</div>
-                  <img src={calendar} alt="" className="w-[14px] h-[14px]" />
+                  <img src={calendar} alt="" className="w-[15px] h-[15px]" />
                 </div>
               ) : (
                 <div className="flex items-center justify-between w-[207px] h-[32px] rounded-sm bg-[rgba(31,28,25,0.5)] px-5 py-[9px] cursor-pointer">
