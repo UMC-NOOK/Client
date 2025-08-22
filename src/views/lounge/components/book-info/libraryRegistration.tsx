@@ -193,13 +193,20 @@ const LibraryRegistration = ({
               }
             });
             type === 'edit'
-              ? patchBookState(
-                  readingStatus === 1
-                    ? 'READING'
-                    : readingStatus === 2
-                      ? 'FINISHED'
-                      : 'BOOKMARK',
-                )
+              ? readingStatus === 1
+                ? patchBookState({
+                    readingStatus: 'READING',
+                    date: serverSelectedDate,
+                  })
+                : readingStatus === 2
+                  ? patchBookState({
+                      readingStatus: 'FINISHED',
+                      date: serverSelectedDate,
+                    })
+                  : patchBookState({
+                      readingStatus: 'BOOKMARK',
+                      date: null,
+                    })
               : readingStatus === 1
                 ? postBookRegistration({
                     date: serverSelectedDate,

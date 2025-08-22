@@ -25,30 +25,23 @@ export const bookRegistration = async (
   }
 };
 
-export const bookRegistrationStart = async (
+export const bookRegistrationChangeStatus = async (
   bookId: number | undefined,
+  status: string,
+  recordedAt: string | null,
 ): Promise<BookRegistrationStartResponse | undefined> => {
   try {
     const response = await instance.patch<BookRegistrationStartResponse>(
-      `/api/bookshelf/start-reading/${bookId}`,
+      `/api/bookshelf/change-status`,
+      {
+        bookId,
+        status,
+        recordedAt,
+      },
     );
     return response.data;
   } catch (error) {
     console.error('Error starting book registration:', error);
-    return undefined;
-  }
-};
-
-export const bookRegistrationFinish = async (
-  bookId: number | undefined,
-): Promise<BookRegistrationResponse | undefined> => {
-  try {
-    const response = await instance.patch<BookRegistrationResponse>(
-      `/api/bookshelf/finish-reading/${bookId}`,
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error finishing book registration:', error);
     return undefined;
   }
 };

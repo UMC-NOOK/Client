@@ -1,7 +1,4 @@
-import {
-  bookRegistrationStart,
-  bookRegistrationFinish,
-} from '../../../../lounge/apis/book-info/bookRegistration';
+import { bookRegistrationChangeStatus } from '../../../../lounge/apis/book-info/bookRegistration';
 import useDeleteBook from '../../../hooks/useMutation/library-mutation/useDeleteBook';
 import usePostBookRegistration from '../../../../home/hooks/useMutation/usePostBookRegistration';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -12,25 +9,19 @@ const usePatchBookState = (bookId: number) => {
   const { mutate: deleteBook } = useDeleteBook();
 
   return useMutation({
-    mutationFn: async (readingStatus: string) => {
+    mutationFn: async ({
+      readingStatus,
+      date,
+    }: {
+      readingStatus: string;
+      date: string | null;
+    }) => {
       if (readingStatus === 'READING') {
-        return bookRegistrationStart(bookId);
+        return bookRegistrationChangeStatus(bookId, readingStatus, date);
       } else if (readingStatus === 'FINISHED') {
-        return bookRegistrationFinish(bookId);
+        return bookRegistrationChangeStatus(bookId, readingStatus, date);
       } else if (readingStatus === 'BOOKMARK') {
-        await new Promise<void>((resolve) => {
-          deleteBook(
-            { bookId },
-            {
-              onSuccess: () => resolve(),
-              onError: () => resolve(),
-            },
-          );
-        });
-        return postBookRegistration({
-          date: null,
-          readingStatus: 'BOOKMARK',
-        });
+        return bookRegistrationChangeStatus(bookId, readingStatus, null);
       }
       return undefined;
     },
