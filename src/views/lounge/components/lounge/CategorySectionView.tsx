@@ -38,7 +38,7 @@ const CategorySectionView = ({ selectedCategory }: { selectedCategory: string })
       <div className='text-white'>
         <div className="mt-[26px] w-[960px] border-t border-[#555351]/70" />
 
-        <div className="text-lg mt-[26px]">{selected}</div>
+        <div className="text-[18px] mt-[26px]">{selected}</div>
         <div className="gap-[5px] text-[22px] font-semibold">따끈따끈 신간 도서를 만나보세요!</div>
         <div className="flex items-center justify-center mt-[36px]">
           {newSection && <BookListSection mallType={mallType} section={newSection} />}
@@ -47,7 +47,7 @@ const CategorySectionView = ({ selectedCategory }: { selectedCategory: string })
 
       <div className="flex flex-col items-start justify-center w-full mt-[50px] text-white">
         <div className="flex items-center w-full">
-          <span className="flex text-[22px] font-bold py-5 whitespace-nowrap mr-4">분야별 베스트셀러 Top 10</span>
+          <span className="flex text-[22px] font-semibold py-5 whitespace-nowrap mr-4">분야별 베스트셀러 Top 10</span>
           <div className="flex-1" style={{ borderTop: '1px solid rgba(85, 83, 81, 0.7)' }} />
         </div>
 
@@ -55,8 +55,8 @@ const CategorySectionView = ({ selectedCategory }: { selectedCategory: string })
           {(bestSections ?? []).map((sec: LoungeSection, index: number) => (
             <div key={`${sec.sectionId}-${sec.categoryName}-${index}`} className="text-white">
               <div className="mt-[40px]">
-                <span className="text-lg">| {selected} · </span>
-                <span className='text-lg'>
+                <span className="text-[18px]">| {selected} · </span>
+                <span className='text-[18px]'>
                   {renderCategoryName(sec?.categoryName, {
                                 pipeClass: "text-base font-semibold text-[rgba(255,255,255,0.5)]",
                               })}

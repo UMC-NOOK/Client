@@ -23,7 +23,7 @@ const RecommendView = ({ mallType, sections }: { mallType: MallType; sections: L
         <div>
           <div className="mt-[26px] w-[960px] border-t border-[#555351]/70" />
 
-          <h3 className="mt-[26px] text-lg font-normal">지금 서재에 등록하세요!</h3>
+          <h3 className="mt-[26px] text-[18px] font-normal">지금 서재에 등록하세요!</h3>
           <h2 className="text-[22px] font-semibold gap-[5px]">놓치기 아쉬운 주간 베스트셀러</h2>
 
           <div className="mt-[36px]">
@@ -35,13 +35,13 @@ const RecommendView = ({ mallType, sections }: { mallType: MallType; sections: L
           <div className="mt-[63px] w-[960px] border-t border-[#555351]/70" />
 
           <div className="mt-[26px]">
-            <span className="text-lg">{me?.nickname}님이 좋아하는 </span>
+            <span className="text-[18px] font-normal">{me?.nickname}님이 좋아하는 </span>
             <span className="text-[22px] font-semibold">
               {renderCategoryName(favoriteSection?.categoryName, {
                 pipeClass: 'text-[22px] font-semibold',
               })}
             </span>
-            <span className="text-lg">을 추천해요.</span>
+            <span className="text-[18px] font-normal">을 추천해요.</span>
           </div>
 
           <div className="mt-[36px] mb-[144px]">
