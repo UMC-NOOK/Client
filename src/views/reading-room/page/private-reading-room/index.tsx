@@ -27,6 +27,7 @@ import usePatchRoomInfo from '../../hooks/private-reading-room/useMutation/usePa
 import useDeleteRoom from '../../hooks/private-reading-room/useMutation/useDeleteRoom';
 import useExitRoom from '../../hooks/private-reading-room/useMutation/useExitRoom';
 import useGetMyRole from '../../hooks/private-reading-room/useQuery/useGetMyRole';
+import ExitBtn from '../../../../components/delete-modal/reading-room/ExitModal';
 
 type ThemeName = 'CAMPFIRE' | 'READINGROOM' | 'SUBWAY';
 
@@ -160,7 +161,9 @@ const PrivateReadingRoom = () => {
       toggleDeleteModal();
       navigate('/reading-room');
     },
-    onError: (error) => {},
+    onError: (error) => {
+      toggleDeleteModal();
+    },
   });
   const handleDelete = (roomId: number) => {
     deleteRoomMutation.mutate({ roomId });
@@ -168,10 +171,12 @@ const PrivateReadingRoom = () => {
 
   const exitRoomMutation = useExitRoom({
     onSuccess: () => {
-      toggleDeleteModal();
+      toggleExitModal();
       navigate('/reading-room');
     },
-    onError: (error) => {},
+    onError: (error) => {
+      toggleExitModal();
+    },
   });
   const handleExit = (roomId: number) => {
     exitRoomMutation.mutate({ roomId });
@@ -283,6 +288,12 @@ const PrivateReadingRoom = () => {
     setCurrentReadingBooks,
   ]);
 
+  useEffect(() => {
+    if (isExitModalOpen) toggleExitModal();
+    if (isDeleteModalOpen) toggleDeleteModal();
+    if (isEditModalOpen) closeEditModal();
+  }, []);
+
   // console.log('zlzllz', currentReadingBooks);
 
   const patchRoomInfo = usePatchRoomInfo();
@@ -367,7 +378,7 @@ const PrivateReadingRoom = () => {
       />
 
       {isExitModalOpen && (
-        <DeleteBtn
+        <ExitBtn
           usage="exit"
           onDelete={() => handleExit(Number(finalRoomId))}
           closeModal={toggleExitModal}
