@@ -4,26 +4,41 @@ import rightArrowIcon from '../../../assets/button/home/chevron-right.png';
 import savedIcon from '../../../assets/button/home/solar_pen.png';
 import { useGetHomeRecent } from '../hooks/useQuery/useGetHomeRecent';
 
+const MAX_TITLE_CHARS = 14; // 표시에 사용할 최대 글자수(띄어쓰기 포함)
+
+const toEllipsis = (s: string, max = MAX_TITLE_CHARS) =>
+  s.length > max ? s.slice(0, max) + '...' : s;
+
 const RecentJournalBox = () => {
   const navigate = useNavigate();
-  const { data, isLoading } = useGetHomeRecent(); // { bookId, title, thumbnailUrl } | undefined
+  // data: { bookId, title, author, coverImgUrl } | undefined
+  const { data, isLoading } = useGetHomeRecent();
 
   const hasJournals = data?.bookId != null && !!data?.title;
 
   const labelText = hasJournals ? '최근 남긴 독서기록' : '작성한 독서 기록이 없어요.';
-  const mainText = isLoading ? '로딩 중…' : hasJournals ? data!.title : '독서 기록 남기기';
+
+  // 원본 텍스트 → 길이 제한 적용
+  const mainTextRaw = isLoading
+    ? '로딩 중…'
+    : hasJournals
+    ? data!.title
+    : '독서 기록 남기기';
+  const mainText = toEllipsis(mainTextRaw);
 
   const rightButtonAria = hasJournals ? '최근 독서기록으로 이동' : '라이브러리로 이동';
 
   const handleGo = () => {
     if (isLoading) return;
 
-    if (hasJournals) {
-      navigate(`/library/${data!.bookId}`, {
+    if (hasJournals && data) {
+      // ✅ BE의 coverImgUrl → FE state의 coverImageUrl 로 매핑
+      navigate(`/library/${data.bookId}`, {
         state: {
-          bookId: data!.bookId,
-          title: data!.title,
-          author: data!.author, 
+          bookId: data.bookId,
+          coverImageUrl: data.coverImgUrl ?? '',
+          title: data.title ?? '',
+          author: data.author ?? '',
         },
       });
     } else {
@@ -51,6 +66,7 @@ const RecentJournalBox = () => {
             disabled={isLoading}
             className="text-[12px] leading-[14.4px] font-[400] text-white text-left disabled:opacity-50
                        max-w-[150px] overflow-hidden whitespace-nowrap text-ellipsis"
+            title={mainTextRaw} // 전체 제목 툴팁으로 제공(선택)
           >
             {mainText}
           </button>

@@ -1,19 +1,22 @@
+// useGetHomeRecent.ts
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { getHomeRecentRecord } from '../../apis/recent';
+import instance from '../../../../apis/instance';
+
+export type HomeRecent = {
+  bookId: number;
+  title: string;
+  author: string;
+  coverImgUrl: string;
+};
 
 export const useGetHomeRecent = () =>
-  useQuery({
+  useQuery<HomeRecent | undefined>({
     queryKey: ['home', 'recentRecord'],
-    queryFn: getHomeRecentRecord,
-    staleTime: 30_000,
-    refetchOnWindowFocus: false,    // 포커스 전환 시 재요청 방지
-    retry: (count, error) => {      // 4xx면 재시도 X, 그 외(네트워크/5xx)만 2회
-      if (axios.isAxiosError(error)) {
-        const s = error.response?.status;
-        if (s && s >= 400 && s < 500) return false;
-      }
-      return count < 2;
+    queryFn: async () => {
+      const { data } = await instance.get<{
+        isSuccess: boolean; code: string; message: string; result: HomeRecent | null;
+      }>('/api/records/recent');
+      return data?.isSuccess ? data.result ?? undefined : undefined;
     },
-    select: (data) => data ?? null,
+    staleTime: 30_000,
   });
