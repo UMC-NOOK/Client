@@ -226,66 +226,72 @@ const ReadNoteEditPage = () => {
               <div
                 className={`flex flex-col items-center justify-start gap-4 box-border overflow-y-auto [&::-webkit-scrollbar]:hidden mb-17 w-full ${isNookChatOpen ? '' : sentenceList?.code == 'SUCCESS-204' ? 'mt-[200px]' : 'ml-40 '}`}
               >
-                {phrases.length ? (
-                  phrases.map((phrase) => {
-                    const matching = quotations.filter(
-                      (q) => q.phraseId === phrase.phraseId,
-                    );
-                    return (
-                      <div
-                        key={phrase.phraseId}
-                        className="flex flex-col items-start w-full"
-                      >
-                        <Phrase
-                          page={phrase.page ?? undefined}
-                          text={phrase.text}
-                          phraseId={phrase.phraseId}
-                          setSelectedPhrasePage={setSelectedPhrasePage}
-                          setTextContent={setTextContent}
-                          clickPhrase={() => {
-                            setClickPhraseId(phrase.phraseId);
-                            setDeleteOption('read-note-edit-phrase');
+                {sentenceList?.result?.length!! > 0 ? (
+                  <>
+                    {phrases.length ? (
+                      phrases.map((phrase) => {
+                        const matching = quotations.filter(
+                          (q) => q.phraseId === phrase.phraseId,
+                        );
+                        return (
+                          <div
+                            key={phrase.phraseId}
+                            className="flex flex-col items-start w-full"
+                          >
+                            <Phrase
+                              page={phrase.page ?? undefined}
+                              text={phrase.text}
+                              phraseId={phrase.phraseId}
+                              setSelectedPhrasePage={setSelectedPhrasePage}
+                              setTextContent={setTextContent}
+                              clickPhrase={() => {
+                                setClickPhraseId(phrase.phraseId);
+                                setDeleteOption('read-note-edit-phrase');
+                              }}
+                              setIsDeleteModalOpen={setIsDeleteModalOpen}
+                              isNookChatOpen={isNookChatOpen}
+                              handleTextAreaKeyDown={handleTextAreaKeyDown}
+                            />
+                            {matching.map((q) => (
+                              <Quotation
+                                key={q.quotationId}
+                                text={q.text}
+                                quotationId={q.quotationId}
+                                clickPhrase={() => {
+                                  setClickPhraseId(phrase.phraseId);
+                                  setDeleteOption('read-note-edit-quotation');
+                                }}
+                                setIsDeleteModalOpen={setIsDeleteModalOpen}
+                                isNookChatOpen={isNookChatOpen}
+                              />
+                            ))}
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <></>
+                    )}
+
+                    {impressions.length > 0 &&
+                      impressions.map((it) => (
+                        <Impression
+                          key={it.impressionId}
+                          text={it.text}
+                          recordId={it.impressionId}
+                          clickImpression={() => {
+                            setClickPhraseId(it.impressionId);
+                            setDeleteOption('read-note-edit-impression');
                           }}
                           setIsDeleteModalOpen={setIsDeleteModalOpen}
                           isNookChatOpen={isNookChatOpen}
-                          handleTextAreaKeyDown={handleTextAreaKeyDown}
                         />
-                        {matching.map((q) => (
-                          <Quotation
-                            key={q.quotationId}
-                            text={q.text}
-                            quotationId={q.quotationId}
-                            clickPhrase={() => {
-                              setClickPhraseId(phrase.phraseId);
-                              setDeleteOption('read-note-edit-quotation');
-                            }}
-                            setIsDeleteModalOpen={setIsDeleteModalOpen}
-                            isNookChatOpen={isNookChatOpen}
-                          />
-                        ))}
-                      </div>
-                    );
-                  })
+                      ))}
+                  </>
                 ) : (
                   <div className="text-[rgba(255,255,255,0.50)] text-center text-sm not-italic font-normal leading-[22px]">
                     작성한 독서 기록이 없습니다.
                   </div>
                 )}
-
-                {impressions.length > 0 &&
-                  impressions.map((it) => (
-                    <Impression
-                      key={it.impressionId}
-                      text={it.text}
-                      recordId={it.impressionId}
-                      clickImpression={() => {
-                        setClickPhraseId(it.impressionId);
-                        setDeleteOption('read-note-edit-impression');
-                      }}
-                      setIsDeleteModalOpen={setIsDeleteModalOpen}
-                      isNookChatOpen={isNookChatOpen}
-                    />
-                  ))}
               </div>
               <div className={` ${isNookChatOpen ? 'w-[654px]' : 'w-402'}`}>
                 {textContent === 'phrase' ? (
