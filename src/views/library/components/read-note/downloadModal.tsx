@@ -12,18 +12,23 @@ import emptyStar from '/src/assets/button/book-info/emptyStar.svg';
 
 // hooks
 import useGetSentenceList from '../../hooks/useQuery/read-note/useGetSentenceList';
+import useGetReview from '../../../lounge/hooks/useQuery/book-info-query/useGetReview';
+
+// types
+import { Review } from '../../../lounge/types/book-info/review';
+
+// utils
+import { exportReadingCardPages } from '../../../../utils/exportReadingCard';
 
 interface DownloadModalProps {
-  onDownload: () => void;
   closeModal: () => void;
   bookImg: string;
   bookTitle: string;
   bookAuthor: string;
-  bookId: string;
+  bookId: number;
 }
 
 const DownloadModal = ({
-  onDownload,
   closeModal,
   bookId,
   bookImg,
@@ -31,7 +36,77 @@ const DownloadModal = ({
   bookAuthor,
 }: DownloadModalProps) => {
   const { data: sentenceList } = useGetSentenceList(bookId);
+  const date = new Date().toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+  const { data: reviewData } = useGetReview(bookId, 0);
+  const isUserReview = reviewData?.result?.reviews.some(
+    (review) => review.ownedByUser,
+  );
+  var userReview: Review | undefined;
+  if (isUserReview) {
+    userReview = reviewData?.result.reviews.find(
+      (review) => review.ownedByUser,
+    );
+  }
 
+  const onDownload = async () => {
+    const items = [
+      // RECORD + comments
+      ...(sentenceList?.result ?? []).flatMap((s) => {
+        if (s.recordType === 'RECORD') {
+          const head = [
+            {
+              kind: 'phrase' as const,
+              page: s.page ? Number(s.page) : '-',
+              text: s.content,
+            },
+          ];
+          const qs = (s.comments ?? []).map((c) => ({
+            kind: 'quote' as const,
+            text: c.content,
+          }));
+          return [...head, ...qs];
+        }
+        return [];
+      }),
+      // COMMENTARY
+      ...(sentenceList?.result ?? []).flatMap((s) =>
+        s.recordType === 'COMMENTARY'
+          ? [{ kind: 'impression' as const, text: s.content }]
+          : [],
+      ),
+    ];
+
+    const rating = reviewData?.result?.reviews.find(
+      (r) => r.ownedByUser,
+    )?.rating;
+
+    await exportReadingCardPages({
+      items,
+      book: {
+        title: bookTitle,
+        author: bookAuthor,
+        dateText: new Date().toLocaleDateString('ko-KR', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        }),
+        rating,
+      },
+      assets: {
+        bgImg: bg_img,
+        quoteIcon: quotation_arrow,
+        impressionIcon: impression_icon,
+        fullStar,
+        emptyStar,
+        bookImg,
+      },
+      fileName: `${bookTitle}-독서카드`,
+    });
+  };
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
       <div className="relative w-[413px] h-[642px] rounded-2xl bg-[rgba(45,40,34,1)] px-[61px] pb-[24px] pt-[42px] text-[#7A7A7A]">
@@ -87,40 +162,60 @@ const DownloadModal = ({
 
                   {/* 우측 메타 */}
                   <div className="flex flex-col items-start justify-start gap-[4px] mt-[30px]">
-                    <div className="text-[8.057px]">2025. 06. 16</div>
+                    <div className="text-[8.057px]">{date}</div>
                     <div className="flex items-center gap-1">
-                      <img
-                        src={fullStar}
-                        alt="별"
-                        className="inline-block w-3 h-3"
-                      />
-                      <img
-                        src={fullStar}
-                        alt="별"
-                        className="inline-block w-3 h-3"
-                      />
-                      <img
-                        src={fullStar}
-                        alt="별"
-                        className="inline-block w-3 h-3"
-                      />
-                      <img
-                        src={fullStar}
-                        alt="별"
-                        className="inline-block w-3 h-3"
-                      />
-                      <img
-                        src={emptyStar}
-                        alt="별"
-                        className="inline-block w-3 h-3"
-                      />
+                      {isUserReview ? (
+                        Array.from({ length: 5 }).map((_, i) => (
+                          <div key={i} className="w-3 h-3 inline-block">
+                            <img
+                              src={
+                                i < userReview!.rating ? fullStar : emptyStar
+                              }
+                              alt={
+                                i < userReview!.rating
+                                  ? 'Full Star'
+                                  : 'Empty Star'
+                              }
+                              className="w-3 h-3"
+                            />
+                          </div>
+                        ))
+                      ) : (
+                        <>
+                          <img
+                            src={emptyStar}
+                            alt="별"
+                            className="inline-block w-3 h-3"
+                          />
+                          <img
+                            src={emptyStar}
+                            alt="별"
+                            className="inline-block w-3 h-3"
+                          />
+                          <img
+                            src={emptyStar}
+                            alt="별"
+                            className="inline-block w-3 h-3"
+                          />
+                          <img
+                            src={emptyStar}
+                            alt="별"
+                            className="inline-block w-3 h-3"
+                          />
+                          <img
+                            src={emptyStar}
+                            alt="별"
+                            className="inline-block w-3 h-3"
+                          />
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* 본문: 남은 공간을 차지 (폭/높이 고정값 제거) */}
-              <div className="mt-[18.26px] y-[315.17px] w-full">
+              <div className="mt-[18.26px] h-[315.17px] w-full flex-1 min-h-0 overflow-y-auto [&::-webkit-scrollbar]:hidden">
                 {sentenceList?.result?.map((sentence) => (
                   <Fragment key={sentence.recordId}>
                     {sentence.recordType === 'RECORD' ? (

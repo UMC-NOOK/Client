@@ -84,7 +84,6 @@ const ReadNotePage = () => {
       )}
       {isDownloadModalOpen && (
         <DownloadModal
-          onDownload={downloadHandler}
           closeModal={downloadCloseHandler}
           bookImg={location.state?.coverImageUrl}
           bookTitle={location.state?.title}
