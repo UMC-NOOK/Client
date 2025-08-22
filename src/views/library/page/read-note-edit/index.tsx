@@ -199,7 +199,7 @@ const ReadNoteEditPage = () => {
               <span className="text-white text-[22px] not-italic font-semibold leading-[25px]">
                 {location.state?.title}
               </span>
-              <p className="text-white text-xs not-italic font-normal">
+              <p className="text-white text-xs not-italic font-[300]">
                 {location.state?.author}
               </p>
             </div>
@@ -288,7 +288,7 @@ const ReadNoteEditPage = () => {
                       ))}
                   </>
                 ) : (
-                  <div className="text-[rgba(255,255,255,0.50)] text-center text-sm not-italic font-normal leading-[22px]">
+                  <div className="text-[rgba(255,255,255,0.50)] text-center text-sm not-italic font-[300] leading-[22px]">
                     작성한 독서 기록이 없습니다.
                   </div>
                 )}
@@ -304,7 +304,7 @@ const ReadNoteEditPage = () => {
                     <input
                       type="number"
                       placeholder="페이지를 입력해주세요 (숫자만 입력)"
-                      className="no-spinner w-full text-white text-xs not-italic font-normal leading-5 bg-transparent outline-none placeholder:text-[#95908a] placeholder:text-xs placeholder:not-italic placeholder:font-normal placeholder:leading-5"
+                      className="no-spinner w-full text-white text-xs not-italic font-[300] leading-5 bg-transparent outline-none placeholder:text-[#95908a] placeholder:text-xs placeholder:not-italic placeholder:font-[300] placeholder:leading-5"
                       onChange={(e) => {
                         setPageValue(e.target.value || null);
                       }}
@@ -330,7 +330,7 @@ const ReadNoteEditPage = () => {
                         name=""
                         id="phraseTextArea"
                         placeholder={placeholderText}
-                        className="w-full h-full text-white text-sm not-italic font-normal leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-11"
+                        className="w-full h-full text-white text-sm not-italic font-[300] leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-[300] placeholder:leading-11"
                         value={textAreaContent}
                         onChange={(e) => {
                           setTextContent('quotation');
@@ -345,7 +345,7 @@ const ReadNoteEditPage = () => {
                       name=""
                       id="phraseTextArea"
                       placeholder={placeholderText}
-                      className="w-full h-full text-white text-sm not-italic font-normal leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-11"
+                      className="w-full h-full text-white text-sm not-italic font-[300] leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-[300] placeholder:leading-11"
                       value={textAreaContent}
                       onChange={(e) => {
                         setTextAreaContent(e.target.value);

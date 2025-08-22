@@ -174,7 +174,7 @@ const ReadNotePage = () => {
             ))}
           </div>
         ) : (
-          <div className="text-[rgba(255,255,255,0.50)] text-center text-base not-italic font-normal flex items-center justify-center w-[634px] h-[478px]">
+          <div className="text-[rgba(255,255,255,0.50)] text-center text-base not-italic font-[300] flex items-center justify-center w-[634px] h-[478px]">
             작성한 독서 기록이 없습니다.
           </div>
         )}
