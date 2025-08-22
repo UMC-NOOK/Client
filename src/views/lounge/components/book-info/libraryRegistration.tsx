@@ -124,7 +124,9 @@ const LibraryRegistration = ({
             </div>
             <div className="flex flex-col gap-4 items-start">
               <div className="text-[rgba(255,255,255,0.50)] text-xs">저자</div>
-              <div className="text-white text-sm">{bookAuthor}</div>
+              <div className="text-white text-sm text-ellipsis overflow-hidden whitespace-nowrap max-w-[207px]">
+                {bookAuthor}
+              </div>
             </div>
             <div
               className="flex flex-col gap-4 items-start relative"

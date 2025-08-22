@@ -93,21 +93,50 @@ const ReadNotePage = () => {
         />
       )}
       <div className="flex flex-col items-start justify-start w-332">
-        <div className="flex w-full h-35 items-center justify-between backdrop-blur-[20px] border-b border-solid border-b-[rgba(85,83,81,1)]">
-          <div className="flex items-center gap-[25px]">
+        <div
+          className={`flex w-full items-center justify-between backdrop-blur-[20px] border-b border-solid border-b-[rgba(85,83,81,1)] ${
+            location.state?.author?.length > 10 ||
+            location.state?.title?.length > 15
+              ? ''
+              : 'pb-9'
+          }`}
+        >
+          <div
+            className={`flex ${
+              location.state?.author?.length > 10 ||
+              location.state?.title?.length > 15
+                ? 'items-start'
+                : 'items-center'
+            } `}
+          >
             <img
               src={chevron_left}
               alt="chevron left"
-              className="h-10 w-10"
+              className="h-10 w-10 mr-[25px]"
               onClick={() => navigate(-1)}
             />
-            <div className="flex items-end gap-7">
-              <span className="text-white text-[22px] not-italic font-semibold leading-[25px]">
-                {location.state?.title || '책 제목 데이터 없음'}
-              </span>
-              <p className="text-white text-xs not-italic font-normal">
-                {location.state?.author || '저자 데이터 없음'}
-              </p>
+            <div className="flex flex-col items-start gap-3">
+              <div className="flex items-end gap-7">
+                <span className="text-white text-[22px] max-w-[480px] not-italic font-semibold leading-[25px]">
+                  {location.state?.title || '책 제목 데이터 없음'}
+                </span>
+                {location.state?.author?.length > 10 ||
+                location.state?.title?.length > 15 ? (
+                  <></>
+                ) : (
+                  <p className="text-white text-xs not-italic font-normal">
+                    {location.state?.author || '저자 데이터 없음'}
+                  </p>
+                )}
+              </div>
+              {location.state?.author?.length > 10 ||
+              location.state?.title?.length > 15 ? (
+                <p className="text-white text-xs not-italic font-normal w-[480px] mb-[18px]">
+                  {location.state?.author || '저자 데이터 없음'}
+                </p>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-4">
