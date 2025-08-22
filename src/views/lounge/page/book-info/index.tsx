@@ -310,13 +310,15 @@ const BookInfoPage = () => {
         </div>
 
         {/* 리뷰작성,리뷰 컴포넌트 */}
-        <div className="w-full flex flex-col items-center justify-center gap-12  ">
+        <div
+          className={`w-full flex flex-col items-center justify-center ${isUserReviewExist && userReview && !isUserEditReview ? '' : 'gap-12'}`}
+        >
           {/* 리뷰 작성 */}
           {isUserReviewExist && userReview ? (
             isUserEditReview ? (
               <div className="flex flex-col items-start justify-center gap-12 w-full">
                 {/* 별점 */}
-                <div className="flex flex-col self-start items-start justify-center gap-6 mt-12 w-full">
+                <div className="flex flex-col self-start items-start justify-center gap-6 w-full">
                   <span className="text-white text-base not-italic font-semibold leading-[25px]  ">
                     이 작품을 평가해 주세요!
                   </span>
