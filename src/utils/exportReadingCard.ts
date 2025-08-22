@@ -185,11 +185,11 @@ function buildItemNode(item: Item, assets: Assets): HTMLElement {
     el.style.display = 'flex';
     el.style.alignItems = 'flex-start';
     el.style.gap = '7px';
-    el.style.marginBottom = '7.01px';
+    el.style.marginBottom = '5.01px';
     el.innerHTML = `
-    <div style="display:flex;justify-content:flex-start;align-items:flex-start;width:100%;margin-bottom:7.01px;gap:14px">
+    <div style="display:flex;justify-content:flex-start;align-items:flex-start;width:100%;margin-bottom:5.01px;gap:14px">
       <div style="height:14px;display:flex;align-items:center;font-size:6.714px;color:#737373;">p.${escapeHtml(item.page ?? '-')}</div>
-      <div style="white-space:pre-wrap;font-size:10.743px">${escapeHtml(item.text)}</div>
+      <div style="white-space:pre-wrap;font-size:10.743px;line-height:1.2">${escapeHtml(item.text)}</div>
     </div>
     `;
     return el;
@@ -199,12 +199,12 @@ function buildItemNode(item: Item, assets: Assets): HTMLElement {
     el.style.display = 'flex';
     el.style.alignItems = 'flex-start';
     el.style.gap = '4.21px';
-    el.style.marginBottom = '7.01px';
+    el.style.marginBottom = '5.01px';
     el.style.paddingLeft = '30px';
     el.innerHTML = `
-    <div style="display:flex;align-items:flex-start;width:100%;color:10.743px;gap:4.21px;margin-bottom:7.01px;">
+    <div style="display:flex;align-items:flex-start;width:100%;color:10.743px;gap:4.21px;margin-bottom:5.01px;">
       <img src="${assets.quoteIcon}" style="width:10.55px;height:10.55px" />
-      <div style="white-space:pre-wrap;font-size:10.743px">${escapeHtml(item.text)}</div>
+      <div style="white-space:pre-wrap;font-size:10.743px; line-height:1.2">${escapeHtml(item.text)}</div>
     </div>
     `;
     return el;
@@ -214,11 +214,11 @@ function buildItemNode(item: Item, assets: Assets): HTMLElement {
   el.style.display = 'flex';
   el.style.alignItems = 'flex-start';
   el.style.gap = '10px';
-  el.style.marginBottom = '7.01px';
+  el.style.marginBottom = '5.01px';
   el.innerHTML = `
-  <div style="display: flex; align-items: flex-start; width: 100%; color: 10.743px; margin-bottom: 7.01px;gap:10px;">
+  <div style="display: flex; align-items: flex-start; width: 100%; color: 10.743px; margin-bottom: 5.01px;gap:10px;">
     <img src="${assets.impressionIcon}" style="width:20px;height:23.48px" />
-    <div style="white-space:pre-wrap;font-size:10.743px">${escapeHtml(item.text)}</div>
+    <div style="white-space:pre-wrap;font-size:10.743px; line-height:1.2">${escapeHtml(item.text)}</div>
   </div>
   `;
   return el;

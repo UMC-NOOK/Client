@@ -273,8 +273,8 @@ const DownloadModal = ({
 export default DownloadModal;
 
 const Phrase = ({ text, page }: { text: string; page: number | string }) => (
-  <div className="w-full flex items-start justify-start gap-7 mb-[7.01px] ">
-    <div className=" h-[14px] flex items-center text-[6.714px] font-pretendard text-[#737373]">
+  <div className="w-full flex items-start justify-start gap-7 mb-[5.01px] ">
+    <div className=" h-[14px] flex items-center text-[6.714px] font-pretendard text-[#737373] leading-[1.2]">
       P.{page}
     </div>
     <div className="whitespace-pre-wrap text-[10.743px]">{text}</div>
@@ -282,15 +282,15 @@ const Phrase = ({ text, page }: { text: string; page: number | string }) => (
 );
 
 const Quotation = ({ text }: { text: string }) => (
-  <div className="w-full flex items-start gap-[4.21px] text-[10.743px] mb-[7.01px] pl-[30px]">
+  <div className="w-full flex items-start gap-[4.21px] text-[10.743px] mb-[5.01px] pl-[30px]">
     <img src={quotation_arrow} alt="" className="w-[10.55px] h-[10.55px]" />
-    <div className="whitespace-pre-wrap">{text}</div>
+    <div className="whitespace-pre-wrap leading-[1.2]">{text}</div>
   </div>
 );
 
 const Impression = ({ text }: { text: string }) => (
-  <div className="w-full flex items-start gap-[10px] text-[10.743px] mb-[7.01px]">
+  <div className="w-full flex items-start gap-[10px] text-[10.743px] mb-[5.01px]">
     <img src={impression_icon} alt="impression" className="w-10 h-[23.48px]" />
-    <div className="whitespace-pre-wrap">{text}</div>
+    <div className="whitespace-pre-wrap leading-[1.2]">{text}</div>
   </div>
 );
