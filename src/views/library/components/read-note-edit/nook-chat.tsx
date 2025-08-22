@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 
 // imgs
 import chat_send_btn from '/src/assets/button/read-note-edit/chat-send-button.svg';
@@ -19,6 +19,7 @@ interface NookChatProps {
 const NookChat = ({ bookId }: NookChatProps) => {
   const [value, setValue] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const { data: nookChatData } = useGetNookChat(bookId);
   const { mutate: postNookChat } = usePostNookChat(bookId);
@@ -32,9 +33,47 @@ const NookChat = ({ bookId }: NookChatProps) => {
     }
   }, [value]);
 
+  const handleTextAreaKeyDown = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>,
+  ) => {
+    if (e.key !== 'Enter') return;
+
+    // 한글 입력 조합 중(IME) Enter는 무시
+    // (React 17+에선 e.nativeEvent.isComposing, 일부 브라우저는 e.isComposing)
+    // @ts-ignore
+    if (e.isComposing || (e.nativeEvent && (e.nativeEvent as any).isComposing))
+      return;
+
+    if (e.shiftKey) {
+      // Shift+Enter는 기본 동작(줄바꿈) 유지
+      return;
+    }
+
+    // Enter 단독: 줄바꿈 막고 등록
+    e.preventDefault();
+    handleSubmit();
+  };
+
+  const handleSubmit = () => {
+    if (value.trim()) {
+      postNookChat(value);
+      setValue('');
+    }
+    setTimeout(() => textareaRef.current?.focus(), 0);
+  };
+
+  useLayoutEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [nookChatData]);
+
   return (
     <div className="flex flex-col items-center justify-between w-[372px] h-[600px] rounded-[20px] bg-[rgba(66,60,53,0.5)] px-5 pb-4">
-      <div className="w-full px-3 overflow-y-auto [&::-webkit-scrollbar]:hidden">
+      <div
+        ref={scrollRef}
+        className="w-full px-3 overflow-y-auto [&::-webkit-scrollbar]:hidden"
+      >
         <NookSay message="독서 후 기억에 남는 장면이나 떠오른 감상이 있나요?" />
         {nookChatData?.result.map((chat) => (
           <div key={chat.chatRecordId} className="mb-4">
@@ -49,11 +88,14 @@ const NookChat = ({ bookId }: NookChatProps) => {
                 <div className="w-[332px] text-white text-sm not-italic font-normal">
                   {chat.message}
                 </div>
-                <div
-                  className="flex w-[180px] h-10 justify-center items-center gap-2.5 shrink-0 border p-2.5 rounded-lg border-solid border-[#7ABFC9] text-[#7ABFC9] text-sm not-italic font-semibold"
-                  onClick={() => postNookChatSave(chat.chatRecordId)}
-                >
-                  내 감상으로 붙여넣기
+                <div className="flex justify-center items-center w-full">
+                  {' '}
+                  <div
+                    className="flex w-[180px] justify-center items-center mt-[24px] border p-5 rounded-[8px] border-solid border-[#7ABFC9] text-[#7ABFC9] text-sm not-italic font-semibold"
+                    onClick={() => postNookChatSave(chat.chatRecordId)}
+                  >
+                    내 감상으로 붙여넣기
+                  </div>
                 </div>
               </>
             )}
@@ -63,6 +105,7 @@ const NookChat = ({ bookId }: NookChatProps) => {
       <div className="w-[352px] flex flex-col gap-5 bg-nook-br-100 rounded-[14px] px-10 py-5  mt-25 self-end">
         <textarea
           ref={textareaRef}
+          onKeyDown={handleTextAreaKeyDown}
           className="w-full resize-none overflow-auto text-sm outline-none text-black max-h-[87px] bg-transparent text-white text-sm not-italic font-normal placeholder:text-[rgba(255,255,255,0.50)] placeholder:text-sm placeholder:not-italic placeholder:font-normal
           "
           value={value}
@@ -74,10 +117,7 @@ const NookChat = ({ bookId }: NookChatProps) => {
           alt=""
           className="w-[25px] h-[25px] self-end cursor-pointer"
           onClick={() => {
-            if (value.trim()) {
-              postNookChat(value);
-              setValue('');
-            }
+            handleSubmit();
           }}
         />
       </div>

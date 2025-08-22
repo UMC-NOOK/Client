@@ -19,12 +19,14 @@ import DownloadModal from '../../components/read-note/downloadModal';
 
 // hooks
 import useGetSentenceList from '../../hooks/useQuery/read-note/useGetSentenceList';
+import useDeleteBook from '../../hooks/useMutation/library-mutation/useDeleteBook';
 
 const ReadNotePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const { data: sentenceList } = useGetSentenceList(location.state.bookId);
+  const { mutate: deleteBook } = useDeleteBook();
 
   const isReadNoteExist = (sentenceList?.result?.length ?? 0) > 0;
   const [isLibraryRegistrationOpen, setIsLibraryRegistrationOpen] =
@@ -42,11 +44,12 @@ const ReadNotePage = () => {
   };
 
   const deleteHandler = () => {
+    deleteBook({ bookId: location.state.bookId });
     setIsDeleteModalOpen((prev) => !prev);
+    navigate('/library', { replace: true });
   };
 
   const deleteCloseHandler = () => {
-    // 삭제 로직 추가
     setIsDeleteModalOpen(false);
   };
 
@@ -69,6 +72,7 @@ const ReadNotePage = () => {
           bookTitle={location.state?.title}
           bookAuthor={location.state?.author}
           bookId={location.state?.bookId}
+          type="edit"
         />
       )}
       {isDeleteModalOpen && (
@@ -80,7 +84,6 @@ const ReadNotePage = () => {
       )}
       {isDownloadModalOpen && (
         <DownloadModal
-          onDownload={downloadHandler}
           closeModal={downloadCloseHandler}
           bookImg={location.state?.coverImageUrl}
           bookTitle={location.state?.title}
@@ -88,22 +91,51 @@ const ReadNotePage = () => {
           bookId={location.state?.bookId}
         />
       )}
-      <div className="flex flex-col items-center justify-start w-332">
-        <div className="flex w-full h-35 items-center justify-between backdrop-blur-[20px] border-b border-solid border-b-[rgba(85,83,81,1)]">
-          <div className="flex items-center gap-20">
+      <div className="flex flex-col items-start justify-start w-332">
+        <div
+          className={`flex w-full items-center justify-between backdrop-blur-[20px] border-b border-solid border-b-[rgba(85,83,81,1)] ${
+            location.state?.author?.length > 10 ||
+            location.state?.title?.length > 15
+              ? ''
+              : 'pb-9'
+          }`}
+        >
+          <div
+            className={`flex ${
+              location.state?.author?.length > 10 ||
+              location.state?.title?.length > 15
+                ? 'items-start'
+                : 'items-center'
+            } `}
+          >
             <img
               src={chevron_left}
               alt="chevron left"
-              className="h-10 w-10"
+              className="h-10 w-10 mr-[25px]"
               onClick={() => navigate(-1)}
             />
-            <div className="flex items-end gap-7">
-              <span className="text-white text-[22px] not-italic font-semibold leading-[25px]">
-                {location.state?.title || '책 제목 데이터 없음'}
-              </span>
-              <p className="text-white text-xs not-italic font-normal">
-                {location.state?.author || '저자 데이터 없음'}
-              </p>
+            <div className="flex flex-col items-start gap-3">
+              <div className="flex items-end gap-7">
+                <span className="text-white text-[22px] max-w-[480px] not-italic font-semibold leading-[25px]">
+                  {location.state?.title || '책 제목 데이터 없음'}
+                </span>
+                {location.state?.author?.length > 10 ||
+                location.state?.title?.length > 15 ? (
+                  <></>
+                ) : (
+                  <p className="text-white text-xs not-italic font-normal">
+                    {location.state?.author || '저자 데이터 없음'}
+                  </p>
+                )}
+              </div>
+              {location.state?.author?.length > 10 ||
+              location.state?.title?.length > 15 ? (
+                <p className="text-white text-xs not-italic font-normal w-[480px] mb-[18px]">
+                  {location.state?.author || '저자 데이터 없음'}
+                </p>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -131,37 +163,56 @@ const ReadNotePage = () => {
               src={delete_btn}
               alt="Delete"
               className="w-17 h-17 cursor-pointer"
-              onClick={deleteHandler}
+              onClick={() => setIsDeleteModalOpen((prev) => !prev)}
             />
           </div>
         </div>
         {isReadNoteExist ? (
           <div className="flex flex-col items-start justify-start w-[634px] h-[478px] gap-7 mt-20 overflow-y-auto  [&::-webkit-scrollbar]:hidden">
-            {sentenceList?.result.map((sentence, index) => (
+            {sentenceList?.result?.map((sentence) => (
               <>
                 {sentence.recordType === 'RECORD' ? (
-                  <Phrase
-                    key={sentence.recordId}
-                    text={sentence.content}
-                    page={parseInt(sentence.page, 10)}
-                  />
+                  sentence.page === null ? (
+                    <Phrase
+                      text={sentence.content}
+                      page="-" // 페이지 정보가 없을 경우 -1로 표시
+                    />
+                  ) : (
+                    <Phrase
+                      text={sentence.content}
+                      page={parseInt(sentence.page, 10)}
+                    />
+                  )
                 ) : (
-                  <Impression key={sentence.recordId} text={sentence.content} />
+                  <></>
                 )}
-                {sentence.comments.map((comment) => (
+                {sentence.comments?.map((comment) => (
                   <Quotation key={comment.commentId} text={comment.content} />
                 ))}
               </>
             ))}
+            {sentenceList?.result?.map((sentence) => (
+              <>
+                {sentence.recordType === 'COMMENTARY' ? (
+                  <Impression text={sentence.content} />
+                ) : (
+                  <></>
+                )}
+              </>
+            ))}
           </div>
         ) : (
-          <div className="text-[rgba(255,255,255,0.50)] text-center text-base not-italic font-normal flex items-center justify-center w-[634px] h-[478px]">
+          <div className="text-[rgba(255,255,255,0.50)] text-center text-base not-italic font-[300] flex items-center justify-center w-[634px] h-[478px]">
             작성한 독서 기록이 없습니다.
           </div>
         )}
       </div>
       <div className="flex items-center justify-center mt-35 relative ">
-        <img src={read_note_save} alt="Save" className="w-[290px] h-[516px]" />
+        <img
+          src={read_note_save}
+          alt="Save"
+          className="w-[290px] h-[516px] rounded-[4px]"
+        />
         <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center gap-2 cursor-pointer">
           <div className="text-[#222020] text-center text-xs not-italic font-normal">
             독서 카드 만들고
@@ -183,7 +234,7 @@ const ReadNotePage = () => {
 
 export default ReadNotePage;
 
-const Phrase = ({ text, page }: { text: string; page: number }) => {
+const Phrase = ({ text, page }: { text: string; page: number | string }) => {
   return (
     <div className="w-full flex items-start justify-start gap-10 text-white text-sm not-italic font-normal">
       <div className="w-20 ">P.{page}</div>

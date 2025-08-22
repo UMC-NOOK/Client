@@ -10,7 +10,7 @@ const usePostBookRegistration = (bookId: number) => {
       date,
       readingStatus,
     }: {
-      date: string;
+      date: string | null;
       readingStatus: ReadingStatus; // ← string → 유니온 타입으로 변경
     }) => bookRegistration(bookId, date, readingStatus),
   });

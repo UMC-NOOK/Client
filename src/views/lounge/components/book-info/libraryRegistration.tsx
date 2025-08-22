@@ -7,6 +7,7 @@ import Calendar from './calendar';
 
 import usePostBookRegistration from '../../hooks/useMutation/book-info-mutation/usePostBookRegistration';
 import useGetCalendar from '../../hooks/useQuery/book-info-query/useGetCalendar';
+import usePatchBookState from '../../../library/hooks/useMutation/read-note-mutation/usePatchBookState';
 
 interface LibraryRegistrationProps {
   onRegister: () => void;
@@ -15,6 +16,7 @@ interface LibraryRegistrationProps {
   bookTitle?: string;
   bookAuthor?: string;
   bookId?: number;
+  type: 'edit' | 'register';
 }
 
 const LibraryRegistration = ({
@@ -24,6 +26,7 @@ const LibraryRegistration = ({
   bookTitle,
   bookAuthor,
   bookId,
+  type,
 }: LibraryRegistrationProps) => {
   const formatDate = (date: Date) => {
     const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
@@ -48,6 +51,7 @@ const LibraryRegistration = ({
 
   const { mutate: postBookRegistration } = usePostBookRegistration(bookId!);
   const { data: getCalendar, disabledDateSet } = useGetCalendar(yearMonth);
+  const { mutate: patchBookState } = usePatchBookState(bookId!);
 
   const list: number[] = disabledDateSet ?? [];
 
@@ -103,13 +107,13 @@ const LibraryRegistration = ({
             />
           </div>
           <div className="text-white text-center text-lg font-semibold">
-            서재 등록
+            {type === 'register' ? '서재 등록' : '정보 수정'}
           </div>
         </div>
 
-        <div className="flex items-start justify-between w-full gap-17 mb-20">
+        <div className="flex items-center justify-between w-full gap-17 mb-20">
           <div className="w-[135px] h-[198px] ml-4">
-            <img src={bookImg} alt="" />
+            <img src={bookImg} alt="" className="rounded-[5px]" />
           </div>
           <div className="flex flex-col gap-8 w-[207px] h-[182px]">
             <div className="flex flex-col gap-4 items-start">
@@ -120,7 +124,9 @@ const LibraryRegistration = ({
             </div>
             <div className="flex flex-col gap-4 items-start">
               <div className="text-[rgba(255,255,255,0.50)] text-xs">저자</div>
-              <div className="text-white text-sm">{bookAuthor}</div>
+              <div className="text-white text-sm text-ellipsis overflow-hidden whitespace-nowrap max-w-[207px]">
+                {bookAuthor}
+              </div>
             </div>
             <div
               className="flex flex-col gap-4 items-start relative"
@@ -133,10 +139,12 @@ const LibraryRegistration = ({
                   onClick={calendarModalHandler}
                 >
                   <div className="text-white text-sm/1">{selectedDate}</div>
-                  <img src={calendar} alt="" className="w-[14px] h-[14px]" />
+                  <img src={calendar} alt="" className="w-[15px] h-[15px]" />
                 </div>
               ) : (
-                <div className="text-white text-sm">{selectedDate}</div>
+                <div className="flex items-center justify-between w-[207px] h-[32px] rounded-sm bg-[rgba(31,28,25,0.5)] px-5 py-[9px] cursor-pointer">
+                  <div className="text-white text-sm/1">-</div>
+                </div>
               )}
               {isCalendarOpen && (
                 <Calendar
@@ -176,26 +184,43 @@ const LibraryRegistration = ({
           className="w-full h-20 px-10 py-2 rounded-[4px] bg-nook-br-100 text-white text-base font-semibold text-center cursor-pointer flex items-center justify-center"
           onClick={() => {
             list.map((date) => {
-              if (date === selectedDateAsDate.getDate()) {
+              if (
+                date === selectedDateAsDate.getDate() &&
+                readingStatus !== 3
+              ) {
                 alert('이미 등록된 날짜입니다.');
                 return;
               }
             });
-
-            readingStatus === 1
-              ? postBookRegistration({
-                  date: serverSelectedDate,
-                  readingStatus: 'READING',
-                })
-              : readingStatus === 2
+            type === 'edit'
+              ? readingStatus === 1
+                ? patchBookState({
+                    readingStatus: 'READING',
+                    date: serverSelectedDate,
+                  })
+                : readingStatus === 2
+                  ? patchBookState({
+                      readingStatus: 'FINISHED',
+                      date: serverSelectedDate,
+                    })
+                  : patchBookState({
+                      readingStatus: 'BOOKMARK',
+                      date: null,
+                    })
+              : readingStatus === 1
                 ? postBookRegistration({
                     date: serverSelectedDate,
-                    readingStatus: 'FINISHED',
+                    readingStatus: 'READING',
                   })
-                : postBookRegistration({
-                    date: serverSelectedDate,
-                    readingStatus: 'BOOKMARK',
-                  });
+                : readingStatus === 2
+                  ? postBookRegistration({
+                      date: serverSelectedDate,
+                      readingStatus: 'FINISHED',
+                    })
+                  : postBookRegistration({
+                      date: null,
+                      readingStatus: 'BOOKMARK',
+                    });
             onRegister();
           }}
         >

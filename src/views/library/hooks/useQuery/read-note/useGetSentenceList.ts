@@ -1,7 +1,7 @@
 import sentenceListFetch from '../../../apis/read-note/sentenceList';
 import { useQuery } from '@tanstack/react-query';
 
-const useGetSentenceList = (bookId: string | undefined) => {
+const useGetSentenceList = (bookId: number | undefined) => {
   return useQuery({
     queryKey: ['sentenceList', bookId],
     queryFn: () => sentenceListFetch(bookId),

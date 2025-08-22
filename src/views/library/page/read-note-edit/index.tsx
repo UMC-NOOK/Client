@@ -1,5 +1,5 @@
 // librarys
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 // imgs
@@ -28,6 +28,51 @@ import usePostSentence from '../../hooks/useMutation/read-note-edit/usePostSente
 const ReadNoteEditPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const taRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleSubmit = () => {
+    if (textAreaContent.trim() === '') return;
+
+    if (textContent === 'phrase') {
+      postSentence({ content: textAreaContent, page: pageValue ?? null });
+    } else if (textContent === 'impression') {
+      postComment({ content: textAreaContent, parentRecordId: null });
+    } else if (textContent === 'quotation') {
+      postComment({
+        content: textAreaContent,
+        parentRecordId: clickPhraseId ?? null,
+      });
+    }
+
+    setTextAreaContent('');
+    setPageValue('');
+    setTextContent('phrase');
+
+    // UX: 전송 후 포커스 유지
+    setTimeout(() => taRef.current?.focus(), 0);
+  };
+
+  const handleTextAreaKeyDown = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>,
+  ) => {
+    if (e.key !== 'Enter') return;
+
+    // 한글 입력 조합 중(IME) Enter는 무시
+    // (React 17+에선 e.nativeEvent.isComposing, 일부 브라우저는 e.isComposing)
+    // @ts-ignore
+    if (e.isComposing || (e.nativeEvent && (e.nativeEvent as any).isComposing))
+      return;
+
+    if (e.shiftKey) {
+      // Shift+Enter는 기본 동작(줄바꿈) 유지
+      return;
+    }
+
+    // Enter 단독: 줄바꿈 막고 등록
+    e.preventDefault();
+    handleSubmit();
+  };
 
   // textArea 로직
   type textContentType = 'phrase' | 'impression' | 'quotation';
@@ -66,7 +111,7 @@ const ReadNoteEditPage = () => {
   const { mutate: postSentence } = usePostSentence(location.state.bookId);
 
   const [textValue, setTextValue] = useState();
-  const [pageValue, setPageValue] = useState<string | null>();
+  const [pageValue, setPageValue] = useState<string | null>('');
 
   const phrases = useMemo(
     () =>
@@ -154,7 +199,7 @@ const ReadNoteEditPage = () => {
               <span className="text-white text-[22px] not-italic font-semibold leading-[25px]">
                 {location.state?.title}
               </span>
-              <p className="text-white text-xs not-italic font-normal">
+              <p className="text-white text-xs not-italic font-[300]">
                 {location.state?.author}
               </p>
             </div>
@@ -170,7 +215,7 @@ const ReadNoteEditPage = () => {
           className={`w-full h-[600px] flex flex-col justify-center ${isNookChatOpen ? 'items-start' : 'items-center'}`}
         >
           <hr
-            className={`${isNookChatOpen ? 'w-[661px]' : 'w-full'} h-0 outline outline-1 outline-offset-[-0.50px] outline-neutral-600/70 mt-14`}
+            className={`${isNookChatOpen ? 'w-[661px]' : 'w-full'} h-0 outline outline-1 outline-offset-[-0.50px] outline-neutral-600/70 mt-14 mb-7`}
           />
           <div
             className={`w-full h-[600px] flex items-center gap-9 ${isNookChatOpen ? 'justify-between' : 'justify-center'}`}
@@ -181,65 +226,72 @@ const ReadNoteEditPage = () => {
               <div
                 className={`flex flex-col items-center justify-start gap-4 box-border overflow-y-auto [&::-webkit-scrollbar]:hidden mb-17 w-full ${isNookChatOpen ? '' : sentenceList?.code == 'SUCCESS-204' ? 'mt-[200px]' : 'ml-40 '}`}
               >
-                {phrases.length ? (
-                  phrases.map((phrase) => {
-                    const matching = quotations.filter(
-                      (q) => q.phraseId === phrase.phraseId,
-                    );
-                    return (
-                      <div
-                        key={phrase.phraseId}
-                        className="flex flex-col items-start w-full"
-                      >
-                        <Phrase
-                          page={phrase.page ?? undefined}
-                          text={phrase.text}
-                          phraseId={phrase.phraseId}
-                          setSelectedPhrasePage={setSelectedPhrasePage}
-                          setTextContent={setTextContent}
-                          clickPhrase={() => {
-                            setClickPhraseId(phrase.phraseId);
-                            setDeleteOption('read-note-edit-phrase');
+                {sentenceList?.result?.length!! > 0 ? (
+                  <>
+                    {phrases.length ? (
+                      phrases.map((phrase) => {
+                        const matching = quotations.filter(
+                          (q) => q.phraseId === phrase.phraseId,
+                        );
+                        return (
+                          <div
+                            key={phrase.phraseId}
+                            className="flex flex-col items-start w-full"
+                          >
+                            <Phrase
+                              page={phrase.page ?? undefined}
+                              text={phrase.text}
+                              phraseId={phrase.phraseId}
+                              setSelectedPhrasePage={setSelectedPhrasePage}
+                              setTextContent={setTextContent}
+                              clickPhrase={() => {
+                                setClickPhraseId(phrase.phraseId);
+                                setDeleteOption('read-note-edit-phrase');
+                              }}
+                              setIsDeleteModalOpen={setIsDeleteModalOpen}
+                              isNookChatOpen={isNookChatOpen}
+                              handleTextAreaKeyDown={handleTextAreaKeyDown}
+                            />
+                            {matching.map((q) => (
+                              <Quotation
+                                key={q.quotationId}
+                                text={q.text}
+                                quotationId={q.quotationId}
+                                clickPhrase={() => {
+                                  setClickPhraseId(phrase.phraseId);
+                                  setDeleteOption('read-note-edit-quotation');
+                                }}
+                                setIsDeleteModalOpen={setIsDeleteModalOpen}
+                                isNookChatOpen={isNookChatOpen}
+                              />
+                            ))}
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <></>
+                    )}
+
+                    {impressions.length > 0 &&
+                      impressions.map((it) => (
+                        <Impression
+                          key={it.impressionId}
+                          text={it.text}
+                          recordId={it.impressionId}
+                          clickImpression={() => {
+                            setClickPhraseId(it.impressionId);
+                            setDeleteOption('read-note-edit-impression');
                           }}
                           setIsDeleteModalOpen={setIsDeleteModalOpen}
                           isNookChatOpen={isNookChatOpen}
                         />
-                        {matching.map((q) => (
-                          <Quotation
-                            key={q.quotationId}
-                            text={q.text}
-                            quotationId={q.quotationId}
-                            clickPhrase={() => {
-                              setClickPhraseId(phrase.phraseId);
-                              setDeleteOption('read-note-edit-quotation');
-                            }}
-                            setIsDeleteModalOpen={setIsDeleteModalOpen}
-                            isNookChatOpen={isNookChatOpen}
-                          />
-                        ))}
-                      </div>
-                    );
-                  })
+                      ))}
+                  </>
                 ) : (
-                  <div className="text-[rgba(255,255,255,0.50)] text-center text-sm not-italic font-normal leading-[22px]">
+                  <div className="text-[rgba(255,255,255,0.50)] text-center text-sm not-italic font-[300] leading-[22px]">
                     작성한 독서 기록이 없습니다.
                   </div>
                 )}
-
-                {impressions.length > 0 &&
-                  impressions.map((it) => (
-                    <Impression
-                      key={it.impressionId}
-                      text={it.text}
-                      recordId={it.impressionId}
-                      clickImpression={() => {
-                        setClickPhraseId(it.impressionId);
-                        setDeleteOption('read-note-edit-impression');
-                      }}
-                      setIsDeleteModalOpen={setIsDeleteModalOpen}
-                      isNookChatOpen={isNookChatOpen}
-                    />
-                  ))}
               </div>
               <div className={` ${isNookChatOpen ? 'w-[654px]' : 'w-402'}`}>
                 {textContent === 'phrase' ? (
@@ -251,8 +303,14 @@ const ReadNoteEditPage = () => {
                     />
                     <input
                       type="number"
+                      value={pageValue ?? ''}
                       placeholder="페이지를 입력해주세요 (숫자만 입력)"
-                      className="no-spinner w-full text-white text-xs not-italic font-normal leading-5 bg-transparent outline-none placeholder:text-[#95908a] placeholder:text-xs placeholder:not-italic placeholder:font-normal placeholder:leading-5"
+                      className="no-spinner w-full text-white text-xs not-italic font-[300] leading-5 bg-transparent outline-none placeholder:text-[#95908a] placeholder:text-xs placeholder:not-italic placeholder:font-[300] placeholder:leading-5"
+                      onFocus={(e) => (e.currentTarget.placeholder = '')}
+                      onBlur={(e) =>
+                        (e.currentTarget.placeholder =
+                          '페이지를 입력해주세요 (숫자만 입력)')
+                      }
                       onChange={(e) => {
                         setPageValue(e.target.value || null);
                       }}
@@ -273,11 +331,17 @@ const ReadNoteEditPage = () => {
                         className="w-10 h-10 mr-3"
                       />
                       <textarea
+                        ref={taRef}
+                        onKeyDown={handleTextAreaKeyDown}
                         name=""
                         id="phraseTextArea"
                         placeholder={placeholderText}
-                        className="w-full h-full text-white text-sm not-italic font-normal leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-11"
+                        className="w-full h-full text-white text-sm not-italic font-[300] leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-[300] placeholder:leading-11"
                         value={textAreaContent}
+                        onFocus={(e) => (e.currentTarget.placeholder = '')}
+                        onBlur={(e) =>
+                          (e.currentTarget.placeholder = placeholderText)
+                        }
                         onChange={(e) => {
                           setTextContent('quotation');
                           setTextAreaContent(e.target.value);
@@ -286,11 +350,17 @@ const ReadNoteEditPage = () => {
                     </div>
                   ) : (
                     <textarea
+                      ref={taRef}
+                      onKeyDown={handleTextAreaKeyDown}
                       name=""
                       id="phraseTextArea"
                       placeholder={placeholderText}
-                      className="w-full h-full text-white text-sm not-italic font-normal leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-normal placeholder:leading-11"
+                      className="w-full h-full text-white text-sm not-italic font-[300] leading-11 resize-none focus:outline-none placeholder:text-[#95908a] placeholder:text-sm placeholder:not-italic placeholder:font-[300] placeholder:leading-11"
                       value={textAreaContent}
+                      onFocus={(e) => (e.currentTarget.placeholder = '')}
+                      onBlur={(e) =>
+                        (e.currentTarget.placeholder = placeholderText)
+                      }
                       onChange={(e) => {
                         setTextAreaContent(e.target.value);
                       }}
@@ -314,27 +384,7 @@ const ReadNoteEditPage = () => {
                       alt="send"
                       className="w-12 h-12"
                       onClick={() => {
-                        if (textAreaContent.trim() !== '') {
-                          if (textContent === 'phrase') {
-                            postSentence({
-                              content: textAreaContent,
-                              page: pageValue ?? null,
-                            });
-                          } else if (textContent === 'impression') {
-                            postComment({
-                              content: textAreaContent,
-                              parentRecordId: null,
-                            });
-                          } else if (textContent === 'quotation') {
-                            postComment({
-                              content: textAreaContent,
-                              parentRecordId: clickPhraseId ?? null,
-                            });
-                          }
-                          setTextAreaContent('');
-                          setPageValue('');
-                          setTextContent('phrase');
-                        }
+                        if (textAreaContent.trim() !== '') handleSubmit();
                       }}
                     />
                   </div>

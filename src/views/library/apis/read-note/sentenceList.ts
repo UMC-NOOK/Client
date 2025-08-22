@@ -2,7 +2,7 @@ import instance from '../../../../apis/instance';
 import { SentenceList } from '../../types/read-note/sentenceList';
 
 const sentenceListFetch = async (
-  bookId: string | undefined,
+  bookId: number | undefined,
 ): Promise<SentenceList | undefined> => {
   try {
     const response = await instance.get<SentenceList>(
