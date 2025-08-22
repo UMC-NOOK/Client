@@ -52,6 +52,7 @@ const ReadingRoomCard: React.FC<ReadingRoomCardProps> = ({ room, onClick }) => {
                 src={src}
                 alt="RoomCard"
                 className="absolute top-0 left-0 w-full h-full object-cover rounded-lg z-0"
+                style={{ objectPosition: '40% 50%' }} 
                 onError={(e) => { (e.currentTarget as HTMLImageElement).src = fallbackCard; }}
             />
     
