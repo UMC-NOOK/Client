@@ -26,7 +26,7 @@ import useCurrentBookStore from '../../../../store/private-reading-room/useCurre
 // 타입 정의
 interface User {
   alias: string;
-  characterColor: 'ORANGE' | 'BLUE' | 'GREEN' | 'YELLOW';
+  characterColor: 'ORANGE' | 'BLUE' | 'GREEN' | 'RED';
   nickname: string;
   userId: number;
 }
@@ -36,7 +36,7 @@ interface CharacterPosition {
   headImages: {
     BLUE: string;
     GREEN: string;
-    YELLOW: string;
+    RED: string;
     ORANGE: string;
   };
   bodySize: string;
@@ -60,7 +60,7 @@ const CHARACTER_POSITIONS: CharacterPosition[] = [
     headImages: {
       BLUE: nh1_b,
       GREEN: nh1_g,
-      YELLOW: nh1_y,
+      RED: nh1_y,
       ORANGE: nh1_o,
     },
     bodySize: 'w-[95px] h-[157px]',
@@ -75,7 +75,7 @@ const CHARACTER_POSITIONS: CharacterPosition[] = [
     headImages: {
       BLUE: nh2_b,
       GREEN: nh2_g,
-      YELLOW: nh2_y,
+      RED: nh2_y,
       ORANGE: nh2_o,
     },
     bodySize: 'w-[239px] h-[169px]',
@@ -90,7 +90,7 @@ const CHARACTER_POSITIONS: CharacterPosition[] = [
     headImages: {
       BLUE: nh3_b,
       GREEN: nh3_g,
-      YELLOW: nh3_y,
+      RED: nh3_y,
       ORANGE: nh3_o,
     },
     bodySize: 'w-[77px] h-[160px]',
@@ -105,7 +105,7 @@ const CHARACTER_POSITIONS: CharacterPosition[] = [
     headImages: {
       BLUE: nh4_b,
       GREEN: nh4_g,
-      YELLOW: nh4_y,
+      RED: nh4_y,
       ORANGE: nh4_o,
     },
     bodySize: 'w-[108px] h-[97px]',
