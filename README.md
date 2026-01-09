@@ -4,8 +4,8 @@
 
 |                              Frontend                               |                              Frontend                               |                              Frontend                               |                                Frontend                                |
 | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :--------------------------------------------------------------------: |
-| <img style="width: 150px;" src="https://github.com/woojo230.png" /> | <img style="width: 150px;" src="https://github.com/Eunjin03.png" /> | <img style="width: 150px;" src="https://github.com/suzy0928.png" /> | <img style="width: 150px;" src="https://github.com/seoyeon0103.png" /> |
-|                [우정혁](https://github.com/woojo230)                |                [오은진](https://github.com/Eunjin03)                |                [박수지](https://github.com/suzy0928)                |                [임서연](https://github.com/seoyeon0103)                |
+| <img style="width: 150px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvqLuvms8WsD7ibE_O4vCRA7F9w-AcpKc_Qw&s" /> | <img style="width: 150px;" src="https://github.com/Eunjin03.png" /> | <img style="width: 150px;" src="https://github.com/suzy0928.png" /> | <img style="width: 150px;" src="https://github.com/seoyeon0103.png" /> |
+|                [New]                |                [오은진](https://github.com/Eunjin03)                |                [박수지](https://github.com/suzy0928)                |                [임서연](https://github.com/seoyeon0103)                |
 
 </div>
 
@@ -28,7 +28,7 @@
 ### 📝 Feature branch
 
 > 1. **브랜치명은 아래의 형식으로 작성합니다. (feature/이름-기능제목#이슈번호)**
->    - 팀원 woojo230의 브랜치명: `feature/woojo230-login#1`
+>    - 팀원 suzy0928의 브랜치명: `feature/suzy0928-login#1`
 >
 > 2. **Feature branch -> develop branch로 merge하기 전 PR에서 reviewers 설정하여 팀장포함 2명 이상에게 approve 받기**
 > 3. **PR 후 팀원들에게 공지하기** <br>
