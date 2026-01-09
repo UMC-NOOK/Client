@@ -1,18 +1,19 @@
-import React from 'react';
 import Logo from './Logo';
 import Navbar from './Navbar';
-import { useSignInStore } from '../../store/sign-in/useLoginStore';
-import SignInBtn from './SignInBtn';
-import UserInfo from './UserInfo';
+import Profile from './Profile';
 
-const Header = () => {
-  const isLogin = useSignInStore((state) => state.isLogin);
+interface HeaderProps {
+  isLogin: boolean;
+}
+
+const Header = ({ isLogin }: HeaderProps) => {
+  // const isLogin = useSignInStore((state) => state.isLogin);
 
   return (
-    <header className="h-28 flex items-center justify-evenly bg-[rgba(0,0,0,0.1)]">
-      <Logo />
-      <Navbar />
-      {isLogin ? <UserInfo /> : <SignInBtn />}
+    <header className="h-35 w-[1060px] flex items-center justify-between bg-[rgba(0,0,0,0.1)]">
+      <Logo isLogin={isLogin} />
+      <Navbar isLogin={isLogin} />
+      <Profile isLogin={isLogin} />
     </header>
   );
 };

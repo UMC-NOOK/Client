@@ -1,17 +1,23 @@
-import React from 'react';
-import Union from '../../assets/logo/Union.png';
-import Nook from '../../assets/logo/NOOK.png';
+import Nook from '../../assets/header/NOOK.svg';
 import { useNavigate } from 'react-router-dom';
 
-const Logo = () => {
+interface LogoProps {
+  isLogin: boolean;
+}
+
+const Logo = ({ isLogin }: LogoProps) => {
   const navigate = useNavigate();
-  const gotoHome = () => {
-    navigate('/home');
+  const gotoHome = (isLogin: boolean) => {
+    if (isLogin) {
+      navigate('/home');
+    } else {
+      navigate('/login');
+    }
   };
   return (
     <div
-      className="flex justify-center items-center space-x-2 h-10 cursor-pointer"
-      onClick={() => gotoHome()}
+      className="flex justify-center items-center space-x-2 w-38 h-13 cursor-pointer"
+      onClick={() => gotoHome(isLogin)}
     >
       <img src={Nook} alt="logoNook" className="h-full object-contain" />
     </div>

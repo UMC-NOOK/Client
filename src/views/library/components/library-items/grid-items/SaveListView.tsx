@@ -1,0 +1,59 @@
+import { useState } from 'react';
+import SaveListItem from './SaveListItem';
+import tempBookData from '../../../../../mock/library/bookData';
+import leftButton from '../../../../../assets/button/library/chevron-left.png';
+import useGetBookState from '../../../hooks/useQuery/library-query/useGetBookState';
+
+interface SaveListProps {
+  onClick: () => void;
+}
+
+interface ApiBookData {
+  coverImageUrl: string;
+  title: string;
+  author: string;
+  bookId: number;
+}
+
+const SaveListView = ({ onClick }: SaveListProps) => {
+  const [bookData, setBookData] = useState(tempBookData);
+
+  const { data, isLoading, isError, error, isSuccess, refetch } =
+    useGetBookState({
+      status: 'BOOKMARK',
+      size: 10,
+      sort: 'LATEST',
+    });
+
+  const booksData: ApiBookData[] = data?.content || [];
+  // console.log('asdf', data);
+
+  return (
+    <div className="w-[96rem] mx-auto">
+      <div
+        className="flex items-center gap-9 cursor-pointer group border-b-transparent hover:border-nook-300 mb-9"
+        onClick={onClick}
+      >
+        <button className="w-10 h-10 flex items-center justify-center translate-y-[2px]">
+          <img
+            src={leftButton}
+            alt="왼쪽버튼"
+            className="w-full h-full object-contain rotate-180"
+          />
+        </button>
+        <span className="text-[2rem] text-nook-100 group-hover:text-nook-300">
+          찜
+        </span>
+      </div>
+      <div className="w-full flex justify-center">
+        <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 auto-rows-max">
+          {booksData.map((book: ApiBookData) => (
+            <SaveListItem key={book.bookId} {...book} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SaveListView;
