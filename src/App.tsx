@@ -1,12 +1,12 @@
-import './App.css'
+//Client/src/App.tsx
+import "./App.css";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./app/AppRoutes";
 
-function App() {
-
+export default function App() {
   return (
-    <>
-    
-    </>
-  )
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  );
 }
-
-export default App
