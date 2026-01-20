@@ -1,0 +1,52 @@
+// src/components/search/mock/books.ts
+export type Book = {
+  id: string;
+  title: string;
+  author: string;
+};
+
+export const recommendedBooks: Book[] = [
+  { id: "rec-1", title: "혼모노", author: "성해나" },
+  { id: "rec-2", title: "괴테는 모든 것을 말했다", author: "스즈키 유이" },
+  { id: "rec-3", title: "흔한남매 21", author: "흔한남매" },
+  { id: "rec-4", title: "안녕이라", author: "김애란" },
+];
+
+export const bestBooks: Book[] = [
+  { id: "best-1", title: "어스탐 경의 임사전언", author: "" },
+  { id: "best-2", title: "처음 만나는 양자의 세계", author: "" },
+  { id: "best-3", title: "트렌드 코리아 2026", author: "" },
+  { id: "best-4", title: "나는 매일 아침마다", author: "" },
+  { id: "best-5", title: "2026 하루 3줄 감사일기", author: "" },
+  { id: "best-6", title: "평균의 종말", author: "" },
+  { id: "best-7", title: "달러구트 꿈 백화점", author: "" },
+  { id: "best-8", title: "뇌과학자의 인생 실험", author: "" },
+  { id: "best-9", title: "유행의 시간", author: "" },
+  { id: "best-10", title: "모두를 위한 경제학", author: "" },
+];
+
+export type BookItem = {
+  id: number;
+  title: string;
+  author: string;
+};
+
+// 최근 포커스한 책
+export const focusedBooks: BookItem[] = [
+  { id: 1, title: "클린 코드", author: "Robert C. Martin" },
+  { id: 2, title: "리팩터링", author: "Martin Fowler" },
+  { id: 3, title: "You Don't Know JS Yet", author: "Kyle Simpson" },
+  { id: 4, title: "모던 자바스크립트 Deep Dive", author: "이웅모" },
+  { id: 5, title: "Designing Data-Intensive Applications", author: "Martin Kleppmann" },
+  { id: 6, title: "실용주의 프로그래머", author: "Andrew Hunt, David Thomas" },
+];
+
+// 아직 읽지 않은 책
+export const unreadBooks: BookItem[] = [
+  { id: 101, title: "컴퓨터 네트워킹: 하향식 접근", author: "Kurose, Ross" },
+  { id: 102, title: "웹 해킹 기술", author: "김홍기" },
+  { id: 103, title: "Hands-On Machine Learning", author: "Aurélien Géron" },
+  { id: 104, title: "Deep Learning", author: "Goodfellow, Bengio, Courville" },
+  { id: 105, title: "머신러닝 보안", author: "Clarence Chio, David Freeman" },
+  { id: 106, title: "Operating Systems: Three Easy Pieces", author: "Remzi H. Arpaci-Dusseau" },
+];
