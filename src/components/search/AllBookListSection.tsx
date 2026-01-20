@@ -1,7 +1,7 @@
 // src/components/search/AllBookListSection.tsx
 import { useMemo } from "react";
 import bookCover from "../../assets/search/mock_bookcover.svg";
-import { recommendedBooks, bestBooks } from "./mock/books";
+import { recommendedBooks, bestBooks } from "./mock/allBook";
 
 type Props = {
   query: string;

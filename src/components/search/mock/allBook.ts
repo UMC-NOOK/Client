@@ -31,22 +31,21 @@ export type BookItem = {
   author: string;
 };
 
-// 최근 포커스한 책
-export const focusedBooks: BookItem[] = [
-  { id: 1, title: "클린 코드", author: "Robert C. Martin" },
-  { id: 2, title: "리팩터링", author: "Martin Fowler" },
-  { id: 3, title: "You Don't Know JS Yet", author: "Kyle Simpson" },
-  { id: 4, title: "모던 자바스크립트 Deep Dive", author: "이웅모" },
-  { id: 5, title: "Designing Data-Intensive Applications", author: "Martin Kleppmann" },
-  { id: 6, title: "실용주의 프로그래머", author: "Andrew Hunt, David Thomas" },
-];
+// src/components/search/mock.ts
+export const focusedBooks = [] = [];
+export const unreadBooks = [] = [];
 
-// 아직 읽지 않은 책
-export const unreadBooks: BookItem[] = [
-  { id: 101, title: "컴퓨터 네트워킹: 하향식 접근", author: "Kurose, Ross" },
-  { id: 102, title: "웹 해킹 기술", author: "김홍기" },
-  { id: 103, title: "Hands-On Machine Learning", author: "Aurélien Géron" },
-  { id: 104, title: "Deep Learning", author: "Goodfellow, Bengio, Courville" },
-  { id: 105, title: "머신러닝 보안", author: "Clarence Chio, David Freeman" },
-  { id: 106, title: "Operating Systems: Three Easy Pieces", author: "Remzi H. Arpaci-Dusseau" },
+//export const focusedBooks = []; 엠티뷰 테스트용 
+//export const unreadBooks = []; 엠티뷰 테스트용 
+
+
+// 둘 다 없을 때 보여줄 "이 책을 추천해요" (한 배열)
+export const fallbackRecommendedBooks: BookItem[] = [
+  { id: 201, title: "모던 자바스크립트 Deep Dive", author: "이웅모" },
+  { id: 202, title: "You Don't Know JS Yet", author: "Kyle Simpson" },
+  { id: 201, title: "이 책을 읽어보실래요?", author: "이웅모" },
+  { id: 202, title: "안녕 누키", author: "Kyle Simpson" },
+  { id: 201, title: "모던 자바스크립트 Deep Dive", author: "이웅모" },
+  { id: 202, title: "You Don't Know JS Yet", author: "Kyle Simpson" },
+  
 ];
