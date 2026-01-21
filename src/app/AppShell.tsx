@@ -16,7 +16,7 @@ export default function AppShell({ children, maxWidthPx = 375 }: AppShellProps) 
           background: "linear-gradient(180deg, #0E1430 0%, #0E101B 100%)",
         }}
       >
-        <div className="pt-[calc(env(safe-area-inset-top)+8px)] px-4 pb-[env(safe-area-inset-bottom)]">
+        <div className="pt-[calc(env(safe-area-inset-top)+8px)] pb-[env(safe-area-inset-bottom)]">
           {children}
         </div>
       </div>

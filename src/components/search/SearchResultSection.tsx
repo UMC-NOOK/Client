@@ -3,28 +3,26 @@ import bookCover from "../../assets/search/mock_bookcover.svg";
 import physicalBookIcon from "../../assets/search/card-book-icon-shape.svg";
 import type { SearchScope } from "./SearchTopSection";
 
-// ✅ 전체 도서 데이터(검색 결과용)
-// 너 프로젝트에서 "전체 북데이터"가 따로 있다 했으니, 여기만 네 실제 mock/export에 맞춰 연결해주면 됨.
-import { allBooks } from "./mock/allBooks";
-
-// ✅ 내 서재 데이터(검색 결과용)
-// focused/unread만으로는 "내 서재 전체"가 부족할 수 있어서,
-// 너가 따로 myLibraryBooks 같은 전체 리스트 export 해두는 걸 추천.
-// 일단 fallback으로 focused+unread+fallback 합쳐서 사용하도록 해둠.
+// Mock Data Imports
+import { allBooks as allBooksExternal } from "./mock/allBooks";
 import { focusedBooks, unreadBooks, fallbackRecommendedBooks } from "./mock/myLibrary";
 
 type Props = {
-  scope: SearchScope;
+  scope: SearchScope; // "all" | "my"
   query: string;
   onDirectAdd?: () => void;
 };
 
+// Mock 데이터 타입을 아우르는 공통 타입 정의
 type Book = {
   id: number | string;
-  title: string;  // 예: "[국내도서] 혼모노", "[eBook] 혼모노"
-  author: string; // 예: "성해나"
+  title: string;
+  author: string;
+  category: string; // [국내도서] 등
+  isEbook: boolean; // 아이콘 제어용
 };
 
+// 중복 제거 함수
 function uniqById<T extends { id: any }>(arr: T[]) {
   const seen = new Set<any>();
   const out: T[] = [];
@@ -36,18 +34,20 @@ function uniqById<T extends { id: any }>(arr: T[]) {
   return out;
 }
 
-function isEbookTitle(title: string) {
-  return title.trim().toLowerCase().startsWith("[ebook]");
-}
+function ResultRow({ book, showDivider }: { book: Book; showDivider: boolean }) {
+  const COVER_W = 56;
+  const GAP_X = 12;
+  const ICON_BOX = 16;
 
-function ResultRow({
-  book,
-  showDivider,
-}: {
-  book: Book;
-  showDivider: boolean;
-}) {
-  const ebook = isEbookTitle(book.title);
+  // ✅ 텍스트 시작 x (= cover + gap)
+  const ICON_LEFT = COVER_W + GAP_X; // 68px
+
+  // ✅ divider 기준 12px 위 == (아이템 박스 bottom 기준 12px)
+  const ICON_BOTTOM_FROM_ITEM = 12;
+
+  const DIVIDER_PADDING_BOTTOM = 4;
+  const DIVIDER_PADDING_TOP = 4;
+
 
   return (
     <div
@@ -56,26 +56,29 @@ function ResultRow({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: "var(--spacing-round-4, 4px)",
+        // 아이템 사이 간격 제어는 상위 map에서 처리하거나 여기서 marginBottom을 줄 수 있음
+        // 여기서는 내부 요소 간격
+        gap: 0,
         alignSelf: "stretch",
       }}
     >
-      {/* 결과 아이템: 342x82, padding 12px 0, gap 12 */}
+      {/* ✅ 결과 아이템 박스 (Relative for Icon) */}
       <div
         className="w-full"
         style={{
           display: "flex",
-          padding: "var(--spacing-round-12, 12px) 0",
+          padding: "12px 0", // 상하 패딩
           alignItems: "flex-start",
-          gap: "var(--spacing-round-12, 12px)",
+          gap: "12px",
           alignSelf: "stretch",
+          position: "relative",
         }}
       >
-        {/* 좌측 표지 */}
+        {/* 표지 */}
         <div
           style={{
             display: "flex",
-            width: 56,
+            width: COVER_W,
             height: 82,
             justifyContent: "center",
             alignItems: "center",
@@ -90,92 +93,87 @@ function ResultRow({
           />
         </div>
 
-        {/* 우측: 제목/작가/아이콘 */}
+        {/* 텍스트 정보 */}
         <div className="flex-1 flex flex-col items-start">
-          {/* [분류] 제목 (2줄 clamp) */}
+          {/* 제목: [카테고리] 제목 */}
           <div
+            className="w-full break-keep line-clamp-2"
             style={{
-              display: "-webkit-box",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 2,
-              alignSelf: "stretch",
-              overflow: "hidden",
-              color: "var(--Gray-gray-100, #ECECEC)",
-              textOverflow: "ellipsis",
+              color: "#ECECEC",
               fontFamily: '"SUIT Variable"',
               fontSize: 14,
               fontStyle: "normal",
               fontWeight: 600,
               lineHeight: "150%",
+              marginBottom: 2, // 작가명과의 간격
             }}
           >
-            {book.title}
+            {/* 카테고리 포함하여 출력 */}
+            <span>[{book.category}] {book.title}</span>
           </div>
 
-          {/* 작가 + (실물책 아이콘은 하단 끝에 얹힘) */}
-          <div className="w-full flex items-end">
-            <div
-              className="flex-1"
-              style={{
-                alignSelf: "stretch",
-                color: "var(--Gray-gray-100, #ECECEC)",
-                fontFamily: "Pretendard",
-                fontSize: 13,
-                fontStyle: "normal",
-                fontWeight: 400,
-                lineHeight: "150%",
-              }}
-            >
-              {book.author}
-            </div>
-
-            {/* E북 아니면(=실물책이면) 아이콘 */}
-            {!ebook ? (
-              <div
-                className="relative"
-                style={{
-                  display: "flex",
-                  width: 16,
-                  height: 16,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flex: "1 0 0",
-                  alignSelf: "stretch",
-                  flexShrink: 0,
-                }}
-                aria-hidden="true"
-              >
-                <img
-                  src={physicalBookIcon}
-                  alt=""
-                  draggable={false}
-                  className="absolute"
-                  style={{
-                    width: "12.833px",
-                    height: "11.667px",
-                    left: "1.583px",
-                    bottom: "2.167px",
-                  }}
-                />
-              </div>
-            ) : (
-              // E북이면 공란
-              <div style={{ width: 16, height: 16, flexShrink: 0 }} aria-hidden="true" />
-            )}
+          {/* 작가 */}
+          <div
+            className="w-full truncate"
+            style={{
+              color: "#A2A7C3", // 피그마 기준 회색
+              fontFamily: "Pretendard", // 혹은 SUIT
+              fontSize: 13,
+              fontWeight: 400,
+              lineHeight: "150%",
+            }}
+          >
+            {book.author}
           </div>
         </div>
+
+        {/* ✅ 아이콘: E-book이 아닐 때만 노출 */}
+        {!book.isEbook && (
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              left: ICON_LEFT,
+              bottom: ICON_BOTTOM_FROM_ITEM, // 12px
+              width: ICON_BOX,
+              height: ICON_BOX,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              pointerEvents: "none",
+            }}
+          >
+            <img
+              src={physicalBookIcon}
+              alt="실물 도서"
+              draggable={false}
+              style={{ width: "12.833px", height: "11.667px" }}
+            />
+          </div>
+        )}
       </div>
 
-      {/* 구분선 */}
+      {/* ✅ Divider (구분선) + 하단 4px 패딩 */}
       {showDivider && (
         <div
           style={{
-            width: 343,
-            height: 1,
-            background:
-              "linear-gradient(90deg, rgba(46, 57, 107, 0.00) 0%, #2E396B 50%, rgba(46, 57, 107, 0.00) 100%)",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            paddingBottom: DIVIDER_PADDING_BOTTOM,
+            paddingTop: DIVIDER_PADDING_TOP,
           }}
-        />
+        >
+          <div
+            style={{
+              width: "100%", // 혹은 343px 고정
+              height: 1,
+              background:
+                "linear-gradient(90deg, rgba(46, 57, 107, 0.00) 0%, #2E396B 50%, rgba(46, 57, 107, 0.00) 100%)",
+            }}
+          />
+        </div>
       )}
     </div>
   );
@@ -183,13 +181,12 @@ function ResultRow({
 
 function DirectAddRow({ onClick }: { onClick?: () => void }) {
   return (
-    <div className="w-full flex items-center justify-start">
+    <div className="w-full flex items-center justify-start pt-4">
       <span
         style={{
-          color: "var(--Gray-gray-400, #8B94B2)",
+          color: "#8B94B2",
           fontFamily: '"SUIT Variable"',
           fontSize: 14,
-          fontStyle: "normal",
           fontWeight: 600,
           lineHeight: "100%",
         }}
@@ -202,7 +199,7 @@ function DirectAddRow({ onClick }: { onClick?: () => void }) {
         onClick={onClick}
         style={{
           display: "flex",
-          padding: "var(--spacing-round-4, 4px) var(--spacing-round-8, 8px)",
+          padding: "4px 8px",
           justifyContent: "center",
           alignItems: "center",
           background: "transparent",
@@ -210,18 +207,12 @@ function DirectAddRow({ onClick }: { onClick?: () => void }) {
       >
         <span
           style={{
-            color: "var(--Gray-gray-400, #8B94B2)",
+            color: "#8B94B2",
             fontFamily: '"SUIT Variable"',
             fontSize: 14,
-            fontStyle: "normal",
             fontWeight: 600,
             lineHeight: "100%",
             textDecorationLine: "underline",
-            textDecorationStyle: "solid",
-            textDecorationSkipInk: "auto",
-            textDecorationThickness: "auto",
-            textUnderlineOffset: "auto",
-            textUnderlinePosition: "from-font",
           }}
         >
           도서 직접 추가
@@ -234,20 +225,27 @@ function DirectAddRow({ onClick }: { onClick?: () => void }) {
 export default function SearchResultSection({ scope, query, onDirectAdd }: Props) {
   const q = query.trim().toLowerCase();
 
-  // ✅ 데이터 소스 선택
-  const source: Book[] =
-    scope === "all"
-      ? (allBooks as Book[])
-      : (uniqById([
-          ...(focusedBooks as any),
-          ...(unreadBooks as any),
-          ...(fallbackRecommendedBooks as any),
-        ]) as Book[]);
+  // ✅ 데이터 소스 분기 (API 연동 전 Mock 데이터 매핑)
+  let source: Book[] = [];
 
+  if (scope === "all") {
+    source = allBooksExternal as Book[];
+  } else {
+    // scope === "my"
+    source = uniqById([
+      ...focusedBooks,
+      ...unreadBooks,
+      ...fallbackRecommendedBooks,
+    ]) as Book[];
+  }
+
+  // ✅ 검색 필터링
   const filtered = !q
     ? []
     : source.filter(
-        (b) => b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q)
+        (b) =>
+          b.title.toLowerCase().includes(q) ||
+          b.author.toLowerCase().includes(q)
       );
 
   const count = filtered.length;
@@ -256,45 +254,30 @@ export default function SearchResultSection({ scope, query, onDirectAdd }: Props
     <section
       className="w-full"
       style={{
-        // ✅ 최하단 여백 스펙
         display: "flex",
-        width: "var(--Devices-iOS-W, 375px)",
-        padding: "0 var(--spacing-round-16, 16px)",
         flexDirection: "column",
         alignItems: "flex-start",
-        gap: "var(--spacing-round-40, 40px)",
+        gap: "40px",
       }}
     >
-      {/* ✅ 검색바 밑 여백(gap 20) */}
       <div
         className="w-full"
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
-          gap: "var(--spacing-round-20, 20px)",
+          gap: "20px",
           alignSelf: "stretch",
-          paddingTop: 20, // (SearchTopSection 아래 자연스러운 간격 필요하면 조절)
+          paddingTop: 20,
         }}
       >
-        {/* ✅ "N권의 도서가 검색되었어요." 영역(gap 8) */}
-        <div
-          className="w-full"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "flex-start",
-            gap: "var(--spacing-round-8, 8px)",
-            alignSelf: "stretch",
-          }}
-        >
+        {/* count */}
+        <div className="w-full" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <span
             style={{
-              color: "var(--Gray-gray-100, #ECECEC)",
+              color: "#ECECEC",
               fontFamily: '"SUIT Variable"',
               fontSize: 13,
-              fontStyle: "normal",
               fontWeight: 600,
               lineHeight: "100%",
             }}
@@ -303,34 +286,29 @@ export default function SearchResultSection({ scope, query, onDirectAdd }: Props
           </span>
         </div>
 
-        {/* ✅ count 아래 여백(gap 16) */}
+        {/* list */}
         <div
-          className="w-full"
           style={{
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
-            gap: "var(--spacing-round-16, 16px)",
-            alignSelf: "stretch",
+            // gap: "16px", // ResultRow 내부에 패딩이 있으므로 gap 조절 필요 시 수정
+            width: "100%",
           }}
         >
-          {/* 0권이면: CTA만 띄우고 끝 */}
           {count === 0 ? (
             <DirectAddRow onClick={onDirectAdd} />
           ) : (
             <>
-              {/* ✅ 결과 리스트 */}
-              <div className="w-full">
+              <div className="w-full flex flex-col">
                 {filtered.map((book, idx) => (
-                  <ResultRow
-                    key={`sr-${scope}-${book.id}-${idx}`}
-                    book={book}
-                    showDivider={true} // 스펙상 "마지막 구분선 이후 공백"까지도 필요해서 마지막도 divider 유지
+                  <ResultRow 
+                    key={`sr-${scope}-${book.id}-${idx}`} 
+                    book={book} 
+                    showDivider={true} 
                   />
                 ))}
               </div>
-
-              {/* ✅ 마지막 구분선 이후 gap(4)는 ResultRow 내부 wrapper가 이미 갖고 있음 */}
               <DirectAddRow onClick={onDirectAdd} />
             </>
           )}

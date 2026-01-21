@@ -1,9 +1,10 @@
-// Client/src/pages/SearchPage.tsx
 import { useState } from "react";
 import SearchTopSection, { type SearchScope } from "../components/search/SearchTopSection";
 import AllBookListSection from "../components/search/AllBookListSection";
 import MyLibraryListSection from "../components/search/MyLibraryListSection";
 import RecentKeywordSection, { type RecentKeyword } from "../components/search/RecentKeywordSection";
+import SearchResultSection from "../components/search/SearchResultSection";
+import { useNavigate } from "react-router-dom";
 
 type ViewMode = "idle" | "searching" | "results";
 
@@ -17,64 +18,72 @@ const MOCK_RECENT: RecentKeyword[] = [
 ];
 
 export default function SearchPage() {
+  const navigate = useNavigate();
   const [scope, setScope] = useState<SearchScope>("all");
   const [query, setQuery] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [mode, setMode] = useState<ViewMode>("idle");
   const [recent, setRecent] = useState<RecentKeyword[]>(MOCK_RECENT);
 
-  const handleSearch = () => {
-    const q = query.trim();
-    setSubmittedQuery(q);
-    setMode("results");
+  const handleSearch = (overrideQuery?: string) => {
+    const target = overrideQuery ?? query; // 인자가 있으면 그걸로 검색
+    if (!target.trim()) return;
+
+    setQuery(target);          
+    setSubmittedQuery(target); 
+    setMode("results");        // 결과 화면으로 전환
   };
 
   const isInputMode = mode === "searching";
 
   return (
-    <div className="w-full">
+    <div className="w-full pb-20"> {/* 하단 여백 확보 */}
       <SearchTopSection
         title="도서 검색"
         activeScope={scope}
         onScopeChange={(next) => {
           setScope(next);
-          setMode((prev) => (prev === "searching" ? "searching" : prev === "results" ? "results" : "idle"));
+          setMode((prev) => (prev === "results" ? "results" : "idle"));
         }}
         query={query}
         onQueryChange={(v) => {
           setQuery(v);
           setMode("searching");
         }}
-        onSearchClick={handleSearch}
-        onEnter={handleSearch}
+        onSearchClick={() => handleSearch()}
+        onEnter={() => handleSearch()}
         onFocus={() => setMode("searching")}
         onBlur={() => {}}
         isInputMode={isInputMode}
-        onClose={() => {}}
+        onClose={() => {
+            setQuery("");
+            setMode("idle");
+        }}
       />
 
-      {/* 검색 중 화면 */}
+      {/* 1. 검색 중 화면 (최근 검색어) */}
       {mode === "searching" && (
         <RecentKeywordSection
           keywords={recent}
           onDelete={(id) => setRecent((prev) => prev.filter((k) => k.id !== id))}
           onClickKeyword={(text) => {
-            setQuery(text);
-            setMode("searching"); 
+            handleSearch(text);
           }}
         />
       )}
 
-      {/*  기본(idle) 화면: 탭에 따라 다르게 */}
-      {mode === "idle" && (scope === "all" ? <AllBookListSection query="" /> : <MyLibraryListSection query="" />)}
+      {/* 2. 기본(idle) 화면: 탭에 따라 컴포넌트 교체 */}
+      {mode === "idle" && (
+        scope === "all" ? <AllBookListSection /> : <MyLibraryListSection />
+      )}
 
-      {/* 결과(results) - 아직 미구현 */}
+      {/* 3. 검색 결과 화면 */}
       {mode === "results" && (
-        <div className="w-full pt-8 px-4">
-          <p className="text-[#A2A7C3] text-[14px] font-[500] leading-[21px] font-[SUIT]">
-            검색 결과 화면은 아직 구현 중입니다. (query: {submittedQuery || "없음"})
-          </p>
-        </div>
+        <SearchResultSection 
+          scope={scope} 
+          query={submittedQuery} 
+          onDirectAdd={() => navigate("/search/direct")}
+        />
       )}
     </div>
   );

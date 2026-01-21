@@ -2,12 +2,12 @@
 import { Navigate, Route, Routes, Outlet, useLocation, useNavigate } from "react-router-dom";
 import AppShell from "./AppShell";
 import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
-
 import LibraryMobilePage from "../pages/LibraryMobilePage";
 import FocusMobilePage from "../pages/FocusMobilePage";
 import RecordMobilePage from "../pages/RecordMobilePage";
 import GroupMobilePage from "../pages/GroupMobilePage";
 import SearchPage from "../pages/SearchPage";
+import SearchDirectAddPage from "../pages/SearchDirectAddPage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -69,6 +69,7 @@ export default function AppRoutes() {
 
       <Route element={<SearchLayout />}>
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/search/direct" element={<SearchDirectAddPage />} />     
       </Route>
 
       <Route element={<MainTabsLayout />}>
