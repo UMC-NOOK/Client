@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import bookCover from "../../assets/search/mock_bookcover.svg";
 import type { BookItem } from "./mock/myLibrary";
 import { focusedBooks, unreadBooks, fallbackRecommendedBooks } from "./mock/myLibrary";
