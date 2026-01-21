@@ -45,18 +45,17 @@ function MainTabsLayout() {
         onMenuClick={() => console.log("menu click")}
         onLogoClick={() => navigate("/library")}
       />
-      <div className="w-full max-w-[343px] mx-auto">
+      <div className="w-full max-w-85.75 mx-auto">
         <Outlet />
       </div>
     </AppShell>
   );
 }
 
-// ✅ 검색 페이지 전용 레이아웃 (AppShell만 적용, TopAppBar 없음)
 function SearchLayout() {
   return (
     <AppShell>
-      <div className="w-full max-w-[343px] mx-auto">
+      <div className="w-full max-w-85.75 mx-auto">
         <Outlet />
       </div>
     </AppShell>
@@ -68,12 +67,10 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/" element={<Navigate to="/library" replace />} />
 
-      {/* 🔹 검색 페이지도 AppShell 안에서 렌더링되게 */}
       <Route element={<SearchLayout />}>
         <Route path="/search" element={<SearchPage />} />
       </Route>
 
-      {/* 🔸 공통 헤더 + 탭이 필요한 기본 페이지들 */}
       <Route element={<MainTabsLayout />}>
         <Route path="/library" element={<LibraryMobilePage />} />
         <Route path="/focus" element={<FocusMobilePage />} />

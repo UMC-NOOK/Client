@@ -1,17 +1,25 @@
-// src/components/search/mock/books.ts
+// src/components/search/mock/allbooks.ts
+
 export type Book = {
   id: string;
   title: string;
   author: string;
 };
 
+/* =======================
+ * 추천 도서
+ * ======================= */
 export const recommendedBooks: Book[] = [
   { id: "rec-1", title: "혼모노", author: "성해나" },
   { id: "rec-2", title: "괴테는 모든 것을 말했다", author: "스즈키 유이" },
   { id: "rec-3", title: "흔한남매 21", author: "흔한남매" },
-  { id: "rec-4", title: "안녕이라", author: "김애란" },
+  { id: "rec-4", title: "안녕은 영원한 헤어짐은 아니겠지요", author: "김애란" },
+  { id: "rec-5", title: "슬기로운 개발 생활", author: "Nook" },
 ];
 
+/* =======================
+ * 주간 베스트
+ * ======================= */
 export const bestBooks: Book[] = [
   { id: "best-1", title: "어스탐 경의 임사전언", author: "" },
   { id: "best-2", title: "처음 만나는 양자의 세계", author: "" },
@@ -25,27 +33,11 @@ export const bestBooks: Book[] = [
   { id: "best-10", title: "모두를 위한 경제학", author: "" },
 ];
 
-export type BookItem = {
-  id: number;
-  title: string;
-  author: string;
-};
-
-// src/components/search/mock.ts
-export const focusedBooks = [] = [];
-export const unreadBooks = [] = [];
-
-//export const focusedBooks = []; 엠티뷰 테스트용 
-//export const unreadBooks = []; 엠티뷰 테스트용 
-
-
-// 둘 다 없을 때 보여줄 "이 책을 추천해요" (한 배열)
-export const fallbackRecommendedBooks: BookItem[] = [
-  { id: 201, title: "모던 자바스크립트 Deep Dive", author: "이웅모" },
-  { id: 202, title: "You Don't Know JS Yet", author: "Kyle Simpson" },
-  { id: 201, title: "이 책을 읽어보실래요?", author: "이웅모" },
-  { id: 202, title: "안녕 누키", author: "Kyle Simpson" },
-  { id: 201, title: "모던 자바스크립트 Deep Dive", author: "이웅모" },
-  { id: 202, title: "You Don't Know JS Yet", author: "Kyle Simpson" },
-  
+/* =======================
+ * 🔍 검색 결과용 전체 도서
+ * (추천 + 베스트 합침)
+ * ======================= */
+export const allBooks: Book[] = [
+  ...recommendedBooks,
+  ...bestBooks,
 ];

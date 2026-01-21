@@ -8,7 +8,7 @@ type AppShellProps = {
 
 export default function AppShell({ children, maxWidthPx = 375 }: AppShellProps) {
   return (
-    <div className="min-h-dvh w-full flex justify-center bg-[#FFFFF] overflow-x-hidden">
+    <div className="min-h-dvh w-full flex justify-center bg-white">
       <div
         className="min-h-dvh w-full"
         style={{
