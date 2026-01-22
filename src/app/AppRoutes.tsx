@@ -1,5 +1,12 @@
-//src/app/AppRoutes.tsx
-import { Navigate, Route, Routes, Outlet, useLocation, useNavigate } from "react-router-dom";
+// src/app/AppRoutes.tsx
+import {
+  Navigate,
+  Route,
+  Routes,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import AppShell from "./AppShell";
 import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
 import LibraryMobilePage from "../pages/LibraryMobilePage";
@@ -53,8 +60,13 @@ function MainTabsLayout() {
 }
 
 function SearchLayout() {
+  const { pathname } = useLocation();
+
+  // ✅ /search/direct 에서는 AppShell의 safe-area top padding 제거
+  const disableSafeAreaTop = pathname.startsWith("/search/direct");
+
   return (
-    <AppShell>
+    <AppShell disableSafeAreaTop={disableSafeAreaTop}>
       <div className="w-full max-w-85.75 mx-auto">
         <Outlet />
       </div>
@@ -69,7 +81,7 @@ export default function AppRoutes() {
 
       <Route element={<SearchLayout />}>
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/search/direct" element={<SearchDirectAddPage />} />     
+        <Route path="/search/direct" element={<SearchDirectAddPage />} />
       </Route>
 
       <Route element={<MainTabsLayout />}>

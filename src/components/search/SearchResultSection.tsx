@@ -13,7 +13,6 @@ type Props = {
   onDirectAdd?: () => void;
 };
 
-// Mock 데이터 타입을 아우르는 공통 타입 정의
 type Book = {
   id: number | string;
   title: string;
@@ -22,7 +21,6 @@ type Book = {
   isEbook: boolean; // 아이콘 제어용
 };
 
-// 중복 제거 함수
 function uniqById<T extends { id: any }>(arr: T[]) {
   const seen = new Set<any>();
   const out: T[] = [];
@@ -39,12 +37,8 @@ function ResultRow({ book, showDivider }: { book: Book; showDivider: boolean }) 
   const GAP_X = 12;
   const ICON_BOX = 16;
 
-  // ✅ 텍스트 시작 x (= cover + gap)
-  const ICON_LEFT = COVER_W + GAP_X; // 68px
-
-  // ✅ divider 기준 12px 위 == (아이템 박스 bottom 기준 12px)
+  const ICON_LEFT = COVER_W + GAP_X;
   const ICON_BOTTOM_FROM_ITEM = 12;
-
   const DIVIDER_PADDING_BOTTOM = 4;
   const DIVIDER_PADDING_TOP = 4;
 
@@ -56,25 +50,21 @@ function ResultRow({ book, showDivider }: { book: Book; showDivider: boolean }) 
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        // 아이템 사이 간격 제어는 상위 map에서 처리하거나 여기서 marginBottom을 줄 수 있음
-        // 여기서는 내부 요소 간격
         gap: 0,
         alignSelf: "stretch",
       }}
     >
-      {/* ✅ 결과 아이템 박스 (Relative for Icon) */}
       <div
         className="w-full"
         style={{
           display: "flex",
-          padding: "12px 0", // 상하 패딩
+          padding: "12px 0", 
           alignItems: "flex-start",
           gap: "12px",
           alignSelf: "stretch",
           position: "relative",
         }}
       >
-        {/* 표지 */}
         <div
           style={{
             display: "flex",
@@ -93,9 +83,7 @@ function ResultRow({ book, showDivider }: { book: Book; showDivider: boolean }) 
           />
         </div>
 
-        {/* 텍스트 정보 */}
         <div className="flex-1 flex flex-col items-start">
-          {/* 제목: [카테고리] 제목 */}
           <div
             className="w-full break-keep line-clamp-2"
             style={{
@@ -105,19 +93,17 @@ function ResultRow({ book, showDivider }: { book: Book; showDivider: boolean }) 
               fontStyle: "normal",
               fontWeight: 600,
               lineHeight: "150%",
-              marginBottom: 2, // 작가명과의 간격
+              marginBottom: 2, 
             }}
           >
-            {/* 카테고리 포함하여 출력 */}
             <span>[{book.category}] {book.title}</span>
           </div>
 
-          {/* 작가 */}
           <div
             className="w-full truncate"
             style={{
-              color: "#A2A7C3", // 피그마 기준 회색
-              fontFamily: "Pretendard", // 혹은 SUIT
+              color: "#A2A7C3",
+              fontFamily: "Pretendard", 
               fontSize: 13,
               fontWeight: 400,
               lineHeight: "150%",
@@ -127,14 +113,13 @@ function ResultRow({ book, showDivider }: { book: Book; showDivider: boolean }) 
           </div>
         </div>
 
-        {/* ✅ 아이콘: E-book이 아닐 때만 노출 */}
         {!book.isEbook && (
           <div
             aria-hidden="true"
             style={{
               position: "absolute",
               left: ICON_LEFT,
-              bottom: ICON_BOTTOM_FROM_ITEM, // 12px
+              bottom: ICON_BOTTOM_FROM_ITEM, 
               width: ICON_BOX,
               height: ICON_BOX,
               display: "flex",
@@ -153,7 +138,6 @@ function ResultRow({ book, showDivider }: { book: Book; showDivider: boolean }) 
         )}
       </div>
 
-      {/* ✅ Divider (구분선) + 하단 4px 패딩 */}
       {showDivider && (
         <div
           style={{
@@ -167,7 +151,7 @@ function ResultRow({ book, showDivider }: { book: Book; showDivider: boolean }) 
         >
           <div
             style={{
-              width: "100%", // 혹은 343px 고정
+              width: "100%",
               height: 1,
               background:
                 "linear-gradient(90deg, rgba(46, 57, 107, 0.00) 0%, #2E396B 50%, rgba(46, 57, 107, 0.00) 100%)",
@@ -225,7 +209,6 @@ function DirectAddRow({ onClick }: { onClick?: () => void }) {
 export default function SearchResultSection({ scope, query, onDirectAdd }: Props) {
   const q = query.trim().toLowerCase();
 
-  // ✅ 데이터 소스 분기 (API 연동 전 Mock 데이터 매핑)
   let source: Book[] = [];
 
   if (scope === "all") {
@@ -239,7 +222,6 @@ export default function SearchResultSection({ scope, query, onDirectAdd }: Props
     ]) as Book[];
   }
 
-  // ✅ 검색 필터링
   const filtered = !q
     ? []
     : source.filter(
@@ -271,7 +253,6 @@ export default function SearchResultSection({ scope, query, onDirectAdd }: Props
           paddingTop: 20,
         }}
       >
-        {/* count */}
         <div className="w-full" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <span
             style={{
@@ -286,13 +267,11 @@ export default function SearchResultSection({ scope, query, onDirectAdd }: Props
           </span>
         </div>
 
-        {/* list */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
-            // gap: "16px", // ResultRow 내부에 패딩이 있으므로 gap 조절 필요 시 수정
             width: "100%",
           }}
         >
