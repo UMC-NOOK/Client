@@ -7,7 +7,6 @@ type DateParts = {
 };
 
 type Props = {
-  imageFile: File | null;
   intro: string;
   pages: string;
   publisher: string;
@@ -34,7 +33,6 @@ const LabelBlock = ({ label, children }: { label: string; children: React.ReactN
 };
 
 export default function SearchNewAddMoreForm({
-  imageFile,
   intro,
   pages,
   publisher,

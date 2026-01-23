@@ -31,7 +31,6 @@ export default function SearchNewAddMorePage() {
       step={3}
     >
       <SearchNewAddMoreForm
-        imageFile={imageFile}
         intro={intro}
         pages={pages}
         publisher={publisher}
