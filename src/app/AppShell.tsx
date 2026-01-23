@@ -1,23 +1,32 @@
+// src/app/AppShell.tsx
 import React from "react";
 
 type AppShellProps = {
   children: React.ReactNode;
   maxWidthPx?: number; // default: 375
+  disableSafeAreaTop?: boolean;
 };
 
-export default function AppShell({ children, maxWidthPx = 375 }: AppShellProps) {
+export default function AppShell({
+  children,
+  maxWidthPx = 375,
+  disableSafeAreaTop = false,
+}: AppShellProps) {
   return (
-    <div className="min-h-dvh w-full flex justify-center bg-[#0B1020]">
+    <div className="min-h-dvh w-full flex justify-center bg-white">
       <div
         className="min-h-dvh w-full"
         style={{
           maxWidth: maxWidthPx,
-          // background/gradient (Figma)
           background: "linear-gradient(180deg, #0E1430 0%, #0E101B 100%)",
         }}
       >
-        {/* Frame padding: 8px 16px 0px (Figma) + safe area */}
-        <div className="pt-[calc(env(safe-area-inset-top)+8px)] px-4 pb-[env(safe-area-inset-bottom)]">
+        <div
+          className={[
+            disableSafeAreaTop ? "" : "pt-[calc(env(safe-area-inset-top)+8px)]",
+            "pb-[env(safe-area-inset-bottom)]",
+          ].join(" ")}
+        >
           {children}
         </div>
       </div>

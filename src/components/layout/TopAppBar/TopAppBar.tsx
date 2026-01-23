@@ -65,7 +65,6 @@ export default function TopAppBar({
         {/* Tabs */}
         {showTabs && (
           <div className="w-full">
-            {/* ✅ 기본선은 ::after로 딱 2px 한 줄만 깔기 */}
             <nav className="relative w-full h-10 flex items-center justify-center">
               {/* 기본선(그라디언트) */}
               <span
@@ -125,7 +124,6 @@ function Tab({
         "relative",
       ].join(" ")}
     >
-      {/* ✅ 선택선은 '같은 위치(bottom:0, height:2px)'에서 그라디언트를 덮어씀 */}
       <span
         aria-hidden="true"
         className="pointer-events-none absolute left-0 right-0 bottom-0 h-[2px]"
