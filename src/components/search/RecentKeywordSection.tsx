@@ -11,9 +11,9 @@ type Props = {
 
 export default function RecentKeywordSection({ keywords, onDelete, onClickKeyword }: Props) {
   return (
-    <section className="w-full flex flex-col items-start gap-[32px] pt-8">
-      <div className="w-full flex flex-col items-start gap-[16px]">
-        <span className="text-[#ECECEC] text-[13px] font-[600] leading-[13px] font-[SUIT Variable]">
+    <section className="w-full flex flex-col items-start gap-8 pt-8">
+      <div className="w-full flex flex-col items-start gap-4">
+        <span className="text-[#ECECEC] text-[13px] font-semibold leading-[13px] font-[SUIT Variable]">
           최근 검색어
         </span>
 

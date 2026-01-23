@@ -45,7 +45,7 @@ function ResultRow({ book, showDivider }: { book: Book; showDivider: boolean }) 
 
   return (
     <div
-      className="flex flex-col items-center gap-[4px] self-stretch"
+      className="flex flex-col items-center gap-1 self-stretch"
       style={{
         display: "flex",
         flexDirection: "column",
