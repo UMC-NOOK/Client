@@ -15,6 +15,7 @@ import RecordMobilePage from "../pages/RecordMobilePage";
 import GroupMobilePage from "../pages/GroupMobilePage";
 import SearchPage from "../pages/SearchPage";
 import SearchDirectAddPage from "../pages/SearchDirectAddPage";
+import BookInfo from "../pages/BookInfo";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -92,6 +93,8 @@ export default function AppRoutes() {
       </Route>
 
       <Route path="*" element={<Navigate to="/library" replace />} />
+
+      <Route path="/library/123" element={<BookInfo />}></Route>
     </Routes>
   );
 }
