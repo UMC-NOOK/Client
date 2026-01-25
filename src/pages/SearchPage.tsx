@@ -82,7 +82,7 @@ export default function SearchPage() {
         <SearchResultSection 
           scope={scope} 
           query={submittedQuery} 
-          onDirectAdd={() => navigate("/search/direct")}
+          onDirectAdd={() => navigate("/search/new")}
         />
       )}
     </div>

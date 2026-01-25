@@ -51,24 +51,24 @@ function HorizontalBookScroller({ books }: { books: BookItem[] }) {
       style={{ touchAction: "pan-x" }}
       className="w-[calc(100%+16px)] -mr-4 overflow-x-auto cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [scroll-snap-type:x_mandatory]"
     >
-      <div className="flex flex-row items-start gap-[8px] pr-4 h-full">
+      <div className="flex flex-row items-start gap-2 pr-4 h-full">
         {books.slice(0, LIMIT).map((book, index) => (
           <div
             key={`lib-${book.id}-${index}`}
-            className="flex flex-col items-start shrink-0 w-[100px] snap-start"
+            className="flex flex-col items-start shrink-0 w-25 snap-start"
           >
             <img
               src={bookCover}
               alt={book.title}
               draggable={false}
-              className="w-[100px] h-[144px] rounded-[2px] object-cover"
+              className="w-25 h-36 rounded-xs object-cover"
             />
             
-            <div className="flex flex-col items-start w-full mt-[4px]">
-              <span className="text-[#ECECEC] text-[14px] font-[600] leading-[21px] font-[SUIT Variable] line-clamp-2 w-full break-keep">
+            <div className="flex flex-col items-start w-full mt-1">
+              <span className="text-[#ECECEC] text-[14px] font-semibold leading-5.25 font-[SUIT Variable] line-clamp-2 w-full break-keep">
                 {book.title}
               </span>
-              <span className="text-[#A2A7C3] text-[12px] font-[400] leading-[18px] font-[SUIT] truncate w-full mt-[2px]">
+              <span className="text-[#A2A7C3] text-[12px] font-normal leading-4.5 font-[SUIT] truncate w-full mt-0.5">
                 {book.author}
               </span>
             </div>
@@ -86,10 +86,10 @@ export default function MyLibraryListSection() {
   const showFallbackOnly = !hasFocused && !hasUnread;
 
   return (
-    <section className="w-full flex flex-col items-start gap-[32px] pt-8">
+    <section className="w-full flex flex-col items-start gap-8 pt-8">
       {showFallbackOnly ? (
-        <div className="w-full flex flex-col items-start gap-[16px]">
-          <span className="text-[#ECECEC] text-[13px] font-[600] leading-[13px] font-[SUIT Variable]">
+        <div className="w-full flex flex-col items-start gap-4">
+          <span className="text-[#ECECEC] text-[13px] font-semibold leading-3.25 font-[SUIT Variable]">
             이 책을 추천해요
           </span>
           <HorizontalBookScroller books={fallbackRecommendedBooks} />
@@ -97,16 +97,16 @@ export default function MyLibraryListSection() {
       ) : (
         <>
           {hasFocused && (
-            <div className="w-full flex flex-col items-start gap-[16px]">
-              <span className="text-[#ECECEC] text-[13px] font-[600] leading-[13px] font-[SUIT Variable]">
+            <div className="w-full flex flex-col items-start gap-4">
+              <span className="text-[#ECECEC] text-[13px] font-semibold leading-3.25 font-[SUIT Variable]">
                 최근 포커스한 책
               </span>
               <HorizontalBookScroller books={focusedBooks} />
             </div>
           )}
           {hasUnread && (
-            <div className="w-full flex flex-col items-start gap-[16px]">
-              <span className="text-[#ECECEC] text-[13px] font-[600] leading-[13px] font-[SUIT Variable]">
+            <div className="w-full flex flex-col items-start gap-4">
+              <span className="text-[#ECECEC] text-[13px] font-semibold leading-3.25 font-[SUIT Variable]">
                 아직 읽지 않은 책
               </span>
               <HorizontalBookScroller books={unreadBooks} />

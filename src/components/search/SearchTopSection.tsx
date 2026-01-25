@@ -63,7 +63,7 @@ export default function SearchTopSection({
       {/* 헤더 */}
       <div className="w-full h-10 flex items-center justify-between">
         <div className="w-6 h-6" aria-hidden="true" />
-        <h1 className="text-[#ECECEC] text-[18px] font-medium leading-[27px] font-[SUIT] text-center">
+        <h1 className="text-[#ECECEC] text-[18px] font-medium leading-6.75 font-[SUIT] text-center">
           {title}
         </h1>
         <button
@@ -99,7 +99,7 @@ export default function SearchTopSection({
           onTouchStart={() => {
             enterInputMode();
           }}
-          className="w-full flex items-center gap-2 rounded-[8px] bg-[#1B203B] px-4 py-[13.5px]"
+          className="w-full flex items-center gap-2 rounded-lg bg-[#1B203B] px-4 py-[13.5px]"
         >
           <input
             ref={inputRef}
@@ -120,7 +120,7 @@ export default function SearchTopSection({
             className="
               flex-1 bg-transparent outline-none
               text-[#ECECEC] placeholder-[#A2A7C3]
-              text-[16px] font-[400] leading-[24px] font-[SUIT]
+              text-[16px] font-normal leading-6 font-[SUIT]
               truncate
             "
           />

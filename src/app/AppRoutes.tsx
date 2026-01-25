@@ -14,7 +14,10 @@ import FocusMobilePage from "../pages/FocusMobilePage";
 import RecordMobilePage from "../pages/RecordMobilePage";
 import GroupMobilePage from "../pages/GroupMobilePage";
 import SearchPage from "../pages/SearchPage";
-import SearchDirectAddPage from "../pages/SearchDirectAddPage";
+
+import SearchNewAddPage from "../pages/SearchNewAddPage";
+import SearchNewAddCategoryPage from "../pages/SearchNewAddCategoryPage";
+import SearchNewAddMorePage from "../pages/SearchNewAddMorePage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -60,17 +63,11 @@ function MainTabsLayout() {
 }
 
 function SearchLayout() {
-  const { pathname } = useLocation();
-
-  // ✅ /search/direct 에서는 AppShell의 safe-area top padding 제거
-  const disableSafeAreaTop = pathname.startsWith("/search/direct");
 
   return (
-    <AppShell disableSafeAreaTop={disableSafeAreaTop}>
       <div className="w-full max-w-85.75 mx-auto">
         <Outlet />
       </div>
-    </AppShell>
   );
 }
 
@@ -81,7 +78,10 @@ export default function AppRoutes() {
 
       <Route element={<SearchLayout />}>
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/search/direct" element={<SearchDirectAddPage />} />
+
+        <Route path="/search/new" element={<SearchNewAddPage />} />
+        <Route path="/search/new/category" element={<SearchNewAddCategoryPage />} />
+        <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
       </Route>
 
       <Route element={<MainTabsLayout />}>

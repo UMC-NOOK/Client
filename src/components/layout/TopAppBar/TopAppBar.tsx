@@ -35,7 +35,7 @@ export default function TopAppBar({
 
   return (
     <header className="w-full">
-      <div className="w-full max-w-[343px] mx-auto flex flex-col items-start">
+      <div className="w-full max-w-85.75 mx-auto flex flex-col items-start">
         {/* GNB */}
         <div className="w-full h-10 flex items-center justify-between">
           <button
@@ -69,7 +69,7 @@ export default function TopAppBar({
               {/* 기본선(그라디언트) */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute left-0 right-0 bottom-0 h-[2px]"
+                className="pointer-events-none absolute left-0 right-0 bottom-0 h-0.5"
                 style={{
                   background:
                     "linear-gradient(90deg, rgba(46,57,107,0) 0%, #2E396B 50%, rgba(46,57,107,0) 100%)",
@@ -126,7 +126,7 @@ function Tab({
     >
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute left-0 right-0 bottom-0 h-[2px]"
+        className="pointer-events-none absolute left-0 right-0 bottom-0 h-0.5"
         style={{ background: selected ? "#ECECEC" : "transparent" }}
       />
 
