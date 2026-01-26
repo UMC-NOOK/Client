@@ -1,3 +1,3 @@
 export default function BookInfo() {
-  return <div>Book Info Page</div>;
+  return <div className="text-white">Book Info Page</div>;
 }
