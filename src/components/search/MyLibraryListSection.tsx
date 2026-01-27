@@ -1,7 +1,11 @@
 import { useRef } from "react";
 import bookCover from "../../assets/search/mock_bookcover.svg";
 import type { BookItem } from "./mock/myLibrary";
-import { focusedBooks, unreadBooks, fallbackRecommendedBooks } from "./mock/myLibrary";
+import {
+  focusedBooks,
+  unreadBooks,
+  fallbackRecommendedBooks,
+} from "./mock/myLibrary";
 
 const LIMIT = 5;
 
@@ -27,7 +31,8 @@ function HorizontalBookScroller({ books }: { books: BookItem[] }) {
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDragging.current || !ref.current) return;
     e.preventDefault();
-    ref.current.scrollLeft = startScrollLeft.current - (e.clientX - startX.current);
+    ref.current.scrollLeft =
+      startScrollLeft.current - (e.clientX - startX.current);
   };
   const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDragging.current) return;
@@ -36,9 +41,10 @@ function HorizontalBookScroller({ books }: { books: BookItem[] }) {
       ref.current.style.scrollSnapType = "x mandatory";
       ref.current.style.cursor = "grab";
     }
-    try { ref.current?.releasePointerCapture(e.pointerId); } catch {}
+    try {
+      ref.current?.releasePointerCapture(e.pointerId);
+    } catch {}
   };
-  
 
   return (
     <div
@@ -63,12 +69,12 @@ function HorizontalBookScroller({ books }: { books: BookItem[] }) {
               draggable={false}
               className="w-25 h-36 rounded-xs object-cover"
             />
-            
+
             <div className="flex flex-col items-start w-full mt-1">
-              <span className="text-[#ECECEC] text-[14px] font-semibold leading-5.25 font-[SUIT Variable] line-clamp-2 w-full break-keep">
+              <span className="text-gray-100 text-[14px] font-semibold leading-5.25 font-[SUIT Variable] line-clamp-2 w-full break-keep">
                 {book.title}
               </span>
-              <span className="text-[#A2A7C3] text-[12px] font-normal leading-4.5 font-[SUIT] truncate w-full mt-0.5">
+              <span className="text-gray-300 text-[12px] font-normal leading-4.5 font-[SUIT] truncate w-full mt-0.5">
                 {book.author}
               </span>
             </div>
@@ -80,7 +86,6 @@ function HorizontalBookScroller({ books }: { books: BookItem[] }) {
 }
 
 export default function MyLibraryListSection() {
-  
   const hasFocused = focusedBooks.length > 0;
   const hasUnread = unreadBooks.length > 0;
   const showFallbackOnly = !hasFocused && !hasUnread;
@@ -89,7 +94,7 @@ export default function MyLibraryListSection() {
     <section className="w-full flex flex-col items-start gap-8 pt-8">
       {showFallbackOnly ? (
         <div className="w-full flex flex-col items-start gap-4">
-          <span className="text-[#ECECEC] text-[13px] font-semibold leading-3.25 font-[SUIT Variable]">
+          <span className="text-gray-100 text-[13px] font-semibold leading-3.25 font-[SUIT Variable]">
             이 책을 추천해요
           </span>
           <HorizontalBookScroller books={fallbackRecommendedBooks} />
@@ -98,7 +103,7 @@ export default function MyLibraryListSection() {
         <>
           {hasFocused && (
             <div className="w-full flex flex-col items-start gap-4">
-              <span className="text-[#ECECEC] text-[13px] font-semibold leading-3.25 font-[SUIT Variable]">
+              <span className="text-gray-100 text-[13px] font-semibold leading-3.25 font-[SUIT Variable]">
                 최근 포커스한 책
               </span>
               <HorizontalBookScroller books={focusedBooks} />
@@ -106,7 +111,7 @@ export default function MyLibraryListSection() {
           )}
           {hasUnread && (
             <div className="w-full flex flex-col items-start gap-4">
-              <span className="text-[#ECECEC] text-[13px] font-semibold leading-3.25 font-[SUIT Variable]">
+              <span className="text-gray-100 text-[13px] font-semibold leading-3.25 font-[SUIT Variable]">
                 아직 읽지 않은 책
               </span>
               <HorizontalBookScroller books={unreadBooks} />

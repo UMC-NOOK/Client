@@ -63,7 +63,7 @@ export default function SearchTopSection({
       {/* 헤더 */}
       <div className="w-full h-10 flex items-center justify-between">
         <div className="w-6 h-6" aria-hidden="true" />
-        <h1 className="text-[#ECECEC] text-[18px] font-medium leading-6.75 font-[SUIT] text-center">
+        <h1 className="text-gray-100 text-[18px] font-medium leading-6.75 font-[SUIT] text-center">
           {title}
         </h1>
         <button
@@ -71,14 +71,19 @@ export default function SearchTopSection({
           onClick={onClose}
           className="w-6 h-6 flex items-center justify-center"
         >
-          <img src={closeIcon} alt="닫기" className="w-6 h-6" draggable={false} />
+          <img
+            src={closeIcon}
+            alt="닫기"
+            className="w-6 h-6"
+            draggable={false}
+          />
         </button>
       </div>
 
       {/* 탭 + 검색바 */}
       <div className="w-full flex flex-col items-start gap-4">
         {/* 탭 */}
-        <div className="w-full rounded-[20px] bg-[#1B203B] flex relative">
+        <div className="w-full rounded-[20px] bg-gray-900 flex relative">
           <TabButton
             label="전체 도서 검색"
             active={currentScope === "all"}
@@ -99,7 +104,7 @@ export default function SearchTopSection({
           onTouchStart={() => {
             enterInputMode();
           }}
-          className="w-full flex items-center gap-2 rounded-lg bg-[#1B203B] px-4 py-[13.5px]"
+          className="w-full flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-[13.5px]"
         >
           <input
             ref={inputRef}
@@ -119,13 +124,17 @@ export default function SearchTopSection({
             placeholder={isInputMode ? "" : placeholder}
             className="
               flex-1 bg-transparent outline-none
-              text-[#ECECEC] placeholder-[#A2A7C3]
+              text-gray-100 placeholder-gray-300
               text-[16px] font-normal leading-6 font-[SUIT]
               truncate
             "
           />
 
-          <button type="button" onClick={onSearchClick} className="flex items-center justify-center">
+          <button
+            type="button"
+            onClick={onSearchClick}
+            className="flex items-center justify-center"
+          >
             <img
               src={searchIcon}
               alt="검색"
@@ -153,7 +162,7 @@ function TabButton({
       type="button"
       onClick={onClick}
       className={`relative flex h-10 px-4 py-3 items-center justify-center flex-1 rounded-[20px] z-10 ${
-        active ? "bg-[#353957]" : ""
+        active ? "bg-gray-700" : ""
       }`}
     >
       <span
@@ -176,4 +185,3 @@ function TabButton({
     </button>
   );
 }
-
