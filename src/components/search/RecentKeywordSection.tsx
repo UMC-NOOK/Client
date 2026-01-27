@@ -9,11 +9,15 @@ type Props = {
   onClickKeyword?: (text: string) => void;
 };
 
-export default function RecentKeywordSection({ keywords, onDelete, onClickKeyword }: Props) {
+export default function RecentKeywordSection({
+  keywords,
+  onDelete,
+  onClickKeyword,
+}: Props) {
   return (
     <section className="w-full flex flex-col items-start gap-8 pt-8">
       <div className="w-full flex flex-col items-start gap-4">
-        <span className="text-[#ECECEC] text-[13px] font-semibold leading-[13px] font-[SUIT Variable]">
+        <span className="text-gray-100 text-[13px] font-semibold leading-[13px] font-[SUIT Variable]">
           최근 검색어
         </span>
 
@@ -27,7 +31,7 @@ export default function RecentKeywordSection({ keywords, onDelete, onClickKeywor
                 key={k.id}
                 role="button"
                 tabIndex={0}
-                onMouseDown={(e) => e.preventDefault()} 
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={() => onClickKeyword?.(k.text)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
@@ -35,7 +39,7 @@ export default function RecentKeywordSection({ keywords, onDelete, onClickKeywor
                     onClickKeyword?.(k.text);
                   }
                 }}
-                className="flex items-center rounded-[8px] bg-[#1B203B]"
+                className="flex items-center rounded-[8px] bg-gray-900"
                 style={{
                   padding: "6px 12px",
                   alignItems: "center",
@@ -67,7 +71,7 @@ export default function RecentKeywordSection({ keywords, onDelete, onClickKeywor
                   className="relative w-[14px] h-[14px]"
                   style={{
                     display: "flex",
-                    padding: 2, 
+                    padding: 2,
                     justifyContent: "center",
                     alignItems: "center",
                   }}

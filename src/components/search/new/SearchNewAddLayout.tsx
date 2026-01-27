@@ -23,11 +23,10 @@ export default function SearchNewAddLayout({
   onClose,
   onNext,
   children,
-  leftIconType = "close", 
-  step, 
+  leftIconType = "close",
+  step,
 }: Props) {
-  const leftIconSrc =
-    leftIconType === "back" ? BackIcon : CloseIcon;
+  const leftIconSrc = leftIconType === "back" ? BackIcon : CloseIcon;
 
   return (
     <div className="w-full min-h-screen flex flex-col pb-10">
@@ -51,7 +50,7 @@ export default function SearchNewAddLayout({
             <span
               className={[
                 "text-[18px] font-medium leading-4.5",
-                isNextActive ? "text-[#ECECEC]" : "text-[#525775]",
+                isNextActive ? "text-gray-100" : "text-gray-600",
               ].join(" ")}
             >
               {nextLabel}
@@ -60,14 +59,14 @@ export default function SearchNewAddLayout({
         </div>
       </div>
 
-    {/* 디바이더 (단일 바 + 진행바 오버레이) */}
+      {/* 디바이더 (단일 바 + 진행바 오버레이) */}
       <div className="w-full px-4">
-        <div className="w-full h-1 rounded-[80px] bg-[#272D49] relative overflow-hidden">
+        <div className="w-full h-1 rounded-[80px] bg-gray-800 relative overflow-hidden">
           <div
             className={[
-              "h-full rounded",           
+              "h-full rounded",
               step === 1 ? "w-0" : step === 2 ? "w-1/2" : "w-full",
-              "bg-[#ECECEC]",
+              "bg-gray-100",
             ].join(" ")}
           />
         </div>
@@ -76,12 +75,12 @@ export default function SearchNewAddLayout({
       {/* 콘텐츠 */}
       <div className="w-full flex flex-col items-start pt-12">
         <div className="w-full flex flex-col items-start px-1">
-          <h1 className="text-[#ECECEC] text-[20px] font-bold leading-7.5">
+          <h1 className="text-gray-100 text-[20px] font-bold leading-7.5">
             {title}
           </h1>
 
           {subtitle && (
-            <p className="text-[#697198] text-[14px] font-medium leading-5.25">
+            <p className="text-gray-500 text-[14px] font-medium leading-5.25">
               {subtitle}
             </p>
           )}

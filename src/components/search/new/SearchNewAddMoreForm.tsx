@@ -21,10 +21,16 @@ type Props = {
   onChangePubDate: (v: DateParts) => void;
 };
 
-const LabelBlock = ({ label, children }: { label: string; children: React.ReactNode }) => {
+const LabelBlock = ({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) => {
   return (
     <div className="w-full flex flex-col justify-center items-start gap-3">
-      <span className='text-[#ECECEC] font-["SUIT_Variable"] text-[13px] font-semibold leading-[13px]'>
+      <span className='text-gray-100 font-["SUIT_Variable"] text-[13px] font-semibold leading-[13px]'>
         {label}
       </span>
       {children}
@@ -54,7 +60,7 @@ export default function SearchNewAddMoreForm({
     <div className="w-full">
       <div className="w-full flex flex-col items-center gap-8 px-1">
         <label
-          className="flex w-25 h-[144px] justify-center items-center rounded-[2px] bg-[#1B203B] cursor-pointer"
+          className="flex w-25 h-[144px] justify-center items-center rounded-[2px] bg-gray-900 cursor-pointer"
           aria-label="사진 추가"
         >
           <input
@@ -78,10 +84,10 @@ export default function SearchNewAddMoreForm({
                   w-full h-[116px]
                   px-4 py-3
                   rounded-md
-                  bg-[#1B203B]
-                  text-[#ECECEC]
+                  bg-gray-900
+                  text-gray-100
                   text-[14px] font-normal leading-5.25
-                  placeholder:text-[#697198]
+                  placeholder:text-gray-500
                   outline-none resize-none
                 "
               />
@@ -98,10 +104,10 @@ export default function SearchNewAddMoreForm({
                 w-full
                 px-4 py-3
                 rounded-md
-                bg-[#1B203B]
-                text-[#ECECEC]
+                bg-gray-900
+                text-gray-100
                 text-[14px] font-normal leading-5.25
-                placeholder:text-[#697198]
+                placeholder:text-gray-500
                 outline-none
               "
               inputMode="numeric"
@@ -118,16 +124,16 @@ export default function SearchNewAddMoreForm({
                 w-full
                 px-4 py-3
                 rounded-md
-                bg-[#1B203B]
-                text-[#ECECEC]
+                bg-gray-900
+                text-gray-100
                 text-[14px] font-normal leading-5.25
-                placeholder:text-[#697198]
+                placeholder:text-gray-500
                 outline-none
               "
             />
           </LabelBlock>
 
-                    {/* 출판일 */}
+          {/* 출판일 */}
           <LabelBlock label="출판일">
             <div className="w-full flex items-start gap-2">
               {[
@@ -150,10 +156,10 @@ export default function SearchNewAddMoreForm({
                     px-2 py-3
                     text-center
                     rounded-lg
-                    bg-[#1B203B]
-                    text-[#ECECEC]
+                    bg-gray-900
+                    text-gray-100
                     text-[14px] font-normal leading-5.25
-                    placeholder:text-[#697198]
+                    placeholder:text-gray-500
                     outline-none
                   "
                   maxLength={f.key === "yyyy" ? 4 : 2}
@@ -172,10 +178,10 @@ export default function SearchNewAddMoreForm({
                 w-full
                 px-4 py-3
                 rounded-md
-                bg-[#1B203B]
-                text-[#ECECEC]
+                bg-gray-900
+                text-gray-100
                 text-[14px] font-normal leading-5.25
-                placeholder:text-[#697198]
+                placeholder:text-gray-500
                 outline-none
               "
             />
