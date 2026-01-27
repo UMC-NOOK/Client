@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         // 기존: --Gray-gray-*
+        // 사용: className="text-gray-1000", className="bg-gray-1000"
         gray: {
           1000: "#13172aff",
           950: "#181d34ff",
@@ -22,6 +23,7 @@ export default {
         },
 
         // 기존: --Colors-*
+        // 사용: className="text-mint", className="bg-mint"
         mint: "#7ad8d2ff",
         yellow: "#f8ee7dff",
         blue: {
