@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import SearchNewAddLayout from "../components/search/new/SearchNewAddLayout";
-import SearchNewAddInfoForm from "../components/search/new/SearchNewAddInfoForm";
+import SearchNewAddLayout from "../../components/search/new/SearchNewAddLayout";
+import SearchNewAddInfoForm from "../../components/search/new/SearchNewAddInfoForm";
 
 export default function SearchNewAddPage() {
   const navigate = useNavigate();

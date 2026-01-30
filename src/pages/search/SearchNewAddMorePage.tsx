@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import SearchNewAddLayout from "../components/search/new/SearchNewAddLayout";
-import SearchNewAddMoreForm from "../components/search/new/SearchNewAddMoreForm";
+import SearchNewAddLayout from "../../components/search/new/SearchNewAddLayout";
+import SearchNewAddMoreForm from "../../components/search/new/SearchNewAddMoreForm";
 
 export default function SearchNewAddMorePage() {
   const navigate = useNavigate();
@@ -31,18 +31,19 @@ export default function SearchNewAddMorePage() {
       step={3}
     >
       <SearchNewAddMoreForm
-        intro={intro}
-        pages={pages}
-        publisher={publisher}
-        isbn={isbn}
-        pubDate={pubDate}
-        onChangeImage={setImageFile}
-        onChangeIntro={setIntro}
-        onChangePages={setPages}
-        onChangePublisher={setPublisher}
-        onChangeIsbn={setIsbn}
-        onChangePubDate={setPubDate}
-      />
+      imageFile={imageFile}
+      onChangeImage={setImageFile}
+      intro={intro}
+      pages={pages}
+      publisher={publisher}
+      isbn={isbn}
+      pubDate={pubDate}
+      onChangeIntro={setIntro}
+      onChangePages={setPages}
+      onChangePublisher={setPublisher}
+      onChangeIsbn={setIsbn}
+      onChangePubDate={setPubDate}
+    />
     </SearchNewAddLayout>
   );
 }

@@ -15,11 +15,8 @@ export default function AppShell({
   return (
     <div className="min-h-dvh w-full flex justify-center bg-white">
       <div
-        className="min-h-dvh w-full"
-        style={{
-          maxWidth: maxWidthPx,
-          background: "linear-gradient(180deg, #0E1430 0%, #0E101B 100%)",
-        }}
+        className="min-h-dvh w-full bg-gradient-background"
+        style={{ maxWidth: maxWidthPx }}
       >
         <div
           className={[
@@ -33,3 +30,4 @@ export default function AppShell({
     </div>
   );
 }
+

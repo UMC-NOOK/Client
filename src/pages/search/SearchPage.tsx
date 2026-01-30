@@ -1,9 +1,9 @@
 import { useState } from "react";
-import SearchTopSection, { type SearchScope } from "../components/search/SearchTopSection";
-import AllBookListSection from "../components/search/AllBookListSection";
-import MyLibraryListSection from "../components/search/MyLibraryListSection";
-import RecentKeywordSection, { type RecentKeyword } from "../components/search/RecentKeywordSection";
-import SearchResultSection from "../components/search/SearchResultSection";
+import SearchTopSection, { type SearchScope } from "../../components/search/SearchTopSection";
+import AllBookListSection from "../../components/search/AllBookListSection";
+import MyLibraryListSection from "../../components/search/MyLibraryListSection";
+import RecentKeywordSection, { type RecentKeyword } from "../../components/search/RecentKeywordSection";
+import SearchResultSection from "../../components/search/SearchResultSection";
 import { useNavigate } from "react-router-dom";
 
 type ViewMode = "idle" | "searching" | "results";
@@ -58,6 +58,7 @@ export default function SearchPage() {
         onClose={() => {
             setQuery("");
             setMode("idle");
+            navigate(-1);
         }}
       />
 

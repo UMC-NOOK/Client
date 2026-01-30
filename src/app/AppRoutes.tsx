@@ -9,15 +9,15 @@ import {
 } from "react-router-dom";
 import AppShell from "./AppShell";
 import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
-import LibraryMobilePage from "../pages/LibraryMobilePage";
-import FocusMobilePage from "../pages/FocusMobilePage";
-import RecordMobilePage from "../pages/RecordMobilePage";
-import GroupMobilePage from "../pages/GroupMobilePage";
-import SearchPage from "../pages/SearchPage";
+import LibraryMobilePage from "../pages/search/LibraryMobilePage";
+import FocusMobilePage from "../pages/search/FocusMobilePage";
+import RecordMobilePage from "../pages/search/RecordMobilePage";
+import GroupMobilePage from "../pages/search/GroupMobilePage";
+import SearchPage from "../pages/search/SearchPage";
 
-import SearchNewAddPage from "../pages/SearchNewAddPage";
-import SearchNewAddCategoryPage from "../pages/SearchNewAddCategoryPage";
-import SearchNewAddMorePage from "../pages/SearchNewAddMorePage";
+import SearchNewAddPage from "../pages/search/SearchNewAddPage";
+import SearchNewAddCategoryPage from "../pages/search/SearchNewAddCategoryPage";
+import SearchNewAddMorePage from "../pages/search/SearchNewAddMorePage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 

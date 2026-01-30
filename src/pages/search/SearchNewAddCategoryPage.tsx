@@ -1,8 +1,8 @@
 // src/pages/SearchNewAddCategoryPage.tsx
 import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import SearchNewAddLayout from "../components/search/new/SearchNewAddLayout";
-import SearchNewAddCategoryForm from "../components/search/new/SearchNewAddCategoryForm";
+import SearchNewAddLayout from "../../components/search/new/SearchNewAddLayout";
+import SearchNewAddCategoryForm from "../../components/search/new/SearchNewAddCategoryForm";
 
 export default function SearchNewAddCategoryPage() {
   const navigate = useNavigate();
