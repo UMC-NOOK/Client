@@ -14,7 +14,7 @@ export default function SearchNewAddInfoForm({
   return (
     <div className="w-full flex flex-col gap-8 px-1">
       <div className="w-full flex flex-col gap-3">
-        <span className="text-[#ECECEC] text-[13px] font-semibold leading-3.25">
+        <span className="text-gray-100 text-[13px] font-semibold leading-3.25">
           제목
         </span>
 
@@ -23,15 +23,15 @@ export default function SearchNewAddInfoForm({
           onChange={(e) => onChangeTitle(e.target.value)}
           placeholder="책의 제목을 입력해주세요."
           className="
-            w-full px-4 py-3 rounded-lg bg-[#1B203B]
-            text-[#ECECEC] text-[14px] leading-5.25
-            placeholder:text-[#697198] outline-none
+            w-full px-4 py-3 rounded-lg bg-gray-900
+            text-gray-100 text-[14px] leading-5.25
+            placeholder:text-gray-500 outline-none
           "
         />
       </div>
 
       <div className="w-full flex flex-col gap-3">
-        <span className="text-[#ECECEC] text-[13px] font-semibold leading-3.25">
+        <span className="text-gray-100 text-[13px] font-semibold leading-3.25">
           저자
         </span>
 
@@ -40,9 +40,9 @@ export default function SearchNewAddInfoForm({
           onChange={(e) => onChangeAuthor(e.target.value)}
           placeholder="책의 저자를 입력해주세요."
           className="
-            w-full px-4 py-3 rounded-lg bg-[#1B203B]
-            text-[#ECECEC] text-[14px] leading-5.25
-            placeholder:text-[#697198] outline-none
+            w-full px-4 py-3 rounded-lg bg-gray-900
+            text-gray-100 text-[14px] leading-5.25
+            placeholder:text-gray-500 outline-none
           "
         />
       </div>
