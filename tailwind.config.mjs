@@ -71,6 +71,7 @@ export default {
        * - 150% => 1.5
        * - 100% => 1
        */
+
       fontSize: {
         // title
         "title-18-m": ["18px", { lineHeight: "1.5", fontWeight: "500" }],
@@ -102,6 +103,7 @@ export default {
         "label-12-sb": ["12px", { lineHeight: "1", fontWeight: "600" }],
         "label-12-b": ["12px", { lineHeight: "1", fontWeight: "700" }],
         "label-13-r": ["13px", { lineHeight: "1", fontWeight: "400" }],
+        "label-13-b": ["13px", { lineHeight: "1", fontWeight: "700" }],
         "label-13-sb": ["13px", { lineHeight: "1", fontWeight: "600" }],
         "label-14-sb": ["14px", { lineHeight: "1", fontWeight: "600" }],
         "label-16-sb": ["16px", { lineHeight: "1", fontWeight: "600" }],
@@ -110,3 +112,5 @@ export default {
   },
   plugins: [],
 };
+
+

@@ -41,14 +41,14 @@ export default function TopAppBar({
           <button
             type="button"
             onClick={onLogoClick}
-            className="h-10 flex items-center"
             aria-label="Go to home"
+            className="h-10 flex items-center"
           >
             <img
               src={resolvedLogoSrc}
               alt={logoAlt}
-              className="h-[22.67px] w-auto"
               draggable={false}
+              className="h-[22.67px] w-auto"
             />
           </button>
 
@@ -64,45 +64,41 @@ export default function TopAppBar({
 
         {/* Tabs */}
         {showTabs && (
-          <div className="w-full">
-            <nav className="relative w-full h-10 flex items-center justify-center">
-              {/* 기본선(그라디언트) */}
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute left-0 right-0 bottom-0 h-0.5"
-                style={{
-                  background:
-                    "linear-gradient(90deg, rgba(46,57,107,0) 0%, #2E396B 50%, rgba(46,57,107,0) 100%)",
-                }}
-              />
+          <nav className="relative w-full h-10 flex items-center justify-center">
+            {/* 기본 divider */}
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute left-0 right-0 bottom-0 h-0.5 bg-gradient-divider"
+            />
 
-              <Tab
-                label="서재"
-                selected={activeTab === "library"}
-                onClick={() => onTabChange?.("library")}
-              />
-              <Tab
-                label="포커스"
-                selected={activeTab === "focus"}
-                onClick={() => onTabChange?.("focus")}
-              />
-              <Tab
-                label="기록"
-                selected={activeTab === "record"}
-                onClick={() => onTabChange?.("record")}
-              />
-              <Tab
-                label="그룹"
-                selected={activeTab === "group"}
-                onClick={() => onTabChange?.("group")}
-              />
-            </nav>
-          </div>
+            <Tab
+              label="서재"
+              selected={activeTab === "library"}
+              onClick={() => onTabChange?.("library")}
+            />
+            <Tab
+              label="포커스"
+              selected={activeTab === "focus"}
+              onClick={() => onTabChange?.("focus")}
+            />
+            <Tab
+              label="기록"
+              selected={activeTab === "record"}
+              onClick={() => onTabChange?.("record")}
+            />
+            <Tab
+              label="그룹"
+              selected={activeTab === "group"}
+              onClick={() => onTabChange?.("group")}
+            />
+          </nav>
         )}
       </div>
     </header>
   );
 }
+
+/* ───────────────── Tab ───────────────── */
 
 function Tab({
   label,
@@ -118,33 +114,34 @@ function Tab({
       type="button"
       onClick={onClick}
       aria-current={selected ? "page" : undefined}
-      className={[
-        "flex-1 h-10 p-3 box-border",
-        "flex items-center justify-center",
-        "relative",
-      ].join(" ")}
+      className="
+        flex-1 h-10 px-3
+        flex items-center justify-center
+        relative
+      "
     >
+      {/* 선택 underline */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute left-0 right-0 bottom-0 h-0.5"
-        style={{ background: selected ? "#ECECEC" : "transparent" }}
+        className={`
+          pointer-events-none absolute left-0 right-0 bottom-0 h-0.5
+          ${selected ? "bg-gray-100" : "bg-transparent"}
+        `}
       />
 
       <span
-        className="text-center"
-        style={{
-          fontFamily: "SUIT Variable",
-          fontWeight: 600,
-          fontSize: 16,
-          lineHeight: "100%",
-          color: selected ? "#ECECEC" : "#697198",
-        }}
+        className={`
+          text-center text-body-16-b
+          ${selected ? "text-gray-100" : "text-gray-500"}
+        `}
       >
         {label}
       </span>
     </button>
   );
 }
+
+/* ───────────────── Icon Button ───────────────── */
 
 function IconButton({
   ariaLabel,
@@ -158,14 +155,14 @@ function IconButton({
   return (
     <button
       type="button"
-      onClick={onClick}
       aria-label={ariaLabel}
-      className={[
-        "h-10 w-10 rounded-full",
-        "flex items-center justify-center",
-        "active:scale-95 transition",
-        "focus:outline-none focus:ring-2 focus:ring-white/15",
-      ].join(" ")}
+      onClick={onClick}
+      className="
+        h-10 w-10 rounded-full
+        flex items-center justify-center
+        transition active:scale-95
+        focus:outline-none focus:ring-2 focus:ring-white/15
+      "
     >
       {children}
     </button>

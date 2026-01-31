@@ -14,17 +14,20 @@ export default function RecentKeywordSection({
   onDelete,
   onClickKeyword,
 }: Props) {
+  const hasKeywords = keywords.length > 0;
+
   return (
     <section className="w-full flex flex-col items-start gap-8 pt-8">
       <div className="w-full flex flex-col items-start gap-4">
-        <span className="text-gray-100 text-[13px] font-semibold leading-[13px] font-[SUIT Variable]">
-          최근 검색어
-        </span>
+        <span className="text-gray-100 text-label-13-sb">최근 검색어</span>
 
-        {keywords.length > 0 ? (
+        {hasKeywords ? (
           <div
-            className="flex flex-wrap items-start content-start gap-x-[8px] gap-y-[8px] self-stretch overflow-hidden"
-            style={{ maxHeight: 64 }} // 최근 검색어 버튼 최대 2줄 제한
+            className="
+              flex flex-wrap items-start content-start
+              gap-x-2 gap-y-2 self-stretch
+              max-h-16 overflow-hidden
+            "
           >
             {keywords.map((k) => (
               <div
@@ -39,27 +42,18 @@ export default function RecentKeywordSection({
                     onClickKeyword?.(k.text);
                   }
                 }}
-                className="flex items-center rounded-[8px] bg-gray-900"
-                style={{
-                  padding: "6px 12px",
-                  alignItems: "center",
-                  gap: "4px",
-                }}
+                className="
+                  flex items-center gap-1
+                  rounded-lg bg-gray-900
+                  px-3 py-1.5
+                "
               >
-                <span
-                  className="whitespace-nowrap"
-                  style={{
-                    color: "#ECECEC",
-                    fontFamily: "SUIT",
-                    fontSize: 14,
-                    fontStyle: "normal",
-                    fontWeight: 400,
-                    lineHeight: "100%",
-                  }}
-                >
+                {/* 키워드 텍스트: 14 / 400 / 100% */}
+                <span className="whitespace-nowrap text-gray-100 text-btn-14-r">
                   {k.text}
                 </span>
 
+                {/* 삭제 버튼 */}
                 <button
                   type="button"
                   aria-label="최근 검색어 삭제"
@@ -68,42 +62,25 @@ export default function RecentKeywordSection({
                     e.stopPropagation();
                     onDelete?.(k.id);
                   }}
-                  className="relative w-[14px] h-[14px]"
-                  style={{
-                    display: "flex",
-                    padding: 2,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
+                  className="
+                    flex items-center justify-center
+                    w-3.5 h-3.5
+                    p-0.5
+                  "
                 >
                   <img
                     src={deleteIcon}
                     alt=""
                     draggable={false}
-                    className="absolute"
-                    style={{
-                      width: "10.208px",
-                      height: "10.208px",
-                      left: "1.896px",
-                      top: "1.896px",
-                    }}
+                    className="w-[10.208px] h-[10.208px]"
                   />
                 </button>
               </div>
             ))}
           </div>
         ) : (
-          <span
-            className="self-stretch"
-            style={{
-              color: "#A2A7C3",
-              fontFamily: "SUIT",
-              fontSize: 14,
-              fontStyle: "normal",
-              fontWeight: 500,
-              lineHeight: "150%",
-            }}
-          >
+          /* 없음 텍스트: 14 / 500 / 150% */
+          <span className="self-stretch text-gray-300 text-body-14-m">
             최근 검색어가 없습니다.
           </span>
         )}

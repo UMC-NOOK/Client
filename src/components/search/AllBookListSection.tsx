@@ -10,15 +10,16 @@ function HorizontalBookScroller({ books }: { books: Book[] }) {
   const startX = useRef(0);
   const startScrollLeft = useRef(0);
 
-  // --- 드래그 로직  ---
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0) return;
     const el = ref.current;
     if (!el) return;
+
     e.preventDefault();
     isDragging.current = true;
     startX.current = e.clientX;
     startScrollLeft.current = el.scrollLeft;
+
     el.style.scrollSnapType = "none";
     el.style.scrollBehavior = "auto";
     el.style.cursor = "grabbing";
@@ -29,6 +30,7 @@ function HorizontalBookScroller({ books }: { books: Book[] }) {
     if (!isDragging.current) return;
     const el = ref.current;
     if (!el) return;
+
     e.preventDefault();
     el.scrollLeft = startScrollLeft.current - (e.clientX - startX.current);
   };
@@ -36,8 +38,10 @@ function HorizontalBookScroller({ books }: { books: Book[] }) {
   const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDragging.current) return;
     isDragging.current = false;
+
     const el = ref.current;
     if (!el) return;
+
     el.style.scrollSnapType = "x mandatory";
     el.style.scrollBehavior = "smooth";
     el.style.cursor = "grab";
@@ -55,26 +59,34 @@ function HorizontalBookScroller({ books }: { books: Book[] }) {
       onPointerCancel={endDrag}
       onPointerLeave={endDrag}
       style={{ touchAction: "pan-x" }}
-      className="w-[calc(100%+16px)] -mr-4 overflow-x-auto cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [scroll-snap-type:x_mandatory]"
+      className={[
+        "w-[calc(100%+16px)] -mr-4",
+        "overflow-x-auto",
+        "cursor-grab active:cursor-grabbing",
+        "select-none",
+        "[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
+        "[scroll-snap-type:x_mandatory]",
+      ].join(" ")}
     >
-      <div className="flex flex-row items-start gap-[8px] pr-4 h-full">
+      <div className="flex items-start gap-2 pr-4">
         {books.slice(0, LIMIT).map((book, index) => (
           <div
             key={`rec-${book.id}-${index}`}
-            className="flex flex-col items-start shrink-0 w-[100px] snap-start"
+            className="shrink-0 w-25 snap-start flex flex-col items-start"
           >
             <img
               src={bookCover}
               alt={book.title}
               draggable={false}
-              className="w-[100px] h-[144px] rounded-[2px] object-cover"
+              className="w-25 h-36 rounded-xs object-cover"
             />
 
-            <div className="flex flex-col items-start w-full mt-[4px]">
-              <span className="text-gray-100 text-[14px] font-[600] leading-[21px] font-[SUIT Variable] line-clamp-2 w-full break-keep">
+            <div className="w-full mt-1 flex flex-col items-start">
+              <span className="w-full break-keep line-clamp-2 text-gray-100 text-subtitle-14-sb">
                 {book.title}
               </span>
-              <span className="text-gray-300 text-[12px] font-[400] leading-[18px] font-[SUIT] truncate w-full mt-[2px]">
+
+              <span className="w-full mt-0.5 truncate text-gray-300 text-body-12-r">
                 {book.author}
               </span>
             </div>
@@ -87,31 +99,31 @@ function HorizontalBookScroller({ books }: { books: Book[] }) {
 
 export default function AllBookListSection() {
   return (
-    <section className="w-full flex flex-col items-start gap-[32px] pt-8">
-      <div className="w-full flex flex-col items-start gap-[16px]">
-        <span className="text-gray-100 text-[13px] font-[600] leading-[13px] font-[SUIT Variable]">
-          이 책을 추천해요
-        </span>
+    <section className="w-full flex flex-col items-start gap-8 pt-8">
+      {/* 추천 */}
+      <div className="w-full flex flex-col items-start gap-4">
+        <span className="text-gray-100 text-label-13-sb">이 책을 추천해요</span>
         <HorizontalBookScroller books={recommendedBooks} />
       </div>
 
-      <div className="w-full flex flex-col items-start gap-[16px]">
-        <span className="text-gray-100 text-[13px] font-[600] leading-[13px] font-[SUIT Variable]">
-          주간 베스트
-        </span>
-        <div className="w-full flex flex-col items-start gap-[8px]">
+      {/* 주간 베스트 */}
+      <div className="w-full flex flex-col items-start gap-4">
+        <span className="text-gray-100 text-label-13-sb">주간 베스트</span>
+
+        <div className="w-full flex flex-col items-start gap-2">
           {bestBooks.map((book, idx) => (
             <div
               key={`best-${book.id}-${idx}`}
-              className="flex items-center w-full h-[28px] gap-[8px]"
+              className="w-full h-7 flex items-center gap-2"
             >
-              <div className="w-[28px] h-[28px] flex items-center justify-center px-[10px] py-[1px]">
-                <span className="text-gray-100 text-[16px] font-[600] leading-[16px] font-[SUIT Variable]">
-                  {idx + 1}
-                </span>
+              {/* 순위 */}
+              <div className="w-7 h-7 flex items-center justify-center">
+                <span className="text-gray-100 text-btn-16-sb">{idx + 1}</span>
               </div>
-              <div className="flex-1 py-[4px] overflow-hidden">
-                <span className="block text-gray-100 text-[16px] font-[600] leading-[16px] font-[SUIT Variable] truncate">
+
+              {/* 제목 */}
+              <div className="flex-1 overflow-hidden py-1">
+                <span className="block truncate text-gray-100 text-btn-16-sb">
                   {book.title}
                 </span>
               </div>
