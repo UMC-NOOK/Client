@@ -1,9 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchNewAddLayout from "../../components/search/new/SearchNewAddLayout";
 import SearchNewAddInfoForm from "../../components/search/new/SearchNewAddInfoForm";
+import { useShell } from "../../app/AppShell";
 
-export default function SearchNewAddPage() {
+export default function SearchNewAddCategoryPage() {
+  const { setHideFooter } = useShell();
+
+  useEffect(() => {
+    setHideFooter(true);
+    return () => setHideFooter(false);
+  }, [setHideFooter]);
+
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");

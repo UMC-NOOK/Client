@@ -37,7 +37,7 @@ export default function SearchPage() {
   const isInputMode = mode === "searching";
 
   return (
-    <div className="w-full pb-20"> {/* 하단 여백 확보 */}
+    <div className="w-full pb-10"> {/* 하단 여백 확보 */}
       <SearchTopSection
         title="도서 검색"
         activeScope={scope}
