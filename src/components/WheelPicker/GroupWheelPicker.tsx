@@ -23,8 +23,7 @@ export default function GroupWheelPicker({
     leftSelectedID,
     rightSelectedId,
     onChangeLeft,
-    onChangeRight,
-    onClose
+    onChangeRight
 }: Props) {
     if(!isOpen) {
         return null
