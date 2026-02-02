@@ -18,7 +18,6 @@ import SearchPage from "../pages/SearchPage";
 import SearchNewAddPage from "../pages/SearchNewAddPage";
 import SearchNewAddCategoryPage from "../pages/SearchNewAddCategoryPage";
 import SearchNewAddMorePage from "../pages/SearchNewAddMorePage";
-import TempGroupWheelPicker from "../components/WheelPicker/TempGroupWheelPicker";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -83,7 +82,6 @@ export default function AppRoutes() {
         <Route path="/search/new" element={<SearchNewAddPage />} />
         <Route path="/search/new/category" element={<SearchNewAddCategoryPage />} />
         <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
-        <Route path="/dev/wheelpicker" element={<TempGroupWheelPicker />} />
       </Route>
       
       <Route element={<MainTabsLayout />}>
