@@ -12,8 +12,6 @@ type Props ={
 
     onChangeLeft: (item: WheelItem) => void
     onChangeRight: (item: WheelItem) => void
-
-    onClose: () => void
 }
 
 export default function GroupWheelPicker({
