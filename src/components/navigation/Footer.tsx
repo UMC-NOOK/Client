@@ -1,5 +1,5 @@
 // Client/src/components/layout/Footer/Footer.tsx
-import dividerIcon from "../../../assets/search/search-field-text.svg";
+import dividerIcon from "../../assets/search/search-field-text.svg";
 
 export default function Footer() {
   return (

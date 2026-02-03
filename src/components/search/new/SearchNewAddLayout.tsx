@@ -2,6 +2,7 @@
 import React from "react";
 import CloseIcon from "../../../assets/search/addBookclose.svg";
 import BackIcon from "../../../assets/search/newbefore.svg";
+import ProgressBar from "../../navigation/ProgressIndicator";
 
 type Props = {
   title: string;
@@ -13,12 +14,6 @@ type Props = {
   children: React.ReactNode;
   leftIconType?: "close" | "back";
   step: 1 | 2 | 3;
-};
-
-const STEP_WIDTH: Record<Props["step"], string> = {
-  1: "w-0",
-  2: "w-1/2",
-  3: "w-full",
 };
 
 export default function SearchNewAddLayout({
@@ -54,7 +49,6 @@ export default function SearchNewAddLayout({
             disabled={!isNextActive}
             className="h-10 px-4 flex items-center justify-center disabled:cursor-not-allowed"
           >
-            {/* 18px / 1 / 500 (btn-18-m 사용) */}
             <span className={["text-btn-18-m", isNextActive ? "text-gray-100" : "text-gray-600"].join(" ")}>
               {nextLabel}
             </span>
@@ -62,23 +56,14 @@ export default function SearchNewAddLayout({
         </div>
       </div>
 
-      {/* 진행바: 콘텐츠 블럭(px-1)과 좌우 길이 맞추기 */}
-      <div className="w-full px-1">
-        <div className="w-full h-1 rounded-[80px] bg-gray-800 relative overflow-hidden">
-          <div className={["h-full bg-gray-100 rounded-[80px]", STEP_WIDTH[step]].join(" ")} />
-        </div>
-      </div>
+      {/* ProgressIndicator 부분 (컴포넌트로 분리) */}
+      <ProgressBar step={step} total={3} />
 
       {/* 콘텐츠 */}
       <div className="w-full flex flex-col items-start pt-12">
         <div className="w-full flex flex-col items-start px-1">
-          {/* 20px / 150% / 700 */}
           <h1 className="text-gray-100 text-title-20-b">{title}</h1>
-
-          {subtitle && (
-            /* 14px / 150% / 500 */
-            <p className="text-gray-500 text-body-14-m">{subtitle}</p>
-          )}
+          {subtitle && <p className="text-gray-500 text-body-14-m">{subtitle}</p>}
         </div>
 
         <div className="w-full px-1 mt-8">
