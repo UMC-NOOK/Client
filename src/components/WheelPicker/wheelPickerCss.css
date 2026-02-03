@@ -1,0 +1,43 @@
+
+.singleWheelRoot li[role="option"]{
+    display: flex;  
+    padding: 0; 
+    gap: 8px;   
+    margin: 0 !important;
+    border: 0 !important;
+}
+
+.singleWheelRoot ul[role="listbox"]{
+  padding: 0 12px;
+  box-shadow: none;
+  scrollbar-width: thin;
+}
+
+.singleWheelRoot li[role="option"] > span:first-of-type {
+  display: flex;
+  font-size: 0 !important;  
+  line-height: 0 !important;
+}
+
+.singleWheelRoot li[role="option"][aria-selected="true"] > span:first-of-type::before {
+  content: url("data:image/svg+xml,%3Csvg%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M10.3518%202.69228C10.5001%202.54398%2010.7405%202.54398%2010.8888%202.69228C11.0371%202.84058%2011.0371%203.08097%2010.8888%203.22927L4.55962%209.55842C4.41132%209.70672%204.17094%209.70672%204.02263%209.55842L1.11123%206.64701C0.962925%206.49871%200.962925%206.25832%201.11123%206.11002C1.25953%205.96172%201.49991%205.96172%201.64821%206.11002L4.29113%208.75294L10.3518%202.69228Z%22%20fill%3D%22%23ECECEC%22/%3E%3C/svg%3E");
+  margin-left: 12px;
+}
+
+.singleWheelRoot li[role="option"] > span[style*="width: 20px"]{
+  width: 3px !important;
+}
+
+.singleWheelRoot li[role="option"] > p {
+  font-size: 14px !important;
+  padding: 0px;
+  margin-left: 8px;
+}
+
+.singleWheelRoot ul[role="listbox"] > div[style*="height: 65px"]{
+  height: 60px !important;
+}
+
+.singleWheelRoot {
+  overflow: hidden;
+}
