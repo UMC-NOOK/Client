@@ -105,7 +105,7 @@ export default function SearchNewAddCategoryForm({
                 >
                   <span
                     className={[
-                      "text-[14px] font-semibold leading-[14px]",
+                      "text-[14px] font-semibold leading-3.5",
                       selected ? "text-gray-1000" : "text-gray-400",
                     ].join(" ")}
                   >

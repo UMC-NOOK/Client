@@ -63,20 +63,13 @@ export default function SearchTopSection({
       {/* 헤더 */}
       <div className="w-full h-10 flex items-center justify-between">
         <div className="w-6 h-6" aria-hidden="true" />
-        <h1 className="text-gray-100 text-[18px] font-medium leading-6.75 font-[SUIT] text-center">
-          {title}
-        </h1>
+        <h1 className="text-gray-100 text-title-18-m text-center">{title}</h1>
         <button
           type="button"
           onClick={onClose}
           className="w-6 h-6 flex items-center justify-center"
         >
-          <img
-            src={closeIcon}
-            alt="닫기"
-            className="w-6 h-6"
-            draggable={false}
-          />
+          <img src={closeIcon} alt="닫기" className="w-6 h-6" draggable={false} />
         </button>
       </div>
 
@@ -96,6 +89,7 @@ export default function SearchTopSection({
           />
         </div>
 
+        {/* 검색바 */}
         <div
           onMouseDown={(e) => {
             e.preventDefault();
@@ -110,9 +104,7 @@ export default function SearchTopSection({
             ref={inputRef}
             value={query}
             onChange={(e) => onQueryChange?.(e.target.value)}
-            onFocus={() => {
-              onFocus?.();
-            }}
+            onFocus={() => onFocus?.()}
             onBlur={onBlur}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
@@ -125,7 +117,7 @@ export default function SearchTopSection({
             className="
               flex-1 bg-transparent outline-none
               text-gray-100 placeholder-gray-300
-              text-[16px] font-normal leading-6 font-[SUIT]
+              text-body-16-r
               truncate
             "
           />
@@ -140,6 +132,7 @@ export default function SearchTopSection({
               alt="검색"
               className="w-[19.5px] h-[19.5px]"
               style={{ aspectRatio: "19.5 / 19.5" }}
+              draggable={false}
             />
           </button>
         </div>
@@ -161,23 +154,22 @@ function TabButton({
     <button
       type="button"
       onClick={onClick}
-      className={`relative flex h-10 px-4 py-3 items-center justify-center flex-1 rounded-[20px] z-10 ${
-        active ? "bg-gray-700" : ""
-      }`}
+      className={[
+        "relative flex h-10 px-4 py-3 items-center justify-center flex-1 rounded-[20px] z-10",
+        active ? "bg-gray-700" : "",
+      ].join(" ")}
     >
       <span
-        className="truncate"
+        className={[
+          "truncate text-label-16-sb",
+          active ? "text-gray-100" : "text-gray-500",
+        ].join(" ")}
         style={{
           display: "-webkit-box",
           WebkitBoxOrient: "vertical",
           WebkitLineClamp: 1,
           overflow: "hidden",
           textOverflow: "ellipsis",
-          color: active ? "#ECECEC" : "#697198",
-          fontFamily: "SUIT Variable",
-          fontSize: 16,
-          fontWeight: 600,
-          lineHeight: "100%",
         }}
       >
         {label}

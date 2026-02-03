@@ -1,23 +1,17 @@
 // src/app/AppRoutes.tsx
-import {
-  Navigate,
-  Route,
-  Routes,
-  Outlet,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Navigate, Route, Routes, Outlet, useLocation, useNavigate } from "react-router-dom";
 import AppShell from "./AppShell";
 import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
-import LibraryMobilePage from "../pages/LibraryMobilePage";
-import FocusMobilePage from "../pages/FocusMobilePage";
-import RecordMobilePage from "../pages/RecordMobilePage";
-import GroupMobilePage from "../pages/GroupMobilePage";
-import SearchPage from "../pages/SearchPage";
 
-import SearchNewAddPage from "../pages/SearchNewAddPage";
-import SearchNewAddCategoryPage from "../pages/SearchNewAddCategoryPage";
-import SearchNewAddMorePage from "../pages/SearchNewAddMorePage";
+import LibraryMobilePage from "../pages/search/LibraryMobilePage";
+import FocusMobilePage from "../pages/search/FocusMobilePage";
+import RecordMobilePage from "../pages/search/RecordMobilePage";
+import GroupMobilePage from "../pages/search/GroupMobilePage";
+import SearchPage from "../pages/search/SearchPage";
+
+import SearchNewAddPage from "../pages/search/SearchNewAddPage";
+import SearchNewAddCategoryPage from "../pages/search/SearchNewAddCategoryPage";
+import SearchNewAddMorePage from "../pages/search/SearchNewAddMorePage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -41,13 +35,14 @@ function tabToPath(tab: TabKey) {
   }
 }
 
+/** ✅ Main Tabs 레이아웃 (TopAppBar + Outlet) */
 function MainTabsLayout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const activeTab = pathToTab(pathname);
 
   return (
-    <AppShell>
+    <>
       <TopAppBar
         activeTab={activeTab}
         onTabChange={(tab) => navigate(tabToPath(tab))}
@@ -58,40 +53,46 @@ function MainTabsLayout() {
       <div className="w-full max-w-85.75 mx-auto">
         <Outlet />
       </div>
-    </AppShell>
+    </>
   );
 }
 
+/** ✅ Search 레이아웃 (검색 영역만 max-width 래핑) */
 function SearchLayout() {
-
   return (
-      <div className="w-full max-w-85.75 mx-auto">
-        <Outlet />
-      </div>
+    <div className="w-full max-w-85.75 mx-auto">
+      <Outlet />
+    </div>
   );
 }
 
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/library" replace />} />
+      {/* ✅ AppShell은 최상단에서 딱 한 번만 */}
+      <Route element={<AppShell />}>
+        {/* 홈 진입 시 기본 탭으로 */}
+        <Route path="/" element={<Navigate to="/library" replace />} />
 
-      <Route element={<SearchLayout />}>
-        <Route path="/search" element={<SearchPage />} />
+        {/* ✅ Search Routes */}
+        <Route element={<SearchLayout />}>
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/search/new" element={<SearchNewAddPage />} />
+          <Route path="/search/new/category" element={<SearchNewAddCategoryPage />} />
+          <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
+        </Route>
 
-        <Route path="/search/new" element={<SearchNewAddPage />} />
-        <Route path="/search/new/category" element={<SearchNewAddCategoryPage />} />
-        <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
+        {/* ✅ Main Tabs Routes */}
+        <Route element={<MainTabsLayout />}>
+          <Route path="/library" element={<LibraryMobilePage />} />
+          <Route path="/focus" element={<FocusMobilePage />} />
+          <Route path="/record" element={<RecordMobilePage />} />
+          <Route path="/group" element={<GroupMobilePage />} />
+        </Route>
+
+        {/* ✅ 그 외 모든 경로는 기본 탭으로 */}
+        <Route path="*" element={<Navigate to="/library" replace />} />
       </Route>
-      
-      <Route element={<MainTabsLayout />}>
-        <Route path="/library" element={<LibraryMobilePage />} />
-        <Route path="/focus" element={<FocusMobilePage />} />
-        <Route path="/record" element={<RecordMobilePage />} />
-        <Route path="/group" element={<GroupMobilePage />} />
-      </Route>
-
-      <Route path="*" element={<Navigate to="/library" replace />} />
     </Routes>
   );
 }
