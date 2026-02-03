@@ -35,7 +35,7 @@ function tabToPath(tab: TabKey) {
   }
 }
 
-/** ✅ Main Tabs 레이아웃 (TopAppBar + Outlet) */
+/** ✅ 탭 화면 레이아웃 (AppShell 없음! 이미 상위에서 깔림) */
 function MainTabsLayout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -57,7 +57,7 @@ function MainTabsLayout() {
   );
 }
 
-/** ✅ Search 레이아웃 (검색 영역만 max-width 래핑) */
+/** ✅ 검색 화면 레이아웃 */
 function SearchLayout() {
   return (
     <div className="w-full max-w-85.75 mx-auto">
@@ -69,12 +69,11 @@ function SearchLayout() {
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* ✅ AppShell은 최상단에서 딱 한 번만 */}
+      {/* ✅ AppShell을 최상단으로 한 번만! */}
       <Route element={<AppShell />}>
-        {/* 홈 진입 시 기본 탭으로 */}
         <Route path="/" element={<Navigate to="/library" replace />} />
 
-        {/* ✅ Search Routes */}
+        {/* Search */}
         <Route element={<SearchLayout />}>
           <Route path="/search" element={<SearchPage />} />
           <Route path="/search/new" element={<SearchNewAddPage />} />
@@ -82,7 +81,7 @@ export default function AppRoutes() {
           <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
         </Route>
 
-        {/* ✅ Main Tabs Routes */}
+        {/* Main Tabs */}
         <Route element={<MainTabsLayout />}>
           <Route path="/library" element={<LibraryMobilePage />} />
           <Route path="/focus" element={<FocusMobilePage />} />
@@ -90,7 +89,6 @@ export default function AppRoutes() {
           <Route path="/group" element={<GroupMobilePage />} />
         </Route>
 
-        {/* ✅ 그 외 모든 경로는 기본 탭으로 */}
         <Route path="*" element={<Navigate to="/library" replace />} />
       </Route>
     </Routes>
