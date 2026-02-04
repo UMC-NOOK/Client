@@ -35,7 +35,6 @@ function tabToPath(tab: TabKey) {
   }
 }
 
-/** ✅ 탭 화면 레이아웃 (AppShell 없음! 이미 상위에서 깔림) */
 function MainTabsLayout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -57,7 +56,6 @@ function MainTabsLayout() {
   );
 }
 
-/** ✅ 검색 화면 레이아웃 */
 function SearchLayout() {
   return (
     <div className="w-full max-w-85.75 mx-auto">
@@ -69,7 +67,6 @@ function SearchLayout() {
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* ✅ AppShell을 최상단으로 한 번만! */}
       <Route element={<AppShell />}>
         <Route path="/" element={<Navigate to="/library" replace />} />
 
