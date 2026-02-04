@@ -31,7 +31,7 @@ function FooterLink({ label }: { label: string }) {
   return (
     <button
       type="button"
-      className="text-gray-500 text-body-12-r hover:underline underline-offset-2"
+      className="text-gray-500 text-body-12-r"
     >
       {label}
     </button>

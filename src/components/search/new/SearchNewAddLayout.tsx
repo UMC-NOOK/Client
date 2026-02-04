@@ -49,12 +49,18 @@ export default function SearchNewAddLayout({
             disabled={!isNextActive}
             className="h-10 px-4 flex items-center justify-center disabled:cursor-not-allowed"
           >
-            <span className={["text-btn-18-m", isNextActive ? "text-gray-100" : "text-gray-600"].join(" ")}>
+            <span
+              className={[
+                "text-btn-18-m",
+                isNextActive ? "text-gray-100" : "text-gray-600",
+              ].join(" ")}
+            >
               {nextLabel}
             </span>
           </button>
         </div>
       </div>
+
 
       {/* ProgressIndicator 부분 (컴포넌트로 분리) */}
       <ProgressBar step={step} total={3} />
