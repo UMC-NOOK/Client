@@ -13,7 +13,7 @@ const base = "inline-flex h-12 items-center justify-center whitespace-nowrap px-
 const variantClassMap: Record<Variant, string> = {
   default: "bg-mint text-black",
   dark: "bg-gray-800 text-[#A2A7C3]",
-  danger: "bg-[#3E1C26] text-[#FF4F41]",
+  danger: "bg-gray-1000 text-red-500",
 };
 
 export default function Button({
