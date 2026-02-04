@@ -1,9 +1,21 @@
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 // src/components/layout/TopAppBar/TopAppBar.tsx
 import React from "react";
 
 import searchPng from "../../../assets/logo/top-navigation-button-icon-search.svg";
 import menuPng from "../../../assets/logo/top-navigation-button-icon.svg";
 import logoSvg from "../../../assets/logo/top-navigation-logo.svg";
+=======
+import TopGnb from "../../navigation/Gnb";
+import TabBar from "../../navigation/tabs/TabBar";
+import type { TabOption } from "../../navigation/tabs/TabBar";
+>>>>>>> Stashed changes
+=======
+import TopGnb from "../../navigation/Gnb";
+import TabBar from "../../navigation/tabs/TabBar";
+import type { TabOption } from "../../navigation/tabs/TabBar";
+>>>>>>> Stashed changes
 
 export type TabKey = "library" | "focus" | "record" | "group";
 
@@ -19,7 +31,17 @@ export type TopAppBarProps = {
   logoAlt?: string;
 
   showTabs?: boolean;
+
+  /** 탭 갯수는 인자로 넘겨줘야 설정 가능  */
+  tabs?: readonly TabOption<TabKey>[];
 };
+
+const DEFAULT_TABS: readonly TabOption<TabKey>[] = [
+  { value: "library", label: "서재" },
+  { value: "focus", label: "포커스" },
+  { value: "record", label: "기록" },
+  { value: "group", label: "그룹" },
+] as const;
 
 export default function TopAppBar({
   activeTab = "library",
@@ -30,11 +52,14 @@ export default function TopAppBar({
   logoSrc,
   logoAlt = "nook",
   showTabs = true,
+  tabs = DEFAULT_TABS,
 }: TopAppBarProps) {
   const resolvedLogoSrc = logoSrc ?? logoSvg;
 
   return (
     <header className="w-full">
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
       <div className="w-full max-w-85.75 mx-auto flex flex-col items-start">
         {/* GNB */}
         <div className="w-full h-10 flex items-center justify-between">
@@ -61,9 +86,24 @@ export default function TopAppBar({
             </IconButton>
           </div>
         </div>
+=======
+=======
+>>>>>>> Stashed changes
+      <div className="w-full max-w-85.75 mx-auto">
+        {/* 공용 컴포넌트 GNB */}
+        <TopGnb
+          onLogoClick={onLogoClick}
+          onSearchClick={onSearchClick}
+          onMenuClick={onMenuClick}
+          logoSrc={logoSrc}
+          logoAlt={logoAlt}
+        />
+>>>>>>> Stashed changes
 
-        {/* Tabs */}
+        {/* 공용 컴포넌트 TabBar */}
         {showTabs && (
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
           <nav className="relative w-full h-10 flex items-center justify-center">
             {/* 기본 divider */}
             <span
@@ -92,11 +132,25 @@ export default function TopAppBar({
               onClick={() => onTabChange?.("group")}
             />
           </nav>
+=======
+=======
+>>>>>>> Stashed changes
+          <TabBar<TabKey>
+            value={activeTab}
+            onChange={(v) => onTabChange?.(v)}
+            options={tabs}
+          />
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
         )}
       </div>
     </header>
   );
 }
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 /* ───────────────── Tab ───────────────── */
 
@@ -168,3 +222,7 @@ function IconButton({
     </button>
   );
 }
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes

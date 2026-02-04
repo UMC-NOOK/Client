@@ -1,7 +1,9 @@
 // Client/src/components/search/SearchTopSection.tsx
 import { useEffect, useRef, useState } from "react";
 import closeIcon from "../../assets/logo/close-button.svg";
-import searchIcon from "../../assets/logo/search-field-button-icon-shape.svg";
+import SearchInput from "../input/SearchField";
+import SegmentedControl from "../navigation/tabs/Text";
+import TopNavigation from "../navigation/topnavigation/TopNavigation";
 
 export type SearchScope = "all" | "my";
 
@@ -28,7 +30,7 @@ type Props = {
 };
 
 export default function SearchTopSection({
-  title = "도서 검색",
+  title = "도서git검색",
   activeScope = "all",
   onScopeChange,
   query = "",
@@ -60,82 +62,45 @@ export default function SearchTopSection({
 
   return (
     <section className="w-full flex flex-col items-start gap-4">
-      {/* 헤더 */}
-      <div className="w-full h-10 flex items-center justify-between">
-        <div className="w-6 h-6" aria-hidden="true" />
-        <h1 className="text-gray-100 text-title-18-m text-center">{title}</h1>
-        <button
-          type="button"
-          onClick={onClose}
-          className="w-6 h-6 flex items-center justify-center"
-        >
-          <img src={closeIcon} alt="닫기" className="w-6 h-6" draggable={false} />
-        </button>
-      </div>
+      {/* ✅ 공용 헤더 */}
+      <TopNavigation
+        left={<div className="w-6 h-6" aria-hidden="true" />}
+        center={<h1 className="text-gray-100 text-title-18-m text-center">{title}</h1>}
+        right={
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-6 h-6 flex items-center justify-center"
+            aria-label="닫기"
+          >
+            <img src={closeIcon} alt="" className="w-6 h-6" draggable={false} />
+          </button>
+        }
+      />
 
       {/* 탭 + 검색바 */}
       <div className="w-full flex flex-col items-start gap-4">
-        {/* 탭 */}
-        <div className="w-full rounded-[20px] bg-gray-900 flex relative">
-          <TabButton
-            label="전체 도서 검색"
-            active={currentScope === "all"}
-            onClick={() => handleScopeClick("all")}
-          />
-          <TabButton
-            label="내 서재 검색"
-            active={currentScope === "my"}
-            onClick={() => handleScopeClick("my")}
-          />
-        </div>
+        <SegmentedControl<SearchScope>
+          ariaLabel="search scope"
+          value={currentScope}
+          onChange={handleScopeChange}
+          buttonWidthPx={168}
+          options={[
+            { value: "all", label: "전체 도서 검색" },
+            { value: "my", label: "내 서재 검색" },
+          ]}
+        />
 
-        {/* 검색바 */}
-        <div
-          onMouseDown={(e) => {
-            e.preventDefault();
-            enterInputMode();
-          }}
-          onTouchStart={() => {
-            enterInputMode();
-          }}
-          className="w-full flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-[13.5px]"
-        >
-          <input
-            ref={inputRef}
-            value={query}
-            onChange={(e) => onQueryChange?.(e.target.value)}
-            onFocus={() => onFocus?.()}
-            onBlur={onBlur}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                onEnter?.();
-                if (!onEnter) onSearchClick?.();
-              }
-            }}
-            placeholder={isInputMode ? "" : placeholder}
-            className="
-              flex-1 bg-transparent outline-none
-              text-gray-100 placeholder-gray-300
-              text-body-16-r
-              truncate
-            "
-          />
-
-          <button
-            type="button"
-            onClick={onSearchClick}
-            className="flex items-center justify-center"
-          >
-            <img
-              src={searchIcon}
-              alt="검색"
-              className="w-[19.5px] h-[19.5px]"
-              style={{ aspectRatio: "19.5 / 19.5" }}
-              draggable={false}
-            />
-          </button>
-        </div>
+        <SearchInput
+          value={query}
+          onChange={(v) => onQueryChange?.(v)}
+          onSearchClick={onSearchClick}
+          onEnter={onEnter}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          isInputMode={isInputMode}
+          placeholder={placeholder}
+        />
       </div>
     </section>
   );
