@@ -11,7 +11,7 @@ type ChipProps = {
 const base = "inline-flex items-center justify-center whitespace-nowrap py-3 px-4 rounded-[20px] text-sm ";
 
 const variantClassMap: Record<ChipVariant, string> = {
-  default: "bg-[#1B203B] text-[#8B94B2]",
+  default: "bg-gray-900 text-gray-400",
   selected: "bg-[#7AD8D2] text-[#13172A]",
 };
 
