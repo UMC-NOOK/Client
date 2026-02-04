@@ -12,7 +12,6 @@ import SearchPage from "../pages/search/SearchPage";
 import SearchNewAddPage from "../pages/search/SearchNewAddPage";
 import SearchNewAddCategoryPage from "../pages/search/SearchNewAddCategoryPage";
 import SearchNewAddMorePage from "../pages/search/SearchNewAddMorePage";
-import TestButtonComponet from "../components/action/TestButtonComponent";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -80,7 +79,6 @@ export default function AppRoutes() {
           <Route path="/search/new" element={<SearchNewAddPage />} />
           <Route path="/search/new/category" element={<SearchNewAddCategoryPage />} />
           <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
-          <Route path="/test-button" element={<TestButtonComponet/>}/>
         </Route>
 
         {/* Main Tabs */}
