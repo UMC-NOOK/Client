@@ -11,7 +11,7 @@ type ButtonProps = {
 const base = "inline-flex h-12 items-center justify-center whitespace-nowrap px-6 py-4 rounded-lg ";
 
 const variantClassMap: Record<Variant, string> = {
-  default: "bg-[#7AD8D2] text-black",
+  default: "bg-mint text-black",
   dark: "bg-[#272D49] text-[#A2A7C3]",
   danger: "bg-[#3E1C26] text-[#FF4F41]",
 };
