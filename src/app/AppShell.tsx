@@ -1,7 +1,7 @@
 // src/app/AppShell.tsx
 import React, { createContext, useContext, useMemo, useState } from "react";
 import { Outlet } from "react-router-dom";
-import Footer from "../components/layout/Footer/Footer";
+import Footer from "../components/navigation/Footer";
 
 export type ShellContextValue = {
   hideFooter: boolean;
