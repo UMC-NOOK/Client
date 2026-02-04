@@ -12,7 +12,7 @@ const base = "inline-flex items-center justify-center whitespace-nowrap py-3 px-
 
 const variantClassMap: Record<ChipVariant, string> = {
   default: "bg-gray-900 text-gray-400",
-  selected: "bg-[#7AD8D2] text-[#13172A]",
+  selected: "bg-mint text-gray-1000",
 };
 
 export default function ChipComponent({
