@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import closeIcon from "../../assets/logo/close-button.svg";
 import SearchInput from "../input/SearchField";
 import SegmentedControl from "../navigation/tabs/Text";
+import TopNavigation from "../navigation/topnavigation/TopNavigation";
 
 export type SearchScope = "all" | "my";
 
@@ -54,22 +55,24 @@ export default function SearchTopSection({
 
   return (
     <section className="w-full flex flex-col items-start gap-4">
-      {/* 헤더 */}
-      <div className="w-full h-10 flex items-center justify-between">
-        <div className="w-6 h-6" aria-hidden="true" />
-        <h1 className="text-gray-100 text-title-18-m text-center">{title}</h1>
-        <button
-          type="button"
-          onClick={onClose}
-          className="w-6 h-6 flex items-center justify-center"
-        >
-          <img src={closeIcon} alt="닫기" className="w-6 h-6" draggable={false} />
-        </button>
-      </div>
+      {/* ✅ 공용 헤더 */}
+      <TopNavigation
+        left={<div className="w-6 h-6" aria-hidden="true" />}
+        center={<h1 className="text-gray-100 text-title-18-m text-center">{title}</h1>}
+        right={
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-6 h-6 flex items-center justify-center"
+            aria-label="닫기"
+          >
+            <img src={closeIcon} alt="" className="w-6 h-6" draggable={false} />
+          </button>
+        }
+      />
 
       {/* 탭 + 검색바 */}
       <div className="w-full flex flex-col items-start gap-4">
-        {/* 탭 (공용 컴포넌트) */}
         <SegmentedControl<SearchScope>
           ariaLabel="search scope"
           value={currentScope}
@@ -81,7 +84,6 @@ export default function SearchTopSection({
           ]}
         />
 
-        {/* 검색바 */}
         <SearchInput
           value={query}
           onChange={(v) => onQueryChange?.(v)}
