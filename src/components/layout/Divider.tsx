@@ -1,5 +1,7 @@
-export default function Divider() {
+export default function Divider(width: number, height: number) {
   return (
-    <div className="bg-gradient-divider flex w-full h-px justify-center items-center"></div>
+    <div
+      className={`bg-gradient-divider flex w-${width} h-${height} justify-center items-center`}
+    ></div>
   );
 }
