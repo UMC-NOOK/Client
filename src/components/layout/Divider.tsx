@@ -1,12 +1,11 @@
 type DividerProps = {
   width: number;
-  height: number;
 };
 
-export default function Divider({ width, height }: DividerProps) {
+export default function Divider({ width }: DividerProps) {
   return (
     <div
-      className={`bg-gradient-divider flex w-${width} h-${height} justify-center items-center`}
+      className={`bg-gradient-divider flex w-${width} h-px justify-center items-center`}
     ></div>
   );
 }
