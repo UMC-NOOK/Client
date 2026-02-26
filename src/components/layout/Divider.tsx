@@ -1,5 +1,8 @@
+// <Divider width={36} />
+// <Divider width={"full"} />
+
 type DividerProps = {
-  width: number;
+  width: number | string;
 };
 
 export default function Divider({ width }: DividerProps) {
