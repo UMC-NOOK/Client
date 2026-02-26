@@ -8,12 +8,13 @@ type ButtonProps = {
   className?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
-const base = "inline-flex h-12 items-center justify-center whitespace-nowrap px-6 py-4 rounded-lg ";
+const base =
+  "inline-flex h-12 items-center justify-center whitespace-nowrap px-6 py-4 rounded-lg ";
 
 const variantClassMap: Record<Variant, string> = {
   default: "bg-mint text-black",
-  dark: "bg-gray-800 text-[#A2A7C3]",
-  danger: "bg-gray-1000 text-red-500",
+  dark: "bg-gray-25 text-[#A2A7C3]",
+  danger: "bg-gray-10 text-red-1",
 };
 
 export default function Button({

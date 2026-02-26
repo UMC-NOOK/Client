@@ -79,12 +79,12 @@ export default function SearchNewAddCategoryForm({
       {SECTIONS.map((sec) => (
         <div key={sec.title} className="flex flex-col gap-2">
           {/* (3) 카테고리명 */}
-          <span className="text-gray-100 text-[13px] font-semibold leading-3.25">
+          <span className="text-gray-90 text-[13px] font-semibold leading-3.25">
             {sec.title}
           </span>
 
           {/* (5) 설명 문구 */}
-          <span className="text-gray-500 text-[14px] font-medium leading-5.25 pb-2">
+          <span className="text-gray-50 text-[14px] font-medium leading-5.25 pb-2">
             복수 선택이 가능합니다.
           </span>
 
@@ -100,13 +100,13 @@ export default function SearchNewAddCategoryForm({
                   onClick={() => toggle(item)}
                   className={[
                     "flex items-center justify-center px-4 py-3 rounded-full",
-                    selected ? "bg-mint" : "bg-gray-900",
+                    selected ? "bg-mint" : "bg-gray-17",
                   ].join(" ")}
                 >
                   <span
                     className={[
                       "text-[14px] font-semibold leading-3.5",
-                      selected ? "text-gray-1000" : "text-gray-400",
+                      selected ? "text-gray-10" : "text-gray-60",
                     ].join(" ")}
                   >
                     {item}

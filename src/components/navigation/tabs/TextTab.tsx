@@ -32,9 +32,9 @@ export default function SegmentedButton({
         // 폭: widthPx 없으면 flex-1로 가변
         widthPx ? "" : "flex-1",
 
-        active ? "bg-gray-700" : "bg-gray-900",
+        active ? "bg-gray-30" : "bg-gray-17",
 
-        active ? "text-gray-100" : "text-gray-500",
+        active ? "text-gray-90" : "text-gray-50",
 
         "text-label-16-sb",
 

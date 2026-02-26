@@ -10,18 +10,12 @@ import {
 
 const LIMIT = 5;
 
-function SectionBlock({
-  title,
-  books,
-}: {
-  title: string;
-  books: BookItem[];
-}) {
+function SectionBlock({ title, books }: { title: string; books: BookItem[] }) {
   if (!books.length) return null;
 
   return (
     <div className="w-full flex flex-col items-start gap-4">
-      <span className="text-gray-100 text-label-13-b">{title}</span>
+      <span className="text-gray-90 text-label-13-b">{title}</span>
       <HorizontalBookScroller books={books} />
     </div>
   );
@@ -126,11 +120,11 @@ function HorizontalBookScroller({ books }: { books: BookItem[] }) {
             />
 
             <div className="flex flex-col items-start w-full mt-1">
-              <span className="text-gray-100 text-body-14-m line-clamp-2 w-full break-keep">
+              <span className="text-gray-90 text-body-14-m line-clamp-2 w-full break-keep">
                 {book.title}
               </span>
 
-              <span className="text-gray-300 text-body-12-r truncate w-full mt-0.5">
+              <span className="text-gray-70 text-body-12-r truncate w-full mt-0.5">
                 {book.author}
               </span>
             </div>
@@ -149,7 +143,10 @@ export default function MyLibraryListSection() {
   return (
     <section className="w-full flex flex-col items-start gap-8 pt-8">
       {showFallbackOnly ? (
-        <SectionBlock title="이 책을 추천해요" books={fallbackRecommendedBooks} />
+        <SectionBlock
+          title="이 책을 추천해요"
+          books={fallbackRecommendedBooks}
+        />
       ) : (
         <>
           <SectionBlock title="최근 포커스한 책" books={focusedBooks} />

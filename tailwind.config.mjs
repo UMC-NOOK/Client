@@ -5,38 +5,49 @@ export default {
     extend: {
       colors: {
         // 기존: --Gray-gray-*
-        // 사용: className="text-gray-1000", className="bg-gray-1000"
+        // 사용: className="text-gray-10", className="bg-gray-10"
         gray: {
-          1000: "#13172aff",
-          950: "#181d34ff",
-          900: "#1b203bff",
-          850: "#212742ff",
-          800: "#272d49ff",
-          700: "#353957ff",
-          650: "#444866ff",
-          600: "#525775ff",
-          500: "#697198ff",
-          400: "#8b94b2ff",
-          300: "#a2a7c3ff",
-          200: "#c5ccdbff",
-          100: "#ecececff",
+          10: "#13172aff",
+          15: "#181d34ff",
+          17: "#1b203bff",
+          20: "#212742ff",
+          25: "#272d49ff",
+          30: "#353957ff",
+          35: "#444866ff",
+          40: "#525775ff",
+          50: "#697198ff",
+          60: "#8b94b2ff",
+          70: "#a2a7c3ff",
+          80: "#c5ccdbff",
+          90: "#ecececff",
         },
 
         // 기존: --Colors-*
-        // 사용: className="text-mint", className="bg-mint"
-        mint: "#7ad8d2ff",
-        yellow: "#f8ee7dff",
+        // 사용: className="text-mint-60", className="bg-blue-1"
+        mint: {
+          60: "#7ad8d2ff",
+        },
+        yellow: {
+          70: "#f8ee7dff",
+          50: "#d2c42dff",
+        },
         blue: {
           1: "#4f9bf2ff",
           2: "#315df7ff",
         },
         red: {
-          1000: "#3e1c26ff",
-          500: "#ff4f41ff",
+          60: "#eb4747ff",
+          20: "#3e1c26ff",
+          1: "#ff4f41ff",
         },
         navy: {
           1: "#0e1430ff",
         },
+        pink: {
+          60: "#EB60AFff",
+        },
+        green: { 50: "#5ECA46ff" },
+        purple: { 60: "#BA31FFff" },
       },
       /**
        * 기존: gradient__*
@@ -51,7 +62,7 @@ export default {
           "linear-gradient(180deg, rgba(31, 39, 81, 0) 0%, #1f2751 100%)",
         "gradient-mask":
           "linear-gradient(180deg, rgba(24, 29, 52, 0) 0%, #181d34 100%)",
-        "gradient-gray-400":
+        "gradient-gray-60":
           "linear-gradient(180deg, #8b94b2 0%, rgba(139, 148, 178, 0) 100%)",
       },
 
@@ -112,5 +123,3 @@ export default {
   },
   plugins: [],
 };
-
-
