@@ -36,7 +36,13 @@ function uniqById<T extends { id: any }>(arr: T[]) {
   return out;
 }
 
-function ResultRow({ book, showDivider }: { book: Book; showDivider: boolean }) {
+function ResultRow({
+  book,
+  showDivider,
+}: {
+  book: Book;
+  showDivider: boolean;
+}) {
   return (
     <div className="flex flex-col items-center self-stretch">
       {/* row */}
@@ -53,13 +59,13 @@ function ResultRow({ book, showDivider }: { book: Book; showDivider: boolean }) 
 
         {/* text */}
         <div className="flex-1 flex flex-col items-start min-w-0">
-          <div className="w-full break-keep line-clamp-2 text-gray-100 text-subtitle-14-sb mb-0.5">
+          <div className="w-full break-keep line-clamp-2 text-gray-90 text-subtitle-14-sb mb-0.5">
             <span>
               [{book.category}] {book.title}
             </span>
           </div>
 
-          <div className="w-full truncate text-gray-300 text-body-13-r">
+          <div className="w-full truncate text-gray-70 text-body-13-r">
             {book.author}
           </div>
         </div>
@@ -104,7 +110,7 @@ function DirectAddRow({
         isEmpty ? "pt-0" : "pt-4",
       ].join(" ")}
     >
-      <span className="text-gray-400 text-label-14-sb">
+      <span className="text-gray-60 text-label-14-sb">
         찾으시는 도서가 없나요?
       </span>
 
@@ -114,7 +120,7 @@ function DirectAddRow({
         onMouseDown={(e) => e.preventDefault()}
         className="flex px-2 py-1 items-center bg-transparent"
       >
-        <span className="text-gray-400 text-label-14-sb underline underline-offset-2">
+        <span className="text-gray-60 text-label-14-sb underline underline-offset-2">
           도서 직접 추가
         </span>
       </button>
@@ -122,7 +128,11 @@ function DirectAddRow({
   );
 }
 
-export default function SearchResultSection({ scope, query, onDirectAdd }: Props) {
+export default function SearchResultSection({
+  scope,
+  query,
+  onDirectAdd,
+}: Props) {
   const q = query.trim().toLowerCase();
 
   let source: Book[] = [];
@@ -141,7 +151,7 @@ export default function SearchResultSection({ scope, query, onDirectAdd }: Props
     : source.filter(
         (b) =>
           b.title.toLowerCase().includes(q) ||
-          b.author.toLowerCase().includes(q)
+          b.author.toLowerCase().includes(q),
       );
 
   const count = filtered.length;
@@ -152,7 +162,7 @@ export default function SearchResultSection({ scope, query, onDirectAdd }: Props
       <div className="w-full flex flex-col items-start pt-5">
         {/* count */}
         <div className="w-full flex flex-col gap-2">
-          <span className="text-gray-100 text-label-13-sb pb-4">
+          <span className="text-gray-90 text-label-13-sb pb-4">
             {count}권의 도서가 검색되었어요.
           </span>
         </div>

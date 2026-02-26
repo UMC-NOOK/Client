@@ -21,7 +21,7 @@ export function TextField({
 }: TextFieldProps) {
   return (
     <div className="w-full flex flex-col items-start gap-3">
-      <span className="text-gray-100 text-label-13-b">{title}</span>
+      <span className="text-gray-90 text-label-13-b">{title}</span>
 
       <input
         value={value}
@@ -30,8 +30,8 @@ export function TextField({
         inputMode={inputMode}
         disabled={disabled}
         className={[
-          "w-full px-4 py-3 rounded-md bg-gray-900 outline-none",
-          "text-gray-100 text-body-14-r placeholder:text-gray-500",
+          "w-full px-4 py-3 rounded-md bg-gray-17 outline-none",
+          "text-gray-90 text-body-14-r placeholder:text-gray-50",
           disabled ? "opacity-50 cursor-not-allowed" : "",
         ].join(" ")}
       />
@@ -61,7 +61,7 @@ export function TitleTextField({
   return (
     <div className="w-full flex flex-col items-start gap-3">
       {/* title */}
-      <span className="text-gray-100 text-label-13-b">{title}</span>
+      <span className="text-gray-90 text-label-13-b">{title}</span>
 
       {/* input */}
       <input
@@ -70,10 +70,10 @@ export function TitleTextField({
         placeholder={placeholder}
         disabled={disabled}
         className={[
-          "w-full px-4 py-3 rounded-md bg-gray-900 outline-none",
+          "w-full px-4 py-3 rounded-md bg-gray-17 outline-none",
           "overflow-hidden text-ellipsis whitespace-nowrap",
           "font-suit text-[20px] font-bold leading-[150%]",
-          hasValue ? "text-gray-100" : "text-gray-300",
+          hasValue ? "text-gray-90" : "text-gray-70",
           disabled ? "opacity-50 cursor-not-allowed" : "",
         ].join(" ")}
       />
@@ -81,13 +81,13 @@ export function TitleTextField({
   );
 }
 
-
 // 3분할 텍스트 입력 필드_TripleTextField
 
-type TripleParts<K1 extends string, K2 extends string, K3 extends string> = Record<
-  K1 | K2 | K3,
-  string
->;
+type TripleParts<
+  K1 extends string,
+  K2 extends string,
+  K3 extends string,
+> = Record<K1 | K2 | K3, string>;
 
 type TripleFieldSpec<K extends string> = {
   key: K;
@@ -96,7 +96,11 @@ type TripleFieldSpec<K extends string> = {
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
 };
 
-type TripleTextFieldProps<K1 extends string, K2 extends string, K3 extends string> = {
+type TripleTextFieldProps<
+  K1 extends string,
+  K2 extends string,
+  K3 extends string,
+> = {
   title: string;
   value: TripleParts<K1, K2, K3>;
   onChange: (v: TripleParts<K1, K2, K3>) => void;
@@ -110,7 +114,11 @@ type TripleTextFieldProps<K1 extends string, K2 extends string, K3 extends strin
   disabled?: boolean;
 };
 
-export function TripleTextField<K1 extends string, K2 extends string, K3 extends string>({
+export function TripleTextField<
+  K1 extends string,
+  K2 extends string,
+  K3 extends string,
+>({
   title,
   value,
   onChange,
@@ -134,7 +142,10 @@ export function TripleTextField<K1 extends string, K2 extends string, K3 extends
     }
   };
 
-  const handleBackspace = (idx: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleBackspace = (
+    idx: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     const { key } = fields[idx];
     const prevIdx = idx - 1;
 
@@ -146,16 +157,16 @@ export function TripleTextField<K1 extends string, K2 extends string, K3 extends
   const base = useMemo(
     () =>
       [
-        "flex-1 min-w-0 px-4 py-3 rounded-md bg-gray-900 outline-none",
-        "text-gray-100 text-body-14-r placeholder:text-gray-500",
+        "flex-1 min-w-0 px-4 py-3 rounded-md bg-gray-17 outline-none",
+        "text-gray-90 text-body-14-r placeholder:text-gray-50",
         disabled ? "opacity-50 cursor-not-allowed" : "",
       ].join(" "),
-    [disabled]
+    [disabled],
   );
 
   return (
     <div className="w-full flex flex-col items-start gap-3">
-      <span className="text-gray-100 text-label-13-b">{title}</span>
+      <span className="text-gray-90 text-label-13-b">{title}</span>
 
       <div className="w-full flex gap-2">
         {fields.map((f, idx) => (

@@ -19,7 +19,7 @@ export default function RecentKeywordSection({
   return (
     <section className="w-full flex flex-col items-start gap-8 pt-8">
       <div className="w-full flex flex-col items-start gap-4">
-        <span className="text-gray-100 text-label-13-sb">최근 검색어</span>
+        <span className="text-gray-90 text-label-13-sb">최근 검색어</span>
 
         {hasKeywords ? (
           <div
@@ -44,12 +44,12 @@ export default function RecentKeywordSection({
                 }}
                 className="
                   flex items-center gap-1
-                  rounded-lg bg-gray-900
+                  rounded-lg bg-gray-17
                   px-3 py-1.5
                 "
               >
                 {/* 키워드 텍스트: 14 / 400 / 100% */}
-                <span className="whitespace-nowrap text-gray-100 text-btn-14-r">
+                <span className="whitespace-nowrap text-gray-90 text-btn-14-r">
                   {k.text}
                 </span>
 
@@ -80,7 +80,7 @@ export default function RecentKeywordSection({
           </div>
         ) : (
           /* 없음 텍스트: 14 / 500 / 150% */
-          <span className="self-stretch text-gray-300 text-body-14-m">
+          <span className="self-stretch text-gray-70 text-body-14-m">
             최근 검색어가 없습니다.
           </span>
         )}

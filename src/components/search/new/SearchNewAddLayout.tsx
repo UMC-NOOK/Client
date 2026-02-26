@@ -40,7 +40,12 @@ export default function SearchNewAddLayout({
             className="p-2 flex items-center justify-center"
             aria-label={leftIconType === "back" ? "뒤로가기" : "닫기"}
           >
-            <img src={leftIconSrc} alt="" className="w-6 h-6" draggable={false} />
+            <img
+              src={leftIconSrc}
+              alt=""
+              className="w-6 h-6"
+              draggable={false}
+            />
           </button>
 
           <button
@@ -52,7 +57,7 @@ export default function SearchNewAddLayout({
             <span
               className={[
                 "text-btn-18-m",
-                isNextActive ? "text-gray-100" : "text-gray-600",
+                isNextActive ? "text-gray-90" : "text-gray-40",
               ].join(" ")}
             >
               {nextLabel}
@@ -61,19 +66,22 @@ export default function SearchNewAddLayout({
         </div>
       </div>
 
-
       {/* ProgressIndicator 부분 (컴포넌트로 분리) */}
       <ProgressBar step={step} total={3} />
 
       {/* 콘텐츠 */}
       <div className="w-full flex flex-col items-start pt-12">
         <div className="w-full flex flex-col items-start px-1">
-          <h1 className="text-gray-100 text-title-20-b">{title}</h1>
-          {subtitle && <p className="text-gray-500 text-body-14-m">{subtitle}</p>}
+          <h1 className="text-gray-90 text-title-20-b">{title}</h1>
+          {subtitle && (
+            <p className="text-gray-50 text-body-14-m">{subtitle}</p>
+          )}
         </div>
 
         <div className="w-full px-1 mt-8">
-          <div className="w-full flex flex-col items-start gap-8">{children}</div>
+          <div className="w-full flex flex-col items-start gap-8">
+            {children}
+          </div>
         </div>
       </div>
     </div>

@@ -35,7 +35,7 @@ export default function SegmentedControl<T extends string>({
       aria-label={ariaLabel}
       style={containerStyle}
       className={[
-        "rounded-[20px] bg-gray-900 flex relative",
+        "rounded-[20px] bg-gray-17 flex relative",
         buttonWidthPx ? "" : "w-full",
         className,
       ].join(" ")}
@@ -54,13 +54,13 @@ export default function SegmentedControl<T extends string>({
             className={[
               "relative flex h-10 items-center justify-center rounded-[20px] z-10",
               buttonWidthPx ? "" : "flex-1", // 변동되는 w 부분 인자로 넘겨주면 변경 가능
-              active ? "bg-gray-700" : "",
+              active ? "bg-gray-30" : "",
             ].join(" ")}
           >
             <span
               className={[
                 "truncate text-label-16-sb",
-                active ? "text-gray-100" : "text-gray-500",
+                active ? "text-gray-90" : "text-gray-50",
               ].join(" ")}
             >
               {opt.label}

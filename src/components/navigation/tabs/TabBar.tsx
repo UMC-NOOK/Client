@@ -28,12 +28,7 @@ export default function TabBar<T extends string>({
   className = "",
 }: Props<T>) {
   return (
-    <nav
-      className={[
-        "relative h-10 flex items-center",
-        className,
-      ].join(" ")}
-    >
+    <nav className={["relative h-10 flex items-center", className].join(" ")}>
       {/* 항상 떠있는 divider */}
       <span
         aria-hidden
@@ -65,7 +60,7 @@ export default function TabBar<T extends string>({
               aria-hidden
               className={[
                 "absolute left-0 right-0 bottom-0 h-0.5",
-                selected ? "bg-gray-100" : "bg-transparent",
+                selected ? "bg-gray-90" : "bg-transparent",
               ].join(" ")}
             />
 
@@ -73,10 +68,8 @@ export default function TabBar<T extends string>({
             <span
               className={[
                 "truncate text-center",
-                variant === "default"
-                  ? "text-body-16-b"
-                  : "text-body-14-m",
-                selected ? "text-gray-100" : "text-gray-500",
+                variant === "default" ? "text-body-16-b" : "text-body-14-m",
+                selected ? "text-gray-90" : "text-gray-50",
               ].join(" ")}
             >
               {opt.label}

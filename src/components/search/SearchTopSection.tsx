@@ -58,7 +58,9 @@ export default function SearchTopSection({
       {/* ✅ 공용 헤더 */}
       <TopNavigation
         left={<div className="w-6 h-6" aria-hidden="true" />}
-        center={<h1 className="text-gray-100 text-title-18-m text-center">{title}</h1>}
+        center={
+          <h1 className="text-gray-90 text-title-18-m text-center">{title}</h1>
+        }
         right={
           <button
             type="button"
