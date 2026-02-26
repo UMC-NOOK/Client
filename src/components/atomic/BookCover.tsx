@@ -1,3 +1,17 @@
+/*
+
+<BookCover
+  size="M"
+  type="Image"
+  imageUrl="https://via.placeholder.com/150"
+/>
+
+<BookCover size="M" type="Upload" />
+
+*/
+
+import camera from "../../assets/icons/camera-gray.svg";
+
 type BookCoverProps = {
   imageUrl?: string;
   size: "XS" | "S" | "M" | "XL";
@@ -13,7 +27,9 @@ export default function BookCover({ imageUrl, size, type }: BookCoverProps) {
   };
 
   return (
-    <div className={`${sizeClasses[size]} rounded-xs bg-`}>
+    <div
+      className={`${sizeClasses[size]} rounded-xs bg-gray-17 flex items-center justify-center`}
+    >
       {type === "Image" && imageUrl && (
         <img
           src={imageUrl}
@@ -22,8 +38,8 @@ export default function BookCover({ imageUrl, size, type }: BookCoverProps) {
         />
       )}
       {type === "Upload" && (
-        <div className="w-full h-full flex items-center justify-center bg-gray-80 text-gray-50">
-          업로드
+        <div className="w-6 h-6 ">
+          <img src={camera} alt="Upload Icon" className="" />
         </div>
       )}
     </div>
