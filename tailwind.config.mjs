@@ -29,18 +29,25 @@ export default {
         },
         yellow: {
           70: "#f8ee7dff",
+          50: "#d2c42dff",
         },
         blue: {
           1: "#4f9bf2ff",
           2: "#315df7ff",
         },
         red: {
+          60: "#eb4747ff",
           20: "#3e1c26ff",
           1: "#ff4f41ff",
         },
         navy: {
           1: "#0e1430ff",
         },
+        pink: {
+          60: "#EB60AFff",
+        },
+        green: { 50: "#5ECA46ff" },
+        purple: { 60: "#BA31FFff" },
       },
       /**
        * 기존: gradient__*
