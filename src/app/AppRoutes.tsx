@@ -12,7 +12,9 @@ import SearchPage from "../pages/search/SearchPage";
 import SearchNewAddPage from "../pages/search/SearchNewAddPage";
 import SearchNewAddCategoryPage from "../pages/search/SearchNewAddCategoryPage";
 import SearchNewAddMorePage from "../pages/search/SearchNewAddMorePage";
-import BannerActionCardTestPage from "../pages/search/testpage";
+import BannerActionCardTestPage from "../pages/search/test/testpage";
+import BottomSheetTestPage from "../pages/search/test/BottomSheetTestPage";
+import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
 
 
 type TabKey = "library" | "focus" | "record" | "group";
@@ -87,7 +89,11 @@ export default function AppRoutes() {
           <Route path="/focus" element={<FocusMobilePage />} />
           <Route path="/record" element={<RecordMobilePage />} />
           <Route path="/group" element={<GroupMobilePage />} />
-          <Route path="/search/test/banner-action-card" element={<BannerActionCardTestPage />} />
+          <Route path="/test/banner-action-card" element={<BannerActionCardTestPage />} />
+          <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
+          <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
+
+
         </Route>
 
         <Route path="*" element={<Navigate to="/library" replace />} />

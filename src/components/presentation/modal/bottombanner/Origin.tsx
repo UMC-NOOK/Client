@@ -1,27 +1,27 @@
 /**
- * ------------------------------------------------------------------
- * BannerActionCard (2-line fixed version)
- * ------------------------------------------------------------------
- * - 2줄 전용 카드 (고정 height 76px)
- * - padding: 20px 16px
- * - background: image + optional gradient overlay
- * - shadow: elevation-20
- * ------------------------------------------------------------------
+ * BannerActionCard
+ *
+ * [사용 예시]
+ * <BannerActionCard
+ *   line1="클라우드 쿠쿠 랜드" // 첫 번째 줄 텍스트
+ *   line2="147쪽부터 이어서 포커스 하기" // 두 번째 줄 텍스트
+ *   onClick={() => console.log("click")}
+ * />
+ *
+ * ++ 아이콘 변경이 필요하면 iconSrc/iconAlt로 override
  */
 
 import React from "react";
 import defaultArrowRight from "../../../../assets/icons/arrow_right.svg";
+import bottomBannerImg from "../../../../assets/images/bottom_banner.jpg";
 
 type Props = {
   line1: string;
-  line2: string; // ✅ 2줄 전용이므로 필수
+  line2: string;
 
   iconSrc?: string;
   iconAlt?: string;
 
-  backgroundImageUrl?: string;
-
-  /** 이미지 위 gradient mask 적용 */
   useGradientOverlay?: boolean;
 
   onClick?: () => void;
@@ -36,7 +36,6 @@ export default function BannerActionCard({
   line2,
   iconSrc = defaultArrowRight,
   iconAlt = "arrow right",
-  backgroundImageUrl,
   useGradientOverlay = false,
   onClick,
   maxWidthPx = 343,
@@ -46,14 +45,11 @@ export default function BannerActionCard({
   const containerStyle: React.CSSProperties = {
     maxWidth: `${maxWidthPx}px`,
     height: "76px",
-    ...(backgroundImageUrl
-      ? {
-          backgroundImage: `url(${backgroundImageUrl})`,
-          backgroundPosition: "50% 50%",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-        }
-      : {}),
+    backgroundImage: `url(${bottomBannerImg})`,
+    backgroundPosition: "50% 50%",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundColor: "lightgray",
   };
 
   return (
@@ -63,24 +59,19 @@ export default function BannerActionCard({
       onClick={onClick}
       style={containerStyle}
       className={[
-        // base
         "relative w-full flex items-center justify-between",
         "px-4 py-5",
         "rounded-lg",
         "shadow-elevation-20",
         "overflow-hidden text-left",
-        "bg-gray-10",
-        // state
         "cursor-pointer",
         className,
       ].join(" ")}
     >
-      {/* ✅ gradient overlay 레이어 방식 (background 충돌 방지) */}
       {useGradientOverlay && (
         <div className="absolute inset-0 bg-gradient-mask pointer-events-none" />
       )}
 
-      {/* Content */}
       <div className="relative z-10 flex flex-1 flex-col gap-2 min-w-0">
         <p className="truncate text-label-14-sb text-gray-90">{line1}</p>
         <p className="truncate text-label-14-sb text-gray-90">{line2}</p>
