@@ -13,7 +13,7 @@ export default function TextWithIconChipComponent({
   onIconClick,
 }: TextWithIconButtonLikeProps) {
   return (
-    <div className="inline-flex items-center gap-1 h-[30px] py-1.5 px-3 rounded-lg text-gray-90 bg-gray-17 text-sm whitespace-nowrap">
+    <div className="inline-flex items-center gap-1 h-7.5 py-1.5 px-3 rounded-lg text-gray-90 bg-gray-17 text-sm whitespace-nowrap">
       <span>{text}</span>
       <IconButtonComponent size="xs" onClick={onIconClick}>
         {icon}
