@@ -1,3 +1,11 @@
+/*
+<Theme
+  imageUrl=""
+  select={select}
+  onClick={() => setSelect(!select)}
+/>
+*/
+
 type ThemeProps = {
   imageUrl: string;
   select: boolean;
