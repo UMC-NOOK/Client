@@ -32,7 +32,7 @@ export function HistoryTime({ focus, time, className }: HistoryTimeProps) {
       </div>
 
       {/* Texts */}
-      <div className="flex flex-1 flex-col items-start justify-center gap-2">
+      <div className="min-w-0 flex flex-col items-start justify-center gap-2">
         <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-label-13-sb text-gray-100">
           {focus}
         </p>
