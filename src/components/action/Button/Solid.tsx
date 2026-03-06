@@ -1,28 +1,29 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type ChipVariant = "default" | "selected";
+type Variant = "default" | "dark" | "danger";
 
-type ChipProps = {
+type ButtonProps = {
   children: ReactNode;
-  variant?: ChipVariant;
+  variant?: Variant;
   className?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const base =
-  "inline-flex items-center justify-center whitespace-nowrap py-3 px-4 rounded-[20px] text-sm ";
+  "inline-flex h-12 items-center justify-center whitespace-nowrap px-6 py-4 rounded-lg ";
 
-const variantClassMap: Record<ChipVariant, string> = {
-  default: "bg-gray-17 text-gray-60",
-  selected: "bg-mint text-gray-10",
+const variantClassMap: Record<Variant, string> = {
+  default: "bg-mint text-black",
+  dark: "bg-gray-25 text-[#A2A7C3]",
+  danger: "bg-gray-10 text-red-1",
 };
 
-export default function ChipComponent({
+export default function Solid({
   children,
   variant = "default",
   className = "",
   type = "button",
   ...props
-}: ChipProps) {
+}: ButtonProps) {
   return (
     <button
       type={type}
