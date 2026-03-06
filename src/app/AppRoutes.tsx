@@ -22,6 +22,7 @@ import HistoryRecordTestPage from "../pages/search/HistoryRecordPage";
 import { ResourceDate } from "../components/content/list/Resource/Date";
 import ResourceDatePage from "../pages/search/ResourceDatePage";
 import ReadingGoalTestPage from "../pages/search/BookGoalListPage";
+import NormalCardTestPage from "../pages/search/NormalPage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -105,6 +106,7 @@ export default function AppRoutes() {
           <Route path="/history/record" element={<HistoryRecordTestPage/>}/>
           <Route path="/resource/date" element={<ResourceDatePage/>}/>
           <Route path="/card/bookgoal" element={<ReadingGoalTestPage/>}/>
+          <Route path="/card/normal" element={<NormalCardTestPage/>}/>
           
         </Route>
 

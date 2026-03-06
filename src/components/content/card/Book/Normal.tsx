@@ -33,26 +33,26 @@ export function Normal({
       <div className="flex flex-col items-start gap-1 self-stretch w-full">
         {/* Title: 2 lines clamp */}
         <p
-          className="self-stretch overflow-hidden text-ellipsis text-gray-90 text-label-14-sb"
-          style={{
-            display: "-webkit-box",
-            WebkitBoxOrient: "vertical",
-            WebkitLineClamp: 2,
-          }}
+          className="line-clamp-2 self-stretch overflow-hidden text-ellipsis text-gray-90 text-label-14-sb"
+        //   style={
+        //     display: "-webkit-box",
+        //     WebkitBoxOrient: "vertical",
+        //     WebkitLineClamp: 2,
+        //   }}
         >
           {title}
         </p>
 
         {/* Subtitle: 1 line clamp */}
         <p
-          className="self-stretch overflow-hidden text-ellipsis text-gray-70 text-[12px] font-normal leading-[150%]"
-          style={{
-            display: "-webkit-box",
-            WebkitBoxOrient: "vertical",
-            WebkitLineClamp: 1,
-          }}
+          className="line-clamp-2 self-stretch overflow-hidden text-ellipsis text-gray-70 text-label-12-r"
+        //   style={{
+        //     display: "-webkit-box",
+        //     WebkitBoxOrient: "vertical",
+        //     WebkitLineClamp: 1,
+        //   }}
         >
-          {subtitle}
+            {author}
         </p>
       </div>
     </div>
