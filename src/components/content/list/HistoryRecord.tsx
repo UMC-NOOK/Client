@@ -27,8 +27,8 @@ export function HistoryRecord({ time, className }: HistoryTimeProps) {
       </div>
 
       <div className="min-w-0 flex flex-1 flex-col items-start justify-center gap-2">
-        <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-label-13-sb text-gray-100">독서 기록</p>
-        <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-label-12-sb text-gray-500">{time}</p>
+        <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-label-13-sb text-gray-90">독서 기록</p>
+        <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-label-12-sb text-gray-50">{time}</p>
       </div>
     </div>
   );

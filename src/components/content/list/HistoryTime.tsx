@@ -33,10 +33,10 @@ export function HistoryTime({ focus, time, className }: HistoryTimeProps) {
 
       {/* Texts */}
       <div className="min-w-0 flex flex-col items-start justify-center gap-2">
-        <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-label-13-sb text-gray-100">
+        <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-label-13-sb text-gray-90">
           {focus}
         </p>
-        <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-label-12-sb text-gray-500">
+        <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-label-12-sb text-gray-50">
           {time}
         </p>
       </div>
