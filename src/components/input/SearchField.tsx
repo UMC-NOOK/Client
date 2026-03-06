@@ -37,7 +37,7 @@ export default function SearchInput({
         enterInputMode();
       }}
       onTouchStart={enterInputMode}
-      className="w-full flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-[13.5px]"
+      className="w-full flex items-center gap-2 rounded-lg bg-gray-17 px-4 py-[13.5px]"
     >
       <input
         ref={inputRef}
@@ -55,7 +55,7 @@ export default function SearchInput({
         placeholder={isInputMode ? "" : placeholder}
         className="
           flex-1 bg-transparent outline-none
-          text-gray-100 placeholder-gray-300
+          text-gray-90 placeholder-gray-70
           text-body-16-r truncate
         "
       />

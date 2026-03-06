@@ -82,11 +82,11 @@ function HorizontalBookScroller({ books }: { books: Book[] }) {
             />
 
             <div className="w-full mt-1 flex flex-col items-start">
-              <span className="w-full break-keep line-clamp-2 text-gray-100 text-subtitle-14-sb">
+              <span className="w-full break-keep line-clamp-2 text-gray-90 text-subtitle-14-sb">
                 {book.title}
               </span>
 
-              <span className="w-full mt-0.5 truncate text-gray-300 text-body-12-r">
+              <span className="w-full mt-0.5 truncate text-gray-70 text-body-12-r">
                 {book.author}
               </span>
             </div>
@@ -102,13 +102,13 @@ export default function AllBookListSection() {
     <section className="w-full flex flex-col items-start gap-8 pt-8">
       {/* 추천 */}
       <div className="w-full flex flex-col items-start gap-4">
-        <span className="text-gray-100 text-label-13-sb">이 책을 추천해요</span>
+        <span className="text-gray-90 text-label-13-sb">이 책을 추천해요</span>
         <HorizontalBookScroller books={recommendedBooks} />
       </div>
 
       {/* 주간 베스트 */}
       <div className="w-full flex flex-col items-start gap-4">
-        <span className="text-gray-100 text-label-13-sb">주간 베스트</span>
+        <span className="text-gray-90 text-label-13-sb">주간 베스트</span>
 
         <div className="w-full flex flex-col items-start gap-2">
           {bestBooks.map((book, idx) => (
@@ -118,12 +118,12 @@ export default function AllBookListSection() {
             >
               {/* 순위 */}
               <div className="w-7 h-7 flex items-center justify-center">
-                <span className="text-gray-100 text-btn-16-sb">{idx + 1}</span>
+                <span className="text-gray-90 text-btn-16-sb">{idx + 1}</span>
               </div>
 
               {/* 제목 */}
               <div className="flex-1 overflow-hidden py-1">
-                <span className="block truncate text-gray-100 text-btn-16-sb">
+                <span className="block truncate text-gray-90 text-btn-16-sb">
                   {book.title}
                 </span>
               </div>

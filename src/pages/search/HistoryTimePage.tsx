@@ -1,6 +1,6 @@
 // src/pages/search/HistoryTimeTestPage.tsx
 import React from "react";
-import { HistoryTime } from "../../components/content/list/HIstoryTime"; 
+import { HistoryTime } from "../../components/content/list/HistoryTime"; 
 // ↑ 경로는 네 실제 파일 위치에 맞게 조정!
 // (예: HistoryTime.tsx가 src/components/content/list/HistoryTime.tsx 라고 가정)
 
@@ -21,7 +21,7 @@ const MOCK = [
 
 export default function HistoryTimeTestPage() {
   return (
-    <main className="min-h-screen bg-gradient-background p-4">
+    <main className="min-h-screen p-4">
       {/* '칸' (padding 16px) */}
       <section className="mx-auto w-full max-w-[375px] space-y-4">
         <header>
@@ -31,7 +31,7 @@ export default function HistoryTimeTestPage() {
           </p>
         </header>
 
-        <div className="rounded-xl bg-gray-950 p-4 shadow-elevation-20">
+        <div className="rounded-xl p-4 shadow-elevation-20">
           <div className="space-y-3">
             {MOCK.map((item, idx) => (
               <HistoryTime key={idx} focus={item.focus} time={item.time} />

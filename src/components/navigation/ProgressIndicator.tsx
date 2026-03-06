@@ -33,11 +33,11 @@ export default function ProgressBar({
         className={[
           "w-full",
           heightClassName,
-          "rounded-[80px] bg-gray-800 relative overflow-hidden",
+          "rounded-[80px] bg-gray-25 relative overflow-hidden",
         ].join(" ")}
       >
         <div
-          className="h-full bg-gray-100 rounded-[80px] transition-all duration-300"
+          className="h-full bg-gray-90 rounded-[80px] transition-all duration-300"
           style={{ width: `${percent}%` }}
         />
       </div>

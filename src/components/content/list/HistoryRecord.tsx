@@ -1,5 +1,5 @@
 import React from "react";
-import bg from "../../../assets/images/bottom_banner.svg";
+import bg from "../../../assets/images/bottom_banner.jpg";
 
 type HistoryTimeProps = {
   time: string;
@@ -11,7 +11,7 @@ export function HistoryRecord({ time, className }: HistoryTimeProps) {
     <div
       className={["flex items-start gap-2 p-3 w-full rounded-[4px] overflow-hidden", className ?? ""].join(" ")}
       style={{
-        backgroundImage: `url("data:image/svg+xml,${bg}")`,
+        backgroundImage: `url(${bg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

@@ -71,7 +71,7 @@ export default function SearchNewAddMoreForm({
           className="
             flex w-25 h-36
             items-center justify-center
-            rounded-xs bg-gray-900
+            rounded-xs bg-gray-17
             cursor-pointer overflow-hidden
           "
         >
@@ -90,7 +90,12 @@ export default function SearchNewAddMoreForm({
               draggable={false}
             />
           ) : (
-            <img src={CameraIcon} alt="" className="w-6 h-6" draggable={false} />
+            <img
+              src={CameraIcon}
+              alt=""
+              className="w-6 h-6"
+              draggable={false}
+            />
           )}
         </label>
 
@@ -122,7 +127,7 @@ export default function SearchNewAddMoreForm({
           />
 
           {/* 출판일 */}
-         <TripleTextField
+          <TripleTextField
             title="출판일"
             value={pubDate}
             onChange={onChangePubDate}
@@ -132,7 +137,7 @@ export default function SearchNewAddMoreForm({
               { key: "dd", placeholder: "DD", maxLen: 2 },
             ]}
             digitsOnly
-          /> 
+          />
 
           {/* ISBN */}
           <TextField

@@ -12,6 +12,10 @@ import SearchPage from "../pages/search/SearchPage";
 import SearchNewAddPage from "../pages/search/SearchNewAddPage";
 import SearchNewAddCategoryPage from "../pages/search/SearchNewAddCategoryPage";
 import SearchNewAddMorePage from "../pages/search/SearchNewAddMorePage";
+import BannerActionCardTestPage from "../pages/search/test/testpage";
+import BottomSheetTestPage from "../pages/search/test/BottomSheetTestPage";
+import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
+
 import RankTestPage from "../pages/search/RankTestPage";
 import HistoryTimeTestPage from "../pages/search/HistoryTimePage";
 import HistoryRecordTestPage from "../pages/search/HistoryRecordPage";
@@ -79,6 +83,7 @@ export default function AppRoutes() {
           <Route path="/search/new" element={<SearchNewAddPage />} />
           <Route path="/search/new/category" element={<SearchNewAddCategoryPage />} />
           <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
+          <Route path="/search/" element={<SearchNewAddMorePage />} />
         </Route>
 
         {/* Main Tabs */}
@@ -87,6 +92,11 @@ export default function AppRoutes() {
           <Route path="/focus" element={<FocusMobilePage />} />
           <Route path="/record" element={<RecordMobilePage />} />
           <Route path="/group" element={<GroupMobilePage />} />
+          <Route path="/test/banner-action-card" element={<BannerActionCardTestPage />} />
+          <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
+          <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
+
+
           <Route path="/rank" element={<RankTestPage/>}/>
           <Route path="/history/time" element={<HistoryTimeTestPage/>}/>
           <Route path="/history/record" element={<HistoryRecordTestPage/>}/>

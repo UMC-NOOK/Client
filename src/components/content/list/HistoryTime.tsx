@@ -10,7 +10,7 @@ export function HistoryTime({ focus, time, className }: HistoryTimeProps) {
   return (
     <div
       className={[
-        "flex items-start gap-2 p-3 w-full rounded-[4px] bg-gray-900",
+        "flex items-start gap-2 p-3 w-full rounded-[4px] bg-gray-17",
         className ?? "",
       ].join(" ")}
     >

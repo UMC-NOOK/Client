@@ -20,7 +20,8 @@ export default function TextArea({
 }: Props) {
   const ref = useRef<HTMLTextAreaElement | null>(null);
 
-  const trimmedValue = maxLength !== undefined ? value.slice(0, maxLength) : value;
+  const trimmedValue =
+    maxLength !== undefined ? value.slice(0, maxLength) : value;
 
   /** auto resize */
   useEffect(() => {
@@ -30,9 +31,12 @@ export default function TextArea({
     el.style.height = `${el.scrollHeight}px`;
   }, [trimmedValue]);
 
-  const hasValue = useMemo(() => trimmedValue.trim().length > 0, [trimmedValue]);
+  const hasValue = useMemo(
+    () => trimmedValue.trim().length > 0,
+    [trimmedValue],
+  );
   const count = trimmedValue.length;
-  const counterColor = count === 0 ? "text-gray-500" : "text-gray-100";
+  const counterColor = count === 0 ? "text-gray-50" : "text-gray-90";
 
   const handleChange = (v: string) => {
     const next = maxLength !== undefined ? v.slice(0, maxLength) : v;
@@ -41,9 +45,9 @@ export default function TextArea({
 
   return (
     <div className="w-full flex flex-col items-start gap-3">
-      {title && <span className="text-gray-100 text-label-13-b">{title}</span>}
+      {title && <span className="text-gray-90 text-label-13-b">{title}</span>}
 
-      <div className="w-full rounded-md bg-gray-900 px-4 py-3 flex flex-col gap-4">
+      <div className="w-full rounded-md bg-gray-17 px-4 py-3 flex flex-col gap-4">
         <textarea
           ref={ref}
           value={trimmedValue}
@@ -53,8 +57,10 @@ export default function TextArea({
           className={[
             "w-full min-h-15.75",
             "bg-transparent outline-none resize-none overflow-hidden",
-            "placeholder:text-gray-500",
-            hasValue ? "text-body-14-b text-gray-100" : "text-body-14-r text-gray-100",
+            "placeholder:text-gray-50",
+            hasValue
+              ? "text-body-14-b text-gray-90"
+              : "text-body-14-r text-gray-90",
             disabled ? "opacity-50 cursor-not-allowed" : "",
           ].join(" ")}
         />
@@ -68,7 +74,7 @@ export default function TextArea({
             "
           >
             <span className={counterColor}>{count}</span>
-            <span className="text-gray-500">/{maxLength}</span>
+            <span className="text-gray-50">/{maxLength}</span>
           </div>
         )}
       </div>
