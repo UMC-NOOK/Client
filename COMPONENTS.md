@@ -104,14 +104,18 @@
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-|      |      |          |         |      |
+| Name    | Type               | Required | Default | Note        |
+| :------ | :----------------- | :------: | :------ | :---------- |
+| `width` | `number \| string` |    O     | -       | 구분선 길이 |
 
 #### Usage
 
 ```tsx
+<Divider width={"full"} />
+```
 
+```tsx
+<Divider width={36} />
 ```
 
 ### [ Dim ]
@@ -122,14 +126,23 @@
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-|      |      |          |         |      |
+| Name     | Type               | Required | Default | Note                    |
+| :------- | :----------------- | :------: | :------ | :---------------------- |
+| `width`  | `number \| string` |    O     | -       | 너비                    |
+| `height` | `number \| string` |    O     | -       | 높이                    |
+| `top`    | `number \| string` |    X     | 0       | relative 기준 top 위치  |
+| `left`   | `number \| string` |    X     | 0       | relative 기준 left 위치 |
 
 #### Usage
 
-```tsx
+사용하기 위해선 반드시 부모 요소에 relative를 주어야 함
 
+```tsx
+<Dim width={"full"} height={"full"} />
+```
+
+```tsx
+<Dim width={360} height={200} top={20} left={1} />
 ```
 
 ### [ Mask Gradient ]
@@ -140,14 +153,23 @@
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-|      |      |          |         |      |
+| Name     | Type               | Required | Default | Note                    |
+| :------- | :----------------- | :------: | :------ | :---------------------- |
+| `width`  | `number \| string` |    O     | -       | 너비                    |
+| `height` | `number \| string` |    O     | -       | 높이                    |
+| `top`    | `number \| string` |    X     | 0       | relative 기준 top 위치  |
+| `left`   | `number \| string` |    X     | 0       | relative 기준 left 위치 |
 
 #### Usage
 
-```tsx
+사용하기 위해선 반드시 부모 요소에 relative를 주어야 함
 
+```tsx
+<MaskGradient width={"full"} height={"full"} />
+```
+
+```tsx
+<MaskGradient width={360} height={200} top={20} left={1} />
 ```
 
 ---
