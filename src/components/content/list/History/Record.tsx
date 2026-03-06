@@ -1,5 +1,5 @@
 import React from "react";
-import bg from "../../../assets/images/bottom_banner.jpg";
+import bg from "../../../../assets/images/bottom_banner.jpg";
 
 type HistoryTimeProps = {
   time: string;

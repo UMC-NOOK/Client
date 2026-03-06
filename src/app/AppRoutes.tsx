@@ -19,6 +19,8 @@ import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
 import RankTestPage from "../pages/search/RankTestPage";
 import HistoryTimeTestPage from "../pages/search/HistoryTimePage";
 import HistoryRecordTestPage from "../pages/search/HistoryRecordPage";
+import { ResourceDate } from "../components/content/list/Resource/Date";
+import ResourceDatePage from "../pages/search/ResourceDatePage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -100,6 +102,7 @@ export default function AppRoutes() {
           <Route path="/rank" element={<RankTestPage/>}/>
           <Route path="/history/time" element={<HistoryTimeTestPage/>}/>
           <Route path="/history/record" element={<HistoryRecordTestPage/>}/>
+          <Route path="/resource/date" element={<ResourceDatePage/>}/>
         </Route>
 
         <Route path="*" element={<Navigate to="/library" replace />} />
