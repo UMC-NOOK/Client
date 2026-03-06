@@ -16,7 +16,7 @@ const sizeClassMap: Record<IconSize, string> = {
   m: "inline-flex w-10 h-10 p-2",
 };
 
-export default function IconButtonComponent({
+export default function Icon({
   children,
   size = "s",
   className = "",
