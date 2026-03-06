@@ -5,7 +5,7 @@
 
 ## 📌 목차 (Table of Contents)
 
-1. [Atomic Elements](#1-atomic-elements)
+1. [Atomic](#1-atomic-elements)
 2. [Layout](#2-layout)
 3. [Input & Forms](#3-input--forms)
 
@@ -68,14 +68,19 @@
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-|      |      |          |         |      |
+| Name       | Type                                          | Required | Default | Note                                                   |
+| :--------- | :-------------------------------------------- | :------: | :------ | :----------------------------------------------------- |
+| `imageUrl` | `string`                                      |    X     | -       | 이미지 URL                                             |
+| `type`     | `'Upload' \| 'Skeleton'\| 'Image'\| 'Delete'` |    O     | -       | `'Image', `'Delete'`일 경우 반드시`imageUrl` 함께 제공 |
 
 #### Usage
 
 ```tsx
+<Image imageUrl="" type="Delete" />
+```
 
+```tsx
+<Image type="Upload" />
 ```
 
 ---
