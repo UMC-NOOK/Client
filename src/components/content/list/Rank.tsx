@@ -6,7 +6,7 @@ type RankItemProps = {
   className?: string;
 };
 
-export function RankListComponent({ rank, title, className }: RankItemProps) {
+export function Rank({ rank, title, className }: RankItemProps) {
   return (
     <div
       className={[

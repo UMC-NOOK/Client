@@ -14,6 +14,7 @@ import SearchNewAddCategoryPage from "../pages/search/SearchNewAddCategoryPage";
 import SearchNewAddMorePage from "../pages/search/SearchNewAddMorePage";
 import RankTestPage from "../pages/search/RankTestPage";
 import HistoryTimeTestPage from "../pages/search/HistoryTimePage";
+import HistoryRecordTestPage from "../pages/search/HistoryRecordPage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -88,6 +89,7 @@ export default function AppRoutes() {
           <Route path="/group" element={<GroupMobilePage />} />
           <Route path="/rank" element={<RankTestPage/>}/>
           <Route path="/history/time" element={<HistoryTimeTestPage/>}/>
+          <Route path="/history/record" element={<HistoryRecordTestPage/>}/>
         </Route>
 
         <Route path="*" element={<Navigate to="/library" replace />} />
