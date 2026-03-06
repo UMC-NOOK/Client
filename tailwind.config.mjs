@@ -111,6 +111,7 @@ export default {
         "btn-18-m": ["18px", { lineHeight: "1", fontWeight: "500" }],
 
         // label
+        "label-12-r" : ["12px", { lineHeight: "1", fontWeight: "400" }],
         "label-12-sb": ["12px", { lineHeight: "1", fontWeight: "600" }],
         "label-12-b": ["12px", { lineHeight: "1", fontWeight: "700" }],
         "label-13-r": ["13px", { lineHeight: "1", fontWeight: "400" }],
