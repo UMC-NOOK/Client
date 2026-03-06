@@ -8,7 +8,7 @@ import { ResourceDate } from "../../components/content/list/Resource/Date";
 
 export default function HistoryRecordWithDateTestPage() {
   return (
-    <main className="min-h-screen bg-gradient-background p-4">
+    <main className="min-h-screen bg-gradient-background">
       <section className="mx-auto w-full max-w-[375px] space-y-4">
         <header>
           <h1 className="text-title-20-b text-gray-100">History + Date Test</h1>
@@ -17,7 +17,7 @@ export default function HistoryRecordWithDateTestPage() {
           </p>
         </header>
         <div
-            className="flex p-4">
+            className="flex w-full flex-col gap-2 ">
             {/* ✅ 사진처럼: 왼쪽 Date(32px) + 오른쪽 카드(남은 폭) */}
             <div className="rounded-xl gap-2 shadow-elevation-20">
             <div className="flex items-start gap-2">
@@ -32,13 +32,11 @@ export default function HistoryRecordWithDateTestPage() {
             </div>
 
             {/* 추가 케이스: 텍스트 더 길게 */}
-            <div className="rounded-xl bg-gray-950 p-4 shadow-elevation-20">
             <div className="flex items-start gap-2">
                 <ResourceDate topText="12.31" bottomText="2026" />
                 <div className="min-w-0 flex-1">
                 <HistoryRecord time="텍스트가 아주 길어질 때 한 줄 말줄임(ellipsis)이 제대로 적용되는지 확인하는 테스트 문자열입니다." />
                 </div>
-            </div>
             </div>
         </div>
       </section>

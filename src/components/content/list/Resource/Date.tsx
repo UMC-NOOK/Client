@@ -10,7 +10,7 @@ export function ResourceDate({ topText, bottomText, className }: DateBadgeProps)
   return (
     <div
       className={[
-        "flex w-full flex-col items-center justify-center gap-1 pt-2",
+        "flex shrink-0 basis-8 flex-col items-center justify-center gap-1 pt-2",
         className ?? "",
       ].join(" ")}
     >
