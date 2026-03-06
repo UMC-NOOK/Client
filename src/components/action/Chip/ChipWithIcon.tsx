@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import IconButtonComponent from "./IconButtonComponent"; // 경로 맞춰줘
+import IconButtonComponent from "../Button/Icon"; // 경로 맞춰줘
 
 type TextWithIconButtonLikeProps = {
   text: ReactNode; // 텍스트만 props로 받음
@@ -7,7 +7,7 @@ type TextWithIconButtonLikeProps = {
   onIconClick?: React.MouseEventHandler<HTMLSpanElement>; // 아이콘 클릭 필요할 때만
 };
 
-export default function TextWithIconChipComponent({
+export default function ChipWithIcon({
   text,
   icon,
   onIconClick,
