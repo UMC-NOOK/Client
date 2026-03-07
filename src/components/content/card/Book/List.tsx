@@ -6,7 +6,7 @@ import libraryIcon from "../../../../assets/icons/library_focus.svg";
 type BookListType = "NONE" | "SEARCH" | "LIBRARY" | "REPORT";
 
 type TypeMeta = {
-  iconSrc: string | null; // NONE/REPORT는 null
+  iconSrc: string | null;
 };
 
 type Props = {
@@ -41,25 +41,19 @@ export function BookListCard({
   return (
     <div
       className={[
-        // 카드 컨테이너 (디자인: width 343 / height 106 / padding y 12 / gap 12)
         "flex w-full max-w-[343px] h-[106px] items-start gap-3 py-3"
       ].join(" ")}
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
-      {/* Left Image: 56 x 82 */}
       <div
         className="flex w-14 h-[82px] shrink-0 items-center justify-center rounded-[2px] bg-center bg-cover bg-no-repeat"
         style={{ backgroundImage: `url(${imageUrl})` }}
         aria-label={imageAlt}
       />
 
-      {/* Right Content
-          ✅ 핵심: 오른쪽도 이미지 높이(82px)에 맞춰서 레이아웃 기준을 동일하게!
-      */}
       <div className="flex flex-1 h-[82px] min-w-0 flex-col justify-between items-start">
-        {/* Title + Author */}
         <div className="flex flex-col gap-1 min-w-0 self-stretch">
           <p className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-90 text-label-16-b">
             {title}
@@ -69,7 +63,6 @@ export function BookListCard({
           </p>
         </div>
 
-        {/* Bottom Row: 아이콘 + 라벨 (이미지 하단 라인에 맞춰짐) */}
         {showBottomRow ? (
           <div className="flex items-center gap-1">
             {/* 아이콘이 있을 때만 렌더 */}
