@@ -2,12 +2,20 @@ import React from "react";
 
 import BookIllust from "../../../../assets/icons/book_illust.svg"; //0
 import BookIllust1to9 from "../../../../assets/icons/book_illust_1.svg"; //1-9
+import BookIllust10to19 from "../../../../assets/icons/book_illust_10.svg"; //10-19
+import BookIllust20to29 from "../../../../assets/icons/book_illust_20.svg"; //20-29
+import BookIllust30to39 from "../../../../assets/icons/book_illust_30.svg"; //30-39
+import BookIllust40to49 from "../../../../assets/icons/book_illust_40.svg"; //40-49
 import BookIllust50to59 from "../../../../assets/icons/book_illust_50.svg"; //50-59
+import BookIllust60to69 from "../../../../assets/icons/book_illust_60.svg"
+import BookIllust70to79 from "../../../../assets/icons/book_illust_70.svg"
+import BookIllust80to89 from "../../../../assets/icons/book_illust_80.svg"
+import BookIllust90to99 from "../../../../assets/icons/book_illust_90.svg"
 import BookIllust100 from "../../../../assets/icons/book_illust_100.svg"; //100
 
 import bg from "../../../../assets/images/reading_goal.jpg" //bg
 
-type ReadingGoal = "ZERO" | "PCT_1_9" | "PCT_50_59" | "PCT_100";
+type ReadingGoal = "ZERO" | "PCT_1_9" |"PCT_10_19" |"PCT_20_29" | "PCT_30_39" | "PCT_40_49" | "PCT_50_59" | "PCT_60_69" | "PCT_70_79" | "PCT_80_89" | "PCT_90_99" | "PCT_100";
 
 type Props = {
   /** 퍼센트 */
@@ -21,7 +29,15 @@ type Props = {
 const ICON_BY_VARIANT: Record<ReadingGoal, string> = {
   ZERO: BookIllust,
   PCT_1_9: BookIllust1to9,
+  PCT_10_19: BookIllust10to19,
+  PCT_20_29: BookIllust20to29,
+  PCT_30_39: BookIllust30to39,
+  PCT_40_49: BookIllust40to49,
   PCT_50_59: BookIllust50to59,
+  PCT_60_69: BookIllust60to69,
+  PCT_70_79: BookIllust70to79,
+  PCT_80_89: BookIllust80to89,
+  PCT_90_99: BookIllust90to99,
   PCT_100: BookIllust100,
 };
 
