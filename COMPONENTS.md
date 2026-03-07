@@ -319,25 +319,35 @@
 
 ## 8. Feedback
 
-> - **Design**:
-> - **Author**:
+> - **Design**: https://www.figma.com/design/VX3WcpitSSgsYxFoXlbgcA/NOOK-UI--%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9A%A9-?node-id=1268-9814&m=dev
+> - **Author**: 오은진
 
-### [ ]
+### [ Snackbar ]
 
 #### Path
 
-``
+`components/feedback/snackbar.tsx`
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-|      |      |          |         |      |
+| Name          | Type   | Required | Default | Note           |
+| :------------ | :----- | :------: | :------ | :------------- |
+| icon          | string |    X     | -       | 아이콘 url     |
+| text          | string |    O     | -       | snack bar 문구 |
+| buttonText    | string |    O     | -       | 버튼 문구      |
+| onButtonClick | void   |    O     | -       | 버튼 클릭 함수 |
 
 #### Usage
 
 ```tsx
+import camera from "../../assets/icons/camera-gray.svg";
 
+<Snackbar
+  icon={camera}
+  text="내 서재에 도서를 등록했어요."
+  buttonText="확인"
+  onButtonClick={() => alert("Snackbar button clicked!")}
+/>;
 ```
 
 ---
