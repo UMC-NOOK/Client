@@ -24,6 +24,7 @@ import ResourceDatePage from "../pages/search/ResourceDatePage";
 import ReadingGoalTestPage from "../pages/search/BookGoalListPage";
 import NormalCardTestPage from "../pages/search/NormalPage";
 import BookListTestPage from "../pages/search/ListPage";
+import FocusMediaInfoCardTestPage from "../pages/search/FocusPage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -109,6 +110,7 @@ export default function AppRoutes() {
           <Route path="/card/bookgoal" element={<ReadingGoalTestPage/>}/>
           <Route path="/card/normal" element={<NormalCardTestPage/>}/>
           <Route path="/card/list" element={<BookListTestPage/>}/>
+          <Route path="/card/focus" element={<FocusMediaInfoCardTestPage/>}/>
           
         </Route>
 
