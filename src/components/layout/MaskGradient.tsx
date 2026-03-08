@@ -5,10 +5,19 @@
 type MaskGradientProps = {
   width: number | string;
   height: number | string;
+  top?: number | string;
+  left?: number | string;
 };
 
-export default function MaskGradient({ width, height }: MaskGradientProps) {
+export default function MaskGradient({
+  width,
+  height,
+  top,
+  left,
+}: MaskGradientProps) {
   return (
-    <div className={`bg-gradient-mask absolute w-${width} h-${height}`}></div>
+    <div
+      className={`bg-gradient-mask absolute w-${width} h-${height} ${top !== undefined ? "top-0" : ""} ${left !== undefined ? "left-0" : ""}`}
+    ></div>
   );
 }
