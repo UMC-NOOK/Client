@@ -21,7 +21,6 @@ export default function SearchInput({
   onFocus,
   onBlur,
   placeholder = "검색어를 입력하세요",
-  isInputMode = false,
 }: Props) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -43,7 +42,7 @@ export default function SearchInput({
     >
       <div className="relative flex-1">
         {showFakeCursor && (
-          <span className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 text-[16px] font-normal leading-[24px] text-gray-90">
+          <span className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 text-[16px] font-normal leading-6 text-gray-90">
             |
           </span>
         )}
@@ -52,11 +51,11 @@ export default function SearchInput({
           ref={inputRef}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          onFocus={(e) => {
+          onFocus={() => {
             setIsFocused(true);
             onFocus?.();
           }}
-          onBlur={(e) => {
+          onBlur={() => {
             setIsFocused(false);
             onBlur?.();
           }}
@@ -68,7 +67,7 @@ export default function SearchInput({
             }
           }}
           placeholder={!isFocused && !value ? placeholder : ""}
-          className="w-full bg-transparent outline-none text-[16px] font-normal leading-[24px] text-gray-90 placeholder-gray-70 truncate caret-transparent"
+          className="w-full bg-transparent outline-none text-[16px] font-normal leading-6 text-gray-90 placeholder-gray-70 truncate caret-transparent"
         />
       </div>
 
