@@ -350,6 +350,27 @@ import camera from "../../assets/icons/camera-gray.svg";
 />;
 ```
 
+### [ Toast ]
+
+#### Path
+
+`components/feedback/Toast.tsx`
+
+#### Props
+
+| Name | Type   | Required | Default | Note           |
+| :--- | :----- | :------: | :------ | :------------- |
+| icon | string |    X     | -       | 아이콘 url     |
+| text | string |    O     | -       | snack bar 문구 |
+
+#### Usage
+
+```tsx
+import camera from "../../assets/icons/camera-gray.svg";
+
+<Toast icon={camera} text="내 서재에 도서를 등록했어요." />;
+```
+
 ---
 
 ## 9. Presentation
