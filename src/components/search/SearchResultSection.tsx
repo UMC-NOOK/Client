@@ -160,12 +160,7 @@ export default function SearchResultSection({
   return (
     <section className="w-full flex flex-col items-start gap-10">
       <div className="w-full flex flex-col items-start pt-5">
-        {/* count */}
-        <div className="w-full flex flex-col gap-2">
-          <span className="text-gray-90 text-label-13-sb pb-4">
-            {count}권의 도서가 검색되었어요.
-          </span>
-        </div>
+        
 
         {/* list */}
         <div className="w-full flex flex-col items-start">

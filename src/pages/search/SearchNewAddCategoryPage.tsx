@@ -19,20 +19,20 @@ export default function SearchNewAddCategoryPage() {
   const title = useMemo(() => sp.get("title") ?? "", [sp]);
   const author = useMemo(() => sp.get("author") ?? "", [sp]);
 
-  const [categories, setCategories] = useState<string[]>([]);
-  const isNextActive = categories.length > 0;
+  const [category, setCategory] = useState<string | null>(null);
+  const isNextActive = !!category;
 
   const handleClose = () => navigate(-1);
 
   const handleNext = () => {
-    if (!isNextActive) return;
+    if (!category) return;
 
     navigate(
       `/search/new/more?title=${encodeURIComponent(title)}&author=${encodeURIComponent(
         author
       )}`,
       {
-        state: { categories },
+        state: { category },
       }
     );
   };
@@ -40,14 +40,13 @@ export default function SearchNewAddCategoryPage() {
   return (
     <SearchNewAddLayout
       title="도서 분야를 선택해주세요."
-      subtitle="최대 2개 선택 가능합니다."
       isNextActive={isNextActive}
       onClose={handleClose}
       onNext={handleNext}
       leftIconType="back"
       step={2}
     >
-      <SearchNewAddCategoryForm value={categories} onChange={setCategories} max={2} />
+      <SearchNewAddCategoryForm value={category} onChange={setCategory} />
     </SearchNewAddLayout>
   );
 }
