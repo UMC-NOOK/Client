@@ -5,9 +5,15 @@
 
 ## 📌 목차 (Table of Contents)
 
-1. [Atomic Elements](#1-atomic-elements)
+1. [Atomic](#1-atomic)
 2. [Layout](#2-layout)
-3. [Input & Forms](#3-input--forms)
+3. [Input](#3-input)
+4. [Selection](#4-selection)
+5. [Action](#5-action)
+6. [Navigation](#6-navigation)
+7. [Content](#7-content)
+8. [Feedback](#8-feedback)
+9. [Presentation](#9-presentation)
 
 ---
 
@@ -68,14 +74,19 @@
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-|      |      |          |         |      |
+| Name       | Type                                          | Required | Default | Note                                                   |
+| :--------- | :-------------------------------------------- | :------: | :------ | :----------------------------------------------------- |
+| `imageUrl` | `string`                                      |    X     | -       | 이미지 URL                                             |
+| `type`     | `'Upload' \| 'Skeleton'\| 'Image'\| 'Delete'` |    O     | -       | `'Image', `'Delete'`일 경우 반드시`imageUrl` 함께 제공 |
 
 #### Usage
 
 ```tsx
+<Image imageUrl="" type="Delete" />
+```
 
+```tsx
+<Image type="Upload" />
 ```
 
 ---
@@ -93,14 +104,18 @@
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-|      |      |          |         |      |
+| Name    | Type               | Required | Default | Note        |
+| :------ | :----------------- | :------: | :------ | :---------- |
+| `width` | `number \| string` |    O     | -       | 구분선 길이 |
 
 #### Usage
 
 ```tsx
+<Divider width={"full"} />
+```
 
+```tsx
+<Divider width={36} />
 ```
 
 ### [ Dim ]
@@ -111,14 +126,23 @@
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-|      |      |          |         |      |
+| Name     | Type               | Required | Default | Note                    |
+| :------- | :----------------- | :------: | :------ | :---------------------- |
+| `width`  | `number \| string` |    O     | -       | 너비                    |
+| `height` | `number \| string` |    O     | -       | 높이                    |
+| `top`    | `number \| string` |    X     | 0       | relative 기준 top 위치  |
+| `left`   | `number \| string` |    X     | 0       | relative 기준 left 위치 |
 
 #### Usage
 
-```tsx
+사용하기 위해선 반드시 부모 요소에 relative를 주어야 함
 
+```tsx
+<Dim width={"full"} height={"full"} />
+```
+
+```tsx
+<Dim width={360} height={200} top={20} left={1} />
 ```
 
 ### [ Mask Gradient ]
@@ -129,14 +153,23 @@
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-|      |      |          |         |      |
+| Name     | Type               | Required | Default | Note                    |
+| :------- | :----------------- | :------: | :------ | :---------------------- |
+| `width`  | `number \| string` |    O     | -       | 너비                    |
+| `height` | `number \| string` |    O     | -       | 높이                    |
+| `top`    | `number \| string` |    X     | 0       | relative 기준 top 위치  |
+| `left`   | `number \| string` |    X     | 0       | relative 기준 left 위치 |
 
 #### Usage
 
-```tsx
+사용하기 위해선 반드시 부모 요소에 relative를 주어야 함
 
+```tsx
+<MaskGradient width={"full"} height={"full"} />
+```
+
+```tsx
+<MaskGradient width={360} height={200} top={20} left={1} />
 ```
 
 ---
@@ -169,6 +202,187 @@
 #### Path
 
 `요기에 경로 입력`
+
+#### Props
+
+| Name | Type | Required | Default | Note |
+| :--- | :--- | :------: | :------ | :--- |
+|      |      |          |         |      |
+
+#### Usage
+
+```tsx
+
+```
+
+---
+
+## 4. Selection
+
+> - **Design**:
+> - **Author**:
+
+### [ ]
+
+#### Path
+
+``
+
+#### Props
+
+| Name | Type | Required | Default | Note |
+| :--- | :--- | :------: | :------ | :--- |
+|      |      |          |         |      |
+
+#### Usage
+
+```tsx
+
+```
+
+---
+
+## 5. Action
+
+> - **Design**:
+> - **Author**:
+
+### [ ]
+
+#### Path
+
+``
+
+#### Props
+
+| Name | Type | Required | Default | Note |
+| :--- | :--- | :------: | :------ | :--- |
+|      |      |          |         |      |
+
+#### Usage
+
+```tsx
+
+```
+
+---
+
+## 6. Navigation
+
+> - **Design**:
+> - **Author**:
+
+### [ ]
+
+#### Path
+
+``
+
+#### Props
+
+| Name | Type | Required | Default | Note |
+| :--- | :--- | :------: | :------ | :--- |
+|      |      |          |         |      |
+
+#### Usage
+
+```tsx
+
+```
+
+---
+
+## 7. Content
+
+> - **Design**:
+> - **Author**:
+
+### [ ]
+
+#### Path
+
+``
+
+#### Props
+
+| Name | Type | Required | Default | Note |
+| :--- | :--- | :------: | :------ | :--- |
+|      |      |          |         |      |
+
+#### Usage
+
+```tsx
+
+```
+
+---
+
+## 8. Feedback
+
+> - **Design**: https://www.figma.com/design/VX3WcpitSSgsYxFoXlbgcA/NOOK-UI--%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9A%A9-?node-id=1268-9814&m=dev
+> - **Author**: 오은진
+
+### [ Snackbar ]
+
+#### Path
+
+`components/feedback/snackbar.tsx`
+
+#### Props
+
+| Name          | Type   | Required | Default | Note           |
+| :------------ | :----- | :------: | :------ | :------------- |
+| icon          | string |    X     | -       | 아이콘 url     |
+| text          | string |    O     | -       | snack bar 문구 |
+| buttonText    | string |    O     | -       | 버튼 문구      |
+| onButtonClick | void   |    O     | -       | 버튼 클릭 함수 |
+
+#### Usage
+
+```tsx
+import camera from "../../assets/icons/camera-gray.svg";
+
+<Snackbar
+  icon={camera}
+  text="내 서재에 도서를 등록했어요."
+  buttonText="확인"
+  onButtonClick={() => alert("Snackbar button clicked!")}
+/>;
+```
+
+### [ Toast ]
+
+#### Path
+
+`components/feedback/Toast.tsx`
+
+#### Props
+
+| Name | Type   | Required | Default | Note           |
+| :--- | :----- | :------: | :------ | :------------- |
+| icon | string |    X     | -       | 아이콘 url     |
+| text | string |    O     | -       | snack bar 문구 |
+
+#### Usage
+
+```tsx
+import camera from "../../assets/icons/camera-gray.svg";
+
+<Toast icon={camera} text="내 서재에 도서를 등록했어요." />;
+```
+
+---
+
+## 9. Presentation
+
+> - **Design**:
+> - **Author**:
+
+### [ ]
+
+#### Path
+
+``
 
 #### Props
 
