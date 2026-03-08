@@ -1,4 +1,5 @@
 // src/app/AppRoutes.tsx
+import { useEffect } from "react";
 import {
   Navigate,
   Route,
@@ -7,7 +8,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import AppShell from "./AppShell";
+import AppShell, { useShell } from "./AppShell";
 import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
 
 import LibraryMobilePage from "../pages/search/LibraryMobilePage";
@@ -76,6 +77,17 @@ function SearchLayout() {
   );
 }
 
+function NoFooterLayout() {
+  const { setHideFooter } = useShell();
+
+  useEffect(() => {
+    setHideFooter(true);
+    return () => setHideFooter(false);
+  }, [setHideFooter]);
+
+  return <Outlet />;
+}
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -108,11 +120,11 @@ export default function AppRoutes() {
           <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
         </Route>
 
-        <Route path="*" element={<Navigate to="/library" replace />} />
+        {/* No Footer Pages */}
+        <Route element={<NoFooterLayout />}>
+          <Route path="/library/123" element={<BookInfo />}></Route>
+        </Route>
       </Route>
-      <Route path="*" element={<Navigate to="/library" replace />} />
-
-      <Route path="/library/123" element={<BookInfo />}></Route>
     </Routes>
   );
 }
