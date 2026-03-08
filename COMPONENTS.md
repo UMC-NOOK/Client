@@ -30,11 +30,12 @@
 
 #### Props
 
-| Name       | Type                         | Required | Default | Note                                          |
-| :--------- | :--------------------------- | :------: | :------ | :-------------------------------------------- |
-| `imageUrl` | `string`                     |    X     | -       | 책 표지 이미지 URL                            |
-| `size`     | `'XS' \| 'S' \| 'M' \| 'XL'` |    O     | -       | 표지 크기                                     |
-| `type`     | `'Image' \| 'Upload'`        |    O     | -       | `'Image'` 일 경우 반드시 `imageUrl` 함께 제공 |
+| Name        | Type                         | Required | Default | Note                                          |
+| :---------- | :--------------------------- | :------: | :------ | :-------------------------------------------- |
+| `imageUrl`  | `string`                     |    X     | -       | 책 표지 이미지 URL                            |
+| `size`      | `'XS' \| 'S' \| 'M' \| 'XL'` |    O     | -       | 표지 크기                                     |
+| `type`      | `'Image' \| 'Upload'`        |    O     | -       | `'Image'` 일 경우 반드시 `imageUrl` 함께 제공 |
+| `className` | `string`                     |    X     | -       | 추가 디자인                                   |
 
 #### Usage
 
