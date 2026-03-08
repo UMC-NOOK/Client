@@ -9,12 +9,20 @@ import {
 } from "react-router-dom";
 import AppShell from "./AppShell";
 import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
-import LibraryMobilePage from "../pages/LibraryMobilePage";
-import FocusMobilePage from "../pages/FocusMobilePage";
-import RecordMobilePage from "../pages/RecordMobilePage";
-import GroupMobilePage from "../pages/GroupMobilePage";
-import SearchPage from "../pages/SearchPage";
-import SearchDirectAddPage from "../pages/SearchDirectAddPage";
+
+import LibraryMobilePage from "../pages/search/LibraryMobilePage";
+import FocusMobilePage from "../pages/search/FocusMobilePage";
+import RecordMobilePage from "../pages/search/RecordMobilePage";
+import GroupMobilePage from "../pages/search/GroupMobilePage";
+import SearchPage from "../pages/search/SearchPage";
+
+import SearchNewAddPage from "../pages/search/SearchNewAddPage";
+import SearchNewAddCategoryPage from "../pages/search/SearchNewAddCategoryPage";
+import SearchNewAddMorePage from "../pages/search/SearchNewAddMorePage";
+import BannerActionCardTestPage from "../pages/search/test/testpage";
+import BottomSheetTestPage from "../pages/search/test/BottomSheetTestPage";
+import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
+
 import BookInfo from "../pages/BookInfo";
 
 type TabKey = "library" | "focus" | "record" | "group";
@@ -45,7 +53,7 @@ function MainTabsLayout() {
   const activeTab = pathToTab(pathname);
 
   return (
-    <AppShell>
+    <>
       <TopAppBar
         activeTab={activeTab}
         onTabChange={(tab) => navigate(tabToPath(tab))}
@@ -56,42 +64,52 @@ function MainTabsLayout() {
       <div className="w-full max-w-85.75 mx-auto">
         <Outlet />
       </div>
-    </AppShell>
+    </>
   );
 }
 
 function SearchLayout() {
-  const { pathname } = useLocation();
-
-  // ✅ /search/direct 에서는 AppShell의 safe-area top padding 제거
-  const disableSafeAreaTop = pathname.startsWith("/search/direct");
-
   return (
-    <AppShell disableSafeAreaTop={disableSafeAreaTop}>
-      <div className="w-full max-w-85.75 mx-auto">
-        <Outlet />
-      </div>
-    </AppShell>
+    <div className="w-full max-w-85.75 mx-auto">
+      <Outlet />
+    </div>
   );
 }
 
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/library" replace />} />
+      <Route element={<AppShell />}>
+        <Route path="/" element={<Navigate to="/library" replace />} />
 
-      <Route element={<SearchLayout />}>
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/search/direct" element={<SearchDirectAddPage />} />
+        {/* Search */}
+        <Route element={<SearchLayout />}>
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/search/new" element={<SearchNewAddPage />} />
+          <Route
+            path="/search/new/category"
+            element={<SearchNewAddCategoryPage />}
+          />
+          <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
+          <Route path="/search/" element={<SearchNewAddMorePage />} />
+        </Route>
+
+        {/* Main Tabs */}
+        <Route element={<MainTabsLayout />}>
+          <Route path="/library" element={<LibraryMobilePage />} />
+          <Route path="/focus" element={<FocusMobilePage />} />
+          <Route path="/record" element={<RecordMobilePage />} />
+          <Route path="/group" element={<GroupMobilePage />} />
+          <Route
+            path="/test/banner-action-card"
+            element={<BannerActionCardTestPage />}
+          />
+          <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
+          <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
+        </Route>
+
+        <Route path="*" element={<Navigate to="/library" replace />} />
       </Route>
-
-      <Route element={<MainTabsLayout />}>
-        <Route path="/library" element={<LibraryMobilePage />} />
-        <Route path="/focus" element={<FocusMobilePage />} />
-        <Route path="/record" element={<RecordMobilePage />} />
-        <Route path="/group" element={<GroupMobilePage />} />
-      </Route>
-
       <Route path="*" element={<Navigate to="/library" replace />} />
 
       <Route path="/library/123" element={<BookInfo />}></Route>

@@ -1,74 +1,130 @@
-import { useRef } from "react";
+// Client/src/components/search/MyLibraryListSection.tsx
+import React, { useMemo, useRef } from "react";
 import bookCover from "../../assets/search/mock_bookcover.svg";
 import type { BookItem } from "./mock/myLibrary";
-import { focusedBooks, unreadBooks, fallbackRecommendedBooks } from "./mock/myLibrary";
+import {
+  focusedBooks,
+  unreadBooks,
+  fallbackRecommendedBooks,
+} from "./mock/myLibrary";
 
 const LIMIT = 5;
 
+function SectionBlock({ title, books }: { title: string; books: BookItem[] }) {
+  if (!books.length) return null;
+
+  return (
+    <div className="w-full flex flex-col items-start gap-4">
+      <span className="text-gray-90 text-label-13-b">{title}</span>
+      <HorizontalBookScroller books={books} />
+    </div>
+  );
+}
+
 function HorizontalBookScroller({ books }: { books: BookItem[] }) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const isDragging = useRef(false);
-  const startX = useRef(0);
-  const startScrollLeft = useRef(0);
 
-  // --- 드래그 로직  ---
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.button !== 0) return;
+  const drag = useRef({
+    isDragging: false,
+    startX: 0,
+    startScrollLeft: 0,
+    pointerId: -1,
+  });
+
+  const sliced = useMemo(() => books.slice(0, LIMIT), [books]);
+
+  const setSnapEnabled = (enabled: boolean) => {
     const el = ref.current;
     if (!el) return;
+    el.style.scrollSnapType = enabled ? "x mandatory" : "none";
+  };
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0) return; // left click only
+    const el = ref.current;
+    if (!el) return;
+
     e.preventDefault();
-    isDragging.current = true;
-    startX.current = e.clientX;
-    startScrollLeft.current = el.scrollLeft;
-    el.style.scrollSnapType = "none";
-    el.style.cursor = "grabbing";
+
+    drag.current.isDragging = true;
+    drag.current.startX = e.clientX;
+    drag.current.startScrollLeft = el.scrollLeft;
+    drag.current.pointerId = e.pointerId;
+
+    setSnapEnabled(false);
     el.setPointerCapture(e.pointerId);
   };
+
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging.current || !ref.current) return;
+    const el = ref.current;
+    if (!el || !drag.current.isDragging) return;
+
     e.preventDefault();
-    ref.current.scrollLeft = startScrollLeft.current - (e.clientX - startX.current);
+    const delta = e.clientX - drag.current.startX;
+    el.scrollLeft = drag.current.startScrollLeft - delta;
   };
-  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging.current) return;
-    isDragging.current = false;
-    if (ref.current) {
-      ref.current.style.scrollSnapType = "x mandatory";
-      ref.current.style.cursor = "grab";
-    }
-    try { ref.current?.releasePointerCapture(e.pointerId); } catch {}
+
+  const endDrag = () => {
+    const el = ref.current;
+    if (!el || !drag.current.isDragging) return;
+
+    drag.current.isDragging = false;
+    drag.current.pointerId = -1;
+
+    setSnapEnabled(true);
   };
-  
+
+  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    endDrag();
+    try {
+      ref.current?.releasePointerCapture(e.pointerId);
+    } catch {}
+  };
+
+  const onPointerCancel = (e: React.PointerEvent<HTMLDivElement>) => {
+    endDrag();
+    try {
+      ref.current?.releasePointerCapture(e.pointerId);
+    } catch {}
+  };
 
   return (
     <div
       ref={ref}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
-      onPointerUp={endDrag}
-      onPointerCancel={endDrag}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerCancel}
       onPointerLeave={endDrag}
-      style={{ touchAction: "pan-x" }}
-      className="w-[calc(100%+16px)] -mr-4 overflow-x-auto cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [scroll-snap-type:x_mandatory]"
+      className="
+        w-[calc(100%+16px)] -mr-4
+        overflow-x-auto select-none
+        cursor-grab active:cursor-grabbing
+        [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
+        [scroll-snap-type:x_mandatory]
+        [touch-action:pan-x]
+
+      "
     >
-      <div className="flex flex-row items-start gap-[8px] pr-4 h-full">
-        {books.slice(0, LIMIT).map((book, index) => (
+      <div className="flex items-start gap-2 pr-4">
+        {sliced.map((book) => (
           <div
-            key={`lib-${book.id}-${index}`}
-            className="flex flex-col items-start shrink-0 w-[100px] snap-start"
+            key={book.id}
+            className="flex flex-col items-start shrink-0 w-25 snap-start"
           >
             <img
               src={bookCover}
               alt={book.title}
               draggable={false}
-              className="w-[100px] h-[144px] rounded-[2px] object-cover"
+              className="w-25 h-36 rounded-xs object-cover"
             />
-            
-            <div className="flex flex-col items-start w-full mt-[4px]">
-              <span className="text-[#ECECEC] text-[14px] font-[600] leading-[21px] font-[SUIT Variable] line-clamp-2 w-full break-keep">
+
+            <div className="flex flex-col items-start w-full mt-1">
+              <span className="text-gray-90 text-body-14-m line-clamp-2 w-full break-keep">
                 {book.title}
               </span>
-              <span className="text-[#A2A7C3] text-[12px] font-[400] leading-[18px] font-[SUIT] truncate w-full mt-[2px]">
+
+              <span className="text-gray-70 text-body-12-r truncate w-full mt-0.5">
                 {book.author}
               </span>
             </div>
@@ -80,38 +136,21 @@ function HorizontalBookScroller({ books }: { books: BookItem[] }) {
 }
 
 export default function MyLibraryListSection() {
-  
   const hasFocused = focusedBooks.length > 0;
   const hasUnread = unreadBooks.length > 0;
   const showFallbackOnly = !hasFocused && !hasUnread;
 
   return (
-    <section className="w-full flex flex-col items-start gap-[32px] pt-8">
+    <section className="w-full flex flex-col items-start gap-8 pt-8">
       {showFallbackOnly ? (
-        <div className="w-full flex flex-col items-start gap-[16px]">
-          <span className="text-[#ECECEC] text-[13px] font-[600] leading-[13px] font-[SUIT Variable]">
-            이 책을 추천해요
-          </span>
-          <HorizontalBookScroller books={fallbackRecommendedBooks} />
-        </div>
+        <SectionBlock
+          title="이 책을 추천해요"
+          books={fallbackRecommendedBooks}
+        />
       ) : (
         <>
-          {hasFocused && (
-            <div className="w-full flex flex-col items-start gap-[16px]">
-              <span className="text-[#ECECEC] text-[13px] font-[600] leading-[13px] font-[SUIT Variable]">
-                최근 포커스한 책
-              </span>
-              <HorizontalBookScroller books={focusedBooks} />
-            </div>
-          )}
-          {hasUnread && (
-            <div className="w-full flex flex-col items-start gap-[16px]">
-              <span className="text-[#ECECEC] text-[13px] font-[600] leading-[13px] font-[SUIT Variable]">
-                아직 읽지 않은 책
-              </span>
-              <HorizontalBookScroller books={unreadBooks} />
-            </div>
-          )}
+          <SectionBlock title="최근 포커스한 책" books={focusedBooks} />
+          <SectionBlock title="아직 읽지 않은 책" books={unreadBooks} />
         </>
       )}
     </section>
