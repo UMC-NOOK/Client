@@ -1,3 +1,4 @@
+//Client\src\components\navigation\tabs\TextTab.tsx
 type Props = {
   label: string;
   active: boolean;
@@ -8,7 +9,7 @@ type Props = {
   disabled?: boolean;
 };
 
-export default function SegmentedButton({
+export default function TextTab({
   label,
   active,
   onClick,

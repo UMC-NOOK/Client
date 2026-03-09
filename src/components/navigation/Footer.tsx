@@ -1,4 +1,4 @@
-// Client/src/components/layout/Footer/Footer.tsx
+// Client\src\components\navigation\Footer.tsx
 import dividerIcon from "../../assets/search/search-field-text.svg";
 
 export default function Footer() {

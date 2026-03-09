@@ -1,3 +1,4 @@
+//Client\src\components\navigation\topnavigation\TopNavigation.tsx
 type TopNavigationProps = {
   left?: React.ReactNode;     // 항상 버튼
   center?: React.ReactNode;   // 글씨 or 없음

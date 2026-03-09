@@ -1,14 +1,4 @@
-/**
- * SingleLineBannerCard
- *
- * [사용 예시]
- * <SingleLineBannerCard
- *   label="지금 바로 독서 기록 추가하기" // 한 줄 텍스트
- *   onClick={() => console.log("clicked")}
- * />
- *
- * ++ 아이콘 변경이 필요하면 iconSrc/iconAlt로 override
- */
+//Client\src\components\presentation\modal\bottombanner\Small.tsx
 
 import React from "react";
 import defaultArrowRight from "../../../../assets/icons/arrow_right.svg";
