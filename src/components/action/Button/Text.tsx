@@ -1,5 +1,3 @@
-import React from "react";
-
 type Size = "12" | "14" | "18";
 
 type Props = {
