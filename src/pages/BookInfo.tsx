@@ -15,7 +15,31 @@ const detailTabs = [
   { value: "info", label: "책 정보" },
   { value: "log", label: "독서 이력" },
 ] as const;
-// functions
+// data
+const bookData = {
+  isSuccess: true,
+  code: "SUCCESS-200",
+  message: "요청에 성공했습니다.",
+  result: {
+    book: {
+      isbn13: "9791162243077",
+      bookId: 101,
+      title: "이것이 자바다",
+      author: "신용권, 임경균",
+      publisher: "한빛미디어",
+      publicationDate: "2022-09-05",
+      mallType: "국내도서",
+      mallTypeCode: "BOOK",
+      category: "IT",
+      pages: 900,
+      description: "자바의 정석 기초편...",
+      coverImageUrl: "https://image.aladin.co.kr/...",
+      aladinLink: "http://...",
+      sourceType: "ALADIN",
+      bookshelfId: 52,
+    },
+  },
+};
 
 export default function BookInfo() {
   const [selectedTab, setSelectedTab] = useState<DetailTab>("info");
@@ -42,10 +66,10 @@ export default function BookInfo() {
             <BookCover imageUrl={testBookCover} size="XL" type="Image" />
             <div>
               <p className="text-title-18-b text-gray-90 text-center">
-                첫사랑의 침공
+                {bookData.result.book.title}
               </p>
               <p className="text-body-14-m text-gray-80 mt-[6px] text-center">
-                권혁일
+                {bookData.result.book.author}
               </p>
             </div>
           </div>
@@ -66,34 +90,46 @@ export default function BookInfo() {
               {/* 컴포넌트 개발 시 리팩토링*/}
               <div className="text-label-14-sb">소개</div>
               <div className="text-body-14-r">
-                표제작 〈첫사랑의 침공〉에서 주인공의 마음을 사로잡은 누나는
-                지구를 침략하러 온 외계인이다. 다른 수록작의 주인공들의 처지도
-                험난해 보이기는 마찬가지다. 그들은 업무 평가에서 매번 꼴찌를
-                도맡는 신을, 지구를 침략할 생각이 없는 외계인을, 북한에서 온
-                간첩을 마음에 둔다.
+                {bookData.result.book.description}
               </div>
             </div>
             <div className=" flex flex-col gap-3">
               <div className="text-label-14-sb ">분야</div>
-              <div className="text-body-14-r">소실/시/희곡</div>
+              <div className="text-body-14-r">
+                {bookData.result.book.category}
+              </div>
             </div>
             <div className=" flex flex-col gap-3">
               <div className="text-label-14-sb">분량</div>
-              <div className="text-body-14-r">228쪽</div>
+              <div className="text-body-14-r">
+                {bookData.result.book.pages}쪽
+              </div>
             </div>
             <div className=" flex flex-col gap-3">
               <div className="text-label-14-sb">출판</div>
-              <div className="text-body-14-r">안전가옥 (2024.06.10)</div>
+              <div className="text-body-14-r">
+                {bookData.result.book.publisher} (
+                {bookData.result.book.publicationDate})
+              </div>
             </div>
             <div className=" flex flex-col gap-3">
               <div className="text-label-14-sb">ISBN</div>
-              <div className="text-body-14-r">9791193024713</div>
+              <div className="text-body-14-r">
+                {bookData.result.book.isbn13}
+              </div>
             </div>
           </div>
           {/* 컴포넌트 개발 시 리팩토링*/}
           <div className="flex gap-2 text-gray-50 text-label-12-sb">
             <div>도서 DB 제공: 알라딘</div>
-            <div>도서 구매하기</div>
+            <div
+              className="underline cursor-pointer"
+              onClick={() =>
+                window.open(bookData.result.book.aladinLink, "_blank")
+              }
+            >
+              도서 구매하기
+            </div>
           </div>
         </div>
       ) : (
