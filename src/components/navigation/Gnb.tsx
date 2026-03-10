@@ -1,3 +1,4 @@
+//Client\src\components\navigation\Gnb.tsx
 import React from "react";
 
 import searchPng from "../../assets/logo/top-navigation-button-icon-search.svg";
