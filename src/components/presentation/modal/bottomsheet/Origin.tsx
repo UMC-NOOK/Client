@@ -1,9 +1,5 @@
-/**
- * 헤더, 바디, 푸터로 구성된 바텀시트 컴포넌트 입니다
- * 헤더와 푸터는 on/off가 가능합니다 (title, footer prop으로 넘김)
- * 푸터는 버튼이 하나일 때와 두 개일때가 존재하며 하나인 경우 4개의 variant, 둘 인 경우 2개의 varian가 존재합니다
- * 푸터의 버튼이 2개일 경우 각 버튼의 비율은 5:5인 경우 equal, 비대칭인 경우 split으로 지정합니다.
- **/
+//Client\src\components\presentation\modal\bottomsheet\Origin.tsx
+//이거 하나로 조정 가능 
 
 import React from "react";
 import closeIcon from "../../../../assets/icons/close.svg";

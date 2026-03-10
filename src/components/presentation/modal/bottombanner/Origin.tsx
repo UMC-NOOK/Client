@@ -1,15 +1,4 @@
-/**
- * BannerActionCard
- *
- * [사용 예시]
- * <BannerActionCard
- *   line1="클라우드 쿠쿠 랜드" // 첫 번째 줄 텍스트
- *   line2="147쪽부터 이어서 포커스 하기" // 두 번째 줄 텍스트
- *   onClick={() => console.log("click")}
- * />
- *
- * ++ 아이콘 변경이 필요하면 iconSrc/iconAlt로 override
- */
+//Client\src\components\presentation\modal\bottombanner\Origin.tsx
 
 import React from "react";
 import defaultArrowRight from "../../../../assets/icons/arrow_right.svg";

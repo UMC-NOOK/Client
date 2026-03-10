@@ -1,9 +1,4 @@
-/**
- * 문구(title/description, 버튼 label)만 바뀌는 고정 레이아웃 팝업입니다.
- * ++ closeOnOverlayClick=false로 오버레이 클릭 닫기 비활성화 가능
- */
-
-
+//Client\src\components\presentation\modal\popup\Origin.tsx
 type Props = {
   open: boolean;
 

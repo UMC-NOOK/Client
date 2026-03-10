@@ -11,7 +11,7 @@ type Props = {
   wrapperClassName?: string; // default: "w-full px-1"
 };
 
-export default function ProgressBar({
+export default function ProgressIndicator({
   step,
   total,
   heightClassName = "h-1",
