@@ -373,6 +373,65 @@ const [birth, setBirth] = useState({
   <TextButton text="활성" size="12" active={true} />
 ```
 
+### [ Solid ]
+
+#### Path
+`src/components/action/Button/Solid.tsx`
+
+#### Props
+| Name            | Type                               | Required | Default     | Note              |
+| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
+|  `text`         | `string`                           |     O    | -           |  텍스트 내용     |
+| `variant`       | `"default" \| "dark" \| "danger"`  |     O    | `default`   | 버튼 종류      |
+| `className`        | `string`                        |     X    |  -          | 추가적인 클래스 명  |
+
+#### Usage
+```tsx
+  //default
+  <Solid> 기본 </Solid> 
+  //dark
+  <Solid variant="dark">다른</Solid> 
+  //danger
+  <Solid variant="danger">제거</Solid>
+```
+
+### [ FAB ]
+
+#### Path
+`src/components/action/Button/FAB.tsx`
+
+#### Props
+| Name            | Type                               | Required | Default     | Note              |
+| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
+|  `icon`         | `ReactNode`                        |     O    | -           |  내부에 들어갈 icon svg    |
+| `onClick`       | `() => void`                       |    X     | -           | 눌럿을 때의 기능 함수      |
+
+#### Usage
+```tsx
+//svg 파일이라서 이렇게 <img 태그에 묶어서 진행했습니다.>
+  <FAB icon={<img src={PlusIcon}/>}/>
+```
+
+
+### [ ContainerText ]
+
+#### Path
+`src/components/action/Button/ContainerText.tsx`
+
+#### Props
+| Name            | Type                               | Required | Default     | Note              |
+| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
+|  `text`         | `string`                           |    O     | -           |  텍스트 내용  |
+| `active`        | `boolean`                          |    X     | `false`     | 활성화/비활성화 여부      |
+
+#### Usage
+```tsx
+  //비활성화
+   <ContainerText text="Text" />
+
+  //활성화
+  <ContainerText text="Text" active />
+```
 
 ### [ Emotion ]
 
