@@ -133,10 +133,25 @@ export default function BookInfo() {
           </div>
         </div>
       ) : (
-        <div>
-          <div></div>
-          <div></div>
-          <div></div>
+        <div className="flex flex-col mt-8 px-1 gap-8 text-gray-90">
+          <div className="flex flex-col gap-3">
+            <div className="text-label-14-sb">포커스</div>
+            <div className="text-body-14-r p-4 rounded-sm bg-gray-15">
+              아직 포커스하지 않았어요.
+            </div>
+          </div>
+          <div className="flex flex-col gap-3">
+            <div className="text-label-14-sb">기록</div>
+            <div className="text-body-14-r p-4 rounded-sm bg-gray-15">
+              아직 기록이 없어요.
+            </div>
+          </div>
+          <div className="flex flex-col gap-3">
+            <div className="text-label-14-sb">독서 히스토리</div>
+            <div className="text-body-14-r p-4 rounded-sm bg-gray-15">
+              아직 독서 활동이 없어요.
+            </div>
+          </div>
         </div>
       )}
       {/* 버튼 모달 */}
