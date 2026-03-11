@@ -349,16 +349,22 @@ const [birth, setBirth] = useState({
 #### Usage
 
 ```tsx
-const tabOptions = [
-  { value: "all", label: "전체" },
-  { value: "popular", label: "인기" },
-] as const;
+const [isActive, setIsActive] = useState(false);
 
-<TabBar
-  options={tabOptions}
-  value={tab}
-  onChange={setTab}
-  variant="underlineGradient"
+//icon 있는 칩
+<Chip
+  text="Text"
+  variant="icon"
+  active={isActive}
+  icon={<img src={PlusIcon} alt="Plus Icon"/>}
+  onClick={() => setIsActive(!isActive)}
+/>
+
+//text만 있는 칩
+<Chip
+  text="Text"
+  variant="none"
+  active={true}
 />
 ```
 

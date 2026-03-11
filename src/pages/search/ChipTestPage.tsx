@@ -3,6 +3,7 @@ import Chip from "../../components/action/Chip/Chip";
 import PlusIcon from "../../assets/icons/plus.svg"; // 여기서 img로 사용
 
 export default function ChipTestPage() {
+    const [isActive, setIsActive] = useState(false);
 
   return (
     <main className="min-h-screen flex justify-center items-center bg-gray-100 p-8">
@@ -10,8 +11,9 @@ export default function ChipTestPage() {
         <Chip
           text="Text"
           variant="icon"
-          active={true}
-          icon={<img src={PlusIcon} alt="Plus Icon" />}
+          active={isActive}
+          icon={<img src={PlusIcon} alt="Plus Icon"/>}
+          onClick={() => setIsActive(!isActive)}
         />
 
         <Chip
