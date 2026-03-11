@@ -330,6 +330,38 @@ const [birth, setBirth] = useState({
 ```
 
 
+### [ Chip ]
+
+#### Path
+
+`src/components/action/Chip/Chip.tsx`
+
+#### Props
+
+| Name            | Type                  | Required | Default     | Note          |
+| :-------------- | :---------------------| :------: | :---------- | :------------ |
+| `text`          | `string`              |     O    | -           | 텍스트 내용       |
+| `variant`       | `"none" \| "icon"`    |     O    | -           | 활성화/비활성화 유무    |
+| `active`        | `boolean`             |     O    | `false`     | 활성화/비활성화 유무    |
+| `icon`          | `ReactNode`           |     X    | -           | 아이콘    |
+| `onClick`       | `()=> void`           |     X    | -           | 눌럿을 때의 기능    |
+
+#### Usage
+
+```tsx
+const tabOptions = [
+  { value: "all", label: "전체" },
+  { value: "popular", label: "인기" },
+] as const;
+
+<TabBar
+  options={tabOptions}
+  value={tab}
+  onChange={setTab}
+  variant="underlineGradient"
+/>
+```
+
 
 
 
