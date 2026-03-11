@@ -1,15 +1,4 @@
-/**
- * ReadingRecordBannerCard
- *
- * [사용 예시]
- * <ReadingRecordBannerCard
- *   count={5} // 숫자/문자열 (자동으로 "개" 붙여 렌더링)
- *   subtitle="기억에 남는 문장, 떠오르는 감상을 기록하세요." // 두번째 줄 설명
- *   onClick={() => console.log("clicked")}
- * />
- *
- * ++ 아이콘 변경이 필요하면 iconSrc/iconAlt로 override
- */
+//Client\src\components\presentation\modal\bottombanner\ReadingRecord.tsx
 
 import React from "react";
 import plusIcon from "../../../../assets/icons/plus.svg";

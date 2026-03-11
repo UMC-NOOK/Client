@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import closeIcon from "../../assets/logo/close-button.svg";
 import SearchInput from "../input/SearchField";
-import SegmentedControl from "../navigation/tabs/Text";
+import Text from "../navigation/tabs/Text";
 import TopNavigation from "../navigation/topnavigation/TopNavigation";
 
 export type SearchScope = "all" | "my";
@@ -75,7 +75,7 @@ export default function SearchTopSection({
 
       {/* 탭 + 검색바 */}
       <div className="w-full flex flex-col items-start gap-4">
-        <SegmentedControl<SearchScope>
+        <Text<SearchScope>
           ariaLabel="search scope"
           value={currentScope}
           onChange={handleScopeChange}
