@@ -16,6 +16,7 @@ import BannerActionCardTestPage from "../pages/search/test/testpage";
 import BottomSheetTestPage from "../pages/search/test/BottomSheetTestPage";
 import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
 import SectionHeaderTestPage from "../pages/search/SectionHeaderTestPage";
+import InformationSectionTestPage from "../pages/search/InformationSectionHeaderTestPage";
 
 
 type TabKey = "library" | "focus" | "record" | "group";
@@ -94,6 +95,7 @@ export default function AppRoutes() {
           <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
 
           <Route path="/sectionHeader" element={<SectionHeaderTestPage/>}/>
+          <Route path="/infroSection" element={<InformationSectionTestPage/>}/>
         </Route>
 
         <Route path="*" element={<Navigate to="/library" replace />} />
