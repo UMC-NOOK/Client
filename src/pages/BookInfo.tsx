@@ -5,6 +5,7 @@ import TopNavigation from "../components/navigation/topnavigation/TopNavigation"
 import BookCover from "../components/atomic/BookCover";
 import TabBar from "../components/navigation/tabs/TabBar";
 import BottomSheet from "../components/presentation/modal/bottomsheet/Origin";
+import PopupConfirmModal from "../components/presentation/modal/popup/Origin";
 // assets
 import chevron_left from "../assets/icons/chevron_left.svg";
 import testBookCover from "../assets/book-info/testBookCover.svg";
@@ -50,12 +51,18 @@ export default function BookInfo() {
   const [hasFocus, setHasFocus] = useState(true);
   const [hasRecord, setHasRecord] = useState(false);
   const [hasHistory, setHasHistory] = useState(false);
+  const [showReadingModal, setShowReadingModal] = useState(false);
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
 
   // 개발용 핸들러 함수
   const toggleReadStatus = () => {
-    if (readStatus === "unread") setReadStatus("reading");
-    else if (readStatus === "reading") setReadStatus("read");
-    else setReadStatus("unread");
+    if (readStatus === "unread") {
+      setReadStatus("reading");
+    } else if (readStatus === "reading") {
+      setShowCompleteModal(true);
+    } else {
+      setShowReadingModal(true);
+    }
 
     console.log("현재 읽기 상태:", readStatus);
   };
@@ -285,6 +292,36 @@ export default function BookInfo() {
             onClick: () => {
               toggleReadStatus();
             },
+          }}
+        />
+      )}
+      {showCompleteModal && (
+        <PopupConfirmModal
+          open={true}
+          onClose={() => setShowCompleteModal(false)}
+          title="완독 상태로 변경할까요?"
+          description="다시 독서 중 상태로 되돌릴 수 있어요."
+          leftLabel="취소"
+          rightLabel="변경"
+          onLeftClick={() => setShowCompleteModal(false)}
+          onRightClick={() => {
+            setReadStatus("read");
+            setShowCompleteModal(false);
+          }}
+        />
+      )}
+      {showReadingModal && (
+        <PopupConfirmModal
+          open={true}
+          onClose={() => setShowReadingModal(false)}
+          title="독서 중 상태로 변경할까요?"
+          description="다시 완독 상태로 되돌릴 수 있어요."
+          leftLabel="취소"
+          rightLabel="변경"
+          onLeftClick={() => setShowReadingModal(false)}
+          onRightClick={() => {
+            setReadStatus("reading");
+            setShowReadingModal(false);
           }}
         />
       )}

@@ -154,7 +154,7 @@ function BottomSheetFooter({
         className={[
           baseBtn,
           leftClassByVariant[config.leftVariant],
-          equal ? "flex-1" : "w-20",
+          equal ? "flex-1" : "",
           "cursor-pointer",
         ].join(" ")}
       >
