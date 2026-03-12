@@ -9,7 +9,7 @@ type Props = {
   size: SectionHeaderSize;
   title: string;
   description?: string; // 13, 16, 20
-  showCaret?: boolean; // 14, 16, 20
+  //showCaret?: boolean; // 14, 16, 20
   onToggle?: (open: boolean) => void; // caret 열 onClick 
   onClick?: () => void; // 사용자용 Click
 };
@@ -26,11 +26,12 @@ export default function SectionHeader({
   size,
   title,
   description,
-  showCaret = false,
+  //showCaret = false,
   onToggle,
   onClick,
 }: Props) {
   const [open, setOpen] = useState(false);
+  const showCaret = size === "14" || size === "16";
 
   const handleClick = () => {
     if (showCaret) {

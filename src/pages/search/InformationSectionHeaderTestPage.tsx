@@ -11,7 +11,6 @@ export default function InformationSectionTestPage() {
             flow="vertical"
             title="Text"
             description="세로형 설명 텍스트입니다."
-            showCaret
             onClick={() => {
               console.log("vertical click");
             }}
@@ -36,7 +35,6 @@ export default function InformationSectionTestPage() {
             flow="vertical"
             title="긴 제목 테스트"
             description="이 설명은 세로형에서 여러 줄로 자연스럽게 내려오는지 확인하기 위한 긴 텍스트입니다."
-            showCaret
           />
         </div>
 

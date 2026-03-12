@@ -19,7 +19,6 @@ export default function SectionHeaderTestPage() {
           <SectionHeader
             size="14"
             title="Text"
-            showCaret
             onClick={() => {
               console.log("size 14 click");
             }}
@@ -35,7 +34,6 @@ export default function SectionHeaderTestPage() {
             size="16"
             title="Text"
             description="한 줄로 잘리는 설명 텍스트입니다."
-            showCaret
             onClick={() => {
               console.log("size 16 click");
             }}

@@ -6,7 +6,6 @@ type Props = {
   flow: InformationSectionFlow;
   title: string;
   description: string;
-  showCaret?: boolean;
   onToggle?: (open: boolean) => void;
   onClick?: () => void;
 };
@@ -15,7 +14,6 @@ export default function InformationSection({
   flow,
   title,
   description,
-  showCaret = false,
   onToggle,
   onClick,
 }: Props) {
@@ -25,7 +23,6 @@ export default function InformationSection({
         <SectionHeader
           size="14"
           title={title}
-          showCaret={showCaret}
           onToggle={onToggle}
           onClick={onClick}
         />

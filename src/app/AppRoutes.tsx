@@ -95,7 +95,7 @@ export default function AppRoutes() {
           <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
 
           <Route path="/sectionHeader" element={<SectionHeaderTestPage/>}/>
-          <Route path="/infroSection" element={<InformationSectionTestPage/>}/>
+          <Route path="/infoSection" element={<InformationSectionTestPage/>}/>
         </Route>
 
         <Route path="*" element={<Navigate to="/library" replace />} />
