@@ -735,24 +735,18 @@ const MOCK_RANKS = [
 #### Usage
 
 ```tsx
-const MOCK_RANKS = [
-  { rank: 0, title: 'The Pragmatic Programmer' },
-  { rank: 1, title: 'Clean Code: A Handbook of Agile Software Craftsmanship' },
-  { rank: 2, title: 'Refactoring: Improving the Design of Existing Code' },
-  {
-    rank: 3,
-    title: '아주아주아주 긴 제목 테스트용 — 한 줄 말줄임이 제대로 적용되는지 확인하는 텍스트입니다',
-  },
-];
+//history (독서기록)
+<HistoryInfoCard
+ variant="history"
+ time="2025.09.11"
+/>
 
-<div className="space-y-3">
-  {MOCK_RANKS.map((item) => (
-   <Rank
-    key={item.rank}
-    rank={item.rank}
-    title={item.title}
-  />))}
-</div>
+//time 
+ <HistoryInfoCard
+  variant="time"
+  title="집중 시간"
+  time="01:24:12"
+/>
 
 ```
 
