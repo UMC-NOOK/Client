@@ -103,7 +103,6 @@ export default function AppRoutes() {
             element={<SearchNewAddCategoryPage />}
           />
           <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
-          <Route path="/search/" element={<SearchNewAddMorePage />} />
         </Route>
 
         {/* Main Tabs */}

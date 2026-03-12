@@ -2,7 +2,7 @@
 import React from "react";
 import CloseIcon from "../../../assets/search/addBookclose.svg";
 import BackIcon from "../../../assets/search/newbefore.svg";
-import ProgressBar from "../../navigation/ProgressIndicator";
+import ProgressIndicator from "../../navigation/ProgressIndicator";
 
 type Props = {
   title: string;
@@ -67,7 +67,7 @@ export default function SearchNewAddLayout({
       </div>
 
       {/* ProgressIndicator 부분 (컴포넌트로 분리) */}
-      <ProgressBar step={step} total={3} />
+      <ProgressIndicator step={step} total={3} />
 
       {/* 콘텐츠 */}
       <div className="w-full flex flex-col items-start pt-12">

@@ -1,3 +1,4 @@
+//Client\src\components\navigation\tabs\Text.tsx
 export type SegmentedOption<T extends string> = {
   value: T;
   label: string;
@@ -17,7 +18,7 @@ type Props<T extends string> = {
   buttonWidthPx?: number;
 };
 
-export default function SegmentedControl<T extends string>({
+export default function Text<T extends string>({
   options,
   value,
   onChange,
