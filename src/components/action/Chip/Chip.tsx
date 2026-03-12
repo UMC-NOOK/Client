@@ -1,6 +1,5 @@
-import type { ButtonHTMLAttributes, ReactNode, SVGProps } from "react";
-import Icon from "../Button/Icon"; // 경로 맞추기
-import React from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
+import Icon from "../Button/Icon"; // 경로 맞추기\
 
 type Variant = "none" | "icon";
 
