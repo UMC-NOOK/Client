@@ -331,7 +331,133 @@ const [birth, setBirth] = useState({
 
 
 
+## 5. Action
+> * **Design**:
+> * **Author**: 임서연
 
+### [ Icon ]
+
+#### Path
+`src/components/action/Button/Icon.tsx`
+
+#### Props
+| Name            | Type                               | Required | Default     | Note              |
+| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
+| `size`          | `"xs" or "s" or "m`                |     O    | -           |  아이콘 사이즈     |
+| `children`      | `ReactNode`                        |     O    | -           | svg 파일      |
+| `className`     | `string`                           |     X    | -           | 추가적인 클래스명  |
+
+#### Usage
+```tsx
+  <Icon size="xs"> 
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M16 8.75C16 6.8272 15.2356 4.98267 13.876 3.62305C12.5164 2.2637 10.6726 1.50002 8.75 1.5C6.8272 1.5 4.98267 2.26342 3.62305 3.62305C2.26342 4.98267 1.5 6.8272 1.5 8.75C1.50002 10.6726 2.2637 12.5164 3.62305 13.876C4.98267 15.2356 6.8272 16 8.75 16C10.6728 16 12.5164 15.2356 13.876 13.876C15.2356 12.5164 16 10.6728 16 8.75ZM17.5 8.75C17.5 10.8192 16.7645 12.8109 15.4424 14.3818L19.2803 18.2197C19.573 18.5126 19.5731 18.9874 19.2803 19.2803C18.9874 19.5731 18.5126 19.573 18.2197 19.2803L14.3818 15.4424C12.8109 16.7645 10.8192 17.5 8.75 17.5C6.42941 17.5 4.20342 16.5784 2.5625 14.9375C0.921589 13.2966 2.04574e-05 11.0706 0 8.75C0 6.42938 0.921571 4.20343 2.5625 2.5625C4.20343 0.921571 6.42938 0 8.75 0C11.0706 2.04577e-05 13.2966 0.921589 14.9375 2.5625C16.5784 4.20342 17.5 6.42941 17.5 8.75Z" fill="#ECECEC"/> </svg> 
+  </Icon>
+```
+
+### [ Text ]
+
+#### Path
+`src/components/action/Button/Text.tsx`
+
+#### Props
+| Name            | Type                               | Required | Default     | Note              |
+| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
+|  `text`         | `string`                           |     O    | -           |  텍스트 내용     |
+| `size`          | `"12" \| "14" \| "18"`             |     O    | -           | 텍스트 사이즈      |
+| `active`        | `boolean`                          |    O     | `"false"`   | 텍스트 활성화/비활성화 여부  |
+| `onClick`       | `() => void`                       |    X     |     -       | 텍스트 Click에 대한 기능  |
+
+#### Usage
+```tsx
+  <TextButton text="비활성" size="18" active={false} />
+  <TextButton text="활성" size="12" active={true} />
+```
+
+### [ Solid ]
+
+#### Path
+`src/components/action/Button/Solid.tsx`
+
+#### Props
+| Name            | Type                               | Required | Default     | Note              |
+| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
+|  `text`         | `string`                           |     O    | -           |  텍스트 내용     |
+| `variant`       | `"default" \| "dark" \| "danger"`  |     O    | `default`   | 버튼 종류      |
+| `className`        | `string`                        |     X    |  -          | 추가적인 클래스 명  |
+
+#### Usage
+```tsx
+  //default
+  <Solid> 기본 </Solid> 
+  //dark
+  <Solid variant="dark">다른</Solid> 
+  //danger
+  <Solid variant="danger">제거</Solid>
+```
+
+### [ FAB ]
+
+#### Path
+`src/components/action/Button/FAB.tsx`
+
+#### Props
+| Name            | Type                               | Required | Default     | Note              |
+| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
+|  `icon`         | `ReactNode`                        |     O    | -           |  내부에 들어갈 icon svg    |
+| `onClick`       | `() => void`                       |    X     | -           | 눌럿을 때의 기능 함수      |
+
+#### Usage
+```tsx
+//svg 파일이라서 이렇게 <img 태그에 묶어서 진행했습니다.>
+  <FAB icon={<img src={PlusIcon}/>}/>
+```
+
+
+### [ ContainerText ]
+
+#### Path
+`src/components/action/Button/ContainerText.tsx`
+
+#### Props
+| Name            | Type                               | Required | Default     | Note              |
+| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
+|  `text`         | `string`                           |    O     | -           |  텍스트 내용  |
+| `active`        | `boolean`                          |    X     | `false`     | 활성화/비활성화 여부      |
+
+#### Usage
+```tsx
+  //비활성화
+   <ContainerText text="Text" />
+
+  //활성화
+  <ContainerText text="Text" active />
+```
+
+### [ Emotion ]
+
+#### Path
+`src/components/Chip/Emotion.tsx`
+
+#### Props
+| Name            | Type                               | Required | Default     | Note              |
+| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
+| `size`          | `string => "s" or "m"`             |     O    | -           | chip의 사이즈       |
+| `emoji`         | `string`                           |     O    | -           | emoji 문자       |
+| `text`          | `string`                           |     X    | -           | emoji 옆 텍스트   |
+| `variant`       | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |     X    | `"default"` | 탭 스타일 variant |
+| `active`        | `boolean`          |     O    | `"true"`          | chip의 비활성화/활성화 여부      |
+
+#### Usage
+```tsx
+//size = s 
+<Emotion size="s" emoji="(^_^)" variant="yellow" active />
+
+//size = m 
+<Emotion size="m" emoji="(^_^)" text="재밌어요" variant="yellow" active />
+
+//active 비활성화"
+<Emotion size="m" emoji="(• o •)" text="유익해요" variant="yellow" active={false} />
+```
 
 ## 6. Navigation
 
