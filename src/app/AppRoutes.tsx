@@ -16,12 +16,6 @@ import BannerActionCardTestPage from "../pages/search/test/testpage";
 import BottomSheetTestPage from "../pages/search/test/BottomSheetTestPage";
 import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
 
-import ReadingGoalTestPage from "../pages/search/BookGoalListPage";
-import NormalCardTestPage from "../pages/search/NormalPage";
-import BookListTestPage from "../pages/search/ListPage";
-import FocusMediaInfoCardTestPage from "../pages/search/FocusPage";
-import ReportTestPage from "../pages/search/ReportTestPage";
-
 type TabKey = "library" | "focus" | "record" | "group";
 
 function pathToTab(pathname: string): TabKey {
@@ -96,13 +90,6 @@ export default function AppRoutes() {
           <Route path="/test/banner-action-card" element={<BannerActionCardTestPage />} />
           <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
           <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
-
-          <Route path="/card/bookgoal" element={<ReadingGoalTestPage/>}/>
-          <Route path="/card/normal" element={<NormalCardTestPage/>}/>
-          <Route path="/card/list" element={<BookListTestPage/>}/>
-          <Route path="/card/focus" element={<FocusMediaInfoCardTestPage/>}/>
-          <Route path="/card/report" element={<ReportTestPage/>}/>
-
         </Route>
 
         <Route path="*" element={<Navigate to="/library" replace />} />
