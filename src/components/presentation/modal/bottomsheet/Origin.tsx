@@ -1,5 +1,5 @@
 //Client\src\components\presentation\modal\bottomsheet\Origin.tsx
-//이거 하나로 조정 가능 
+//이거 하나로 조정 가능
 
 import React from "react";
 import closeIcon from "../../../../assets/icons/close.svg";
@@ -207,6 +207,7 @@ export default function BottomSheet({
       <div
         className={[
           "absolute inset-x-0 bottom-0 mx-auto",
+          "pointer-events-auto",
           "w-93.75",
           "flex flex-col items-start",
           "px-4 pt-4 pb-8", // 16 16 32

@@ -43,6 +43,22 @@ const bookData = {
 
 export default function BookInfo() {
   const [selectedTab, setSelectedTab] = useState<DetailTab>("info");
+  const [readStatus, setReadStatus] = useState<"unread" | "reading" | "read">(
+    "unread",
+  );
+  // 개발용 상태
+  const [hasFocus, setHasFocus] = useState(true);
+  const [hasRecord, setHasRecord] = useState(false);
+  const [hasHistory, setHasHistory] = useState(false);
+
+  // 개발용 핸들러 함수
+  const toggleReadStatus = () => {
+    if (readStatus === "unread") setReadStatus("reading");
+    else if (readStatus === "reading") setReadStatus("read");
+    else setReadStatus("unread");
+
+    console.log("현재 읽기 상태:", readStatus);
+  };
 
   return (
     <div className="flex flex-col pb-[calc(120px+env(safe-area-inset-bottom))]">
@@ -135,37 +151,143 @@ export default function BookInfo() {
       ) : (
         <div className="flex flex-col mt-8 px-1 gap-8 text-gray-90">
           <div className="flex flex-col gap-3">
-            <div className="text-label-14-sb">포커스</div>
-            <div className="text-body-14-r p-4 rounded-sm bg-gray-15">
-              아직 포커스하지 않았어요.
+            <div className="text-label-16-sb">포커스</div>
+            <div
+              className="text-body-14-r p-4 rounded-sm bg-gray-15"
+              onClick={() => {
+                // 개발용 토글
+                setHasFocus(!hasFocus);
+              }}
+            >
+              {hasFocus ? (
+                <div className="flex flex-col gap-4">
+                  <div className="flex gap-3 items-center">
+                    <span className="text-label-14-sb">기간</span>
+                    <span className="text-body-14-r">25.12.30 - 26.01.19</span>
+                  </div>
+                  <div className="flex gap-3 items-center">
+                    <span className="text-label-14-sb">시간</span>
+                    <span className="text-body-14-r">3시간 4분 22초</span>
+                  </div>
+                  <div className="flex gap-3 items-center">
+                    <span className="text-label-14-sb">횟수</span>
+                    <span className="text-body-14-r">39번</span>
+                  </div>
+                  <div className="flex gap-3 items-center">
+                    <span className="text-label-14-sb">페이지</span>
+                    <span className="text-body-14-r">~99쪽</span>
+                  </div>
+                </div>
+              ) : (
+                "아직 포커스하지 않았어요."
+              )}
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <div className="text-label-14-sb">기록</div>
-            <div className="text-body-14-r p-4 rounded-sm bg-gray-15">
-              아직 기록이 없어요.
+            {hasRecord ? (
+              <div className="flex items-center justify-between">
+                <div className="flex gap-2">
+                  <span className="text-label-16-sb">기록</span>
+                  <span className="text-mint-60 text-label-16-sb">16</span>
+                </div>
+                <div
+                  className="curser-pointer text-btn-14-sb text-gray-60"
+                  onClick={() => {
+                    // 전체 기록 보기로 이동
+                  }}
+                >
+                  전체 보기
+                </div>
+              </div>
+            ) : (
+              <div className="text-label-16-sb">기록</div>
+            )}
+
+            <div
+              className="text-body-14-r p-4 rounded-sm bg-gray-15"
+              onClick={() => {
+                // 개발용 토글
+                setHasRecord(!hasRecord);
+              }}
+            >
+              {hasRecord ? (
+                <div className="w-full overflow-hidden line-clamp-3">
+                  [p.131] 어느 쪽의 이야기가 그럴듯하고 그들에게 어울립니까?
+                  아가씨에게 존속 상해치사의 죄를 추가하고 싶지는 않으니 나는
+                  첫번째를 고르지 않겠습니다 진짜 뭐라는 겁니까
+                </div>
+              ) : (
+                "아직 기록이 없어요."
+              )}
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <div className="text-label-14-sb">독서 히스토리</div>
-            <div className="text-body-14-r p-4 rounded-sm bg-gray-15">
-              아직 독서 활동이 없어요.
+            <div className="text-label-16-sb">독서 히스토리</div>
+            <div
+              className="text-body-14-r p-4 rounded-sm bg-gray-15"
+              onClick={() => {
+                // 개발용 토글
+                setHasHistory(!hasHistory);
+              }}
+            >
+              {hasHistory ? (
+                <div>독서 기록이 있습니다.</div>
+              ) : (
+                "아직 독서 활동이 없어요."
+              )}
             </div>
           </div>
         </div>
       )}
       {/* 버튼 모달 */}
-      <BottomSheet
-        open={true}
-        onClose={() => {}}
-        overlay={false}
-        footer={{
-          layout: "single",
-          variant: "mint",
-          label: "서재에 등록하기",
-          onClick: () => {},
-        }}
-      />
+      {readStatus === "reading" && (
+        <BottomSheet
+          open={true}
+          onClose={() => {}}
+          overlay={false}
+          footer={{
+            layout: "double",
+            sizeMode: "split",
+            leftVariant: "secondary",
+            leftLabel: "완독 표시",
+            rightLabel: "포커스 시작하기",
+            onLeftClick: () => {
+              toggleReadStatus();
+            },
+            onRightClick: () => {},
+          }}
+        />
+      )}
+      {readStatus === "unread" && (
+        <BottomSheet
+          open={true}
+          onClose={() => {}}
+          overlay={false}
+          footer={{
+            layout: "single",
+            variant: "mint",
+            label: "서재에 등록하기",
+            onClick: () => {
+              toggleReadStatus();
+            },
+          }}
+        />
+      )}
+      {readStatus === "read" && (
+        <BottomSheet
+          open={true}
+          onClose={() => {}}
+          overlay={false}
+          footer={{
+            layout: "single",
+            variant: "primarySecondaryText",
+            label: "완독 취소하기",
+            onClick: () => {
+              toggleReadStatus();
+            },
+          }}
+        />
+      )}
     </div>
   );
 }
