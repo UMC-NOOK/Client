@@ -718,6 +718,66 @@ const MOCK_RANKS = [
 
 ```
 
+### [ History ]
+
+#### Path
+
+`components/content/list/History`
+
+#### Props
+
+| Name       | Type                        | Required  | Default | Note                         |
+| :--------- | :-------------------------- | :-------: | :------ | :--------------------------  |
+| variant    |  `"history" \| "time"`      |     O     |   -     |   독서 기록 / 시간 컴포넌트 기록    |
+| time       | string                      |     O     |   -     |  타이머 시간  |
+| title      | string                      |     X     |   -     |  시간 기록일 때의 제목  |
+
+#### Usage
+
+```tsx
+const MOCK_RANKS = [
+  { rank: 0, title: 'The Pragmatic Programmer' },
+  { rank: 1, title: 'Clean Code: A Handbook of Agile Software Craftsmanship' },
+  { rank: 2, title: 'Refactoring: Improving the Design of Existing Code' },
+  {
+    rank: 3,
+    title: '아주아주아주 긴 제목 테스트용 — 한 줄 말줄임이 제대로 적용되는지 확인하는 텍스트입니다',
+  },
+];
+
+<div className="space-y-3">
+  {MOCK_RANKS.map((item) => (
+   <Rank
+    key={item.rank}
+    rank={item.rank}
+    title={item.title}
+  />))}
+</div>
+
+```
+
+
+### [ Date ]
+
+#### Path
+
+`components/content/list/Resource/Date`
+
+#### Props
+
+| Name       | Type       | Required  | Default | Note    |
+| :--------- | :--------- | :-------: | :------ | :------ |
+| topText    | string     |     O     |   -     |   월.일    |
+| bottomText | string     |     O     |   -     |  해당 년도 4자리  |
+
+#### Usage
+
+```tsx
+<ResourceDate topText="01.12" bottomText="2026" />
+
+```
+
+
 ---
 
 ## 8. Feedback

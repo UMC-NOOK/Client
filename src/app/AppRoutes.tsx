@@ -16,15 +16,13 @@ import BannerActionCardTestPage from "../pages/search/test/testpage";
 import BottomSheetTestPage from "../pages/search/test/BottomSheetTestPage";
 import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
 
-import RankTestPage from "../pages/search/RankTestPage";
-import HistoryTimeTestPage from "../pages/search/HistoryTimePage";
-import HistoryRecordTestPage from "../pages/search/HistoryRecordPage";
 import ResourceDatePage from "../pages/search/ResourceDatePage";
 import ReadingGoalTestPage from "../pages/search/BookGoalListPage";
 import NormalCardTestPage from "../pages/search/NormalPage";
 import BookListTestPage from "../pages/search/ListPage";
 import FocusMediaInfoCardTestPage from "../pages/search/FocusPage";
 import ReportTestPage from "../pages/search/ReportTestPage";
+import HistoryInfoCardTestPage from "../pages/search/HistoryTestPage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -101,16 +99,13 @@ export default function AppRoutes() {
           <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
           <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
 
-
-          <Route path="/rank" element={<RankTestPage/>}/>
-          <Route path="/history/time" element={<HistoryTimeTestPage/>}/>
-          <Route path="/history/record" element={<HistoryRecordTestPage/>}/>
           <Route path="/resource/date" element={<ResourceDatePage/>}/>
           <Route path="/card/bookgoal" element={<ReadingGoalTestPage/>}/>
           <Route path="/card/normal" element={<NormalCardTestPage/>}/>
           <Route path="/card/list" element={<BookListTestPage/>}/>
           <Route path="/card/focus" element={<FocusMediaInfoCardTestPage/>}/>
           <Route path="/card/report" element={<ReportTestPage/>}/>
+          <Route path="/history/history" element={<HistoryInfoCardTestPage/>}/>
 
         </Route>
 
