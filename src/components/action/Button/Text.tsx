@@ -15,7 +15,7 @@ const sizeClassMap: Record<Size, string> = {
   "18": "h-10 px-4 text-btn-18-m", 
 };
 
-export function TextButton({
+export function Text({
   text,
   size,
   active = false,

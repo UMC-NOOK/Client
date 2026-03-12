@@ -1,9 +1,9 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes } from "react";
 
 type Variant = "default" | "dark" | "danger";
 
 type ButtonProps = {
-  children: ReactNode;
+  text: string;
   variant?: Variant;
   className?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
@@ -18,7 +18,7 @@ const variantClassMap: Record<Variant, string> = {
 };
 
 export default function Solid({
-  children,
+  text,
   variant = "default",
   className = "",
   type = "button",
@@ -30,7 +30,7 @@ export default function Solid({
       className={[base, variantClassMap[variant], className].join(" ")}
       {...props}
     >
-      {children}
+      {text}
     </button>
   );
 }

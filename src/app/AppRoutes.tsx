@@ -111,6 +111,7 @@ export default function AppRoutes() {
           <Route path="/card/list" element={<BookListTestPage/>}/>
           <Route path="/card/focus" element={<FocusMediaInfoCardTestPage/>}/>
           <Route path="/card/report" element={<ReportTestPage/>}/>
+
         </Route>
 
         <Route path="*" element={<Navigate to="/library" replace />} />
