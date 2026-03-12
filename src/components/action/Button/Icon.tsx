@@ -3,9 +3,8 @@ import type { HTMLAttributes, ReactNode } from "react";
 type IconSize = "xs" | "s" | "m";
 
 type IconFrameProps = {
-  children: ReactNode; //화면에 렌더링할 수 있는 모든 것(문자 등등등...)
+  children: ReactNode; // 아이콘을 ReactNode로 받음
   size?: IconSize;
-  className?: string;
 } & HTMLAttributes<HTMLSpanElement>;
 
 const base = "items-center justify-center";
@@ -19,12 +18,11 @@ const sizeClassMap: Record<IconSize, string> = {
 export default function Icon({
   children,
   size = "s",
-  className = "",
   ...props
 }: IconFrameProps) {
   return (
-    <span className={[sizeClassMap[size], base, className].join(" ")} {...props}>
-      {children}
+    <span className={[sizeClassMap[size], base].join(" ")} {...props}>
+      {children} {/* 이 부분에서 아이콘이 표시됨 */}
     </span>
   );
 }
