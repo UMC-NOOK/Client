@@ -1,5 +1,5 @@
 import React from "react";
-import Report from "../../components/content/card/Book/List/Report"
+import Report from "../../components/content/Card/Book/List/Report"
 
 import img from "../../assets/Book Cover.jpg";
 

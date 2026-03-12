@@ -1,5 +1,5 @@
 import React from "react";
-import { Normal } from "../../components/content/card/Book/Normal"; // 경로 맞게 수정
+import { Normal } from "../../components/content/Card/Book/Normal"; // 경로 맞게 수정
 
 export default function NormalCardTestPage() {
   const items = [

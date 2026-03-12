@@ -1,6 +1,6 @@
 // src/pages/search/HistoryTimeTestPage.tsx
 import React from "react";
-import { HistoryTime } from "../../components/content/list/History/Time"; 
+import { HistoryTime } from "../../components/content/List/History/Time"; 
 // ↑ 경로는 네 실제 파일 위치에 맞게 조정!
 // (예: HistoryTime.tsx가 src/components/content/list/HistoryTime.tsx 라고 가정)
 

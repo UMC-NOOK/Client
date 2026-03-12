@@ -3,8 +3,8 @@ import React from "react";
 
 // ✅ 너 프로젝트 폴더 구조에 맞게 경로만 맞춰줘
 // (VSCode에서 파일 우클릭 → Copy Relative Path 추천)
-import { HistoryRecord } from "../../components/content/list/History/Record";
-import { ResourceDate } from "../../components/content/list/Resource/Date";
+import { HistoryRecord } from "../../components/content/List/History/Record";
+import { ResourceDate } from "../../components/content/List/Resource/Date";
 
 export default function HistoryRecordWithDateTestPage() {
   return (

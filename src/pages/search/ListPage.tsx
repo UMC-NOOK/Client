@@ -1,5 +1,5 @@
 import React from "react";
-import { BookListCard } from "../../components/content/card/Book/List/List";
+import { BookListCard } from "../../components/content/Card/Book/List/List";
 
 // 임시 커버 이미지들 (프로젝트에 있는 이미지로 교체해도 됨)
 const covers = [

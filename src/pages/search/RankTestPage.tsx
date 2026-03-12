@@ -1,6 +1,6 @@
 // src/pages/RankListTestPage.tsx
 import React from 'react';
-import { Rank } from '../../components/content/list/Rank';
+import { Rank } from '../../components/content/List/Rank';
 
 const MOCK_RANKS = [
   { rank: 0, title: 'The Pragmatic Programmer' },

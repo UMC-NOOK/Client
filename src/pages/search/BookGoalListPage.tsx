@@ -1,5 +1,5 @@
 import React from "react";
-import { BookGoal } from "../../components/content/card/BookGoal/BookGoal";
+import { BookGoal } from "../../components/content/Card/BookGoal/BookGoal";
 
 export default function ReadingGoalTestPage() {
   return (

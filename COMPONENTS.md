@@ -678,10 +678,10 @@ const options = [
 
 ## 7. Content
 
-> - **Design**:
-> - **Author**:
+> - **Design**: 
+> - **Author**: 임서연
 
-### [ ]
+### [ List/Rank ]
 
 #### Path
 
