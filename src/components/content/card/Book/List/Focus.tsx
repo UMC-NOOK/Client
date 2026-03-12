@@ -1,6 +1,6 @@
 import React from "react";
 
-import playIcon from "../../../../assets/icons/movement.svg";
+import playIcon from "../../../../../assets/icons/movement.svg";
 
 type Props = {
   imageUrl: string;

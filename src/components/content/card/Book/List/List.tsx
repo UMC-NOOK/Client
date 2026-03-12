@@ -1,7 +1,7 @@
 import React from "react";
 
-import searchIcon from "../../../../assets/icons/book_shelf.svg";
-import libraryIcon from "../../../../assets/icons/library_focus.svg";
+import searchIcon from "../../../../../assets/icons/book_shelf.svg";
+import libraryIcon from "../../../../../assets/icons/library_focus.svg";
 
 type BookListType = "NONE" | "SEARCH" | "LIBRARY" | "REPORT";
 

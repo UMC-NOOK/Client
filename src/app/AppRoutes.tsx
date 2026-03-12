@@ -19,12 +19,12 @@ import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
 import RankTestPage from "../pages/search/RankTestPage";
 import HistoryTimeTestPage from "../pages/search/HistoryTimePage";
 import HistoryRecordTestPage from "../pages/search/HistoryRecordPage";
-import { ResourceDate } from "../components/content/list/Resource/Date";
 import ResourceDatePage from "../pages/search/ResourceDatePage";
 import ReadingGoalTestPage from "../pages/search/BookGoalListPage";
 import NormalCardTestPage from "../pages/search/NormalPage";
 import BookListTestPage from "../pages/search/ListPage";
 import FocusMediaInfoCardTestPage from "../pages/search/FocusPage";
+import ReportTestPage from "../pages/search/ReportTestPage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -110,7 +110,7 @@ export default function AppRoutes() {
           <Route path="/card/normal" element={<NormalCardTestPage/>}/>
           <Route path="/card/list" element={<BookListTestPage/>}/>
           <Route path="/card/focus" element={<FocusMediaInfoCardTestPage/>}/>
-          
+          <Route path="/card/report" element={<ReportTestPage/>}/>
         </Route>
 
         <Route path="*" element={<Navigate to="/library" replace />} />
