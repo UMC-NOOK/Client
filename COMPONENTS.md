@@ -330,7 +330,59 @@ const [birth, setBirth] = useState({
 ```
 
 
+### [ SectionHeader ]
 
+#### Path
+
+`src/components/content/InformationText/SectionHeader.tsx`
+
+#### Props
+
+| Name          | Type                                | Required | Default | Note                    |
+| :------------ | :---------------------------------- | :------: | :------ | :---------------------- |
+| `size`        | `"13" \| "14" \| "16" \| "20" \|`   |     O    | -       | 컴포넌트 사이즈             |
+| `title`       | `string`                            |     O    | -       | 기본 텍스트 내용이자 윗 텍스트   |
+| `description` | `string`                            |     X    | `false` | 아래 텍스트                |
+| `showCaret`   | `boolean`                           |     X    | -       | 토글 보이는 컴포넌트 유무      |
+| `onToggle`    | `(open: boolean) => void`           |     X    | -       | 토글 내렸을 때의 함수         |
+| `onClick`     | `() => void`                        |     X    | -       | 해당 컴포넌트 눌럿을 때의 함수  |
+
+#### Usage
+
+```tsx
+//size 13 (토글 없음, 원하면 onClick 추가 가능)
+ <SectionHeader
+  size="13"
+  title="Text"
+  description="한 줄로 말줄임 처리되는 설명 텍스트입니다."
+/>
+
+//size 14 (토글 잇음, 밑 설명단 없음)
+<SectionHeader
+  size="14"
+  title="Text"
+  showCaret
+  onClick={() => {console.log("size 14 click");}}
+  onToggle={(open) => { console.log("size 14 toggle:", open);}}
+/>
+
+//size 16 (토글 있음, 밑 설명단 있음)
+<SectionHeader
+  size="16"
+  title="Text"
+  description="한 줄로 잘리는 설명 텍스트입니다."
+  showCaret
+  onClick={() => { console.log("size 16 click"); }}
+  onToggle={(open) => { console.log("size 16 toggle:", open);}}
+/>
+
+//size 20 (토글 없음, 밑 설명단 있음)
+<SectionHeader
+ size="20"
+ title="Text"
+ description="조금 더 큰 제목 아래 설명 텍스트가 들어갑니다."
+/>
+```
 
 
 ## 6. Navigation

@@ -101,7 +101,7 @@ export default function SectionHeader({
             src={caretSrc}
             alt=""
             aria-hidden="true"
-            className="h-3 w-3 shrink-0"
+            className="h-3 w- shrink-0"
           />
         ) : null}
       </>
