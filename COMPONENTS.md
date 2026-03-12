@@ -329,6 +329,55 @@ const [birth, setBirth] = useState({
 />
 ```
 
+## 5. Action
+
+### [ ContainerText ]
+
+#### Path
+`src/components/action/Button/ContainerText.tsx`
+
+#### Props
+| Name            | Type                               | Required | Default     | Note              |
+| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
+|  `text`         | `string`                           |    O     | -           |  텍스트 내용  |
+| `active`        | `boolean`                          |    X     | `false`     | 활성화/비활성화 여부      |
+
+#### Usage
+```tsx
+  //비활성화
+   <ContainerText text="Text" />
+
+  //활성화
+  <ContainerText text="Text" active />
+```
+
+### [ Emotion ]
+
+#### Path
+`src/components/Chip/Emotion.tsx`
+
+#### Props
+| Name            | Type                               | Required | Default     | Note              |
+| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
+| `size`          | `string => "s" or "m"`             |     O    | -           | chip의 사이즈       |
+| `emoji`         | `string`                           |     O    | -           | emoji 문자       |
+| `text`          | `string`                           |     X    | -           | emoji 옆 텍스트   |
+| `variant`       | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |     X    | `"default"` | 탭 스타일 variant |
+| `active`        | `boolean`          |     O    | `"true"`          | chip의 비활성화/활성화 여부      |
+
+#### Usage
+```tsx
+//size = s 
+<Emotion size="s" emoji="(^_^)" variant="yellow" active />
+
+//size = m 
+<Emotion size="m" emoji="(^_^)" text="재밌어요" variant="yellow" active />
+
+//active 비활성화"
+<Emotion size="m" emoji="(• o •)" text="유익해요" variant="yellow" active={false} />
+```
+
+## 5. Content
 
 ### [ SectionHeader ]
 
@@ -415,6 +464,18 @@ const [birth, setBirth] = useState({
   title="Text"
   description="가로형 설명 텍스트입니다."
 />
+```
+
+#### Props
+| Name            | Type                               | Required | Default     | Note              |
+| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
+|  `icon`         | `ReactNode`                        |     O    | -           |  내부에 들어갈 icon svg    |
+| `onClick`       | `() => void`                       |    X     | -           | 눌럿을 때의 기능 함수      |
+
+#### Usage
+```tsx
+//svg 파일이라서 이렇게 <img 태그에 묶어서 진행했습니다.>
+  <FAB icon={<img src={PlusIcon}/>}/>
 ```
 
 
