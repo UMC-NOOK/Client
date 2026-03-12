@@ -678,26 +678,99 @@ const options = [
 
 ## 7. Content
 
-> - **Design**:
-> - **Author**:
+> - **Design**: 
+> - **Author**: 임서연
 
-### [ ]
+### [ Rank ]
 
 #### Path
 
-``
+`components/content/list/Rank`
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-|      |      |          |         |      |
+| Name       | Type       | Required  | Default | Note    |
+| :--------- | :--------- | :-------: | :------ | :------ |
+| rank       | number     |     O     |   -     |   등수   |
+| title      | string     |     O     |   -     |  책 제목  |
 
 #### Usage
 
 ```tsx
+const MOCK_RANKS = [
+  { rank: 0, title: 'The Pragmatic Programmer' },
+  { rank: 1, title: 'Clean Code: A Handbook of Agile Software Craftsmanship' },
+  { rank: 2, title: 'Refactoring: Improving the Design of Existing Code' },
+  {
+    rank: 3,
+    title: '아주아주아주 긴 제목 테스트용 — 한 줄 말줄임이 제대로 적용되는지 확인하는 텍스트입니다',
+  },
+];
+
+<div className="space-y-3">
+  {MOCK_RANKS.map((item) => (
+   <Rank
+    key={item.rank}
+    rank={item.rank}
+    title={item.title}
+  />))}
+</div>
 
 ```
+
+### [ History ]
+
+#### Path
+
+`components/content/list/History`
+
+#### Props
+
+| Name       | Type                        | Required  | Default | Note                         |
+| :--------- | :-------------------------- | :-------: | :------ | :--------------------------  |
+| variant    |  `"history" \| "time"`      |     O     |   -     |   독서 기록 / 시간 컴포넌트 기록    |
+| time       | string                      |     O     |   -     |  타이머 시간  |
+| title      | string                      |     X     |   -     |  시간 기록일 때의 제목  |
+
+#### Usage
+
+```tsx
+//history (독서기록)
+<HistoryInfoCard
+ variant="history"
+ time="2025.09.11"
+/>
+
+//time 
+ <HistoryInfoCard
+  variant="time"
+  title="집중 시간"
+  time="01:24:12"
+/>
+
+```
+
+
+### [ Date ]
+
+#### Path
+
+`components/content/list/Resource/Date`
+
+#### Props
+
+| Name       | Type       | Required  | Default | Note    |
+| :--------- | :--------- | :-------: | :------ | :------ |
+| topText    | string     |     O     |   -     |   월.일    |
+| bottomText | string     |     O     |   -     |  해당 년도 4자리  |
+
+#### Usage
+
+```tsx
+<ResourceDate topText="01.12" bottomText="2026" />
+
+```
+
 
 ---
 
