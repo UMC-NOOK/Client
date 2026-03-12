@@ -1,4 +1,3 @@
-import React from "react";
 import { MediaInfoCard } from "../../components/content/Card/Book/List/Focus";
 
 // ✅ 커버 이미지(임시). 프로젝트에 이미 있는 이미지로 바꿔도 됨

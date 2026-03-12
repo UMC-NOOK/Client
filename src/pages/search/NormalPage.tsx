@@ -1,4 +1,3 @@
-import React from "react";
 import { Normal } from "../../components/content/Card/Book/Normal"; // 경로 맞게 수정
 
 export default function NormalCardTestPage() {

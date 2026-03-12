@@ -1,5 +1,3 @@
-import React from "react";
-
 type DateBadgeProps = {
   topText: string;     // 예: "MM.DD"
   bottomText: string;  // 예: "YYYY"
