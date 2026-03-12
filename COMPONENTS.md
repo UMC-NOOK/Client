@@ -681,21 +681,40 @@ const options = [
 > - **Design**: 
 > - **Author**: 임서연
 
-### [ List/Rank ]
+### [ Rank ]
 
 #### Path
 
-``
+`components/content/list/Rank`
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-|      |      |          |         |      |
+| Name       | Type       | Required  | Default | Note    |
+| :--------- | :--------- | :-------: | :------ | :------ |
+| rank       | number     |     O     |   -     |   등수   |
+| title      | string     |     O     |   -     |  책 제목  |
 
 #### Usage
 
 ```tsx
+const MOCK_RANKS = [
+  { rank: 0, title: 'The Pragmatic Programmer' },
+  { rank: 1, title: 'Clean Code: A Handbook of Agile Software Craftsmanship' },
+  { rank: 2, title: 'Refactoring: Improving the Design of Existing Code' },
+  {
+    rank: 3,
+    title: '아주아주아주 긴 제목 테스트용 — 한 줄 말줄임이 제대로 적용되는지 확인하는 텍스트입니다',
+  },
+];
+
+<div className="space-y-3">
+  {MOCK_RANKS.map((item) => (
+   <Rank
+    key={item.rank}
+    rank={item.rank}
+    title={item.title}
+  />))}
+</div>
 
 ```
 
