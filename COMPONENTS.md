@@ -343,7 +343,6 @@ const [birth, setBirth] = useState({
 | `size`        | `"13" \| "14" \| "16" \| "20" \|`   |     O    | -       | 컴포넌트 사이즈             |
 | `title`       | `string`                            |     O    | -       | 기본 텍스트 내용이자 윗 텍스트   |
 | `description` | `string`                            |     X    | `false` | 아래 텍스트                |
-| `showCaret`   | `boolean`                           |     X    | -       | 토글 보이는 컴포넌트 유무      |
 | `onToggle`    | `(open: boolean) => void`           |     X    | -       | 토글 내렸을 때의 함수         |
 | `onClick`     | `() => void`                        |     X    | -       | 해당 컴포넌트 눌럿을 때의 함수  |
 
@@ -360,8 +359,7 @@ const [birth, setBirth] = useState({
 //size 14 (토글 잇음, 밑 설명단 없음)
 <SectionHeader
   size="14"
-  title="Text"
-  showCaret
+  title="Text"=
   onClick={() => {console.log("size 14 click");}}
   onToggle={(open) => { console.log("size 14 toggle:", open);}}
 />
@@ -371,7 +369,6 @@ const [birth, setBirth] = useState({
   size="16"
   title="Text"
   description="한 줄로 잘리는 설명 텍스트입니다."
-  showCaret
   onClick={() => { console.log("size 16 click"); }}
   onToggle={(open) => { console.log("size 16 toggle:", open);}}
 />
@@ -381,6 +378,42 @@ const [birth, setBirth] = useState({
  size="20"
  title="Text"
  description="조금 더 큰 제목 아래 설명 텍스트가 들어갑니다."
+/>
+```
+
+### [ Information Section ]
+
+#### Path
+
+`src/components/content/InformationText/InformationSection.tsx`
+
+#### Props
+
+| Name          | Type                                | Required | Default | Note                    |
+| :------------ | :---------------------------------- | :------: | :------ | :---------------------- |
+| `flow`        | `"vertical" \| "horizontal" `       |     O    | -       | 수직/수평 선택             |
+| `title`       | `string`                            |     O    | -       | 위 또는 왼쪽 텍스트   |
+| `description` | `string`                            |     O    | -       | 아래 또는 오른쪽 테스트               |
+| `onToggle`    | `(open: boolean) => void`           |     X    | -       | 토글 내렸을 때의 함수         |
+| `onClick`     | `() => void`                        |     X    | -       | 해당 컴포넌트 눌럿을 때의 함수  |
+
+#### Usage
+
+```tsx
+//vertical
+ <InformationSection
+  flow="vertical"
+  title="Text"
+  description="세로형 설명 텍스트입니다."
+  onClick={() => { console.log("vertical click");}}
+  onToggle={(open) => { console.log("vertical toggle:", open); }}
+/>
+
+//horizontal
+<InformationSection
+  flow="horizontal"
+  title="Text"
+  description="가로형 설명 텍스트입니다."
 />
 ```
 
