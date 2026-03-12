@@ -1,5 +1,3 @@
-import React from "react";
-
 type HistoryTimeProps = {
   focus: string; // top text
   time: string;  // bottom text

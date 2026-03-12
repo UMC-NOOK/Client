@@ -1,4 +1,3 @@
-import React from "react";
 import bg from "../../../assets/images/bottom_banner.jpg";
 
 type Variant = "history" | "time";

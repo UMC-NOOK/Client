@@ -1,5 +1,3 @@
-import React from 'react';
-
 type RankItemProps = {
   rank: number;
   title: string;
