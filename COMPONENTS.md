@@ -787,6 +787,104 @@ const MOCK_RANKS = [
 
 ```
 
+### [ Book Goal ]
+
+#### Path
+
+`src/components/content/Card/BookGoal/BookGoal.tsx`
+
+#### Props
+
+| Name          | Type                                                | Required | Default | Note |
+| :------------ | :---------------------------------------------------| :------: | :------ | :---------------------- |
+| `percent`     | `"ZERO" \| "PCT_1_9" \|"PCT_10_19"\|"PCT_20_29" \|` |     O    | -       | 도서 읽은 퍼센트            |
+|               |`"PCT_30_39" \| "PCT_40_49" \| "PCT_50_59" \| "PCT_60_69"`|
+|               |`"PCT_70_79" \| "PCT_80_89" \| "PCT_90_99" \| "PCT_100"`|
+| `message`     | `string`                                            |     O    | -       | 텍스트   |
+
+#### Usage
+
+```tsx
+//zero => mesage가 독서 목표를 설정하세요 라고 정해져있음
+<BookGoal percent="ZERO" />
+
+//zero 가 아닌 경우 message를 받아와야함
+<BookGoal
+ percent="PCT_1_9"
+ message="100권까지 99권 남았어요."
+/>
+```
+
+### [ Normal ]
+
+#### Path
+
+`src/components/content/Card/Book/Normal.tsx`
+
+#### Props
+
+| Name          | Type           | Required | Default                 | Note |
+| :------------ | :--------------| :------: | :---------------------- | :-------------|
+| `imageUrl`    | `string`       |     O    | -                       | 이미지 Url      |
+| `title`       | `string`       |     O    | -                       | 제목           |
+| `author`      | `string`       |     O    | -                       | 저자           |
+| `imageAlt`     | `string`      |     X    | `"card thumbnail"`      | 이미지 이름      |
+| `onClick`     | `() => void`   |     X    | -       | 클릭할 때의 기능   |
+
+#### Usage
+
+```tsx
+<Normal
+  imageUrl={sampleBook}
+  title="아주 보통의 하루"
+  author="작가 이름"
+/>
+
+<Normal
+ imageUrl="https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg"
+ title="The Little Prince"
+ author="Antoine de Saint-Exupéry"
+/>
+
+ <Normal
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg"
+  title="아주 긴 제목이 들어갔을 때 두 줄까지 말줄임 처리가 잘 되는지 확인하기 위한 테스트용 제목입니다"
+  author="아주 긴 저자명 테스트용"
+  onClick={() => { console.log("normal clicked");}}
+/>
+```
+
+### [ List ]
+
+#### Path
+
+`src/components/content/Card/Book/List.tsx`
+
+#### Props
+
+| Name       | Type                                       | Required | Default | Note |
+| :----------| :---------------------------------------------| :------: | :------ | :---------------------- |
+| `imageUrl` | `string`                                      |     O    | -       | 이미지 url   |
+| `title`    | `string`                                      |     O    | -       | 제목   |
+| `author`   | `string`                                      |     O    | -       | 저자   |
+| `type`     | `"NONE" \| "SEARCH" \| "LIBRARY" \| "REPORT"` |     O    | -       | 제목 리스트에서 사용하는 종류 |
+| `typeLabel`| `string`                                      |     X    | `null`  | 기록에서 도서 선택 페이지에서 독서 전 / 독서 중 / 완독 |
+| `imageAlt` | `string`                                      |     X    | -       | 이미지 이름   |
+| `onClick`  | `() => void`                                  |     X    | -       | 클릭했을 때의 기능   |
+
+#### Usage
+
+```tsx
+//zero => mesage가 독서 목표를 설정하세요 라고 정해져있음
+<BookGoal percent="ZERO" />
+
+//zero 가 아닌 경우 message를 받아와야함
+<BookGoal
+ percent="PCT_1_9"
+ message="100권까지 99권 남았어요."
+/>
+```
+
 ### [ SectionHeader ]
 
 #### Path
@@ -873,7 +971,6 @@ const MOCK_RANKS = [
   description="가로형 설명 텍스트입니다."
 />
 ```
-
 
 ---
 
