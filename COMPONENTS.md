@@ -935,7 +935,20 @@ const MOCK_RANKS = [
 #### Usage
 
 ```tsx
+<Focus
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg"
+  timeText="01:24:12"
+  title="The Little Prince"
+  author="Antoine de Saint-Exupéry"
+/>
 
+<Focus
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg"
+  timeText="12:59:59"
+  title="아주 긴 제목이 들어갔을 때 한 줄 말줄임 처리가 잘 되는지 확인하기 위한 테스트용 제목입니다"
+  author="아주 긴 저자명 테스트"
+  onClick={() => { console.log("media info card clicked");}}
+/>
 ```
 
 
