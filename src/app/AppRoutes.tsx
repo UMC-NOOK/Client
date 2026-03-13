@@ -15,7 +15,7 @@ import SearchNewAddMorePage from "../pages/search/SearchNewAddMorePage";
 import BannerActionCardTestPage from "../pages/search/test/testpage";
 import BottomSheetTestPage from "../pages/search/test/BottomSheetTestPage";
 import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
-import ListPage from "../pages/search/ListTestpage";
+import FocusPage from "../pages/search/FocusTestPage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -91,7 +91,7 @@ export default function AppRoutes() {
           <Route path="/test/banner-action-card" element={<BannerActionCardTestPage />} />
           <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
           <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
-          <Route path="/list" element={<ListPage/>}/>
+          <Route path="/list/focus" element={<FocusPage/>}/>
         </Route>
 
         <Route path="*" element={<Navigate to="/library" replace />} />
