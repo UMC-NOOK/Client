@@ -9,7 +9,7 @@ type Props = {
   onClick?: () => void;
 };
 
-export function MediaInfoCard({
+export function Focus({
   imageUrl,
   imageAlt = "thumbnail",
   timeText,
