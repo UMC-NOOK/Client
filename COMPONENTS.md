@@ -848,6 +848,54 @@ const MOCK_RANKS = [
 
 ```
 
+### [ BookSet ]
+
+#### Path
+
+`components/content/Calendar/Resource/BookSet.tsx`
+
+#### Props
+
+| Name     | Type                      | Required  | Default   | Note    |
+| :------- | :-------------------------| :-------: | :-------- | :------ |
+| day      | `string`                  |     O     |   -       |  퍼센트   |
+| visible  | `boolean`                 |     X     |  `false`  |   시각화 유무   |
+| disble   | `boolean`                 |     X     |  `false`  |  활성화 유무   |
+| count    | `"single" \| "multiple"`  |     X     |  `single` |  도서 수 여러 개 유무   |
+| imageUrl | `string`                  |     X     |  -        |  도서 이미지   |
+| bookNum  | `number`                  |     X     |   `0`     |  도서 개수   |
+
+#### Usage
+
+```tsx
+<BookSet day="TT" visible={false} />
+
+<BookSet
+  day="TT"
+  visible
+  disable
+  imageUrl="https://picsum.photos/44/64?random=1"
+/>
+
+<BookSet
+  day="TT"
+  visible
+  disable={false}
+  count="single"
+  imageUrl="https://picsum.photos/44/64?random=3"
+/>
+
+<BookSet
+  day="TT"
+  visible
+  disable={false}
+  count="multiple"
+  bookNum={2}
+  imageUrl="https://picsum.photos/44/64?random=5"
+/>
+```
+
+
 ---
 
 ## 8. Feedback
