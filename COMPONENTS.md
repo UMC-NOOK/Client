@@ -1006,14 +1006,27 @@ const MOCK_RANKS = [
 
 #### Usage
 ```tsx
-//size = s 
-<Emotion size="s" emoji="(^_^)" variant="yellow" active />
+<ReportList
+  date="25.09.13"
+  emoji="(T_T)"
+  variant="blue"
+  review="생각이 많아서 초반에는 잘 안 읽혔는데, 중간부터 조금씩 흐름을 탔다. 마지막 문장이 특히 오래 남았다."
+  images={[sampleBook]}
+/>
 
-//size = m 
-<Emotion size="m" emoji="(^_^)" text="재밌어요" variant="yellow" active />
-
-//active 비활성화"
-<Emotion size="m" emoji="(• o •)" text="유익해요" variant="yellow" active={false} />
+<ReportList
+  date="25.09.14"
+  emoji="(>_<)"
+  variant="red"
+  review="오늘 기록은 이미지 여러 장이 들어갔을 때의 레이아웃을 확인하기 위한 테스트입니다. 줄 수가 늘어나면 카드 높이도 자연스럽게 커져야 합니다."
+  images={[
+    sampleBook,
+    "https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg",
+    "https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg",
+    "https://covers.openlibrary.org/b/isbn/9780439554930-M.jpg",
+    "https://covers.openlibrary.org/b/isbn/9780140449136-M.jpg",
+  ]}
+/>
 ```
 
 
