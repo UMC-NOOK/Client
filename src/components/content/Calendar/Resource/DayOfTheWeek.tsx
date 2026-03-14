@@ -8,7 +8,7 @@ export default function DayOfTheWeek({
 }: Props) {
   return (
     <div className={["inline-flex min-h-[21px] items-center justify-center px-2 py-1"].join(" ")}>
-      <span className="min-w-[24px] text-center text-label-13-r text-gray-60 whitespace-nowrap">
+      <span className="min-w-6 text-center text-label-13-r text-gray-60 whitespace-nowrap">
         {text}
       </span>
     </div>

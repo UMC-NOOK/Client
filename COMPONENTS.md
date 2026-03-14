@@ -786,7 +786,26 @@ const MOCK_RANKS = [
 
 ```tsx
 <DayOfTheWeek text="T" />
+```
 
+### [ Day ]
+
+#### Path
+
+`components/content/Calendar/Resource/Day.tsx`
+
+#### Props
+
+| Name    | Type       | Required  | Default | Note    |
+| :------ | :--------- | :-------: | :------ | :------ |
+| text    | `string`   |     O     |   -     |   요일   |
+| disable | `boolean`  |     X     | `true`  |   활성화 유무 (비활성화 = true)   |
+
+#### Usage
+
+```tsx
+<Day text="1" />
+<Day text="M" disable={false} />
 ```
 
 ---
