@@ -34,12 +34,12 @@ export default function ReportList({
         size="13"
         top={
           <div className="flex items-center gap-2">
-            <span className="text-label-13-sb text-gray-60">{date}</span>
+            <span className="text-gray-50">{date}</span>
             <Emotion size="s" emoji={emoji} variant={variant} active />
           </div>
         }
         bottom={
-          <p className="w-full min-w-0 whitespace-pre-wrap break-words text-body-14-r text-gray-90">
+          <p className="w-full min-w-0 whitespace-pre-wrap break-words text-gray-80">
             {review}
           </p>
         }
