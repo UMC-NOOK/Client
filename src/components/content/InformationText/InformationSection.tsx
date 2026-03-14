@@ -4,25 +4,25 @@ type InformationSectionFlow = "vertical" | "horizontal";
 
 type Props = { 
   flow: InformationSectionFlow; 
-  title: string; 
-  description: string; 
+  top: string; 
+  bottom: string; 
   onToggle?: (open: boolean) => void; 
   onClick?: () => void; 
 }; 
 
 export default function InformationSection({ 
   flow, 
-  title, 
-  description, 
+  top, 
+  bottom, 
   onToggle,
   onClick, 
 }: Props) { 
   if (flow === "vertical") { 
     return ( 
       <div className="flex w-full flex-col items-start gap-3"> 
-        <SectionHeader size="14" title={title} onToggle={onToggle} onClick={onClick} /> 
+        <SectionHeader size="14" top={top} onToggle={onToggle} onClick={onClick} /> 
           <p className="w-full self-stretch text-body-14-r text-gray-90"> 
-            {description} 
+            {bottom} 
           </p> 
       </div> 
     ); 
@@ -32,12 +32,12 @@ export default function InformationSection({
     <div className="flex w-full items-start gap-3"> 
       <div className="flex h-[21px] shrink-0 flex-col items-start justify-center"> 
         <span className="text-label-14-sb text-gray-90">
-            {title}
+            {top}
           </span> 
       </div> 
       
       <p className="min-w-0 flex-1 text-body-14-r text-gray-90"> 
-          {description} 
+          {bottom} 
       </p> 
     </div> 
   ); 
