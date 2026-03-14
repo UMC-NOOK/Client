@@ -998,47 +998,36 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name          | Type                                | Required | Default | Note                    |
-| :------------ | :---------------------------------- | :------: | :------ | :---------------------- |
-| `size`        | `"13" \| "14" \| "16" \| "20" \|`   |     O    | -       | 컴포넌트 사이즈             |
-| `title`       | `string`                            |     O    | -       | 기본 텍스트 내용이자 윗 텍스트   |
-| `description` | `string`                            |     X    | `false` | 아래 텍스트                |
-| `onToggle`    | `(open: boolean) => void`           |     X    | -       | 토글 내렸을 때의 함수         |
-| `onClick`     | `() => void`                        |     X    | -       | 해당 컴포넌트 눌럿을 때의 함수  |
+| Name          | Type                               | Required | Default | Note                    |
+| :------------ | :--------------------------------- | :------: | :------ | :---------------------- |
+| `size`        | `"13" \| "14" \| "16" \| "20" \|`  |     O    | -       | 컴포넌트 사이즈             |
+| `top`         | `ReactNode`                        |     O    | -       | 윗 칸  |
+| `bottom`      | `ReactNode`                        |     X    | -       | 아래 칸                |
+| `onToggle`    | `(open: boolean) => void`          |     X    | -       | 토글 내렸을 때의 함수         |
+| `onClick`     | `() => void`                       |     X    | -       | 해당 컴포넌트 눌럿을 때의 함수  |
 
 #### Usage
 
 ```tsx
 //size 13 (토글 없음, 원하면 onClick 추가 가능)
- <SectionHeader
+<SectionHeader
   size="13"
-  title="Text"
-  description="한 줄로 말줄임 처리되는 설명 텍스트입니다."
+  top={<span>Text</span>}
+  bottom={<span>Text</span>}
 />
 
 //size 14 (토글 잇음, 밑 설명단 없음)
 <SectionHeader
   size="14"
-  title="Text"=
-  onClick={() => {console.log("size 14 click");}}
-  onToggle={(open) => { console.log("size 14 toggle:", open);}}
-/>
+  top={<CustomTitle />}
+ />
 
 //size 16 (토글 있음, 밑 설명단 있음)
 <SectionHeader
   size="16"
-  title="Text"
-  description="한 줄로 잘리는 설명 텍스트입니다."
-  onClick={() => { console.log("size 16 click"); }}
-  onToggle={(open) => { console.log("size 16 toggle:", open);}}
-/>
-
-//size 20 (토글 없음, 밑 설명단 있음)
-<SectionHeader
- size="20"
- title="Text"
- description="조금 더 큰 제목 아래 설명 텍스트가 들어갑니다."
-/>
+  top={<span>제목</span>}
+  bottom={<CustomDescription />}
+/> 
 ```
 
 ### [ Information Section ]
@@ -1052,8 +1041,8 @@ const MOCK_RANKS = [
 | Name          | Type                                | Required | Default | Note                    |
 | :------------ | :---------------------------------- | :------: | :------ | :---------------------- |
 | `flow`        | `"vertical" \| "horizontal" `       |     O    | -       | 수직/수평 선택             |
-| `title`       | `string`                            |     O    | -       | 위 또는 왼쪽 텍스트   |
-| `description` | `string`                            |     O    | -       | 아래 또는 오른쪽 테스트               |
+| `top`         | `string`                            |     O    | -       | 위 또는 왼쪽 텍스트   |
+| `bottom`      | `string`                            |     O    | -       | 아래 또는 오른쪽 테스트               |
 | `onToggle`    | `(open: boolean) => void`           |     X    | -       | 토글 내렸을 때의 함수         |
 | `onClick`     | `() => void`                        |     X    | -       | 해당 컴포넌트 눌럿을 때의 함수  |
 
@@ -1063,8 +1052,8 @@ const MOCK_RANKS = [
 //vertical
  <InformationSection
   flow="vertical"
-  title="Text"
-  description="세로형 설명 텍스트입니다."
+  top="Text"
+  bottom="세로형 설명 텍스트입니다."
   onClick={() => { console.log("vertical click");}}
   onToggle={(open) => { console.log("vertical toggle:", open); }}
 />
@@ -1072,8 +1061,8 @@ const MOCK_RANKS = [
 //horizontal
 <InformationSection
   flow="horizontal"
-  title="Text"
-  description="가로형 설명 텍스트입니다."
+  top="Text"
+  bottom="가로형 설명 텍스트입니다."
 />
 ```
 
