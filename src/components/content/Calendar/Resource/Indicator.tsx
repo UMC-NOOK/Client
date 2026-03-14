@@ -5,7 +5,7 @@ import Per_50 from "../../../../assets/icons/percent50.svg";
 import Per_75 from "../../../../assets/icons/percent75.svg";
 import Per_100 from "../../../../assets/icons/percent100.svg";
 
-type Percent = "none" | "0" | "25" | "50" | "75" | "100";
+export type Percent = "none" | "0" | "25" | "50" | "75" | "100";
 
 type Props = {
     percent: Percent;
