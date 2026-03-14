@@ -55,8 +55,6 @@ const ICON_BY_VARIANT: Record<ReadingGoal, string> = {
   PCT_100: BookIllust100,
 };
 
-const ZERO_MESSAGE = "독서 목표를 설정하세요!";
-
 function splitByUntil(message: string) {
   const s = message.trim();
   const idx = s.indexOf("까지");
