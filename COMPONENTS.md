@@ -808,6 +808,24 @@ const MOCK_RANKS = [
 <Day text="M" disable={false} />
 ```
 
+### [ Indicator ]
+
+#### Path
+
+`components/content/Calendar/Resource/Indicator.tsx`
+
+#### Props
+
+| Name    | Type                                               | Required  | Default | Note    |
+| :------ | :------------------------------------------------- | :-------: | :------ | :------ |
+| percent | `"none" \| "0" \| "25" \| "50" \| "75" \| "100"`   |     O     |   -     |  퍼센트   |
+
+#### Usage
+
+```tsx
+<Indicator percent="0" />
+```
+
 ---
 
 ## 8. Feedback
