@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 import caretDownIcon from "../../../assets/icons/caret_down.svg";
 import caretUpIcon from "../../../assets/icons/caret_up.svg";
@@ -7,8 +7,8 @@ type SectionHeaderSize = "13" | "14" | "16" | "20";
 
 type Props = {
   size: SectionHeaderSize;
-  title: string;
-  description?: string; // 13, 16, 20
+  top: ReactNode;
+  bottom?: ReactNode; // 13, 16, 20
   //showCaret?: boolean; // 14, 16, 20
   onToggle?: (open: boolean) => void; // caret 열 onClick 
   onClick?: () => void; // 사용자용 Click
@@ -24,8 +24,8 @@ const clampOneLineStyle = {
 
 export default function SectionHeader({
   size,
-  title,
-  description,
+  top,
+  bottom,
   //showCaret = false,
   onToggle,
   onClick,
@@ -49,14 +49,14 @@ export default function SectionHeader({
   if (size === "13") {
     return (
       <div className="flex w-full flex-col items-start justify-center gap-2">
-        <p className="text-label-13-sb text-gray-90">{title}</p>
+        <p className="w-full text-label-13-sb text-gray-90">{top}</p>
 
-        {description ? (
+        {bottom ? (
           <p
             className="self-stretch text-label-12-sb text-gray-50"
             style={clampOneLineStyle}
           >
-            {description}
+            {bottom}
           </p>
         ) : null}
       </div>
@@ -66,7 +66,7 @@ export default function SectionHeader({
   if (size === "14") {
     const Content = (
       <>
-        <span className="text-label-14-sb text-gray-90">{title}</span>
+        <span className="min-w-0 text-label-14-sb text-gray-90">{top}</span>
 
         {showCaret ? (
           <img
@@ -95,7 +95,7 @@ export default function SectionHeader({
   if (size === "16") {
     const TopRow = (
       <>
-        <span className="text-label-16-sb text-gray-90">{title}</span>
+        <span className="min-w-0 text-label-16-sb text-gray-90">{top}</span>
 
         {showCaret ? (
           <img
@@ -122,12 +122,12 @@ export default function SectionHeader({
           <div className="flex w-full items-center gap-2">{TopRow}</div>
         )}
 
-        {description ? (
+        {bottom ? (
           <p
             className="self-stretch text-label-14-sb text-gray-50"
             style={clampOneLineStyle}
           >
-            {description}
+            {bottom}
           </p>
         ) : null}
       </div>
@@ -136,14 +136,14 @@ export default function SectionHeader({
 
   return (
     <div className="flex w-full flex-col items-start justify-center">
-      <p className="text-title-20-b text-gray-90">{title}</p>
+      <p className="w-full text-title-20-b text-gray-90">{top}</p>
 
-      {description ? (
+      {bottom ? (
         <p
           className="self-stretch text-body-14-m text-gray-50"
           style={clampOneLineStyle}
         >
-          {description}
+          {bottom}
         </p>
       ) : null}
     </div>
