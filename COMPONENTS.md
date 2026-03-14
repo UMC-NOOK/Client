@@ -854,7 +854,7 @@ const MOCK_RANKS = [
 />
 ```
 
-### [ List ]
+### [ Book/List ]
 
 #### Path
 
@@ -988,6 +988,34 @@ const MOCK_RANKS = [
   reviewNumber={99}
   onClick={() => {console.log("report clicked");}}/>
 ```
+
+### [ Report/List ]
+
+#### Path
+`src/components/content/Card/Report/List.tsx`
+
+#### Props
+| Name            | Type                 | Required | Default     | Note              |
+| :-------------- | :------------------- | :------: | :---------- | :--------------   |
+| `date`          | `string`             |     O    | -           | chip의 사이즈       |
+| `emoji`         | `string`             |     O    | -           | emoji 문자       |
+| `variant`       | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |     X    |  `yellow`          | emoji 색상       |
+| `review`        | `string`             |     O    | -           | emoji 옆 텍스트   |
+| `image`         | `string[]`           |     X    |`[]`         | chip의 비활성화/활성화 여부      |
+| `onClick`       | `() => void`         |     X    | -           | 해당 컴포넌트 눌럿을 때의 함수  |
+
+#### Usage
+```tsx
+//size = s 
+<Emotion size="s" emoji="(^_^)" variant="yellow" active />
+
+//size = m 
+<Emotion size="m" emoji="(^_^)" text="재밌어요" variant="yellow" active />
+
+//active 비활성화"
+<Emotion size="m" emoji="(• o •)" text="유익해요" variant="yellow" active={false} />
+```
+
 
 
 ### [ SectionHeader ]

@@ -16,10 +16,7 @@ type Props = {
 
 const clampOneLineStyle = {
   display: "-webkit-box",
-  WebkitBoxOrient: "vertical" as const,
-  WebkitLineClamp: 1,
-  overflow: "hidden",
-  textOverflow: "ellipsis",
+  WebkitBoxOrient: "vertical" as const
 };
 
 export default function SectionHeader({
@@ -49,7 +46,7 @@ export default function SectionHeader({
   if (size === "13") {
     return (
       <div className="flex w-full flex-col items-start justify-center gap-2">
-        <p className="w-full text-label-13-sb text-gray-90">{top}</p>
+        <p className="w-full text-label-13-sb text-gray-90 ">{top}</p>
 
         {bottom ? (
           <p
@@ -139,12 +136,12 @@ export default function SectionHeader({
       <p className="w-full text-title-20-b text-gray-90">{top}</p>
 
       {bottom ? (
-        <p
-          className="self-stretch text-body-14-m text-gray-50"
+        <div
+          className="self-stretch whitespace-pre-wrap text-body-14-m text-gray-50"
           style={clampOneLineStyle}
         >
           {bottom}
-        </p>
+        </div>
       ) : null}
     </div>
   );
