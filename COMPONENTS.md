@@ -750,7 +750,6 @@ const MOCK_RANKS = [
 
 ```
 
-
 ### [ Date ]
 
 #### Path
@@ -771,6 +770,24 @@ const MOCK_RANKS = [
 
 ```
 
+### [ DayOfTheWeek ]
+
+#### Path
+
+`components/content/Calendar/Resource/DayOfTheWeek.tsx`
+
+#### Props
+
+| Name    | Type       | Required  | Default | Note    |
+| :------ | :--------- | :-------: | :------ | :------ |
+| text    | `string`   |     O     |   -     |   요일   |
+
+#### Usage
+
+```tsx
+<DayOfTheWeek text="T" />
+
+```
 
 ---
 
