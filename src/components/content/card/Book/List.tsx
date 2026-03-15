@@ -1,5 +1,5 @@
-import searchIcon from "../../../../../assets/icons/book_shelf.svg";
-import libraryIcon from "../../../../../assets/icons/library_focus.svg";
+import searchIcon from "../../../../assets/icons/book_shelf.svg";
+import libraryIcon from "../../../../assets/icons/library_focus.svg";
 
 type BookListType = "NONE" | "SEARCH" | "LIBRARY" | "REPORT";
 
@@ -12,19 +12,19 @@ type Props = {
   title: string;
   author: string;
   type: BookListType;
-  typeLabel?: string | null;
+  typeLabel?: string | null; //독서중인지 아닌지에 대해
   imageAlt?: string;
   onClick?: () => void;
 };
 
 const TYPE_META: Record<BookListType, TypeMeta> = {
-  SEARCH: { iconSrc: searchIcon },
-  LIBRARY: { iconSrc: libraryIcon },
-  NONE: { iconSrc: null },
-  REPORT: { iconSrc: null },
+  SEARCH: { iconSrc: searchIcon }, //전체 검색
+  LIBRARY: { iconSrc: libraryIcon }, //서제에서 타이머 icon
+  NONE: { iconSrc: null }, //서재에서 전체보기했을 때 아이콘이 없는 경우
+  REPORT: { iconSrc: null }, //기록에서 도서 선택
 };
 
-export function BookListCard({
+export function BookList({
   imageUrl,
   title,
   author,
@@ -39,31 +39,30 @@ export function BookListCard({
   return (
     <div
       className={[
-        "flex w-full max-w-[343px] h-[106px] items-start gap-3 py-3"
+        "flex w-full min-h-[106px] items-start gap-3 py-3"
       ].join(" ")}
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
       <div
-        className="flex w-14 h-[82px] shrink-0 items-center justify-center rounded-[2px] bg-center bg-cover bg-no-repeat"
+        className="flex w-14 self-stretch shrink-0 items-center justify-center rounded-[2px] bg-center bg-cover bg-no-repeat"
         style={{ backgroundImage: `url(${imageUrl})` }}
         aria-label={imageAlt}
       />
 
-      <div className="flex flex-1 h-[82px] min-w-0 flex-col justify-between items-start">
-        <div className="flex flex-col gap-1 min-w-0 self-stretch">
-          <p className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-90 text-label-16-b">
+      <div className="flex flex-1 min-w-0 flex-col min-h-[82px] justify-between items-start">
+        <div className="flex flex-col gap-0.5 min-w-0 self-stretch">
+          <p className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-90 text-label-14-sb">
             {title}
           </p>
-          <p className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-70 text-label-12-r">
+          <p className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-90 text-label-13-r">
             {author}
           </p>
         </div>
 
         {showBottomRow ? (
           <div className="flex items-center gap-1">
-            {/* 아이콘이 있을 때만 렌더 */}
             {meta.iconSrc ? (
               <span
                 className="relative block shrink-0"
@@ -72,7 +71,6 @@ export function BookListCard({
               >
                 <img
                   src={meta.iconSrc}
-                  alt=""
                   className="absolute"
                   style={{
                     width: "13.333px",
@@ -85,7 +83,7 @@ export function BookListCard({
             ) : null}
 
             {typeLabel ? (
-              <span className="text-gray-70 text-label-12-r">{typeLabel}</span>
+              <span className="text-gray-60 text-label-13-r">{typeLabel}</span>
             ) : null}
           </div>
         ) : null}

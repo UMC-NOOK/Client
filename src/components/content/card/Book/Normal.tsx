@@ -15,41 +15,26 @@ export function Normal({
 }: Props) {
   return (
     <div
-      className={[ "inline-flex flex-col items-start gap-1", ].join(" ")}
+      className={[ "inline-flex w-[100px] flex-col items-start gap-1", ].join(" ")}
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
-      {/* Image */}
+
       <div
-        className="flex w-25 h-36 items-center justify-center rounded-[2px] bg-center bg-cover bg-no-repeat"
+        className="flex w-[100px] h-36 items-center justify-center rounded-[2px] bg-center bg-cover bg-no-repeat"
         style={{ backgroundImage: `url(${imageUrl})` }}
         aria-label={imageAlt}
       />
 
-      {/* Texts */}
-      <div className="flex flex-col items-start gap-1 self-stretch w-full">
-        {/* Title: 2 lines clamp */}
+    <div className="flex flex-col items-start self-stretch w-full">
         <p
-          className="line-clamp-2 self-stretch overflow-hidden text-ellipsis text-gray-90 text-label-14-sb"
-        //   style={
-        //     display: "-webkit-box",
-        //     WebkitBoxOrient: "vertical",
-        //     WebkitLineClamp: 2,
-        //   }}
-        >
+          className="line-clamp-2 self-stretch overflow-hidden text-ellipsis text-gray-90 text-label-14-sb">
           {title}
         </p>
 
-        {/* Subtitle: 1 line clamp */}
         <p
-          className="line-clamp-2 self-stretch overflow-hidden text-ellipsis text-gray-70 text-label-12-r"
-        //   style={{
-        //     display: "-webkit-box",
-        //     WebkitBoxOrient: "vertical",
-        //     WebkitLineClamp: 1,
-        //   }}
-        >
+          className="line-clamp-1 self-stretch overflow-hidden text-ellipsis text-gray-70 text-label-12-r">
             {author}
         </p>
       </div>
