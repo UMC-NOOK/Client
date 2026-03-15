@@ -333,6 +333,110 @@ const [birth, setBirth] = useState({
 
 ## 5. Action
 
+> - **Design**:
+> - **Author**: 임서연
+
+### [ Icon ]
+
+#### Path
+
+`src/components/action/Button/Icon.tsx`
+
+#### Props
+
+| Name        | Type                | Required | Default | Note              |
+| :---------- | :------------------ | :------: | :------ | :---------------- |
+| `size`      | `"xs" or "s" or "m` |    O     | -       | 아이콘 사이즈     |
+| `children`  | `ReactNode`         |    O     | -       | svg 파일          |
+| `className` | `string`            |    X     | -       | 추가적인 클래스명 |
+
+#### Usage
+
+```tsx
+<Icon size="xs">
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {" "}
+    <path
+      d="M16 8.75C16 6.8272 15.2356 4.98267 13.876 3.62305C12.5164 2.2637 10.6726 1.50002 8.75 1.5C6.8272 1.5 4.98267 2.26342 3.62305 3.62305C2.26342 4.98267 1.5 6.8272 1.5 8.75C1.50002 10.6726 2.2637 12.5164 3.62305 13.876C4.98267 15.2356 6.8272 16 8.75 16C10.6728 16 12.5164 15.2356 13.876 13.876C15.2356 12.5164 16 10.6728 16 8.75ZM17.5 8.75C17.5 10.8192 16.7645 12.8109 15.4424 14.3818L19.2803 18.2197C19.573 18.5126 19.5731 18.9874 19.2803 19.2803C18.9874 19.5731 18.5126 19.573 18.2197 19.2803L14.3818 15.4424C12.8109 16.7645 10.8192 17.5 8.75 17.5C6.42941 17.5 4.20342 16.5784 2.5625 14.9375C0.921589 13.2966 2.04574e-05 11.0706 0 8.75C0 6.42938 0.921571 4.20343 2.5625 2.5625C4.20343 0.921571 6.42938 0 8.75 0C11.0706 2.04577e-05 13.2966 0.921589 14.9375 2.5625C16.5784 4.20342 17.5 6.42941 17.5 8.75Z"
+      fill="#ECECEC"
+    />{" "}
+  </svg>
+</Icon>
+```
+
+### [ Text ]
+
+#### Path
+
+`src/components/action/Button/Text.tsx`
+
+#### Props
+
+| Name      | Type                   | Required | Default   | Note                        |
+| :-------- | :--------------------- | :------: | :-------- | :-------------------------- |
+| `text`    | `string`               |    O     | -         | 텍스트 내용                 |
+| `size`    | `"12" \| "14" \| "18"` |    O     | -         | 텍스트 사이즈               |
+| `active`  | `boolean`              |    O     | `"false"` | 텍스트 활성화/비활성화 여부 |
+| `onClick` | `() => void`           |    X     | -         | 텍스트 Click에 대한 기능    |
+
+#### Usage
+
+```tsx
+  <TextButton text="비활성" size="18" active={false} />
+  <TextButton text="활성" size="12" active={true} />
+```
+
+### [ Solid ]
+
+#### Path
+
+`src/components/action/Button/Solid.tsx`
+
+#### Props
+
+| Name        | Type                              | Required | Default   | Note               |
+| :---------- | :-------------------------------- | :------: | :-------- | :----------------- |
+| `text`      | `string`                          |    O     | -         | 텍스트 내용        |
+| `variant`   | `"default" \| "dark" \| "danger"` |    O     | `default` | 버튼 종류          |
+| `className` | `string`                          |    X     | -         | 추가적인 클래스 명 |
+
+#### Usage
+
+```tsx
+  //default
+  <Solid> 기본 </Solid>
+  //dark
+  <Solid variant="dark">다른</Solid>
+  //danger
+  <Solid variant="danger">제거</Solid>
+```
+
+### [ FAB ]
+
+#### Path
+
+`src/components/action/Button/FAB.tsx`
+
+#### Props
+
+| Name      | Type         | Required | Default | Note                   |
+| :-------- | :----------- | :------: | :------ | :--------------------- |
+| `icon`    | `ReactNode`  |    O     | -       | 내부에 들어갈 icon svg |
+| `onClick` | `() => void` |    X     | -       | 눌럿을 때의 기능 함수  |
+
+#### Usage
+
+```tsx
+//svg 파일이라서 이렇게 <img 태그에 묶어서 진행했습니다.>
+<FAB icon={<img src={PlusIcon} />} />
+```
+
 ### [ ContainerText ]
 
 #### Path
@@ -354,6 +458,44 @@ const [birth, setBirth] = useState({
 
   //활성화
   <ContainerText text="Text" active />
+```
+
+### [ Chip ]
+
+#### Path
+
+`src/components/action/Chip/Chip.tsx`
+
+#### Props
+
+| Name      | Type               | Required | Default | Note                 |
+| :-------- | :----------------- | :------: | :------ | :------------------- |
+| `text`    | `string`           |    O     | -       | 텍스트 내용          |
+| `variant` | `"none" \| "icon"` |    O     | -       | 활성화/비활성화 유무 |
+| `active`  | `boolean`          |    O     | `false` | 활성화/비활성화 유무 |
+| `icon`    | `ReactNode`        |    X     | -       | 아이콘               |
+| `onClick` | `()=> void`        |    X     | -       | 눌럿을 때의 기능     |
+
+#### Usage
+
+```tsx
+const [isActive, setIsActive] = useState(false);
+
+//icon 있는 칩
+<Chip
+  text="Text"
+  variant="icon"
+  active={isActive}
+  icon={<img src={PlusIcon} alt="Plus Icon"/>}
+  onClick={() => setIsActive(!isActive)}
+/>
+
+//text만 있는 칩
+<Chip
+  text="Text"
+  variant="none"
+  active={true}
+/>
 ```
 
 ### [ Emotion ]
@@ -383,109 +525,6 @@ const [birth, setBirth] = useState({
 
 //active 비활성화"
 <Emotion size="m" emoji="(• o •)" text="유익해요" variant="yellow" active={false} />
-```
-
-## 5. Content
-
-### [ SectionHeader ]
-
-#### Path
-
-`src/components/content/InformationText/SectionHeader.tsx`
-
-#### Props
-
-| Name          | Type                              | Required | Default | Note                           |
-| :------------ | :-------------------------------- | :------: | :------ | :----------------------------- |
-| `size`        | `"13" \| "14" \| "16" \| "20" \|` |    O     | -       | 컴포넌트 사이즈                |
-| `title`       | `string`                          |    O     | -       | 기본 텍스트 내용이자 윗 텍스트 |
-| `description` | `string`                          |    X     | `false` | 아래 텍스트                    |
-| `onToggle`    | `(open: boolean) => void`         |    X     | -       | 토글 내렸을 때의 함수          |
-| `onClick`     | `() => void`                      |    X     | -       | 해당 컴포넌트 눌럿을 때의 함수 |
-
-#### Usage
-
-```tsx
-//size 13 (토글 없음, 원하면 onClick 추가 가능)
- <SectionHeader
-  size="13"
-  title="Text"
-  description="한 줄로 말줄임 처리되는 설명 텍스트입니다."
-/>
-
-//size 14 (토글 잇음, 밑 설명단 없음)
-<SectionHeader
-  size="14"
-  title="Text"=
-  onClick={() => {console.log("size 14 click");}}
-  onToggle={(open) => { console.log("size 14 toggle:", open);}}
-/>
-
-//size 16 (토글 있음, 밑 설명단 있음)
-<SectionHeader
-  size="16"
-  title="Text"
-  description="한 줄로 잘리는 설명 텍스트입니다."
-  onClick={() => { console.log("size 16 click"); }}
-  onToggle={(open) => { console.log("size 16 toggle:", open);}}
-/>
-
-//size 20 (토글 없음, 밑 설명단 있음)
-<SectionHeader
- size="20"
- title="Text"
- description="조금 더 큰 제목 아래 설명 텍스트가 들어갑니다."
-/>
-```
-
-### [ Information Section ]
-
-#### Path
-
-`src/components/content/InformationText/InformationSection.tsx`
-
-#### Props
-
-| Name          | Type                          | Required | Default | Note                           |
-| :------------ | :---------------------------- | :------: | :------ | :----------------------------- |
-| `flow`        | `"vertical" \| "horizontal" ` |    O     | -       | 수직/수평 선택                 |
-| `title`       | `string`                      |    O     | -       | 위 또는 왼쪽 텍스트            |
-| `description` | `string`                      |    O     | -       | 아래 또는 오른쪽 테스트        |
-| `onToggle`    | `(open: boolean) => void`     |    X     | -       | 토글 내렸을 때의 함수          |
-| `onClick`     | `() => void`                  |    X     | -       | 해당 컴포넌트 눌럿을 때의 함수 |
-
-#### Usage
-
-```tsx
-//vertical
- <InformationSection
-  flow="vertical"
-  title="Text"
-  description="세로형 설명 텍스트입니다."
-  onClick={() => { console.log("vertical click");}}
-  onToggle={(open) => { console.log("vertical toggle:", open); }}
-/>
-
-//horizontal
-<InformationSection
-  flow="horizontal"
-  title="Text"
-  description="가로형 설명 텍스트입니다."
-/>
-```
-
-#### Props
-
-| Name      | Type         | Required | Default | Note                   |
-| :-------- | :----------- | :------: | :------ | :--------------------- |
-| `icon`    | `ReactNode`  |    O     | -       | 내부에 들어갈 icon svg |
-| `onClick` | `() => void` |    X     | -       | 눌럿을 때의 기능 함수  |
-
-#### Usage
-
-```tsx
-//svg 파일이라서 이렇게 <img 태그에 묶어서 진행했습니다.>
-<FAB icon={<img src={PlusIcon} />} />
 ```
 
 ## 6. Navigation
@@ -687,24 +726,412 @@ const options = [
 ## 7. Content
 
 > - **Design**:
-> - **Author**:
+> - **Author**: 임서연
 
-### [ ]
+### [ Rank ]
 
 #### Path
 
-``
+`components/content/list/Rank`
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-|      |      |          |         |      |
+| Name  | Type   | Required | Default | Note    |
+| :---- | :----- | :------: | :------ | :------ |
+| rank  | number |    O     | -       | 등수    |
+| title | string |    O     | -       | 책 제목 |
 
 #### Usage
 
 ```tsx
+const MOCK_RANKS = [
+  { rank: 0, title: "The Pragmatic Programmer" },
+  { rank: 1, title: "Clean Code: A Handbook of Agile Software Craftsmanship" },
+  { rank: 2, title: "Refactoring: Improving the Design of Existing Code" },
+  {
+    rank: 3,
+    title:
+      "아주아주아주 긴 제목 테스트용 — 한 줄 말줄임이 제대로 적용되는지 확인하는 텍스트입니다",
+  },
+];
 
+<div className="space-y-3">
+  {MOCK_RANKS.map((item) => (
+    <Rank key={item.rank} rank={item.rank} title={item.title} />
+  ))}
+</div>;
+```
+
+### [ History ]
+
+#### Path
+
+`components/content/list/History`
+
+#### Props
+
+| Name    | Type                  | Required | Default | Note                           |
+| :------ | :-------------------- | :------: | :------ | :----------------------------- |
+| variant | `"history" \| "time"` |    O     | -       | 독서 기록 / 시간 컴포넌트 기록 |
+| time    | string                |    O     | -       | 타이머 시간                    |
+| title   | string                |    X     | -       | 시간 기록일 때의 제목          |
+
+#### Usage
+
+```tsx
+//history (독서기록)
+<HistoryInfoCard
+ variant="history"
+ time="2025.09.11"
+/>
+
+//time
+ <HistoryInfoCard
+  variant="time"
+  title="집중 시간"
+  time="01:24:12"
+/>
+
+```
+
+### [ Date ]
+
+#### Path
+
+`components/content/list/Resource/Date`
+
+#### Props
+
+| Name       | Type   | Required | Default | Note            |
+| :--------- | :----- | :------: | :------ | :-------------- |
+| topText    | string |    O     | -       | 월.일           |
+| bottomText | string |    O     | -       | 해당 년도 4자리 |
+
+#### Usage
+
+```tsx
+<ResourceDate topText="01.12" bottomText="2026" />
+```
+
+### [ Book Goal ]
+
+#### Path
+
+`src/components/content/Card/BookGoal/BookGoal.tsx`
+
+#### Props
+
+| Name      | Type                                                       | Required | Default | Note             |
+| :-------- | :--------------------------------------------------------- | :------: | :------ | :--------------- |
+| `percent` | `"ZERO" \| "PCT_1_9" \|"PCT_10_19"\|"PCT_20_29" \|`        |    O     | -       | 도서 읽은 퍼센트 |
+|           | `"PCT_30_39" \| "PCT_40_49" \| "PCT_50_59" \| "PCT_60_69"` |
+|           | `"PCT_70_79" \| "PCT_80_89" \| "PCT_90_99" \| "PCT_100"`   |
+| `message` | `string`                                                   |    O     | -       | 텍스트           |
+
+#### Usage
+
+```tsx
+//zero => mesage가 독서 목표를 설정하세요 라고 정해져있음
+<BookGoal percent="ZERO" />
+
+//zero 가 아닌 경우 message를 받아와야함
+<BookGoal
+ percent="PCT_1_9"
+ message="100권까지 99권 남았어요."
+/>
+```
+
+### [ Normal ]
+
+#### Path
+
+`src/components/content/Card/Book/Normal.tsx`
+
+#### Props
+
+| Name       | Type         | Required | Default            | Note             |
+| :--------- | :----------- | :------: | :----------------- | :--------------- |
+| `imageUrl` | `string`     |    O     | -                  | 이미지 Url       |
+| `title`    | `string`     |    O     | -                  | 제목             |
+| `author`   | `string`     |    O     | -                  | 저자             |
+| `imageAlt` | `string`     |    X     | `"card thumbnail"` | 이미지 이름      |
+| `onClick`  | `() => void` |    X     | -                  | 클릭할 때의 기능 |
+
+#### Usage
+
+```tsx
+<Normal
+  imageUrl={sampleBook}
+  title="아주 보통의 하루"
+  author="작가 이름"
+/>
+
+<Normal
+ imageUrl="https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg"
+ title="The Little Prince"
+ author="Antoine de Saint-Exupéry"
+/>
+
+ <Normal
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg"
+  title="아주 긴 제목이 들어갔을 때 두 줄까지 말줄임 처리가 잘 되는지 확인하기 위한 테스트용 제목입니다"
+  author="아주 긴 저자명 테스트용"
+  onClick={() => { console.log("normal clicked");}}
+/>
+```
+
+### [ Book/List ]
+
+#### Path
+
+`src/components/content/Card/Book/List.tsx`
+
+#### Props
+
+| Name        | Type                                          | Required | Default | Note                                                   |
+| :---------- | :-------------------------------------------- | :------: | :------ | :----------------------------------------------------- |
+| `imageUrl`  | `string`                                      |    O     | -       | 이미지 url                                             |
+| `title`     | `string`                                      |    O     | -       | 제목                                                   |
+| `author`    | `string`                                      |    O     | -       | 저자                                                   |
+| `type`      | `"NONE" \| "SEARCH" \| "LIBRARY" \| "REPORT"` |    O     | -       | 제목 리스트에서 사용하는 종류                          |
+| `typeLabel` | `string`                                      |    X     | `null`  | 기록에서 도서 선택 페이지에서 독서 전 / 독서 중 / 완독 |
+| `imageAlt`  | `string`                                      |    X     | -       | 이미지 이름                                            |
+| `onClick`   | `() => void`                                  |    X     | -       | 클릭했을 때의 기능                                     |
+
+#### Usage
+
+```tsx
+<BookList
+  imageUrl={sampleBook}
+  title="검색 결과 도서"
+  author="저자 이름"
+  type="SEARCH"
+/>
+
+<BookList
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg"
+  title="서재 도서"
+  author="Antoine de Saint-Exupéry"
+  type="LIBRARY"
+  typeLabel="01:00:30"
+/>
+
+<BookList
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg"
+  title="아이콘 없이 라벨만 있는 경우"
+  author="Yuval Noah Harari"
+  type="REPORT"
+  typeLabel="완독"
+/>
+
+<BookList
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780439554930-M.jpg"
+  title="아이콘도 라벨도 없는 경우"
+  author="J.K. Rowling"
+  type="NONE"
+/>
+
+<BookList
+  imageUrl={sampleBook}
+  title="아주 긴 제목이 들어갔을 때 한 줄 말줄임 처리가 잘 되는지 확인하기 위한 테스트용 제목입니다"
+  author="아주 긴 저자명 테스트"
+  type="SEARCH"
+  typeLabel="읽는 중"
+  onClick={() => {console.log("book list clicked");}}
+/>
+```
+
+### [ Focus ]
+
+#### Path
+
+`src/components/content/Card/Book/List/Focus.tsx`
+
+#### Props
+
+| Name       | Type         | Required | Default | Note               |
+| :--------- | :----------- | :------: | :------ | :----------------- |
+| `imageUrl` | `string`     |    O     | -       | 이미지 url         |
+| `imageAlt` | `string`     |    X     | -       | 이미지 이름        |
+| `timeText` | `string`     |    O     | -       | 시간               |
+| `title`    | `string`     |    O     | -       | 제목               |
+| `author`   | `string`     |    O     | -       | 저자               |
+| `onClick`  | `() => void` |    X     | -       | 클릭했을 때의 기능 |
+
+#### Usage
+
+```tsx
+<Focus
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg"
+  timeText="01:24:12"
+  title="The Little Prince"
+  author="Antoine de Saint-Exupéry"
+/>
+
+<Focus
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg"
+  timeText="12:59:59"
+  title="아주 긴 제목이 들어갔을 때 한 줄 말줄임 처리가 잘 되는지 확인하기 위한 테스트용 제목입니다"
+  author="아주 긴 저자명 테스트"
+  onClick={() => { console.log("media info card clicked");}}
+/>
+```
+
+### [ Report ]
+
+#### Path
+
+`src/components/content/Card/Book/List/Report.tsx`
+
+#### Props
+
+| Name           | Type         | Required | Default          | Note               |
+| :------------- | :----------- | :------: | :--------------- | :----------------- |
+| `imageUrl`     | `string`     |    O     | -                | 이미지 url         |
+| `title`        | `string`     |    O     | -                | 제목               |
+| `author`       | `string`     |    O     | -                | 저자               |
+| `recent`       | `string`     |    O     | -                | 최근 리뷰          |
+| `reviewNumber` | `number`     |    O     | -                | 리뷰 수            |
+| `imageAlt`     | `string`     |    X     | `"report cover"` | 이미지 이름        |
+| `onClick`      | `() => void` |    X     | -                | 클릭했을 때의 기능 |
+
+#### Usage
+
+```tsx
+<Report
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg"
+  title="아주 긴 제목이 들어갔을 때 한 줄 말줄임 처리가 잘 되는지 확인하는 테스트용 제목입니다"
+  author="아주 긴 저자명 테스트"
+  recent="이 문장도 최근 리포트가 길어졌을 때 두 줄까지 자연스럽게 말줄임 처리되는지 확인하기 위한 테스트용 문장입니다."
+  reviewNumber={3}
+/>
+
+<Report
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg"
+  title="나는 오늘 어디까지라도 달릴 수 있어"
+  author="윤지한"
+  recent="최근 리포트 문장입니다. 두 줄 영역 안에서 얼마나 자연스럽게 정리되는지 확인합니다."
+  reviewNumber={99}
+  onClick={() => {console.log("report clicked");}}/>
+```
+
+### [ Report/List ]
+
+#### Path
+
+`src/components/content/Card/Report/List.tsx`
+
+#### Props
+
+| Name      | Type                                                         | Required | Default  | Note                           |
+| :-------- | :----------------------------------------------------------- | :------: | :------- | :----------------------------- |
+| `date`    | `string`                                                     |    O     | -        | chip의 사이즈                  |
+| `emoji`   | `string`                                                     |    O     | -        | emoji 문자                     |
+| `variant` | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |    X     | `yellow` | emoji 색상                     |
+| `review`  | `string`                                                     |    O     | -        | emoji 옆 텍스트                |
+| `image`   | `string[]`                                                   |    X     | `[]`     | chip의 비활성화/활성화 여부    |
+| `onClick` | `() => void`                                                 |    X     | -        | 해당 컴포넌트 눌럿을 때의 함수 |
+
+#### Usage
+
+```tsx
+<ReportList
+  date="25.09.13"
+  emoji="(T_T)"
+  variant="blue"
+  review="생각이 많아서 초반에는 잘 안 읽혔는데, 중간부터 조금씩 흐름을 탔다. 마지막 문장이 특히 오래 남았다."
+  images={[sampleBook]}
+/>
+
+<ReportList
+  date="25.09.14"
+  emoji="(>_<)"
+  variant="red"
+  review="오늘 기록은 이미지 여러 장이 들어갔을 때의 레이아웃을 확인하기 위한 테스트입니다. 줄 수가 늘어나면 카드 높이도 자연스럽게 커져야 합니다."
+  images={[
+    sampleBook,
+    "https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg",
+    "https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg",
+    "https://covers.openlibrary.org/b/isbn/9780439554930-M.jpg",
+    "https://covers.openlibrary.org/b/isbn/9780140449136-M.jpg",
+  ]}
+/>
+```
+
+### [ SectionHeader ]
+
+#### Path
+
+`src/components/content/InformationText/SectionHeader.tsx`
+
+#### Props
+
+| Name       | Type                              | Required | Default | Note                           |
+| :--------- | :-------------------------------- | :------: | :------ | :----------------------------- |
+| `size`     | `"13" \| "14" \| "16" \| "20" \|` |    O     | -       | 컴포넌트 사이즈                |
+| `top`      | `ReactNode`                       |    O     | -       | 윗 칸                          |
+| `bottom`   | `ReactNode`                       |    X     | -       | 아래 칸                        |
+| `onToggle` | `(open: boolean) => void`         |    X     | -       | 토글 내렸을 때의 함수          |
+| `onClick`  | `() => void`                      |    X     | -       | 해당 컴포넌트 눌럿을 때의 함수 |
+
+#### Usage
+
+```tsx
+//size 13 (토글 없음, 원하면 onClick 추가 가능)
+<SectionHeader
+  size="13"
+  top={<span>Text</span>}
+  bottom={<span>Text</span>}
+/>
+
+//size 14 (토글 잇음, 밑 설명단 없음)
+<SectionHeader
+  size="14"
+  top={<CustomTitle />}
+ />
+
+//size 16 (토글 있음, 밑 설명단 있음)
+<SectionHeader
+  size="16"
+  top={<span>제목</span>}
+  bottom={<CustomDescription />}
+/>
+```
+
+### [ Information Section ]
+
+#### Path
+
+`src/components/content/InformationText/InformationSection.tsx`
+
+#### Props
+
+| Name       | Type                          | Required | Default | Note                           |
+| :--------- | :---------------------------- | :------: | :------ | :----------------------------- |
+| `flow`     | `"vertical" \| "horizontal" ` |    O     | -       | 수직/수평 선택                 |
+| `top`      | `string`                      |    O     | -       | 위 또는 왼쪽 텍스트            |
+| `bottom`   | `string`                      |    O     | -       | 아래 또는 오른쪽 테스트        |
+| `onToggle` | `(open: boolean) => void`     |    X     | -       | 토글 내렸을 때의 함수          |
+| `onClick`  | `() => void`                  |    X     | -       | 해당 컴포넌트 눌럿을 때의 함수 |
+
+#### Usage
+
+```tsx
+//vertical
+ <InformationSection
+  flow="vertical"
+  top="Text"
+  bottom="세로형 설명 텍스트입니다."
+  onClick={() => { console.log("vertical click");}}
+  onToggle={(open) => { console.log("vertical toggle:", open); }}
+/>
+
+//horizontal
+<InformationSection
+  flow="horizontal"
+  top="Text"
+  bottom="가로형 설명 텍스트입니다."
+/>
 ```
 
 ---
