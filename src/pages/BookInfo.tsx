@@ -7,11 +7,13 @@ import TabBar from "../components/navigation/tabs/TabBar";
 import BottomSheet from "../components/presentation/modal/bottomsheet/Origin";
 import PopupConfirmModal from "../components/presentation/modal/popup/Origin";
 import MaskGradient from "../components/layout/MaskGradient";
+import Snackbar from "../components/feedback/snackbar";
 import { HistoryInfoCard } from "../components/content/list/History";
-import { ResourceDate } from "../components/content/list/Resource/Date";
+// import { ResourceDate } from "../components/content/list/Resource/Date";
 // assets
 import chevron_left from "../assets/icons/chevron_left.svg";
 import testBookCover from "../assets/book-info/testBookCover.svg";
+import book_shelf from "../assets/icons/book_shelf-gray-30.svg";
 // types
 type DetailTab = "info" | "log";
 // values
@@ -109,6 +111,10 @@ export default function BookInfo() {
   const [readStatus, setReadStatus] = useState<"unread" | "reading" | "read">(
     "unread",
   );
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+  });
   // 개발용 상태
   const [hasFocus, setHasFocus] = useState(true);
   const [hasRecord, setHasRecord] = useState(false);
@@ -116,10 +122,25 @@ export default function BookInfo() {
   const [showReadingModal, setShowReadingModal] = useState(false);
   const [showCompleteModal, setShowCompleteModal] = useState(false);
 
+  const openSnackbar = (message: string) => {
+    setSnackbar({
+      open: true,
+      message,
+    });
+  };
+
+  const onClickSnackbar = () => {
+    setSnackbar((prev) => ({
+      ...prev,
+      open: false,
+    }));
+  };
+
   // 개발용 핸들러 함수
   const toggleReadStatus = () => {
     if (readStatus === "unread") {
       setReadStatus("reading");
+      openSnackbar("내 서재에 책을 등록했어요.");
     } else if (readStatus === "reading") {
       setShowCompleteModal(true);
     } else {
@@ -130,7 +151,7 @@ export default function BookInfo() {
   };
 
   return (
-    <div className="flex flex-col pb-[calc(120px+env(safe-area-inset-bottom))]">
+    <div className="relative flex flex-col pb-[calc(120px+env(safe-area-inset-bottom))]">
       {/* 상단 */}
       <div className="relative">
         <div className="absolute inset-0 z-0 -mx-4 -mt-2 pointer-events-none overflow-hidden">
@@ -386,6 +407,7 @@ export default function BookInfo() {
           }}
         />
       )}
+      {/* 팝업 모달 */}
       {showCompleteModal && (
         <PopupConfirmModal
           open={true}
@@ -414,6 +436,15 @@ export default function BookInfo() {
             setReadStatus("reading");
             setShowReadingModal(false);
           }}
+        />
+      )}
+      {/* 스낵바 */}
+      {snackbar.open && (
+        <Snackbar
+          icon={book_shelf}
+          text={snackbar.message}
+          buttonText="서재로 이동"
+          onButtonClick={onClickSnackbar}
         />
       )}
     </div>
