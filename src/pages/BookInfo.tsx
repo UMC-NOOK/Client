@@ -7,6 +7,8 @@ import TabBar from "../components/navigation/tabs/TabBar";
 import BottomSheet from "../components/presentation/modal/bottomsheet/Origin";
 import PopupConfirmModal from "../components/presentation/modal/popup/Origin";
 import MaskGradient from "../components/layout/MaskGradient";
+import { HistoryInfoCard } from "../components/content/list/History";
+import { ResourceDate } from "../components/content/list/Resource/Date";
 // assets
 import chevron_left from "../assets/icons/chevron_left.svg";
 import testBookCover from "../assets/book-info/testBookCover.svg";
@@ -289,7 +291,21 @@ export default function BookInfo() {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <div className="text-label-16-sb">독서 히스토리</div>
+            {hasHistory ? (
+              <div className="flex items-center justify-between">
+                <div className="text-label-16-sb">독서 히스토리</div>
+                <div
+                  className="curser-pointer text-btn-14-sb text-gray-60"
+                  onClick={() => {
+                    // 전체 기록 보기로 이동
+                  }}
+                >
+                  전체 보기
+                </div>
+              </div>
+            ) : (
+              <div className="text-label-16-sb">독서 히스토리</div>
+            )}
             <div
               className={`text-body-14-r p-4 rounded-sm bg-gray-15 ${hasHistory ? "h-80 relative overflow-hidden" : ""}`}
               onClick={() => {
@@ -298,11 +314,22 @@ export default function BookInfo() {
               }}
             >
               {hasHistory ? (
-                <MaskGradient
-                  width={"full"}
-                  height={20}
-                  className="-m-4 bottom-0"
-                />
+                <>
+                  <MaskGradient
+                    width={"full"}
+                    height={20}
+                    className="-m-4 bottom-0"
+                  />
+                  {bookHistoryData.map((history, index) => (
+                    <HistoryInfoCard
+                      key={index}
+                      variant={history.state === "record" ? "history" : "time"}
+                      title={history.title}
+                      time={history.description}
+                      hasIcon={history.state !== "status"}
+                    />
+                  ))}
+                </>
               ) : (
                 "아직 독서 활동이 없어요."
               )}
