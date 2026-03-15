@@ -775,6 +775,7 @@ const MOCK_RANKS = [
 | variant | `"history" \| "time"` |    O     | -       | 독서 기록 / 시간 컴포넌트 기록 |
 | time    | string                |    O     | -       | 타이머 시간                    |
 | title   | string                |    X     | -       | 시간 기록일 때의 제목          |
+| hasIcon | boolean               |    X     | `true`  | 아이콘 유무                    |
 
 #### Usage
 
@@ -790,6 +791,14 @@ const MOCK_RANKS = [
   variant="time"
   title="집중 시간"
   time="01:24:12"
+/>
+
+//독서 상태 변경
+ <HistoryInfoCard
+  variant="time"
+  title="독서 중"
+  time="독서 상태를 변경했어요."
+  hasIcon=false
 />
 
 ```
