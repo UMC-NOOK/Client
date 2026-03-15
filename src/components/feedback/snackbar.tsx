@@ -12,7 +12,7 @@ export default function Snackbar({
   onButtonClick,
 }: SnackbarProps) {
   return (
-    <div className="w-full h-[46px] py-3 px-4 flex items-center gap-2 bg-gray-90 rounded-lg">
+    <div className="w-full h-[46px] py-3 px-4 flex items-center gap-2 bg-gray-90 rounded-lg absolute bottom-4 z-100">
       {icon && (
         <img src={icon} alt="Icon" className="w-5 h-5 inline-block shrink-0" />
       )}

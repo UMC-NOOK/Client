@@ -1167,6 +1167,9 @@ const MOCK_RANKS = [
 
 #### Usage
 
+사용하기 위해선 반드시 부모 요소에 relative를 주어야 함
+해당 컴포넌트는 `z-100`으로 설정되어 있음
+
 ```tsx
 import camera from "../../assets/icons/camera-gray.svg";
 
