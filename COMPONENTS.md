@@ -693,6 +693,47 @@ const options = [
 <Footer />
 ```
 
+### [ Dot ]
+
+#### Path
+
+`src/components/navigation/Pagination/PageIndicator/Resource/Dot.tsx`
+
+#### Props
+
+| Name    | Type    | Required | Default | Note |
+| :------ | :------ | :------: | :------ | :--- |
+| current | boolean |     O    | `false` | 현재 indx 유무 |
+
+#### Usage
+
+```tsx
+//false
+<Dot/>
+
+<Dot current={true} />
+```
+
+### [ Page Indicator ]
+
+#### Path
+
+`src/components/navigation/Pagination/PageIndicator.tsx`
+
+#### Props
+
+| Name  | Type    | Required | Default | Note |
+| :---- | :------ | :------: | :------ | :--- |
+| cur   | number  |     O    | -       | 현재 indx  |
+| total | number  |     O    | -       | 전체 indx 개수 |
+
+#### Usage
+
+```tsx
+<PageIndicator cur={0} total={4} />
+```
+
+
 ## 7. Content
 
 > - **Design**: 
