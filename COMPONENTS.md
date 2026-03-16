@@ -786,6 +786,450 @@ const MOCK_RANKS = [
 <ResourceDate topText="01.12" bottomText="2026" />
 
 ```
+### [ Book Goal ]
+
+#### Path
+
+`src/components/content/Card/BookGoal/BookGoal.tsx`
+
+#### Props
+
+| Name          | Type                                                | Required | Default | Note |
+| :------------ | :---------------------------------------------------| :------: | :------ | :---------------------- |
+| `percent`     | `"ZERO" \| "PCT_1_9" \|"PCT_10_19"\|"PCT_20_29" \|` |     O    | -       | 도서 읽은 퍼센트            |
+|               |`"PCT_30_39" \| "PCT_40_49" \| "PCT_50_59" \| "PCT_60_69"`|
+|               |`"PCT_70_79" \| "PCT_80_89" \| "PCT_90_99" \| "PCT_100"`|
+| `message`     | `string`                                            |     O    | -       | 텍스트   |
+
+#### Usage
+
+```tsx
+//zero => mesage가 독서 목표를 설정하세요 라고 정해져있음
+<BookGoal percent="ZERO" />
+
+//zero 가 아닌 경우 message를 받아와야함
+<BookGoal
+ percent="PCT_1_9"
+ message="100권까지 99권 남았어요."
+/>
+```
+
+### [ Normal ]
+
+#### Path
+
+`src/components/content/Card/Book/Normal.tsx`
+
+#### Props
+
+| Name          | Type           | Required | Default                 | Note |
+| :------------ | :--------------| :------: | :---------------------- | :-------------|
+| `imageUrl`    | `string`       |     O    | -                       | 이미지 Url      |
+| `title`       | `string`       |     O    | -                       | 제목           |
+| `author`      | `string`       |     O    | -                       | 저자           |
+| `imageAlt`     | `string`      |     X    | `"card thumbnail"`      | 이미지 이름      |
+| `onClick`     | `() => void`   |     X    | -       | 클릭할 때의 기능   |
+
+#### Usage
+
+```tsx
+<Normal
+  imageUrl={sampleBook}
+  title="아주 보통의 하루"
+  author="작가 이름"
+/>
+
+<Normal
+ imageUrl="https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg"
+ title="The Little Prince"
+ author="Antoine de Saint-Exupéry"
+/>
+
+ <Normal
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg"
+  title="아주 긴 제목이 들어갔을 때 두 줄까지 말줄임 처리가 잘 되는지 확인하기 위한 테스트용 제목입니다"
+  author="아주 긴 저자명 테스트용"
+  onClick={() => { console.log("normal clicked");}}
+/>
+```
+
+### [ Book/List ]
+
+#### Path
+
+`src/components/content/Card/Book/List.tsx`
+
+#### Props
+
+| Name       | Type                                       | Required | Default | Note |
+| :----------| :---------------------------------------------| :------: | :------ | :---------------------- |
+| `imageUrl` | `string`                                      |     O    | -       | 이미지 url   |
+| `title`    | `string`                                      |     O    | -       | 제목   |
+| `author`   | `string`                                      |     O    | -       | 저자   |
+| `type`     | `"NONE" \| "SEARCH" \| "LIBRARY" \| "REPORT"` |     O    | -       | 제목 리스트에서 사용하는 종류 |
+| `typeLabel`| `string`                                      |     X    | `null`  | 기록에서 도서 선택 페이지에서 독서 전 / 독서 중 / 완독 |
+| `imageAlt` | `string`                                      |     X    | -       | 이미지 이름   |
+| `onClick`  | `() => void`                                  |     X    | -       | 클릭했을 때의 기능   |
+
+#### Usage
+
+```tsx
+<BookList
+  imageUrl={sampleBook}
+  title="검색 결과 도서"
+  author="저자 이름"
+  type="SEARCH"
+/>
+
+<BookList
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg"
+  title="서재 도서"
+  author="Antoine de Saint-Exupéry"
+  type="LIBRARY"
+  typeLabel="01:00:30"
+/>
+
+<BookList
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg"
+  title="아이콘 없이 라벨만 있는 경우"
+  author="Yuval Noah Harari"
+  type="REPORT"
+  typeLabel="완독"
+/>
+
+<BookList
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780439554930-M.jpg"
+  title="아이콘도 라벨도 없는 경우"
+  author="J.K. Rowling"
+  type="NONE"
+/>
+
+<BookList
+  imageUrl={sampleBook}
+  title="아주 긴 제목이 들어갔을 때 한 줄 말줄임 처리가 잘 되는지 확인하기 위한 테스트용 제목입니다"
+  author="아주 긴 저자명 테스트"
+  type="SEARCH"
+  typeLabel="읽는 중"
+  onClick={() => {console.log("book list clicked");}}
+/>
+```
+
+### [ Focus ]
+
+#### Path
+
+`src/components/content/Card/Book/List/Focus.tsx`
+
+#### Props
+
+| Name       | Type              | Required | Default     | Note |
+| :----------| :-----------------| :------: | :---------- | :---------------------- |
+| `imageUrl` | `string`          |     O    | -           | 이미지 url   |
+| `imageAlt` | `string`          |     X    | -           | 이미지 이름   |
+| `timeText` | `string`          |     O    | -           | 시간   |
+| `title`    | `string`          |     O    | -           | 제목 |
+| `author`   | `string`          |     O    | -           | 저자 |
+| `onClick`  | `() => void`      |     X    | -           | 클릭했을 때의 기능   |
+
+#### Usage
+
+```tsx
+<Focus
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg"
+  timeText="01:24:12"
+  title="The Little Prince"
+  author="Antoine de Saint-Exupéry"
+/>
+
+<Focus
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg"
+  timeText="12:59:59"
+  title="아주 긴 제목이 들어갔을 때 한 줄 말줄임 처리가 잘 되는지 확인하기 위한 테스트용 제목입니다"
+  author="아주 긴 저자명 테스트"
+  onClick={() => { console.log("media info card clicked");}}
+/>
+```
+
+### [ Report ]
+
+#### Path
+
+`src/components/content/Card/Book/List/Report.tsx`
+
+#### Props
+
+| Name           | Type              | Required | Default         | Note |
+| :--------------| :-----------------| :------: | :-------------- | :---------------------- |
+| `imageUrl`     | `string`          |     O    | -               | 이미지 url   |
+| `title`        | `string`          |     O    | -               | 제목 |
+| `author`       | `string`          |     O    | -               | 저자 |
+| `recent`       | `string`          |     O    | -               | 최근 리뷰 |
+| `reviewNumber` | `number`          |     O    | -               | 리뷰 수 |
+| `imageAlt`     | `string`          |     X    |`"report cover"` | 이미지 이름 |
+| `onClick`      | `() => void`      |     X    | -               | 클릭했을 때의 기능   |
+
+#### Usage
+
+```tsx
+<Report
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg"
+  title="아주 긴 제목이 들어갔을 때 한 줄 말줄임 처리가 잘 되는지 확인하는 테스트용 제목입니다"
+  author="아주 긴 저자명 테스트"
+  recent="이 문장도 최근 리포트가 길어졌을 때 두 줄까지 자연스럽게 말줄임 처리되는지 확인하기 위한 테스트용 문장입니다."
+  reviewNumber={3}
+/>
+
+<Report
+  imageUrl="https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg"
+  title="나는 오늘 어디까지라도 달릴 수 있어"
+  author="윤지한"
+  recent="최근 리포트 문장입니다. 두 줄 영역 안에서 얼마나 자연스럽게 정리되는지 확인합니다."
+  reviewNumber={99}
+  onClick={() => {console.log("report clicked");}}/>
+```
+
+### [ Report/List ]
+
+#### Path
+`src/components/content/Card/Report/List.tsx`
+
+#### Props
+| Name            | Type                 | Required | Default     | Note              |
+| :-------------- | :------------------- | :------: | :---------- | :--------------   |
+| `date`          | `string`             |     O    | -           | chip의 사이즈       |
+| `emoji`         | `string`             |     O    | -           | emoji 문자       |
+| `variant`       | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |     X    |  `yellow`          | emoji 색상       |
+| `review`        | `string`             |     O    | -           | emoji 옆 텍스트   |
+| `image`         | `string[]`           |     X    |`[]`         | chip의 비활성화/활성화 여부      |
+| `onClick`       | `() => void`         |     X    | -           | 해당 컴포넌트 눌럿을 때의 함수  |
+
+#### Usage
+```tsx
+<ReportList
+  date="25.09.13"
+  emoji="(T_T)"
+  variant="blue"
+  review="생각이 많아서 초반에는 잘 안 읽혔는데, 중간부터 조금씩 흐름을 탔다. 마지막 문장이 특히 오래 남았다."
+  images={[sampleBook]}
+/>
+
+<ReportList
+  date="25.09.14"
+  emoji="(>_<)"
+  variant="red"
+  review="오늘 기록은 이미지 여러 장이 들어갔을 때의 레이아웃을 확인하기 위한 테스트입니다. 줄 수가 늘어나면 카드 높이도 자연스럽게 커져야 합니다."
+  images={[
+    sampleBook,
+    "https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg",
+    "https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg",
+    "https://covers.openlibrary.org/b/isbn/9780439554930-M.jpg",
+    "https://covers.openlibrary.org/b/isbn/9780140449136-M.jpg",
+  ]}
+/>
+```
+
+
+
+### [ SectionHeader ]
+
+#### Path
+
+`src/components/content/InformationText/SectionHeader.tsx`
+
+#### Props
+
+| Name          | Type                               | Required | Default | Note                    |
+| :------------ | :--------------------------------- | :------: | :------ | :---------------------- |
+| `size`        | `"13" \| "14" \| "16" \| "20" \|`  |     O    | -       | 컴포넌트 사이즈             |
+| `top`         | `ReactNode`                        |     O    | -       | 윗 칸  |
+| `bottom`      | `ReactNode`                        |     X    | -       | 아래 칸                |
+| `onToggle`    | `(open: boolean) => void`          |     X    | -       | 토글 내렸을 때의 함수         |
+| `onClick`     | `() => void`                       |     X    | -       | 해당 컴포넌트 눌럿을 때의 함수  |
+
+#### Usage
+
+```tsx
+//size 13 (토글 없음, 원하면 onClick 추가 가능)
+<SectionHeader
+  size="13"
+  top={<span>Text</span>}
+  bottom={<span>Text</span>}
+/>
+
+//size 14 (토글 잇음, 밑 설명단 없음)
+<SectionHeader
+  size="14"
+  top={<CustomTitle />}
+ />
+
+//size 16 (토글 있음, 밑 설명단 있음)
+<SectionHeader
+  size="16"
+  top={<span>제목</span>}
+  bottom={<CustomDescription />}
+/> 
+```
+
+### [ Information Section ]
+
+#### Path
+
+`src/components/content/InformationText/InformationSection.tsx`
+
+#### Props
+
+| Name          | Type                                | Required | Default | Note                    |
+| :------------ | :---------------------------------- | :------: | :------ | :---------------------- |
+| `flow`        | `"vertical" \| "horizontal" `       |     O    | -       | 수직/수평 선택             |
+| `top`         | `string`                            |     O    | -       | 위 또는 왼쪽 텍스트   |
+| `bottom`      | `string`                            |     O    | -       | 아래 또는 오른쪽 테스트               |
+| `onToggle`    | `(open: boolean) => void`           |     X    | -       | 토글 내렸을 때의 함수         |
+| `onClick`     | `() => void`                        |     X    | -       | 해당 컴포넌트 눌럿을 때의 함수  |
+
+#### Usage
+
+```tsx
+//vertical
+ <InformationSection
+  flow="vertical"
+  top="Text"
+  bottom="세로형 설명 텍스트입니다."
+  onClick={() => { console.log("vertical click");}}
+  onToggle={(open) => { console.log("vertical toggle:", open); }}
+/>
+
+//horizontal
+<InformationSection
+  flow="horizontal"
+  top="Text"
+  bottom="가로형 설명 텍스트입니다."
+/>
+```
+
+### [ DayOfTheWeek ]
+
+#### Path
+
+`components/content/Calendar/Resource/DayOfTheWeek.tsx`
+
+#### Props
+
+| Name    | Type       | Required  | Default | Note    |
+| :------ | :--------- | :-------: | :------ | :------ |
+| text    | `string`   |     O     |   -     |   요일   |
+
+#### Usage
+
+```tsx
+<DayOfTheWeek text="T" />
+```
+
+### [ Day ]
+
+#### Path
+
+`components/content/Calendar/Resource/Day.tsx`
+
+#### Props
+
+| Name    | Type       | Required  | Default | Note    |
+| :------ | :--------- | :-------: | :------ | :------ |
+| text    | `string`   |     O     |   -     |   요일   |
+| disable | `boolean`  |     X     | `true`  |   활성화 유무 (비활성화 = true)   |
+
+#### Usage
+
+```tsx
+<Day text="1" />
+<Day text="M" disable={false} />
+```
+
+### [ Indicator ]
+
+#### Path
+
+`components/content/Calendar/Resource/Indicator.tsx`
+
+#### Props
+
+| Name    | Type                                               | Required  | Default | Note    |
+| :------ | :------------------------------------------------- | :-------: | :------ | :------ |
+| percent | `"none" \| "0" \| "25" \| "50" \| "75" \| "100"`   |     O     |   -     |  퍼센트   |
+
+#### Usage
+
+```tsx
+<Indicator percent="0" />
+```
+
+### [ IndicatorSet ]
+
+#### Path
+
+`components/content/Calendar/Resource/IndicatorSet.tsx`
+
+#### Props
+
+| Name    | Type                                               | Required  | Default | Note    |
+| :------ | :------------------------------------------------- | :-------: | :------ | :------ |
+| day     | `string`                                           |     O     |   -     |  퍼센트   |
+| disble  | `boolean`                                          |     X     |  `true` |  활성화 유무   |
+| percent | `"none" \| "0" \| "25" \| "50" \| "75" \| "100"`   |     X     |  `none` |  퍼센트   |
+
+#### Usage
+
+```tsx
+<IndicatorSet day="TT"/>
+<IndicatorSet day="TT" disable={false}  percent="0" />
+
+```
+
+### [ BookSet ]
+
+#### Path
+
+`components/content/Calendar/Resource/BookSet.tsx`
+
+#### Props
+
+| Name     | Type                      | Required  | Default   | Note    |
+| :------- | :-------------------------| :-------: | :-------- | :------ |
+| day      | `string`                  |     O     |   -       |  퍼센트   |
+| visible  | `boolean`                 |     X     |  `false`  |   시각화 유무   |
+| disble   | `boolean`                 |     X     |  `false`  |  활성화 유무   |
+| count    | `"single" \| "multiple"`  |     X     |  `single` |  도서 수 여러 개 유무   |
+| imageUrl | `string`                  |     X     |  -        |  도서 이미지   |
+| bookNum  | `number`                  |     X     |   `0`     |  도서 개수   |
+
+#### Usage
+
+```tsx
+<BookSet day="TT" visible={false} />
+
+<BookSet
+  day="TT"
+  visible
+  disable
+  imageUrl="https://picsum.photos/44/64?random=1"
+/>
+
+<BookSet
+  day="TT"
+  visible
+  disable={false}
+  count="single"
+  imageUrl="https://picsum.photos/44/64?random=3"
+/>
+
+<BookSet
+  day="TT"
+  visible
+  disable={false}
+  count="multiple"
+  bookNum={2}
+  imageUrl="https://picsum.photos/44/64?random=5"
+/>
+```
 
 ### [ EmptyState ]
 
@@ -813,11 +1257,41 @@ const MOCK_RANKS = [
 />
 ```
 
+### [ Profile ]
+
+#### Path
+
+`components/content/Profile/Profile.tsx`
+
+#### Props
+
+| Name      | Type         | Required  | Default | Note    |
+| :-------- | :----------- | :-------: | :------ | :------ |
+| active    | `boolean`    |     X     | `true`  |   활성화 유무    |
+| imageUrl  | `string`     |     O     |   -     |  이미지 url  |
+| name      | `string`     |     O     |   -     |  이름  |
+| time      | `string`     |     O     |   -     |  시간  |
+
+#### Usage
+
+```tsx
+<Profile
+  imageUrl="https://picsum.photos/56/56?random=1"
+  name="수연"
+  time="09:00"
+/>
+
+<Profile
+  active={false}
+  imageUrl="https://picsum.photos/56/56?random=3"
+  name="수연"
+  time="09:00"
+/>
+```
 
 ---
 
 ## 8. Feedback
-
 > - **Design**: https://www.figma.com/design/VX3WcpitSSgsYxFoXlbgcA/NOOK-UI--%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9A%A9-?node-id=1268-9814&m=dev
 > - **Author**: 오은진
 

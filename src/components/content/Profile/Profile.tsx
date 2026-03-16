@@ -24,14 +24,22 @@ export default function Profile({
       />
 
       <div
-        className={["w-fullitems-center text-center",
-          "[&_p:last-child]:!text-label-13-sb",
-          active
-            ? "[_p:first-child]:!&text-gray-90 [&_p:last-child]:!text-gray-50"
-            : "[&_p:first-child]:!text-gray-50 [&_p:last-child]:!text-gray-50",
-        ].join(" ")}
-      >
-        <SectionHeader size="13" top={name} bottom={time} />
+        className="w-full text-center">
+        <SectionHeader size="13" 
+            top={
+                active ? (
+                    name
+                ) : (
+                    <span className="text-gray-35">{name}</span>
+                )
+            } 
+            bottom={
+                active ? (
+                    <span className="text-label-13-r"> {time} </span>
+                ) : (
+                    <span className="text-gray-35">{time}</span>
+                )
+            } />
       </div>
     </div>
   );
