@@ -105,7 +105,7 @@ export default function SearchPage() {
         onEnter={() => handleSearch()}
         onFocus={() => setMode("searching")}
         onBlur={() => {}}
-        isInputMode={isInputMode}
+        
         onClose={() => {
           setQuery("");
           setSubmittedQuery("");
