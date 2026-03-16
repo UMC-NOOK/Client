@@ -1,4 +1,4 @@
-import SectionHeader from "../InformationText/SectionHeader" 
+import SectionHeader from "./SectionHeader" 
 
 type InformationSectionFlow = "vertical" | "horizontal"; 
 

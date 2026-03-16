@@ -1,5 +1,5 @@
-import SectionHeader from "../../InformationText/SectionHeader";
-import { Emotion } from "../../../action/Chip/Emotion";
+import SectionHeader from "../../cnformationText/SectionHeader";
+import { Emotion } from "../../../action/chip/Emotion";
 
 type EmotionVariant = "yellow" | "pink" | "green" | "blue" | "red" | "none";
 

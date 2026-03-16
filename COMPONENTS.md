@@ -336,7 +336,7 @@ const [birth, setBirth] = useState({
 ### [ Icon ]
 
 #### Path
-`src/components/action/Button/Icon.tsx`
+`src/components/action/button/Icon.tsx`
 
 #### Props
 | Name            | Type                               | Required | Default     | Note              |
@@ -355,7 +355,7 @@ const [birth, setBirth] = useState({
 ### [ Text ]
 
 #### Path
-`src/components/action/Button/Text.tsx`
+`src/components/action/button/Text.tsx`
 
 #### Props
 | Name            | Type                               | Required | Default     | Note              |
@@ -374,7 +374,7 @@ const [birth, setBirth] = useState({
 ### [ Solid ]
 
 #### Path
-`src/components/action/Button/Solid.tsx`
+`src/components/action/button/Solid.tsx`
 
 #### Props
 | Name            | Type                               | Required | Default     | Note              |
@@ -414,7 +414,7 @@ const [birth, setBirth] = useState({
 ### [ ContainerText ]
 
 #### Path
-`src/components/action/Button/ContainerText.tsx`
+`src/components/action/button/ContainerText.tsx`
 
 #### Props
 | Name            | Type                               | Required | Default     | Note              |
@@ -435,7 +435,7 @@ const [birth, setBirth] = useState({
 
 #### Path
 
-`src/components/action/Chip/Chip.tsx`
+`src/components/action/chip/Chip.tsx`
 
 #### Props
 
@@ -473,7 +473,7 @@ const [isActive, setIsActive] = useState(false);
 ### [ Emotion ]
 
 #### Path
-`src/components/Chip/Emotion.tsx`
+`src/components/chip/Emotion.tsx`
 
 #### Props
 | Name            | Type                               | Required | Default     | Note              |
@@ -771,7 +771,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`components/content/list/Resource/Date`
+`components/content/list/resource/Date`
 
 #### Props
 
@@ -792,7 +792,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`src/components/content/Card/BookGoal/BookGoal.tsx`
+`src/components/content/card/bookGoal/BookGoal.tsx`
 
 #### Props
 
@@ -820,7 +820,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`src/components/content/Card/Book/Normal.tsx`
+`src/components/content/card/book/Normal.tsx`
 
 #### Props
 
@@ -859,7 +859,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`src/components/content/Card/Book/List.tsx`
+`src/components/content/card/book/List.tsx`
 
 #### Props
 
@@ -920,7 +920,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`src/components/content/Card/Book/List/Focus.tsx`
+`src/components/content/card/book/list/Focus.tsx`
 
 #### Props
 
@@ -993,7 +993,7 @@ const MOCK_RANKS = [
 ### [ Report/List ]
 
 #### Path
-`src/components/content/Card/Report/List.tsx`
+`src/components/content/card/report/List.tsx`
 
 #### Props
 | Name            | Type                 | Required | Default     | Note              |
@@ -1036,7 +1036,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`src/components/content/InformationText/SectionHeader.tsx`
+`src/components/content/informationText/SectionHeader.tsx`
 
 #### Props
 
@@ -1076,7 +1076,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`src/components/content/InformationText/InformationSection.tsx`
+`src/components/content/informationText/InformationSection.tsx`
 
 #### Props
 
@@ -1114,7 +1114,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`components/content/Calendar/Resource/DayOfTheWeek.tsx`
+`components/content/calendar/resource/DayOfTheWeek.tsx`
 
 #### Props
 
@@ -1132,7 +1132,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`components/content/Calendar/Resource/Day.tsx`
+`components/content/calendar/resource/Day.tsx`
 
 #### Props
 
@@ -1152,7 +1152,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`components/content/Calendar/Resource/Indicator.tsx`
+`components/content/calendar/resource/Indicator.tsx`
 
 #### Props
 
@@ -1170,7 +1170,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`components/content/Calendar/Resource/IndicatorSet.tsx`
+`components/content/calendar/resource/IndicatorSet.tsx`
 
 #### Props
 
