@@ -85,8 +85,6 @@ export default function SearchPage() {
     });
   };
 
-  const isInputMode = mode === "searching";
-
   return (
     <div className="w-full pb-10">
       <SearchTopSection
