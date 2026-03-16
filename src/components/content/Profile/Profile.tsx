@@ -31,7 +31,7 @@ export default function Profile({
             : "[&_p:first-child]:!text-gray-50 [&_p:last-child]:!text-gray-50",
         ].join(" ")}
       >
-        <SectionHeader size="13" title={name} description={time} />
+        <SectionHeader size="13" top={name} bottom={time} />
       </div>
     </div>
   );

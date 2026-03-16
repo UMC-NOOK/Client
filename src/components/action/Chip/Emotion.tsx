@@ -53,7 +53,7 @@ export function Emotion({
 
     if (props.size === "s") {
         return (
-        <span className={[base, sizeClassMap.s, active ? "" : color,].join(" ")}>
+        <span className={[base, sizeClassMap.s, active ? color : ""].join(" ")}>
          <span className={emoji}>{props.emoji}</span>
         </span>
         );

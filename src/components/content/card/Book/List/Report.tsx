@@ -2,7 +2,7 @@ type Props = {
   imageUrl: string;
   title: string;
   author: string;
-  reportText: string;
+  recent: string;
   reviewNumber: number;
   imageAlt?: string;
   onClick?: () => void;
@@ -14,7 +14,7 @@ export default function Report({
   imageUrl,
   title,
   author,
-  reportText,
+  recent,
   reviewNumber,
   imageAlt = "report cover",
   onClick,
@@ -26,7 +26,7 @@ export default function Report({
       onClick={onClick}
       role={clickable ? "button" : undefined}
       tabIndex={clickable ? 0 : undefined}
-      className="flex w-[343px] items-start gap-3 rounded-[4px] bg-gray-15 p-4"
+      className="flex w-full  items-start gap-3 rounded-[4px] bg-gray-15 p-4"
     >
       <div
         className="flex w-14 self-stretch shrink-0 items-center justify-center rounded-[2px] bg-cover bg-center bg-no-repeat"
@@ -56,7 +56,7 @@ export default function Report({
         </p>
 
         <p className="line-clamp-2 min-h-[37px] w-full overflow-hidden text-body-12-r text-gray-80">
-          {reportText}
+          {recent}
         </p>
       </div>
     </div>
