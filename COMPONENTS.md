@@ -771,6 +771,32 @@ const MOCK_RANKS = [
 
 ```
 
+### [ EmptyState ]
+
+#### Path
+
+`components/content/EmptyState/EmptyState.tsx`
+
+#### Props
+
+| Name          | Type         | Required  | Default | Note    |
+| :------------ | :----------- | :-------: | :------ | :------ |
+| text          | `string`     |     O     |   -     |   텍스트    |
+| buttonText    | `string`     |     X     |   -     |  버튼 이름  |
+| onButtonClick | `() => void` |     X     |   -     |  버튼 클릭 함수  |
+
+#### Usage
+
+```tsx
+<EmptyState text="표시할 항목이 없습니다." />
+
+<EmptyState
+  text="아직 등록된 일정이 없습니다."
+  buttonText="추가하기"
+  onButtonClick={() => {console.log("추가하기 클릭");}}
+/>
+```
+
 
 ---
 
