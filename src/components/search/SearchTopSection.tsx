@@ -1,3 +1,4 @@
+//Client/src/components/search/SearchTopSection.tsx
 import { useEffect, useState } from "react";
 import closeIcon from "../../assets/logo/close-button.svg";
 import SearchInput from "../input/SearchField";

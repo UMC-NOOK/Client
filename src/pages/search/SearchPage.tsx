@@ -1,43 +1,94 @@
-import { useState } from "react";
-import SearchTopSection, { type SearchScope } from "../../components/search/SearchTopSection";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import SearchTopSection, {
+  type SearchScope,
+} from "../../components/search/SearchTopSection";
 import AllBookListSection from "../../components/search/AllBookListSection";
 import MyLibraryListSection from "../../components/search/MyLibraryListSection";
-import RecentKeywordSection, { type RecentKeyword } from "../../components/search/RecentKeywordSection";
+import RecentKeywordSection, {
+  type RecentKeyword,
+} from "../../components/search/RecentKeywordSection";
 import SearchResultSection from "../../components/search/SearchResultSection";
-import { useNavigate } from "react-router-dom";
+import { useInfiniteSearchBooks } from "../../hooks/queries/useInfiniteSearchBooks";
+import { useSearchHistories } from "../../hooks/queries/useSearchHistories";
+import type { SearchBooksResult } from "../../api/search";
+import { useDeleteSearchHistory } from "../../hooks/mutations/useDeleteSearchHIstory";
 
 type ViewMode = "idle" | "searching" | "results";
 
-const MOCK_RECENT: RecentKeyword[] = [
-  { id: 1, text: "파과" },
-  { id: 2, text: "구유경" },
-  { id: 3, text: "승민이" },
-  { id: 4, text: "오경민" },
-  { id: 5, text: "치즈 이야기" },
-  { id: 6, text: "체인소맨" },
-];
-
 export default function SearchPage() {
   const navigate = useNavigate();
+
   const [scope, setScope] = useState<SearchScope>("all");
   const [query, setQuery] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [mode, setMode] = useState<ViewMode>("idle");
-  const [recent, setRecent] = useState<RecentKeyword[]>(MOCK_RECENT);
+  const [recent, setRecent] = useState<RecentKeyword[]>([]);
 
+  const searchType = scope === "all" ? "GLOBAL" : "LIBRARY";
+  useDeleteSearchHistory();
+
+  const { data: historyData } = useSearchHistories({
+    type: searchType,
+    enabled: mode === "searching",
+  });
+
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteSearchBooks({
+    type: searchType,
+    keyword: submittedQuery,
+    enabled: mode === "results" && !!submittedQuery.trim(),
+  });
+
+  useEffect(() => {
+    if (!historyData) return;
+
+    setRecent(
+      historyData.map((text, index) => ({
+        id: index + 1,
+        text,
+      })),
+    );
+  }, [historyData]);
+
+  const books = useMemo(() => {
+    if (!data?.pages) return [];
+    return data?.pages
+      .flatMap((page: SearchBooksResult) =>
+         Array.isArray(page.books) ? page.books : [],
+      )
+      .filter(Boolean);
+    },[data]);
+  
+  const totalResults = data?.pages?.[0]?.totalResults ?? 0;
+  const safeBooks = Array.isArray(books) ? books : [];
+  
   const handleSearch = (overrideQuery?: string) => {
-    const target = overrideQuery ?? query; // 인자가 있으면 그걸로 검색
-    if (!target.trim()) return;
+    const target = (overrideQuery ?? query).trim();
+    if (!target) return;
 
-    setQuery(target);          
-    setSubmittedQuery(target); 
-    setMode("results");        // 결과 화면으로 전환
+    setQuery(target);
+    setSubmittedQuery(target);
+    setMode("results");
+
+    setRecent((prev) => {
+      const withoutDup = prev.filter((item) => item.text !== target);
+      return [{ id: Date.now(), text: target }, ...withoutDup].slice(0, 10);
+    });
   };
 
   const isInputMode = mode === "searching";
 
   return (
-    <div className="w-full pb-10"> {/* 하단 여백 확보 */}
+    <div className="w-full pb-10">
       <SearchTopSection
         title="도서 검색"
         activeScope={scope}
@@ -56,33 +107,48 @@ export default function SearchPage() {
         onBlur={() => {}}
         isInputMode={isInputMode}
         onClose={() => {
-            setQuery("");
-            setMode("idle");
-            navigate(-1);
+          setQuery("");
+          setSubmittedQuery("");
+          setMode("idle");
+          navigate(-1);
         }}
       />
 
-      {/* 1. 검색 중 화면 (최근 검색어) */}
       {mode === "searching" && (
         <RecentKeywordSection
           keywords={recent}
-          onDelete={(id) => setRecent((prev) => prev.filter((k) => k.id !== id))}
+          onDelete={(id) =>
+            setRecent((prev) => prev.filter((k) => k.id !== id))
+          }
           onClickKeyword={(text) => {
             handleSearch(text);
           }}
         />
       )}
 
-      {/* 2. 기본(idle) 화면: 탭에 따라 컴포넌트 교체 */}
-      {mode === "idle" && (
-        scope === "all" ? <AllBookListSection /> : <MyLibraryListSection />
-      )}
+      {mode === "idle" &&
+        (scope === "all" ? <AllBookListSection /> : <MyLibraryListSection />)}
 
-      {/* 3. 검색 결과 화면 */}
       {mode === "results" && (
-        <SearchResultSection 
-          scope={scope} 
-          query={submittedQuery} 
+        <SearchResultSection
+          scope={scope}
+          query={submittedQuery}
+          books={safeBooks}
+          totalResults={totalResults}
+          isLoading={isLoading}
+          isError={isError}
+          errorMessage={
+            error instanceof Error
+              ? error.message
+              : "검색 중 오류가 발생했습니다."
+          }
+          hasNext={!!hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          onLoadMore={() => {
+            if (hasNextPage && !isFetchingNextPage) {
+              fetchNextPage();
+            }
+          }}
           onDirectAdd={() => navigate("/search/new")}
         />
       )}
