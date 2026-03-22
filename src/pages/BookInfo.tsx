@@ -8,7 +8,7 @@ import BottomSheet from "../components/presentation/modal/bottomsheet/Origin";
 import PopupConfirmModal from "../components/presentation/modal/popup/Origin";
 import MaskGradient from "../components/layout/MaskGradient";
 import Snackbar from "../components/feedback/snackbar";
-import { HistoryInfoCard } from "../components/content/list/History";
+import HistoryInfoCard from "../components/content/list/History";
 // import { ResourceDate } from "../components/content/list/Resource/Date";
 // assets
 import chevron_left from "../assets/icons/chevron_left.svg";

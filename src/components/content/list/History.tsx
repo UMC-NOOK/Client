@@ -9,7 +9,7 @@ type Props = {
   hasIcon?: boolean;
 };
 
-export function HistoryInfoCard({
+export default function HistoryInfoCard({
   variant,
   time,
   title,
