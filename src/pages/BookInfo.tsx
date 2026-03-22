@@ -9,6 +9,7 @@ import PopupConfirmModal from "../components/presentation/modal/popup/Origin";
 import MaskGradient from "../components/layout/MaskGradient";
 import Snackbar from "../components/feedback/snackbar";
 import HistoryInfoCard from "../components/content/list/History";
+import InformationSection from "../components/content/InformationText/InformationSection";
 // import { ResourceDate } from "../components/content/list/Resource/Date";
 // assets
 import chevron_left from "../assets/icons/chevron_left.svg";
@@ -38,7 +39,8 @@ const bookData = {
       mallTypeCode: "BOOK",
       category: "IT",
       pages: 900,
-      description: "자바의 정석 기초편...",
+      description:
+        "자바의 정석 기초편 출간 20주년 기념판. 자바의 정석은 자바 입문서의 스테디셀러로, 2002년 출간 이후 20년 동안 꾸준히 사랑받아온 책입니다. 이번에 출간된 기념판은 자바의 최신 버전인 자바 17을 기반으로 내용을 대폭 보강하였으며, 기존의 친절한 설명과 자세한 예제는 그대로 유지하면서도 최신 트렌드와 기술을 반영하여 독자들이 자바를 더욱 쉽고 재미있게 배울 수 있도록 구성하였습니다.",
       coverImageUrl: "https://image.aladin.co.kr/...",
       aladinLink: "http://...",
       sourceType: "ALADIN",
@@ -190,40 +192,36 @@ export default function BookInfo() {
       </div>
       {/* 하단 */}
       {selectedTab === "info" ? (
-        <div className="flex flex-col justify-content items-center gap-10 mt-8">
+        <div className="flex flex-col justify-center items-center gap-10 mt-8">
           <div className="grid grid-cols-2 gap-8 text-gray-90">
-            <div className="col-span-2 flex flex-col gap-3">
-              {/* 컴포넌트 개발 시 리팩토링*/}
-              <div className="text-label-14-sb">소개</div>
-              <div className="text-body-14-r">
-                {bookData.result.book.description}
-              </div>
+            <div className="col-span-2 w-full">
+              <InformationSection
+                flow="vertical"
+                top="소개"
+                bottom={bookData.result.book.description}
+              />
             </div>
-            <div className=" flex flex-col gap-3">
-              <div className="text-label-14-sb ">분야</div>
-              <div className="text-body-14-r">
-                {bookData.result.book.category}
-              </div>
-            </div>
-            <div className=" flex flex-col gap-3">
-              <div className="text-label-14-sb">분량</div>
-              <div className="text-body-14-r">
-                {bookData.result.book.pages}쪽
-              </div>
-            </div>
-            <div className=" flex flex-col gap-3">
-              <div className="text-label-14-sb">출판</div>
-              <div className="text-body-14-r">
-                {bookData.result.book.publisher} (
-                {bookData.result.book.publicationDate})
-              </div>
-            </div>
-            <div className=" flex flex-col gap-3">
-              <div className="text-label-14-sb">ISBN</div>
-              <div className="text-body-14-r">
-                {bookData.result.book.isbn13}
-              </div>
-            </div>
+
+            <InformationSection
+              flow="vertical"
+              top="분야"
+              bottom={bookData.result.book.category}
+            />
+            <InformationSection
+              flow="vertical"
+              top="분량"
+              bottom={`${bookData.result.book.pages}쪽`}
+            />
+            <InformationSection
+              flow="vertical"
+              top="출판"
+              bottom={`${bookData.result.book.publisher} (${bookData.result.book.publicationDate})`}
+            />
+            <InformationSection
+              flow="vertical"
+              top="ISBN"
+              bottom={bookData.result.book.isbn13}
+            />
           </div>
           {/* 컴포넌트 개발 시 리팩토링*/}
           <div className="flex gap-2 text-gray-50 text-label-12-sb">
