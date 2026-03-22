@@ -163,7 +163,7 @@ export default function BookInfo() {
               className="w-full h-full blur-[20px] opacity-50"
             />
             <div className="absolute inset-0 bg-black opacity-40" />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-10" />
+            <div className="absolute inset-0 bg-linear-to-b from-transparent to-gray-10" />
           </div>
         </div>
         <div className="relative z-10">
@@ -439,14 +439,14 @@ export default function BookInfo() {
         />
       )}
       {/* 스낵바 */}
-      {snackbar.open && (
-        <Snackbar
-          icon={book_shelf}
-          text={snackbar.message}
-          buttonText="서재로 이동"
-          onButtonClick={onClickSnackbar}
-        />
-      )}
+      <Snackbar
+        icon={book_shelf}
+        isOpen={snackbar.open}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        text={snackbar.message}
+        buttonText="서재로 이동"
+        onButtonClick={onClickSnackbar}
+      />
     </div>
   );
 }
