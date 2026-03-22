@@ -1158,12 +1158,14 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name          | Type   | Required | Default | Note           |
-| :------------ | :----- | :------: | :------ | :------------- |
-| icon          | string |    X     | -       | 아이콘 url     |
-| text          | string |    O     | -       | snack bar 문구 |
-| buttonText    | string |    O     | -       | 버튼 문구      |
-| onButtonClick | void   |    O     | -       | 버튼 클릭 함수 |
+| Name          | Type       | Required | Default | Note               |
+| :------------ | :--------- | :------: | :------ | :----------------- |
+| icon          | string     |    X     | -       | 아이콘 url         |
+| text          | string     |    O     | -       | snack bar 문구     |
+| buttonText    | string     |    O     | -       | 버튼 문구          |
+| onButtonClick | () => void |    O     | -       | 버튼 클릭 함수     |
+| isOpen        | boolean    |    O     | -       | snackbar 노출 여부 |
+| onClose       | () => void |    X     | -       | snackbar 종료 함수 |
 
 #### Usage
 
@@ -1171,13 +1173,19 @@ const MOCK_RANKS = [
 해당 컴포넌트는 `z-100`으로 설정되어 있음
 
 ```tsx
-import camera from "../../assets/icons/camera-gray.svg";
+import book_shelf from "../assets/icons/book_shelf-gray-30.svg";
+const [snackbar, setSnackbar] = useState({
+  open: false,
+  message: "",
+});
 
 <Snackbar
-  icon={camera}
-  text="내 서재에 도서를 등록했어요."
-  buttonText="확인"
-  onButtonClick={() => alert("Snackbar button clicked!")}
+  icon={book_shelf}
+  isOpen={snackbar.open}
+  onClose={() => setSnackbar({ ...snackbar, open: false })}
+  text={snackbar.message}
+  buttonText="서재로 이동"
+  onButtonClick={onClickSnackbar}
 />;
 ```
 
@@ -1189,17 +1197,23 @@ import camera from "../../assets/icons/camera-gray.svg";
 
 #### Props
 
-| Name | Type   | Required | Default | Note           |
-| :--- | :----- | :------: | :------ | :------------- |
-| icon | string |    X     | -       | 아이콘 url     |
-| text | string |    O     | -       | snack bar 문구 |
+| Name    | Type       | Required | Default | Note            |
+| :------ | :--------- | :------: | :------ | :-------------- |
+| icon    | string     |    X     | -       | 아이콘 url      |
+| text    | string     |    O     | -       | toast 문구      |
+| isOpen  | boolean    |    O     | -       | toast 노출 여부 |
+| onClose | () => void |    X     | -       | toast 종료 함수 |
 
 #### Usage
 
 ```tsx
-import camera from "../../assets/icons/camera-gray.svg";
+const [isToastOpen, setIsToastOpen] = useState(false);
 
-<Toast icon={camera} text="내 서재에 도서를 등록했어요." />;
+<Toast
+  isOpen={isToastOpen}
+  onClose={() => setIsToastOpen(false)}
+  text="저장되었습니다."
+/>;
 ```
 
 ---
