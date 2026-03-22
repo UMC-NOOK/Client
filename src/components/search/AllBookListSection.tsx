@@ -1,3 +1,4 @@
+//Client/src/components/search/AllBookListSection.tsx
 import { useRef } from "react";
 import bookCover from "../../assets/search/mock_bookcover.svg";
 import { bestBooks, recommendedBooks, type Book } from "./mock/allBooks";

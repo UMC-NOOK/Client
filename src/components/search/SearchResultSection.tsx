@@ -2,76 +2,57 @@
 import bookCover from "../../assets/search/mock_bookcover.svg";
 import physicalBookIcon from "../../assets/search/card-book-icon-shape.svg";
 import type { SearchScope } from "./SearchTopSection";
-
-// Mock Data Imports
-import { allBooks as allBooksExternal } from "./mock/allBooks";
-import {
-  focusedBooks,
-  unreadBooks,
-  fallbackRecommendedBooks,
-} from "./mock/myLibrary";
+import type { SearchBookItem } from "../../api/search";
 
 type Props = {
-  scope: SearchScope; // "all" | "my"
+  scope: SearchScope;
   query: string;
+  books: SearchBookItem[];
+  totalResults?: number;
+  isLoading?: boolean;
+  isError?: boolean;
+  errorMessage?: string;
+  hasNext?: boolean;
+  isFetchingNextPage?: boolean;
+  onLoadMore?: () => void;
   onDirectAdd?: () => void;
 };
-
-type Book = {
-  id: number | string;
-  title: string;
-  author: string;
-  category: string;
-  isInMyLibrary: boolean;
-};
-
-function uniqById<T extends { id: any }>(arr: T[]) {
-  const seen = new Set<any>();
-  const out: T[] = [];
-  for (const x of arr) {
-    if (seen.has(x.id)) continue;
-    seen.add(x.id);
-    out.push(x);
-  }
-  return out;
-}
 
 function ResultRow({
   book,
   showDivider,
 }: {
-  book: Book;
+  book: SearchBookItem;
   showDivider: boolean;
 }) {
   return (
     <div className="flex flex-col items-center self-stretch">
-      {/* row */}
       <div className="w-full flex items-start gap-3 py-3 relative">
-        {/* cover */}
         <div className="flex justify-center items-center shrink-0 w-14 h-20.5">
           <img
-            src={bookCover}
-            alt={book.title}
+            src={book?.coverImageUrl || bookCover}
+            alt={book?.title || "book cover"}
             draggable={false}
             className="w-14 h-20.5 object-cover rounded-xs"
+            onError={(e) => {
+              e.currentTarget.src = bookCover;
+            }}
           />
         </div>
 
-        {/* text */}
         <div className="flex-1 flex flex-col items-start min-w-0">
           <div className="w-full break-keep line-clamp-2 text-gray-90 text-subtitle-14-sb mb-0.5">
             <span>
-              [{book.category}] {book.title}
+              [{book?.mallType ?? "BOOK"}] {book?.title ?? ""}
             </span>
           </div>
 
           <div className="w-full truncate text-gray-70 text-body-13-r">
-            {book.author}
+            {book?.author ?? ""}
           </div>
         </div>
 
-        {/* icon */}
-        {!book.isInMyLibrary && (
+        {!book?.inLibrary && (
           <div
             aria-hidden="true"
             className="absolute left-17 bottom-3 w-4 h-4 pointer-events-none flex items-center justify-start"
@@ -86,7 +67,6 @@ function ResultRow({
         )}
       </div>
 
-      {/* divider */}
       {showDivider && (
         <div className="w-full flex flex-col items-center py-1">
           <div className="w-full h-px bg-gradient-divider" />
@@ -131,52 +111,64 @@ function DirectAddRow({
 export default function SearchResultSection({
   scope,
   query,
+  books,
+  isLoading = false,
+  isError = false,
+  errorMessage,
+  hasNext = false,
+  isFetchingNextPage = false,
+  onLoadMore,
   onDirectAdd,
 }: Props) {
-  const q = query.trim().toLowerCase();
+  const q = query.trim();
+  const safeBooks = Array.isArray(books) ? books : [];
+  const filtered = q ? safeBooks : [];
+  const isEmpty = !isLoading && filtered.length === 0;
 
-  let source: Book[] = [];
-  if (scope === "all") {
-    source = allBooksExternal as Book[];
-  } else {
-    source = uniqById([
-      ...focusedBooks,
-      ...unreadBooks,
-      ...fallbackRecommendedBooks,
-    ]) as Book[];
-  }
-
-  const filtered = !q
-    ? []
-    : source.filter(
-        (b) =>
-          b.title.toLowerCase().includes(q) ||
-          b.author.toLowerCase().includes(q),
-      );
-
-  const count = filtered.length;
-  const isEmpty = count === 0;
 
   return (
     <section className="w-full flex flex-col items-start gap-10">
       <div className="w-full flex flex-col items-start pt-5">
-        
-
-        {/* list */}
         <div className="w-full flex flex-col items-start">
-          {isEmpty ? (
+          {isLoading ? (
+            <div className="w-full py-3 text-gray-70 text-body-13-r">
+              검색 중...
+            </div>
+          ) : isError ? (
+            <div className="w-full py-3 text-gray-70 text-body-13-r">
+              {errorMessage ?? "검색 중 오류가 발생했습니다."}
+            </div>
+          ) : isEmpty ? (
             <DirectAddRow onClick={onDirectAdd} isEmpty={true} />
           ) : (
             <>
               <div className="w-full flex flex-col">
-                {filtered.map((book, idx) => (
-                  <ResultRow
-                    key={`sr-${scope}-${book.id}-${idx}`}
-                    book={book}
-                    showDivider={true}
-                  />
-                ))}
+                {filtered.map((book, idx) => {
+                  if (!book) return null;
+
+                  return (
+                    <ResultRow
+                      key={`sr-${scope}-${book.isbn13 ?? idx}-${idx}`}
+                      book={book}
+                      showDivider={true}
+                    />
+                  );
+                })}
               </div>
+
+              {hasNext && (
+                <div className="w-full flex justify-center pt-4">
+                  <button
+                    type="button"
+                    onClick={onLoadMore}
+                    disabled={isFetchingNextPage}
+                    className="text-gray-60 text-label-14-sb"
+                  >
+                    {isFetchingNextPage ? "불러오는 중..." : "더보기"}
+                  </button>
+                </div>
+              )}
+
               <DirectAddRow onClick={onDirectAdd} isEmpty={false} />
             </>
           )}
@@ -185,3 +177,4 @@ export default function SearchResultSection({
     </section>
   );
 }
+

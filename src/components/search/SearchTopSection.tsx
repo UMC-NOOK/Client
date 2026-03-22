@@ -1,3 +1,4 @@
+//Client/src/components/search/SearchTopSection.tsx
 import { useEffect, useState } from "react";
 import closeIcon from "../../assets/logo/close-button.svg";
 import SearchInput from "../input/SearchField";
@@ -23,8 +24,6 @@ type Props = {
 
   onEnter?: () => void;
 
-  isInputMode?: boolean;
-
   placeholder?: string;
 };
 
@@ -39,7 +38,6 @@ export default function SearchTopSection({
   onFocus,
   onBlur,
   onEnter,
-  isInputMode = false,
   placeholder = "제목, 저자, ISBN으로 검색",
 }: Props) {
   const [currentScope, setCurrentScope] = useState<SearchScope>(activeScope);
@@ -93,7 +91,7 @@ export default function SearchTopSection({
           onEnter={onEnter}
           onFocus={onFocus}
           onBlur={onBlur}
-          isInputMode={isInputMode}
+          
           placeholder={placeholder}
         />
       </div>

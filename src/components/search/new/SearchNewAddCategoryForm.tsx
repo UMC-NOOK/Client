@@ -1,3 +1,4 @@
+//Client/src/components/search/new/SearchNewAddCategoryForm.tsx
 type Props = {
   value: string | null;
   onChange: (v: string) => void;
