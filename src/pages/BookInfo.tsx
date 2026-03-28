@@ -10,6 +10,7 @@ import MaskGradient from "../components/layout/MaskGradient";
 import Snackbar from "../components/feedback/snackbar";
 import HistoryInfoCard from "../components/content/list/History";
 import InformationSection from "../components/content/InformationText/InformationSection";
+import ResourceDate from "../components/content/list/Resource/Date";
 // import { ResourceDate } from "../components/content/list/Resource/Date";
 // assets
 import chevron_left from "../assets/icons/chevron_left.svg";
@@ -19,7 +20,7 @@ import book_shelf from "../assets/icons/book_shelf-gray-30.svg";
 type DetailTab = "info" | "log";
 // values
 const detailTabs = [
-  { value: "info", label: "책 정보" },
+  { value: "info", label: "도서 정보" },
   { value: "log", label: "독서 이력" },
 ] as const;
 // data
@@ -50,61 +51,70 @@ const bookData = {
 };
 const bookHistoryData = [
   {
-    date: "2024-01-15T22:02:00",
-    state: "focus",
-    title: "1시간 13분의 포커스",
-    description: "22:02 – 23:15",
+    year: 2026,
+    showYear: true,
+    monthDay: "12.09",
+    items: [
+      {
+        timelineId: 103,
+        type: "FOCUS",
+        occurredAt: "2026-12-09T23:15:00",
+        title: "1시간 13분의 포커스",
+        subtitle: "22:02 - 23:15",
+        previewText: "1시간 13분의 포커스",
+        targetId: 7001,
+      },
+      {
+        timelineId: 102,
+        type: "FOCUS",
+        occurredAt: "2026-12-09T16:50:00",
+        title: "1시간 27분의 포커스",
+        subtitle: "15:23 - 16:50",
+        previewText: "1시간 27분의 포커스",
+        targetId: 7002,
+      },
+    ],
   },
   {
-    date: "2024-01-15T20:30:00",
-    state: "record",
-    title: "독서기록",
-    description:
-      "[p.40] 변하는 실제가 없음은 물론 그것이 거쳐가는 길이 모순의 흙과 불화의 초목으로 닦이고 마침내 ...",
+    year: 2026,
+    showYear: false,
+    monthDay: "12.09",
+    items: [
+      {
+        timelineId: 103,
+        type: "RECORD",
+        occurredAt: "2026-12-09T23:15:00",
+        title: "독서 기록",
+        subtitle: "[p.40] 변하는 실제가 없음은 물론 그것이 거쳐가는 길이",
+        previewText: "독서 기록",
+        targetId: 7001,
+      },
+      {
+        timelineId: 102,
+        type: "RECORD",
+        occurredAt: "2026-12-09T16:50:00",
+        title: "독서 기록",
+        subtitle: "3개의 이미지",
+        previewText: "독서 기록",
+        targetId: 7002,
+      },
+    ],
   },
   {
-    date: "2024-01-10T18:00:00",
-    state: "status",
-    title: "첫 사랑의 침공",
-    description: "서재에 등록했어요",
-  },
-  {
-    date: "2024-01-10₩T19:20:00",
-    state: "focus",
-    title: "2시간 5분의 포커스",
-    description: "23:30 – 01:35",
-  },
-  {
-    date: "2024-01-08T21:00:00",
-    state: "record",
-    title: "독서기록",
-    description:
-      "삶의 가장 비극적이고 서늘한 순간을 유려한 문장으로 기록한 작품집입니다. 제목이 뜻하는 빼어난 노래처럼, 작가는 인간의고독과 고통을 외면하지 않고 이를...",
-  },
-  {
-    date: "2024-01-05T17:45:00",
-    state: "status",
-    title: "독서 중",
-    description: "포커스 시작하기를 눌렀어요",
-  },
-  {
-    date: "2024-01-01T10:00:00",
-    state: "focus",
-    title: "3시간 4분의 포커스",
-    description: "01:40 – 04:45",
-  },
-  {
-    date: "2023-12-30T14:20:00",
-    state: "record",
-    title: "독서기록",
-    description:
-      "[p.131] 어느 쪽의 이야기가 그럴듯하고 그들에게 어울립니까? 아가씨에게 존속 상해치사의 죄를 추가하고 싶지는 않으니 나는 첫번째를 고르지 않겠습니다 진짜 뭐라는 겁니까",
-  },
-  {
-    date: "2023-12-25T16:00:00",
-    state: "status",
-    title: "완독",
-    description: "완독 표시를 눌렀어요",
+    year: 2025,
+    showYear: true,
+    monthDay: "11.30",
+    items: [
+      {
+        timelineId: 100,
+        type: "REGISTER",
+        occurredAt: "2025-11-30T09:00:00",
+        title: "첫사랑의 침공",
+        subtitle: "서재에 등록했어요.",
+        previewText: "서재에 등록했어요.",
+        targetId: 12,
+      },
+    ],
   },
 ];
 
@@ -223,7 +233,6 @@ export default function BookInfo() {
               bottom={bookData.result.book.isbn13}
             />
           </div>
-          {/* 컴포넌트 개발 시 리팩토링*/}
           <div className="flex gap-2 text-gray-50 text-label-12-sb">
             <div>도서 DB 제공: 알라딘</div>
             <div
@@ -249,22 +258,26 @@ export default function BookInfo() {
             >
               {hasFocus ? (
                 <div className="flex flex-col gap-4">
-                  <div className="flex gap-3 items-center">
-                    <span className="text-label-14-sb">기간</span>
-                    <span className="text-body-14-r">25.12.30 - 26.01.19</span>
-                  </div>
-                  <div className="flex gap-3 items-center">
-                    <span className="text-label-14-sb">시간</span>
-                    <span className="text-body-14-r">3시간 4분 22초</span>
-                  </div>
-                  <div className="flex gap-3 items-center">
-                    <span className="text-label-14-sb">횟수</span>
-                    <span className="text-body-14-r">39번</span>
-                  </div>
-                  <div className="flex gap-3 items-center">
-                    <span className="text-label-14-sb">페이지</span>
-                    <span className="text-body-14-r">~99쪽</span>
-                  </div>
+                  <InformationSection
+                    flow="horizontal"
+                    top="기간"
+                    bottom="25.12.30 - 26.01.19"
+                  />
+                  <InformationSection
+                    flow="horizontal"
+                    top="시간"
+                    bottom="3시간 4분 22초"
+                  />
+                  <InformationSection
+                    flow="horizontal"
+                    top="횟수"
+                    bottom="39번"
+                  />
+                  <InformationSection
+                    flow="horizontal"
+                    top="페이지"
+                    bottom="~99쪽"
+                  />
                 </div>
               ) : (
                 "아직 포커스하지 않았어요."
@@ -299,11 +312,16 @@ export default function BookInfo() {
               }}
             >
               {hasRecord ? (
-                <div className="w-full overflow-hidden line-clamp-3">
-                  [p.131] 어느 쪽의 이야기가 그럴듯하고 그들에게 어울립니까?
-                  아가씨에게 존속 상해치사의 죄를 추가하고 싶지는 않으니 나는
-                  첫번째를 고르지 않겠습니다 진짜 뭐라는 겁니까
-                </div>
+                <InformationSection
+                  flow="horizontal"
+                  bottom={
+                    <div className="w-full overflow-hidden line-clamp-3">
+                      [p.131] 어느 쪽의 이야기가 그럴듯하고 그들에게 어울립니까?
+                      아가씨에게 존속 상해치사의 죄를 추가하고 싶지는 않으니
+                      나는 첫번째를 고르지 않겠습니다 진짜 뭐라는 겁니까
+                    </div>
+                  }
+                />
               ) : (
                 "아직 기록이 없어요."
               )}
@@ -340,13 +358,32 @@ export default function BookInfo() {
                     className="-m-4 bottom-0"
                   />
                   {bookHistoryData.map((history, index) => (
-                    <HistoryInfoCard
-                      key={index}
-                      variant={history.state === "record" ? "history" : "time"}
-                      title={history.title}
-                      time={history.description}
-                      hasIcon={history.state !== "status"}
-                    />
+                    <div
+                      key={history.year}
+                      className="flex items-start gap-2 mb-4 w-full"
+                    >
+                      <ResourceDate
+                        topText={history.monthDay}
+                        bottomText={
+                          history.showYear ? String(history.year) : ""
+                        }
+                      />
+                      <div className="min-w-0 flex flex-1 flex-col gap-1">
+                        {history.items.map((item) => (
+                          <HistoryInfoCard
+                            key={item.timelineId}
+                            variant={
+                              item.type === "RECORD" ? "history" : "time"
+                            }
+                            title={item.title}
+                            time={item.subtitle}
+                            hasIcon={
+                              item.type !== "REGISTER" && item.type !== "STATUS"
+                            }
+                          />
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </>
               ) : (
