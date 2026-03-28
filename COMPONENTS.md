@@ -1121,7 +1121,7 @@ const MOCK_RANKS = [
 | Name        | Type                          | Required | Default | Note                           |
 | :---------- | :---------------------------- | :------: | :------ | :----------------------------- |
 | `flow`      | `"vertical" \| "horizontal" ` |    O     | -       | 수직/수평 선택                 |
-| `top`       | `string`                      |    O     | -       | 위 또는 왼쪽 텍스트            |
+| `top`       | `string`                      |    X     | -       | 위 또는 왼쪽 텍스트            |
 | `bottom`    | `string`                      |    O     | -       | 아래 또는 오른쪽 테스트        |
 | `showCaret` | `boolean`                     |    X     | `false` | 토글 표시 여부                 |
 | `onToggle`  | `(open: boolean) => void`     |    X     | -       | 토글 내렸을 때의 함수          |

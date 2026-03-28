@@ -1,11 +1,12 @@
 import SectionHeader from "../InformationText/SectionHeader";
+import { type ReactNode } from "react";
 
 type InformationSectionFlow = "vertical" | "horizontal";
 
 type Props = {
   flow: InformationSectionFlow;
-  top: string;
-  bottom: string;
+  top?: string;
+  bottom: string | ReactNode;
   showCaret?: boolean;
   onToggle?: (open: boolean) => void;
   onClick?: () => void;
@@ -38,11 +39,14 @@ export default function InformationSection({
 
   return (
     <div className="flex w-full items-start gap-3">
-      <div className="flex h-[21px] shrink-0 flex-col items-start justify-center">
-        <span className="text-label-14-sb text-gray-90">{top}</span>
-      </div>
-
-      <p className="min-w-0 flex-1 text-body-14-r text-gray-90">{bottom}</p>
+      {top ? (
+        <div className="flex h-[21px] shrink-0 flex-col items-start justify-center">
+          <span className="text-label-14-sb text-gray-90">{top}</span>
+        </div>
+      ) : null}
+      {bottom ? (
+        <p className="min-w-0 flex-1 text-body-14-r text-gray-90">{bottom}</p>
+      ) : null}
     </div>
   );
 }
