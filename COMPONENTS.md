@@ -1075,13 +1075,14 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name       | Type                              | Required | Default | Note                           |
-| :--------- | :-------------------------------- | :------: | :------ | :----------------------------- |
-| `size`     | `"13" \| "14" \| "16" \| "20" \|` |    O     | -       | 컴포넌트 사이즈                |
-| `top`      | `ReactNode`                       |    O     | -       | 윗 칸                          |
-| `bottom`   | `ReactNode`                       |    X     | -       | 아래 칸                        |
-| `onToggle` | `(open: boolean) => void`         |    X     | -       | 토글 내렸을 때의 함수          |
-| `onClick`  | `() => void`                      |    X     | -       | 해당 컴포넌트 눌럿을 때의 함수 |
+| Name        | Type                              | Required | Default | Note                           |
+| :---------- | :-------------------------------- | :------: | :------ | :----------------------------- |
+| `size`      | `"13" \| "14" \| "16" \| "20" \|` |    O     | -       | 컴포넌트 사이즈                |
+| `top`       | `ReactNode`                       |    O     | -       | 윗 칸                          |
+| `bottom`    | `ReactNode`                       |    X     | -       | 아래 칸                        |
+| `showCaret` | `boolean`                         |    X     | `false` | 토글 표시 여부                 |
+| `onToggle`  | `(open: boolean) => void`         |    X     | -       | 토글 내렸을 때의 함수          |
+| `onClick`   | `() => void`                      |    X     | -       | 해당 컴포넌트 눌럿을 때의 함수 |
 
 #### Usage
 
@@ -1093,15 +1094,17 @@ const MOCK_RANKS = [
   bottom={<span>Text</span>}
 />
 
-//size 14 (토글 잇음, 밑 설명단 없음)
+//size 14 (토글 있음, 밑 설명단 없음)
 <SectionHeader
   size="14"
+  showCaret={true}
   top={<CustomTitle />}
  />
 
 //size 16 (토글 있음, 밑 설명단 있음)
 <SectionHeader
   size="16"
+  showCaret={true}
   top={<span>제목</span>}
   bottom={<CustomDescription />}
 />
@@ -1115,13 +1118,14 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name       | Type                          | Required | Default | Note                           |
-| :--------- | :---------------------------- | :------: | :------ | :----------------------------- |
-| `flow`     | `"vertical" \| "horizontal" ` |    O     | -       | 수직/수평 선택                 |
-| `top`      | `string`                      |    O     | -       | 위 또는 왼쪽 텍스트            |
-| `bottom`   | `string`                      |    O     | -       | 아래 또는 오른쪽 테스트        |
-| `onToggle` | `(open: boolean) => void`     |    X     | -       | 토글 내렸을 때의 함수          |
-| `onClick`  | `() => void`                  |    X     | -       | 해당 컴포넌트 눌럿을 때의 함수 |
+| Name        | Type                          | Required | Default | Note                           |
+| :---------- | :---------------------------- | :------: | :------ | :----------------------------- |
+| `flow`      | `"vertical" \| "horizontal" ` |    O     | -       | 수직/수평 선택                 |
+| `top`       | `string`                      |    O     | -       | 위 또는 왼쪽 텍스트            |
+| `bottom`    | `string`                      |    O     | -       | 아래 또는 오른쪽 테스트        |
+| `showCaret` | `boolean`                     |    X     | `false` | 토글 표시 여부                 |
+| `onToggle`  | `(open: boolean) => void`     |    X     | -       | 토글 내렸을 때의 함수          |
+| `onClick`   | `() => void`                  |    X     | -       | 해당 컴포넌트 눌럿을 때의 함수 |
 
 #### Usage
 
