@@ -4,7 +4,7 @@ import Indicator, { type Percent } from "../Resource/Indicator";
 type Props = {
   day: string;
   disable?: boolean;
-  percent?: Percent;
+  percent: Percent;
 };
 
 export default function IndicatorSet({

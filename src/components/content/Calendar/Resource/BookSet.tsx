@@ -1,6 +1,6 @@
 import Day from "../../Calendar/Resource/Day";
 
-type Count = "single" | "multiple";
+export type Count = "single" | "multiple";
 
 type Props = {
   day: string;
