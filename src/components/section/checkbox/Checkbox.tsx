@@ -24,7 +24,7 @@ export default function Checkbox ({text} : CheckboxProps) {
                 </CheckboxLib.Indicator> 
 	        </CheckboxLib.Root>
             <label
-                className="label-14-sb text-gray-90">
+                className="flex-1 label-14-sb text-gray-90 truncate">
                     {text}
             </label>
         </div>
