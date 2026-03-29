@@ -7,7 +7,7 @@ type Props = {
   visible?: boolean;
   disable?: boolean;
   count?: Count;
-  imageUrl?: string;
+  imageUrl?: string | null;
   bookNum?: number;
 };
 
