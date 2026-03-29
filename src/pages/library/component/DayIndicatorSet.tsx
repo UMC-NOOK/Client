@@ -1,5 +1,6 @@
 import IndicatorSet from "../../../components/content/Calendar/Resource/IndicatorSet"
 import type { Percent } from "../../../components/content/Calendar/Resource/Indicator";
+import {getDatesInMonth, getStartDay} from "./GlobalFunction";
 
 //dayInfo
 type DayInfo = {
@@ -19,19 +20,6 @@ type Props = {
   month: number; 
   dayInformations: DayInfo[];
 };
-
-//며칠 가져오기
-//정보가 0부터 1월임, 맨 마지막 파라미터 0은 전달의 마지막 날 이란다.;;;(싸갈 이렇게어렵게 해둘거임?)
-function getDatesInMonth(year: number, month: number){
-    return new Date(year, month, 0).getDate();
-}
-
-//요일 가져오기
-//for문 사용해서 해당안하는 날의 요일을 알아내야함(싸갈진짜 귀찮다.)
-function getStartDay(year: number, month: number){
-    const jsDay = new Date(year, month - 1 , 1).getDay(); // 1 : 월
-    return (jsDay + 6) % 7;
-}
 
 //string Percent
 function toPercent(value: string): Percent {
