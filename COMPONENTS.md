@@ -194,7 +194,6 @@
 | `onFocus`       | `() => void`          |     X    | -              | input focus 시 실행 |
 | `onBlur`        | `() => void`          |     X    | -              | input blur 시 실행  |
 | `placeholder`   | `string`              |     X    | `"검색어를 입력하세요"` | placeholder 텍스트  |
-| `isInputMode`   | `boolean`             |     X    | -              | 입력 모드 여부         |
 
 #### Usage
 

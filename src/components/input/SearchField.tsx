@@ -1,5 +1,5 @@
 // Client/src/components/input/SearchField.tsx
-import { useRef, useState } from "react";
+import { useState } from "react";
 import searchIcon from "../../assets/logo/search-field-button-icon-shape.svg";
 
 type Props = {
@@ -10,7 +10,6 @@ type Props = {
   onFocus?: () => void;
   onBlur?: () => void;
   placeholder?: string;
-  isInputMode?: boolean;
 };
 
 export default function SearchInput({
@@ -22,57 +21,46 @@ export default function SearchInput({
   onBlur,
   placeholder = "검색어를 입력하세요",
 }: Props) {
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const [isFocused, setIsFocused] = useState(false);
 
-  const enterInputMode = () => {
-    inputRef.current?.focus();
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (onEnter) {
+        onEnter();
+      } else {
+        onSearchClick?.();
+      }
+    }
   };
 
-  const showFakeCursor = isFocused && value.length === 0;
-
   return (
-    <div
-      onMouseDown={(e) => {
-        e.preventDefault();
-        enterInputMode();
-      }}
-      onTouchStart={enterInputMode}
-      className="flex w-full self-stretch items-center gap-2 rounded-lg bg-gray-17 px-4 py-1"
-    >
-      <div className="relative flex-1">
-        {showFakeCursor && (
-          <span className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 text-[16px] font-normal leading-6 text-gray-90">
-            |
-          </span>
-        )}
-
-        <input
-          ref={inputRef}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onFocus={() => {
-            setIsFocused(true);
-            onFocus?.();
-          }}
-          onBlur={() => {
-            setIsFocused(false);
-            onBlur?.();
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              onEnter?.();
-              if (!onEnter) onSearchClick?.();
-            }
-          }}
-          placeholder={!isFocused && !value ? placeholder : ""}
-          className="w-full bg-transparent outline-none text-[16px] font-normal leading-6 text-gray-90 placeholder-gray-70 truncate caret-transparent"
-        />
-      </div>
+    <div className="flex w-full items-center gap-2 rounded-lg bg-gray-17 px-4 py-1">
+      <input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={handleEnter}
+        onFocus={() => {
+          setIsFocused(true);
+          onFocus?.();
+        }}
+        onBlur={() => {
+          setIsFocused(false);
+          onBlur?.();
+        }}
+        placeholder={!isFocused && !value ? placeholder : ""}
+        className="
+          flex-1
+          bg-transparent outline-none
+          text-[16px] font-normal leading-6 text-gray-90
+          placeholder-gray-70
+          caret-[#697198]
+        "
+      />
 
       <button
         type="button"
+        onMouseDown={(e) => e.preventDefault()}
         onClick={onSearchClick}
         className="flex h-[35.5px] w-[35.5px] items-center justify-center"
       >

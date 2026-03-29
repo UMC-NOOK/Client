@@ -1,3 +1,6 @@
+// Client/src/components/search/new/SearchNewAddInfoForm.tsx
+import { TextField } from "../../input/textinput/TextField";
+
 type Props = {
   title: string;
   author: string;
@@ -13,39 +16,19 @@ export default function SearchNewAddInfoForm({
 }: Props) {
   return (
     <div className="w-full flex flex-col gap-8 px-1">
-      <div className="w-full flex flex-col gap-3">
-        <span className="text-gray-90 text-[13px] font-semibold leading-3.25">
-          제목
-        </span>
+      <TextField
+        title="제목"
+        value={title}
+        onChange={onChangeTitle}
+        placeholder="책의 제목을 입력해주세요."
+      />
 
-        <input
-          value={title}
-          onChange={(e) => onChangeTitle(e.target.value)}
-          placeholder="책의 제목을 입력해주세요."
-          className="
-            w-full px-4 py-3 rounded-lg bg-gray-17
-            text-gray-90 text-[14px] leading-5.25
-            placeholder:text-gray-50 outline-none
-          "
-        />
-      </div>
-
-      <div className="w-full flex flex-col gap-3">
-        <span className="text-gray-90 text-[13px] font-semibold leading-3.25">
-          저자
-        </span>
-
-        <input
-          value={author}
-          onChange={(e) => onChangeAuthor(e.target.value)}
-          placeholder="책의 저자를 입력해주세요."
-          className="
-            w-full px-4 py-3 rounded-lg bg-gray-17
-            text-gray-90 text-[14px] leading-5.25
-            placeholder:text-gray-50 outline-none
-          "
-        />
-      </div>
+      <TextField
+        title="저자"
+        value={author}
+        onChange={onChangeAuthor}
+        placeholder="책의 저자를 입력해주세요."
+      />
     </div>
   );
 }

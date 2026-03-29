@@ -23,7 +23,6 @@ export default function TextArea({
   const trimmedValue =
     maxLength !== undefined ? value.slice(0, maxLength) : value;
 
-  /** auto resize */
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -58,6 +57,7 @@ export default function TextArea({
             "w-full min-h-15.75",
             "bg-transparent outline-none resize-none overflow-hidden",
             "placeholder:text-gray-50",
+            "caret-[#697198]",
             hasValue
               ? "text-body-14-b text-gray-90"
               : "text-body-14-r text-gray-90",

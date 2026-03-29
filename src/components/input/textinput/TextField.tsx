@@ -32,6 +32,7 @@ export function TextField({
         className={[
           "w-full px-4 py-3 rounded-md bg-gray-17 outline-none",
           "text-gray-90 text-body-14-r placeholder:text-gray-50",
+          "caret-gray-50",
           disabled ? "opacity-50 cursor-not-allowed" : "",
         ].join(" ")}
       />
@@ -60,10 +61,8 @@ export function TitleTextField({
 
   return (
     <div className="w-full flex flex-col items-start gap-3">
-      {/* title */}
       <span className="text-gray-90 text-label-13-b">{title}</span>
 
-      {/* input */}
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -73,6 +72,7 @@ export function TitleTextField({
           "w-full px-4 py-3 rounded-md bg-gray-17 outline-none",
           "overflow-hidden text-ellipsis whitespace-nowrap",
           "font-suit text-[20px] font-bold leading-[150%]",
+          "caret-gray-50",
           hasValue ? "text-gray-90" : "text-gray-70",
           disabled ? "opacity-50 cursor-not-allowed" : "",
         ].join(" ")}
@@ -104,13 +104,8 @@ type TripleTextFieldProps<
   title: string;
   value: TripleParts<K1, K2, K3>;
   onChange: (v: TripleParts<K1, K2, K3>) => void;
-
-  /** 3칸 정의(순서대로 3개) */
   fields: [TripleFieldSpec<K1>, TripleFieldSpec<K2>, TripleFieldSpec<K3>];
-
-  /** 숫자만 입력 제한(날짜/코드용) */
   digitsOnly?: boolean;
-
   disabled?: boolean;
 };
 
@@ -159,6 +154,8 @@ export function TripleTextField<
       [
         "flex-1 min-w-0 px-4 py-3 rounded-md bg-gray-17 outline-none",
         "text-gray-90 text-body-14-r placeholder:text-gray-50",
+        "caret-[#697198]",
+        "[caret-width:20px]",
         disabled ? "opacity-50 cursor-not-allowed" : "",
       ].join(" "),
     [disabled],

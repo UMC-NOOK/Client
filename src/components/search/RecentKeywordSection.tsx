@@ -48,12 +48,10 @@ export default function RecentKeywordSection({
                   px-3 py-1.5
                 "
               >
-                {/* 키워드 텍스트: 14 / 400 / 100% */}
                 <span className="whitespace-nowrap text-gray-90 text-btn-14-r">
                   {k.text}
                 </span>
 
-                {/* 삭제 버튼 */}
                 <button
                   type="button"
                   aria-label="최근 검색어 삭제"
@@ -79,7 +77,6 @@ export default function RecentKeywordSection({
             ))}
           </div>
         ) : (
-          /* 없음 텍스트: 14 / 500 / 150% */
           <span className="self-stretch text-gray-70 text-body-14-m">
             최근 검색어가 없습니다.
           </span>
