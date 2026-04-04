@@ -29,18 +29,18 @@ export default function BookSet({
     <div className="flex flex-col items-center gap-1">
       <Day text={day} disable={disable} />
 
-      {disable ?(
-        <div className="h-16" aria-hidden />
-        ): (
-        <div className="relative w-11 h-16 overflow-hidden">
+      {disable ? (
+        <div className="h-16 w-11 shrink-0 rounded-[2px] bg-gray-10" />
+      ) : (
+        <div className="relative h-16 w-11 overflow-hidden rounded-[2px]">
           {imageUrl ? (
             <img
               src={imageUrl}
               alt={`${day} book`}
-              className="h-full w-full object-cover rounded-[2px]"
+              className="h-full w-full object-cover"
             />
           ) : (
-            <div className="w-11 h-full w-full" aria-hidden />
+            <div className="h-full w-full bg-gray-10" />
           )}
 
           {count === "multiple" ? (

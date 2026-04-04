@@ -44,10 +44,14 @@ export default function DayIndicatorSet({
 }: Props){
     //해당 년/월에 따른 요일/며칠 정보 가져오기
     const lastDate = getDatesInMonth(year, month);
-    const startDay = getStartDay(year,month); //0부터 일요일임
+    const startDay = getStartDay(year, month); // 0=월 … 6=일 (헤더 월~일과 동일)
 
     //내가 지정한 요일의 정보들로 배열 이루기
     const dayInfosForArray : DayInfoForArray[] = [];
+
+    const noServerData = dayInformations.length === 0;
+    /** 빈 배열이면 그 달의 모든 일자는 0%로 채움. 데이터가 있으면 매칭되는 날만 서버 값, 없으면 none */
+    const defaultPercentForDay = noServerData ? "0" : "none";
 
     //앞에서부터 다 채워야겟지? staryDay전까지
     for(let i = 0; i < startDay; i++){
@@ -58,27 +62,32 @@ export default function DayIndicatorSet({
         });
     }
 
-    //이제 채워넣기
-    for(let l = 1; l <= lastDate; l ++ ){
+    //이제 채워넣기 (day 문자열로 find — 빈 배열이어도 안전)
+    for (let l = 1; l <= lastDate; l++) {
+        const entry = dayInformations.find((d) => d.day === String(l));
+        const raw = entry?.percent ?? defaultPercentForDay;
         dayInfosForArray.push({
             day: String(l),
             disable: true,
-            percent: toPercent(dayInformations[l].percent)
+            percent: toPercent(raw),
         });
     }
 
     return(
-        <div className="flex flex-col w-full gap-6">
-            <div className="grid grid-cols-7">
+        <div className="flex flex-col w-full">
+            <div className="grid w-full grid-cols-7 pb-4 gap-y-6">
                 {dayInfosForArray.map((d, index) => (
-                    //Percent로 받아야함
-                    <IndicatorSet
+                    <div
                         key={`${d.day || "none"}=${index}`}
-                        day={d.day}
-                        disable={d.disable}
-                        percent={d.percent}
-                    />))
-                }
+                        className="flex min-w-0 justify-center"
+                    >
+                        <IndicatorSet
+                            day={d.day}
+                            disable={d.disable}
+                            percent={d.percent}
+                        />
+                    </div>
+                ))}
             </div>
         </div>
     )

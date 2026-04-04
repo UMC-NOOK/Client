@@ -68,6 +68,16 @@ function splitByUntil(message: string) {
   return line2 ? [line1, line2] : [line1];
 }
 
+function splitGoalText(text: string) {
+  const match = text.match(/^(.+?까지)\s*(.+)$/);
+
+  if (!match) {
+    return [text];
+  }
+
+  return [match[1], match[2]];
+}
+
 export default function BookGoal(props: Props) {
   const { percent } = props;
   const resolvedMessage = percent === "ZERO" ? "독서 목표를 설정하세요!" : props.message;
@@ -83,14 +93,11 @@ export default function BookGoal(props: Props) {
       <div className="flex flex-col gap-1">
         <p className="text-label-12-sb text-gray-70">독서 목표</p>
 
-        <p className="text-label-16-sb text-gray-90">
+        <div className="flex flex-col items-start text-label-16-sb text-gray-90 gap-2 pt-1">
           {lines.map((line, i) => (
-            <span key={i}>
-              {line}
-              {i !== lines.length - 1 ? <br /> : null}
-            </span>
+            <div key={i}>{line}</div>
           ))}
-        </p>
+        </div>
       </div>
 
       <div className="shrink-0">

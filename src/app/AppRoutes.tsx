@@ -3,7 +3,7 @@ import { Navigate, Route, Routes, Outlet, useLocation, useNavigate } from "react
 import AppShell from "./AppShell";
 import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
 
-import LibraryMobilePage from "../pages/search/LibraryMobilePage";
+//import LibraryMobilePage from "../pages/search/LibraryMobilePage";
 import FocusMobilePage from "../pages/search/FocusMobilePage";
 import RecordMobilePage from "../pages/search/RecordMobilePage";
 import GroupMobilePage from "../pages/search/GroupMobilePage";
@@ -84,14 +84,13 @@ export default function AppRoutes() {
 
         {/* Main Tabs */}
         <Route element={<MainTabsLayout />}>
-          <Route path="/library" element={<LibraryMobilePage />} />
+          <Route path="/library" element={<LibraryPage />} />
           <Route path="/focus" element={<FocusMobilePage />} />
           <Route path="/record" element={<RecordMobilePage />} />
           <Route path="/group" element={<GroupMobilePage />} />
           <Route path="/test/banner-action-card" element={<BannerActionCardTestPage />} />
           <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
           <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
-          <Route path="/test/library" element={<LibraryPage/>} />
         </Route>
 
         <Route path="*" element={<Navigate to="/library" replace />} />

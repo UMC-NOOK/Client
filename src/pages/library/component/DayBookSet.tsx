@@ -54,7 +54,7 @@ export default function DayBookSet({
     dayInfomations
 }: Props){
     const lastDate = getDatesInMonth(year, month);
-    const startDay = getStartDay(year,month); //0부터 일요일임
+    const startDay = getStartDay(year, month); // 0=월 … 6=일 (헤더 월~일과 동일)
 
     const dayInfosForArray : DayInfoForArray[] = [];
 
@@ -70,32 +70,37 @@ export default function DayBookSet({
     }
 
 
-    for(let l = 1; l <= lastDate; l ++ ){
+    for (let l = 1; l <= lastDate; l++) {
+        const entry = dayInfomations.find((d) => d.day === String(l));
+        const bookNum = entry?.bookNum ?? 0;
         dayInfosForArray.push({
             day: String(l),
             visible: true,
-            disable: toDisable(dayInfomations[l].bookNum),
-            count: toCount(dayInfomations[l].bookNum),
-            imageUrl: dayInfomations[l].imageUrl || null,
-            bookNum: dayInfomations[l].bookNum
+            disable: toDisable(bookNum),
+            count: toCount(bookNum),
+            imageUrl: entry?.imageUrl ?? null,
+            bookNum,
         });
     }
 
     return(
-            <div className="flex flex-col w-full gap-6">
-                <div className="grid grid-cols-7">
+            <div className="flex w-full flex-col">
+                <div className="grid w-full grid-cols-7 gap-y-6 pb-4">
                     {dayInfosForArray.map((d, index) => (
-                        //Percent로 받아야함
-                        <BookSet
+                        <div
                             key={`${d.day || "none"}=${index}`}
-                            day={d.day}
-                            visible={d.visible}
-                            disable={d.disable}
-                            count={d.count}
-                            imageUrl={d.imageUrl}
-                            bookNum={d.bookNum}
-                        />))
-                    }
+                            className="flex min-w-0 justify-center"
+                        >
+                            <BookSet
+                                day={d.day}
+                                visible={d.visible}
+                                disable={d.disable}
+                                count={d.count}
+                                imageUrl={d.imageUrl}
+                                bookNum={d.bookNum}
+                            />
+                        </div>
+                    ))}
                 </div>
             </div>
         )
