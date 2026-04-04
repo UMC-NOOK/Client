@@ -7,6 +7,7 @@ type Props = {
   time: string;
   title?: string;
   hasIcon?: boolean;
+  onClick?: () => void;
 };
 
 export default function HistoryInfoCard({
@@ -14,13 +15,14 @@ export default function HistoryInfoCard({
   time,
   title,
   hasIcon = true,
+  onClick,
 }: Props) {
   const isHistory = variant === "history";
 
   return (
     <div
       className={[
-        "flex w-full items-start gap-2 rounded-[4px] p-3",
+        "flex w-full items-start gap-2 rounded-sm p-3",
         !isHistory ? "bg-gray-17" : "",
       ].join(" ")}
       style={
@@ -33,6 +35,7 @@ export default function HistoryInfoCard({
             }
           : undefined
       }
+      onClick={onClick}
     >
       {hasIcon && (
         <div className="flex h-4 w-4 shrink-0 items-center justify-center self-stretch">

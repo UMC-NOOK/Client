@@ -778,6 +778,7 @@ const MOCK_RANKS = [
 | time    | string                |    O     | -       | 타이머 시간                    |
 | title   | string                |    X     | -       | 시간 기록일 때의 제목          |
 | hasIcon | boolean               |    X     | `true`  | 아이콘 유무                    |
+| onClick | void                  |    X     | -       | 클릭 함수                      |
 
 #### Usage
 
