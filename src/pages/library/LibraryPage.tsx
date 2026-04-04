@@ -10,6 +10,7 @@ import book from "../../assets/icons/book.svg";
 import bookGray from "../../assets/icons/book-gray.svg";
 import { useState } from "react";
 import DayOfTheWeek from "../../components/content/Calendar/Resource/DayOfTheWeek";
+import BottomBanner from "./component/BottomBanner";
 
 
 
@@ -20,7 +21,7 @@ export default function LibraryPage(){
 
     return(
         <div className="flex flex-col w-full">
-            <div className="flex flex-col pt-6">
+            <div className="flex flex-col pt-6.5">
                 <div className="flex flex-row gap-1">
                     <label className="text-label-20-b text-gray-90">
                         경민
@@ -105,7 +106,7 @@ export default function LibraryPage(){
                 </div>
 
             </div>
-
+            <BottomBanner/>
         </div>
     )
 }
