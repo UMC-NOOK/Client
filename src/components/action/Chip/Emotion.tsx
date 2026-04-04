@@ -47,18 +47,6 @@ type BaseProps = {
   emojiKey: EmotionKey; // default: "yellow"
 };
 
-type SizeSProps = BaseProps & {
-  size: "s";
-  emoji: string;
-};
-
-type SizeMProps = BaseProps & {
-  size: "m";
-  emoji: string;
-  text: string;
-};
-
-
 const base = "flex h-[30px] justify-center items-center select-none";
 
 const sizeClassMap: Record<Size, string> = {
