@@ -633,12 +633,14 @@ const options = [
 
 #### Props
 
-| Name        | Type              | Required | Default | Note           |
-| :---------- | :---------------- | :------: | :------ | :------------- |
-| `left`      | `React.ReactNode` |    X     | -       | 좌측 영역 요소 |
-| `center`    | `React.ReactNode` |    X     | -       | 중앙 영역 요소 |
-| `right`     | `React.ReactNode` |    X     | -       | 우측 영역 요소 |
-| `className` | `string`          |    X     | `""`    | 추가 클래스명  |
+| Name           | Type              | Required | Default | Note                   |
+| :------------- | :---------------- | :------: | :------ | :--------------------- |
+| `left`         | `React.ReactNode` |    X     | -       | 좌측 영역 요소         |
+| `onClickLeft`  | `void`            |    X     | -       | 좌측 영역 요소 클릭 시 |
+| `center`       | `React.ReactNode` |    X     | -       | 중앙 영역 요소         |
+| `right`        | `React.ReactNode` |    X     | -       | 우측 영역 요소         |
+| `onClickRight` | `void`            |    X     | -       | 우측 영역 요소 클릭 시 |
+| `className`    | `string`          |    X     | `""`    | 추가 클래스명          |
 
 #### Usage
 
