@@ -58,7 +58,6 @@ type SizeMProps = BaseProps & {
   text: string;
 };
 
-type Props = SizeSProps | SizeMProps;
 
 const base = "flex h-[30px] justify-center items-center select-none";
 
