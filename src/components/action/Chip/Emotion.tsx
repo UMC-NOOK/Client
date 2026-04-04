@@ -1,6 +1,6 @@
 type Size = "s" | "m";
 type Variant = "yellow" | "pink" | "green" | "blue" |"purple" | "red"| "none"; // 필요하면 "blue" | "mint" ... 이런 식으로 확장
-type EmotionKey = "Fun" | "EMPATHIZING" | "USEFUL" | "SAD" | "COMPLICATED" | "UNCOMFORTABLE";
+export type EmotionKey = "Fun" | "EMPATHIZING" | "USEFUL" | "SAD" | "COMPLICATED" | "UNCOMFORTABLE";
 
 type EmotionMeta = {
   variant: Variant;
