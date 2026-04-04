@@ -478,21 +478,16 @@ const [isActive, setIsActive] = useState(false);
 | Name            | Type                               | Required | Default     | Note              |
 | :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
 | `size`          | `string => "s" or "m"`             |     O    | -           | chip의 사이즈       |
-| `emoji`         | `string`                           |     O    | -           | emoji 문자       |
-| `text`          | `string`                           |     X    | -           | emoji 옆 텍스트   |
-| `variant`       | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |     X    | `"default"` | 탭 스타일 variant |
-| `active`        | `boolean`          |     O    | `"true"`          | chip의 비활성화/활성화 여부      |
+| `emojiKey`      | `"Fun" | "EMPATHIZING" | "USEFUL" | "SAD" | "COMPLICATED" | "UNCOMFORTABLE"`                           |     O    | -           | emoji 종류       |
+| `active`        | `boolean`          |     O    | `"false"`          | chip의 비활성화/활성화 여부      |
 
 #### Usage
 ```tsx
 //size = s 
-<Emotion size="s" emoji="(^_^)" variant="yellow" active />
+ <Emotion size="s" emojiKey={key} active={false}/>
 
 //size = m 
-<Emotion size="m" emoji="(^_^)" text="재밌어요" variant="yellow" active />
-
-//active 비활성화"
-<Emotion size="m" emoji="(• o •)" text="유익해요" variant="yellow" active={false} />
+<Emotion size="m" emojiKey={key} active={true}/>
 ```
 
 ## 6. Navigation
