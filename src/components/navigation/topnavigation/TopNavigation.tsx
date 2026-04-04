@@ -21,7 +21,7 @@ export default function TopNavigation({
       ].join(" ")}
     >
       {/* LEFT */}
-      <div className="flex items-center justify-start w-10">
+      <div className="flex items-center justify-start">
         {left}
       </div>
 
@@ -31,7 +31,7 @@ export default function TopNavigation({
       </div>
 
       {/* RIGHT */}
-      <div className="flex items-center justify-end w-10">
+      <div className="flex items-center justify-end">
         {right}
       </div>
     </header>
