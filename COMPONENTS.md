@@ -340,7 +340,7 @@ const [birth, setBirth] = useState({
 #### Props
 | Name            | Type                               | Required | Default     | Note              |
 | :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
-| `size`          | `"xs" or "s" or "m`                |     O    | -           |  아이콘 사이즈     |
+| `size`          | `"xs(14)" or "s(20)" or "m(24)`                |     O    | -           |  아이콘 사이즈     |
 | `children`      | `ReactNode`                        |     O    | -           | svg 파일      |
 | `className`     | `string`                           |     X    | -           | 추가적인 클래스명  |
 

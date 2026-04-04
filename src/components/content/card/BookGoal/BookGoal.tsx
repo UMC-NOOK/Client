@@ -68,7 +68,7 @@ function splitByUntil(message: string) {
   return line2 ? [line1, line2] : [line1];
 }
 
-export function BookGoal(props: Props) {
+export default function BookGoal(props: Props) {
   const { percent } = props;
   const resolvedMessage = percent === "ZERO" ? "독서 목표를 설정하세요!" : props.message;
   const lines = splitByUntil(resolvedMessage);
