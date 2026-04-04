@@ -1,21 +1,21 @@
 // libraries
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // components
-import TopNavigation from "../components/navigation/topnavigation/TopNavigation";
-import BookCover from "../components/atomic/BookCover";
-import TabBar from "../components/navigation/tabs/TabBar";
-import BottomSheet from "../components/presentation/modal/bottomsheet/Origin";
-import PopupConfirmModal from "../components/presentation/modal/popup/Origin";
-import MaskGradient from "../components/layout/MaskGradient";
-import Snackbar from "../components/feedback/snackbar";
-import HistoryInfoCard from "../components/content/list/History";
-import InformationSection from "../components/content/InformationText/InformationSection";
-import ResourceDate from "../components/content/list/Resource/Date";
-// import { ResourceDate } from "../components/content/list/Resource/Date";
+import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
+import BookCover from "../../components/atomic/BookCover";
+import TabBar from "../../components/navigation/tabs/TabBar";
+import BottomSheet from "../../components/presentation/modal/bottomsheet/Origin";
+import PopupConfirmModal from "../../components/presentation/modal/popup/Origin";
+import MaskGradient from "../../components/layout/MaskGradient";
+import Snackbar from "../../components/feedback/snackbar";
+import HistoryInfoCard from "../../components/content/list/History";
+import InformationSection from "../../components/content/InformationText/InformationSection";
+import ResourceDate from "../../components/content/list/Resource/Date";
 // assets
-import chevron_left from "../assets/icons/chevron_left.svg";
-import testBookCover from "../assets/book-info/testBookCover.svg";
-import book_shelf from "../assets/icons/book_shelf-gray-30.svg";
+import chevron_left from "../../assets/icons/chevron_left.svg";
+import testBookCover from "../../assets/book-info/testBookCover.svg";
+import book_shelf from "../../assets/icons/book_shelf-gray-30.svg";
 // types
 type DetailTab = "info" | "log";
 // values
@@ -118,7 +118,9 @@ const bookHistoryData = [
   },
 ];
 
-export default function BookInfo() {
+export default function BookInfoPage() {
+  const navigate = useNavigate();
+
   const [selectedTab, setSelectedTab] = useState<DetailTab>("info");
   const [readStatus, setReadStatus] = useState<"unread" | "reading" | "read">(
     "unread",
@@ -179,7 +181,10 @@ export default function BookInfo() {
           </div>
         </div>
         <div className="relative z-10">
-          <TopNavigation left={<img src={chevron_left} alt="back" />} />
+          <TopNavigation
+            left={<img src={chevron_left} alt="back" />}
+            onClickLeft={() => window.history.back()}
+          />
           <div className="flex flex-col justify-center items-center mt-10 gap-4">
             <BookCover imageUrl={testBookCover} size="XL" type="Image" />
             <div>
@@ -334,7 +339,7 @@ export default function BookInfo() {
                 <div
                   className="curser-pointer text-btn-14-sb text-gray-60"
                   onClick={() => {
-                    // 전체 기록 보기로 이동
+                    navigate("/library/123/history");
                   }}
                 >
                   전체 보기
@@ -357,7 +362,7 @@ export default function BookInfo() {
                     height={20}
                     className="-m-4 bottom-0"
                   />
-                  {bookHistoryData.map((history, index) => (
+                  {bookHistoryData.map((history) => (
                     <div
                       key={history.year}
                       className="flex items-start gap-2 mb-4 w-full"

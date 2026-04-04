@@ -24,7 +24,8 @@ import BannerActionCardTestPage from "../pages/search/test/testpage";
 import BottomSheetTestPage from "../pages/search/test/BottomSheetTestPage";
 import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
 
-import BookInfo from "../pages/BookInfo";
+import BookInfoPage from "../pages/bookInfo/BookInfoPage";
+import AllHistoryPage from "../pages/bookInfo/AllHistoryPage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -121,7 +122,11 @@ export default function AppRoutes() {
 
         {/* No Footer Pages */}
         <Route element={<NoFooterLayout />}>
-          <Route path="/library/123" element={<BookInfo />}></Route>
+          <Route path="/library/123" element={<BookInfoPage />}></Route>
+          <Route
+            path="/library/123/history"
+            element={<AllHistoryPage />}
+          ></Route>
         </Route>
       </Route>
     </Routes>
