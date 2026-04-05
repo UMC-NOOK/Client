@@ -743,6 +743,47 @@ const options = [
 <Footer />
 ```
 
+### [ Dot ]
+
+#### Path
+
+`src/components/navigation/Pagination/PageIndicator/Resource/Dot.tsx`
+
+#### Props
+
+| Name    | Type    | Required | Default | Note |
+| :------ | :------ | :------: | :------ | :--- |
+| current | boolean |     O    | `false` | 현재 indx 유무 |
+
+#### Usage
+
+```tsx
+//false
+<Dot/>
+
+<Dot current={true} />
+```
+
+### [ Page Indicator ]
+
+#### Path
+
+`src/components/navigation/Pagination/PageIndicator.tsx`
+
+#### Props
+
+| Name  | Type    | Required | Default | Note |
+| :---- | :------ | :------: | :------ | :--- |
+| cur   | number  |     O    | -       | 현재 indx  |
+| total | number  |     O    | -       | 전체 indx 개수 |
+
+#### Usage
+
+```tsx
+<PageIndicator cur={0} total={4} />
+```
+
+
 ## 7. Content
 
 > - **Design**:
@@ -842,7 +883,6 @@ const MOCK_RANKS = [
 ```tsx
 <ResourceDate topText="01.12" bottomText="2026" />
 ```
-
 ### [ Book Goal ]
 
 #### Path
@@ -1298,10 +1338,67 @@ const MOCK_RANKS = [
 />
 ```
 
+### [ EmptyState ]
+
+#### Path
+
+`components/content/EmptyState/EmptyState.tsx`
+
+#### Props
+
+| Name          | Type         | Required  | Default | Note    |
+| :------------ | :----------- | :-------: | :------ | :------ |
+| text          | `string`     |     O     |   -     |   텍스트    |
+| buttonText    | `string`     |     X     |   -     |  버튼 이름  |
+| onButtonClick | `() => void` |     X     |   -     |  버튼 클릭 함수  |
+
+#### Usage
+
+```tsx
+<EmptyState text="표시할 항목이 없습니다." />
+
+<EmptyState
+  text="아직 등록된 일정이 없습니다."
+  buttonText="추가하기"
+  onButtonClick={() => {console.log("추가하기 클릭");}}
+/>
+```
+
+### [ Profile ]
+
+#### Path
+
+`components/content/Profile/Profile.tsx`
+
+#### Props
+
+| Name      | Type         | Required  | Default | Note    |
+| :-------- | :----------- | :-------: | :------ | :------ |
+| active    | `boolean`    |     X     | `true`  |   활성화 유무    |
+| imageUrl  | `string`     |     O     |   -     |  이미지 url  |
+| name      | `string`     |     O     |   -     |  이름  |
+| time      | `string`     |     O     |   -     |  시간  |
+
+#### Usage
+
+```tsx
+<Profile
+  imageUrl="https://picsum.photos/56/56?random=1"
+  name="수연"
+  time="09:00"
+/>
+
+<Profile
+  active={false}
+  imageUrl="https://picsum.photos/56/56?random=3"
+  name="수연"
+  time="09:00"
+/>
+```
+
 ---
 
 ## 8. Feedback
-
 > - **Design**: https://www.figma.com/design/VX3WcpitSSgsYxFoXlbgcA/NOOK-UI--%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9A%A9-?node-id=1268-9814&m=dev
 > - **Author**: 오은진
 
