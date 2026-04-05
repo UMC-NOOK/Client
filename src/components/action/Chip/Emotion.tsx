@@ -53,7 +53,7 @@ type BaseProps = {
   emojiKey: EmotionKey; // default: "yellow"
 };
 
-const base = "flex  w-fit justify-center items-center select-none";
+const base = "flex w-fit justify-center items-center select-none";
 
 const sizeClassMap: Record<Size, string> = {
   s: "p-1 h-[20px] rounded-[4px] bg-gray-20 text-label-12-sb",
