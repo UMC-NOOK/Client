@@ -197,6 +197,15 @@
 | `onBlur`        | `() => void`          |    X     | -                       | input blur 시 실행     |
 | `placeholder`   | `string`              |    X     | `"검색어를 입력하세요"` | placeholder 텍스트     |
 | `isInputMode`   | `boolean`             |    X     | -                       | 입력 모드 여부         |
+| Name            | Type                  | Required | Default                 | Note                   |
+| :-------------- | :-------------------- | :------: | :-------------          | :---------------       |
+| `value`         | `string`              |    O     | -                       | 검색어 값              |
+| `onChange`      | `(v: string) => void` |    O     | -                       | 입력값 변경 핸들러     |
+| `onSearchClick` | `() => void`          |    X     | -                       | 검색 버튼 클릭 시 실행 |
+| `onEnter`       | `() => void`          |    X     | -                       | Enter 키 입력 시 실행  |
+| `onFocus`       | `() => void`          |    X     | -                       | input focus 시 실행    |
+| `onBlur`        | `() => void`          |    X     | -                       | input blur 시 실행     |
+| `placeholder`   | `string`              |    X     | `"검색어를 입력하세요"` | placeholder 텍스트     |
 
 #### Usage
 
@@ -506,19 +515,26 @@ const [isActive, setIsActive] = useState(false);
 
 #### Props
 
-| Name      | Type                                                         | Required | Default     | Note                        |
-| :-------- | :----------------------------------------------------------- | :------: | :---------- | :-------------------------- |
-| `size`    | `string => "s" or "m"`                                       |    O     | -           | chip의 사이즈               |
-| `emoji`   | `string`                                                     |    O     | -           | emoji 문자                  |
-| `text`    | `string`                                                     |    X     | -           | emoji 옆 텍스트             |
-| `variant` | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |    X     | `"default"` | 탭 스타일 variant           |
-| `active`  | `boolean`                                                    |    O     | `"true"`    | chip의 비활성화/활성화 여부 |
+| Name            | Type                                                         |   Required    | Default     | Note                        |
+| :-------------- | :----------------------------------------------------------- | :-----------: | :---------- | :-------------------------- | ------------- | ---------------- | --- | --- | ---------- |
+| `size`          | `string => "s" or "m"`                                       |       O       | -           | chip의 사이즈               |
+| `emoji`         | `string`                                                     |       O       | -           | emoji 문자                  |
+| `text`          | `string`                                                     |       X       | -           | emoji 옆 텍스트             |
+| `variant`       | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |       X       | `"default"` | 탭 스타일 variant           |
+| `active`        | `boolean`                                                    |       O       | `"true"`    | chip의 비활성화/활성화 여부 |
+| Name            | Type                                                         |   Required    | Default     | Note                        |
+| :-------------- | :---------------------------------                           |   :------:    | :---------- | :--------------             |
+| `size`          | `string => "s" or "m"`                                       |       O       | -           | chip의 사이즈               |
+| `emojiKey`      | `"Fun"                                                       | "EMPATHIZING" | "USEFUL"    | "SAD"                       | "COMPLICATED" | "UNCOMFORTABLE"` | O   | -   | emoji 종류 |
+| `active`        | `boolean`                                                    |       O       | `"false"`   | chip의 비활성화/활성화 여부 |
 
 #### Usage
 
 ```tsx
 //size = s
 <Emotion size="s" emoji="(^_^)" variant="yellow" active />
+//size = s
+ <Emotion size="s" emojiKey={key} active={false}/>
 
 //size = m
 <Emotion size="m" emoji="(^_^)" text="재밌어요" variant="yellow" active />
@@ -1035,30 +1051,35 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name      | Type                                                         | Required | Default  | Note                           |
-| :-------- | :----------------------------------------------------------- | :------: | :------- | :----------------------------- |
-| `date`    | `string`                                                     |    O     | -        | chip의 사이즈                  |
-| `emoji`   | `string`                                                     |    O     | -        | emoji 문자                     |
-| `variant` | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |    X     | `yellow` | emoji 색상                     |
-| `review`  | `string`                                                     |    O     | -        | emoji 옆 텍스트                |
-| `image`   | `string[]`                                                   |    X     | `[]`     | chip의 비활성화/활성화 여부    |
-| `onClick` | `() => void`                                                 |    X     | -        | 해당 컴포넌트 눌럿을 때의 함수 |
+| Name            | Type                                                         |   Required    | Default     | Note                           |
+| :-------------- | :----------------------------------------------------------- | :-----------: | :---------- | :----------------------------- | ------------- | ---------------- | --- | --- | ---------- |
+| `date`          | `string`                                                     |       O       | -           | chip의 사이즈                  |
+| `emoji`         | `string`                                                     |       O       | -           | emoji 문자                     |
+| `variant`       | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |       X       | `yellow`    | emoji 색상                     |
+| `review`        | `string`                                                     |       O       | -           | emoji 옆 텍스트                |
+| `image`         | `string[]`                                                   |       X       | `[]`        | chip의 비활성화/활성화 여부    |
+| `onClick`       | `() => void`                                                 |       X       | -           | 해당 컴포넌트 눌럿을 때의 함수 |
+| Name            | Type                                                         |   Required    | Default     | Note                           |
+| :-------------- | :-------------------                                         |   :------:    | :---------- | :--------------                |
+| `date`          | `string`                                                     |       O       | -           | chip의 사이즈                  |
+| `emojiKey`      | `"Fun"                                                       | "EMPATHIZING" | "USEFUL"    | "SAD"                          | "COMPLICATED" | "UNCOMFORTABLE"` | O   | -   | emoji 문자 |
+| `review`        | `string`                                                     |       O       | -           | emoji 옆 텍스트                |
+| `image`         | `string[]`                                                   |       X       | `[]`        | chip의 비활성화/활성화 여부    |
+| `onClick`       | `() => void`                                                 |       X       | -           | 해당 컴포넌트 눌럿을 때의 함수 |
 
 #### Usage
 
 ```tsx
 <ReportList
   date="25.09.13"
-  emoji="(T_T)"
-  variant="blue"
+  emojiKey="FUN"
   review="생각이 많아서 초반에는 잘 안 읽혔는데, 중간부터 조금씩 흐름을 탔다. 마지막 문장이 특히 오래 남았다."
   images={[sampleBook]}
 />
 
 <ReportList
   date="25.09.14"
-  emoji="(>_<)"
-  variant="red"
+  emojiKey="FUN"
   review="오늘 기록은 이미지 여러 장이 들어갔을 때의 레이아웃을 확인하기 위한 테스트입니다. 줄 수가 늘어나면 카드 높이도 자연스럽게 커져야 합니다."
   images={[
     sampleBook,
@@ -1147,6 +1168,131 @@ const MOCK_RANKS = [
   flow="horizontal"
   top="Text"
   bottom="가로형 설명 텍스트입니다."
+/>
+```
+
+### [ DayOfTheWeek ]
+
+#### Path
+
+`components/content/Calendar/Resource/DayOfTheWeek.tsx`
+
+#### Props
+
+| Name | Type     | Required | Default | Note |
+| :--- | :------- | :------: | :------ | :--- |
+| text | `string` |    O     | -       | 요일 |
+
+#### Usage
+
+```tsx
+<DayOfTheWeek text="T" />
+```
+
+### [ Day ]
+
+#### Path
+
+`components/content/Calendar/Resource/Day.tsx`
+
+#### Props
+
+| Name    | Type      | Required | Default | Note                          |
+| :------ | :-------- | :------: | :------ | :---------------------------- |
+| text    | `string`  |    O     | -       | 요일                          |
+| disable | `boolean` |    X     | `true`  | 활성화 유무 (비활성화 = true) |
+
+#### Usage
+
+```tsx
+<Day text="1" />
+<Day text="M" disable={false} />
+```
+
+### [ Indicator ]
+
+#### Path
+
+`components/content/Calendar/Resource/Indicator.tsx`
+
+#### Props
+
+| Name    | Type                                             | Required | Default | Note   |
+| :------ | :----------------------------------------------- | :------: | :------ | :----- |
+| percent | `"none" \| "0" \| "25" \| "50" \| "75" \| "100"` |    O     | -       | 퍼센트 |
+
+#### Usage
+
+```tsx
+<Indicator percent="0" />
+```
+
+### [ IndicatorSet ]
+
+#### Path
+
+`components/content/Calendar/Resource/IndicatorSet.tsx`
+
+#### Props
+
+| Name    | Type                                             | Required | Default | Note        |
+| :------ | :----------------------------------------------- | :------: | :------ | :---------- |
+| day     | `string`                                         |    O     | -       | 퍼센트      |
+| disble  | `boolean`                                        |    X     | `true`  | 활성화 유무 |
+| percent | `"none" \| "0" \| "25" \| "50" \| "75" \| "100"` |    X     | `none`  | 퍼센트      |
+
+#### Usage
+
+```tsx
+<IndicatorSet day="TT"/>
+<IndicatorSet day="TT" disable={false}  percent="0" />
+
+```
+
+### [ BookSet ]
+
+#### Path
+
+`components/content/Calendar/Resource/BookSet.tsx`
+
+#### Props
+
+| Name     | Type                     | Required | Default  | Note                 |
+| :------- | :----------------------- | :------: | :------- | :------------------- |
+| day      | `string`                 |    O     | -        | 퍼센트               |
+| visible  | `boolean`                |    X     | `false`  | 시각화 유무          |
+| disble   | `boolean`                |    X     | `false`  | 활성화 유무          |
+| count    | `"single" \| "multiple"` |    X     | `single` | 도서 수 여러 개 유무 |
+| imageUrl | `string`                 |    X     | -        | 도서 이미지          |
+| bookNum  | `number`                 |    X     | `0`      | 도서 개수            |
+
+#### Usage
+
+```tsx
+<BookSet day="TT" visible={false} />
+
+<BookSet
+  day="TT"
+  visible
+  disable
+  imageUrl="https://picsum.photos/44/64?random=1"
+/>
+
+<BookSet
+  day="TT"
+  visible
+  disable={false}
+  count="single"
+  imageUrl="https://picsum.photos/44/64?random=3"
+/>
+
+<BookSet
+  day="TT"
+  visible
+  disable={false}
+  count="multiple"
+  bookNum={2}
+  imageUrl="https://picsum.photos/44/64?random=5"
 />
 ```
 
