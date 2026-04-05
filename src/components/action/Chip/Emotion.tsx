@@ -1,7 +1,7 @@
 type Size = "s" | "m";
 type Variant = "yellow" | "pink" | "green" | "blue" | "purple" | "red" | "none"; // 필요하면 "blue" | "mint" ... 이런 식으로 확장
 export type EmotionKey =
-  | "Fun"
+  | "FUN"
   | "EMPATHIZING"
   | "USEFUL"
   | "SAD"
@@ -15,7 +15,7 @@ type EmotionMeta = {
 };
 
 const emotionMetaMap: Record<EmotionKey, EmotionMeta> = {
-  Fun: {
+  FUN: {
     variant: "yellow",
     emoji: "(^_^)",
     text: "재미있어요",
@@ -53,11 +53,11 @@ type BaseProps = {
   emojiKey: EmotionKey; // default: "yellow"
 };
 
-const base = "flex h-[30px] justify-center items-center select-none";
+const base = "flex  w-fit justify-center items-center select-none";
 
 const sizeClassMap: Record<Size, string> = {
-  s: "p-1 rounded-[4px] bg-gray-20 text-label-12-sb",
-  m: "p-2 gap-2 rounded-[2px] bg-gray-30",
+  s: "p-1 h-[20px] rounded-[4px] bg-gray-20 text-label-12-sb",
+  m: "p-2 h-[30px] gap-2 rounded-[2px] bg-gray-30",
 };
 
 const variantColorClassMap: Record<Variant, string> = {
