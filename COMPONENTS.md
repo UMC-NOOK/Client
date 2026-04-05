@@ -478,21 +478,16 @@ const [isActive, setIsActive] = useState(false);
 | Name            | Type                               | Required | Default     | Note              |
 | :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
 | `size`          | `string => "s" or "m"`             |     O    | -           | chip의 사이즈       |
-| `emoji`         | `string`                           |     O    | -           | emoji 문자       |
-| `text`          | `string`                           |     X    | -           | emoji 옆 텍스트   |
-| `variant`       | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |     X    | `"default"` | 탭 스타일 variant |
-| `active`        | `boolean`          |     O    | `"true"`          | chip의 비활성화/활성화 여부      |
+| `emojiKey`      | `"Fun" | "EMPATHIZING" | "USEFUL" | "SAD" | "COMPLICATED" | "UNCOMFORTABLE"`                           |     O    | -           | emoji 종류       |
+| `active`        | `boolean`          |     O    | `"false"`          | chip의 비활성화/활성화 여부      |
 
 #### Usage
 ```tsx
 //size = s 
-<Emotion size="s" emoji="(^_^)" variant="yellow" active />
+ <Emotion size="s" emojiKey={key} active={false}/>
 
 //size = m 
-<Emotion size="m" emoji="(^_^)" text="재밌어요" variant="yellow" active />
-
-//active 비활성화"
-<Emotion size="m" emoji="(• o •)" text="유익해요" variant="yellow" active={false} />
+<Emotion size="m" emojiKey={key} active={true}/>
 ```
 
 ## 6. Navigation
@@ -998,8 +993,7 @@ const MOCK_RANKS = [
 | Name            | Type                 | Required | Default     | Note              |
 | :-------------- | :------------------- | :------: | :---------- | :--------------   |
 | `date`          | `string`             |     O    | -           | chip의 사이즈       |
-| `emoji`         | `string`             |     O    | -           | emoji 문자       |
-| `variant`       | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |     X    |  `yellow`          | emoji 색상       |
+| `emojiKey`         | `"Fun" | "EMPATHIZING" | "USEFUL" | "SAD" | "COMPLICATED" | "UNCOMFORTABLE"`             |     O    | -           | emoji 문자       |
 | `review`        | `string`             |     O    | -           | emoji 옆 텍스트   |
 | `image`         | `string[]`           |     X    |`[]`         | chip의 비활성화/활성화 여부      |
 | `onClick`       | `() => void`         |     X    | -           | 해당 컴포넌트 눌럿을 때의 함수  |
@@ -1008,16 +1002,14 @@ const MOCK_RANKS = [
 ```tsx
 <ReportList
   date="25.09.13"
-  emoji="(T_T)"
-  variant="blue"
+  emojiKey="FUN"
   review="생각이 많아서 초반에는 잘 안 읽혔는데, 중간부터 조금씩 흐름을 탔다. 마지막 문장이 특히 오래 남았다."
   images={[sampleBook]}
 />
 
 <ReportList
   date="25.09.14"
-  emoji="(>_<)"
-  variant="red"
+  emojiKey="FUN"
   review="오늘 기록은 이미지 여러 장이 들어갔을 때의 레이아웃을 확인하기 위한 테스트입니다. 줄 수가 늘어나면 카드 높이도 자연스럽게 커져야 합니다."
   images={[
     sampleBook,
