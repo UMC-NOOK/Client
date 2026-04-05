@@ -9,6 +9,7 @@ import BottomSheet from "../../components/presentation/modal/bottomsheet/Origin"
 import PopupConfirmModal from "../../components/presentation/modal/popup/Origin";
 import MaskGradient from "../../components/layout/MaskGradient";
 import Snackbar from "../../components/feedback/snackbar";
+import Solid from "../../components/action/Button/Solid";
 import HistoryInfoCard from "../../components/content/list/History";
 import InformationSection from "../../components/content/InformationText/InformationSection";
 import ResourceDate from "../../components/content/list/Resource/Date";
@@ -238,15 +239,25 @@ export default function BookInfoPage() {
               bottom={bookData.result.book.isbn13}
             />
           </div>
-          <div className="flex gap-2 text-gray-50 text-label-12-sb">
-            <div>도서 DB 제공: 알라딘</div>
-            <div
-              className="underline cursor-pointer"
-              onClick={() =>
-                window.open(bookData.result.book.aladinLink, "_blank")
-              }
-            >
-              도서 구매하기
+          <div className="flex flex-col gap-2 w-full justify-center items-center">
+            {readStatus !== "unread" && (
+              <Solid
+                text="서재에서 제거"
+                variant="alert"
+                size="m"
+                onClick={() => setReadStatus("unread")}
+              />
+            )}
+            <div className="flex gap-2 text-gray-50 text-label-12-sb">
+              <div>도서 DB 제공: 알라딘</div>
+              <div
+                className="underline cursor-pointer"
+                onClick={() =>
+                  window.open(bookData.result.book.aladinLink, "_blank")
+                }
+              >
+                도서 구매하기
+              </div>
             </div>
           </div>
         </div>
