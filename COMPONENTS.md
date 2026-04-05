@@ -409,21 +409,23 @@ const [birth, setBirth] = useState({
 
 #### Props
 
-| Name        | Type                              | Required | Default   | Note               |
-| :---------- | :-------------------------------- | :------: | :-------- | :----------------- |
-| `text`      | `string`                          |    O     | -         | 텍스트 내용        |
-| `variant`   | `"default" \| "dark" \| "danger"` |    O     | `default` | 버튼 종류          |
-| `className` | `string`                          |    X     | -         | 추가적인 클래스 명 |
+| Name        | Type                                                | Required | Default   | Note               |
+| :---------- | :-------------------------------------------------- | :------: | :-------- | :----------------- |
+| `text`      | `string`                                            |    O     | -         | 텍스트 내용        |
+| `variant`   | `"primary" \| "secondary" \| "disabled" \| "alert"` |    X     | `default` | 버튼 종류          |
+| `size`      | `"s" \| "m" `                                       |    X     | `default` | 버튼 크기          |
+| `onClick`   | `void`                                              |    X     | -         | 클릭 함수          |
+| `className` | `string`                                            |    X     | -         | 추가적인 클래스 명 |
 
 #### Usage
 
 ```tsx
   //default
-  <Solid> 기본 </Solid>
+  <Solid text="버튼 텍스트"> 기본 </Solid>
   //dark
-  <Solid variant="dark">다른</Solid>
+  <Solid text="버튼 텍스트" variant="primary">다른</Solid>
   //danger
-  <Solid variant="danger">제거</Solid>
+  <Solid text="버튼 텍스트" variant="alert">제거</Solid>
 ```
 
 ### [ FAB ]
