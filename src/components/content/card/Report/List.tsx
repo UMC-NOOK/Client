@@ -1,5 +1,5 @@
 import SectionHeader from "../../InformationText/SectionHeader";
-import { Emotion } from "../../../action/Chip/Emotion";
+import Emotion from "../../../action/Chip/Emotion";
 import type { EmotionKey } from "../../../action/Chip/Emotion";
 
 type Props = {
