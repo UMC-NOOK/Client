@@ -30,11 +30,12 @@
 
 #### Props
 
-| Name       | Type                         | Required | Default | Note                                          |
-| :--------- | :--------------------------- | :------: | :------ | :-------------------------------------------- |
-| `imageUrl` | `string`                     |    X     | -       | 책 표지 이미지 URL                            |
-| `size`     | `'XS' \| 'S' \| 'M' \| 'XL'` |    O     | -       | 표지 크기                                     |
-| `type`     | `'Image' \| 'Upload'`        |    O     | -       | `'Image'` 일 경우 반드시 `imageUrl` 함께 제공 |
+| Name        | Type                         | Required | Default | Note                                          |
+| :---------- | :--------------------------- | :------: | :------ | :-------------------------------------------- |
+| `imageUrl`  | `string`                     |    X     | -       | 책 표지 이미지 URL                            |
+| `size`      | `'XS' \| 'S' \| 'M' \| 'XL'` |    O     | -       | 표지 크기                                     |
+| `type`      | `'Image' \| 'Upload'`        |    O     | -       | `'Image'` 일 경우 반드시 `imageUrl` 함께 제공 |
+| `className` | `string`                     |    X     | -       | 추가 디자인                                   |
 
 #### Usage
 
@@ -153,12 +154,13 @@
 
 #### Props
 
-| Name     | Type               | Required | Default | Note                    |
-| :------- | :----------------- | :------: | :------ | :---------------------- |
-| `width`  | `number \| string` |    O     | -       | 너비                    |
-| `height` | `number \| string` |    O     | -       | 높이                    |
-| `top`    | `number \| string` |    X     | 0       | relative 기준 top 위치  |
-| `left`   | `number \| string` |    X     | 0       | relative 기준 left 위치 |
+| Name        | Type               | Required | Default | Note                                                                                                     |
+| :---------- | :----------------- | :------: | :------ | :------------------------------------------------------------------------------------------------------- |
+| `width`     | `number \| string` |    O     | -       | 너비                                                                                                     |
+| `height`    | `number \| string` |    O     | -       | 높이                                                                                                     |
+| `top`       | `number \| string` |    X     | 0       | relative 기준 top 위치                                                                                   |
+| `left`      | `number \| string` |    X     | 0       | relative 기준 left 위치                                                                                  |
+| `className` | ` string`          |    X     | -       | 기타 요소 (만약 부모 요소에 padding이 들어간다면 `-m-4` 이런 식으로 padding값 만큼 음수 margin으로 빼줌) |
 
 #### Usage
 
@@ -174,8 +176,8 @@
 
 ## 3. Input
 
-> * **Design**: [https://www.figma.com/design/VX3WcpitSSgsYxFoXlbgcA/NOOK-UI--%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9A%A9-?node-id=1268-10175&m=dev](https://www.figma.com/design/VX3WcpitSSgsYxFoXlbgcA/NOOK-UI--%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9A%A9-?node-id=1268-10175&m=dev)
-> * **Author**: 박수지
+> - **Design**: [https://www.figma.com/design/VX3WcpitSSgsYxFoXlbgcA/NOOK-UI--%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9A%A9-?node-id=1268-10175&m=dev](https://www.figma.com/design/VX3WcpitSSgsYxFoXlbgcA/NOOK-UI--%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9A%A9-?node-id=1268-10175&m=dev)
+> - **Author**: 박수지
 
 ### [ Search Field ]
 
@@ -185,15 +187,25 @@
 
 #### Props
 
-| Name            | Type                  | Required | Default        | Note             |
-| :-------------- | :-------------------- | :------: | :------------- | :--------------- |
-| `value`         | `string`              |     O    | -              | 검색어 값            |
-| `onChange`      | `(v: string) => void` |     O    | -              | 입력값 변경 핸들러       |
-| `onSearchClick` | `() => void`          |     X    | -              | 검색 버튼 클릭 시 실행    |
-| `onEnter`       | `() => void`          |     X    | -              | Enter 키 입력 시 실행  |
-| `onFocus`       | `() => void`          |     X    | -              | input focus 시 실행 |
-| `onBlur`        | `() => void`          |     X    | -              | input blur 시 실행  |
-| `placeholder`   | `string`              |     X    | `"검색어를 입력하세요"` | placeholder 텍스트  |
+| Name            | Type                  | Required | Default                 | Note                   |
+| :-------------- | :-------------------- | :------: | :---------------------- | :--------------------- |
+| `value`         | `string`              |    O     | -                       | 검색어 값              |
+| `onChange`      | `(v: string) => void` |    O     | -                       | 입력값 변경 핸들러     |
+| `onSearchClick` | `() => void`          |    X     | -                       | 검색 버튼 클릭 시 실행 |
+| `onEnter`       | `() => void`          |    X     | -                       | Enter 키 입력 시 실행  |
+| `onFocus`       | `() => void`          |    X     | -                       | input focus 시 실행    |
+| `onBlur`        | `() => void`          |    X     | -                       | input blur 시 실행     |
+| `placeholder`   | `string`              |    X     | `"검색어를 입력하세요"` | placeholder 텍스트     |
+| `isInputMode`   | `boolean`             |    X     | -                       | 입력 모드 여부         |
+| Name            | Type                  | Required | Default                 | Note                   |
+| :-------------- | :-------------------- | :------: | :-------------          | :---------------       |
+| `value`         | `string`              |    O     | -                       | 검색어 값              |
+| `onChange`      | `(v: string) => void` |    O     | -                       | 입력값 변경 핸들러     |
+| `onSearchClick` | `() => void`          |    X     | -                       | 검색 버튼 클릭 시 실행 |
+| `onEnter`       | `() => void`          |    X     | -                       | Enter 키 입력 시 실행  |
+| `onFocus`       | `() => void`          |    X     | -                       | input focus 시 실행    |
+| `onBlur`        | `() => void`          |    X     | -                       | input blur 시 실행     |
+| `placeholder`   | `string`              |    X     | `"검색어를 입력하세요"` | placeholder 텍스트     |
 
 #### Usage
 
@@ -206,7 +218,7 @@
 />
 ```
 
-### [ Text Field ] -> 기본 굵기 
+### [ Text Field ] -> 기본 굵기
 
 #### Path
 
@@ -214,14 +226,14 @@
 
 #### Props
 
-| Name          | Type                                                  | Required | Default | Note            |
-| :------------ | :---------------------------------------------------- | :------: | :------ | :-------------- |
-| `title`       | `string`                                              |     O    | -       | 입력 필드 제목        |
-| `value`       | `string`                                              |     O    | -       | 입력 값            |
-| `onChange`    | `(v: string) => void`                                 |     O    | -       | 값 변경 핸들러        |
-| `placeholder` | `string`                                              |     X    | `""`    | placeholder 텍스트 |
-| `inputMode`   | `React.HTMLAttributes<HTMLInputElement>["inputMode"]` |     X    | -       | 입력 모드 설정        |
-| `disabled`    | `boolean`                                             |     X    | `false` | 비활성화 여부         |
+| Name          | Type                                                  | Required | Default | Note               |
+| :------------ | :---------------------------------------------------- | :------: | :------ | :----------------- |
+| `title`       | `string`                                              |    O     | -       | 입력 필드 제목     |
+| `value`       | `string`                                              |    O     | -       | 입력 값            |
+| `onChange`    | `(v: string) => void`                                 |    O     | -       | 값 변경 핸들러     |
+| `placeholder` | `string`                                              |    X     | `""`    | placeholder 텍스트 |
+| `inputMode`   | `React.HTMLAttributes<HTMLInputElement>["inputMode"]` |    X     | -       | 입력 모드 설정     |
+| `disabled`    | `boolean`                                             |    X     | `false` | 비활성화 여부      |
 
 #### Usage
 
@@ -242,13 +254,13 @@
 
 #### Props
 
-| Name          | Type                  | Required | Default | Note            |
-| :------------ | :-------------------- | :------: | :------ | :-------------- |
-| `title`       | `string`              |     O    | -       | 입력 필드 제목        |
-| `value`       | `string`              |     O    | -       | 입력 값            |
-| `onChange`    | `(v: string) => void` |     O    | -       | 값 변경 핸들러        |
-| `placeholder` | `string`              |     X    | `""`    | placeholder 텍스트 |
-| `disabled`    | `boolean`             |     X    | `false` | 비활성화 여부         |
+| Name          | Type                  | Required | Default | Note               |
+| :------------ | :-------------------- | :------: | :------ | :----------------- |
+| `title`       | `string`              |    O     | -       | 입력 필드 제목     |
+| `value`       | `string`              |    O     | -       | 입력 값            |
+| `onChange`    | `(v: string) => void` |    O     | -       | 값 변경 핸들러     |
+| `placeholder` | `string`              |    X     | `""`    | placeholder 텍스트 |
+| `disabled`    | `boolean`             |    X     | `false` | 비활성화 여부      |
 
 #### Usage
 
@@ -261,7 +273,7 @@
 />
 ```
 
-### [ Triple Text Field ] -> 3분할 
+### [ Triple Text Field ] -> 3분할
 
 #### Path
 
@@ -269,14 +281,14 @@
 
 #### Props
 
-| Name         | Type                                              | Required | Default | Note           |
-| :----------- | :------------------------------------------------ | :------: | :------ | :------------- |
-| `title`      | `string`                                          |     O    | -       | 입력 필드 제목       |
-| `value`      | `Record<string, string>`                          |     O    | -       | 3개 input의 값 객체 |
-| `onChange`   | `(v: Record<string, string>) => void`             |     O    | -       | 값 변경 핸들러       |
-| `fields`     | `[{ key, placeholder, maxLen, inputMode? }, ...]` |     O    | -       | 3칸 입력 필드 정의    |
-| `digitsOnly` | `boolean`                                         |     X    | `true`  | 숫자만 입력 허용      |
-| `disabled`   | `boolean`                                         |     X    | `false` | 비활성화 여부        |
+| Name         | Type                                              | Required | Default | Note                |
+| :----------- | :------------------------------------------------ | :------: | :------ | :------------------ |
+| `title`      | `string`                                          |    O     | -       | 입력 필드 제목      |
+| `value`      | `Record<string, string>`                          |    O     | -       | 3개 input의 값 객체 |
+| `onChange`   | `(v: Record<string, string>) => void`             |    O     | -       | 값 변경 핸들러      |
+| `fields`     | `[{ key, placeholder, maxLen, inputMode? }, ...]` |    O     | -       | 3칸 입력 필드 정의  |
+| `digitsOnly` | `boolean`                                         |    X     | `true`  | 숫자만 입력 허용    |
+| `disabled`   | `boolean`                                         |    X     | `false` | 비활성화 여부       |
 
 #### Usage
 
@@ -296,7 +308,7 @@ const [birth, setBirth] = useState({
     { key: "month", placeholder: "MM", maxLen: 2, inputMode: "numeric" },
     { key: "day", placeholder: "DD", maxLen: 2, inputMode: "numeric" },
   ]}
-/>
+/>;
 ```
 
 ### [ Text Area ]
@@ -307,14 +319,14 @@ const [birth, setBirth] = useState({
 
 #### Props
 
-| Name          | Type                  | Required | Default | Note            |
-| :------------ | :-------------------- | :------: | :------ | :-------------- |
-| `title`       | `string`              |     X    | -       | textarea 제목     |
-| `value`       | `string`              |     O    | -       | 입력 값            |
-| `onChange`    | `(v: string) => void` |     O    | -       | 값 변경 핸들러        |
-| `placeholder` | `string`              |     X    | `""`    | placeholder 텍스트 |
-| `maxLength`   | `number`              |     X    | -       | 최대 글자 수 제한      |
-| `disabled`    | `boolean`             |     X    | `false` | 비활성화 여부         |
+| Name          | Type                  | Required | Default | Note               |
+| :------------ | :-------------------- | :------: | :------ | :----------------- |
+| `title`       | `string`              |    X     | -       | textarea 제목      |
+| `value`       | `string`              |    O     | -       | 입력 값            |
+| `onChange`    | `(v: string) => void` |    O     | -       | 값 변경 핸들러     |
+| `placeholder` | `string`              |    X     | `""`    | placeholder 텍스트 |
+| `maxLength`   | `number`              |    X     | -       | 최대 글자 수 제한  |
+| `disabled`    | `boolean`             |    X     | `false` | 비활성화 여부      |
 
 #### Usage
 
@@ -329,42 +341,69 @@ const [birth, setBirth] = useState({
 ```
 
 ## 5. Action
-> * **Design**:
-> * **Author**: 임서연
+
+> - **Design**:
+> - **Author**: 임서연
 
 ### [ Icon ]
 
 #### Path
+
 `src/components/action/Button/Icon.tsx`
 
 #### Props
+<<<<<<< HEAD
 | Name            | Type                               | Required | Default     | Note              |
 | :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
 | `size`          | `"xs(14)" or "s(20)" or "m(24)`                |     O    | -           |  아이콘 사이즈     |
 | `children`      | `ReactNode`                        |     O    | -           | svg 파일      |
 | `className`     | `string`                           |     X    | -           | 추가적인 클래스명  |
+=======
+
+| Name        | Type                | Required | Default | Note              |
+| :---------- | :------------------ | :------: | :------ | :---------------- |
+| `size`      | `"xs" or "s" or "m` |    O     | -       | 아이콘 사이즈     |
+| `children`  | `ReactNode`         |    O     | -       | svg 파일          |
+| `className` | `string`            |    X     | -       | 추가적인 클래스명 |
+>>>>>>> ca4f5feb29f1115acc3be3590a1cf684574f7907
 
 #### Usage
+
 ```tsx
-  <Icon size="xs"> 
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M16 8.75C16 6.8272 15.2356 4.98267 13.876 3.62305C12.5164 2.2637 10.6726 1.50002 8.75 1.5C6.8272 1.5 4.98267 2.26342 3.62305 3.62305C2.26342 4.98267 1.5 6.8272 1.5 8.75C1.50002 10.6726 2.2637 12.5164 3.62305 13.876C4.98267 15.2356 6.8272 16 8.75 16C10.6728 16 12.5164 15.2356 13.876 13.876C15.2356 12.5164 16 10.6728 16 8.75ZM17.5 8.75C17.5 10.8192 16.7645 12.8109 15.4424 14.3818L19.2803 18.2197C19.573 18.5126 19.5731 18.9874 19.2803 19.2803C18.9874 19.5731 18.5126 19.573 18.2197 19.2803L14.3818 15.4424C12.8109 16.7645 10.8192 17.5 8.75 17.5C6.42941 17.5 4.20342 16.5784 2.5625 14.9375C0.921589 13.2966 2.04574e-05 11.0706 0 8.75C0 6.42938 0.921571 4.20343 2.5625 2.5625C4.20343 0.921571 6.42938 0 8.75 0C11.0706 2.04577e-05 13.2966 0.921589 14.9375 2.5625C16.5784 4.20342 17.5 6.42941 17.5 8.75Z" fill="#ECECEC"/> </svg> 
-  </Icon>
+<Icon size="xs">
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {" "}
+    <path
+      d="M16 8.75C16 6.8272 15.2356 4.98267 13.876 3.62305C12.5164 2.2637 10.6726 1.50002 8.75 1.5C6.8272 1.5 4.98267 2.26342 3.62305 3.62305C2.26342 4.98267 1.5 6.8272 1.5 8.75C1.50002 10.6726 2.2637 12.5164 3.62305 13.876C4.98267 15.2356 6.8272 16 8.75 16C10.6728 16 12.5164 15.2356 13.876 13.876C15.2356 12.5164 16 10.6728 16 8.75ZM17.5 8.75C17.5 10.8192 16.7645 12.8109 15.4424 14.3818L19.2803 18.2197C19.573 18.5126 19.5731 18.9874 19.2803 19.2803C18.9874 19.5731 18.5126 19.573 18.2197 19.2803L14.3818 15.4424C12.8109 16.7645 10.8192 17.5 8.75 17.5C6.42941 17.5 4.20342 16.5784 2.5625 14.9375C0.921589 13.2966 2.04574e-05 11.0706 0 8.75C0 6.42938 0.921571 4.20343 2.5625 2.5625C4.20343 0.921571 6.42938 0 8.75 0C11.0706 2.04577e-05 13.2966 0.921589 14.9375 2.5625C16.5784 4.20342 17.5 6.42941 17.5 8.75Z"
+      fill="#ECECEC"
+    />{" "}
+  </svg>
+</Icon>
 ```
 
 ### [ Text ]
 
 #### Path
+
 `src/components/action/Button/Text.tsx`
 
 #### Props
-| Name            | Type                               | Required | Default     | Note              |
-| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
-|  `text`         | `string`                           |     O    | -           |  텍스트 내용     |
-| `size`          | `"12" \| "14" \| "18"`             |     O    | -           | 텍스트 사이즈      |
-| `active`        | `boolean`                          |    O     | `"false"`   | 텍스트 활성화/비활성화 여부  |
-| `onClick`       | `() => void`                       |    X     |     -       | 텍스트 Click에 대한 기능  |
+
+| Name      | Type                   | Required | Default   | Note                        |
+| :-------- | :--------------------- | :------: | :-------- | :-------------------------- |
+| `text`    | `string`               |    O     | -         | 텍스트 내용                 |
+| `size`    | `"12" \| "14" \| "18"` |    O     | -         | 텍스트 사이즈               |
+| `active`  | `boolean`              |    O     | `"false"` | 텍스트 활성화/비활성화 여부 |
+| `onClick` | `() => void`           |    X     | -         | 텍스트 Click에 대한 기능    |
 
 #### Usage
+
 ```tsx
   <TextButton text="비활성" size="18" active={false} />
   <TextButton text="활성" size="12" active={true} />
@@ -373,55 +412,65 @@ const [birth, setBirth] = useState({
 ### [ Solid ]
 
 #### Path
+
 `src/components/action/Button/Solid.tsx`
 
 #### Props
-| Name            | Type                               | Required | Default     | Note              |
-| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
-|  `text`         | `string`                           |     O    | -           |  텍스트 내용     |
-| `variant`       | `"default" \| "dark" \| "danger"`  |     O    | `default`   | 버튼 종류      |
-| `className`        | `string`                        |     X    |  -          | 추가적인 클래스 명  |
+
+| Name        | Type                                                | Required | Default   | Note               |
+| :---------- | :-------------------------------------------------- | :------: | :-------- | :----------------- |
+| `text`      | `string`                                            |    O     | -         | 텍스트 내용        |
+| `variant`   | `"primary" \| "secondary" \| "disabled" \| "alert"` |    X     | `default` | 버튼 종류          |
+| `size`      | `"s" \| "m" `                                       |    X     | `default` | 버튼 크기          |
+| `onClick`   | `void`                                              |    X     | -         | 클릭 함수          |
+| `className` | `string`                                            |    X     | -         | 추가적인 클래스 명 |
 
 #### Usage
+
 ```tsx
   //default
-  <Solid> 기본 </Solid> 
+  <Solid text="버튼 텍스트"> 기본 </Solid>
   //dark
-  <Solid variant="dark">다른</Solid> 
+  <Solid text="버튼 텍스트" variant="primary">다른</Solid>
   //danger
-  <Solid variant="danger">제거</Solid>
+  <Solid text="버튼 텍스트" variant="alert">제거</Solid>
 ```
 
 ### [ FAB ]
 
 #### Path
+
 `src/components/action/Button/FAB.tsx`
 
 #### Props
-| Name            | Type                               | Required | Default     | Note              |
-| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
-|  `icon`         | `ReactNode`                        |     O    | -           |  내부에 들어갈 icon svg    |
-| `onClick`       | `() => void`                       |    X     | -           | 눌럿을 때의 기능 함수      |
+
+| Name      | Type         | Required | Default | Note                   |
+| :-------- | :----------- | :------: | :------ | :--------------------- |
+| `icon`    | `ReactNode`  |    O     | -       | 내부에 들어갈 icon svg |
+| `onClick` | `() => void` |    X     | -       | 눌럿을 때의 기능 함수  |
 
 #### Usage
+
 ```tsx
 //svg 파일이라서 이렇게 <img 태그에 묶어서 진행했습니다.>
-  <FAB icon={<img src={PlusIcon}/>}/>
+<FAB icon={<img src={PlusIcon} />} />
 ```
-
 
 ### [ ContainerText ]
 
 #### Path
+
 `src/components/action/Button/ContainerText.tsx`
 
 #### Props
-| Name            | Type                               | Required | Default     | Note              |
-| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
-|  `text`         | `string`                           |    O     | -           |  텍스트 내용  |
-| `active`        | `boolean`                          |    X     | `false`     | 활성화/비활성화 여부      |
+
+| Name     | Type      | Required | Default | Note                 |
+| :------- | :-------- | :------: | :------ | :------------------- |
+| `text`   | `string`  |    O     | -       | 텍스트 내용          |
+| `active` | `boolean` |    X     | `false` | 활성화/비활성화 여부 |
 
 #### Usage
+
 ```tsx
   //비활성화
    <ContainerText text="Text" />
@@ -438,13 +487,13 @@ const [birth, setBirth] = useState({
 
 #### Props
 
-| Name            | Type                  | Required | Default     | Note          |
-| :-------------- | :---------------------| :------: | :---------- | :------------ |
-| `text`          | `string`              |     O    | -           | 텍스트 내용       |
-| `variant`       | `"none" \| "icon"`    |     O    | -           | 활성화/비활성화 유무    |
-| `active`        | `boolean`             |     O    | `false`     | 활성화/비활성화 유무    |
-| `icon`          | `ReactNode`           |     X    | -           | 아이콘    |
-| `onClick`       | `()=> void`           |     X    | -           | 눌럿을 때의 기능    |
+| Name      | Type               | Required | Default | Note                 |
+| :-------- | :----------------- | :------: | :------ | :------------------- |
+| `text`    | `string`           |    O     | -       | 텍스트 내용          |
+| `variant` | `"none" \| "icon"` |    O     | -       | 활성화/비활성화 유무 |
+| `active`  | `boolean`          |    O     | `false` | 활성화/비활성화 유무 |
+| `icon`    | `ReactNode`        |    X     | -       | 아이콘               |
+| `onClick` | `()=> void`        |    X     | -       | 눌럿을 때의 기능     |
 
 #### Usage
 
@@ -468,27 +517,36 @@ const [isActive, setIsActive] = useState(false);
 />
 ```
 
-
 ### [ Emotion ]
 
 #### Path
+
 `src/components/Chip/Emotion.tsx`
 
 #### Props
-| Name            | Type                               | Required | Default     | Note              |
-| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
-| `size`          | `string => "s" or "m"`             |     O    | -           | chip의 사이즈       |
-| `emoji`         | `string`                           |     O    | -           | emoji 문자       |
-| `text`          | `string`                           |     X    | -           | emoji 옆 텍스트   |
-| `variant`       | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |     X    | `"default"` | 탭 스타일 variant |
-| `active`        | `boolean`          |     O    | `"true"`          | chip의 비활성화/활성화 여부      |
+
+| Name            | Type                                                         |   Required    | Default     | Note                        |
+| :-------------- | :----------------------------------------------------------- | :-----------: | :---------- | :-------------------------- | ------------- | ---------------- | --- | --- | ---------- |
+| `size`          | `string => "s" or "m"`                                       |       O       | -           | chip의 사이즈               |
+| `emoji`         | `string`                                                     |       O       | -           | emoji 문자                  |
+| `text`          | `string`                                                     |       X       | -           | emoji 옆 텍스트             |
+| `variant`       | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |       X       | `"default"` | 탭 스타일 variant           |
+| `active`        | `boolean`                                                    |       O       | `"true"`    | chip의 비활성화/활성화 여부 |
+| Name            | Type                                                         |   Required    | Default     | Note                        |
+| :-------------- | :---------------------------------                           |   :------:    | :---------- | :--------------             |
+| `size`          | `string => "s" or "m"`                                       |       O       | -           | chip의 사이즈               |
+| `emojiKey`      | `"Fun"                                                       | "EMPATHIZING" | "USEFUL"    | "SAD"                       | "COMPLICATED" | "UNCOMFORTABLE"` | O   | -   | emoji 종류 |
+| `active`        | `boolean`                                                    |       O       | `"false"`   | chip의 비활성화/활성화 여부 |
 
 #### Usage
-```tsx
-//size = s 
-<Emotion size="s" emoji="(^_^)" variant="yellow" active />
 
-//size = m 
+```tsx
+//size = s
+<Emotion size="s" emoji="(^_^)" variant="yellow" active />
+//size = s
+ <Emotion size="s" emojiKey={key} active={false}/>
+
+//size = m
 <Emotion size="m" emoji="(^_^)" text="재밌어요" variant="yellow" active />
 
 //active 비활성화"
@@ -497,8 +555,8 @@ const [isActive, setIsActive] = useState(false);
 
 ## 6. Navigation
 
-> * **Design**:
-> * **Author**: 박수지
+> - **Design**:
+> - **Author**: 박수지
 
 ### [ Tab Bar ]
 
@@ -508,14 +566,14 @@ const [isActive, setIsActive] = useState(false);
 
 #### Props
 
-| Name            | Type                               | Required | Default     | Note          |
-| :-------------- | :--------------------------------- | :------: | :---------- | :------------ |
-| `options`       | `readonly TabOption<T>[]`          |     O    | -           | 탭 옵션 목록       |
-| `value`         | `T`                                |     O    | -           | 현재 선택된 탭 값    |
-| `onChange`      | `(v: T) => void`                   |     O    | -           | 탭 변경 핸들러      |
-| `buttonWidthPx` | `number`                           |     X    | -           | 탭 버튼 고정 너비    |
-| `variant`       | `"default" \| "underlineGradient"` |     X    | `"default"` | 탭 스타일 variant |
-| `className`     | `string`                           |     X    | `""`        | 추가 클래스명       |
+| Name            | Type                               | Required | Default     | Note              |
+| :-------------- | :--------------------------------- | :------: | :---------- | :---------------- |
+| `options`       | `readonly TabOption<T>[]`          |    O     | -           | 탭 옵션 목록      |
+| `value`         | `T`                                |    O     | -           | 현재 선택된 탭 값 |
+| `onChange`      | `(v: T) => void`                   |    O     | -           | 탭 변경 핸들러    |
+| `buttonWidthPx` | `number`                           |    X     | -           | 탭 버튼 고정 너비 |
+| `variant`       | `"default" \| "underlineGradient"` |    X     | `"default"` | 탭 스타일 variant |
+| `className`     | `string`                           |    X     | `""`        | 추가 클래스명     |
 
 #### Usage
 
@@ -530,7 +588,7 @@ const tabOptions = [
   value={tab}
   onChange={setTab}
   variant="underlineGradient"
-/>
+/>;
 ```
 
 ### [ Text ]
@@ -541,15 +599,15 @@ const tabOptions = [
 
 #### Props
 
-| Name            | Type                            | Required | Default               | Note         |
-| :-------------- | :------------------------------ | :------: | :-------------------- | :----------- |
-| `options`       | `readonly SegmentedOption<T>[]` |     O    | -                     | 세그먼트 옵션 목록   |
-| `value`         | `T`                             |     O    | -                     | 현재 선택된 값     |
-| `onChange`      | `(v: T) => void`                |     O    | -                     | 값 변경 핸들러     |
-| `className`     | `string`                        |     X    | `""`                  | 추가 클래스명      |
-| `ariaLabel`     | `string`                        |     X    | `"segmented control"` | 접근성용 라벨      |
-| `variant`       | `"fluid" \| "fixed"`            |     X    | -                     | 레이아웃 variant |
-| `buttonWidthPx` | `number`                        |     X    | -                     | 버튼 고정 너비     |
+| Name            | Type                            | Required | Default               | Note               |
+| :-------------- | :------------------------------ | :------: | :-------------------- | :----------------- |
+| `options`       | `readonly SegmentedOption<T>[]` |    O     | -                     | 세그먼트 옵션 목록 |
+| `value`         | `T`                             |    O     | -                     | 현재 선택된 값     |
+| `onChange`      | `(v: T) => void`                |    O     | -                     | 값 변경 핸들러     |
+| `className`     | `string`                        |    X     | `""`                  | 추가 클래스명      |
+| `ariaLabel`     | `string`                        |    X     | `"segmented control"` | 접근성용 라벨      |
+| `variant`       | `"fluid" \| "fixed"`            |    X     | -                     | 레이아웃 variant   |
+| `buttonWidthPx` | `number`                        |    X     | -                     | 버튼 고정 너비     |
 
 #### Usage
 
@@ -564,7 +622,7 @@ const options = [
   value={selected}
   onChange={setSelected}
   ariaLabel="콘텐츠 타입 선택"
-/>
+/>;
 ```
 
 ### [ Text Tab ]
@@ -575,13 +633,13 @@ const options = [
 
 #### Props
 
-| Name       | Type         | Required | Default | Note        |
-| :--------- | :----------- | :------: | :------ | :---------- |
-| `label`    | `string`     |     O    | -       | 버튼에 표시될 텍스트 |
-| `active`   | `boolean`    |     O    | -       | 활성화 여부      |
-| `onClick`  | `() => void` |     O    | -       | 클릭 핸들러      |
-| `widthPx`  | `number`     |     X    | -       | 버튼 고정 너비    |
-| `disabled` | `boolean`    |     X    | `false` | 비활성화 여부     |
+| Name       | Type         | Required | Default | Note                 |
+| :--------- | :----------- | :------: | :------ | :------------------- |
+| `label`    | `string`     |    O     | -       | 버튼에 표시될 텍스트 |
+| `active`   | `boolean`    |    O     | -       | 활성화 여부          |
+| `onClick`  | `() => void` |    O     | -       | 클릭 핸들러          |
+| `widthPx`  | `number`     |    X     | -       | 버튼 고정 너비       |
+| `disabled` | `boolean`    |    X     | `false` | 비활성화 여부        |
 
 #### Usage
 
@@ -601,12 +659,14 @@ const options = [
 
 #### Props
 
-| Name        | Type              | Required | Default | Note     |
-| :---------- | :---------------- | :------: | :------ | :------- |
-| `left`      | `React.ReactNode` |     X    | -       | 좌측 영역 요소 |
-| `center`    | `React.ReactNode` |     X    | -       | 중앙 영역 요소 |
-| `right`     | `React.ReactNode` |     X    | -       | 우측 영역 요소 |
-| `className` | `string`          |     X    | `""`    | 추가 클래스명  |
+| Name           | Type              | Required | Default | Note                   |
+| :------------- | :---------------- | :------: | :------ | :--------------------- |
+| `left`         | `React.ReactNode` |    X     | -       | 좌측 영역 요소         |
+| `onClickLeft`  | `void`            |    X     | -       | 좌측 영역 요소 클릭 시 |
+| `center`       | `React.ReactNode` |    X     | -       | 중앙 영역 요소         |
+| `right`        | `React.ReactNode` |    X     | -       | 우측 영역 요소         |
+| `onClickRight` | `void`            |    X     | -       | 우측 영역 요소 클릭 시 |
+| `className`    | `string`          |    X     | `""`    | 추가 클래스명          |
 
 #### Usage
 
@@ -626,16 +686,16 @@ const options = [
 
 #### Props
 
-| Name            | Type         | Required | Default                                           | Note          |
-| :-------------- | :----------- | :------: | :------------------------------------------------ | :------------ |
-| `onSearchClick` | `() => void` |     X    | -                                                 | 검색 버튼 클릭 핸들러  |
-| `onMenuClick`   | `() => void` |     X    | -                                                 | 메뉴 버튼 클릭 핸들러  |
-| `onLogoClick`   | `() => void` |     X    | -                                                 | 로고 클릭 핸들러     |
-| `logoSrc`       | `string`     |     X    | -                                                 | 커스텀 로고 이미지 경로 |
-| `logoAlt`       | `string`     |     X    | `"nook"`                                          | 로고 대체 텍스트     |
-| `showSearch`    | `boolean`    |     X    | `true`                                            | 검색 아이콘 표시 여부  |
-| `showMenu`      | `boolean`    |     X    | `true`                                            | 메뉴 아이콘 표시 여부  |
-| `className`     | `string`     |     X    | `"w-full h-10 flex items-center justify-between"` | 추가 클래스명       |
+| Name            | Type         | Required | Default                                           | Note                    |
+| :-------------- | :----------- | :------: | :------------------------------------------------ | :---------------------- |
+| `onSearchClick` | `() => void` |    X     | -                                                 | 검색 버튼 클릭 핸들러   |
+| `onMenuClick`   | `() => void` |    X     | -                                                 | 메뉴 버튼 클릭 핸들러   |
+| `onLogoClick`   | `() => void` |    X     | -                                                 | 로고 클릭 핸들러        |
+| `logoSrc`       | `string`     |    X     | -                                                 | 커스텀 로고 이미지 경로 |
+| `logoAlt`       | `string`     |    X     | `"nook"`                                          | 로고 대체 텍스트        |
+| `showSearch`    | `boolean`    |    X     | `true`                                            | 검색 아이콘 표시 여부   |
+| `showMenu`      | `boolean`    |    X     | `true`                                            | 메뉴 아이콘 표시 여부   |
+| `className`     | `string`     |    X     | `"w-full h-10 flex items-center justify-between"` | 추가 클래스명           |
 
 #### Usage
 
@@ -655,12 +715,12 @@ const options = [
 
 #### Props
 
-| Name               | Type     | Required | Default         | Note       |
-| :----------------- | :------- | :------: | :-------------- | :--------- |
-| `step`             | `number` |     O    | -               | 현재 단계      |
-| `total`            | `number` |     O    | -               | 전체 단계 수    |
-| `heightClassName`  | `string` |     X    | `"h-1"`         | 진행바 높이 클래스 |
-| `wrapperClassName` | `string` |     X    | `"w-full px-1"` | 바깥 래퍼 클래스  |
+| Name               | Type     | Required | Default         | Note               |
+| :----------------- | :------- | :------: | :-------------- | :----------------- |
+| `step`             | `number` |    O     | -               | 현재 단계          |
+| `total`            | `number` |    O     | -               | 전체 단계 수       |
+| `heightClassName`  | `string` |    X     | `"h-1"`         | 진행바 높이 클래스 |
+| `wrapperClassName` | `string` |    X     | `"w-full px-1"` | 바깥 래퍼 클래스   |
 
 #### Usage
 
@@ -673,7 +733,6 @@ const options = [
 />
 ```
 
-
 ### [ Footer ]
 
 #### Path
@@ -682,9 +741,9 @@ const options = [
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-| - | - | - | - | props 없음 |
+| Name | Type | Required | Default | Note       |
+| :--- | :--- | :------: | :------ | :--------- |
+| -    | -    |    -     | -       | props 없음 |
 
 #### Usage
 
@@ -692,9 +751,50 @@ const options = [
 <Footer />
 ```
 
+### [ Dot ]
+
+#### Path
+
+`src/components/navigation/Pagination/PageIndicator/Resource/Dot.tsx`
+
+#### Props
+
+| Name    | Type    | Required | Default | Note |
+| :------ | :------ | :------: | :------ | :--- |
+| current | boolean |     O    | `false` | 현재 indx 유무 |
+
+#### Usage
+
+```tsx
+//false
+<Dot/>
+
+<Dot current={true} />
+```
+
+### [ Page Indicator ]
+
+#### Path
+
+`src/components/navigation/Pagination/PageIndicator.tsx`
+
+#### Props
+
+| Name  | Type    | Required | Default | Note |
+| :---- | :------ | :------: | :------ | :--- |
+| cur   | number  |     O    | -       | 현재 indx  |
+| total | number  |     O    | -       | 전체 indx 개수 |
+
+#### Usage
+
+```tsx
+<PageIndicator cur={0} total={4} />
+```
+
+
 ## 7. Content
 
-> - **Design**: 
+> - **Design**:
 > - **Author**: 임서연
 
 ### [ Rank ]
@@ -705,33 +805,30 @@ const options = [
 
 #### Props
 
-| Name       | Type       | Required  | Default | Note    |
-| :--------- | :--------- | :-------: | :------ | :------ |
-| rank       | number     |     O     |   -     |   등수   |
-| title      | string     |     O     |   -     |  책 제목  |
+| Name  | Type   | Required | Default | Note    |
+| :---- | :----- | :------: | :------ | :------ |
+| rank  | number |    O     | -       | 등수    |
+| title | string |    O     | -       | 책 제목 |
 
 #### Usage
 
 ```tsx
 const MOCK_RANKS = [
-  { rank: 0, title: 'The Pragmatic Programmer' },
-  { rank: 1, title: 'Clean Code: A Handbook of Agile Software Craftsmanship' },
-  { rank: 2, title: 'Refactoring: Improving the Design of Existing Code' },
+  { rank: 0, title: "The Pragmatic Programmer" },
+  { rank: 1, title: "Clean Code: A Handbook of Agile Software Craftsmanship" },
+  { rank: 2, title: "Refactoring: Improving the Design of Existing Code" },
   {
     rank: 3,
-    title: '아주아주아주 긴 제목 테스트용 — 한 줄 말줄임이 제대로 적용되는지 확인하는 텍스트입니다',
+    title:
+      "아주아주아주 긴 제목 테스트용 — 한 줄 말줄임이 제대로 적용되는지 확인하는 텍스트입니다",
   },
 ];
 
 <div className="space-y-3">
   {MOCK_RANKS.map((item) => (
-   <Rank
-    key={item.rank}
-    rank={item.rank}
-    title={item.title}
-  />))}
-</div>
-
+    <Rank key={item.rank} rank={item.rank} title={item.title} />
+  ))}
+</div>;
 ```
 
 ### [ History ]
@@ -742,11 +839,13 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name       | Type                        | Required  | Default | Note                         |
-| :--------- | :-------------------------- | :-------: | :------ | :--------------------------  |
-| variant    |  `"history" \| "time"`      |     O     |   -     |   독서 기록 / 시간 컴포넌트 기록    |
-| time       | string                      |     O     |   -     |  타이머 시간  |
-| title      | string                      |     X     |   -     |  시간 기록일 때의 제목  |
+| Name    | Type                  | Required | Default | Note                           |
+| :------ | :-------------------- | :------: | :------ | :----------------------------- |
+| variant | `"history" \| "time"` |    O     | -       | 독서 기록 / 시간 컴포넌트 기록 |
+| time    | string                |    O     | -       | 타이머 시간                    |
+| title   | string                |    X     | -       | 시간 기록일 때의 제목          |
+| hasIcon | boolean               |    X     | `true`  | 아이콘 유무                    |
+| onClick | void                  |    X     | -       | 클릭 함수                      |
 
 #### Usage
 
@@ -757,11 +856,19 @@ const MOCK_RANKS = [
  time="2025.09.11"
 />
 
-//time 
+//time
  <HistoryInfoCard
   variant="time"
   title="집중 시간"
   time="01:24:12"
+/>
+
+//독서 상태 변경
+ <HistoryInfoCard
+  variant="time"
+  title="독서 중"
+  time="독서 상태를 변경했어요."
+  hasIcon=false
 />
 
 ```
@@ -774,19 +881,16 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name       | Type       | Required  | Default | Note    |
-| :--------- | :--------- | :-------: | :------ | :------ |
-| topText    | string     |     O     |   -     |   월.일    |
-| bottomText | string     |     O     |   -     |  해당 년도 4자리  |
+| Name       | Type   | Required | Default | Note            |
+| :--------- | :----- | :------: | :------ | :-------------- |
+| topText    | string |    O     | -       | 월.일           |
+| bottomText | string |    O     | -       | 해당 년도 4자리 |
 
 #### Usage
 
 ```tsx
 <ResourceDate topText="01.12" bottomText="2026" />
-
 ```
-
-
 ### [ Book Goal ]
 
 #### Path
@@ -795,12 +899,12 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name          | Type                                                | Required | Default | Note |
-| :------------ | :---------------------------------------------------| :------: | :------ | :---------------------- |
-| `percent`     | `"ZERO" \| "PCT_1_9" \|"PCT_10_19"\|"PCT_20_29" \|` |     O    | -       | 도서 읽은 퍼센트            |
-|               |`"PCT_30_39" \| "PCT_40_49" \| "PCT_50_59" \| "PCT_60_69"`|
-|               |`"PCT_70_79" \| "PCT_80_89" \| "PCT_90_99" \| "PCT_100"`|
-| `message`     | `string`                                            |     O    | -       | 텍스트   |
+| Name      | Type                                                       | Required | Default | Note             |
+| :-------- | :--------------------------------------------------------- | :------: | :------ | :--------------- |
+| `percent` | `"ZERO" \| "PCT_1_9" \|"PCT_10_19"\|"PCT_20_29" \|`        |    O     | -       | 도서 읽은 퍼센트 |
+|           | `"PCT_30_39" \| "PCT_40_49" \| "PCT_50_59" \| "PCT_60_69"` |
+|           | `"PCT_70_79" \| "PCT_80_89" \| "PCT_90_99" \| "PCT_100"`   |
+| `message` | `string`                                                   |    O     | -       | 텍스트           |
 
 #### Usage
 
@@ -823,13 +927,13 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name          | Type           | Required | Default                 | Note |
-| :------------ | :--------------| :------: | :---------------------- | :-------------|
-| `imageUrl`    | `string`       |     O    | -                       | 이미지 Url      |
-| `title`       | `string`       |     O    | -                       | 제목           |
-| `author`      | `string`       |     O    | -                       | 저자           |
-| `imageAlt`     | `string`      |     X    | `"card thumbnail"`      | 이미지 이름      |
-| `onClick`     | `() => void`   |     X    | -       | 클릭할 때의 기능   |
+| Name       | Type         | Required | Default            | Note             |
+| :--------- | :----------- | :------: | :----------------- | :--------------- |
+| `imageUrl` | `string`     |    O     | -                  | 이미지 Url       |
+| `title`    | `string`     |    O     | -                  | 제목             |
+| `author`   | `string`     |    O     | -                  | 저자             |
+| `imageAlt` | `string`     |    X     | `"card thumbnail"` | 이미지 이름      |
+| `onClick`  | `() => void` |    X     | -                  | 클릭할 때의 기능 |
 
 #### Usage
 
@@ -862,15 +966,15 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name       | Type                                       | Required | Default | Note |
-| :----------| :---------------------------------------------| :------: | :------ | :---------------------- |
-| `imageUrl` | `string`                                      |     O    | -       | 이미지 url   |
-| `title`    | `string`                                      |     O    | -       | 제목   |
-| `author`   | `string`                                      |     O    | -       | 저자   |
-| `type`     | `"NONE" \| "SEARCH" \| "LIBRARY" \| "REPORT"` |     O    | -       | 제목 리스트에서 사용하는 종류 |
-| `typeLabel`| `string`                                      |     X    | `null`  | 기록에서 도서 선택 페이지에서 독서 전 / 독서 중 / 완독 |
-| `imageAlt` | `string`                                      |     X    | -       | 이미지 이름   |
-| `onClick`  | `() => void`                                  |     X    | -       | 클릭했을 때의 기능   |
+| Name        | Type                                          | Required | Default | Note                                                   |
+| :---------- | :-------------------------------------------- | :------: | :------ | :----------------------------------------------------- |
+| `imageUrl`  | `string`                                      |    O     | -       | 이미지 url                                             |
+| `title`     | `string`                                      |    O     | -       | 제목                                                   |
+| `author`    | `string`                                      |    O     | -       | 저자                                                   |
+| `type`      | `"NONE" \| "SEARCH" \| "LIBRARY" \| "REPORT"` |    O     | -       | 제목 리스트에서 사용하는 종류                          |
+| `typeLabel` | `string`                                      |    X     | `null`  | 기록에서 도서 선택 페이지에서 독서 전 / 독서 중 / 완독 |
+| `imageAlt`  | `string`                                      |    X     | -       | 이미지 이름                                            |
+| `onClick`   | `() => void`                                  |    X     | -       | 클릭했을 때의 기능                                     |
 
 #### Usage
 
@@ -923,14 +1027,14 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name       | Type              | Required | Default     | Note |
-| :----------| :-----------------| :------: | :---------- | :---------------------- |
-| `imageUrl` | `string`          |     O    | -           | 이미지 url   |
-| `imageAlt` | `string`          |     X    | -           | 이미지 이름   |
-| `timeText` | `string`          |     O    | -           | 시간   |
-| `title`    | `string`          |     O    | -           | 제목 |
-| `author`   | `string`          |     O    | -           | 저자 |
-| `onClick`  | `() => void`      |     X    | -           | 클릭했을 때의 기능   |
+| Name       | Type         | Required | Default | Note               |
+| :--------- | :----------- | :------: | :------ | :----------------- |
+| `imageUrl` | `string`     |    O     | -       | 이미지 url         |
+| `imageAlt` | `string`     |    X     | -       | 이미지 이름        |
+| `timeText` | `string`     |    O     | -       | 시간               |
+| `title`    | `string`     |    O     | -       | 제목               |
+| `author`   | `string`     |    O     | -       | 저자               |
+| `onClick`  | `() => void` |    X     | -       | 클릭했을 때의 기능 |
 
 #### Usage
 
@@ -959,15 +1063,15 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name           | Type              | Required | Default         | Note |
-| :--------------| :-----------------| :------: | :-------------- | :---------------------- |
-| `imageUrl`     | `string`          |     O    | -               | 이미지 url   |
-| `title`        | `string`          |     O    | -               | 제목 |
-| `author`       | `string`          |     O    | -               | 저자 |
-| `recent`       | `string`          |     O    | -               | 최근 리뷰 |
-| `reviewNumber` | `number`          |     O    | -               | 리뷰 수 |
-| `imageAlt`     | `string`          |     X    |`"report cover"` | 이미지 이름 |
-| `onClick`      | `() => void`      |     X    | -               | 클릭했을 때의 기능   |
+| Name           | Type         | Required | Default          | Note               |
+| :------------- | :----------- | :------: | :--------------- | :----------------- |
+| `imageUrl`     | `string`     |    O     | -                | 이미지 url         |
+| `title`        | `string`     |    O     | -                | 제목               |
+| `author`       | `string`     |    O     | -                | 저자               |
+| `recent`       | `string`     |    O     | -                | 최근 리뷰          |
+| `reviewNumber` | `number`     |    O     | -                | 리뷰 수            |
+| `imageAlt`     | `string`     |    X     | `"report cover"` | 이미지 이름        |
+| `onClick`      | `() => void` |    X     | -                | 클릭했을 때의 기능 |
 
 #### Usage
 
@@ -992,32 +1096,40 @@ const MOCK_RANKS = [
 ### [ Report/List ]
 
 #### Path
+
 `src/components/content/Card/Report/List.tsx`
 
 #### Props
-| Name            | Type                 | Required | Default     | Note              |
-| :-------------- | :------------------- | :------: | :---------- | :--------------   |
-| `date`          | `string`             |     O    | -           | chip의 사이즈       |
-| `emoji`         | `string`             |     O    | -           | emoji 문자       |
-| `variant`       | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |     X    |  `yellow`          | emoji 색상       |
-| `review`        | `string`             |     O    | -           | emoji 옆 텍스트   |
-| `image`         | `string[]`           |     X    |`[]`         | chip의 비활성화/활성화 여부      |
-| `onClick`       | `() => void`         |     X    | -           | 해당 컴포넌트 눌럿을 때의 함수  |
+
+| Name            | Type                                                         |   Required    | Default     | Note                           |
+| :-------------- | :----------------------------------------------------------- | :-----------: | :---------- | :----------------------------- | ------------- | ---------------- | --- | --- | ---------- |
+| `date`          | `string`                                                     |       O       | -           | chip의 사이즈                  |
+| `emoji`         | `string`                                                     |       O       | -           | emoji 문자                     |
+| `variant`       | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |       X       | `yellow`    | emoji 색상                     |
+| `review`        | `string`                                                     |       O       | -           | emoji 옆 텍스트                |
+| `image`         | `string[]`                                                   |       X       | `[]`        | chip의 비활성화/활성화 여부    |
+| `onClick`       | `() => void`                                                 |       X       | -           | 해당 컴포넌트 눌럿을 때의 함수 |
+| Name            | Type                                                         |   Required    | Default     | Note                           |
+| :-------------- | :-------------------                                         |   :------:    | :---------- | :--------------                |
+| `date`          | `string`                                                     |       O       | -           | chip의 사이즈                  |
+| `emojiKey`      | `"Fun"                                                       | "EMPATHIZING" | "USEFUL"    | "SAD"                          | "COMPLICATED" | "UNCOMFORTABLE"` | O   | -   | emoji 문자 |
+| `review`        | `string`                                                     |       O       | -           | emoji 옆 텍스트                |
+| `image`         | `string[]`                                                   |       X       | `[]`        | chip의 비활성화/활성화 여부    |
+| `onClick`       | `() => void`                                                 |       X       | -           | 해당 컴포넌트 눌럿을 때의 함수 |
 
 #### Usage
+
 ```tsx
 <ReportList
   date="25.09.13"
-  emoji="(T_T)"
-  variant="blue"
+  emojiKey="FUN"
   review="생각이 많아서 초반에는 잘 안 읽혔는데, 중간부터 조금씩 흐름을 탔다. 마지막 문장이 특히 오래 남았다."
   images={[sampleBook]}
 />
 
 <ReportList
   date="25.09.14"
-  emoji="(>_<)"
-  variant="red"
+  emojiKey="FUN"
   review="오늘 기록은 이미지 여러 장이 들어갔을 때의 레이아웃을 확인하기 위한 테스트입니다. 줄 수가 늘어나면 카드 높이도 자연스럽게 커져야 합니다."
   images={[
     sampleBook,
@@ -1029,8 +1141,6 @@ const MOCK_RANKS = [
 />
 ```
 
-
-
 ### [ SectionHeader ]
 
 #### Path
@@ -1039,13 +1149,14 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name          | Type                               | Required | Default | Note                    |
-| :------------ | :--------------------------------- | :------: | :------ | :---------------------- |
-| `size`        | `"13" \| "14" \| "16" \| "20" \|`  |     O    | -       | 컴포넌트 사이즈             |
-| `top`         | `ReactNode`                        |     O    | -       | 윗 칸  |
-| `bottom`      | `ReactNode`                        |     X    | -       | 아래 칸                |
-| `onToggle`    | `(open: boolean) => void`          |     X    | -       | 토글 내렸을 때의 함수         |
-| `onClick`     | `() => void`                       |     X    | -       | 해당 컴포넌트 눌럿을 때의 함수  |
+| Name        | Type                              | Required | Default | Note                           |
+| :---------- | :-------------------------------- | :------: | :------ | :----------------------------- |
+| `size`      | `"13" \| "14" \| "16" \| "20" \|` |    O     | -       | 컴포넌트 사이즈                |
+| `top`       | `ReactNode`                       |    O     | -       | 윗 칸                          |
+| `bottom`    | `ReactNode`                       |    X     | -       | 아래 칸                        |
+| `showCaret` | `boolean`                         |    X     | `false` | 토글 표시 여부                 |
+| `onToggle`  | `(open: boolean) => void`         |    X     | -       | 토글 내렸을 때의 함수          |
+| `onClick`   | `() => void`                      |    X     | -       | 해당 컴포넌트 눌럿을 때의 함수 |
 
 #### Usage
 
@@ -1057,18 +1168,20 @@ const MOCK_RANKS = [
   bottom={<span>Text</span>}
 />
 
-//size 14 (토글 잇음, 밑 설명단 없음)
+//size 14 (토글 있음, 밑 설명단 없음)
 <SectionHeader
   size="14"
+  showCaret={true}
   top={<CustomTitle />}
  />
 
 //size 16 (토글 있음, 밑 설명단 있음)
 <SectionHeader
   size="16"
+  showCaret={true}
   top={<span>제목</span>}
   bottom={<CustomDescription />}
-/> 
+/>
 ```
 
 ### [ Information Section ]
@@ -1079,13 +1192,14 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name          | Type                                | Required | Default | Note                    |
-| :------------ | :---------------------------------- | :------: | :------ | :---------------------- |
-| `flow`        | `"vertical" \| "horizontal" `       |     O    | -       | 수직/수평 선택             |
-| `top`         | `string`                            |     O    | -       | 위 또는 왼쪽 텍스트   |
-| `bottom`      | `string`                            |     O    | -       | 아래 또는 오른쪽 테스트               |
-| `onToggle`    | `(open: boolean) => void`           |     X    | -       | 토글 내렸을 때의 함수         |
-| `onClick`     | `() => void`                        |     X    | -       | 해당 컴포넌트 눌럿을 때의 함수  |
+| Name        | Type                          | Required | Default | Note                           |
+| :---------- | :---------------------------- | :------: | :------ | :----------------------------- |
+| `flow`      | `"vertical" \| "horizontal" ` |    O     | -       | 수직/수평 선택                 |
+| `top`       | `string`                      |    X     | -       | 위 또는 왼쪽 텍스트            |
+| `bottom`    | `string`                      |    O     | -       | 아래 또는 오른쪽 테스트        |
+| `showCaret` | `boolean`                     |    X     | `false` | 토글 표시 여부                 |
+| `onToggle`  | `(open: boolean) => void`     |    X     | -       | 토글 내렸을 때의 함수          |
+| `onClick`   | `() => void`                  |    X     | -       | 해당 컴포넌트 눌럿을 때의 함수 |
 
 #### Usage
 
@@ -1107,8 +1221,6 @@ const MOCK_RANKS = [
 />
 ```
 
-
-
 ### [ DayOfTheWeek ]
 
 #### Path
@@ -1117,9 +1229,9 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name    | Type       | Required  | Default | Note    |
-| :------ | :--------- | :-------: | :------ | :------ |
-| text    | `string`   |     O     |   -     |   요일   |
+| Name | Type     | Required | Default | Note |
+| :--- | :------- | :------: | :------ | :--- |
+| text | `string` |    O     | -       | 요일 |
 
 #### Usage
 
@@ -1135,10 +1247,10 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name    | Type       | Required  | Default | Note    |
-| :------ | :--------- | :-------: | :------ | :------ |
-| text    | `string`   |     O     |   -     |   요일   |
-| disable | `boolean`  |     X     | `true`  |   활성화 유무 (비활성화 = true)   |
+| Name    | Type      | Required | Default | Note                          |
+| :------ | :-------- | :------: | :------ | :---------------------------- |
+| text    | `string`  |    O     | -       | 요일                          |
+| disable | `boolean` |    X     | `true`  | 활성화 유무 (비활성화 = true) |
 
 #### Usage
 
@@ -1155,9 +1267,9 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name    | Type                                               | Required  | Default | Note    |
-| :------ | :------------------------------------------------- | :-------: | :------ | :------ |
-| percent | `"none" \| "0" \| "25" \| "50" \| "75" \| "100"`   |     O     |   -     |  퍼센트   |
+| Name    | Type                                             | Required | Default | Note   |
+| :------ | :----------------------------------------------- | :------: | :------ | :----- |
+| percent | `"none" \| "0" \| "25" \| "50" \| "75" \| "100"` |    O     | -       | 퍼센트 |
 
 #### Usage
 
@@ -1173,11 +1285,19 @@ const MOCK_RANKS = [
 
 #### Props
 
+<<<<<<< HEAD
 | Name    | Type                                               | Required  | Default | Note    |
 | :------ | :------------------------------------------------- | :-------: | :------ | :------ |
 | day     | `string`                                           |     O     |   -     |  퍼센트   |
 | disble  | `boolean`                                          |     X     |  `true` |  활성화 유무   |
 | percent | `"none" \| "0" \| "25" \| "50" \| "75" \| "100"`   |     O     |  `none` |  퍼센트   |
+=======
+| Name    | Type                                             | Required | Default | Note        |
+| :------ | :----------------------------------------------- | :------: | :------ | :---------- |
+| day     | `string`                                         |    O     | -       | 퍼센트      |
+| disble  | `boolean`                                        |    X     | `true`  | 활성화 유무 |
+| percent | `"none" \| "0" \| "25" \| "50" \| "75" \| "100"` |    X     | `none`  | 퍼센트      |
+>>>>>>> ca4f5feb29f1115acc3be3590a1cf684574f7907
 
 #### Usage
 
@@ -1195,14 +1315,14 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name     | Type                      | Required  | Default   | Note    |
-| :------- | :-------------------------| :-------: | :-------- | :------ |
-| day      | `string`                  |     O     |   -       |  퍼센트   |
-| visible  | `boolean`                 |     X     |  `false`  |   시각화 유무   |
-| disble   | `boolean`                 |     X     |  `false`  |  활성화 유무   |
-| count    | `"single" \| "multiple"`  |     X     |  `single` |  도서 수 여러 개 유무   |
-| imageUrl | `string`                  |     X     |  -        |  도서 이미지   |
-| bookNum  | `number`                  |     X     |   `0`     |  도서 개수   |
+| Name     | Type                     | Required | Default  | Note                 |
+| :------- | :----------------------- | :------: | :------- | :------------------- |
+| day      | `string`                 |    O     | -        | 퍼센트               |
+| visible  | `boolean`                |    X     | `false`  | 시각화 유무          |
+| disble   | `boolean`                |    X     | `false`  | 활성화 유무          |
+| count    | `"single" \| "multiple"` |    X     | `single` | 도서 수 여러 개 유무 |
+| imageUrl | `string`                 |    X     | -        | 도서 이미지          |
+| bookNum  | `number`                 |    X     | `0`      | 도서 개수            |
 
 #### Usage
 
@@ -1234,11 +1354,67 @@ const MOCK_RANKS = [
 />
 ```
 
+### [ EmptyState ]
+
+#### Path
+
+`components/content/EmptyState/EmptyState.tsx`
+
+#### Props
+
+| Name          | Type         | Required  | Default | Note    |
+| :------------ | :----------- | :-------: | :------ | :------ |
+| text          | `string`     |     O     |   -     |   텍스트    |
+| buttonText    | `string`     |     X     |   -     |  버튼 이름  |
+| onButtonClick | `() => void` |     X     |   -     |  버튼 클릭 함수  |
+
+#### Usage
+
+```tsx
+<EmptyState text="표시할 항목이 없습니다." />
+
+<EmptyState
+  text="아직 등록된 일정이 없습니다."
+  buttonText="추가하기"
+  onButtonClick={() => {console.log("추가하기 클릭");}}
+/>
+```
+
+### [ Profile ]
+
+#### Path
+
+`components/content/Profile/Profile.tsx`
+
+#### Props
+
+| Name      | Type         | Required  | Default | Note    |
+| :-------- | :----------- | :-------: | :------ | :------ |
+| active    | `boolean`    |     X     | `true`  |   활성화 유무    |
+| imageUrl  | `string`     |     O     |   -     |  이미지 url  |
+| name      | `string`     |     O     |   -     |  이름  |
+| time      | `string`     |     O     |   -     |  시간  |
+
+#### Usage
+
+```tsx
+<Profile
+  imageUrl="https://picsum.photos/56/56?random=1"
+  name="수연"
+  time="09:00"
+/>
+
+<Profile
+  active={false}
+  imageUrl="https://picsum.photos/56/56?random=3"
+  name="수연"
+  time="09:00"
+/>
+```
 
 ---
 
 ## 8. Feedback
-
 > - **Design**: https://www.figma.com/design/VX3WcpitSSgsYxFoXlbgcA/NOOK-UI--%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9A%A9-?node-id=1268-9814&m=dev
 > - **Author**: 오은진
 
@@ -1250,23 +1426,34 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name          | Type   | Required | Default | Note           |
-| :------------ | :----- | :------: | :------ | :------------- |
-| icon          | string |    X     | -       | 아이콘 url     |
-| text          | string |    O     | -       | snack bar 문구 |
-| buttonText    | string |    O     | -       | 버튼 문구      |
-| onButtonClick | void   |    O     | -       | 버튼 클릭 함수 |
+| Name          | Type       | Required | Default | Note               |
+| :------------ | :--------- | :------: | :------ | :----------------- |
+| icon          | string     |    X     | -       | 아이콘 url         |
+| text          | string     |    O     | -       | snack bar 문구     |
+| buttonText    | string     |    O     | -       | 버튼 문구          |
+| onButtonClick | () => void |    O     | -       | 버튼 클릭 함수     |
+| isOpen        | boolean    |    O     | -       | snackbar 노출 여부 |
+| onClose       | () => void |    X     | -       | snackbar 종료 함수 |
 
 #### Usage
 
+사용하기 위해선 반드시 부모 요소에 relative를 주어야 함
+해당 컴포넌트는 `z-100`으로 설정되어 있음
+
 ```tsx
-import camera from "../../assets/icons/camera-gray.svg";
+import book_shelf from "../assets/icons/book_shelf-gray-30.svg";
+const [snackbar, setSnackbar] = useState({
+  open: false,
+  message: "",
+});
 
 <Snackbar
-  icon={camera}
-  text="내 서재에 도서를 등록했어요."
-  buttonText="확인"
-  onButtonClick={() => alert("Snackbar button clicked!")}
+  icon={book_shelf}
+  isOpen={snackbar.open}
+  onClose={() => setSnackbar({ ...snackbar, open: false })}
+  text={snackbar.message}
+  buttonText="서재로 이동"
+  onButtonClick={onClickSnackbar}
 />;
 ```
 
@@ -1278,17 +1465,23 @@ import camera from "../../assets/icons/camera-gray.svg";
 
 #### Props
 
-| Name | Type   | Required | Default | Note           |
-| :--- | :----- | :------: | :------ | :------------- |
-| icon | string |    X     | -       | 아이콘 url     |
-| text | string |    O     | -       | snack bar 문구 |
+| Name    | Type       | Required | Default | Note            |
+| :------ | :--------- | :------: | :------ | :-------------- |
+| icon    | string     |    X     | -       | 아이콘 url      |
+| text    | string     |    O     | -       | toast 문구      |
+| isOpen  | boolean    |    O     | -       | toast 노출 여부 |
+| onClose | () => void |    X     | -       | toast 종료 함수 |
 
 #### Usage
 
 ```tsx
-import camera from "../../assets/icons/camera-gray.svg";
+const [isToastOpen, setIsToastOpen] = useState(false);
 
-<Toast icon={camera} text="내 서재에 도서를 등록했어요." />;
+<Toast
+  isOpen={isToastOpen}
+  onClose={() => setIsToastOpen(false)}
+  text="저장되었습니다."
+/>;
 ```
 
 ---
@@ -1302,21 +1495,21 @@ import camera from "../../assets/icons/camera-gray.svg";
 
 #### Path
 
-`src/components/presentation/modal/bottombanner/Origin.tsx`  
+`src/components/presentation/modal/bottombanner/Origin.tsx`
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-| `line1` | `string` | O | - | 첫 번째 문장 |
-| `line2` | `string` | O | - | 두 번째 문장 |
-| `iconSrc` | `string` | X | `defaultArrowRight` | 우측 아이콘 이미지 경로 |
-| `iconAlt` | `string` | X | `"arrow right"` | 아이콘 대체 텍스트 |
-| `useGradientOverlay` | `boolean` | X | `false` | 그라데이션 오버레이 사용 여부 |
-| `onClick` | `() => void` | X | - | 클릭 핸들러 |
-| `maxWidthPx` | `number` | X | `343` | 최대 너비 |
-| `className` | `string` | X | `""` | 추가 클래스명 |
-| `ariaLabel` | `string` | X | `"banner action card"` | 접근성 라벨 |
+| Name                 | Type         | Required | Default                | Note                          |
+| :------------------- | :----------- | :------: | :--------------------- | :---------------------------- |
+| `line1`              | `string`     |    O     | -                      | 첫 번째 문장                  |
+| `line2`              | `string`     |    O     | -                      | 두 번째 문장                  |
+| `iconSrc`            | `string`     |    X     | `defaultArrowRight`    | 우측 아이콘 이미지 경로       |
+| `iconAlt`            | `string`     |    X     | `"arrow right"`        | 아이콘 대체 텍스트            |
+| `useGradientOverlay` | `boolean`    |    X     | `false`                | 그라데이션 오버레이 사용 여부 |
+| `onClick`            | `() => void` |    X     | -                      | 클릭 핸들러                   |
+| `maxWidthPx`         | `number`     |    X     | `343`                  | 최대 너비                     |
+| `className`          | `string`     |    X     | `""`                   | 추가 클래스명                 |
+| `ariaLabel`          | `string`     |    X     | `"banner action card"` | 접근성 라벨                   |
 
 #### Usage
 
@@ -1336,16 +1529,16 @@ import camera from "../../assets/icons/camera-gray.svg";
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-| `count` | `number \| string` | O | - | 독서 기록 개수 |
-| `subtitle` | `string` | O | - | 하단 설명 문구 |
-| `onClick` | `() => void` | X | - | 클릭 핸들러 |
-| `maxWidthPx` | `number` | X | `343` | 최대 너비 |
-| `iconSrc` | `string` | X | `plusIcon` | 우측 아이콘 이미지 경로 |
-| `iconAlt` | `string` | X | `"plus"` | 아이콘 대체 텍스트 |
-| `className` | `string` | X | `""` | 추가 클래스명 |
-| `ariaLabel` | `string` | X | `"reading record banner"` | 접근성 라벨 |
+| Name         | Type               | Required | Default                   | Note                    |
+| :----------- | :----------------- | :------: | :------------------------ | :---------------------- |
+| `count`      | `number \| string` |    O     | -                         | 독서 기록 개수          |
+| `subtitle`   | `string`           |    O     | -                         | 하단 설명 문구          |
+| `onClick`    | `() => void`       |    X     | -                         | 클릭 핸들러             |
+| `maxWidthPx` | `number`           |    X     | `343`                     | 최대 너비               |
+| `iconSrc`    | `string`           |    X     | `plusIcon`                | 우측 아이콘 이미지 경로 |
+| `iconAlt`    | `string`           |    X     | `"plus"`                  | 아이콘 대체 텍스트      |
+| `className`  | `string`           |    X     | `""`                      | 추가 클래스명           |
+| `ariaLabel`  | `string`           |    X     | `"reading record banner"` | 접근성 라벨             |
 
 #### Usage
 
@@ -1365,42 +1558,39 @@ import camera from "../../assets/icons/camera-gray.svg";
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-| `label` | `string` | O | - | 배너 문구 |
-| `iconSrc` | `string` | X | `defaultArrowRight` | 우측 아이콘 이미지 경로 |
-| `iconAlt` | `string` | X | `"arrow right"` | 아이콘 대체 텍스트 |
-| `onClick` | `() => void` | X | - | 클릭 핸들러 |
-| `maxWidthPx` | `number` | X | `343` | 최대 너비 |
-| `className` | `string` | X | `""` | 추가 클래스명 |
-| `ariaLabel` | `string` | X | `"single line banner card"` | 접근성 라벨 |
+| Name         | Type         | Required | Default                     | Note                    |
+| :----------- | :----------- | :------: | :-------------------------- | :---------------------- |
+| `label`      | `string`     |    O     | -                           | 배너 문구               |
+| `iconSrc`    | `string`     |    X     | `defaultArrowRight`         | 우측 아이콘 이미지 경로 |
+| `iconAlt`    | `string`     |    X     | `"arrow right"`             | 아이콘 대체 텍스트      |
+| `onClick`    | `() => void` |    X     | -                           | 클릭 핸들러             |
+| `maxWidthPx` | `number`     |    X     | `343`                       | 최대 너비               |
+| `className`  | `string`     |    X     | `""`                        | 추가 클래스명           |
+| `ariaLabel`  | `string`     |    X     | `"single line banner card"` | 접근성 라벨             |
 
 #### Usage
 
 ```tsx
-<SingleLineBannerCard
-  label="추천 도서를 확인해보세요"
-  onClick={handleClick}
-/>
+<SingleLineBannerCard label="추천 도서를 확인해보세요" onClick={handleClick} />
 ```
 
-### [ Bottom Sheet ] -> 이 부분은 #252 PR 공유사항 추가로 참고 
+### [ Bottom Sheet ] -> 이 부분은 #252 PR 공유사항 추가로 참고
 
 #### Path
 
-`src/components/presentation/modal/bottomsheet/Origin.tsx` 
+`src/components/presentation/modal/bottomsheet/Origin.tsx`
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-| `open` | `boolean` | O | - | 바텀시트 열림 여부 |
-| `onClose` | `() => void` | O | - | 닫기 핸들러 |
-| `title` | `string` | X | - | 헤더 제목 |
-| `footer` | `BottomSheetFooterConfig` | X | - | 하단 버튼 설정 |
-| `children` | `React.ReactNode` | O | - | 바디 콘텐츠 |
-| `closeOnOverlayClick` | `boolean` | X | `true` | 오버레이 클릭 닫기 여부 |
-| `className` | `string` | X | `""` | 추가 클래스명 |
+| Name                  | Type                      | Required | Default | Note                    |
+| :-------------------- | :------------------------ | :------: | :------ | :---------------------- |
+| `open`                | `boolean`                 |    O     | -       | 바텀시트 열림 여부      |
+| `onClose`             | `() => void`              |    O     | -       | 닫기 핸들러             |
+| `title`               | `string`                  |    X     | -       | 헤더 제목               |
+| `footer`              | `BottomSheetFooterConfig` |    X     | -       | 하단 버튼 설정          |
+| `children`            | `React.ReactNode`         |    O     | -       | 바디 콘텐츠             |
+| `closeOnOverlayClick` | `boolean`                 |    X     | `true`  | 오버레이 클릭 닫기 여부 |
+| `className`           | `string`                  |    X     | `""`    | 추가 클래스명           |
 
 #### Usage
 
@@ -1431,19 +1621,19 @@ import camera from "../../assets/icons/camera-gray.svg";
 
 #### Props
 
-| Name | Type | Required | Default | Note |
-| :--- | :--- | :------: | :------ | :--- |
-| `open` | `boolean` | O | - | 팝업 열림 여부 |
-| `title` | `string` | O | - | 팝업 제목 |
-| `description` | `string` | O | - | 팝업 설명 |
-| `leftLabel` | `string` | O | - | 왼쪽 버튼 텍스트 |
-| `rightLabel` | `string` | O | - | 오른쪽 버튼 텍스트 |
-| `onLeftClick` | `() => void` | X | - | 왼쪽 버튼 클릭 핸들러 |
-| `onRightClick` | `() => void` | X | - | 오른쪽 버튼 클릭 핸들러 |
-| `onClose` | `() => void` | X | - | 외부 닫기 핸들러 |
-| `closeOnOverlayClick` | `boolean` | X | `true` | 오버레이 클릭 닫기 여부 |
-| `className` | `string` | X | `""` | 추가 클래스명 |
-| `ariaLabel` | `string` | X | `"popup confirm modal"` | 접근성 라벨 |
+| Name                  | Type         | Required | Default                 | Note                    |
+| :-------------------- | :----------- | :------: | :---------------------- | :---------------------- |
+| `open`                | `boolean`    |    O     | -                       | 팝업 열림 여부          |
+| `title`               | `string`     |    O     | -                       | 팝업 제목               |
+| `description`         | `string`     |    O     | -                       | 팝업 설명               |
+| `leftLabel`           | `string`     |    O     | -                       | 왼쪽 버튼 텍스트        |
+| `rightLabel`          | `string`     |    O     | -                       | 오른쪽 버튼 텍스트      |
+| `onLeftClick`         | `() => void` |    X     | -                       | 왼쪽 버튼 클릭 핸들러   |
+| `onRightClick`        | `() => void` |    X     | -                       | 오른쪽 버튼 클릭 핸들러 |
+| `onClose`             | `() => void` |    X     | -                       | 외부 닫기 핸들러        |
+| `closeOnOverlayClick` | `boolean`    |    X     | `true`                  | 오버레이 클릭 닫기 여부 |
+| `className`           | `string`     |    X     | `""`                    | 추가 클래스명           |
+| `ariaLabel`           | `string`     |    X     | `"popup confirm modal"` | 접근성 라벨             |
 
 #### Usage
 
