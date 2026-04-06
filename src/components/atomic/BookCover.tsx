@@ -16,9 +16,15 @@ type BookCoverProps = {
   imageUrl?: string;
   size: "XS" | "S" | "M" | "XL";
   type: "Image" | "Upload";
+  className?: string;
 };
 
-export default function BookCover({ imageUrl, size, type }: BookCoverProps) {
+export default function BookCover({
+  imageUrl,
+  size,
+  type,
+  className,
+}: BookCoverProps) {
   const sizeClasses = {
     XS: "w-11 h-16",
     S: "w-14 h-[82px]",
@@ -28,7 +34,7 @@ export default function BookCover({ imageUrl, size, type }: BookCoverProps) {
 
   return (
     <div
-      className={`${sizeClasses[size]} rounded-xs bg-gray-17 flex items-center justify-center`}
+      className={`${sizeClasses[size]} rounded-xs bg-gray-17 flex items-center justify-center ${className || ""}`}
     >
       {type === "Image" && imageUrl && (
         <img

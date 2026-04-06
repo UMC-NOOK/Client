@@ -1,9 +1,9 @@
 type DateBadgeProps = {
-  topText: string;     // 예: "MM.DD"
-  bottomText: string;  // 예: "YYYY"
+  topText: string; // 예: "MM.DD"
+  bottomText: string; // 예: "YYYY"
 };
 
-export function ResourceDate({ topText, bottomText}: DateBadgeProps) {
+export default function ResourceDate({ topText, bottomText }: DateBadgeProps) {
   return (
     <div
       className={[

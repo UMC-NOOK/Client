@@ -9,26 +9,25 @@ type Props = {
   size: SectionHeaderSize;
   top: ReactNode;
   bottom?: ReactNode; // 13, 16, 20
-  //showCaret?: boolean; // 14, 16, 20
-  onToggle?: (open: boolean) => void; // caret 열 onClick 
+  showCaret?: boolean; // 14, 16, 20
+  onToggle?: (open: boolean) => void; // caret 열 onClick
   onClick?: () => void; // 사용자용 Click
 };
 
 const clampOneLineStyle = {
   display: "-webkit-box",
-  WebkitBoxOrient: "vertical" as const
+  WebkitBoxOrient: "vertical" as const,
 };
 
 export default function SectionHeader({
   size,
   top,
   bottom,
-  //showCaret = false,
+  showCaret = false,
   onToggle,
   onClick,
 }: Props) {
   const [open, setOpen] = useState(false);
-  const showCaret = size === "14" || size === "16";
 
   const handleClick = () => {
     if (showCaret) {
@@ -99,7 +98,7 @@ export default function SectionHeader({
             src={caretSrc}
             alt=""
             aria-hidden="true"
-            className="h-3 w- shrink-0"
+            className="h-3 w-3 shrink-0"
           />
         ) : null}
       </>
