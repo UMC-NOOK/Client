@@ -17,6 +17,7 @@ import BottomSheetTestPage from "../pages/search/test/BottomSheetTestPage";
 import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
 import LibraryPage from "../pages/library/LibraryPage";
 import LibraryGoalInputPage from "../pages/library/LibraryGoalInputPage";
+import LibraryAllBookPage from "../pages/library/LibraryAllBookPage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -94,6 +95,7 @@ export default function AppRoutes() {
           <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
         </Route>
         <Route path="/library/input" element={<LibraryGoalInputPage/>}/>
+        <Route path="/library/all" element={<LibraryAllBookPage/>}/>
         <Route path="*" element={<Navigate to="/library" replace />} />
       </Route>
     </Routes>

@@ -1,7 +1,7 @@
 import searchIcon from "../../../../assets/icons/book_shelf.svg";
-import libraryIcon from "../../../../assets/icons/library_focus.svg";
+import libraryIcon from "../../../../assets/icons/focus-gray.svg";
 
-type BookListType = "NONE" | "SEARCH" | "LIBRARY" | "REPORT";
+type BookListType = "SEARCH" | "BEFORE" | "READINGORDONE" | "REPORT";
 
 type TypeMeta = {
   iconSrc: string | null;
@@ -19,8 +19,8 @@ type Props = {
 
 const TYPE_META: Record<BookListType, TypeMeta> = {
   SEARCH: { iconSrc: searchIcon }, //전체 검색
-  LIBRARY: { iconSrc: libraryIcon }, //서제에서 타이머 icon
-  NONE: { iconSrc: null }, //서재에서 전체보기했을 때 아이콘이 없는 경우
+  BEFORE: { iconSrc: null }, //서재에서 전체보기했을 때 아이콘이 없는 경우
+  READINGORDONE: { iconSrc: libraryIcon }, //서제에서 타이머 icon
   REPORT: { iconSrc: null }, //기록에서 도서 선택
 };
 
