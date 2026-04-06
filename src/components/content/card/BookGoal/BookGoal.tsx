@@ -80,8 +80,10 @@ function splitGoalText(text: string) {
 
 export default function BookGoal(props: Props) {
   const { percent } = props;
-  const resolvedMessage = percent === "ZERO" ? "독서 목표를 설정하세요!" : props.message;
-  const lines = splitByUntil(resolvedMessage);
+  const resolvedMessage =
+    percent === "ZERO" ? "독서 목표를 설정하세요!" : props.message;
+
+  const lines = splitGoalText(resolvedMessage);
 
   return (
     <div
@@ -93,9 +95,11 @@ export default function BookGoal(props: Props) {
       <div className="flex flex-col gap-1">
         <p className="text-label-12-sb text-gray-70">독서 목표</p>
 
-        <div className="flex flex-col items-start text-label-16-sb text-gray-90 gap-2 pt-1">
+        <div className="flex flex-col items-start gap-2 pt-1 text-label-16-sb text-gray-90">
           {lines.map((line, i) => (
-            <div key={i}>{line}</div>
+            <div key={i}>
+              {line}
+            </div>
           ))}
         </div>
       </div>
