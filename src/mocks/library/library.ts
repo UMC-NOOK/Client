@@ -6,7 +6,7 @@ import type {
     LibraryBookGoalPatchResponse,
     LibraryDateFocusResponse,
     LibraryStatusBookResponse,
-  } from "./types";
+  } from "../../types/libraryInfo/library";
   
   /**
    * 서재 전체 도서 수 조회
@@ -16,7 +16,7 @@ import type {
     code: "SUCCESS-200",
     message: "서재 전체 도서 수 조회에 성공했습니다.",
     result: {
-      totalBookNum: 106,
+      totalBookNum: 126,
     },
   };
   

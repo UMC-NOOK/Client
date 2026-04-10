@@ -12,10 +12,28 @@ import { useState } from "react";
 import DayOfTheWeek from "../../components/content/Calendar/Resource/DayOfTheWeek";
 import BottomBanner from "./modal/BottomBanner";
 import DateFocusBookModal from "./modal/DateFocusBookModal";
+import {
+    useLibraryBookNum,
+    useLibraryBookGoal,
+  } from "../../hooks/queries/library";
+
+import {mockLibraryBookNumResponse} from "../../mocks/library/library"
+import getGoalPercent from "./utils/getGoalPercent";
 
 export default function LibraryPage() {
     const [selectedView, setSelectedView] = useState<"focus" | "book">("focus");
     const [isModalOpen, setIsModalOpen] = useState(true); // 테스트용으로 true
+
+    const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
+    const { data: libraryBookGoalData, isLoading : isBookGoalLoading, isError : isBookGoalError } = useLibraryBookGoal();
+
+    const totalBookNum = libraryBookData?.totalBookNum ?? 0;
+    const goal = libraryBookGoalData?.goal ?? 0;
+    const remainingCount = libraryBookGoalData?.remainingCount ?? 0;
+    const progressPercent = libraryBookGoalData?.progressPercent ?? 0;
+    const IconProgressPercent = getGoalPercent(progressPercent);
+
+    const mockTotalBookNum = mockLibraryBookNumResponse.result.totalBookNum;
 
     return (
         <div className="flex flex-col w-full">
@@ -27,7 +45,10 @@ export default function LibraryPage() {
 
                 <div className="flex flex-row gap-1 pt-2.5">
                     <div>
-                        <label className="text-label-20-b text-yellow-70">106권</label>
+                        <label className="text-label-20-b text-yellow-70">
+                            {isBookLoading ? mockTotalBookNum : totalBookNum}
+                        </label>
+                        <label className="text-label-20-b text-yellow-70">권</label>
                         <label className="text-label-20-b text-gray-90">의 책이 있어요.</label>
                     </div>
                     <Icon size="m" className="items-center">
@@ -36,7 +57,9 @@ export default function LibraryPage() {
                 </div>
 
                 <div className="pt-4">
-                    <BookGoal percent="PCT_1_9" message="100권까지 99권 남았어요." />
+                    <BookGoal 
+                        percent={IconProgressPercent}
+                        message={`${goal}권까지 ${remainingCount}권 남았어요.`} />
                 </div>
             </div>
 
