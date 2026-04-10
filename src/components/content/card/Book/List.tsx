@@ -24,7 +24,7 @@ const TYPE_META: Record<BookListType, TypeMeta> = {
   REPORT: { iconSrc: null }, //기록에서 도서 선택
 };
 
-export function BookList({
+export default function BookList({
   imageUrl,
   title,
   author,

@@ -31,8 +31,6 @@ export default function TopNavigation({
 
       {/* RIGHT */}
       <div className="flex items-center justify-end">
-        {right}
-        <div className="flex items-center justify-end w-10">
           {onClickRight ? (
             <button onClick={onClickRight} className="focus:outline-none">
               {right}
@@ -41,7 +39,6 @@ export default function TopNavigation({
             <> {right}</>
           )}
         </div>
-      </div>
     </header>
   );
 }

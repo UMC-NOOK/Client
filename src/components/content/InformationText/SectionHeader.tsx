@@ -45,15 +45,15 @@ export default function SectionHeader({
   if (size === "13") {
     return (
       <div className="flex w-full flex-col items-start justify-center gap-2">
-        <p className="w-full text-label-13-sb text-gray-90 ">{top}</p>
+        <div className="w-full text-label-13-sb text-gray-90 ">{top}</div>
 
         {bottom ? (
-          <p
+          <div
             className="self-stretch text-label-12-sb text-gray-50"
             style={clampOneLineStyle}
           >
             {bottom}
-          </p>
+          </div>
         ) : null}
       </div>
     );
@@ -119,12 +119,12 @@ export default function SectionHeader({
         )}
 
         {bottom ? (
-          <p
+          <div
             className="self-stretch text-label-14-sb text-gray-50"
             style={clampOneLineStyle}
           >
             {bottom}
-          </p>
+          </div>
         ) : null}
       </div>
     );
@@ -132,7 +132,7 @@ export default function SectionHeader({
 
   return (
     <div className="flex w-full flex-col items-start justify-center">
-      <p className="w-full text-title-20-b text-gray-90">{top}</p>
+      <div className="w-full text-title-20-b text-gray-90">{top}</div>
 
       {bottom ? (
         <div

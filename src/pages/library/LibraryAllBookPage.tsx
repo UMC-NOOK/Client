@@ -6,7 +6,7 @@ import SectionHeader from "../../components/content/InformationText/SectionHeade
 import TabBar from "../../components/navigation/tabs/TabBar";
 import type { TabOption } from "../../components/navigation/tabs/TabBar";
 import { useMemo, useState } from "react";
-import { BookList } from "../../components/content/card/Book/List";
+import BookList from "../../components/content/card/Book/List";
 import Divider from "../../components/layout/Divider";
 
 type LibraryTab = "BEFORE" | "READING" | "FINISHED";

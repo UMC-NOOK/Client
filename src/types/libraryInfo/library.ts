@@ -98,4 +98,3 @@ export type LibraryDateFocusResponse = BaseApiResponse<LibraryDateFocus>;
 
 //상태별 조회
 export type LibraryStatusBookResponse<T extends BookStatusType> = BaseApiResponse<LibraryStatusBook<T>>;
-
