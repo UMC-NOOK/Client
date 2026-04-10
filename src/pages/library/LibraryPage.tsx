@@ -17,7 +17,10 @@ import {
     useLibraryBookGoal,
   } from "../../hooks/queries/library";
 
-import {mockLibraryBookNumResponse} from "../../mocks/library/library"
+import {
+    mockLibraryBookNumResponse,
+    mockLibraryBookGoalResponse
+} from "../../mocks/library/library"
 import getGoalPercent from "./utils/getGoalPercent";
 
 export default function LibraryPage() {
@@ -27,13 +30,16 @@ export default function LibraryPage() {
     const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
     const { data: libraryBookGoalData, isLoading : isBookGoalLoading, isError : isBookGoalError } = useLibraryBookGoal();
 
+    //mock
+    const mockTotalBookNum = mockLibraryBookNumResponse.result.totalBookNum;
+    const mockLibraryBookGoal = mockLibraryBookGoalResponse.result;
+
     const totalBookNum = libraryBookData?.totalBookNum ?? 0;
-    const goal = libraryBookGoalData?.goal ?? 0;
-    const remainingCount = libraryBookGoalData?.remainingCount ?? 0;
-    const progressPercent = libraryBookGoalData?.progressPercent ?? 0;
+    const goal = libraryBookGoalData?.goal ?? mockLibraryBookGoal.goal;
+    const remainingCount = libraryBookGoalData?.remainingCount ?? mockLibraryBookGoal.remainingCount;
+    const progressPercent = libraryBookGoalData?.progressPercent ?? mockLibraryBookGoal.progressPercent;
     const IconProgressPercent = getGoalPercent(progressPercent);
 
-    const mockTotalBookNum = mockLibraryBookNumResponse.result.totalBookNum;
 
     return (
         <div className="flex flex-col w-full">

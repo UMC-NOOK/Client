@@ -29,8 +29,8 @@ import type {
     message: "서재 독서 목표 조회에 성공했습니다.",
     result: {
       goal: 100,
-      remainingCount: 49,
-      progressPercent: 51,
+      remainingCount: 0,
+      progressPercent: 100,
     },
   };
   
