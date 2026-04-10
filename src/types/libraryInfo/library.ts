@@ -1,5 +1,5 @@
 export type FocusTimeSlotType = "FOCUS_00"| "FOCUS_01" | "FOCUS_02" | "FOCUS_03" | "FOCUS_04";
-export type BookStatusType = "BEFORE" | "REDING" | "FINISHED";
+export type BookStatusType = "BEFORE" | "READING" | "FINISHED";
 
 export interface BaseApiResponse <T> {
     isSuccess: true;
@@ -15,14 +15,15 @@ export type LibraryBook = {
 export type LibraryBookGoal = {
     goal: number;
     remainingCount: number;
+    progressPercent: number;
 };
 
-export type FocusTimeItems {
+export type FocusTimeItems ={
     date: string;
     timeSlot: string;
 };
 
-export type FocusBookItems {
+export type FocusBookItems = {
     bookId: number;
     coverUrl: string;
 };
@@ -87,7 +88,7 @@ export type LibraryBookNumResponse = BaseApiResponse<LibraryBook>; // 서재 전
 export type LibraryBookGoalResponse = BaseApiResponse<LibraryBookGoal>; //서재 목표 조회
 
 //포커스 조회x
-export type LibraryFocusTimeResponse = BaseApiResponse<LibraryFocus<FocusBookItems>>;
+export type LibraryFocusTimeResponse = BaseApiResponse<LibraryFocus<FocusTimeItems>>;
 export type LibraryFocusBookResponse = BaseApiResponse<LibraryFocus<FocusBookItems>>;
 
 //목표 조회
