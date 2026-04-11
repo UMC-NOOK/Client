@@ -122,7 +122,7 @@ export default function AppRoutes() {
           <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
           <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
         </Route>
-        <Route path="/library/input" element={<LibraryGoalInputPage/>}/>
+        <Route path="/users/me/onboarding/goal" element={<LibraryGoalInputPage/>}/>
         <Route path="/library/all" element={<LibraryAllBookPage/>}/>
         <Route path="*" element={<Navigate to="/library" replace />} />
 

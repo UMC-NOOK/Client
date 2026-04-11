@@ -9,6 +9,7 @@ import focusGray from "../../assets/icons/focus-gray.svg";
 import book from "../../assets/icons/book.svg";
 import bookGray from "../../assets/icons/book-gray.svg";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import DayOfTheWeek from "../../components/content/Calendar/Resource/DayOfTheWeek";
 import BottomBanner from "./modal/BottomBanner";
 import DateFocusBookModal from "./modal/DateFocusBookModal";
@@ -62,11 +63,15 @@ export default function LibraryPage() {
                     </Icon>
                 </div>
 
-                <div className="pt-4">
-                    <BookGoal 
+                <Link
+                    to="/users/me/onboarding/goal"
+                    className="block w-full pt-4 text-inherit no-underline outline-none focus-visible:ring-2 focus-visible:ring-gray-40 focus-visible:ring-offset-2 rounded-[8px]"
+                >
+                    <BookGoal
                         percent={IconProgressPercent}
-                        message={`${goal}권까지 ${remainingCount}권 남았어요.`} />
-                </div>
+                        message={`${goal}권까지 ${remainingCount}권 남았어요.`}
+                    />
+                </Link>
             </div>
 
             <div className="flex flex-col pt-8">
