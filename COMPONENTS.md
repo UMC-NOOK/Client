@@ -352,20 +352,12 @@ const [birth, setBirth] = useState({
 `src/components/action/Button/Icon.tsx`
 
 #### Props
-<<<<<<< HEAD
-| Name            | Type                               | Required | Default     | Note              |
-| :-------------- | :--------------------------------- | :------: | :---------- | :--------------   |
-| `size`          | `"xs(14)" or "s(20)" or "m(24)`                |     O    | -           |  아이콘 사이즈     |
-| `children`      | `ReactNode`                        |     O    | -           | svg 파일      |
-| `className`     | `string`                           |     X    | -           | 추가적인 클래스명  |
-=======
 
 | Name        | Type                | Required | Default | Note              |
 | :---------- | :------------------ | :------: | :------ | :---------------- |
 | `size`      | `"xs" or "s" or "m` |    O     | -       | 아이콘 사이즈     |
 | `children`  | `ReactNode`         |    O     | -       | svg 파일          |
 | `className` | `string`            |    X     | -       | 추가적인 클래스명 |
->>>>>>> ca4f5feb29f1115acc3be3590a1cf684574f7907
 
 #### Usage
 
@@ -1285,19 +1277,11 @@ const MOCK_RANKS = [
 
 #### Props
 
-<<<<<<< HEAD
-| Name    | Type                                               | Required  | Default | Note    |
-| :------ | :------------------------------------------------- | :-------: | :------ | :------ |
-| day     | `string`                                           |     O     |   -     |  퍼센트   |
-| disble  | `boolean`                                          |     X     |  `true` |  활성화 유무   |
-| percent | `"none" \| "0" \| "25" \| "50" \| "75" \| "100"`   |     O     |  `none` |  퍼센트   |
-=======
 | Name    | Type                                             | Required | Default | Note        |
 | :------ | :----------------------------------------------- | :------: | :------ | :---------- |
 | day     | `string`                                         |    O     | -       | 퍼센트      |
 | disble  | `boolean`                                        |    X     | `true`  | 활성화 유무 |
-| percent | `"none" \| "0" \| "25" \| "50" \| "75" \| "100"` |    X     | `none`  | 퍼센트      |
->>>>>>> ca4f5feb29f1115acc3be3590a1cf684574f7907
+| percent | `"none" \| "0" \| "25" \| "50" \| "75" \| "100"` |    O     | `none`  | 퍼센트      |
 
 #### Usage
 
