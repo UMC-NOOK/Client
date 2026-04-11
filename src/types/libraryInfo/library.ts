@@ -35,7 +35,7 @@ export type LibraryFocus<TType extends FocusTimeItems | FocusBookItems> = {
 };
 
 export type PatchBookGoal = {
-    goal: string;
+    goal: number;
 };
 
 export type BookDetailInfo = {

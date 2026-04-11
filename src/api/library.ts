@@ -8,6 +8,8 @@ import type {
     FocusTimeItems,
     FocusBookItems,
     LibraryDateFocus,
+    PatchBookGoal,
+    LibraryBookGoalPatchResponse,
   } from "../types/libraryInfo/library";
 
 export async function libraryGet<T>(url: string): Promise<T> {
@@ -19,11 +21,11 @@ export function getLibraryBookNum(): Promise<LibraryBook> {
     return libraryGet<LibraryBook>("/count");
   }
   
-  export function getLibraryBookGoal(): Promise<LibraryBookGoal> {
+export function getLibraryBookGoal(): Promise<LibraryBookGoal> {
     return libraryGet<LibraryBookGoal>("/goal");
   }
   
-  export function getLibraryFocusTime(
+export function getLibraryFocusTime(
     yearMonth: string,
   ): Promise<LibraryFocus<FocusTimeItems>> {
     return libraryGet<LibraryFocus<FocusTimeItems>>(
@@ -31,7 +33,7 @@ export function getLibraryBookNum(): Promise<LibraryBook> {
     );
   }
   
-  export function getLibraryFocusBook(
+export function getLibraryFocusBook(
     yearMonth: string,
   ): Promise<LibraryFocus<FocusBookItems>> {
     return libraryGet<LibraryFocus<FocusBookItems>>(
@@ -39,7 +41,7 @@ export function getLibraryBookNum(): Promise<LibraryBook> {
     );
   }
   
-  export function getLibraryDateFocus(
+export function getLibraryDateFocus(
     date: string,
     cursor?: number,
   ): Promise<LibraryDateFocus> {
@@ -49,3 +51,25 @@ export function getLibraryBookNum(): Promise<LibraryBook> {
   
     return libraryGet<LibraryDateFocus>(query);
   }
+
+  //패치
+  async function libraryPatch<TRequest, TResponse>(
+    url: string,
+    body: TRequest,
+  ): Promise<TResponse> {
+    const response = await api.patch<BaseApiResponse<TResponse>>(
+      `/api/${url}`,
+      body,
+    );
+
+    return response.data.result;
+  }
+
+export function patchLibraryBookGoal(
+  body: PatchBookGoal,
+): Promise<PatchBookGoal> {
+  return libraryPatch<PatchBookGoal, PatchBookGoal>(
+    "/users/me/onboarding/goal",
+    body,
+  );
+}

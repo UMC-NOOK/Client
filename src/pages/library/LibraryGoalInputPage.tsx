@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Icon from "../../components/action/Button/Icon";
 import close from "../../assets/icons/close.svg";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import { Text } from "../../components/action/Button/Text";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
+import { usePatchLibraryBookGoal } from "../../hooks/mutations/library/usePatchLibraryBookGoal";
 
 function getRemainingDaysInYear(date = new Date()) {
     const year = date.getFullYear();
@@ -22,9 +23,29 @@ function getRemainingDaysInYear(date = new Date()) {
   }
 
 export default function LibraryGoalInputPage() {
-    const [goalCount, setGoalCount] = useState("");
-
+    const navigate = useNavigate();
     const { year, remainingDays } = getRemainingDaysInYear();
+
+    const [goalCount, setGoalCount] = useState("");
+    const { mutate: patchGoal, isPending } = usePatchLibraryBookGoal();
+
+    const handleComplete = () => {
+        if (isPending) return;
+
+        const trimmed = goalCount.trim();
+        if (!/^\d+$/.test(trimmed)) return;
+
+        const goal = Number(trimmed);
+
+        patchGoal(
+            { goal },
+            {
+                onSuccess: () => {
+                    navigate("/library");
+                },
+            },
+        );
+    };
 
     return(
         <div className="flex flex-col">
@@ -40,12 +61,14 @@ export default function LibraryGoalInputPage() {
                             </Icon>
                         </Link>
                     }
+                    onClickRight={handleComplete}
                     right={
                         <Text
                             text="완료"
                             size="18"
+                            active={/^\d+$/.test(goalCount.trim())}
                         />
-                    }                
+                    }
                 />
             </div>
             <div className="flex flex-col px-1 pt-12 gap-10">
@@ -69,9 +92,12 @@ export default function LibraryGoalInputPage() {
                         <div className="flex h-[54px] w-[305px] items-center rounded-[8px] bg-gray-17 py-3 px-4">
                             <input
                                 type="text"
+                                inputMode="numeric"
                                 autoComplete="off"
                                 value={goalCount}
-                                onChange={(e) => setGoalCount(e.target.value)}
+                                onChange={(e) =>
+                                    setGoalCount(e.target.value.replace(/\D/g, ""))
+                                }
                                 placeholder="몇"
                                 className="w-full bg-transparent text-label-20-b text-gray-90 outline-none  placeholder:text-label-20-b placeholder:text-gray-70"
                             />
