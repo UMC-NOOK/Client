@@ -1,5 +1,5 @@
-import Day from "../../Calendar/Resource/Day";
-import Indicator, { type Percent } from "../Resource/Indicator";
+import Day from "./Day";
+import Indicator, { type Percent } from "./Indicator";
 
 type Props = {
   day: string;

@@ -340,6 +340,65 @@ const [birth, setBirth] = useState({
 />
 ```
 
+
+## 4. Section
+
+> - **Design**:
+> - **Author**: 임서연
+
+### [ Drop Down ]
+
+#### Path
+
+`src/components/section/dropDown/DropDown.tsx`
+
+#### Props
+
+| Name              | Type         | Required | Default | Note              |
+| :---------------- | :----------- | :------: | :------ | :------------     |
+| `initialYear`     | `number`     |    X     | 2026    | 초기 년도           |
+| `initialMonth`    | `number`     |    O     | -       | 초기 월             |  
+| `startYear`       | `number`     |    O     | -       | 나타낼 시작 연도      |
+| `endYear`         | `number`     |    O     | -       | 나타낼 마지막 연도    |
+| `onApply`         | `(value: { year: number; month: number; yearMonth: string }) => void`            |    O     | -       | 적용 버튼에 대한 함수|
+
+#### Usage
+
+```tsx
+ <DropDown
+          initialYear={2026}
+          initialMonth={11}
+          startYear={2025}
+          endYear={2026}
+          onApply={(value) => {
+            setAppliedValue(value);
+            console.log("적용된 값:", value);
+          }}
+  />
+```
+
+
+### [ Checkbox ]
+
+#### Path
+
+`src/components/section/checkvox/Checkbox.tsx`
+
+#### Props
+
+| Name        | Type         | Required | Default | Note              |
+| :--------   | :----------- | :------: | :------ | :------------     |
+| `text`      | `string`     |    O     | -       | 체크박스 내용         |
+
+#### Usage
+
+```tsx
+<Checkbox text="이거어디까지길어지는지한번ㅁ만실행해보고싶은데가능할까여?"/>
+
+```
+
+
+
 ## 5. Action
 
 > - **Design**:
@@ -475,7 +534,7 @@ const [birth, setBirth] = useState({
 
 #### Path
 
-`src/components/action/Chip/Chip.tsx`
+`src/components/action/chip/Chip.tsx`
 
 #### Props
 
@@ -869,7 +928,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`components/content/list/Resource/Date`
+`components/content/list/resource/Date`
 
 #### Props
 
@@ -887,7 +946,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`src/components/content/Card/BookGoal/BookGoal.tsx`
+`src/components/content/card/bookGoal/BookGoal.tsx`
 
 #### Props
 
@@ -915,7 +974,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`src/components/content/Card/Book/Normal.tsx`
+`src/components/content/card/book/Normal.tsx`
 
 #### Props
 
@@ -954,7 +1013,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`src/components/content/Card/Book/List.tsx`
+`src/components/content/card/book/List.tsx`
 
 #### Props
 
@@ -1015,7 +1074,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`src/components/content/Card/Book/List/Focus.tsx`
+`src/components/content/card/book/list/Focus.tsx`
 
 #### Props
 
@@ -1137,7 +1196,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`src/components/content/InformationText/SectionHeader.tsx`
+`src/components/content/informationText/SectionHeader.tsx`
 
 #### Props
 
@@ -1180,7 +1239,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`src/components/content/InformationText/InformationSection.tsx`
+`src/components/content/informationText/InformationSection.tsx`
 
 #### Props
 
@@ -1217,7 +1276,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`components/content/Calendar/Resource/DayOfTheWeek.tsx`
+`components/content/calendar/resource/DayOfTheWeek.tsx`
 
 #### Props
 
@@ -1235,7 +1294,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`components/content/Calendar/Resource/Day.tsx`
+`components/content/calendar/resource/Day.tsx`
 
 #### Props
 
@@ -1255,7 +1314,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`components/content/Calendar/Resource/Indicator.tsx`
+`components/content/calendar/resource/Indicator.tsx`
 
 #### Props
 
@@ -1273,7 +1332,7 @@ const MOCK_RANKS = [
 
 #### Path
 
-`components/content/Calendar/Resource/IndicatorSet.tsx`
+`components/content/calendar/resource/IndicatorSet.tsx`
 
 #### Props
 

@@ -120,6 +120,7 @@ export default function AppRoutes() {
             element={<BannerActionCardTestPage />}
           />
           <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
+          <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
           <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
         </Route>
         <Route path="/users/me/onboarding/goal" element={<LibraryGoalInputPage/>}/>
