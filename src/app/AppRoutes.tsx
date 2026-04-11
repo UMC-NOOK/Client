@@ -119,13 +119,10 @@ export default function AppRoutes() {
             element={<BannerActionCardTestPage />}
           />
           <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
-<<<<<<< HEAD
           <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
           <Route path="/test/checkbox" element={<CheckboxTestpage/>}/>
           <Route path="/test/dropdown" element={<TestPage/>}/>
-=======
           <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
->>>>>>> ca4f5feb29f1115acc3be3590a1cf684574f7907
         </Route>
 
         {/* No Footer Pages */}
