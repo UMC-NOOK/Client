@@ -1,27 +1,35 @@
-// Client/src/components/search/MyLibraryListSection.tsx
 import React, { useMemo, useRef } from "react";
 import bookCover from "../../assets/search/mock_bookcover.svg";
-import type { BookItem } from "./mock/myLibrary";
-import {
-  focusedBooks,
-  unreadBooks,
-  fallbackRecommendedBooks,
-} from "./mock/myLibrary";
+import type { LibraryHomeSection } from "../../api/search";
+
+type Props = {
+  sections: LibraryHomeSection[];
+};
 
 const LIMIT = 5;
 
-function SectionBlock({ title, books }: { title: string; books: BookItem[] }) {
-  if (!books.length) return null;
+function SectionBlock({
+  title,
+  items,
+}: {
+  title: string;
+  items: LibraryHomeSection["items"];
+}) {
+  if (!items.length) return null;
 
   return (
     <div className="w-full flex flex-col items-start gap-4">
       <span className="text-gray-90 text-label-13-b">{title}</span>
-      <HorizontalBookScroller books={books} />
+      <HorizontalBookScroller books={items} />
     </div>
   );
 }
 
-function HorizontalBookScroller({ books }: { books: BookItem[] }) {
+function HorizontalBookScroller({
+  books,
+}: {
+  books: LibraryHomeSection["items"];
+}) {
   const ref = useRef<HTMLDivElement | null>(null);
 
   const drag = useRef({
@@ -40,7 +48,7 @@ function HorizontalBookScroller({ books }: { books: BookItem[] }) {
   };
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.button !== 0) return; // left click only
+    if (e.button !== 0) return;
     const el = ref.current;
     if (!el) return;
 
@@ -103,20 +111,22 @@ function HorizontalBookScroller({ books }: { books: BookItem[] }) {
         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
         [scroll-snap-type:x_mandatory]
         [touch-action:pan-x]
-
       "
     >
       <div className="flex items-start gap-2 pr-4">
-        {sliced.map((book) => (
+        {sliced.map((book, index) => (
           <div
-            key={book.id}
+            key={`${book.bookId ?? book.isbn13 ?? index}`}
             className="flex flex-col items-start shrink-0 w-25 snap-start"
           >
             <img
-              src={bookCover}
+              src={book.coverUrl || bookCover}
               alt={book.title}
               draggable={false}
               className="w-25 h-36 rounded-xs object-cover"
+              onError={(e) => {
+                e.currentTarget.src = bookCover;
+              }}
             />
 
             <div className="flex flex-col items-start w-full mt-1">
@@ -135,24 +145,16 @@ function HorizontalBookScroller({ books }: { books: BookItem[] }) {
   );
 }
 
-export default function MyLibraryListSection() {
-  const hasFocused = focusedBooks.length > 0;
-  const hasUnread = unreadBooks.length > 0;
-  const showFallbackOnly = !hasFocused && !hasUnread;
-
+export default function MyLibraryListSection({ sections }: Props) {
   return (
     <section className="w-full flex flex-col items-start gap-8 pt-8">
-      {showFallbackOnly ? (
+      {sections.map((section) => (
         <SectionBlock
-          title="이 책을 추천해요"
-          books={fallbackRecommendedBooks}
+          key={section.type}
+          title={section.title}
+          items={section.items}
         />
-      ) : (
-        <>
-          <SectionBlock title="최근 포커스한 책" books={focusedBooks} />
-          <SectionBlock title="아직 읽지 않은 책" books={unreadBooks} />
-        </>
-      )}
+      ))}
     </section>
   );
 }
