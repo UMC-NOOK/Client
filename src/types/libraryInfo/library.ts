@@ -34,11 +34,7 @@ export type LibraryFocus<TType extends FocusTimeItems | FocusBookItems> = {
     focusBookItems: TType[];
 };
 
-export type PatchBookGoalRequest = {
-    goal: string;
-};
-
-export type PatchBookGoalResponse = {
+export type PatchBookGoal = {
     goal: string;
 };
 
@@ -96,7 +92,7 @@ export type LibraryFocusTimeResponse = BaseApiResponse<LibraryFocus<FocusTimeIte
 export type LibraryFocusBookResponse = BaseApiResponse<LibraryFocus<FocusBookItems>>;
 
 //목표 조회
-export type LibraryBookGoalPatchResponse = BaseApiResponse<PatchBookGoalResponse>;
+export type LibraryBookGoalPatchResponse = BaseApiResponse<PatchBookGoal>;
 
 //날짜별 조회
 export type LibraryDateFocusResponse = BaseApiResponse<LibraryDateFocus>;
