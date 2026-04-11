@@ -1,10 +1,12 @@
 import type {
+    BookStatusType,
     LibraryBookNumResponse,
     LibraryBookGoalResponse,
     LibraryFocusTimeResponse,
     LibraryFocusBookResponse,
     LibraryBookGoalPatchResponse,
     LibraryDateFocusResponse,
+    LibraryStatusBook,
     LibraryStatusBookResponse,
   } from "../../types/libraryInfo/library";
   
@@ -111,7 +113,7 @@ import type {
     code: "SUCCESS-200",
     message: "독서 목표 수정에 성공했습니다.",
     result: {
-      goal: "120",
+      goal: 120,
     },
   };
   
@@ -278,3 +280,34 @@ import type {
       hasNext: false,
     },
   };
+
+/**
+ * GET /library/books mock — cursor·size는 목록 배열 기준 offset·limit.
+ */
+export function getMockLibraryStatusBooksPage<T extends BookStatusType>(
+    status: T,
+    cursor: number,
+    size: number,
+): LibraryStatusBook<T> {
+    const base =
+        status === "BEFORE"
+            ? mockLibraryStatusBeforeResponse.result
+            : status === "READING"
+              ? mockLibraryStatusReadingResponse.result
+              : mockLibraryStatusFinishedResponse.result;
+
+    const full = [...(base.bookItems ?? [])];
+    const page = full.slice(cursor, cursor + size);
+    const deliveredEnd = cursor + page.length;
+    const hasNext = deliveredEnd < full.length;
+    const nextCursor = hasNext ? (full[deliveredEnd]?.bookId ?? null) : null;
+
+    return {
+        ...base,
+        readingStatus: status,
+        totalBookNum: base.totalBookNum,
+        bookItems: page,
+        hasNext,
+        nextCursor,
+    } as LibraryStatusBook<T>;
+}

@@ -123,7 +123,7 @@ export default function AppRoutes() {
           <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
         </Route>
         <Route path="/users/me/onboarding/goal" element={<LibraryGoalInputPage/>}/>
-        <Route path="/library/all" element={<LibraryAllBookPage/>}/>
+        <Route path="/library/status" element={<LibraryAllBookPage />} />
         <Route path="*" element={<Navigate to="/library" replace />} />
 
         {/* No Footer Pages */}

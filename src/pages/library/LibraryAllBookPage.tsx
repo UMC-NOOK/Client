@@ -5,11 +5,25 @@ import search from "../../assets/icons/search.svg";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
 import TabBar from "../../components/navigation/tabs/TabBar";
 import type { TabOption } from "../../components/navigation/tabs/TabBar";
-import { useMemo, useState } from "react";
+import { useCallback } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import BookList from "../../components/content/card/Book/List";
 import Divider from "../../components/layout/Divider";
+import type { BaseStatusBookItems } from "../../types/libraryInfo/library";
+import { useLibraryStatusBooks } from "../../hooks/queries/library";
 
-type LibraryTab = "BEFORE" | "READING" | "FINISHED";
+const LIBRARY_TAB_VALUES = ["BEFORE", "READING", "FINISHED"] as const;
+type LibraryTab = (typeof LIBRARY_TAB_VALUES)[number];
+
+function isLibraryTab(value: string): value is LibraryTab {
+  return (LIBRARY_TAB_VALUES as readonly string[]).includes(value);
+}
+
+function parseQueryInt(value: string | null, fallback: number): number {
+  if (value == null || value === "") return fallback;
+  const n = Number.parseInt(value, 10);
+  return Number.isFinite(n) ? n : fallback;
+}
 
 const TAB_OPTIONS: TabOption<LibraryTab>[] = [
     { value: "BEFORE", label: "독서 전" },
@@ -17,102 +31,95 @@ const TAB_OPTIONS: TabOption<LibraryTab>[] = [
     { value: "FINISHED", label: "완독" },
 ];
 
-type LibraryBookItem = {
-    bookId: number;
-    title: string;
-    author: string;
-    coverUrl: string;
-    startedAt: string;
-    endedAt: string | null;
-    tab: LibraryTab;
+const SECTION_SUBJECT: Record<LibraryTab, string> = {
+    BEFORE: "독서 전인",
+    READING: "독서 중인",
+    FINISHED: "완독한",
 };
 
-const MOCK_BOOKS: LibraryBookItem[] = [
-    {
-      bookId: 1,
-      title: "[국내도서] 혼모노",
-      author: "성해나",
-      coverUrl:
-        "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop",
-      startedAt: "",
-      endedAt: null,
-      tab: "BEFORE",
-    },
-    {
-      bookId: 2,
-      title: "[eBook] 혼모노",
-      author: "성해나",
-      coverUrl:
-        "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&auto=format&fit=crop",
-      startedAt: "2026-04-10",
-      endedAt: null,
-      tab: "READING",
-    },
-    {
-      bookId: 3,
-      title: "나는 성해나의 <혼모노>를 이렇게 읽었다",
-      author: "문지한",
-      coverUrl:
-        "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=400&auto=format&fit=crop",
-      startedAt: "2026-03-22",
-      endedAt: "2026-03-29",
-      tab: "FINISHED",
-    },
-    {
-      bookId: 4,
-      title: "[국내도서] 혼모노 특별판",
-      author: "성해나",
-      coverUrl:
-        "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=400&auto=format&fit=crop",
-      startedAt: "2026-04-01",
-      endedAt: null,
-      tab: "READING",
-    },
-  ];
+const SECTION_BOTTOM: Record<LibraryTab, string> = {
+    BEFORE: "아직 포커스 한 적 없는 책들이에요.",
+    READING: "한 번 이상 포커스 한 책들이에요.",
+    FINISHED: "다 읽은 책들이에요.",
+};
 
-  function getBookListProps(item: LibraryBookItem, tab: LibraryTab) {
+function formatDateLabel(iso: string) {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso.slice(0, 10);
+    return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}`;
+}
+
+function getBookListProps(
+    item: BaseStatusBookItems & Partial<{ startedAt: string; endedAt: string }>,
+    tab: LibraryTab,
+) {
     if (tab === "BEFORE") {
-      return {
-        type: "BEFORE" as const,
-        typeLabel: null,
-      };
+        return { type: "BEFORE" as const, typeLabel: null };
     }
-  
-    if (tab === "READING") {
-      return {
-        type: "READINGORDONE" as const,
-        typeLabel: "25.12.16 ~",
-      };
+    if (tab === "READING" && item.startedAt) {
+        return {
+            type: "READINGORDONE" as const,
+            typeLabel: formatDateLabel(item.startedAt),
+        };
     }
-  
-    return {
-      type: "READINGORDONE" as const,
-      typeLabel: "25.12.16 ~ 25.12.27",
-    };
-  }
+    if (tab === "FINISHED" && item.startedAt && item.endedAt) {
+        return {
+            type: "READINGORDONE" as const,
+            typeLabel: `${formatDateLabel(item.startedAt)} - ${formatDateLabel(item.endedAt)}`,
+        };
+    }
+    return { type: "READINGORDONE" as const, typeLabel: null };
+}
 
-  function getEmptyText(tab: LibraryTab) {
+function getEmptyText(tab: LibraryTab) {
     if (tab === "BEFORE") return "서재에 독서 전인 책이 없어요.";
     if (tab === "READING") return "서재에 독서 중인 책이 없어요.";
     return "서재에 완독한 책이 없어요.";
-  }
+}
 
 export default function LibraryAllBookPage() {
-    
-    const [tab, setTab] = useState<LibraryTab>("BEFORE");
-    
-    const filteredBooks = useMemo(() => {
-        return MOCK_BOOKS.filter((book) => book.tab === tab);
-      }, [tab]);
+    const [searchParams, setSearchParams] = useSearchParams();
 
-      return(
+    const statusParam = searchParams.get("status");
+    const tab: LibraryTab =
+        statusParam && isLibraryTab(statusParam) ? statusParam : "BEFORE";
+
+    const cursor = parseQueryInt(searchParams.get("cursor"), 0);
+    const size = parseQueryInt(searchParams.get("size"), 20);
+
+    const setTab = useCallback(
+        (next: LibraryTab) => {
+            setSearchParams(
+                (prev) => {
+                    const p = new URLSearchParams(prev);
+                    p.set("status", next);
+                    return p;
+                },
+                { replace: true },
+            );
+        },
+        [setSearchParams],
+    );
+
+    const { data, isLoading, isError } = useLibraryStatusBooks({
+        status: tab,
+        cursor,
+        size,
+    });
+
+    const bookItems = data?.bookItems ?? [];
+    const totalBookNum = data?.totalBookNum ?? 0;
+
+    return (
         <div>
             <div className="pt-2">
                 <TopNavigation
                     left={
-                        <Icon size="m">
-                            <img src={chevronLeft}/>
-                        </Icon>
+                        <Link to="/library">
+                            <Icon size="m">
+                                <img src={chevronLeft}/>
+                            </Icon>
+                        </Link>
                     }
                     center={
                         <div className="text-label-18-rb text-gray-90">
@@ -133,21 +140,15 @@ export default function LibraryAllBookPage() {
                     top={
                         <div className="flex items-center gap-1">
                             <label className="text-gray-90">
-                                독서 전인 책이 
+                                {SECTION_SUBJECT[tab]} 책이{" "}
                             </label>
                             <label className="text-yellow-70">
-                                2권
+                                {isLoading ? "…" : `${totalBookNum}권`}
                             </label>
-                            <label className="text-gray-90">
-                                있어요.
-                            </label>
+                            <label className="text-gray-90"> 있어요.</label>
                         </div>
                     }
-                    bottom={
-                        <div>
-                            아직 포커스 한 적 없는 책들이에요.
-                        </div>
-                    }
+                    bottom={<div>{SECTION_BOTTOM[tab]}</div>}
                 />
             </div>
             <div>
@@ -158,12 +159,18 @@ export default function LibraryAllBookPage() {
                 />
             </div>
             <div className="flex flex-col pt-6">
-            {filteredBooks.length === 0 ? (
+            {isLoading ? (
+                <div className="text-label-14-sb text-gray-60">불러오는 중…</div>
+            ) : isError ? (
+                <div className="text-label-14-sb text-gray-60">
+                    목록을 불러오지 못했어요.
+                </div>
+            ) : bookItems.length === 0 ? (
                 <div className="text-label-14-sb text-gray-60">
                     {getEmptyText(tab)}
                 </div>
             ) : (
-                filteredBooks.map((item, index) => {
+                bookItems.map((item, index) => {
                     const bookListProps = getBookListProps(item, tab);
 
                     return (
@@ -179,7 +186,7 @@ export default function LibraryAllBookPage() {
                                 }}
                             />
 
-                            {index !== filteredBooks.length - 1 ? (
+                            {index !== bookItems.length - 1 ? (
                                 <div className="py-1">
                                     <Divider width={"full"} />
                                 </div>
@@ -190,5 +197,5 @@ export default function LibraryAllBookPage() {
             )}
             </div>
         </div>
-    )
+    );
 }

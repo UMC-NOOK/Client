@@ -97,5 +97,12 @@ export type LibraryBookGoalPatchResponse = BaseApiResponse<PatchBookGoal>;
 //날짜별 조회
 export type LibraryDateFocusResponse = BaseApiResponse<LibraryDateFocus>;
 
+/** GET 상태별 도서 목록 — 쿼리스트링 */
+export type LibraryStatusBooksQueryParams = {
+    status: BookStatusType;
+    cursor?: number;
+    size?: number;
+};
+
 //상태별 조회
 export type LibraryStatusBookResponse<T extends BookStatusType> = BaseApiResponse<LibraryStatusBook<T>>;

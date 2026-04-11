@@ -58,9 +58,11 @@ export default function LibraryPage() {
                         <label className="text-label-20-b text-yellow-70">권</label>
                         <label className="text-label-20-b text-gray-90">의 책이 있어요.</label>
                     </div>
-                    <Icon size="m" className="items-center">
-                        <img src={arrowRight} alt="" />
-                    </Icon>
+                    <Link to="/library/status">
+                        <Icon size="m" className="items-center">
+                            <img src={arrowRight} alt="상태별 책 보러가기" />
+                        </Icon>
+                    </Link>
                 </div>
 
                 <Link
