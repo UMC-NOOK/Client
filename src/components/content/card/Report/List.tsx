@@ -1,12 +1,10 @@
-import SectionHeader from "../../cnformationText/SectionHeader";
-import { Emotion } from "../../../action/chip/Emotion";
-
-type EmotionVariant = "yellow" | "pink" | "green" | "blue" | "red" | "none";
+import SectionHeader from "../../InformationText/SectionHeader";
+import Emotion from "../../../action/Chip/Emotion";
+import type { EmotionKey } from "../../../action/Chip/Emotion";
 
 type Props = {
   date: string;
-  emoji: string;
-  variant?: EmotionVariant;
+  emojiKey: EmotionKey;
   review: string;
   images?: string[];
   onClick?: () => void;
@@ -14,8 +12,7 @@ type Props = {
 
 export default function ReportList({
   date,
-  emoji,
-  variant = "yellow",
+  emojiKey,
   review,
   images = [],
   onClick,
@@ -35,7 +32,7 @@ export default function ReportList({
         top={
           <div className="flex items-center gap-2">
             <span className="text-gray-50">{date}</span>
-            <Emotion size="s" emoji={emoji} variant={variant} active />
+            <Emotion size="s" emojiKey={emojiKey} active />
           </div>
         }
         bottom={

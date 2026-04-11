@@ -1,5 +1,5 @@
 //Client\src\components\presentation\modal\bottomsheet\Origin.tsx
-//이거 하나로 조정 가능 
+//이거 하나로 조정 가능
 
 import React from "react";
 import closeIcon from "../../../../assets/icons/close.svg";
@@ -42,10 +42,14 @@ type Props = {
   /** footer ON/OFF */
   footer?: BottomSheetFooterConfig;
 
-  children: React.ReactNode;
+  /** body ON/OFF */
+  children?: React.ReactNode;
 
   /** overlay 클릭으로 닫기 (기본 true) */
   closeOnOverlayClick?: boolean;
+
+  /** 뒷 배경 오버레이 */
+  overlay?: boolean;
 
   className?: string;
 };
@@ -77,10 +81,9 @@ function BottomSheetHeader({
         type="button"
         aria-label="close bottom sheet"
         onClick={onClose}
-        className={[
-          "flex w-10 h-10 items-center justify-center",
-          "p-2",
-        ].join(" ")}
+        className={["flex w-10 h-10 items-center justify-center", "p-2"].join(
+          " ",
+        )}
       >
         <img src={closeIcon} alt="close" className="w-6 h-6" />
       </button>
@@ -98,7 +101,7 @@ function BottomSheetFooter({
   const baseBtn = [
     "flex items-center justify-center",
     "h-12", // 버튼 2개 케이스 왼쪽 버튼 48px 고정
-    "px-6 py-4", 
+    "px-6 py-4",
     "rounded-[8px]",
     "text-btn-16-sb",
   ].join(" ");
@@ -151,7 +154,7 @@ function BottomSheetFooter({
         className={[
           baseBtn,
           leftClassByVariant[config.leftVariant],
-          equal ? "flex-1" : "w-20",
+          equal ? "flex-1" : "",
           "cursor-pointer",
         ].join(" ")}
       >
@@ -162,7 +165,9 @@ function BottomSheetFooter({
         type="button"
         aria-label={config.ariaLabelRight}
         onClick={config.onRightClick}
-        className={[baseBtn, rightBtnClass, "flex-1", "cursor-pointer"].join(" ")}
+        className={[baseBtn, rightBtnClass, "flex-1", "cursor-pointer"].join(
+          " ",
+        )}
       >
         {config.rightLabel}
       </button>
@@ -176,29 +181,33 @@ export default function BottomSheet({
   title,
   footer,
   children,
+  overlay = true,
   closeOnOverlayClick = true,
   className = "",
 }: Props) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50">
+    <div className="fixed inset-0 z-50 pointer-events-none">
       {/* Overlay */}
-      <button
-        type="button"
-        aria-label="close overlay"
-        onClick={closeOnOverlayClick ? onClose : undefined}
-        className={[
-          "absolute inset-0",
-          "bg-black/50",
-          closeOnOverlayClick ? "cursor-pointer" : "cursor-default",
-        ].join(" ")}
-      />
+      {overlay && (
+        <button
+          type="button"
+          aria-label="close overlay"
+          onClick={closeOnOverlayClick ? onClose : undefined}
+          className={[
+            "absolute inset-0 pointer-events-auto",
+            "bg-black/50",
+            closeOnOverlayClick ? "cursor-pointer" : "cursor-default",
+          ].join(" ")}
+        />
+      )}
 
       {/* Sheet Wrapper */}
       <div
         className={[
           "absolute inset-x-0 bottom-0 mx-auto",
+          "pointer-events-auto",
           "w-93.75",
           "flex flex-col items-start",
           "px-4 pt-4 pb-8", // 16 16 32
@@ -207,19 +216,21 @@ export default function BottomSheet({
           className,
         ].join(" ")}
         role="dialog"
-        aria-modal="true"
+        aria-modal={overlay ? "true" : undefined}
       >
         {/* Header (ON/OFF) */}
         {title ? <BottomSheetHeader title={title} onClose={onClose} /> : null}
 
         {/* Body: header와의 gap 16px */}
-        <div className={["w-full", title ? "mt-4" : ""].join(" ")}>
-          {children}
-        </div>
+        {children ? (
+          <div className={["w-full", title ? "mt-4" : ""].join(" ")}>
+            {children}
+          </div>
+        ) : null}
 
         {/* Footer: body와의 gap 32px */}
         {footer ? (
-          <div className="w-full mt-8">
+          <div className={["w-full", children ? "mt-8" : ""].join(" ")}>
             <BottomSheetFooter config={footer} />
           </div>
         ) : null}

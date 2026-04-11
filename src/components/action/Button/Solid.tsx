@@ -1,25 +1,35 @@
 import type { ButtonHTMLAttributes } from "react";
 
-type Variant = "default" | "dark" | "danger";
+type Variant = "primary" | "secondary" | "disabled" | "alert";
+type Size = "s" | "m";
 
 type ButtonProps = {
   text: string;
   variant?: Variant;
+  size?: Size;
+  onClick?: () => void;
   className?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const base =
-  "inline-flex h-12 items-center justify-center whitespace-nowrap px-6 py-4 rounded-lg ";
+  "inline-flex h-12 w-full items-center justify-center whitespace-nowrap px-6 py-4 rounded-lg ";
 
 const variantClassMap: Record<Variant, string> = {
-  default: "bg-mint text-black",
-  dark: "bg-gray-25 text-[#A2A7C3]",
-  danger: "bg-gray-10 text-red-1",
+  primary: "bg-mint-60 text-gray-10",
+  secondary: "bg-gray-25 text-gray-70",
+  disabled: "bg-gray-25 text-gray-50",
+  alert: "bg-red-20 text-red-1",
+};
+
+const sizeClassMap: Record<Size, string> = {
+  s: "h-[38px] text-btn-14-sb rounded-sm px-8 py-3",
+  m: "h-12 text-label-16-sb rounded-lg px-6 py-4",
 };
 
 export default function Solid({
   text,
-  variant = "default",
+  variant = "primary",
+  size = "m",
   className = "",
   type = "button",
   ...props
@@ -27,7 +37,12 @@ export default function Solid({
   return (
     <button
       type={type}
-      className={[base, variantClassMap[variant], className].join(" ")}
+      className={[
+        base,
+        variantClassMap[variant],
+        sizeClassMap[size],
+        className,
+      ].join(" ")}
       {...props}
     >
       {text}

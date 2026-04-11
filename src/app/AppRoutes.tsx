@@ -1,6 +1,14 @@
 // src/app/AppRoutes.tsx
-import { Navigate, Route, Routes, Outlet, useLocation, useNavigate } from "react-router-dom";
-import AppShell from "./AppShell";
+import { useEffect } from "react";
+import {
+  Navigate,
+  Route,
+  Routes,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+import AppShell, { useShell } from "./AppShell";
 import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
 
 import LibraryMobilePage from "../pages/search/LibraryMobilePage";
@@ -17,6 +25,9 @@ import BottomSheetTestPage from "../pages/search/test/BottomSheetTestPage";
 import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
 import CheckboxTestpage from "../pages/search/CheckboxTest";
 import TestPage from "../pages/library/Testpage";
+
+import BookInfoPage from "../pages/bookInfo/BookInfoPage";
+import AllHistoryPage from "../pages/bookInfo/AllHistoryPage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -69,6 +80,17 @@ function SearchLayout() {
   );
 }
 
+function NoFooterLayout() {
+  const { setHideFooter } = useShell();
+
+  useEffect(() => {
+    setHideFooter(true);
+    return () => setHideFooter(false);
+  }, [setHideFooter]);
+
+  return <Outlet />;
+}
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -79,7 +101,10 @@ export default function AppRoutes() {
         <Route element={<SearchLayout />}>
           <Route path="/search" element={<SearchPage />} />
           <Route path="/search/new" element={<SearchNewAddPage />} />
-          <Route path="/search/new/category" element={<SearchNewAddCategoryPage />} />
+          <Route
+            path="/search/new/category"
+            element={<SearchNewAddCategoryPage />}
+          />
           <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
         </Route>
 
@@ -89,14 +114,28 @@ export default function AppRoutes() {
           <Route path="/focus" element={<FocusMobilePage />} />
           <Route path="/record" element={<RecordMobilePage />} />
           <Route path="/group" element={<GroupMobilePage />} />
-          <Route path="/test/banner-action-card" element={<BannerActionCardTestPage />} />
+          <Route
+            path="/test/banner-action-card"
+            element={<BannerActionCardTestPage />}
+          />
           <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
+<<<<<<< HEAD
           <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
           <Route path="/test/checkbox" element={<CheckboxTestpage/>}/>
           <Route path="/test/dropdown" element={<TestPage/>}/>
+=======
+          <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
+>>>>>>> ca4f5feb29f1115acc3be3590a1cf684574f7907
         </Route>
 
-        <Route path="*" element={<Navigate to="/library" replace />} />
+        {/* No Footer Pages */}
+        <Route element={<NoFooterLayout />}>
+          <Route path="/library/123" element={<BookInfoPage />}></Route>
+          <Route
+            path="/library/123/history"
+            element={<AllHistoryPage />}
+          ></Route>
+        </Route>
       </Route>
     </Routes>
   );

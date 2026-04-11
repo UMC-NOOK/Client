@@ -28,7 +28,9 @@ export default function TabBar<T extends string>({
   className = "",
 }: Props<T>) {
   return (
-    <nav className={["relative h-10 flex items-center", className].join(" ")}>
+    <nav
+      className={["relative h-[38px] flex items-center", className].join(" ")}
+    >
       {/* 항상 떠있는 divider */}
       <span
         aria-hidden
