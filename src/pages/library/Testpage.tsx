@@ -1,5 +1,5 @@
 import { useState } from "react";
-import YearMonthPicker from "../../components/section/dropDown/DropDown";
+import DropDown from "../../components/section/dropDown/DropDown";
 
 export default function TestPage() {
   const [appliedValue, setAppliedValue] = useState<{
@@ -11,7 +11,7 @@ export default function TestPage() {
   return (
     <div className="flex min-h-screen w-full items-center justify-center p-6">
       <div className="flex flex-col items-center gap-6">
-        <YearMonthPicker
+        <DropDown
           initialYear={2026}
           initialMonth={11}
           startYear={2025}

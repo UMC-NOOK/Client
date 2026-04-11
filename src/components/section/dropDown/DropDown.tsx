@@ -10,17 +10,17 @@ type YearMonthValue = {
 
 type Props = {
   initialYear?: number;
-  initialMonth?: number;
-  startYear?: number;
-  endYear?: number;
-  onApply?: (value: { year: number; month: number; yearMonth: string }) => void;
+  initialMonth: number;
+  startYear: number;
+  endYear: number;
+  onApply: (value: { year: number; month: number; yearMonth: string }) => void;
 };
 
-export default function YearMonthPicker({
+export default function DropDown({
   initialYear = 2026,
-  initialMonth = 1,
-  startYear = 2025,
-  endYear = 2026,
+  initialMonth,
+  startYear,
+  endYear,
   onApply,
 }: Props) {
   const years = useMemo(
