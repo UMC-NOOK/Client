@@ -1,4 +1,4 @@
-import Day from "../../Calendar/Resource/Day";
+import Day from "./Day";
 
 type Count = "single" | "multiple";
 

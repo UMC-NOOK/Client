@@ -1,0 +1,15 @@
+.picker-root {
+    mask-image: linear-gradient(
+      to bottom,
+      white 0%,
+      white 78%,
+      transparent 100%
+    ) !important;
+  
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      white 0%,
+      white 78%,
+      transparent 100%
+    ) !important;
+  }
