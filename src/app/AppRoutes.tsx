@@ -23,8 +23,6 @@ import SearchNewAddMorePage from "../pages/search/SearchNewAddMorePage";
 import BannerActionCardTestPage from "../pages/search/test/testpage";
 import BottomSheetTestPage from "../pages/search/test/BottomSheetTestPage";
 import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
-import CheckboxTestpage from "../pages/search/CheckboxTest";
-import TestPage from "../pages/library/Testpage";
 
 import BookInfoPage from "../pages/bookInfo/BookInfoPage";
 import AllHistoryPage from "../pages/bookInfo/AllHistoryPage";
@@ -120,8 +118,6 @@ export default function AppRoutes() {
           />
           <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
           <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
-          <Route path="/test/checkbox" element={<CheckboxTestpage/>}/>
-          <Route path="/test/dropdown" element={<TestPage/>}/>
           <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
         </Route>
 
