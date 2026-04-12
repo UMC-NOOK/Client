@@ -26,7 +26,7 @@ export default function TopNavigation({
             {left}
           </button>
         ) : (
-          <> {right}</>
+          <> {left}</>
         )} 
       </div>
 

@@ -36,9 +36,7 @@ export default function DateFocusBookModal({
       >
         <TopNavigation
           left={
-            <Icon size="m">
-              {null}
-            </Icon>
+            <div className="w-10 h-10" />
           }
           center={
             <label className="text-label-18-rb text-gray-90">
