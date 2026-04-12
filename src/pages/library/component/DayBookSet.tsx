@@ -20,11 +20,11 @@ type DayInfoForArray = {
   bookNum: number;
 };
 
-// component props
 type Props = {
   year: number;
   month: number;
   dayInfomations: DayInfo[];
+  onSelectDate?: (date: string) => void;
 };
 
 function toCount(value: number): Count {
@@ -43,13 +43,13 @@ export default function DayBookSet({
   year,
   month,
   dayInfomations,
+  onSelectDate,
 }: Props) {
   const lastDate = getDatesInMonth(year, month);
-  const startDay = getStartDay(year, month); // 0=월 … 6=일
+  const startDay = getStartDay(year, month);
 
   const dayInfosForArray: DayInfoForArray[] = [];
 
-  // 앞쪽 빈칸 채우기
   for (let i = 0; i < startDay; i++) {
     dayInfosForArray.push({
       day: "",
@@ -61,7 +61,6 @@ export default function DayBookSet({
     });
   }
 
-  // 날짜별 실제 데이터 채우기
   for (let l = 1; l <= lastDate; l++) {
     const entry = dayInfomations.find((d) => d.day === String(l));
     const bookNum = entry?.bookCount ?? 0;
@@ -79,21 +78,33 @@ export default function DayBookSet({
   return (
     <div className="flex w-full flex-col">
       <div className="grid w-full grid-cols-7 gap-y-6 pb-4">
-        {dayInfosForArray.map((d, index) => (
-          <div
-            key={`${d.day || "none"}-${index}`}
-            className="flex min-w-0 justify-center"
-          >
-            <BookSet
-              day={d.day}
-              visible={d.visible}
-              disable={d.disable}
-              count={d.count}
-              coverUrl={d.coverUrl}
-              bookNum={d.bookNum}
-            />
-          </div>
-        ))}
+        {dayInfosForArray.map((d, index) => {
+          const fullDate =
+            d.day.trim() === ""
+              ? ""
+              : `${year}-${String(month).padStart(2, "0")}-${String(d.day).padStart(2, "0")}`;
+
+          return (
+            <div
+              key={`${d.day || "none"}-${index}`}
+              className="flex min-w-0 justify-center"
+            >
+              <BookSet
+                day={d.day}
+                visible={d.visible}
+                disable={d.disable}
+                count={d.count}
+                coverUrl={d.coverUrl}
+                bookNum={d.bookNum}
+                onClick={
+                  d.visible && !d.disable
+                    ? () => onSelectDate?.(fullDate)
+                    : undefined
+                }
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -248,6 +248,7 @@ export default function LibraryPage() {
                         year={selectedYearMonth.year}
                         month={selectedYearMonth.month}
                         dayInfomations={dayBookInformations}
+                        onSelectDate={handleSelectFocusDate}
                     />
                 )}
                 </div>

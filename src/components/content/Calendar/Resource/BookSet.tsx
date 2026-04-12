@@ -9,6 +9,7 @@ type Props = {
   count?: Count;
   coverUrl?: string | null;
   bookNum?: number;
+  onClick?: () => void;
 };
 
 export default function BookSet({
@@ -18,15 +19,21 @@ export default function BookSet({
   count = "single",
   coverUrl,
   bookNum = 0,
+  onClick,
 }: Props) {
   if (!visible) {
     return (
-      <div className="flex w-11 h-[89px] flex-col items-start gap-1"/>
+      <div className="flex w-11 h-[89px] flex-col items-start gap-1" />
     );
   }
 
   return (
-    <div className="flex flex-col items-center gap-1">
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disable}
+      className="flex flex-col items-center gap-1 disabled:cursor-default"
+    >
       <Day text={day} disable={disable} />
 
       {disable ? (
@@ -52,6 +59,6 @@ export default function BookSet({
           ) : null}
         </div>
       )}
-    </div>
+    </button>
   );
 }
