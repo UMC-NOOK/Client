@@ -30,12 +30,14 @@ type Props = {
   year: number;
   month: number;
   dayInformations: FocusTimeItems[];
+  onSelectDate?: (date: string) => void;
 };
 
 export default function DayIndicatorSet({
   year,
   month,
   dayInformations,
+  onSelectDate,
 }: Props) {
   const lastDate = getDatesInMonth(year, month);
   const startDay = getStartDay(year, month);
@@ -73,18 +75,30 @@ export default function DayIndicatorSet({
   return (
     <div className="flex flex-col w-full">
       <div className="grid w-full grid-cols-7 pb-4 gap-y-6">
-        {dayInfosForArray.map((d, index) => (
-          <div
-            key={`${d.day || "none"}-${index}`}
-            className="flex min-w-0 justify-center"
-          >
-            <IndicatorSet
-              day={d.day}
-              disable={d.disable}
-              percent={d.percent}
-            />
-          </div>
-        ))}
+        {dayInfosForArray.map((d, index) => {
+          const fullDate =
+            d.day.trim() === ""
+              ? ""
+              : `${year}-${String(month).padStart(2, "0")}-${String(d.day).padStart(2, "0")}`;
+
+          return (
+            <div
+              key={`${d.day || "none"}-${index}`}
+              className="flex min-w-0 justify-center"
+            >
+              <IndicatorSet
+                day={d.day}
+                disable={d.disable}
+                percent={d.percent}
+                onClick={
+                  d.day.trim() === ""
+                    ? undefined
+                    : () => onSelectDate?.(fullDate)
+                }
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

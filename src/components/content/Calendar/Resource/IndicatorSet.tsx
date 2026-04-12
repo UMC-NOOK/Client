@@ -5,14 +5,15 @@ type Props = {
   day: string;
   disable?: boolean;
   percent: Percent;
+  onClick?: () => void;
 };
 
 export default function IndicatorSet({
-    day,
-    disable=true,
-    percent="none"
+  day,
+  disable = true,
+  percent = "none",
+  onClick,
 }: Props) {
-  /** 월 앞 빈 칸 — 인디케이터(none/base.svg)를 그리지 않아 배경과 색 안 맞는 문제 방지 */
   const isPaddingCell = day.trim() === "";
 
   if (isPaddingCell) {
@@ -25,9 +26,13 @@ export default function IndicatorSet({
   }
 
   return (
-    <div className="flex w-10 flex-col items-center gap-1">
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex w-10 flex-col items-center gap-1"
+    >
       <Day text={day} disable={disable} />
       <Indicator percent={percent} />
-    </div>
+    </button>
   );
 }

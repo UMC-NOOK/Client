@@ -49,7 +49,8 @@ function formatFocusMinutes(totalFocusMin: number) {
 
 export default function LibraryPage() {
     const [selectedView, setSelectedView] = useState<"focus" | "book">("focus");
-    const [isModalOpen, setIsModalOpen] = useState(true); // 테스트용으로 true
+    const [isModalOpen, setIsModalOpen] = useState(false); 
+    const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
@@ -80,6 +81,11 @@ export default function LibraryPage() {
         isLoading: isBooksMonthlyLoading,
         isError: isBooksMonthlyError,
       } = useLibraryBooksMonthly(yearMonth);
+
+      const handleSelectFocusDate = (date: string) => {
+        setSelectedDate(date);
+        setIsModalOpen(true);
+      };
 
     //mock
     const mockTotalBookNum = mockLibraryBookNumResponse.result.totalBookNum;
@@ -230,7 +236,8 @@ export default function LibraryPage() {
                         year={selectedYearMonth.year}
                         month={selectedYearMonth.month}
                         dayInformations={focusItems}
-                    />
+                        onSelectDate={handleSelectFocusDate}
+                  />
                 ) : (
                     <DayBookSet
                         year={selectedYearMonth.year}
@@ -246,6 +253,7 @@ export default function LibraryPage() {
             <DateFocusBookModal
                 open={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
+                selectedDate={selectedDate}
             />
         </div>
     );
