@@ -21,7 +21,13 @@ export default function TopNavigation({
 
       {/* LEFT */}
       <div className="flex items-center justify-start">
-        {left} 
+        {onClickLeft ? (
+          <button onClick={onClickLeft} className="focus:outline-none">
+            {left}
+          </button>
+        ) : (
+          <> {right}</>
+        )} 
       </div>
 
       {/* CENTER */}
