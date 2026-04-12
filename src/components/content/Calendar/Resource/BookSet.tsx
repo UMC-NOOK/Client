@@ -7,7 +7,7 @@ type Props = {
   visible?: boolean;
   disable?: boolean;
   count?: Count;
-  imageUrl?: string | null;
+  coverUrl?: string | null;
   bookNum?: number;
 };
 
@@ -16,7 +16,7 @@ export default function BookSet({
   visible = false,
   disable = false,
   count = "single",
-  imageUrl,
+  coverUrl,
   bookNum = 0,
 }: Props) {
   if (!visible) {
@@ -33,9 +33,9 @@ export default function BookSet({
         <div className="h-16 w-11 shrink-0 rounded-[2px] bg-gray-10" />
       ) : (
         <div className="relative h-16 w-11 overflow-hidden rounded-[2px]">
-          {imageUrl ? (
+          {coverUrl ? (
             <img
-              src={imageUrl}
+              src={coverUrl}
               alt={`${day} book`}
               className="h-full w-full object-cover"
             />

@@ -1,98 +1,62 @@
 import { api } from "./axios";
-import { getMockLibraryStatusBooksPage } from "../mocks/library/library";
 
 import type {
-    BaseApiResponse,
-    BookStatusType,
-    LibraryBook,
-    LibraryBookGoal,
-    LibraryFocus,
-    FocusTimeItems,
-    FocusBookItems,
-    LibraryDateFocus,
-    LibraryStatusBook,
-    LibraryStatusBooksQueryParams,
-    PatchBookGoal,
-  } from "../types/libraryInfo/library";
+  BaseApiResponse,
+  LibraryBook,
+  LibraryBookGoal,
+  LibraryDateFocus,
+  BookStatusType,
+  LibraryStatusBook,
+  PatchBookGoal,
+  LibraryFocusMonthly,
+  LibraryBooksMonthly,
+} from "../types/libraryInfo/library";
 
-export async function libraryGet<T>(url: string): Promise<T> {
-  const response = await api.get<BaseApiResponse<T>>(`/api/library${url}`);
+const LIBRARY_BASE = "/api/v1/library";
+
+export async function libraryGet<T>(
+  url: string,
+  params?: Record<string, string | number | undefined>,
+): Promise<T> {
+  const response = await api.get<BaseApiResponse<T>>(`${LIBRARY_BASE}${url}`, {
+    params,
+  });
+
+  if (response.data?.result === undefined) {
+    throw new Error(`응답 result가 없습니다: ${LIBRARY_BASE}${url}`);
+  }
+
   return response.data.result;
 }
 
+// 전체 책 개수 조회
 export function getLibraryBookNum(): Promise<LibraryBook> {
-    return libraryGet<LibraryBook>("/count");
-  }
-  
+  return libraryGet<LibraryBook>("/count");
+}
+
+// 목표 조회
 export function getLibraryBookGoal(): Promise<LibraryBookGoal> {
-    return libraryGet<LibraryBookGoal>("/goal");
-  }
-  
-export function getLibraryFocusTime(
-    yearMonth: string,
-  ): Promise<LibraryFocus<FocusTimeItems>> {
-    return libraryGet<LibraryFocus<FocusTimeItems>>(
-      `/focus-time?yearMonth=${yearMonth}`,
-    );
-  }
-  
-export function getLibraryFocusBook(
-    yearMonth: string,
-  ): Promise<LibraryFocus<FocusBookItems>> {
-    return libraryGet<LibraryFocus<FocusBookItems>>(
-      `/focus-book?yearMonth=${yearMonth}`,
-    );
-  }
-  
-export function getLibraryDateFocus(
-    date: string,
-    cursor?: number,
-  ): Promise<LibraryDateFocus> {
-    const query = cursor
-      ? `/date-focus?date=${date}&cursor=${cursor}`
-      : `/date-focus?date=${date}`;
-  
-    return libraryGet<LibraryDateFocus>(query);
-  }
-
-function useLibraryStatusBooksMock(): boolean {
-    if (import.meta.env.PROD) return false;
-    return import.meta.env.VITE_MOCK_LIBRARY_BOOKS !== "false";
+  return libraryGet<LibraryBookGoal>("/goal");
 }
 
-export function getLibraryStatusBooks<T extends BookStatusType>(
-    params: LibraryStatusBooksQueryParams & { status: T },
-): Promise<LibraryStatusBook<T>> {
-    const { status, cursor = 0, size = 20 } = params;
+// patch
+async function libraryPatch<TRequest, TResponse>(
+  url: string,
+  body: TRequest,
+): Promise<TResponse> {
+  const response = await api.patch<BaseApiResponse<TResponse>>(
+    `/api${url}`,
+    body,
+  );
 
-    if (useLibraryStatusBooksMock()) {
-        return Promise.resolve(
-            getMockLibraryStatusBooksPage(status, cursor, size),
-        ) as Promise<LibraryStatusBook<T>>;
-    }
-
-    // params의 cursor·size는 number. URL 쿼리는 규격상 문자열만 가능해서 여기서만 직렬화.
-    const search = new URLSearchParams({
-        status,
-        cursor: String(cursor),
-        size: String(size),
-    });
-    return libraryGet<LibraryStatusBook<T>>(`/books?${search.toString()}`);
-}
-
-  //패치
-  async function libraryPatch<TRequest, TResponse>(
-    url: string,
-    body: TRequest,
-  ): Promise<TResponse> {
-    const response = await api.patch<BaseApiResponse<TResponse>>(
-      `/api/${url}`,
-      body,
-    );
-
-    return response.data.result;
+  if (response.data?.result === undefined) {
+    throw new Error(`응답 result가 없습니다: /api${url}`);
   }
 
+  return response.data.result;
+}
+
+// 목표 수정 함수
 export function patchLibraryBookGoal(
   body: PatchBookGoal,
 ): Promise<PatchBookGoal> {
@@ -100,4 +64,51 @@ export function patchLibraryBookGoal(
     "/users/me/onboarding/goal",
     body,
   );
+}
+
+// 날짜별 상세 조회용 - 아직 실제 daily endpoint 없으면 나중에 붙이기
+export function getLibraryDateFocus(params: {
+  date: string;
+  cursor?: number;
+}): Promise<LibraryDateFocus> {
+  return libraryGet<LibraryDateFocus>("/stats/focus-daily", {
+    date: params.date,
+    cursor: params.cursor,
+  });
+}
+
+// 월별 포커스 조회
+export function getLibraryFocusMonthly(params: {
+  yearMonth: string;
+}): Promise<LibraryFocusMonthly> {
+  return libraryGet<LibraryFocusMonthly>("/stats/focus-monthly", {
+    yearMonth: params.yearMonth,
+  });
+}
+
+const STATUS_QUERY_PARAM: Record<BookStatusType, string> = {
+  BEFORE: "before",
+  READING: "reading",
+  FINISHED: "done",
+};
+
+export function getLibraryStatusBooks<T extends BookStatusType>(params: {
+  status: T;
+  cursor: number;
+  size: number;
+}): Promise<LibraryStatusBook<T>> {
+  return libraryGet<LibraryStatusBook<T>>("/status-books", {
+    status: STATUS_QUERY_PARAM[params.status],
+    cursor: params.cursor,
+    size: params.size,
+  });
+}
+
+// 월별 독서 책 조회
+export function getLibraryBooksMonthly(params: {
+  yearMonth: string;
+}): Promise<LibraryBooksMonthly> {
+  return libraryGet<LibraryBooksMonthly>("/stats/monthly", {
+    yearMonth: params.yearMonth,
+  });
 }

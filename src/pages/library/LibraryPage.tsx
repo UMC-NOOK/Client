@@ -8,28 +8,78 @@ import focus from "../../assets/icons/focus.svg";
 import focusGray from "../../assets/icons/focus-gray.svg";
 import book from "../../assets/icons/book.svg";
 import bookGray from "../../assets/icons/book-gray.svg";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import DayOfTheWeek from "../../components/content/Calendar/Resource/DayOfTheWeek";
 import BottomBanner from "./modal/BottomBanner";
 import DateFocusBookModal from "./modal/DateFocusBookModal";
+import CaretDown from "../../assets/icons/caret_down.svg";
+import CaretUp from "../../assets/icons/caret_up.svg";
+
 import {
     useLibraryBookNum,
     useLibraryBookGoal,
+    useLibraryFocusMonthly,
+    useLibraryBooksMonthly,
   } from "../../hooks/queries/library";
 
 import {
     mockLibraryBookNumResponse,
     mockLibraryBookGoalResponse
 } from "../../mocks/library/library"
+
 import getGoalPercent from "./utils/getGoalPercent";
+import DropDown from "../../components/section/dropDown/DropDown";
+
+type SelectedYearMonth = {
+    year: number;
+    month: number;
+  };
+
+
+function formatFocusMinutes(totalFocusMin: number) {
+    const hour = Math.floor(totalFocusMin / 60);
+    const minute = totalFocusMin % 60;
+  
+    if (hour === 0) return `${minute}분 동안 포커스 했어요.`;
+    if (minute === 0) return `${hour}시간 동안 포커스 했어요.`;
+    return `${hour}시간 ${minute}분 동안 포커스 했어요.`;
+  }
+  
 
 export default function LibraryPage() {
     const [selectedView, setSelectedView] = useState<"focus" | "book">("focus");
     const [isModalOpen, setIsModalOpen] = useState(true); // 테스트용으로 true
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
-    const { data: libraryBookGoalData, isLoading : isBookGoalLoading, isError : isBookGoalError } = useLibraryBookGoal();
+    const { data: libraryBookGoalData } = useLibraryBookGoal();
+
+    const [selectedYearMonth, setSelectedYearMonth] = useState<SelectedYearMonth>({
+        year: 2026,
+        month: 4,
+      });
+
+    const yearMonth = useMemo(() => {
+        return `${selectedYearMonth.year}-${String(selectedYearMonth.month).padStart(2, "0")}`;
+    }, [selectedYearMonth.year, selectedYearMonth.month]);
+
+    const {
+        data: libraryFocusMonthlyData,
+        isLoading: isFocusMonthlyLoading,
+        isError: isFocusMonthlyError,
+      } = useLibraryFocusMonthly(yearMonth);
+
+    const handleApplyYearMonth = (value: SelectedYearMonth) => {
+        setSelectedYearMonth(value);
+        setIsDropdownOpen(false);
+    };
+
+    const {
+        data: libraryBooksMonthlyData,
+        isLoading: isBooksMonthlyLoading,
+        isError: isBooksMonthlyError,
+      } = useLibraryBooksMonthly(yearMonth);
 
     //mock
     const mockTotalBookNum = mockLibraryBookNumResponse.result.totalBookNum;
@@ -39,11 +89,36 @@ export default function LibraryPage() {
     const goal = libraryBookGoalData?.goal ?? mockLibraryBookGoal.goal;
     const remainingCount = libraryBookGoalData?.remainingCount ?? mockLibraryBookGoal.remainingCount;
     const progressPercent = libraryBookGoalData?.progressPercent ?? mockLibraryBookGoal.progressPercent;
-    const IconProgressPercent = getGoalPercent(progressPercent);
+    const iconProgressPercent = getGoalPercent(progressPercent);
+
+    const focusItems = libraryFocusMonthlyData?.focusBookItems ?? [];
+    const totalFocusMin = libraryFocusMonthlyData?.totalFocusMin ?? 0;
+
+    const bookDays = libraryBooksMonthlyData?.days ?? [];
+    const totalBookCount = libraryBooksMonthlyData?.totalBookCount ?? 0;
+    
+    const dayBookInformations = bookDays.map((item) => ({
+        day: String(new Date(item.date).getDate()),
+        bookCount: item.bookCount,
+        coverUrl: item.topBook?.coverUrl ?? null,
+        bookId: item.topBook?.bookId ?? null,
+      }));
+    
+    const bookBottomText = isBooksMonthlyLoading
+        ? "독서한 책을 불러오는 중이에요."
+        : isBooksMonthlyError
+            ? "독서한 책을 불러오지 못했어요."
+            : `${totalBookCount}권의 책을 독서했어요.`;
+    
+    const focusBottomText = isFocusMonthlyLoading
+        ? "포커스 시간을 불러오는 중이에요."
+        : isFocusMonthlyError
+            ? "포커스 시간을 불러오지 못했어요."
+            : formatFocusMinutes(totalFocusMin);
 
 
     return (
-        <div className="flex flex-col w-full">
+        <div className="relative flex flex-col w-full">
             <div className="flex flex-col pt-6.5">
                 <div className="flex flex-row gap-1">
                     <label className="text-label-20-b text-gray-90">경민</label>
@@ -60,7 +135,7 @@ export default function LibraryPage() {
                     </div>
                     <Link to="/library/status">
                         <Icon size="m" className="items-center">
-                            <img src={arrowRight} alt="상태별 책 보러가기" />
+                            <img src={arrowRight}/>
                         </Icon>
                     </Link>
                 </div>
@@ -70,7 +145,7 @@ export default function LibraryPage() {
                     className="block w-full pt-4 text-inherit no-underline outline-none focus-visible:ring-2 focus-visible:ring-gray-40 focus-visible:ring-offset-2 rounded-[8px]"
                 >
                     <BookGoal
-                        percent={IconProgressPercent}
+                        percent={iconProgressPercent}
                         message={`${goal}권까지 ${remainingCount}권 남았어요.`}
                     />
                 </Link>
@@ -81,17 +156,35 @@ export default function LibraryPage() {
                     <SectionHeader
                         size="16"
                         top={
-                            <div className="flex flex-row gap-2 justify-center">
+                            <div className="flex flex-row gap-2 items-center justify-center">
                                 <div className="text-label-16-b text-gray-90">
-                                    12월 독서 달력
+                                    {selectedYearMonth.month}월 독서 달력
                                 </div>
+                                <div 
+                                    className="flex w-3 h-3 items-center justify-center"
+                                    onClick={() => setIsDropdownOpen((prev) => !prev)}>
+                                    <img
+                                        src={isDropdownOpen ? CaretUp : CaretDown}
+                                    />
+                                </div>
+                                {isDropdownOpen && (
+                                    <div className="absolute right-12 z-50 bottom-94">
+                                        <DropDown
+                                            initialYear={selectedYearMonth.year}
+                                            initialMonth={selectedYearMonth.month}
+                                            startYear={2025}
+                                            endYear={2026}
+                                            onApply={handleApplyYearMonth}
+                                        />
+                                    </div>
+                                )}   
                             </div>
                         }
                         bottom={
                             <div className="text-label-14-sb text-gray-70">
                                 {selectedView === "focus"
-                                    ? "52시간 17분 동안 포커스 했어요."
-                                    : "0권의 책을 독서했어요."}
+                                ? focusBottomText
+                                : bookBottomText}
                             </div>
                         }
                     />
@@ -132,11 +225,19 @@ export default function LibraryPage() {
                 </div>
 
                 <div className="pt-2">
-                    {selectedView === "focus" ? (
-                        <DayIndicatorSet year={2026} month={4} dayInformations={[]} />
-                    ) : (
-                        <DayBookSet year={2026} month={4} dayInfomations={[]} />
-                    )}
+                {selectedView === "focus" ? (
+                    <DayIndicatorSet
+                        year={selectedYearMonth.year}
+                        month={selectedYearMonth.month}
+                        dayInformations={focusItems}
+                    />
+                ) : (
+                    <DayBookSet
+                        year={selectedYearMonth.year}
+                        month={selectedYearMonth.month}
+                        dayInfomations={dayBookInformations}
+                    />
+                )}
                 </div>
             </div>
 

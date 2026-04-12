@@ -20,19 +20,41 @@ export type LibraryBookGoal = {
 
 export type FocusTimeItems ={
     date: string;
-    timeSlot: string;
+    timeSlot: FocusTimeSlotType;
 };
+
+
+export type MonthlyTopBook = {
+    bookId: number;
+    coverUrl: string;
+  };
+  
+  
 
 export type FocusBookItems = {
     bookId: number;
     coverUrl: string;
 };
 
-export type LibraryFocus<TType extends FocusTimeItems | FocusBookItems> = {
+export type MonthlyBookDay = {
+    date: string;
+    bookCount: number;
+    topBook: MonthlyTopBook | null;
+  };
+  
+
+  export type LibraryFocusMonthly = {
     yearMonth: string;
     totalFocusMin: number;
-    focusBookItems: TType[];
-};
+    focusBookItems: FocusTimeItems[];
+  };
+
+
+export type LibraryBooksMonthly = {
+    yearMonth: string;
+    totalBookCount: number;
+    days: MonthlyBookDay[];
+  };
 
 export type PatchBookGoal = {
     goal: number;
@@ -84,12 +106,13 @@ export type LibraryStatusBook<T extends BookStatusType> = {
     bookItems: null | [] | BookStatusItems<T>[];
 } & CursorPage;
 
+
 export type LibraryBookNumResponse = BaseApiResponse<LibraryBook>; // 서재 전체 도수 조회
 export type LibraryBookGoalResponse = BaseApiResponse<LibraryBookGoal>; //서재 목표 조회
 
 //포커스 조회x
-export type LibraryFocusTimeResponse = BaseApiResponse<LibraryFocus<FocusTimeItems>>;
-export type LibraryFocusBookResponse = BaseApiResponse<LibraryFocus<FocusBookItems>>;
+export type LibraryFocusTimeResponse = BaseApiResponse<LibraryFocusMonthly>;
+export type LibraryFocusBookResponse = BaseApiResponse<LibraryBooksMonthly>;
 
 //목표 조회
 export type LibraryBookGoalPatchResponse = BaseApiResponse<PatchBookGoal>;
@@ -97,7 +120,7 @@ export type LibraryBookGoalPatchResponse = BaseApiResponse<PatchBookGoal>;
 //날짜별 조회
 export type LibraryDateFocusResponse = BaseApiResponse<LibraryDateFocus>;
 
-/** GET 상태별 도서 목록 — 쿼리스트링 */
+//모든
 export type LibraryStatusBooksQueryParams = {
     status: BookStatusType;
     cursor?: number;

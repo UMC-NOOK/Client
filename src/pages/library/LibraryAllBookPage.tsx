@@ -143,7 +143,7 @@ export default function LibraryAllBookPage() {
                                 {SECTION_SUBJECT[tab]} 책이{" "}
                             </label>
                             <label className="text-yellow-70">
-                                {isLoading ? "…" : `${totalBookNum}권`}
+                                {isLoading ? "0권" : `${totalBookNum}권`}
                             </label>
                             <label className="text-gray-90"> 있어요.</label>
                         </div>
