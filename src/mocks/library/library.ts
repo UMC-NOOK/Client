@@ -3,7 +3,6 @@ import type {
     LibraryBookNumResponse,
     LibraryBookGoalResponse,
     LibraryFocusTimeResponse,
-    LibraryFocusBookResponse,
     LibraryBookGoalPatchResponse,
     LibraryDateFocusResponse,
     LibraryStatusBook,
