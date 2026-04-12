@@ -55,19 +55,6 @@ const ICON_BY_VARIANT: Record<ReadingGoal, string> = {
   PCT_100: BookIllust100,
 };
 
-function splitByUntil(message: string) {
-  const s = message.trim();
-  const idx = s.indexOf("까지");
-
-  if (idx === -1) return [s];
-
-  const cut = idx + "까지".length;
-  const line1 = s.slice(0, cut).trim();
-  const line2 = s.slice(cut).trim();
-
-  return line2 ? [line1, line2] : [line1];
-}
-
 function splitGoalText(text: string) {
   const match = text.match(/^(.+?까지)\s*(.+)$/);
 
