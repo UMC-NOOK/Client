@@ -71,41 +71,6 @@ import type {
   };
   
   /**
-   * 월별 포커스 책 조회
-   */
-  export const mockLibraryFocusBookResponse: LibraryFocusBookResponse = {
-    isSuccess: true,
-    code: "SUCCESS-200",
-    message: "월별 포커스 도서 조회에 성공했습니다.",
-    result: {
-      yearMonth: "2026-04",
-      totalFocusMin: 3137,
-      focusBookItems: [
-        {
-          bookId: 1,
-          coverUrl:
-            "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop",
-        },
-        {
-          bookId: 2,
-          coverUrl:
-            "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&auto=format&fit=crop",
-        },
-        {
-          bookId: 3,
-          coverUrl:
-            "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=400&auto=format&fit=crop",
-        },
-        {
-          bookId: 4,
-          coverUrl:
-            "https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&auto=format&fit=crop",
-        },
-      ],
-    },
-  };
-  
-  /**
    * 독서 목표 수정
    */
   export const mockLibraryBookGoalPatchResponse: LibraryBookGoalPatchResponse = {
