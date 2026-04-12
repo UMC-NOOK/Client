@@ -82,10 +82,15 @@ export default function LibraryPage() {
         isError: isBooksMonthlyError,
       } = useLibraryBooksMonthly(yearMonth);
 
-      const handleSelectFocusDate = (date: string) => {
+    const handleSelectFocusDate = (date: string) => {
         setSelectedDate(date);
         setIsModalOpen(true);
       };
+    
+    const dropdownPositionClass =
+        selectedView === "focus"
+            ? "absolute right-12 z-50 bottom-94"
+            : "absolute right-12 z-50 bottom-124";
 
     //mock
     const mockTotalBookNum = mockLibraryBookNumResponse.result.totalBookNum;
@@ -174,7 +179,7 @@ export default function LibraryPage() {
                                     />
                                 </div>
                                 {isDropdownOpen && (
-                                    <div className="absolute right-12 z-50 bottom-94">
+                                    <div className={dropdownPositionClass}>
                                         <DropDown
                                             initialYear={selectedYearMonth.year}
                                             initialMonth={selectedYearMonth.month}
