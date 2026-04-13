@@ -40,7 +40,7 @@ export async function searchBooks({
   keyword,
   cursor,
 }: SearchBooksParams): Promise<SearchBooksResult> {
-  const response = await api.get<BookSearchResponse>(`/api/books/search/${type}`, {
+  const response = await api.get<BookSearchResponse>(`/api/v1/books/search/${type}`, {
     params: {
       keyword,
       cursor,
@@ -62,7 +62,7 @@ export async function getSearchHistories(
   type: SearchType,
 ): Promise<string[]> {
   const response = await api.get<SearchHistoryListResponse>(
-    `/api/books/search/${type}/histories`,
+    `/api/v1/books/search/${type}/histories`,
   );
 
   return response.data.result ?? [];
@@ -79,9 +79,81 @@ export async function deleteSearchHistory(
   type: SearchType,
   keyword: string,
 ): Promise<void> {
-  await api.delete<BasicResponse>(`/api/books/search/${type}/histories`, {
+  await api.delete<BasicResponse>(`/api/v1/books/search/${type}/histories`, {
     params: {
       keyword,
     },
   });
+}
+
+
+export type LibraryHomeSectionType =
+  | "RECENT_FOCUS"
+  | "BEFORE_READING"
+  | "RECOMMENDED";
+
+export interface LibraryHomeBookItem {
+  bookId?: number;
+  isbn13?: string;
+  title: string;
+  author: string;
+  coverUrl: string | null;
+}
+
+export interface LibraryHomeSection {
+  type: LibraryHomeSectionType;
+  title: string;
+  items: LibraryHomeBookItem[];
+}
+
+export interface LibrarySearchHomeResult {
+  sections: LibraryHomeSection[];
+}
+
+export interface LibrarySearchHomeResponse {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+  result: LibrarySearchHomeResult;
+}
+
+export async function getLibrarySearchHome(): Promise<LibrarySearchHomeResult> {
+  const response = await api.get<LibrarySearchHomeResponse>(
+    "/api/v1/books/search/library/home",
+  );
+
+  return response.data.result;
+}
+
+
+export interface GlobalHomeBookItem {
+  isbn13: string;
+  title: string;
+  author: string;
+  coverImageUrl: string | null;
+  publisher: string;
+  rank: number;
+}
+
+export interface BestsellersResponse {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+  result: GlobalHomeBookItem[];
+}
+
+export async function getBestsellers(): Promise<GlobalHomeBookItem[]> {
+  const response = await api.get<BestsellersResponse>(
+    "/api/v1/books/bestsellers",
+  );
+
+  return response.data.result ?? [];
+}
+
+export async function getRecommendations(): Promise<GlobalHomeBookItem[]> {
+  const response = await api.get<BestsellersResponse>(
+    "/api/v1/books/recommendations",
+  );
+
+  return response.data.result ?? [];
 }

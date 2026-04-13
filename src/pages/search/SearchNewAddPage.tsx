@@ -4,7 +4,7 @@ import SearchNewAddLayout from "../../components/search/new/SearchNewAddLayout";
 import SearchNewAddInfoForm from "../../components/search/new/SearchNewAddInfoForm";
 import { useShell } from "../../app/AppShell";
 
-export default function SearchNewAddCategoryPage() {
+export default function SearchNewAddPage() {
   const { setHideFooter } = useShell();
 
   useEffect(() => {
@@ -27,6 +27,7 @@ export default function SearchNewAddCategoryPage() {
       title: title.trim(),
       author: author.trim(),
     });
+
     navigate(`/search/new/category?${params.toString()}`);
   };
 

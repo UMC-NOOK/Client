@@ -10,8 +10,13 @@ import RecentKeywordSection, {
   type RecentKeyword,
 } from "../../components/search/RecentKeywordSection";
 import SearchResultSection from "../../components/search/SearchResultSection";
+
 import { useInfiniteSearchBooks } from "../../hooks/queries/useInfiniteSearchBooks";
 import { useSearchHistories } from "../../hooks/queries/useSearchHistories";
+import { useLibrarySearchHome } from "../../hooks/queries/useLibrarySearchHome";
+import { useBestsellers } from "../../hooks/queries/useBestsellers";
+import { useRecommendations } from "../../hooks/queries/useRecommendations";
+
 import type { SearchBooksResult } from "../../api/search";
 import { useDeleteSearchHistory } from "../../hooks/mutations/useDeleteSearchHIstory";
 
@@ -27,12 +32,24 @@ export default function SearchPage() {
   const [recent, setRecent] = useState<RecentKeyword[]>([]);
 
   const searchType = scope === "all" ? "GLOBAL" : "LIBRARY";
-  useDeleteSearchHistory();
+  const { mutate: deleteHistory } = useDeleteSearchHistory();
 
   const { data: historyData } = useSearchHistories({
     type: searchType,
     enabled: mode === "searching",
   });
+
+  const { data: libraryHomeData } = useLibrarySearchHome(
+    mode === "idle" && scope === "my",
+  );
+
+  const { data: bestsellersData } = useBestsellers(
+    mode === "idle" && scope === "all",
+  );
+
+  const { data: recommendationsData } = useRecommendations(
+    mode === "idle" && scope === "all",
+  );
 
   const {
     data,
@@ -61,16 +78,20 @@ export default function SearchPage() {
 
   const books = useMemo(() => {
     if (!data?.pages) return [];
-    return data?.pages
+
+    return data.pages
       .flatMap((page: SearchBooksResult) =>
-         Array.isArray(page.books) ? page.books : [],
+        Array.isArray(page.books) ? page.books : [],
       )
       .filter(Boolean);
-    },[data]);
-  
+  }, [data]);
+
   const totalResults = data?.pages?.[0]?.totalResults ?? 0;
   const safeBooks = Array.isArray(books) ? books : [];
-  
+  const librarySections = libraryHomeData?.sections ?? [];
+  const recommendedBooks = recommendationsData ?? [];
+  const bestBooks = bestsellersData ?? [];
+
   const handleSearch = (overrideQuery?: string) => {
     const target = (overrideQuery ?? query).trim();
     if (!target) return;
@@ -103,7 +124,6 @@ export default function SearchPage() {
         onEnter={() => handleSearch()}
         onFocus={() => setMode("searching")}
         onBlur={() => {}}
-        
         onClose={() => {
           setQuery("");
           setSubmittedQuery("");
@@ -115,9 +135,22 @@ export default function SearchPage() {
       {mode === "searching" && (
         <RecentKeywordSection
           keywords={recent}
-          onDelete={(id) =>
-            setRecent((prev) => prev.filter((k) => k.id !== id))
-          }
+          onDelete={(id) => {
+            const target = recent.find((k) => k.id === id);
+            if (!target) return;
+
+            deleteHistory(
+              {
+                type: searchType,
+                keyword: target.text,
+              },
+              {
+                onSuccess: () => {
+                  setRecent((prev) => prev.filter((k) => k.id !== id));
+                },
+              },
+            );
+          }}
           onClickKeyword={(text) => {
             handleSearch(text);
           }}
@@ -125,7 +158,14 @@ export default function SearchPage() {
       )}
 
       {mode === "idle" &&
-        (scope === "all" ? <AllBookListSection /> : <MyLibraryListSection />)}
+        (scope === "all" ? (
+          <AllBookListSection
+            recommendedBooks={recommendedBooks}
+            bestBooks={bestBooks}
+          />
+        ) : (
+          <MyLibraryListSection sections={librarySections} />
+        ))}
 
       {mode === "results" && (
         <SearchResultSection

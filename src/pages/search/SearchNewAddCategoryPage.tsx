@@ -1,4 +1,3 @@
-// src/pages/search/SearchNewAddCategoryPage.tsx
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SearchNewAddLayout from "../../components/search/new/SearchNewAddLayout";
@@ -27,14 +26,13 @@ export default function SearchNewAddCategoryPage() {
   const handleNext = () => {
     if (!category) return;
 
-    navigate(
-      `/search/new/more?title=${encodeURIComponent(title)}&author=${encodeURIComponent(
-        author
-      )}`,
-      {
-        state: { category },
-      }
-    );
+    const params = new URLSearchParams({
+      title,
+      author,
+      category,
+    });
+
+    navigate(`/search/new/more?${params.toString()}`);
   };
 
   return (

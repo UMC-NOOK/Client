@@ -1,11 +1,16 @@
-//Client/src/components/search/AllBookListSection.tsx
 import { useRef } from "react";
+
 import bookCover from "../../assets/search/mock_bookcover.svg";
-import { bestBooks, recommendedBooks, type Book } from "./mock/allBooks";
+import type { GlobalHomeBookItem } from "../../api/search";
+
+type Props = {
+  recommendedBooks: GlobalHomeBookItem[];
+  bestBooks: GlobalHomeBookItem[];
+};
 
 const LIMIT = 5;
 
-function HorizontalBookScroller({ books }: { books: Book[] }) {
+function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
@@ -72,14 +77,17 @@ function HorizontalBookScroller({ books }: { books: Book[] }) {
       <div className="flex items-start gap-2 pr-4">
         {books.slice(0, LIMIT).map((book, index) => (
           <div
-            key={`rec-${book.id}-${index}`}
+            key={`${book.isbn13}-${index}`}
             className="shrink-0 w-25 snap-start flex flex-col items-start"
           >
             <img
-              src={bookCover}
+              src={book.coverImageUrl || bookCover}
               alt={book.title}
               draggable={false}
               className="w-25 h-36 rounded-xs object-cover"
+              onError={(e) => {
+                e.currentTarget.src = bookCover;
+              }}
             />
 
             <div className="w-full mt-1 flex flex-col items-start">
@@ -98,31 +106,30 @@ function HorizontalBookScroller({ books }: { books: Book[] }) {
   );
 }
 
-export default function AllBookListSection() {
+export default function AllBookListSection({
+  recommendedBooks,
+  bestBooks,
+}: Props) {
   return (
     <section className="w-full flex flex-col items-start gap-8 pt-8">
-      {/* 추천 */}
       <div className="w-full flex flex-col items-start gap-4">
         <span className="text-gray-90 text-label-13-sb">이 책을 추천해요</span>
         <HorizontalBookScroller books={recommendedBooks} />
       </div>
 
-      {/* 주간 베스트 */}
       <div className="w-full flex flex-col items-start gap-4">
         <span className="text-gray-90 text-label-13-sb">주간 베스트</span>
 
         <div className="w-full flex flex-col items-start gap-2">
           {bestBooks.map((book, idx) => (
             <div
-              key={`best-${book.id}-${idx}`}
+              key={`best-${book.isbn13}-${idx}`}
               className="w-full h-7 flex items-center gap-2"
             >
-              {/* 순위 */}
               <div className="w-7 h-7 flex items-center justify-center">
-                <span className="text-gray-90 text-btn-16-sb">{idx + 1}</span>
+                <span className="text-gray-90 text-btn-16-sb">{book.rank ?? idx + 1}</span>
               </div>
 
-              {/* 제목 */}
               <div className="flex-1 overflow-hidden py-1">
                 <span className="block truncate text-gray-90 text-btn-16-sb">
                   {book.title}
