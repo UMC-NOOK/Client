@@ -132,41 +132,6 @@ export default function AppRoutes() {
             <Route path="/library/123" element={<BookInfoPage />} />
             <Route path="/library/123/history" element={<AllHistoryPage />} />
           </Route>
-        <Route path="/" element={<Navigate to="/library" replace />} />
-
-        {/* Search */}
-        <Route element={<SearchLayout />}>
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/search/new" element={<SearchNewAddPage />} />
-          <Route
-            path="/search/new/category"
-            element={<SearchNewAddCategoryPage />}
-          />
-          <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
-        </Route>
-
-        {/* Main Tabs */}
-        <Route element={<MainTabsLayout />}>
-          <Route path="/library" element={<LibraryMobilePage />} />
-          <Route path="/focus" element={<FocusMobilePage />} />
-          <Route path="/record" element={<RecordMobilePage />} />
-          <Route path="/group" element={<GroupMobilePage />} />
-          <Route
-            path="/test/banner-action-card"
-            element={<BannerActionCardTestPage />}
-          />
-          <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
-          <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
-          <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
-        </Route>
-
-        {/* No Footer Pages */}
-        <Route element={<NoFooterLayout />}>
-          <Route path="/library/123" element={<BookInfoPage />}></Route>
-          <Route
-            path="/library/123/history"
-            element={<AllHistoryPage />}
-          ></Route>
         </Route>
       </Route>
     </Routes>
