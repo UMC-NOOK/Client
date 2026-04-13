@@ -17,7 +17,7 @@ const sizeClassMap: Record<IconSize, string> = {
 
 export default function Icon({
   children,
-  size = "s",
+  size = "xs",
   ...props
 }: IconFrameProps) {
   return (
