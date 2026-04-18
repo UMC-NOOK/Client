@@ -7,12 +7,16 @@ type IconFrameProps = {
   size?: IconSize;
 } & HTMLAttributes<HTMLSpanElement>;
 
-const base = "items-center justify-center";
+/** SVG를 img로 넣을 때 파일마다 width/height가 달라도 프레임 안에 맞게 스케일 */
+const base = [
+  "box-border inline-grid shrink-0 place-items-center",
+  "[&_img]:block [&_img]:h-full [&_img]:w-full [&_img]:object-contain",
+].join(" ");
 
 const sizeClassMap: Record<IconSize, string> = {
-  xs: "inline-flex w-[18px] h-[18px] p-0.5",
-  s: "inline-flex w-6 h-6 p-0.5",
-  m: "inline-flex w-10 h-10 p-2",
+  xs: "h-[18px] w-[18px] p-0.5",
+  s: "h-6 w-6 p-0.5",
+  m: "h-10 w-10 p-2",
 };
 
 export default function Icon({

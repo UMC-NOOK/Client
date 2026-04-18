@@ -18,13 +18,16 @@ export default function TopNavigation({
 }: TopNavigationProps) {
   return (
     <header className={["w-full h-10 flex items-center", className].join(" ")}>
+
       {/* LEFT */}
-      <div className="flex items-center justify-start w-10">
-        {left && (
+      <div className="flex items-center justify-start">
+        {onClickLeft ? (
           <button onClick={onClickLeft} className="focus:outline-none">
             {left}
           </button>
-        )}
+        ) : (
+          <> {left}</>
+        )} 
       </div>
 
       {/* CENTER */}
@@ -33,15 +36,15 @@ export default function TopNavigation({
       </div>
 
       {/* RIGHT */}
-      <div className="flex items-center justify-end w-10">
-        {onClickRight ? (
-          <button onClick={onClickRight} className="focus:outline-none">
-            {right}
-          </button>
-        ) : (
-          <> {right}</>
-        )}
-      </div>
+      <div className="flex items-center justify-end">
+          {onClickRight ? (
+            <button onClick={onClickRight} className="focus:outline-none">
+              {right}
+            </button>
+          ) : (
+            <> {right}</>
+          )}
+        </div>
     </header>
   );
 }

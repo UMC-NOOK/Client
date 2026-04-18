@@ -1,14 +1,15 @@
 import Day from "./Day";
 
-type Count = "single" | "multiple";
+export type Count = "single" | "multiple";
 
 type Props = {
   day: string;
   visible?: boolean;
   disable?: boolean;
   count?: Count;
-  imageUrl?: string;
+  coverUrl?: string | null;
   bookNum?: number;
+  onClick?: () => void;
 };
 
 export default function BookSet({
@@ -16,31 +17,37 @@ export default function BookSet({
   visible = false,
   disable = false,
   count = "single",
-  imageUrl,
+  coverUrl,
   bookNum = 0,
+  onClick,
 }: Props) {
   if (!visible) {
     return (
-      <div className="flex w-11 h-[89px] flex-col items-start gap-1"/>
+      <div className="flex w-11 h-[89px] flex-col items-start gap-1" />
     );
   }
 
   return (
-    <div className="flex flex-col items-center gap-1">
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disable}
+      className="flex flex-col items-center gap-1 disabled:cursor-default"
+    >
       <Day text={day} disable={disable} />
 
-      {disable ?(
-        <div className="h-16" aria-hidden />
-        ): (
-        <div className="relative w-11 h-16 overflow-hidden">
-          {imageUrl ? (
+      {disable ? (
+        <div className="h-16 w-11 shrink-0 rounded-[2px] bg-gray-10" />
+      ) : (
+        <div className="relative h-16 w-11 overflow-hidden rounded-[2px]">
+          {coverUrl ? (
             <img
-              src={imageUrl}
+              src={coverUrl}
               alt={`${day} book`}
-              className="h-full w-full object-cover rounded-[2px]"
+              className="h-full w-full object-cover"
             />
           ) : (
-            <div className="w-11 h-full w-full" aria-hidden />
+            <div className="h-full w-full bg-gray-10" />
           )}
 
           {count === "multiple" ? (
@@ -52,6 +59,6 @@ export default function BookSet({
           ) : null}
         </div>
       )}
-    </div>
+    </button>
   );
 }

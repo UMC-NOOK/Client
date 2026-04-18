@@ -55,23 +55,26 @@ const ICON_BY_VARIANT: Record<ReadingGoal, string> = {
   PCT_100: BookIllust100,
 };
 
-function splitByUntil(message: string) {
-  const s = message.trim();
-  const idx = s.indexOf("까지");
+function splitGoalText(text: string) {
+  const match = text.match(/^(.+?까지)\s*(.+)$/);
 
-  if (idx === -1) return [s];
+  if (!match) {
+    return [text];
+  }
 
-  const cut = idx + "까지".length;
-  const line1 = s.slice(0, cut).trim();
-  const line2 = s.slice(cut).trim();
-
-  return line2 ? [line1, line2] : [line1];
+  return [match[1], match[2]];
 }
 
-export function BookGoal(props: Props) {
+export default function BookGoal(props: Props) {
   const { percent } = props;
-  const resolvedMessage = percent === "ZERO" ? "독서 목표를 설정하세요!" : props.message;
-  const lines = splitByUntil(resolvedMessage);
+  const resolvedMessage =
+    percent === "ZERO"
+    ? "독서 목표를 설정하세요!"
+    : percent === "PCT_100"
+      ? "목표를 달성했어요!"
+      : props.message;
+
+  const lines = splitGoalText(resolvedMessage);
 
   return (
     <div
@@ -83,14 +86,13 @@ export function BookGoal(props: Props) {
       <div className="flex flex-col gap-1">
         <p className="text-label-12-sb text-gray-70">독서 목표</p>
 
-        <p className="text-label-16-sb text-gray-90">
+        <div className="flex flex-col items-start gap-2 pt-1 text-label-16-sb text-gray-90">
           {lines.map((line, i) => (
-            <span key={i}>
+            <div key={i}>
               {line}
-              {i !== lines.length - 1 ? <br /> : null}
-            </span>
+            </div>
           ))}
-        </p>
+        </div>
       </div>
 
       <div className="shrink-0">

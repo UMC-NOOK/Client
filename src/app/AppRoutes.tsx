@@ -10,7 +10,7 @@ import {
 import AppShell, { useShell } from "./AppShell";
 import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
 
-import LibraryMobilePage from "../pages/search/LibraryMobilePage";
+//import LibraryMobilePage from "../pages/search/LibraryMobilePage";
 import FocusMobilePage from "../pages/search/FocusMobilePage";
 import RecordMobilePage from "../pages/search/RecordMobilePage";
 import GroupMobilePage from "../pages/search/GroupMobilePage";
@@ -26,6 +26,9 @@ import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
 import BookInfoPage from "../pages/bookInfo/BookInfoPage";
 import AllHistoryPage from "../pages/bookInfo/AllHistoryPage";
 import DevLoginButton from "../components/dev/DevLoginButton";
+import LibraryPage from "../pages/library/LibraryPage";
+import LibraryGoalInputPage from "../pages/library/LibraryGoalInputPage";
+import LibraryAllBookPage from "../pages/library/LibraryAllBookPage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -115,18 +118,22 @@ export default function AppRoutes() {
             <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
           </Route>
 
-          <Route element={<MainTabsLayout />}>
-            <Route path="/library" element={<LibraryMobilePage />} />
-            <Route path="/focus" element={<FocusMobilePage />} />
-            <Route path="/record" element={<RecordMobilePage />} />
-            <Route path="/group" element={<GroupMobilePage />} />
-            <Route
-              path="/test/banner-action-card"
-              element={<BannerActionCardTestPage />}
-            />
-            <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
-            <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
-          </Route>
+        {/* Main Tabs */}
+        <Route element={<MainTabsLayout />}>
+          <Route path="/library" element={<LibraryPage />} />
+          <Route path="/focus" element={<FocusMobilePage />} />
+          <Route path="/record" element={<RecordMobilePage />} />
+          <Route path="/group" element={<GroupMobilePage />} />
+          <Route
+            path="/test/banner-action-card"
+            element={<BannerActionCardTestPage />}
+          />
+          <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
+          <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
+        </Route>
+        <Route path="/users/me/onboarding/goal" element={<LibraryGoalInputPage/>}/>
+        <Route path="/library/status" element={<LibraryAllBookPage />} />
+        <Route path="*" element={<Navigate to="/library" replace />} />
 
           <Route element={<NoFooterLayout />}>
             <Route path="/library/123" element={<BookInfoPage />} />
