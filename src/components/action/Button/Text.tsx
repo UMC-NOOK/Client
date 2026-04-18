@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 type Size = "12" | "14" | "18";
 
 type Props = {
-  text: ReactNode;
+  children: ReactNode;
   size: Size;
   active?: boolean;
   onClick?: () => void;
@@ -18,7 +18,7 @@ const sizeClassMap: Record<Size, string> = {
 };
 
 export function Text({
-  text,
+  children,
   size,
   active = false,
   onClick,
@@ -37,7 +37,7 @@ export function Text({
         colorClass,
       ].join(" ")}
     >
-      {text}
+      {children}
     </span>
   );
 }

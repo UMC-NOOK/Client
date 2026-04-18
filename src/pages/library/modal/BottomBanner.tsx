@@ -22,7 +22,9 @@ export default function BottomBanner({
         <div className="flex flex-col items-end justify-center w-full h-29"> 
             <div className="flex justify-between jusitfy-end">
                 <div>
-
+                    <Text size="12">
+                        닫기
+                    </Text>
                 </div>
             </div>
              <div
