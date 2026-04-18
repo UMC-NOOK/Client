@@ -1,5 +1,6 @@
 import bottomBanner from "../../../assets/images/bottom_banner.jpg";
 import arrowRight from "../../../assets/icons/arrow_right.svg";
+import close from "../../../assets/icons/close.svg";
 
 type BottomBannerProps = {
     bookId: number;
@@ -25,6 +26,9 @@ export default function BottomBanner({
                     <Text size="12">
                         닫기
                     </Text>
+                </div>
+                <div className="w-3 h-3">
+                    <img src={close}/>
                 </div>
             </div>
              <div
