@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Icon from "../../components/action/Button/Icon";
 import close from "../../assets/icons/close.svg";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
-import { Text } from "../../components/action/Button/Text";
+import Text  from "../../components/action/Button/Text";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
 import { usePatchLibraryBookGoal } from "../../hooks/mutations/library/usePatchLibraryBookGoal";
 

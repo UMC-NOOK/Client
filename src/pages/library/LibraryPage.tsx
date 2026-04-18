@@ -27,7 +27,8 @@ import {
 
 import {
     mockLibraryBookNumResponse,
-    mockLibraryBookGoalResponse
+    mockLibraryBookGoalResponse,
+    mockLibraryDateFocusResponse
 } from "../../mocks/library/library"
 
 import getGoalPercent from "./utils/getGoalPercent";
@@ -59,8 +60,8 @@ export default function LibraryPage() {
 
     const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
     const { data: libraryBookGoalData } = useLibraryBookGoal();
+
     const { data: libraryToggleYearsData } = useLibraryDateToggle();
-    const { data: libraryRecentBookInfoData } = useLibraryRecentBookInfo();
     
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth() + 1;
@@ -98,6 +99,14 @@ export default function LibraryPage() {
         setSelectedDate(date);
         setIsModalOpen(true);
       };
+    
+
+    const { data: libraryRecentBookInfoData } = useLibraryRecentBookInfo();
+    const bookId = libraryRecentBookInfoData?.bookId ?? 0;
+    const title = libraryRecentBookInfoData?.title ?? "클라우드 쿠쿠 랜드";
+    const coverUrl = libraryRecentBookInfoData?.coverUrl ?? "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop";
+    const page = libraryRecentBookInfoData?.page ?? 147;
+    const focusTime = libraryRecentBookInfoData?.focusTime?? "08:10:22";
     
     const dropdownPositionClass =
         selectedView === "focus"
@@ -266,7 +275,13 @@ export default function LibraryPage() {
                 </div>
             </div>
 
-            <BottomBanner />
+            <BottomBanner 
+                bookId={bookId}
+                title={title}
+                coverUrl={coverUrl}
+                page={page}
+                focusTime={focusTime}
+            />
 
             <DateFocusBookModal
                 open={isModalOpen}
