@@ -1,4 +1,3 @@
-// src/app/AppRoutes.tsx
 import { useEffect } from "react";
 import {
   Navigate,
@@ -26,6 +25,7 @@ import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
 
 import BookInfoPage from "../pages/bookInfo/BookInfoPage";
 import AllHistoryPage from "../pages/bookInfo/AllHistoryPage";
+import DevLoginButton from "../components/dev/DevLoginButton";
 import LibraryPage from "../pages/library/LibraryPage";
 import LibraryGoalInputPage from "../pages/library/LibraryGoalInputPage";
 import LibraryAllBookPage from "../pages/library/LibraryAllBookPage";
@@ -92,22 +92,31 @@ function NoFooterLayout() {
   return <Outlet />;
 }
 
+function AppShellLayout() {
+  return (
+    <>
+      <DevLoginButton />
+      <Outlet />
+    </>
+  );
+}
+
 export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<AppShell />}>
-        <Route path="/" element={<Navigate to="/library" replace />} />
+        <Route element={<AppShellLayout />}>
+          <Route path="/" element={<Navigate to="/library" replace />} />
 
-        {/* Search */}
-        <Route element={<SearchLayout />}>
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/search/new" element={<SearchNewAddPage />} />
-          <Route
-            path="/search/new/category"
-            element={<SearchNewAddCategoryPage />}
-          />
-          <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
-        </Route>
+          <Route element={<SearchLayout />}>
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/search/new" element={<SearchNewAddPage />} />
+            <Route
+              path="/search/new/category"
+              element={<SearchNewAddCategoryPage />}
+            />
+            <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
+          </Route>
 
         {/* Main Tabs */}
         <Route element={<MainTabsLayout />}>
@@ -121,19 +130,15 @@ export default function AppRoutes() {
           />
           <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
           <Route path="/test/popup" element={<PopupConfirmModalTestPage/>} />
-          <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
         </Route>
         <Route path="/users/me/onboarding/goal" element={<LibraryGoalInputPage/>}/>
         <Route path="/library/status" element={<LibraryAllBookPage />} />
         <Route path="*" element={<Navigate to="/library" replace />} />
 
-        {/* No Footer Pages */}
-        <Route element={<NoFooterLayout />}>
-          <Route path="/library/123" element={<BookInfoPage />}></Route>
-          <Route
-            path="/library/123/history"
-            element={<AllHistoryPage />}
-          ></Route>
+          <Route element={<NoFooterLayout />}>
+            <Route path="/library/123" element={<BookInfoPage />} />
+            <Route path="/library/123/history" element={<AllHistoryPage />} />
+          </Route>
         </Route>
       </Route>
     </Routes>
