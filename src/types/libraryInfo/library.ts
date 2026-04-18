@@ -106,6 +106,9 @@ export type LibraryStatusBook<T extends BookStatusType> = {
     bookItems: null | [] | BookStatusItems<T>[];
 } & CursorPage;
 
+export type DateToggleYear = {
+    years: string[];
+}
 
 export type LibraryBookNumResponse = BaseApiResponse<LibraryBook>; // 서재 전체 도수 조회
 export type LibraryBookGoalResponse = BaseApiResponse<LibraryBookGoal>; //서재 목표 조회
@@ -129,3 +132,6 @@ export type LibraryStatusBooksQueryParams = {
 
 //상태별 조회
 export type LibraryStatusBookResponse<T extends BookStatusType> = BaseApiResponse<LibraryStatusBook<T>>;
+
+//날짜 적용 토글 연도
+export type LibraryDateToggleYearResponse = BaseApiResponse<DateToggleYear>;
