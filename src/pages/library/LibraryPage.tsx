@@ -31,6 +31,8 @@ import {
 import getGoalPercent from "./utils/getGoalPercent";
 import DropDown from "../../components/section/dropDown/DropDown";
 
+import { useLibraryDateToggle } from "../../hooks/queries/library/useLibraryDateToggle";
+
 type SelectedYearMonth = {
     year: number;
     month: number;
@@ -55,10 +57,17 @@ export default function LibraryPage() {
 
     const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
     const { data: libraryBookGoalData } = useLibraryBookGoal();
+    const { data: libraryToggleYearsData, } = useLibraryDateToggle();
+    
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1;
+    const availableYears = libraryToggleYearsData?.years ?? [];
+    const startYear = availableYears.length > 0 ? Math.min(...availableYears) : currentYear;
+    const endYear = availableYears.length > 0 ? Math.max(...availableYears) : currentYear;
 
     const [selectedYearMonth, setSelectedYearMonth] = useState<SelectedYearMonth>({
-        year: 2026,
-        month: 4,
+        year: startYear,
+        month: currentMonth,
       });
 
     const yearMonth = useMemo(() => {
@@ -179,14 +188,14 @@ export default function LibraryPage() {
                                     />
                                 </div>
                                 {isDropdownOpen && (
-                                    <div className={dropdownPositionClass}>
-                                        <DropDown
-                                            initialYear={selectedYearMonth.year}
-                                            initialMonth={selectedYearMonth.month}
-                                            startYear={2025}
-                                            endYear={2026}
+                                    <div className={dropdownPositionClass}> 
+                                        <DropDown 
+                                            initialYear={selectedYearMonth.year} 
+                                            initialMonth={selectedYearMonth.month} 
+                                            startYear={startYear} 
+                                            endYear={endYear} 
                                             onApply={handleApplyYearMonth}
-                                        />
+                                        /> 
                                     </div>
                                 )}   
                             </div>
