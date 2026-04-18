@@ -1,12 +1,7 @@
+import type BaseApiResponse from "../BaseApiResponse";
+
 export type FocusTimeSlotType = "FOCUS_00"| "FOCUS_01" | "FOCUS_02" | "FOCUS_03" | "FOCUS_04";
 export type BookStatusType = "BEFORE" | "READING" | "FINISHED";
-
-export interface BaseApiResponse <T> {
-    isSuccess: true;
-    code: "SUCCESS-200";
-    message: string;
-    result: T;
-};
 
 export type LibraryBook = {
     totalBookNum: number;
