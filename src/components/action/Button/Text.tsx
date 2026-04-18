@@ -1,7 +1,9 @@
+import type { ReactNode } from "react";
+
 type Size = "12" | "14" | "18";
 
 type Props = {
-  text: string;
+  text: ReactNode;
   size: Size;
   active?: boolean;
   onClick?: () => void;

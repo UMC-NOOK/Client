@@ -105,6 +105,14 @@ export type DateToggleYear = {
     years: number[];
 }
 
+export type RecentBookInfo = {
+    bookId : number;
+    coverUrl : string;
+    title : string;
+    page : number;
+    focusTime : string;
+}
+
 export type LibraryBookNumResponse = BaseApiResponse<LibraryBook>; // 서재 전체 도수 조회
 export type LibraryBookGoalResponse = BaseApiResponse<LibraryBookGoal>; //서재 목표 조회
 
@@ -130,3 +138,6 @@ export type LibraryStatusBookResponse<T extends BookStatusType> = BaseApiRespons
 
 //날짜 적용 토글 연도
 export type LibraryDateToggleYearResponse = BaseApiResponse<DateToggleYear>;
+
+//최근 도서 정보 듸우기
+export type LibraryRecentBookInfoResponse = BaseApiResponse<RecentBookInfo>;

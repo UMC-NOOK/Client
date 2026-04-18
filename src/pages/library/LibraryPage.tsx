@@ -21,6 +21,8 @@ import {
     useLibraryBookGoal,
     useLibraryFocusMonthly,
     useLibraryBooksMonthly,
+    useLibraryDateToggle,
+    useLibraryRecentBookInfo,
   } from "../../hooks/queries/library";
 
 import {
@@ -31,7 +33,7 @@ import {
 import getGoalPercent from "./utils/getGoalPercent";
 import DropDown from "../../components/section/dropDown/DropDown";
 
-import { useLibraryDateToggle } from "../../hooks/queries/library/useLibraryDateToggle";
+
 
 type SelectedYearMonth = {
     year: number;
@@ -57,7 +59,8 @@ export default function LibraryPage() {
 
     const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
     const { data: libraryBookGoalData } = useLibraryBookGoal();
-    const { data: libraryToggleYearsData, } = useLibraryDateToggle();
+    const { data: libraryToggleYearsData } = useLibraryDateToggle();
+    const { data: libraryRecentBookInfoData } = useLibraryRecentBookInfo();
     
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth() + 1;
