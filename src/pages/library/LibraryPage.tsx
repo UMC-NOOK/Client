@@ -7,7 +7,7 @@ import arrowRight from "../../assets/icons/arrow_right.svg";
 import focus from "../../assets/icons/focus.svg";
 import focusGray from "../../assets/icons/focus-gray.svg";
 import book from "../../assets/icons/book.svg";
-import bookGray from "../../assets/icons/book-gray.svg";
+import book_gray_40 from "../../assets/icons/book_gray_40.svg"
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import DayOfTheWeek from "../../components/content/Calendar/Resource/DayOfTheWeek";
@@ -228,7 +228,7 @@ export default function LibraryPage() {
                         >
                             <Icon size="m">
                                 <img
-                                    src={selectedView === "book" ? book : bookGray}
+                                    src={selectedView === "book" ? book : book_gray_40}
                                     alt=""
                                 />
                             </Icon>
