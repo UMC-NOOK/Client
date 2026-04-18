@@ -102,7 +102,7 @@ export type LibraryStatusBook<T extends BookStatusType> = {
 } & CursorPage;
 
 export type DateToggleYear = {
-    years: string[];
+    years: number[];
 }
 
 export type LibraryBookNumResponse = BaseApiResponse<LibraryBook>; // 서재 전체 도수 조회
