@@ -25,7 +25,7 @@ export default function BottomBanner({
 } : BottomBannerProps) {
     return (
         <div className="pointer-events-none fixed inset-0 z-30 flex items-end justify-center">
-            <div className="flex flex-col items-end justify-center min-w-[375px] h-29 px-4"> 
+            <div className="pointer-events-auto flex flex-col items-end justify-center min-w-[375px] h-29 px-4"> 
                 <div className="flex justify-center items-center">
                     <Text size="12">
                             닫기
