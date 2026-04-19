@@ -57,6 +57,7 @@ export default function LibraryPage() {
     const [isModalOpen, setIsModalOpen] = useState(false); 
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isBannerOpen, setIsBannerOpen] = useState(true);
 
     const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
     const { data: libraryBookGoalData } = useLibraryBookGoal();
@@ -275,13 +276,21 @@ export default function LibraryPage() {
                 </div>
             </div>
 
-            <BottomBanner 
-                bookId={bookId}
-                title={title}
-                coverUrl={coverUrl}
-                page={page}
-                focusTime={focusTime}
-            />
+            {isBannerOpen && (
+                <BottomBanner
+                    bookId={bookId}
+                    title={title}
+                    coverUrl={coverUrl}
+                    page={page}
+                    focusTime={focusTime}
+                    onClick={(bookId) => {
+                        console.log("이동:", bookId);
+                    }}
+                    onClose={() => {
+                        setIsBannerOpen(false);
+                    }}
+                />
+            )}
 
             <DateFocusBookModal
                 open={isModalOpen}
