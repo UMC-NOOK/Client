@@ -1,4 +1,4 @@
-import type { HistoryGroup } from "../../types/bookInfo/history";
+import type { HistoryGroup } from "../../types/bookInfo/history.type";
 
 export const historyData: HistoryGroup[] = [
   {
