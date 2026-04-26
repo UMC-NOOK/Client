@@ -28,11 +28,12 @@ import {
 import {
     mockLibraryBookNumResponse,
     mockLibraryBookGoalResponse,
-    mockLibraryDateFocusResponse
+    MOCK_SPECIFIC_DATE_BOOK_ITEMS
 } from "../../mocks/library/library"
 
 import getGoalPercent from "./utils/getGoalPercent";
 import DropDown from "../../components/section/dropDown/DropDown";
+import { useLibrarySpecificDateBookInfo } from "../../hooks/queries/library/useLibrarySpecificDateBookInfo";
 
 
 
@@ -55,9 +56,10 @@ function formatFocusMinutes(totalFocusMin: number) {
 export default function LibraryPage() {
     const [selectedView, setSelectedView] = useState<"focus" | "book">("focus");
     const [isModalOpen, setIsModalOpen] = useState(false); 
-    const [selectedDate, setSelectedDate] = useState<string | null>(null);
+    const [selectedDate, setSelectedDate] = useState<string | "">("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isBannerOpen, setIsBannerOpen] = useState(true);
+    const [cursor, setCursor] = useState(0);
 
     const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
     const { data: libraryBookGoalData } = useLibraryBookGoal();
@@ -99,8 +101,13 @@ export default function LibraryPage() {
     const handleSelectFocusDate = (date: string) => {
         setSelectedDate(date);
         setIsModalOpen(true);
+        setCursor(0);
       };
-    
+
+    const {
+        data: specificDateBookInfo
+    } = useLibrarySpecificDateBookInfo(
+        isModalOpen, selectedDate, cursor);
 
     const { data: libraryRecentBookInfoData } = useLibraryRecentBookInfo();
     const bookId = libraryRecentBookInfoData?.bookId ?? 0;
@@ -148,7 +155,9 @@ export default function LibraryPage() {
         : isFocusMonthlyError
             ? "포커스 시간을 불러오지 못했어요."
             : formatFocusMinutes(totalFocusMin);
-
+    
+    const modalItems =
+        specificDateBookInfo?.items ?? MOCK_SPECIFIC_DATE_BOOK_ITEMS;
 
     return (
         <div className="relative flex flex-col w-full">
@@ -296,6 +305,7 @@ export default function LibraryPage() {
                 open={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 selectedDate={selectedDate}
+                items={modalItems}
             />
         </div>
     );

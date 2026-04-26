@@ -3,25 +3,29 @@ import TopNavigation from "../../../components/navigation/topnavigation/TopNavig
 import close from "../../../assets/icons/close.svg";
 import BookList from "../../../components/content/card/Book/List";
 import { createPortal } from "react-dom";
+import type { SpecificDateBookItem } from "../../../types/libraryInfo/library";
 
 interface DateFocusBookModalProps {
   open: boolean;
   onClose: () => void;
   selectedDate?: string | null;
+  items: SpecificDateBookItem[];
 }
 
 function formatDateLabel(date?: string | null) {
   if (!date) return "";
-  const parsed = new Date(date);
-  if (Number.isNaN(parsed.getTime())) return date;
 
-  return `${parsed.getMonth() + 1}월 ${parsed.getDate()}일`;
+  const [year, month, day] = date.split("-");
+  if (!year || !month || !day) return date;
+
+  return `${Number(month)}월 ${Number(day)}일`;
 }
 
 export default function DateFocusBookModal({
   open,
   onClose,
   selectedDate,
+  items,
 }: DateFocusBookModalProps) {
   if (!open) return null;
 
@@ -31,13 +35,11 @@ export default function DateFocusBookModal({
       onClick={onClose}
     >
       <div
-        className="min-w-[375px] rounded-t-[16px] bg-gray-15 pt-4 pb-8 px-4"
+        className="min-w-[375px] rounded-t-[16px] bg-gray-15 px-4 pt-4 pb-8"
         onClick={(e) => e.stopPropagation()}
       >
         <TopNavigation
-          left={
-            <div className="w-10 h-10" />
-          }
+          left={<div className="w-10 h-10" />}
           center={
             <label className="text-label-18-rb text-gray-90">
               {formatDateLabel(selectedDate)}
@@ -53,13 +55,26 @@ export default function DateFocusBookModal({
         />
 
         <div className="pt-4">
-          <BookList
-            imageUrl="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop"
-            title="[국내도서] 혼모노"
-            author="성해나"
-            type="READINGORDONE"
-            typeLabel="01:00:00"
-          />
+          {items.length === 0 ? (
+            <div className="py-6 text-center text-gray-60">
+              해당 날짜의 기록이 없습니다.
+            </div>
+          ) : (
+            <div className="max-h-105.5 overflow-y-auto pr-1 scrollbar-hide">
+              <div className="flex flex-col">
+                {items.map((item, index) => (
+                  <BookList
+                    key={`${item.bookId}-${index}`}
+                    imageUrl={item.coverUrl}
+                    title={item.title}
+                    author={item.author}
+                    type="READINGORDONE"
+                    typeLabel={item.focusTime}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>,

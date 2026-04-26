@@ -1,7 +1,7 @@
 import { api } from "./axios";
 import type BaseApiResponse from "../types/BaseApiResponse";
 
-import type  {
+import type {
    LibraryBook,
    LibraryBookGoal,
    LibraryDateFocus,
@@ -12,6 +12,7 @@ import type  {
    LibraryBooksMonthly,
    DateToggleYear,
    RecentBookInfo,
+   SpecificDateBookInfo,
 } from "../types/libraryInfo/library";
 
 const LIBRARY_BASE = "/api/v1/library";
@@ -123,4 +124,14 @@ export function getDateToggleYear() {
 //recetn book info get function
 export function getRecentBookInfo() {
   return libraryGet<RecentBookInfo>("/recent-focus");
+}
+
+export function getLibrarySpecificBookInfo(params: {
+  date: string,
+  cursor: number,
+}) :Promise<SpecificDateBookInfo> {
+  return libraryGet<SpecificDateBookInfo>("focus-records", {
+    date: params.date,
+    cursro: params.cursor,
+  })
 }

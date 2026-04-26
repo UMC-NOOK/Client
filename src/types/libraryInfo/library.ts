@@ -113,6 +113,20 @@ export type RecentBookInfo = {
     focusTime : string;
 }
 
+//해당 날짜의 item 책 정보
+export type DateBookInfo = {
+    bookId : number;
+    title : string;
+    author : string;
+    foucstTime : string;
+    coverUrl : string;
+};
+
+//해당 날짜의 repsonse
+export type SpecificDateBookInfo = {
+    items : DateBookInfo[];
+} & CursorPage;
+
 export type LibraryBookNumResponse = BaseApiResponse<LibraryBook>; // 서재 전체 도수 조회
 export type LibraryBookGoalResponse = BaseApiResponse<LibraryBookGoal>; //서재 목표 조회
 
@@ -141,3 +155,6 @@ export type LibraryDateToggleYearResponse = BaseApiResponse<DateToggleYear>;
 
 //최근 도서 정보 듸우기
 export type LibraryRecentBookInfoResponse = BaseApiResponse<RecentBookInfo>;
+
+//해당 날짜에 읽은 책 
+export type LibrarySpecificDateBookInfo = BaseApiResponse<SpecificDateBookInfo>;
