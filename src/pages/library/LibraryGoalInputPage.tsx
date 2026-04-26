@@ -64,10 +64,11 @@ export default function LibraryGoalInputPage() {
                     onClickRight={handleComplete}
                     right={
                         <Text
-                            text="완료"
                             size="18"
                             active={/^\d+$/.test(goalCount.trim())}
-                        />
+                        >
+                            완료
+                        </Text>
                     }
                 />
             </div>
