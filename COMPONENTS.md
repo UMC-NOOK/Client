@@ -340,7 +340,6 @@ const [birth, setBirth] = useState({
 />
 ```
 
-
 ## 4. Section
 
 > - **Design**:
@@ -354,29 +353,28 @@ const [birth, setBirth] = useState({
 
 #### Props
 
-| Name              | Type         | Required | Default | Note              |
-| :---------------- | :----------- | :------: | :------ | :------------     |
-| `initialYear`     | `number`     |    X     | 2026    | 초기 년도           |
-| `initialMonth`    | `number`     |    O     | -       | 초기 월             |  
-| `startYear`       | `number`     |    O     | -       | 나타낼 시작 연도      |
-| `endYear`         | `number`     |    O     | -       | 나타낼 마지막 연도    |
-| `onApply`         | `(value: { year: number; month: number; yearMonth: string }) => void`            |    O     | -       | 적용 버튼에 대한 함수|
+| Name           | Type                                                                  | Required | Default | Note                  |
+| :------------- | :-------------------------------------------------------------------- | :------: | :------ | :-------------------- |
+| `initialYear`  | `number`                                                              |    X     | 2026    | 초기 년도             |
+| `initialMonth` | `number`                                                              |    O     | -       | 초기 월               |
+| `startYear`    | `number`                                                              |    O     | -       | 나타낼 시작 연도      |
+| `endYear`      | `number`                                                              |    O     | -       | 나타낼 마지막 연도    |
+| `onApply`      | `(value: { year: number; month: number; yearMonth: string }) => void` |    O     | -       | 적용 버튼에 대한 함수 |
 
 #### Usage
 
 ```tsx
- <DropDown
-          initialYear={2026}
-          initialMonth={11}
-          startYear={2025}
-          endYear={2026}
-          onApply={(value) => {
-            setAppliedValue(value);
-            console.log("적용된 값:", value);
-          }}
-  />
+<DropDown
+  initialYear={2026}
+  initialMonth={11}
+  startYear={2025}
+  endYear={2026}
+  onApply={(value) => {
+    setAppliedValue(value);
+    console.log("적용된 값:", value);
+  }}
+/>
 ```
-
 
 ### [ Checkbox ]
 
@@ -386,18 +384,15 @@ const [birth, setBirth] = useState({
 
 #### Props
 
-| Name        | Type         | Required | Default | Note              |
-| :--------   | :----------- | :------: | :------ | :------------     |
-| `text`      | `string`     |    O     | -       | 체크박스 내용         |
+| Name   | Type     | Required | Default | Note          |
+| :----- | :------- | :------: | :------ | :------------ |
+| `text` | `string` |    O     | -       | 체크박스 내용 |
 
 #### Usage
 
 ```tsx
-<Checkbox text="이거어디까지길어지는지한번ㅁ만실행해보고싶은데가능할까여?"/>
-
+<Checkbox text="이거어디까지길어지는지한번ㅁ만실행해보고싶은데가능할까여?" />
 ```
-
-
 
 ## 5. Action
 
@@ -810,9 +805,9 @@ const options = [
 
 #### Props
 
-| Name    | Type    | Required | Default | Note |
-| :------ | :------ | :------: | :------ | :--- |
-| current | boolean |     O    | `false` | 현재 indx 유무 |
+| Name    | Type    | Required | Default | Note           |
+| :------ | :------ | :------: | :------ | :------------- |
+| current | boolean |    O     | `false` | 현재 indx 유무 |
 
 #### Usage
 
@@ -831,17 +826,16 @@ const options = [
 
 #### Props
 
-| Name  | Type    | Required | Default | Note |
-| :---- | :------ | :------: | :------ | :--- |
-| cur   | number  |     O    | -       | 현재 indx  |
-| total | number  |     O    | -       | 전체 indx 개수 |
+| Name  | Type   | Required | Default | Note           |
+| :---- | :----- | :------: | :------ | :------------- |
+| cur   | number |    O     | -       | 현재 indx      |
+| total | number |    O     | -       | 전체 indx 개수 |
 
 #### Usage
 
 ```tsx
 <PageIndicator cur={0} total={4} />
 ```
-
 
 ## 7. Content
 
@@ -942,6 +936,7 @@ const MOCK_RANKS = [
 ```tsx
 <ResourceDate topText="01.12" bottomText="2026" />
 ```
+
 ### [ Book Goal ]
 
 #### Path
@@ -1405,11 +1400,11 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name          | Type         | Required  | Default | Note    |
-| :------------ | :----------- | :-------: | :------ | :------ |
-| text          | `string`     |     O     |   -     |   텍스트    |
-| buttonText    | `string`     |     X     |   -     |  버튼 이름  |
-| onButtonClick | `() => void` |     X     |   -     |  버튼 클릭 함수  |
+| Name          | Type         | Required | Default | Note           |
+| :------------ | :----------- | :------: | :------ | :------------- |
+| text          | `string`     |    O     | -       | 텍스트         |
+| buttonText    | `string`     |    X     | -       | 버튼 이름      |
+| onButtonClick | `() => void` |    X     | -       | 버튼 클릭 함수 |
 
 #### Usage
 
@@ -1431,12 +1426,12 @@ const MOCK_RANKS = [
 
 #### Props
 
-| Name      | Type         | Required  | Default | Note    |
-| :-------- | :----------- | :-------: | :------ | :------ |
-| active    | `boolean`    |     X     | `true`  |   활성화 유무    |
-| imageUrl  | `string`     |     O     |   -     |  이미지 url  |
-| name      | `string`     |     O     |   -     |  이름  |
-| time      | `string`     |     O     |   -     |  시간  |
+| Name     | Type      | Required | Default | Note        |
+| :------- | :-------- | :------: | :------ | :---------- |
+| active   | `boolean` |    X     | `true`  | 활성화 유무 |
+| imageUrl | `string`  |    O     | -       | 이미지 url  |
+| name     | `string`  |    O     | -       | 이름        |
+| time     | `string`  |    O     | -       | 시간        |
 
 #### Usage
 
@@ -1458,6 +1453,7 @@ const MOCK_RANKS = [
 ---
 
 ## 8. Feedback
+
 > - **Design**: https://www.figma.com/design/VX3WcpitSSgsYxFoXlbgcA/NOOK-UI--%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9A%A9-?node-id=1268-9814&m=dev
 > - **Author**: 오은진
 
