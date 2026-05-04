@@ -36,7 +36,7 @@ export default function ReportList({
           </div>
         }
         bottom={
-          <p className="w-full min-w-0 whitespace-pre-wrap break-words text-gray-80">
+          <p className="w-full min-w-0 whitespace-pre-wrap break-words text-gray-80 text-body-12-r ">
             {review}
           </p>
         }
