@@ -1,5 +1,6 @@
 // libraries
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // components
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
 import Report from "../../components/content/card/Book/List/Report";
@@ -7,16 +8,18 @@ import BottomSheet from "../../components/presentation/modal/bottomsheet/Origin"
 import ContainerText from "../../components/action/Button/ContainerText";
 // assets
 import plus from "../../assets/icons/plus.svg";
+//types
+import type { SortOption } from "../../types/report/sortOption.type";
+
+// hooks
+import { useGetReportCount } from "../../hooks/queries/report/useGetReportCount";
 
 export default function ReportPage() {
-  type SortOption =
-    | "RECENT_RECORDED"
-    | "OLDEST_RECORDED"
-    | "RECORD_COUNT_ASC"
-    | "RECORD_COUNT_DESC";
+  const navigate = useNavigate();
 
   const [showSortSheet, setShowSortSheet] = useState(false);
   const [sortOption, setSortOption] = useState<SortOption>("RECENT_RECORDED");
+
   const options: { label: string; value: SortOption }[] = [
     { label: "최신 기록 순", value: "RECENT_RECORDED" },
     { label: "오래된 기록 순", value: "OLDEST_RECORDED" },
@@ -26,6 +29,9 @@ export default function ReportPage() {
 
   // 개발용 상태
   const [hasReport, setHasReport] = useState(true);
+
+  // hooks 호출
+  const { data: recordCount } = useGetReportCount();
 
   const data = {
     items: [
@@ -56,14 +62,27 @@ export default function ReportPage() {
     <div className="flex flex-col gap-2">
       {/* header */}
       <div className="flex items-start justify-between mt-6">
-        <div className="flex flex-col">
-          <p className="text-title-20-b text-gray-90">독서 기록</p>
-          <p className="text-body-14-m text-gray-50">98개의 기록을 남겼어요.</p>
-        </div>
-        <div className="cursor-pointer p-2 w-auto h-auto">
+        <SectionHeader
+          size="20"
+          top="독서 기록"
+          bottom={
+            recordCount === 0 ? (
+              <p className="text-body-14-m text-gray-50">남긴 기록이 없어요.</p>
+            ) : (
+              <p className="text-body-14-m text-gray-50">
+                {recordCount}개의 기록을 남겼어요.
+              </p>
+            )
+          }
+        />
+        <div
+          className="cursor-pointer p-2 w-auto h-auto"
+          onClick={() => navigate("/report/search")}
+        >
           <img src={plus} alt="plus" />
         </div>
       </div>
+
       {/* content */}
       <div className="flex flex-col gap-4">
         <div className="self-end m-2">

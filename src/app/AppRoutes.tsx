@@ -12,7 +12,7 @@ import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
 
 //import LibraryMobilePage from "../pages/search/LibraryMobilePage";
 import FocusMobilePage from "../pages/search/FocusMobilePage";
-import RecordMobilePage from "../pages/search/RecordMobilePage";
+// import RecordMobilePage from "../pages/search/RecordMobilePage";
 import GroupMobilePage from "../pages/search/GroupMobilePage";
 import SearchPage from "../pages/search/SearchPage";
 
@@ -27,6 +27,7 @@ import BookInfoPage from "../pages/bookInfo/BookInfoPage";
 import AllHistoryPage from "../pages/bookInfo/AllHistoryPage";
 
 import ReportPage from "../pages/report/ReportPage";
+import ReportSearchPage from "../pages/report/ReportSearchPage";
 
 import DevLoginButton from "../components/dev/DevLoginButton";
 
@@ -146,6 +147,8 @@ export default function AppRoutes() {
             <Route path="/library/123" element={<BookInfoPage />} />
             <Route path="/library/123/history" element={<AllHistoryPage />} />
           </Route>
+
+          <Route path="/report/search" element={<ReportSearchPage />} />
         </Route>
       </Route>
     </Routes>

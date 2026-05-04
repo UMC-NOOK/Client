@@ -1,11 +1,11 @@
 import { api } from "./axios";
 
 import type { BaseApiResponse } from "../types/index.type";
+import type { RecordCountResponse } from "../types/report/recordCount.type";
 import type {
-  RecordCountResponse,
   RecordRequest,
   RecordResponse,
-} from "../types/report/recordCount.type";
+} from "../types/report/record.type";
 
 const RECORDS_ENDPOINT = "/api/v1/records";
 
