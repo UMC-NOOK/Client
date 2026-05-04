@@ -572,18 +572,20 @@ const [isActive, setIsActive] = useState(false);
 
 #### Props
 
-| Name            | Type                                                         |   Required    | Default     | Note                        |
-| :-------------- | :----------------------------------------------------------- | :-----------: | :---------- | :-------------------------- | ------------- | ---------------- | --- | --- | ---------- |
-| `size`          | `string => "s" or "m"`                                       |       O       | -           | chip의 사이즈               |
-| `emoji`         | `string`                                                     |       O       | -           | emoji 문자                  |
-| `text`          | `string`                                                     |       X       | -           | emoji 옆 텍스트             |
-| `variant`       | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |       X       | `"default"` | 탭 스타일 variant           |
-| `active`        | `boolean`                                                    |       O       | `"true"`    | chip의 비활성화/활성화 여부 |
-| Name            | Type                                                         |   Required    | Default     | Note                        |
-| :-------------- | :---------------------------------                           |   :------:    | :---------- | :--------------             |
-| `size`          | `string => "s" or "m"`                                       |       O       | -           | chip의 사이즈               |
-| `emojiKey`      | `"Fun"                                                       | "EMPATHIZING" | "USEFUL"    | "SAD"                       | "COMPLICATED" | "UNCOMFORTABLE"` | O   | -   | emoji 종류 |
-| `active`        | `boolean`                                                    |       O       | `"false"`   | chip의 비활성화/활성화 여부 |
+| Name      | Type                                                         | Required | Default     | Note                        |
+| :-------- | :----------------------------------------------------------- | :------: | :---------- | :-------------------------- |
+| `size`    | `string => "s" or "m"`                                       |    O     | -           | chip의 사이즈               |
+| `emoji`   | `string`                                                     |    O     | -           | emoji 문자                  |
+| `text`    | `string`                                                     |    X     | -           | emoji 옆 텍스트             |
+| `variant` | `"yellow" \| "pink" \| "green" \| "blue" \| "red" \| "none"` |    X     | `"default"` | 탭 스타일 variant           |
+| `active`  | `boolean`                                                    |    O     | `"true"`    | chip의 비활성화/활성화 여부 |
+
+| Name       | Type                   |                                Required                                 | Default   | Note                        |
+| :--------- | :--------------------- | :---------------------------------------------------------------------: | :-------- | :-------------------------- | ---------- |
+| `size`     | `string => "s" or "m"` |                                    O                                    | -         | chip의 사이즈               |
+| `emojiKey` | `"Fun"                 | "EMPATHIZING" \| "USEFUL" \| "SAD" \| "COMPLICATED" \| "UNCOMFORTABLE"` | O         | -                           | emoji 종류 |
+| `active`   | `boolean`              |                                    O                                    | `"false"` | chip의 비활성화/활성화 여부 |
+| `onClick`  | `void`                 |                                    X                                    | -         | emotion 클릭시 실행할 함수  |
 
 #### Usage
 

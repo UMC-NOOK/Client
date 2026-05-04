@@ -6,7 +6,8 @@ export type EmotionKey =
   | "USEFUL"
   | "SAD"
   | "COMPLICATED"
-  | "UNCOMFORTABLE";
+  | "UNCOMFORTABLE"
+  | null;
 
 type EmotionMeta = {
   variant: Variant;
@@ -14,7 +15,7 @@ type EmotionMeta = {
   text: string;
 };
 
-const emotionMetaMap: Record<EmotionKey, EmotionMeta> = {
+const emotionMetaMap: Record<Exclude<EmotionKey, null>, EmotionMeta> = {
   FUN: {
     variant: "yellow",
     emoji: "(^_^)",
@@ -51,6 +52,7 @@ type BaseProps = {
   active: boolean; // default: true (활성)
   size: Size;
   emojiKey: EmotionKey; // default: "yellow"
+  onClick?: () => void;
 };
 
 const base = "flex w-fit justify-center items-center select-none";
@@ -75,7 +77,22 @@ const sizeStyleMap: Record<Size, { emoji: string; text: string }> = {
   m: { emoji: "text-label-14-sb", text: "text-label-12-sb" }, // m 사이즈일 때 emoji는 16px, text는 14px
 };
 
-export default function Emotion({ active = false, size, emojiKey }: BaseProps) {
+export default function Emotion({
+  active = false,
+  size,
+  emojiKey,
+  onClick,
+}: BaseProps) {
+  if (emojiKey === null) {
+    // render empty/inactive when no emotion is provided
+    const inactive = variantColorClassMap["none"];
+    if (size === "s") {
+      return (
+        <span className={[base, sizeClassMap.s, inactive].join(" ")}></span>
+      );
+    }
+    return <span className={[base, sizeClassMap.m].join(" ")}></span>;
+  }
   const emojiMeta = emotionMetaMap[emojiKey];
   const emojiFeature = emotionMetaMap[emojiKey].emoji;
   const color = variantColorClassMap[emojiMeta.variant];
@@ -94,7 +111,7 @@ export default function Emotion({ active = false, size, emojiKey }: BaseProps) {
   }
 
   return (
-    <span className={[base, sizeClassMap.m].join(" ")}>
+    <span className={[base, sizeClassMap.m].join(" ")} onClick={onClick}>
       <span className={`${emoji} ${active ? color : inactive}`}>
         {emojiFeature}
       </span>
