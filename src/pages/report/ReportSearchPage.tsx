@@ -23,7 +23,8 @@ export default function ReportSearchPage() {
   const navigate = useNavigate();
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [submittedQuery, setSubmittedQuery] = useState("");
+  // const [submittedQuery, setSubmittedQuery] = useState("");
+  const [, setSubmittedQuery] = useState("");
   const [showSortSheet, setShowSortSheet] = useState(false);
   const [recent, setRecent] = useState<RecentKeyword[]>([]);
   const [sortOption, setSortOption] = useState<SortOption>("RECENT_RECORDED");
