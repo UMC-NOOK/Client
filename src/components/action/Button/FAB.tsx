@@ -6,7 +6,7 @@ type Props = {
   className?: string;
 };
 
-export function FAB({ icon, onClick, className }: Props) {
+export default function FAB({ icon, onClick, className }: Props) {
   const clickable = Boolean(onClick);
 
   return (
