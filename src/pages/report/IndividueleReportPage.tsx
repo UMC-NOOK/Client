@@ -82,7 +82,7 @@ export default function IndividueleReportPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-start w-full h-dvh overflow-hidden gap-4 relative">
+    <div className="flex flex-col items-center justify-start w-full h-dvh overflow-y-hidden gap-4 relative">
       <TopNavigation
         left={<img src={chevron_left} alt="back" />}
         onClickLeft={() => navigate(-1)}
@@ -111,6 +111,11 @@ export default function IndividueleReportPage() {
             emojiKey={record.emotion as emotion | null}
             review={record.content}
             images={record.imageUrl}
+            onClick={() =>
+              navigate(`/report/${id}/${record.recordId}`, {
+                state: { bookTitle, record },
+              })
+            }
           />
         ))}
       </div>

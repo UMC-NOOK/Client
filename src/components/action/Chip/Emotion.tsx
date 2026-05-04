@@ -18,7 +18,7 @@ const emotionMetaMap: Record<EmotionKey, EmotionMeta> = {
   FUN: {
     variant: "yellow",
     emoji: "(^_^)",
-    text: "재미있어요",
+    text: "재밌어요",
   },
   EMPATHIZING: {
     variant: "pink",
