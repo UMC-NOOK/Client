@@ -9,6 +9,7 @@ import EmptyState from "../../components/content/EmptyState/EmptyState";
 import FAB from "../../components/action/Button/FAB";
 // api
 import { useGetIndividueleRecords } from "../../hooks/queries/report/useGetIndividueleRecords";
+import { useGetEmotions } from "../../hooks/queries/report/useGetEmotions";
 // types
 import type { EmotionKey } from "../../types/report/emotions.type";
 import type { EmotionKey as emotion } from "../../components/action/Chip/Emotion";
@@ -21,42 +22,6 @@ export default function IndividueleReportPage() {
   const bookTitle = history.state?.usr?.bookTitle || "책 제목 없음";
   const navigate = useNavigate();
 
-  const emotionMetaMap: Record<EmotionKey, { text: string; count: number }> = {
-    ALL: {
-      text: "전체",
-      count: 6,
-    },
-    FUN: {
-      text: "재밌어요",
-      count: 2,
-    },
-    EMPATHIZING: {
-      text: "공감돼요",
-      count: 0,
-    },
-
-    USEFUL: {
-      text: "유익해요",
-      count: 0,
-    },
-    SAD: {
-      text: "슬퍼요",
-      count: 0,
-    },
-    UNCOMFORTABLE: {
-      text: "불편해요",
-      count: 3,
-    },
-    COMPLICATED: {
-      text: "복잡해요",
-      count: 1,
-    },
-    EMPTY: {
-      text: "선택없음",
-      count: 0,
-    },
-  };
-
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey>("ALL");
 
   const { data: recordsData } = useGetIndividueleRecords(
@@ -64,6 +29,57 @@ export default function IndividueleReportPage() {
     undefined,
     selectedEmotion,
   );
+  const { data: emotionsData } = useGetEmotions(parseInt(id || "0", 10));
+
+  const emotionMetaMap: Record<EmotionKey, { text: string; count: number }> = {
+    ALL: {
+      text: "전체",
+      count: emotionsData?.totalCount || 0,
+    },
+    FUN: {
+      text: "재밌어요",
+      count:
+        emotionsData?.emotionCounts.find((e) => e.emotion === "FUN")
+          ?.recordCount || 0,
+    },
+    EMPATHIZING: {
+      text: "공감돼요",
+      count:
+        emotionsData?.emotionCounts.find((e) => e.emotion === "EMPATHIZING")
+          ?.recordCount || 0,
+    },
+
+    USEFUL: {
+      text: "유익해요",
+      count:
+        emotionsData?.emotionCounts.find((e) => e.emotion === "USEFUL")
+          ?.recordCount || 0,
+    },
+    SAD: {
+      text: "슬퍼요",
+      count:
+        emotionsData?.emotionCounts.find((e) => e.emotion === "SAD")
+          ?.recordCount || 0,
+    },
+    UNCOMFORTABLE: {
+      text: "불편해요",
+      count:
+        emotionsData?.emotionCounts.find((e) => e.emotion === "UNCOMFORTABLE")
+          ?.recordCount || 0,
+    },
+    COMPLICATED: {
+      text: "복잡해요",
+      count:
+        emotionsData?.emotionCounts.find((e) => e.emotion === "COMPLICATED")
+          ?.recordCount || 0,
+    },
+    EMPTY: {
+      text: "선택없음",
+      count:
+        emotionsData?.emotionCounts.find((e) => e.emotion === "EMPTY")
+          ?.recordCount || 0,
+    },
+  };
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-dvh overflow-hidden gap-4 relative">

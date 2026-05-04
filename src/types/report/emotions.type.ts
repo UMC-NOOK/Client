@@ -5,7 +5,7 @@ export interface EmotionResponse {
 
 interface EmotionCount {
   emotion: EmotionKey;
-  count: number;
+  recordCount: number;
 }
 
 export type EmotionKey =
