@@ -2,7 +2,7 @@ import type { SortOption } from "./sortOption.type";
 
 export interface RecordRequest {
   cursor?: string;
-  size?: number;
+  size?: string;
   order?: SortOption;
 }
 

@@ -66,7 +66,7 @@ export default function IndividueleReportPage() {
   );
 
   return (
-    <div className="flex flex-col items-center justify-start w-full h-[100dvh] overflow-hidden gap-4 relative">
+    <div className="flex flex-col items-center justify-start w-full h-dvh overflow-hidden gap-4 relative">
       <TopNavigation
         left={<img src={chevron_left} alt="back" />}
         onClickLeft={() => navigate(-1)}

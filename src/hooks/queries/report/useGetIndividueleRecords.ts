@@ -1,7 +1,9 @@
-import { getIndividueleRecords } from "../../../api/record";
+// import { getIndividueleRecords } from "../../../api/record";
+
 import { useQuery } from "@tanstack/react-query";
 import type { EmotionKey } from "../../../types/report/emotions.type";
 
+// 개발용
 import type { IndividueleRecordResponse } from "../../../types/report/individueleRecord.type";
 
 export function useGetIndividueleRecords(
@@ -12,10 +14,11 @@ export function useGetIndividueleRecords(
   return useQuery({
     queryKey: ["individueleRecords", bookId, size, emotion],
     // queryFn: () => getIndividueleRecords(bookId, size, emotion),
-    queryFn: () => getMockIndividueleRecords(bookId, size, emotion), // 임시
+    queryFn: () => getMockIndividueleRecords(bookId, size, emotion), // 개발용
   });
 }
 
+// 개발용
 const dummyRecords: IndividueleRecordResponse["items"] = [
   {
     recordId: 31,
@@ -84,13 +87,15 @@ const dummyRecords: IndividueleRecordResponse["items"] = [
   // },
 ];
 
-// 임시
 const getMockIndividueleRecords = async (
   bookId: number,
   size?: string,
   emotion?: EmotionKey,
 ): Promise<IndividueleRecordResponse> => {
   return new Promise((resolve) => {
+    console.log(
+      `Fetching records for bookId=${bookId}, size=${size}, emotion=${emotion}`,
+    );
     setTimeout(() => {
       // 1. 감정(emotion) 필터링: 값이 지정되어 있고 "ALL"이 아닐 때만 필터링
       let filteredItems = dummyRecords;

@@ -13,6 +13,7 @@ import type { SortOption } from "../../types/report/sortOption.type";
 
 // hooks
 import { useGetReportCount } from "../../hooks/queries/report/useGetReportCount";
+import { useGetReport } from "../../hooks/queries/report/useGetReort";
 
 export default function ReportPage() {
   const navigate = useNavigate();
@@ -32,31 +33,7 @@ export default function ReportPage() {
 
   // hooks 호출
   const { data: recordCount } = useGetReportCount();
-
-  const data = {
-    items: [
-      {
-        bookId: 101,
-        title: "작별하지 않는다",
-        author: "한강",
-        recordContent: "가장 오래 남았던 문장을 기록한 독서 메모입니다.",
-        coverImageUrl:
-          "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FA63nA%2FbtsFqKitYc4%2FAAAAAAAAAAAAAAAAAAAAAKUGtE-rV1MNFhMn5XNnw1bxEgBggGOxwdRzsu3XHcdD%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1777561199%26allow_ip%3D%26allow_referer%3D%26signature%3Ds3s6yuo6E8Qa4sVG%252FjRIQEV12jA%253D",
-        recordCount: 4,
-      },
-      {
-        bookId: 99,
-        title: "소년이 온다",
-        author: "한강",
-        recordContent: "감정이 크게 남은 부분을 짧게 정리한 기록입니다.",
-        coverImageUrl:
-          "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbPz6QM%2FbtsFm0GA4WY%2FAAAAAAAAAAAAAAAAAAAAADt7715qbAHxp6NPPLfY-0Z9m3jPraCk2sDQrSAblEhK%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1777561199%26allow_ip%3D%26allow_referer%3D%26signature%3DE6ifvpq2kHb2bLJwKR2Ofrv2Bzc%253D",
-        recordCount: 2,
-      },
-    ],
-    nextCursor: "fDk5fDIwMjYtMDQtMDFUMDk6MzA",
-    hasNext: true,
-  };
+  const { data: recordData } = useGetReport("10", sortOption);
 
   return (
     <div className="flex flex-col gap-2">
@@ -100,7 +77,7 @@ export default function ReportPage() {
           onClick={() => setHasReport(!hasReport)}
         >
           {hasReport ? (
-            data.items.map((item) => (
+            recordData?.items.map((item) => (
               <Report
                 key={item.bookId}
                 {...item}

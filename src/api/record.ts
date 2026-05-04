@@ -6,11 +6,11 @@ import type {
   RecordRequest,
   RecordResponse,
 } from "../types/report/record.type";
+import type { EmotionResponse } from "../types/report/emotions.type";
 import type {
-  EmotionResponse,
-  EmotionKey,
-} from "../types/report/emotions.type";
-import type { IndividueleRecordResponse } from "../types/report/individueleRecord.type";
+  IndividueleRecordResponse,
+  IndividueleRecordRequest,
+} from "../types/report/individueleRecord.type";
 
 const RECORDS_ENDPOINT = "/api/v1/records";
 
@@ -41,17 +41,12 @@ export async function getEmotions(bookId: number): Promise<EmotionResponse> {
 }
 
 export async function getIndividueleRecords(
-  bookId: number,
-  size?: string,
-  emotion?: EmotionKey,
+  params: IndividueleRecordRequest,
 ): Promise<IndividueleRecordResponse> {
   const response = await api.get<BaseApiResponse<IndividueleRecordResponse>>(
-    `${RECORDS_ENDPOINT}/${bookId}`,
+    `${RECORDS_ENDPOINT}/${params.bookId}`,
     {
-      params: {
-        size,
-        emotion,
-      },
+      params,
     },
   );
   return response.data.result;
