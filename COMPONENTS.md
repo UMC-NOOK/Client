@@ -490,10 +490,11 @@ const [birth, setBirth] = useState({
 
 #### Props
 
-| Name      | Type         | Required | Default | Note                   |
-| :-------- | :----------- | :------: | :------ | :--------------------- |
-| `icon`    | `ReactNode`  |    O     | -       | 내부에 들어갈 icon svg |
-| `onClick` | `() => void` |    X     | -       | 눌럿을 때의 기능 함수  |
+| Name        | Type         | Required | Default | Note                   |
+| :---------- | :----------- | :------: | :------ | :--------------------- |
+| `icon`      | `ReactNode`  |    O     | -       | 내부에 들어갈 icon svg |
+| `onClick`   | `() => void` |    X     | -       | 눌럿을 때의 기능 함수  |
+| `className` | `string`     |    X     | -       | 스타일 추가 시 사용    |
 
 #### Usage
 
