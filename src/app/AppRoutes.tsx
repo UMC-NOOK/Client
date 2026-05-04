@@ -28,6 +28,7 @@ import AllHistoryPage from "../pages/bookInfo/AllHistoryPage";
 
 import ReportPage from "../pages/report/ReportPage";
 import ReportSearchPage from "../pages/report/ReportSearchPage";
+import IndividueleReportPage from "../pages/report/IndividueleReportPage";
 
 import DevLoginButton from "../components/dev/DevLoginButton";
 
@@ -149,6 +150,9 @@ export default function AppRoutes() {
           </Route>
 
           <Route path="/report/search" element={<ReportSearchPage />} />
+          <Route element={<NoFooterLayout />}>
+            <Route path="/report/:id" element={<IndividueleReportPage />} />
+          </Route>
         </Route>
       </Route>
     </Routes>

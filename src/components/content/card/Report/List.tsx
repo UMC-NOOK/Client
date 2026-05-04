@@ -4,7 +4,7 @@ import type { EmotionKey } from "../../../action/Chip/Emotion";
 
 type Props = {
   date: string;
-  emojiKey: EmotionKey;
+  emojiKey: EmotionKey | null;
   review: string;
   images?: string[];
   onClick?: () => void;
@@ -32,7 +32,7 @@ export default function ReportList({
         top={
           <div className="flex items-center gap-2">
             <span className="text-gray-50">{date}</span>
-            <Emotion size="s" emojiKey={emojiKey} active />
+            {emojiKey ? <Emotion size="s" emojiKey={emojiKey} active /> : null}
           </div>
         }
         bottom={

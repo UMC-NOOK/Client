@@ -109,6 +109,11 @@ export default function ReportPage() {
                 author={item.author}
                 recent={item.recordContent}
                 reviewNumber={item.recordCount}
+                onClick={() =>
+                  navigate(`/report/${item.bookId}`, {
+                    state: { bookTitle: item.title },
+                  })
+                }
               />
             ))
           ) : (

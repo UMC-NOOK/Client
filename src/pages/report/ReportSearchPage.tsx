@@ -8,6 +8,7 @@ import SectionHeader from "../../components/content/InformationText/SectionHeade
 import Report from "../../components/content/card/Book/List/Report";
 import BottomSheet from "../../components/presentation/modal/bottomsheet/Origin";
 import ContainerText from "../../components/action/Button/ContainerText";
+import EmptyState from "../../components/content/EmptyState/EmptyState";
 import RecentKeywordSection, {
   type RecentKeyword,
 } from "../../components/search/RecentKeywordSection";
@@ -142,9 +143,7 @@ export default function ReportSearchPage() {
                 />
               ))
             ) : (
-              <p className="text-body-14-sb text-gray-60 text-center mt-24">
-                작성한 기록이 없어요.
-              </p>
+              <EmptyState text="작성한 기록이 없어요." />
             )}
           </div>
         </div>
