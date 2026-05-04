@@ -55,7 +55,8 @@ type BaseProps = {
   onClick?: () => void;
 };
 
-const base = "flex w-fit justify-center items-center select-none";
+const base =
+  "flex shrink-0 whitespace-nowrap w-fit justify-center items-center select-none";
 
 const sizeClassMap: Record<Size, string> = {
   s: "p-1 h-[20px] rounded-[4px] bg-gray-20 text-label-12-sb",
