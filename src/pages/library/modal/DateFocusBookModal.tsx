@@ -3,13 +3,13 @@ import TopNavigation from "../../../components/navigation/topnavigation/TopNavig
 import close from "../../../assets/icons/close.svg";
 import BookList from "../../../components/content/card/Book/List";
 import { createPortal } from "react-dom";
-import type { SpecificDateBookInfo } from "../../../types/libraryInfo/library";
+import type { DateBookInfo } from "../../../types/libraryInfo/library";
 
 interface DateFocusBookModalProps {
   open: boolean;
   onClose: () => void;
   selectedDate?: string | null;
-  items: SpecificDateBookInfo[];
+  items: DateBookInfo[];
 }
 
 function formatDateLabel(date?: string | null) {

@@ -118,7 +118,7 @@ export type DateBookInfo = {
     bookId : number;
     title : string;
     author : string;
-    foucstTime : string;
+    focusTime : string;
     coverUrl : string;
 };
 
