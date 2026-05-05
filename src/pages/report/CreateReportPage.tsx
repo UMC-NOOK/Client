@@ -96,7 +96,8 @@ export default function CreateReportPage() {
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-dvh overflow-y-hidden gap-5 relative">
-      <div className="flex flex-col items-center justify-start w-full gap-2">
+      {/* Top Navigation */}
+      <div className="flex flex-col items-center justify-start w-full gap-2 shrink-0">
         <TopNavigation
           left={<img src={chevron_left} alt="back" />}
           onClickLeft={() => navigate(-1)}
@@ -104,7 +105,9 @@ export default function CreateReportPage() {
         />
         <Divider width="full" />
       </div>
-      <div className="flex flex-col h-[59vh] items-start justify-start w-full gap-5 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ">
+
+      {/* 💡 1. 텍스트 영역: 고정 높이(h-[59vh]) 대신 flex-1 적용 */}
+      <div className="flex flex-col flex-1 items-start justify-start w-full gap-5 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <textarea
           placeholder="기억에 남는 문장, 떠오르는 감상을 기록하세요."
           className="w-full h-full text-body-13-r text-gray-90 placeholder:text-gray-50 bg-transparent border-none outline-none focus:outline-none focus:ring-0 resize-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
@@ -112,7 +115,9 @@ export default function CreateReportPage() {
           onChange={(e) => setContent(e.target.value)}
         />
       </div>
-      <div className="flex flex-col items-start justify-start w-full gap-2 pb-26">
+
+      {/* 💡 2. 하단 UI 영역: 기존 패딩(pb-26) 유지 + shrink-0 추가 */}
+      <div className="flex flex-col items-start justify-start w-full gap-2 pb-26 shrink-0">
         <div className="flex items-start w-full overflow-x-scroll gap-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {emotionArray.map((key) => (
             <Emotion
@@ -135,7 +140,6 @@ export default function CreateReportPage() {
             style={{ display: "none" }}
             onChange={handleFileChange}
           />
-
           {/* 업로드 버튼 */}
           <div onClick={handleUploadClick} className="cursor-pointer shrink-0">
             <Image type="Upload" />
@@ -163,11 +167,16 @@ export default function CreateReportPage() {
           )}
         </div>
       </div>
-      <Toast
-        key={`toast-${toastKey}`}
-        text="사진은 최대 5장까지 첨부할 수 있어요."
-        isOpen={isToastOpen}
-      />
+
+      {/* 💡 3. Toast 분리 및 z-index 고정 */}
+      <div className="absolute bottom-[100px] left-0 w-full flex justify-center z-[100]">
+        <Toast
+          key={`toast-${toastKey}`}
+          text="사진은 최대 5장까지 첨부할 수 있어요."
+          isOpen={isToastOpen}
+        />
+      </div>
+
       <BottomSheet
         open={true}
         onClose={() => {}}
