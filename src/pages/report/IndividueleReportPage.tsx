@@ -121,7 +121,9 @@ export default function IndividueleReportPage() {
       </div>
       <FAB
         icon={<img src={plus} alt="plus" />}
-        onClick={() => navigate(`/report/${id}/create`)}
+        onClick={() =>
+          navigate(`/report/${id}/create`, { state: { bookTitle } })
+        }
         className="absolute bottom-6 right-4 z-10"
       />
     </div>

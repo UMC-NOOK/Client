@@ -1,8 +1,6 @@
 // libraries
 import { useState } from "react";
-import {
-  useNavigate, //useParams
-} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 // components
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import Divider from "../../components/layout/Divider";
@@ -13,7 +11,7 @@ import PopupConfirmModal from "../../components/presentation/modal/popup/Origin"
 import chevron_left from "../../assets/icons/chevron_left.svg";
 
 export default function ViewReportPage() {
-  // const { id, recordId } = useParams();
+  const { id, recordId } = useParams();
   const record = history.state?.usr?.record;
   const bookTitle = history.state?.usr?.bookTitle || "책 제목 없음";
   const navigate = useNavigate();
@@ -62,7 +60,11 @@ export default function ViewReportPage() {
           onLeftClick: () => {
             setDeleteConfirmOpen(true);
           },
-          onRightClick: () => {},
+          onRightClick: () => {
+            navigate(`/report/${id}/${recordId}/edit`, {
+              state: { bookTitle, record },
+            });
+          },
         }}
       />
       {deleteConfirmOpen && (

@@ -30,6 +30,7 @@ import ReportPage from "../pages/report/ReportPage";
 import ReportSearchPage from "../pages/report/ReportSearchPage";
 import IndividueleReportPage from "../pages/report/IndividueleReportPage";
 import ViewReportPage from "../pages/report/ViewReportPage";
+import CreateReportPage from "../pages/report/CreateReportPage";
 
 import DevLoginButton from "../components/dev/DevLoginButton";
 
@@ -154,6 +155,11 @@ export default function AppRoutes() {
           <Route element={<NoFooterLayout />}>
             <Route path="/report/:id" element={<IndividueleReportPage />} />
             <Route path="/report/:id/:recordId" element={<ViewReportPage />} />
+            <Route path="/report/:id/create" element={<CreateReportPage />} />
+            <Route
+              path="/report/:id/:recordId/edit"
+              element={<CreateReportPage />}
+            />
           </Route>
         </Route>
       </Route>
