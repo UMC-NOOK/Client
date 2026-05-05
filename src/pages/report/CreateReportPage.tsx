@@ -17,11 +17,23 @@ export default function CreateReportPage() {
   const navigate = useNavigate();
   const bookTitle = history.state?.usr?.bookTitle || "책 제목 없음";
 
-  const [content, setContent] = useState("");
-  const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey>(null);
+  const record = history.state?.usr?.record;
 
-  const [images, setImages] = useState<string[]>([]);
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const initialImages: string[] = record?.imgUrls || record?.imageUrl || [];
+  const imageArray = Array.isArray(initialImages)
+    ? initialImages
+    : [initialImages].filter(Boolean);
+
+  const [content, setContent] = useState(record?.content || "");
+  const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey>(
+    record?.emotion || null,
+  );
+
+  const [images, setImages] = useState<string[]>(imageArray);
+
+  const [imageFiles, setImageFiles] = useState<(File | null)[]>(
+    imageArray.map(() => null),
+  );
 
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
 
@@ -41,10 +53,8 @@ export default function CreateReportPage() {
 
   const MAX_IMAGES = 5;
 
-  // 1️⃣ 커스텀 업로드 버튼 클릭 시 숨겨진 input 강제 클릭
   const handleUploadClick = () => {
     if (images.length < MAX_IMAGES) {
-      // 5장 미만일 때만 파일 선택 창 열기
       fileInputRef.current?.click();
     } else {
       setIsToastOpen(true);
@@ -52,42 +62,33 @@ export default function CreateReportPage() {
     }
   };
 
-  // 2️⃣ 실제 파일이 선택되었을 때 실행되는 핸들러
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
 
-    // 선택된 파일들을 배열로 변환
     const selectedFiles = Array.from(files);
     const remainingSlots = MAX_IMAGES - images.length;
-
-    // 남은 슬롯만큼만 파일 자르기 (사용자가 한 번에 여러 장을 선택할 경우 대비)
     const allowedFiles = selectedFiles.slice(0, remainingSlots);
 
-    // 💡 미리보기를 위한 로컬 URL 생성 (URL.createObjectURL)
     const newImageUrls = allowedFiles.map((file) => URL.createObjectURL(file));
 
-    // 상태 업데이트
     setImages((prev) => [...prev, ...newImageUrls]);
     setImageFiles((prev) => [...prev, ...allowedFiles]);
 
-    // input 초기화 (같은 파일을 연달아 올릴 수 있도록 조치)
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
 
-    // 만약 남은 슬롯보다 더 많은 파일을 선택했다면 Toast 띄워주기
     if (selectedFiles.length > remainingSlots) {
       setIsToastOpen(true);
       setToastKey(Date.now());
     }
   };
 
-  // 이미지 삭제 핸들러 (URL과 File 객체 모두 삭제해야 함)
   const handleImageClick = (index: number) => {
     if (deleteIndex === index) {
       setImages(images.filter((_, i) => i !== index));
-      setImageFiles(imageFiles.filter((_, i) => i !== index)); // 💡 File 객체도 같이 삭제
+      setImageFiles(imageFiles.filter((_, i) => i !== index));
       setDeleteIndex(null);
     } else {
       setDeleteIndex(index);
@@ -106,7 +107,7 @@ export default function CreateReportPage() {
         <Divider width="full" />
       </div>
 
-      {/* 💡 1. 텍스트 영역: 고정 높이(h-[59vh]) 대신 flex-1 적용 */}
+      {/* 텍스트 영역 */}
       <div className="flex flex-col flex-1 items-start justify-start w-full gap-5 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <textarea
           placeholder="기억에 남는 문장, 떠오르는 감상을 기록하세요."
@@ -116,7 +117,7 @@ export default function CreateReportPage() {
         />
       </div>
 
-      {/* 💡 2. 하단 UI 영역: 기존 패딩(pb-26) 유지 + shrink-0 추가 */}
+      {/* 하단 UI 영역 */}
       <div className="flex flex-col items-start justify-start w-full gap-2 pb-26 shrink-0">
         <div className="flex items-start w-full overflow-x-scroll gap-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {emotionArray.map((key) => (
@@ -135,7 +136,7 @@ export default function CreateReportPage() {
           <input
             type="file"
             accept="image/*"
-            multiple // 여러 장 선택 허용
+            multiple
             ref={fileInputRef}
             style={{ display: "none" }}
             onChange={handleFileChange}
@@ -168,7 +169,7 @@ export default function CreateReportPage() {
         </div>
       </div>
 
-      {/* 💡 3. Toast 분리 및 z-index 고정 */}
+      {/* Toast */}
       <div className="absolute bottom-[100px] left-0 w-full flex justify-center z-[100]">
         <Toast
           key={`toast-${toastKey}`}
@@ -185,7 +186,9 @@ export default function CreateReportPage() {
           layout: "single",
           variant: `${content ? "mint" : "primaryDisabled"}`,
           label: "기록 저장하기",
-          onClick: () => {},
+          onClick: () => {
+            // imageFiles.filter(file => file !== null) 로 실제 새로 업로드된 파일만 추출 가능
+          },
         }}
       />
     </div>
