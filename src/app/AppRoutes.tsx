@@ -1,3 +1,4 @@
+// src/app/AppRoutes.tsx
 import { useEffect } from "react";
 import {
   Navigate,
@@ -10,7 +11,6 @@ import {
 import AppShell, { useShell } from "./AppShell";
 import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
 
-//import LibraryMobilePage from "../pages/search/LibraryMobilePage";
 import FocusMobilePage from "../pages/search/FocusMobilePage";
 // import RecordMobilePage from "../pages/search/RecordMobilePage";
 import GroupMobilePage from "../pages/search/GroupMobilePage";
@@ -37,6 +37,11 @@ import DevLoginButton from "../components/dev/DevLoginButton";
 import LibraryPage from "../pages/library/LibraryPage";
 import LibraryGoalInputPage from "../pages/library/LibraryGoalInputPage";
 import LibraryAllBookPage from "../pages/library/LibraryAllBookPage";
+
+import OnboardingLayout from "../pages/onboarding/OnboardingLayout";
+import OnboardingGoalPage from "../pages/onboarding/OnboardingGoalPage";
+import { OnboardingCategoryPage } from "../pages/onboarding/OnboardingCategoryPage";
+import { OnboardingProfilePage } from "../pages/onboarding/OnboardingProfilePage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -126,11 +131,13 @@ export default function AppRoutes() {
             <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
           </Route>
 
+
           {/* Main Tabs */}
           <Route element={<MainTabsLayout />}>
             <Route path="/library" element={<LibraryPage />} />
             <Route path="/focus" element={<FocusMobilePage />} />
-            <Route path="/record" element={<ReportPage />} />
+            <Route path="/record" element={<RecordMobilePage />} />
+
             <Route path="/group" element={<GroupMobilePage />} />
             <Route
               path="/test/banner-action-card"
@@ -139,17 +146,26 @@ export default function AppRoutes() {
             <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
             <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
           </Route>
-          <Route
-            path="/users/me/onboarding/goal"
-            element={<LibraryGoalInputPage />}
-          />
+
+
           <Route path="/library/status" element={<LibraryAllBookPage />} />
-          <Route path="*" element={<Navigate to="/library" replace />} />
 
           <Route element={<NoFooterLayout />}>
+            <Route path="/onboarding" element={<OnboardingLayout />}>
+              <Route
+                index
+                element={<Navigate to="/onboarding/goal" replace />}
+              />
+              <Route path="goal" element={<OnboardingGoalPage />} />
+              <Route path="category" element={<OnboardingCategoryPage />} />
+              <Route path="profile" element={<OnboardingProfilePage />} />
+            </Route>
+
+            <Route path="/library/goal" element={<LibraryGoalInputPage />} />
             <Route path="/library/123" element={<BookInfoPage />} />
             <Route path="/library/123/history" element={<AllHistoryPage />} />
           </Route>
+
 
           <Route path="/report/search" element={<ReportSearchPage />} />
           <Route element={<NoFooterLayout />}>
@@ -161,6 +177,9 @@ export default function AppRoutes() {
               element={<CreateReportPage />}
             />
           </Route>
+
+          <Route path="*" element={<Navigate to="/library" replace />} />
+
         </Route>
       </Route>
     </Routes>
