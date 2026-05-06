@@ -1,4 +1,4 @@
-import { getEmotions } from "../../../api/record";
+// import { getEmotions } from "../../../api/record";
 import { useQuery } from "@tanstack/react-query";
 
 // 개발용
