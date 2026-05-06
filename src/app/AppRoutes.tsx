@@ -131,12 +131,11 @@ export default function AppRoutes() {
             <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
           </Route>
 
-
           {/* Main Tabs */}
           <Route element={<MainTabsLayout />}>
             <Route path="/library" element={<LibraryPage />} />
             <Route path="/focus" element={<FocusMobilePage />} />
-            <Route path="/record" element={<RecordMobilePage />} />
+            <Route path="/record" element={<ReportPage />} />
 
             <Route path="/group" element={<GroupMobilePage />} />
             <Route
@@ -146,7 +145,6 @@ export default function AppRoutes() {
             <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
             <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
           </Route>
-
 
           <Route path="/library/status" element={<LibraryAllBookPage />} />
 
@@ -166,7 +164,6 @@ export default function AppRoutes() {
             <Route path="/library/123/history" element={<AllHistoryPage />} />
           </Route>
 
-
           <Route path="/report/search" element={<ReportSearchPage />} />
           <Route element={<NoFooterLayout />}>
             <Route path="/report/:id" element={<IndividueleReportPage />} />
@@ -179,7 +176,6 @@ export default function AppRoutes() {
           </Route>
 
           <Route path="*" element={<Navigate to="/library" replace />} />
-
         </Route>
       </Route>
     </Routes>
