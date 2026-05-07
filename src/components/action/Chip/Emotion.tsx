@@ -105,7 +105,12 @@ export default function Emotion({
   if (size === "s") {
     return (
       <span
-        className={[base, sizeClassMap.s, background, active ? color : inactive].join(" ")}
+        className={[
+          base,
+          sizeClassMap.s,
+          background,
+          active ? color : inactive,
+        ].join(" ")}
       >
         <span className={emoji}>{emojiFeature}</span>
       </span>
@@ -113,9 +118,10 @@ export default function Emotion({
   }
 
   return (
-
-    <span className={[base, sizeClassMap.m, background].join(" ")}>
-
+    <span
+      className={[base, sizeClassMap.m, background].join(" ")}
+      onClick={onClick}
+    >
       <span className={`${emoji} ${active ? color : inactive}`}>
         {emojiFeature}
       </span>
