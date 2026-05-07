@@ -1,12 +1,7 @@
+import type BaseApiResponse from "../BaseApiResponse";
+
 export type FocusTimeSlotType = "FOCUS_00"| "FOCUS_01" | "FOCUS_02" | "FOCUS_03" | "FOCUS_04";
 export type BookStatusType = "BEFORE" | "READING" | "FINISHED";
-
-export interface BaseApiResponse <T> {
-    isSuccess: true;
-    code: "SUCCESS-200";
-    message: string;
-    result: T;
-};
 
 export type LibraryBook = {
     totalBookNum: number;
@@ -106,6 +101,31 @@ export type LibraryStatusBook<T extends BookStatusType> = {
     bookItems: null | [] | BookStatusItems<T>[];
 } & CursorPage;
 
+export type DateToggleYear = {
+    years: number[];
+}
+
+export type RecentBookInfo = {
+    bookId : number;
+    coverUrl : string;
+    title : string;
+    page : number;
+    focusTime : string;
+}
+
+//해당 날짜의 item 책 정보
+export type DateBookInfo = {
+    bookId : number;
+    title : string;
+    author : string;
+    focusTime : string;
+    coverUrl : string;
+};
+
+//해당 날짜의 repsonse
+export type SpecificDateBookInfo = {
+    items : DateBookInfo[];
+} & CursorPage;
 
 export type LibraryBookNumResponse = BaseApiResponse<LibraryBook>; // 서재 전체 도수 조회
 export type LibraryBookGoalResponse = BaseApiResponse<LibraryBookGoal>; //서재 목표 조회
@@ -129,3 +149,12 @@ export type LibraryStatusBooksQueryParams = {
 
 //상태별 조회
 export type LibraryStatusBookResponse<T extends BookStatusType> = BaseApiResponse<LibraryStatusBook<T>>;
+
+//날짜 적용 토글 연도
+export type LibraryDateToggleYearResponse = BaseApiResponse<DateToggleYear>;
+
+//최근 도서 정보 듸우기
+export type LibraryRecentBookInfoResponse = BaseApiResponse<RecentBookInfo>;
+
+//해당 날짜에 읽은 책 
+export type LibrarySpecificDateBookInfo = BaseApiResponse<SpecificDateBookInfo>;

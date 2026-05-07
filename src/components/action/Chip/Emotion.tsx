@@ -59,8 +59,8 @@ const base =
   "flex shrink-0 whitespace-nowrap w-fit justify-center items-center select-none";
 
 const sizeClassMap: Record<Size, string> = {
-  s: "p-1 h-[20px] rounded-[4px] bg-gray-20 text-label-12-sb",
-  m: "p-2 h-[30px] gap-2 rounded-[2px] bg-gray-30",
+  s: "p-1 h-[20px] rounded-[4px] text-label-12-sb",
+  m: "p-2 h-[30px] gap-2 rounded-[2px]",
 };
 
 const variantColorClassMap: Record<Variant, string> = {
@@ -98,13 +98,14 @@ export default function Emotion({
   const emojiFeature = emotionMetaMap[emojiKey].emoji;
   const color = variantColorClassMap[emojiMeta.variant];
   const inactive = variantColorClassMap["none"];
+  const background = active ? "bg-gray-30" : "bg-gray-20";
 
   const { emoji, text } = sizeStyleMap[size];
 
   if (size === "s") {
     return (
       <span
-        className={[base, sizeClassMap.s, active ? color : inactive].join(" ")}
+        className={[base, sizeClassMap.s, background, active ? color : inactive].join(" ")}
       >
         <span className={emoji}>{emojiFeature}</span>
       </span>
@@ -112,7 +113,9 @@ export default function Emotion({
   }
 
   return (
-    <span className={[base, sizeClassMap.m].join(" ")} onClick={onClick}>
+
+    <span className={[base, sizeClassMap.m, background].join(" ")}>
+
       <span className={`${emoji} ${active ? color : inactive}`}>
         {emojiFeature}
       </span>

@@ -1,15 +1,18 @@
 import { api } from "./axios";
+import type BaseApiResponse from "../types/BaseApiResponse";
 
 import type {
-  BaseApiResponse,
-  LibraryBook,
-  LibraryBookGoal,
-  LibraryDateFocus,
-  BookStatusType,
-  LibraryStatusBook,
-  PatchBookGoal,
-  LibraryFocusMonthly,
-  LibraryBooksMonthly,
+   LibraryBook,
+   LibraryBookGoal,
+   LibraryDateFocus,
+   BookStatusType,
+   LibraryStatusBook,
+   PatchBookGoal,
+   LibraryFocusMonthly,
+   LibraryBooksMonthly,
+   DateToggleYear,
+   RecentBookInfo,
+   SpecificDateBookInfo,
 } from "../types/libraryInfo/library";
 
 const LIBRARY_BASE = "/api/v1/library";
@@ -111,4 +114,24 @@ export function getLibraryBooksMonthly(params: {
   return libraryGet<LibraryBooksMonthly>("/stats/monthly", {
     yearMonth: params.yearMonth,
   });
+}
+
+//date 토글 연도 받아오기
+export function getDateToggleYear() {
+  return libraryGet<DateToggleYear>("/years");
+}
+
+//recetn book info get function
+export function getRecentBookInfo() {
+  return libraryGet<RecentBookInfo>("/recent-focus");
+}
+
+export function getLibrarySpecificBookInfo(params: {
+  date: string,
+  cursor: number,
+}) :Promise<SpecificDateBookInfo> {
+  return libraryGet<SpecificDateBookInfo>("focus-records", {
+    date: params.date,
+    cursro: params.cursor,
+  })
 }

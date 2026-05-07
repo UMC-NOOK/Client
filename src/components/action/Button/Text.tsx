@@ -1,7 +1,9 @@
+import type { ReactNode } from "react";
+
 type Size = "12" | "14" | "18";
 
 type Props = {
-  text: string;
+  children: ReactNode;
   size: Size;
   active?: boolean;
   onClick?: () => void;
@@ -15,8 +17,8 @@ const sizeClassMap: Record<Size, string> = {
   "18": "h-10 px-4 text-btn-18-m", 
 };
 
-export function Text({
-  text,
+export default function Text({
+  children,
   size,
   active = false,
   onClick,
@@ -35,7 +37,7 @@ export function Text({
         colorClass,
       ].join(" ")}
     >
-      {text}
+      {children}
     </span>
   );
 }
