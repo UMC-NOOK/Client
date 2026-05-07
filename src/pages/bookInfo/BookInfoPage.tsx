@@ -1,6 +1,7 @@
 // libraries
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
 // components
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import BookCover from "../../components/atomic/BookCover";
@@ -17,6 +18,8 @@ import ResourceDate from "../../components/content/list/Resource/Date";
 import chevron_left from "../../assets/icons/chevron_left.svg";
 import testBookCover from "../../assets/book-info/testBookCover.svg";
 import book_shelf from "../../assets/icons/book_shelf-gray-30.svg";
+// hooks
+import { useGetBookDetailWithISBN } from "../../hooks/queries/bookInfo/useGetBookDetailWithISBN";
 // types
 type DetailTab = "info" | "log";
 // values
@@ -25,31 +28,6 @@ const detailTabs = [
   { value: "log", label: "독서 이력" },
 ] as const;
 // data
-const bookData = {
-  isSuccess: true,
-  code: "SUCCESS-200",
-  message: "요청에 성공했습니다.",
-  result: {
-    book: {
-      isbn13: "9791162243077",
-      bookId: 101,
-      title: "이것이 자바다",
-      author: "신용권, 임경균",
-      publisher: "한빛미디어",
-      publicationDate: "2022-09-05",
-      mallType: "국내도서",
-      mallTypeCode: "BOOK",
-      category: "IT",
-      pages: 900,
-      description:
-        "자바의 정석 기초편 출간 20주년 기념판. 자바의 정석은 자바 입문서의 스테디셀러로, 2002년 출간 이후 20년 동안 꾸준히 사랑받아온 책입니다. 이번에 출간된 기념판은 자바의 최신 버전인 자바 17을 기반으로 내용을 대폭 보강하였으며, 기존의 친절한 설명과 자세한 예제는 그대로 유지하면서도 최신 트렌드와 기술을 반영하여 독자들이 자바를 더욱 쉽고 재미있게 배울 수 있도록 구성하였습니다.",
-      coverImageUrl: "https://image.aladin.co.kr/...",
-      aladinLink: "http://...",
-      sourceType: "ALADIN",
-      bookshelfId: 52,
-    },
-  },
-};
 const bookHistoryData = [
   {
     year: 2026,
@@ -120,6 +98,7 @@ const bookHistoryData = [
 ];
 
 export default function BookInfoPage() {
+  const bookISBN = useParams().isbn13;
   const navigate = useNavigate();
 
   const [selectedTab, setSelectedTab] = useState<DetailTab>("info");
@@ -130,6 +109,11 @@ export default function BookInfoPage() {
     open: false,
     message: "",
   });
+
+  const { data: bookDetailData, isLoading } = useGetBookDetailWithISBN(
+    bookISBN!,
+  );
+
   // 개발용 상태
   const [hasFocus, setHasFocus] = useState(true);
   const [hasRecord, setHasRecord] = useState(false);
@@ -171,12 +155,17 @@ export default function BookInfoPage() {
       <div className="relative">
         <div className="absolute inset-0 z-0 -mx-4 -mt-2 pointer-events-none overflow-hidden">
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[375px] h-[525px]">
-            <BookCover
-              imageUrl={testBookCover}
-              size="XL"
-              type="Image"
-              className="w-full h-full blur-[20px] opacity-50"
-            />
+            {/* 배경 흐림 커버 스켈레톤 */}
+            {isLoading ? (
+              <div className="w-full h-full bg-gray-20 animate-pulse blur-[20px] opacity-50" />
+            ) : (
+              <BookCover
+                imageUrl={bookDetailData?.coverImageUrl || testBookCover}
+                size="XL"
+                type="Image"
+                className="w-full h-full blur-[20px] opacity-50"
+              />
+            )}
             <div className="absolute inset-0 bg-black opacity-40" />
             <div className="absolute inset-0 bg-linear-to-b from-transparent to-gray-10" />
           </div>
@@ -184,17 +173,37 @@ export default function BookInfoPage() {
         <div className="relative z-10">
           <TopNavigation
             left={<img src={chevron_left} alt="back" />}
-            onClickLeft={() => window.history.back()}
+            onClickLeft={() => navigate(-1)}
           />
           <div className="flex flex-col justify-center items-center mt-10 gap-4">
-            <BookCover imageUrl={testBookCover} size="XL" type="Image" />
-            <div>
-              <p className="text-title-18-b text-gray-90 text-center">
-                {bookData.result.book.title}
-              </p>
-              <p className="text-body-14-m text-gray-80 mt-[6px] text-center">
-                {bookData.result.book.author}
-              </p>
+            {/* 메인 도서 커버 스켈레톤 */}
+            {isLoading ? (
+              <div className="w-[140px] h-[200px] bg-gray-20 animate-pulse rounded-md" />
+            ) : (
+              <BookCover
+                imageUrl={bookDetailData?.coverImageUrl || testBookCover}
+                size="XL"
+                type="Image"
+              />
+            )}
+
+            <div className="flex flex-col items-center gap-2">
+              {/* 타이틀 & 저자 스켈레톤 */}
+              {isLoading ? (
+                <>
+                  <div className="w-48 h-6 bg-gray-20 animate-pulse rounded-sm" />
+                  <div className="w-24 h-4 bg-gray-20 animate-pulse rounded-sm mt-1" />
+                </>
+              ) : (
+                <>
+                  <p className="text-title-18-b text-gray-90 text-center">
+                    {bookDetailData?.title}
+                  </p>
+                  <p className="text-body-14-m text-gray-80 text-center">
+                    {bookDetailData?.author}
+                  </p>
+                </>
+              )}
             </div>
           </div>
           <TabBar
@@ -209,35 +218,47 @@ export default function BookInfoPage() {
       {/* 하단 */}
       {selectedTab === "info" ? (
         <div className="flex flex-col justify-center items-center gap-10 mt-8">
-          <div className="grid grid-cols-2 gap-8 text-gray-90">
-            <div className="col-span-2 w-full">
-              <InformationSection
-                flow="vertical"
-                top="소개"
-                bottom={bookData.result.book.description}
-              />
-            </div>
-
-            <InformationSection
-              flow="vertical"
-              top="분야"
-              bottom={bookData.result.book.category}
-            />
-            <InformationSection
-              flow="vertical"
-              top="분량"
-              bottom={`${bookData.result.book.pages}쪽`}
-            />
-            <InformationSection
-              flow="vertical"
-              top="출판"
-              bottom={`${bookData.result.book.publisher} (${bookData.result.book.publicationDate})`}
-            />
-            <InformationSection
-              flow="vertical"
-              top="ISBN"
-              bottom={bookData.result.book.isbn13}
-            />
+          <div className="grid grid-cols-2 gap-8 text-gray-90 w-full px-4">
+            {/* 정보 섹션 스켈레톤 */}
+            {isLoading ? (
+              <>
+                <div className="col-span-2 w-full h-24 bg-gray-15 animate-pulse rounded-sm" />
+                <div className="w-full h-12 bg-gray-15 animate-pulse rounded-sm" />
+                <div className="w-full h-12 bg-gray-15 animate-pulse rounded-sm" />
+                <div className="w-full h-12 bg-gray-15 animate-pulse rounded-sm" />
+                <div className="w-full h-12 bg-gray-15 animate-pulse rounded-sm" />
+              </>
+            ) : (
+              <>
+                <div className="col-span-2 w-full">
+                  <InformationSection
+                    flow="vertical"
+                    top="소개"
+                    bottom={bookDetailData?.description}
+                  />
+                </div>
+                <InformationSection
+                  flow="vertical"
+                  top="분야"
+                  bottom={bookDetailData?.category}
+                />
+                <InformationSection
+                  flow="vertical"
+                  top="분량"
+                  bottom={`${bookDetailData?.pages}쪽`}
+                />
+                <InformationSection
+                  flow="vertical"
+                  top="출판"
+                  bottom={`${bookDetailData?.publisher} (${bookDetailData?.publicationDate})`}
+                />
+                <InformationSection
+                  flow="vertical"
+                  top="ISBN"
+                  bottom={bookDetailData?.isbn13}
+                />
+              </>
+            )}
           </div>
           <div className="flex flex-col gap-2 w-full justify-center items-center">
             {readStatus !== "unread" && (
@@ -248,17 +269,19 @@ export default function BookInfoPage() {
                 onClick={() => setReadStatus("unread")}
               />
             )}
-            <div className="flex gap-2 text-gray-50 text-label-12-sb">
-              <div>도서 DB 제공: 알라딘</div>
-              <div
-                className="underline cursor-pointer"
-                onClick={() =>
-                  window.open(bookData.result.book.aladinLink, "_blank")
-                }
-              >
-                도서 구매하기
+            {!isLoading && bookDetailData?.aladinLink && (
+              <div className="flex gap-2 text-gray-50 text-label-12-sb">
+                <div>도서 DB 제공: 알라딘</div>
+                <div
+                  className="underline cursor-pointer"
+                  onClick={() =>
+                    window.open(bookDetailData?.aladinLink!, "_blank")
+                  }
+                >
+                  도서 구매하기
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       ) : (
