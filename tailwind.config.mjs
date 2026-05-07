@@ -117,6 +117,7 @@ export default {
         "label-13-r": ["13px", { lineHeight: "1", fontWeight: "400" }],
         "label-13-b": ["13px", { lineHeight: "1", fontWeight: "700" }],
         "label-13-sb": ["13px", { lineHeight: "1", fontWeight: "600" }],
+        "label-14-rb": ["14px", { lineHeight: "1", fontWeight: "500" }],
         "label-14-sb": ["14px", { lineHeight: "1", fontWeight: "600" }],
         "label-16-sb": ["16px", { lineHeight: "1", fontWeight: "600" }],
         "label-16-b": ["16px", { lineHeight: "1", fontWeight: "700" }],

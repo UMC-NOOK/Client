@@ -34,6 +34,8 @@ import OnboardingLayout from "../pages/onboarding/OnboardingLayout";
 import OnboardingGoalPage from "../pages/onboarding/OnboardingGoalPage";
 import { OnboardingCategoryPage } from "../pages/onboarding/OnboardingCategoryPage";
 import { OnboardingProfilePage } from "../pages/onboarding/OnboardingProfilePage";
+import LoginPage from "../pages/login/LoginPage";
+import OAuthCallbackPage from "../pages/login/OAuthCallbackPage";
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -71,7 +73,7 @@ function MainTabsLayout() {
         onMenuClick={() => console.log("menu click")}
         onLogoClick={() => navigate("/library")}
       />
-      <div className="w-full max-w-85.75 mx-auto">
+      <div className="mx-auto w-full max-w-85.75">
         <Outlet />
       </div>
     </>
@@ -80,7 +82,7 @@ function MainTabsLayout() {
 
 function SearchLayout() {
   return (
-    <div className="w-full max-w-85.75 mx-auto">
+    <div className="mx-auto w-full max-w-85.75">
       <Outlet />
     </div>
   );
@@ -106,55 +108,104 @@ function AppShellLayout() {
   );
 }
 
+function RequireAuth() {
+  const accessToken = localStorage.getItem("accessToken");
+
+  if (!accessToken) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Outlet />;
+}
+
 export default function AppRoutes() {
+  const accessToken = localStorage.getItem("accessToken");
+
   return (
     <Routes>
       <Route element={<AppShell />}>
         <Route element={<AppShellLayout />}>
-          <Route path="/" element={<Navigate to="/library" replace />} />
+          <Route
+            path="/"
+            element={
+              accessToken ? (
+                <Navigate to="/library" replace />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
 
-          <Route element={<SearchLayout />}>
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/search/new" element={<SearchNewAddPage />} />
-            <Route
-              path="/search/new/category"
-              element={<SearchNewAddCategoryPage />}
-            />
-            <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
-          </Route>
-
-          <Route element={<MainTabsLayout />}>
-            <Route path="/library" element={<LibraryPage />} />
-            <Route path="/focus" element={<FocusMobilePage />} />
-            <Route path="/record" element={<RecordMobilePage />} />
-            <Route path="/group" element={<GroupMobilePage />} />
-            <Route
-              path="/test/banner-action-card"
-              element={<BannerActionCardTestPage />}
-            />
-            <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
-            <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
-          </Route>
-
-          <Route path="/library/status" element={<LibraryAllBookPage />} />
-
+          {/* public routes */}
           <Route element={<NoFooterLayout />}>
-            <Route path="/onboarding" element={<OnboardingLayout />}>
+            <Route
+              path="/login"
+              element={
+                accessToken ? (
+                  <Navigate to="/library" replace />
+                ) : (
+                  <LoginPage />
+                )
+              }
+            />
+            <Route path="/google/oauth" element={<OAuthCallbackPage />} />
+            <Route path="/kakao/callback" element={<OAuthCallbackPage />} />
+          </Route>
+
+          {/* protected routes */}
+          <Route element={<RequireAuth />}>
+            <Route element={<SearchLayout />}>
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/search/new" element={<SearchNewAddPage />} />
               <Route
-                index
-                element={<Navigate to="/onboarding/goal" replace />}
+                path="/search/new/category"
+                element={<SearchNewAddCategoryPage />}
               />
-              <Route path="goal" element={<OnboardingGoalPage />} />
-              <Route path="category" element={<OnboardingCategoryPage />} />
-              <Route path="profile" element={<OnboardingProfilePage />} />
+              <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
             </Route>
 
-            <Route path="/library/goal" element={<LibraryGoalInputPage />} />
-            <Route path="/library/123" element={<BookInfoPage />} />
-            <Route path="/library/123/history" element={<AllHistoryPage />} />
+            <Route element={<MainTabsLayout />}>
+              <Route path="/library" element={<LibraryPage />} />
+              <Route path="/focus" element={<FocusMobilePage />} />
+              <Route path="/record" element={<RecordMobilePage />} />
+              <Route path="/group" element={<GroupMobilePage />} />
+              <Route
+                path="/test/banner-action-card"
+                element={<BannerActionCardTestPage />}
+              />
+              <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
+              <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
+            </Route>
+
+            <Route path="/library/status" element={<LibraryAllBookPage />} />
+
+            <Route element={<NoFooterLayout />}>
+              <Route path="/onboarding" element={<OnboardingLayout />}>
+                <Route
+                  index
+                  element={<Navigate to="/onboarding/goal" replace />}
+                />
+                <Route path="goal" element={<OnboardingGoalPage />} />
+                <Route path="category" element={<OnboardingCategoryPage />} />
+                <Route path="profile" element={<OnboardingProfilePage />} />
+              </Route>
+
+              <Route path="/library/goal" element={<LibraryGoalInputPage />} />
+              <Route path="/library/123" element={<BookInfoPage />} />
+              <Route path="/library/123/history" element={<AllHistoryPage />} />
+            </Route>
           </Route>
 
-          <Route path="*" element={<Navigate to="/library" replace />} />
+          <Route
+              path="*"
+              element={
+                accessToken ? (
+                  <Navigate to="/library" replace />
+                ) : (
+                  <LoginPage />
+                )
+              }
+            />
         </Route>
       </Route>
     </Routes>

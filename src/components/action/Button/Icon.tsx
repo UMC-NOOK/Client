@@ -9,7 +9,7 @@ type IconFrameProps = {
 
 /** SVG를 img로 넣을 때 파일마다 width/height가 달라도 프레임 안에 맞게 스케일 */
 const base = [
-  "box-border inline-grid shrink-0 place-items-center",
+  "box-border inline-grid shrink-0 place-items-center justify-center ",
   "[&_img]:block [&_img]:h-full [&_img]:w-full [&_img]:object-contain",
 ].join(" ");
 
