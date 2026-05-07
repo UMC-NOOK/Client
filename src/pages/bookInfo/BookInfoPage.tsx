@@ -1,5 +1,5 @@
 // libraries
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // components
@@ -113,6 +113,15 @@ export default function BookInfoPage() {
   const { data: bookDetailData, isLoading } = useGetBookDetailWithISBN(
     bookISBN!,
   );
+
+  // 데이터가 null일 때 alert 띄우기 (렌더링 사이드 이펙트 방지)
+  useEffect(() => {
+    // 로딩이 끝났고, 데이터가 명시적으로 null인 경우
+    if (!isLoading && bookDetailData === null) {
+      alert("잠시후에 다시 시도해주세요");
+      navigate(-1); // 이전 페이지로 이동
+    }
+  }, [isLoading, bookDetailData]);
 
   // 개발용 상태
   const [hasFocus, setHasFocus] = useState(true);
