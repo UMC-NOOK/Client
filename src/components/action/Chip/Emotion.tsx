@@ -6,7 +6,8 @@ export type EmotionKey =
   | "USEFUL"
   | "SAD"
   | "COMPLICATED"
-  | "UNCOMFORTABLE";
+  | "UNCOMFORTABLE"
+  | null;
 
 type EmotionMeta = {
   variant: Variant;
@@ -14,11 +15,11 @@ type EmotionMeta = {
   text: string;
 };
 
-const emotionMetaMap: Record<EmotionKey, EmotionMeta> = {
+const emotionMetaMap: Record<Exclude<EmotionKey, null>, EmotionMeta> = {
   FUN: {
     variant: "yellow",
     emoji: "(^_^)",
-    text: "재미있어요",
+    text: "재밌어요",
   },
   EMPATHIZING: {
     variant: "pink",
@@ -51,9 +52,11 @@ type BaseProps = {
   active: boolean; // default: true (활성)
   size: Size;
   emojiKey: EmotionKey; // default: "yellow"
+  onClick?: () => void;
 };
 
-const base = "flex w-fit justify-center items-center select-none";
+const base =
+  "flex shrink-0 whitespace-nowrap w-fit justify-center items-center select-none";
 
 const sizeClassMap: Record<Size, string> = {
   s: "p-1 h-[20px] rounded-[4px] text-label-12-sb",
@@ -75,7 +78,22 @@ const sizeStyleMap: Record<Size, { emoji: string; text: string }> = {
   m: { emoji: "text-label-14-sb", text: "text-label-12-sb" }, // m 사이즈일 때 emoji는 16px, text는 14px
 };
 
-export default function Emotion({ active = false, size, emojiKey }: BaseProps) {
+export default function Emotion({
+  active = false,
+  size,
+  emojiKey,
+  onClick,
+}: BaseProps) {
+  if (emojiKey === null) {
+    // render empty/inactive when no emotion is provided
+    const inactive = variantColorClassMap["none"];
+    if (size === "s") {
+      return (
+        <span className={[base, sizeClassMap.s, inactive].join(" ")}></span>
+      );
+    }
+    return <span className={[base, sizeClassMap.m].join(" ")}></span>;
+  }
   const emojiMeta = emotionMetaMap[emojiKey];
   const emojiFeature = emotionMetaMap[emojiKey].emoji;
   const color = variantColorClassMap[emojiMeta.variant];
@@ -95,7 +113,9 @@ export default function Emotion({ active = false, size, emojiKey }: BaseProps) {
   }
 
   return (
+
     <span className={[base, sizeClassMap.m, background].join(" ")}>
+
       <span className={`${emoji} ${active ? color : inactive}`}>
         {emojiFeature}
       </span>

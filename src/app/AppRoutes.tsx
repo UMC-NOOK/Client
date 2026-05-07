@@ -12,7 +12,7 @@ import AppShell, { useShell } from "./AppShell";
 import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
 
 import FocusMobilePage from "../pages/search/FocusMobilePage";
-import RecordMobilePage from "../pages/search/RecordMobilePage";
+// import RecordMobilePage from "../pages/search/RecordMobilePage";
 import GroupMobilePage from "../pages/search/GroupMobilePage";
 import SearchPage from "../pages/search/SearchPage";
 
@@ -25,7 +25,15 @@ import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
 
 import BookInfoPage from "../pages/bookInfo/BookInfoPage";
 import AllHistoryPage from "../pages/bookInfo/AllHistoryPage";
+
+import ReportPage from "../pages/report/ReportPage";
+import ReportSearchPage from "../pages/report/ReportSearchPage";
+import IndividueleReportPage from "../pages/report/IndividueleReportPage";
+import ViewReportPage from "../pages/report/ViewReportPage";
+import CreateReportPage from "../pages/report/CreateReportPage";
+
 import DevLoginButton from "../components/dev/DevLoginButton";
+
 import LibraryPage from "../pages/library/LibraryPage";
 import LibraryGoalInputPage from "../pages/library/LibraryGoalInputPage";
 import LibraryAllBookPage from "../pages/library/LibraryAllBookPage";
@@ -123,10 +131,12 @@ export default function AppRoutes() {
             <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
           </Route>
 
+          {/* Main Tabs */}
           <Route element={<MainTabsLayout />}>
             <Route path="/library" element={<LibraryPage />} />
             <Route path="/focus" element={<FocusMobilePage />} />
-            <Route path="/record" element={<RecordMobilePage />} />
+            <Route path="/record" element={<ReportPage />} />
+
             <Route path="/group" element={<GroupMobilePage />} />
             <Route
               path="/test/banner-action-card"
@@ -152,6 +162,17 @@ export default function AppRoutes() {
             <Route path="/users/me/onboarding/goal" element={<LibraryGoalInputPage />} />
             <Route path="/library/123" element={<BookInfoPage />} />
             <Route path="/library/123/history" element={<AllHistoryPage />} />
+          </Route>
+
+          <Route path="/report/search" element={<ReportSearchPage />} />
+          <Route element={<NoFooterLayout />}>
+            <Route path="/report/:id" element={<IndividueleReportPage />} />
+            <Route path="/report/:id/:recordId" element={<ViewReportPage />} />
+            <Route path="/report/:id/create" element={<CreateReportPage />} />
+            <Route
+              path="/report/:id/:recordId/edit"
+              element={<CreateReportPage />}
+            />
           </Route>
 
           <Route path="*" element={<Navigate to="/library" replace />} />

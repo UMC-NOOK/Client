@@ -1,0 +1,5 @@
+export type SortOption =
+  | "RECENT_RECORDED"
+  | "OLDEST_RECORDED"
+  | "RECORD_COUNT_ASC"
+  | "RECORD_COUNT_DESC";

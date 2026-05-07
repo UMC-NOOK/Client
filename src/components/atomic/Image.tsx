@@ -10,7 +10,7 @@ type ImageProps = {
 export default function Image({ imageUrl, type }: ImageProps) {
   return (
     <div
-      className={`w-26 h-26 relative rounded-xs ${type === "Skeleton" ? "bg-gray-10" : ""} ${type === "Upload" ? "bg-gray-17" : ""}`}
+      className={`shrink-0 w-26 h-26 relative rounded-xs ${type === "Skeleton" ? "bg-gray-10" : ""} ${type === "Upload" ? "bg-gray-17" : ""}`}
     >
       {type === "Upload" && (
         <img

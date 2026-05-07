@@ -13,7 +13,7 @@ import focus from "../../assets/icons/focus-gray-90.svg";
 import { historyData } from "../../mocks/bookInfo/historyData";
 import { timelineDetailMockMap } from "../../mocks/bookInfo/timelineDetailMock";
 // types
-import type { TimelineDetailResponse } from "../../types/bookInfo/history";
+import type { TimelineDetailResponse } from "../../types/bookInfo/history.type";
 // utils
 import { formatDateKorean, formatDateDot } from "../../utils/formatDateParts";
 
