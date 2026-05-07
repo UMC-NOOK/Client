@@ -288,6 +288,80 @@ import type {
     },
   ];
 
+  export const mockLibraryBooksMonthlyResponse = {
+    isSuccess: true,
+    code: "SUCCESS-200",
+    message: "월별 독서 책 조회에 성공했습니다.",
+    result: {
+      yearMonth: "2026-04",
+      totalBookCount: 11,
+      days: [
+        {
+          date: "2026-04-01",
+          bookCount: 1,
+          topBook: {
+            bookId: 101,
+            coverUrl:
+              "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop",
+          },
+        },
+        {
+          date: "2026-04-03",
+          bookCount: 2,
+          topBook: {
+            bookId: 102,
+            coverUrl:
+              "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&auto=format&fit=crop",
+          },
+        },
+        {
+          date: "2026-04-07",
+          bookCount: 1,
+          topBook: {
+            bookId: 103,
+            coverUrl:
+              "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=400&auto=format&fit=crop",
+          },
+        },
+        {
+          date: "2026-04-11",
+          bookCount: 3,
+          topBook: {
+            bookId: 104,
+            coverUrl:
+              "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=400&auto=format&fit=crop",
+          },
+        },
+        {
+          date: "2026-04-16",
+          bookCount: 1,
+          topBook: {
+            bookId: 105,
+            coverUrl:
+              "https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&auto=format&fit=crop",
+          },
+        },
+        {
+          date: "2026-04-20",
+          bookCount: 1,
+          topBook: {
+            bookId: 106,
+            coverUrl:
+              "https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=400&auto=format&fit=crop",
+          },
+        },
+        {
+          date: "2026-04-24",
+          bookCount: 2,
+          topBook: {
+            bookId: 107,
+            coverUrl:
+              "https://images.unsplash.com/photo-1526243741027-444d633d7365?q=80&w=400&auto=format&fit=crop",
+          },
+        },
+      ],
+    },
+  };
 /**
  * GET /library/books mock — cursor·size는 목록 배열 기준 offset·limit.
  */
