@@ -159,9 +159,15 @@ export default function AppRoutes() {
               <Route path="profile" element={<OnboardingProfilePage />} />
             </Route>
 
-            <Route path="/users/me/onboarding/goal" element={<LibraryGoalInputPage />} />
-            <Route path="/library/123" element={<BookInfoPage />} />
-            <Route path="/library/123/history" element={<AllHistoryPage />} />
+            <Route
+              path="/users/me/onboarding/goal"
+              element={<LibraryGoalInputPage />}
+            />
+            <Route path="/library/:isbn13" element={<BookInfoPage />} />
+            <Route
+              path="/library/:isbn13/history"
+              element={<AllHistoryPage />}
+            />
           </Route>
 
           <Route path="/report/search" element={<ReportSearchPage />} />

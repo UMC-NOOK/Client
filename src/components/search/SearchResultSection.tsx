@@ -1,4 +1,5 @@
 // Client/src/components/search/SearchResultSection.tsx
+import { useNavigate } from "react-router-dom";
 import bookCover from "../../assets/search/mock_bookcover.svg";
 import physicalBookIcon from "../../assets/search/card-book-icon-shape.svg";
 import type { SearchScope } from "./SearchTopSection";
@@ -25,8 +26,16 @@ function ResultRow({
   book: SearchBookItem;
   showDivider: boolean;
 }) {
+  const navigate = useNavigate();
+
   return (
-    <div className="flex flex-col items-center self-stretch">
+    <div
+      className="flex flex-col items-center self-stretch"
+      onClick={() => {
+        console.log("navigate to book detail", book.isbn13);
+        navigate(`/library/${book.isbn13}`);
+      }}
+    >
       <div className="w-full flex items-start gap-3 py-3 relative">
         <div className="flex justify-center items-center shrink-0 w-14 h-20.5">
           <img
@@ -125,7 +134,6 @@ export default function SearchResultSection({
   const filtered = q ? safeBooks : [];
   const isEmpty = !isLoading && filtered.length === 0;
 
-
   return (
     <section className="w-full flex flex-col items-start gap-10">
       <div className="w-full flex flex-col items-start pt-5">
@@ -177,4 +185,3 @@ export default function SearchResultSection({
     </section>
   );
 }
-

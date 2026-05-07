@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 import bookCover from "../../assets/search/mock_bookcover.svg";
 import type { GlobalHomeBookItem } from "../../api/search";
@@ -11,6 +12,8 @@ type Props = {
 const LIMIT = 5;
 
 function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
+  const navigate = useNavigate();
+
   const ref = useRef<HTMLDivElement | null>(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
@@ -79,6 +82,10 @@ function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
           <div
             key={`${book.isbn13}-${index}`}
             className="shrink-0 w-25 snap-start flex flex-col items-start"
+            onClick={() => {
+              console.log("navigate to book detail", book.isbn13);
+              navigate(`/library/${book.isbn13}`);
+            }}
           >
             <img
               src={book.coverImageUrl || bookCover}
@@ -110,6 +117,8 @@ export default function AllBookListSection({
   recommendedBooks,
   bestBooks,
 }: Props) {
+  const navigate = useNavigate();
+
   return (
     <section className="w-full flex flex-col items-start gap-8 pt-8">
       <div className="w-full flex flex-col items-start gap-4">
@@ -125,9 +134,15 @@ export default function AllBookListSection({
             <div
               key={`best-${book.isbn13}-${idx}`}
               className="w-full h-7 flex items-center gap-2"
+              onClick={() => {
+                console.log("navigate to book detail", book.isbn13);
+                navigate(`/library/${book.isbn13}`);
+              }}
             >
               <div className="w-7 h-7 flex items-center justify-center">
-                <span className="text-gray-90 text-btn-16-sb">{book.rank ?? idx + 1}</span>
+                <span className="text-gray-90 text-btn-16-sb">
+                  {book.rank ?? idx + 1}
+                </span>
               </div>
 
               <div className="flex-1 overflow-hidden py-1">
