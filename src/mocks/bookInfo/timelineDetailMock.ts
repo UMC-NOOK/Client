@@ -1,4 +1,4 @@
-import type { TimelineDetailResponse } from "../../types/bookInfo/history";
+import type { TimelineDetailResponse } from "../../types/bookInfo/history.type";
 
 export const timelineDetailMockMap: Record<number, TimelineDetailResponse> = {
   2001: {

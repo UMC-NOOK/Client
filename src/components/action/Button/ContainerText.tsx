@@ -5,7 +5,11 @@ type Props = {
   active?: boolean; // default: false (비활성)
 } & HTMLAttributes<HTMLDivElement>;
 
-export function ContainerText({ text, active = false, ...props }: Props) {
+export default function ContainerText({
+  text,
+  active = false,
+  ...props
+}: Props) {
   return (
     <div
       {...props}

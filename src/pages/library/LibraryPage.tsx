@@ -7,7 +7,7 @@ import arrowRight from "../../assets/icons/arrow_right.svg";
 import focus from "../../assets/icons/focus.svg";
 import focusGray from "../../assets/icons/focus-gray.svg";
 import book from "../../assets/icons/book.svg";
-import bookGray from "../../assets/icons/book-gray.svg";
+import book_gray_40 from "../../assets/icons/book_gray_40.svg"
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import DayOfTheWeek from "../../components/content/Calendar/Resource/DayOfTheWeek";
@@ -21,15 +21,21 @@ import {
     useLibraryBookGoal,
     useLibraryFocusMonthly,
     useLibraryBooksMonthly,
+    useLibraryDateToggle,
+    useLibraryRecentBookInfo,
   } from "../../hooks/queries/library";
 
 import {
     mockLibraryBookNumResponse,
-    mockLibraryBookGoalResponse
+    mockLibraryBookGoalResponse,
+    MOCK_SPECIFIC_DATE_BOOK_ITEMS
 } from "../../mocks/library/library"
 
 import getGoalPercent from "./utils/getGoalPercent";
 import DropDown from "../../components/section/dropDown/DropDown";
+import { useLibrarySpecificDateBookInfo } from "../../hooks/queries/library/useLibrarySpecificDateBookInfo";
+
+
 
 type SelectedYearMonth = {
     year: number;
@@ -50,15 +56,25 @@ function formatFocusMinutes(totalFocusMin: number) {
 export default function LibraryPage() {
     const [selectedView, setSelectedView] = useState<"focus" | "book">("focus");
     const [isModalOpen, setIsModalOpen] = useState(false); 
-    const [selectedDate, setSelectedDate] = useState<string | null>(null);
+    const [selectedDate, setSelectedDate] = useState<string | "">("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isBannerOpen, setIsBannerOpen] = useState(true);
+    const [cursor, setCursor] = useState(0);
 
     const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
     const { data: libraryBookGoalData } = useLibraryBookGoal();
 
+    const { data: libraryToggleYearsData } = useLibraryDateToggle();
+    
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1;
+    const availableYears = libraryToggleYearsData?.years ?? [];
+    const startYear = availableYears.length > 0 ? Math.min(...availableYears) : currentYear;
+    const endYear = availableYears.length > 0 ? Math.max(...availableYears) : currentYear;
+
     const [selectedYearMonth, setSelectedYearMonth] = useState<SelectedYearMonth>({
-        year: 2026,
-        month: 4,
+        year: startYear,
+        month: currentMonth,
       });
 
     const yearMonth = useMemo(() => {
@@ -85,7 +101,20 @@ export default function LibraryPage() {
     const handleSelectFocusDate = (date: string) => {
         setSelectedDate(date);
         setIsModalOpen(true);
+        setCursor(0);
       };
+
+    const {
+        data: specificDateBookInfo
+    } = useLibrarySpecificDateBookInfo(
+        isModalOpen, selectedDate, cursor);
+
+    const { data: libraryRecentBookInfoData } = useLibraryRecentBookInfo();
+    const bookId = libraryRecentBookInfoData?.bookId ?? 0;
+    const title = libraryRecentBookInfoData?.title ?? "클라우드 쿠쿠 랜드";
+    const coverUrl = libraryRecentBookInfoData?.coverUrl ?? "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop";
+    const page = libraryRecentBookInfoData?.page ?? 147;
+    const focusTime = libraryRecentBookInfoData?.focusTime?? "08:10:22";
     
     const dropdownPositionClass =
         selectedView === "focus"
@@ -126,7 +155,9 @@ export default function LibraryPage() {
         : isFocusMonthlyError
             ? "포커스 시간을 불러오지 못했어요."
             : formatFocusMinutes(totalFocusMin);
-
+    
+    const modalItems =
+        specificDateBookInfo?.items ?? MOCK_SPECIFIC_DATE_BOOK_ITEMS;
 
     return (
         <div className="relative flex flex-col w-full">
@@ -179,14 +210,14 @@ export default function LibraryPage() {
                                     />
                                 </div>
                                 {isDropdownOpen && (
-                                    <div className={dropdownPositionClass}>
-                                        <DropDown
-                                            initialYear={selectedYearMonth.year}
-                                            initialMonth={selectedYearMonth.month}
-                                            startYear={2025}
-                                            endYear={2026}
+                                    <div className={dropdownPositionClass}> 
+                                        <DropDown 
+                                            initialYear={selectedYearMonth.year} 
+                                            initialMonth={selectedYearMonth.month} 
+                                            startYear={startYear} 
+                                            endYear={endYear} 
                                             onApply={handleApplyYearMonth}
-                                        />
+                                        /> 
                                     </div>
                                 )}   
                             </div>
@@ -219,7 +250,7 @@ export default function LibraryPage() {
                         >
                             <Icon size="m">
                                 <img
-                                    src={selectedView === "book" ? book : bookGray}
+                                    src={selectedView === "book" ? book : book_gray_40}
                                     alt=""
                                 />
                             </Icon>
@@ -254,12 +285,27 @@ export default function LibraryPage() {
                 </div>
             </div>
 
-            <BottomBanner />
+            {isBannerOpen && (
+                <BottomBanner
+                    bookId={bookId}
+                    title={title}
+                    coverUrl={coverUrl}
+                    page={page}
+                    focusTime={focusTime}
+                    onClick={(bookId) => {
+                        console.log("이동:", bookId);
+                    }}
+                    onClose={() => {
+                        setIsBannerOpen(false);
+                    }}
+                />
+            )}
 
             <DateFocusBookModal
                 open={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 selectedDate={selectedDate}
+                items={modalItems}
             />
         </div>
     );
