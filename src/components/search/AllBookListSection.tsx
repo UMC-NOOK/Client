@@ -16,6 +16,7 @@ function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
 
   const ref = useRef<HTMLDivElement | null>(null);
   const isDragging = useRef(false);
+  const dragMoved = useRef(false);
   const startX = useRef(0);
   const startScrollLeft = useRef(0);
 
@@ -24,15 +25,16 @@ function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
     const el = ref.current;
     if (!el) return;
 
-    e.preventDefault();
+    // e.preventDefault();
     isDragging.current = true;
+    dragMoved.current = false;
     startX.current = e.clientX;
     startScrollLeft.current = el.scrollLeft;
 
     el.style.scrollSnapType = "none";
     el.style.scrollBehavior = "auto";
-    el.style.cursor = "grabbing";
-    el.setPointerCapture(e.pointerId);
+    // el.style.cursor = "grabbing";
+    // el.setPointerCapture(e.pointerId);
   };
 
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -40,24 +42,31 @@ function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
     const el = ref.current;
     if (!el) return;
 
+    // 마우스 이동 거리가 5px 이상일 때만 '드래그'로 판정
+    if (Math.abs(e.clientX - startX.current) > 5) {
+      dragMoved.current = true;
+    }
+
     e.preventDefault();
     el.scrollLeft = startScrollLeft.current - (e.clientX - startX.current);
   };
 
-  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging.current) return;
-    isDragging.current = false;
+  const endDrag = () =>
+    //e: React.PointerEvent<HTMLDivElement>
+    {
+      if (!isDragging.current) return;
+      isDragging.current = false;
 
-    const el = ref.current;
-    if (!el) return;
+      const el = ref.current;
+      if (!el) return;
 
-    el.style.scrollSnapType = "x mandatory";
-    el.style.scrollBehavior = "smooth";
-    el.style.cursor = "grab";
-    try {
-      el.releasePointerCapture(e.pointerId);
-    } catch {}
-  };
+      el.style.scrollSnapType = "x mandatory";
+      el.style.scrollBehavior = "smooth";
+      // el.style.cursor = "grab";
+      // try {
+      //   el.releasePointerCapture(e.pointerId);
+      // } catch {}
+    };
 
   return (
     <div
@@ -67,7 +76,7 @@ function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
       onPointerUp={endDrag}
       onPointerCancel={endDrag}
       onPointerLeave={endDrag}
-      style={{ touchAction: "pan-x" }}
+      style={{ touchAction: "pan-y" }}
       className={[
         "w-[calc(100%+16px)] -mr-4",
         "overflow-x-auto",
@@ -81,8 +90,13 @@ function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
         {books.slice(0, LIMIT).map((book, index) => (
           <div
             key={`${book.isbn13}-${index}`}
-            className="shrink-0 w-25 snap-start flex flex-col items-start"
-            onClick={() => {
+            className="shrink-0 w-25 snap-start flex flex-col items-start cursor-pointer"
+            onClick={(e) => {
+              if (dragMoved.current) {
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+              }
               console.log("navigate to book detail", book.isbn13);
               navigate(`/library/${book.isbn13}`);
             }}
