@@ -245,6 +245,49 @@ import type {
     },
   };
 
+  export const MOCK_SPECIFIC_DATE_BOOK_ITEMS = [
+    {
+      bookId: 1,
+      title: "[국내도서] 혼모노",
+      author: "성해나",
+      focusTime: "01:00:00",
+      coverUrl:
+        "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop",
+    },
+    {
+      bookId: 2,
+      title: "[국내도서] 데미안",
+      author: "헤르만 헤세",
+      focusTime: "00:42:00",
+      coverUrl:
+        "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&auto=format&fit=crop",
+    },
+    {
+      bookId: 3,
+      title: "[국내도서] 어린 왕자",
+      author: "생텍쥐페리",
+      focusTime: "00:25:00",
+      coverUrl:
+        "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=400&auto=format&fit=crop",
+    },
+    {
+      bookId: 4,
+      title: "[국내도서] 아몬드",
+      author: "손원평",
+      focusTime: "00:33:00",
+      coverUrl:
+        "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=400&auto=format&fit=crop",
+    },
+    {
+      bookId: 5,
+      title: "[국내도서] 달러구트 꿈 백화점",
+      author: "이미예",
+      focusTime: "00:18:00",
+      coverUrl:
+        "https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&auto=format&fit=crop",
+    },
+  ];
+
 /**
  * GET /library/books mock — cursor·size는 목록 배열 기준 offset·limit.
  */
