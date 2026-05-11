@@ -11,6 +11,7 @@ type OAuthLogin = {
     nickName: string;
     accessToken: string;
     refreshToken: string;
+    onboardingCompleted : boolean;
 };
 
 export type OAuthLoginResponse = BaseApiResponse<OAuthLogin>;
