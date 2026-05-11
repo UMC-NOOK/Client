@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { devLogin } from "../../api/auth";
 
 export default function DevLoginButton() {
+  const navigate = useNavigate();
+
   const handleDevLogin = async () => {
     try {
       await devLogin({
@@ -29,7 +32,9 @@ export default function DevLoginButton() {
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     alert("로그아웃 완료");
+    navigate("/login", { replace: true });
   };
 
   if (!import.meta.env.DEV) return null;

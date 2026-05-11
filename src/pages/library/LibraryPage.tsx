@@ -28,7 +28,9 @@ import {
 import {
     mockLibraryBookNumResponse,
     mockLibraryBookGoalResponse,
-    MOCK_SPECIFIC_DATE_BOOK_ITEMS
+    MOCK_SPECIFIC_DATE_BOOK_ITEMS,
+    mockLibraryFocusTimeResponse,
+    mockLibraryBooksMonthlyResponse
 } from "../../mocks/library/library"
 
 import getGoalPercent from "./utils/getGoalPercent";
@@ -131,11 +133,29 @@ export default function LibraryPage() {
     const progressPercent = libraryBookGoalData?.progressPercent ?? mockLibraryBookGoal.progressPercent;
     const iconProgressPercent = getGoalPercent(progressPercent);
 
-    const focusItems = libraryFocusMonthlyData?.focusBookItems ?? [];
-    const totalFocusMin = libraryFocusMonthlyData?.totalFocusMin ?? 0;
+    const focusItems =
+        libraryFocusMonthlyData?.focusBookItems &&
+        libraryFocusMonthlyData.focusBookItems.length > 0
+            ? libraryFocusMonthlyData.focusBookItems
+            : mockLibraryFocusTimeResponse.result.focusBookItems;
 
-    const bookDays = libraryBooksMonthlyData?.days ?? [];
-    const totalBookCount = libraryBooksMonthlyData?.totalBookCount ?? 0;
+    const totalFocusMin =
+        libraryFocusMonthlyData?.focusBookItems &&
+        libraryFocusMonthlyData.focusBookItems.length > 0
+            ? libraryFocusMonthlyData.totalFocusMin
+            : mockLibraryFocusTimeResponse.result.totalFocusMin;
+
+    const hasBookMockFallback =
+        !libraryBooksMonthlyData?.days ||
+        libraryBooksMonthlyData.days.length === 0;
+          
+    const bookDays = hasBookMockFallback
+        ? mockLibraryBooksMonthlyResponse.result.days
+        : libraryBooksMonthlyData.days;
+          
+    const totalBookCount = hasBookMockFallback
+        ? mockLibraryBooksMonthlyResponse.result.totalBookCount
+        : libraryBooksMonthlyData.totalBookCount;
     
     const dayBookInformations = bookDays.map((item) => ({
         day: String(new Date(item.date).getDate()),

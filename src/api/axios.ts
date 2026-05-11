@@ -1,4 +1,3 @@
-// src/api/axios.ts
 import axios from "axios";
 
 export const api = axios.create({
@@ -6,15 +5,16 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-
 api.interceptors.request.use((config) => {
   const accessToken = localStorage.getItem("accessToken");
-  console.log("accessToken from localStorage:", accessToken);
 
-  if (accessToken) {
+  const isAuthRequest =
+    config.url?.includes("/auth/oauth") ||
+    config.url?.includes("/auth/dev/login");
+
+  if (accessToken && !isAuthRequest) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
 
-  console.log("Authorization header:", config.headers.Authorization);
   return config;
 });
