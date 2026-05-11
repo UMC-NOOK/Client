@@ -116,6 +116,13 @@ function AppShellLayout() {
   );
 }
 
+
+function getAuthenticatedHomePath() {
+  const onboardingCompleted = localStorage.getItem("onboardingCompleted") === "true";
+
+  return onboardingCompleted ? "/library" : "/onboarding";
+}
+
 function RequireAuth() {
   const accessToken = localStorage.getItem("accessToken");
 
@@ -133,11 +140,11 @@ export default function AppRoutes() {
     <Routes>
       <Route element={<AppShell />}>
         <Route element={<AppShellLayout />}>
-          <Route
+        <Route
             path="/"
             element={
               accessToken ? (
-                <Navigate to="/library" replace />
+                <Navigate to={getAuthenticatedHomePath()} replace />
               ) : (
                 <Navigate to="/login" replace />
               )
@@ -150,7 +157,7 @@ export default function AppRoutes() {
               path="/login"
               element={
                 accessToken ? (
-                  <Navigate to="/library" replace />
+                  <Navigate to={getAuthenticatedHomePath()} replace />
                 ) : (
                   <LoginPage />
                 )
@@ -227,7 +234,7 @@ export default function AppRoutes() {
               path="*"
               element={
                 accessToken ? (
-                  <Navigate to="/library" replace />
+                  <Navigate to={getAuthenticatedHomePath()} replace />
                 ) : (
                   <LoginPage />
                 )

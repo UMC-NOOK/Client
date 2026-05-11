@@ -65,6 +65,7 @@ export default function LibraryPage() {
 
     const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
     const { data: libraryBookGoalData } = useLibraryBookGoal();
+    console.log("libraryBookGoalData:", libraryBookGoalData);
 
     const { data: libraryToggleYearsData } = useLibraryDateToggle();
     
@@ -130,7 +131,9 @@ export default function LibraryPage() {
     const totalBookNum = libraryBookData?.totalBookNum ?? 0;
     const goal = libraryBookGoalData?.goal ?? mockLibraryBookGoal.goal;
     const remainingCount = libraryBookGoalData?.remainingCount ?? mockLibraryBookGoal.remainingCount;
+    console.log( libraryBookGoalData?.remainingCount);
     const progressPercent = libraryBookGoalData?.progressPercent ?? mockLibraryBookGoal.progressPercent;
+    console.log(libraryBookGoalData?.progressPercent);
     const iconProgressPercent = getGoalPercent(progressPercent);
 
     const focusItems =
@@ -178,12 +181,14 @@ export default function LibraryPage() {
     
     const modalItems =
         specificDateBookInfo?.items ?? MOCK_SPECIFIC_DATE_BOOK_ITEMS;
+    
+    const nickname = localStorage.getItem("nickname");
 
     return (
         <div className="relative flex flex-col w-full">
             <div className="flex flex-col pt-6.5">
                 <div className="flex flex-row gap-1">
-                    <label className="text-label-20-b text-gray-90">경민</label>
+                    <label className="text-label-20-b text-gray-90">{nickname}</label>
                     <label className="text-label-20-b text-gray-90">님의 서재에</label>
                 </div>
 

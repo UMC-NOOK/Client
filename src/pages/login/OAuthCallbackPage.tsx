@@ -33,9 +33,11 @@ export default function OAuthCallbackPage() {
     const run = async () => {
       try {
         const result = await mutateAsync({ provider, code });
-        console.log("oauth success result", result);
 
-        navigate("/library", { replace: true });
+        navigate(
+          result.result.onboardingCompleted ? "/library" : "/onboarding",
+          { replace: true },
+        );
       } catch (error: any) {
         console.error("oauth login error", error);
         console.error("oauth login error response", error?.response?.data);

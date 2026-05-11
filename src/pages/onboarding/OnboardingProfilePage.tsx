@@ -29,6 +29,8 @@ export function OnboardingProfilePage() {
       profileImageKey: image ?? "",
     });
 
+    localStorage.setItem("nickname", nickname);
+    
     navigate("/library");
   };
 

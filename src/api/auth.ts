@@ -16,6 +16,7 @@ type DevLoginResponse = {
     email: string;
     nickName: string;
     accessToken: string;
+    onboardingCompleted?: boolean;
   };
 };
 
@@ -44,6 +45,7 @@ export async function oauthLogin(params: OAuthLoginParams) {
   const { accessToken, refreshToken } = response.data.result;
   localStorage.setItem("accessToken", accessToken);
   localStorage.setItem("refreshToken", refreshToken);
+  localStorage.setItem("onboardingCompleted", String(response.data.result.onboardingCompleted));
 
   return response.data;
 }
