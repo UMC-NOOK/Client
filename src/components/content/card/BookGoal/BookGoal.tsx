@@ -67,12 +67,13 @@ function splitGoalText(text: string) {
 
 export default function BookGoal(props: Props) {
   const { percent } = props;
+  
   const resolvedMessage =
-    percent === "ZERO"
-    ? "독서 목표를 설정하세요!"
+  "message" in props && props.message
+    ? props.message
     : percent === "PCT_100"
       ? "목표를 달성했어요!"
-      : props.message;
+      : "독서 목표를 설정하세요!";
 
   const lines = splitGoalText(resolvedMessage);
 

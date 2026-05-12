@@ -33,6 +33,7 @@ export default function DevLoginButton() {
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("onboardingCompleted");
     alert("로그아웃 완료");
     navigate("/login", { replace: true });
   };

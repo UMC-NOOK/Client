@@ -38,8 +38,16 @@ export function getLibraryBookNum(): Promise<LibraryBook> {
 }
 
 // 목표 조회
-export function getLibraryBookGoal(): Promise<LibraryBookGoal> {
-  return libraryGet<LibraryBookGoal>("/goal");
+export async function getLibraryBookGoal(): Promise<LibraryBookGoal> {
+  const response = await api.get<BaseApiResponse<LibraryBookGoal>>(
+    "/api/v1/users/me/onboarding/goal",
+  );
+
+  if (response.data?.result === undefined) {
+    throw new Error("응답 result가 없습니다: /api/v1/users/me/onboarding/goal");
+  }
+
+  return response.data.result;
 }
 
 // patch
@@ -48,7 +56,7 @@ async function libraryPatch<TRequest, TResponse>(
   body: TRequest,
 ): Promise<TResponse> {
   const response = await api.patch<BaseApiResponse<TResponse>>(
-    `/api${url}`,
+    `/api/v1${url}`,
     body,
   );
 
