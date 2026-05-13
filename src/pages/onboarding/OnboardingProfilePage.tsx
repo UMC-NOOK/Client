@@ -7,40 +7,58 @@ import ProgressIndicator from "../../components/navigation/ProgressIndicator";
 import { useOnboardingDraft } from "./OnboardingContext";
 import { TextField } from "../../components/input/textinput/TextField";
 
+import { completeOnboarding } from "../../api/onboarding";
+import { uploadSingleImage } from "../../api/image";
+
 import chevronLeftIcon from "../../assets/icons/chevron_left.svg";
 import cameraIcon from "../../assets/icons/Shape.svg";
 
 export function OnboardingProfilePage() {
   const navigate = useNavigate();
-  const { draft, updateDraft } = useOnboardingDraft();
+  const { draft } = useOnboardingDraft();
 
   const [nickname, setNickname] = useState(draft.nickname ?? "");
   const [image, setImage] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
 
   const isNextActive = nickname.trim().length > 0;
 
   const handleClose = () => navigate(-1);
 
-  const handleNext = () => {
-    if (!isNextActive) return;
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
 
-    updateDraft({
+    setFile(f);
+    const preview = URL.createObjectURL(f);
+    setImage(preview);
+  };
+
+const handleNext = async () => {
+  try {
+    if (!draft.goal || !draft.categories?.length) return;
+    if (!nickname.trim()) return;
+
+    let imageKey = "";
+
+    if (file) {
+      imageKey = await uploadSingleImage(file, "profile");
+    }
+
+    await completeOnboarding({
+      goal: draft.goal,
+      categories: draft.categories,
       nickname,
-      profileImageKey: image ?? "",
+      profileImageKey: imageKey,
     });
 
     localStorage.setItem("nickname", nickname);
     
     navigate("/library");
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const preview = URL.createObjectURL(file);
-    setImage(preview);
-  };
+  } catch (e) {
+    console.error("❌ 온보딩 실패", e);
+  }
+};
 
   return (
     <div className="px-0 pt-0">

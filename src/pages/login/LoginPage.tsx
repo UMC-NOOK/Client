@@ -41,12 +41,24 @@ export default function LoginPage() {
               email: "dev@test.com",
               nickName: "DEV_USER",
             });
-            if (response.isSuccess) {
-              navigate("/library");
-            } else {
-              alert("임시 로그인 실패");
+            
+            console.log("🔥 로그인 응답", response);
+
+          if (response.isSuccess) {
+            const token = response.result?.accessToken;
+
+            if (!token) {
+              console.error("❌ accessToken 없음", response);
+              return;
             }
-          }}
+
+            localStorage.setItem("accessToken", token);
+
+            navigate("/library");
+          } else {
+            alert("임시 로그인 실패");
+          }
+        }}
           className="flex h-12 w-full items-center justify-center gap-2 rounded-[12px] bg-gray-10 text-label-16-sb text-gray-90"
         >
           <span> 임시 로그인 </span>
