@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
@@ -6,16 +6,19 @@ import Icon from "../../components/action/Button/Icon";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
 import TabBar from "../../components/navigation/tabs/TabBar";
 import BookList from "../../components/content/card/Book/List";
+import Divider from "../../components/layout/Divider";
 
 import chevronLeft from "../../assets/icons/chevron_left.svg";
 import search from "../../assets/icons/search.svg";
 
+import { getMockLibraryStatusBooksPage } from "../../mocks/library/library";
+import { getLibraryStatusBooks } from "../../api/library";
+
 import {
   type BaseStatusBookItems,
   type BookStatusType,
+  type LibraryStatusBook,
 } from "../../types/libraryInfo/library";
-import { getMockLibraryStatusBooksPage } from "../../mocks/library/library";
-import Divider from "../../components/layout/Divider";
 
 type LibraryTab = BookStatusType;
 
@@ -43,13 +46,16 @@ function isLibraryTab(value: string): value is LibraryTab {
 
 function parseQueryInt(value: string | null, fallback: number) {
   if (!value) return fallback;
+
   const parsed = Number(value);
   return Number.isNaN(parsed) ? fallback : parsed;
 }
 
 function formatDateLabel(iso: string) {
   const d = new Date(iso);
+
   if (Number.isNaN(d.getTime())) return iso.slice(0, 10);
+
   return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}`;
 }
 
@@ -71,7 +77,9 @@ function getBookListProps(
   if (tab === "FINISHED" && item.startedAt && item.endedAt) {
     return {
       type: "READINGORDONE" as const,
-      typeLabel: `${formatDateLabel(item.startedAt)} - ${formatDateLabel(item.endedAt)}`,
+      typeLabel: `${formatDateLabel(item.startedAt)} - ${formatDateLabel(
+        item.endedAt,
+      )}`,
     };
   }
 
@@ -81,6 +89,7 @@ function getBookListProps(
 function getEmptyText(tab: LibraryTab) {
   if (tab === "BEFORE") return "서재에 독서 전인 책이 없어요.";
   if (tab === "READING") return "서재에 독서 중인 책이 없어요.";
+
   return "서재에 완독한 책이 없어요.";
 }
 
@@ -93,6 +102,12 @@ export default function LibraryAllBookPage() {
 
   const cursor = parseQueryInt(searchParams.get("cursor"), 0);
   const size = parseQueryInt(searchParams.get("size"), 20);
+
+  const [apiData, setApiData] = useState<LibraryStatusBook<LibraryTab> | null>(
+    null,
+  );
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   const setTab = useCallback(
     (next: LibraryTab) => {
@@ -110,15 +125,59 @@ export default function LibraryAllBookPage() {
     [setSearchParams, size],
   );
 
-  const data = useMemo(() => {
+  const mockData = useMemo(() => {
     return getMockLibraryStatusBooksPage(tab, cursor, size);
   }, [tab, cursor, size]);
 
-  const isLoading = false;
-  const isError = false;
+  useEffect(() => {
+    let ignore = false;
 
-  const bookItems = data.bookItems ?? [];
-  const totalBookNum = data.totalBookNum;
+    async function fetchLibraryStatusBooks() {
+      try {
+        setIsLoading(true);
+        setIsError(false);
+
+        const result = await getLibraryStatusBooks({
+          status: tab,
+          cursor,
+          size,
+        });
+
+        if (!ignore) {
+          setApiData(result);
+        }
+      } catch (error) {
+        console.error("서재 상태별 책 목록 조회 실패:", error);
+
+        if (!ignore) {
+          setIsError(true);
+          setApiData(null);
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    fetchLibraryStatusBooks();
+
+    return () => {
+      ignore = true;
+    };
+  }, [tab, cursor, size]);
+
+  const apiBookItems = apiData?.bookItems?.items ?? [];
+
+  const shouldUseMock =
+    !isLoading && !isError && apiData !== null && apiBookItems.length === 0;
+  
+  const bookItems = shouldUseMock
+    ? mockData.bookItems ?? []
+    : apiBookItems;
+  
+  const totalBookNum = apiData?.totalBookNum ?? mockData.totalBookNum ?? 0;
+  
 
   return (
     <div>
@@ -153,7 +212,7 @@ export default function LibraryAllBookPage() {
                 {SECTION_SUBJECT[tab]} 책이{" "}
               </label>
               <label className="text-yellow-70">
-                {isLoading ? "0권" : `${totalBookNum}권`}
+                {isLoading ? `${totalBookNum}권` : `${totalBookNum}권`}
               </label>
               <label className="text-gray-90"> 있어요.</label>
             </div>
@@ -198,11 +257,11 @@ export default function LibraryAllBookPage() {
                   typeLabel={bookListProps.typeLabel}
                 />
 
-                 {index !== bookItems.length - 1 ? (
-                    <div className="py-1">
-                        <Divider width={"full"} />
-                    </div>
-                    ) : null}
+                {index !== bookItems.length - 1 ? (
+                  <div className="py-1">
+                    <Divider width="full" />
+                  </div>
+                ) : null}
               </div>
             );
           })

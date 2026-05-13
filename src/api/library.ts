@@ -97,19 +97,13 @@ export function getLibraryFocusMonthly(params: {
   });
 }
 
-const STATUS_QUERY_PARAM: Record<BookStatusType, string> = {
-  BEFORE: "before",
-  READING: "reading",
-  FINISHED: "done",
-};
-
 export function getLibraryStatusBooks<T extends BookStatusType>(params: {
   status: T;
   cursor: number;
   size: number;
 }): Promise<LibraryStatusBook<T>> {
-  return libraryGet<LibraryStatusBook<T>>("/status-books", {
-    status: STATUS_QUERY_PARAM[params.status],
+  return libraryGet<LibraryStatusBook<T>>("/status", {
+    status: params.status,
     cursor: params.cursor,
     size: params.size,
   });

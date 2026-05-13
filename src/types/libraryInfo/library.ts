@@ -95,11 +95,18 @@ export type BookStatusItems <T extends BookStatusType> =
             ? ReadingBookItems
             : FinishedBookItems
 
+export type LibraryStatusBookItemsPage<T extends BookStatusType> = {
+    items: BookStatusItems<T>[];
+    nextCursor: number | null;
+    hasNext: boolean;
+};
+              
 export type LibraryStatusBook<T extends BookStatusType> = {
-    readingStatus: BookStatusType;
+    readingStatus: T;
     totalBookNum: number;
     bookItems: null | [] | BookStatusItems<T>[];
-} & CursorPage;
+};
+
 
 export type DateToggleYear = {
     years: number[];
