@@ -1,130 +1,129 @@
 import type BaseApiResponse from "../BaseApiResponse";
 
-export type FocusTimeSlotType = "FOCUS_00"| "FOCUS_01" | "FOCUS_02" | "FOCUS_03" | "FOCUS_04";
+export type FocusTimeSlotType =
+  | "FOCUS_00"
+  | "FOCUS_01"
+  | "FOCUS_02"
+  | "FOCUS_03"
+  | "FOCUS_04";
 export type BookStatusType = "BEFORE" | "READING" | "FINISHED";
 
 export type LibraryBook = {
-    totalBookNum: number;
+  totalBookNum: number;
 };
 
 export type LibraryBookGoal = {
-    goal: number;
-    remainingCount: number;
-    progressPercent: number;
+  goal: number;
+  remainingCount: number;
+  progressPercent: number;
 };
 
-export type FocusTimeItems ={
-    date: string;
-    timeSlot: FocusTimeSlotType;
+export type FocusTimeItems = {
+  date: string;
+  timeSlot: FocusTimeSlotType;
 };
-
 
 export type MonthlyTopBook = {
-    bookId: number;
-    coverUrl: string;
-  };
-  
-  
+  bookId: number;
+  coverUrl: string;
+};
 
 export type FocusBookItems = {
-    bookId: number;
-    coverUrl: string;
+  bookId: number;
+  coverUrl: string;
 };
 
 export type MonthlyBookDay = {
-    date: string;
-    bookCount: number;
-    topBook: MonthlyTopBook | null;
-  };
-  
+  date: string;
+  bookCount: number;
+  topBook: MonthlyTopBook | null;
+};
 
-  export type LibraryFocusMonthly = {
-    yearMonth: string;
-    totalFocusMin: number;
-    focusBookItems: FocusTimeItems[];
-  };
-
+export type LibraryFocusMonthly = {
+  yearMonth: string;
+  totalFocusMin: number;
+  focusBookItems: FocusTimeItems[];
+};
 
 export type LibraryBooksMonthly = {
-    yearMonth: string;
-    totalBookCount: number;
-    days: MonthlyBookDay[];
-  };
+  yearMonth: string;
+  totalBookCount: number;
+  days: MonthlyBookDay[];
+};
 
 export type PatchBookGoal = {
-    goal: number;
+  goal: number;
 };
 
 export type BookDetailInfo = {
-    bookId: number;
-    title: string;
-    author: string;
-    focusSec: number;
-    coverUrl: string;
+  bookId: number;
+  title: string;
+  author: string;
+  focusSec: number;
+  coverUrl: string;
 };
 
 export type CursorPage = {
-    nextCursor: number | null;
-    hasNext: boolean;
+  nextCursor: number | null;
+  hasNext: boolean;
 };
 
 export type LibraryDateFocus = {
-    items: BookDetailInfo[];
+  items: BookDetailInfo[];
 } & CursorPage;
 
 export interface BaseStatusBookItems {
-    bookId: number;
-    title: string;
-    author: string;
-    coverUrl: string;
-};
-
-export interface ReadingBookItems extends BaseStatusBookItems {
-    startedAt: string;
-};
-
-export interface FinishedBookItems extends BaseStatusBookItems {
-    startedAt: string;
-    endedAt: string;
+  bookId: number;
+  title: string;
+  author: string;
+  coverUrl: string;
 }
 
-export type BookStatusItems <T extends BookStatusType> =
-    T extends "BEFORE"
-        ? BaseStatusBookItems
-        : T extends "READING"
-            ? ReadingBookItems
-            : FinishedBookItems
+export interface ReadingBookItems extends BaseStatusBookItems {
+  startedAt: string;
+}
+
+export interface FinishedBookItems extends BaseStatusBookItems {
+  startedAt: string;
+  endedAt: string;
+}
+
+export type BookStatusItems<T extends BookStatusType> = T extends "BEFORE"
+  ? BaseStatusBookItems
+  : T extends "READING"
+    ? ReadingBookItems
+    : FinishedBookItems;
 
 export type LibraryStatusBook<T extends BookStatusType> = {
-    readingStatus: BookStatusType;
-    totalBookNum: number;
-    bookItems: null | [] | BookStatusItems<T>[];
+  readingStatus: BookStatusType;
+  totalBookNum: number;
+  bookItems: null | [] | BookStatusItems<T>[];
 } & CursorPage;
 
 export type DateToggleYear = {
-    years: number[];
-}
+  years: number[];
+};
 
 export type RecentBookInfo = {
-    bookId : number;
-    coverUrl : string;
-    title : string;
-    page : number;
-    focusTime : string;
-}
+  bookId: number;
+  coverUrl: string;
+  title: string;
+  page: number;
+  focusTime: string;
+};
 
 //해당 날짜의 item 책 정보
 export type DateBookInfo = {
-    bookId : number;
-    title : string;
-    author : string;
-    focusTime : string;
-    coverUrl : string;
+  bookId: number;
+  title: string;
+  author: string;
+  focusTime: string;
+  coverUrl: string;
 };
 
 //해당 날짜의 repsonse
 export type SpecificDateBookInfo = {
-    items : DateBookInfo[];
+  items: DateBookInfo[];
 } & CursorPage;
 
 export type LibraryBookNumResponse = BaseApiResponse<LibraryBook>; // 서재 전체 도수 조회
@@ -142,13 +141,14 @@ export type LibraryDateFocusResponse = BaseApiResponse<LibraryDateFocus>;
 
 //모든
 export type LibraryStatusBooksQueryParams = {
-    status: BookStatusType;
-    cursor?: number;
-    size?: number;
+  status: BookStatusType;
+  cursor?: number;
+  size?: number;
 };
 
 //상태별 조회
-export type LibraryStatusBookResponse<T extends BookStatusType> = BaseApiResponse<LibraryStatusBook<T>>;
+export type LibraryStatusBookResponse<T extends BookStatusType> =
+  BaseApiResponse<LibraryStatusBook<T>>;
 
 //날짜 적용 토글 연도
 export type LibraryDateToggleYearResponse = BaseApiResponse<DateToggleYear>;
@@ -156,5 +156,11 @@ export type LibraryDateToggleYearResponse = BaseApiResponse<DateToggleYear>;
 //최근 도서 정보 듸우기
 export type LibraryRecentBookInfoResponse = BaseApiResponse<RecentBookInfo>;
 
-//해당 날짜에 읽은 책 
+//해당 날짜에 읽은 책
 export type LibrarySpecificDateBookInfo = BaseApiResponse<SpecificDateBookInfo>;
+
+export interface BookResponse {
+  bookId: number;
+  bookShelfId: number | null;
+  readingStatus: BookStatusType | null;
+}

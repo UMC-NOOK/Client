@@ -10,21 +10,21 @@ export function useLibraryBookRegister() {
   const queryClient = useQueryClient();
 
   const addBookMutation = useMutation({
-    mutationFn: (bookId: string) => postLibraryBook(bookId),
+    mutationFn: (bookId: number) => postLibraryBook(bookId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["libraryBooks"] });
     },
   });
 
   const deleteBookMutation = useMutation({
-    mutationFn: (bookId: string) => deleteLibraryBook(bookId),
+    mutationFn: (bookId: number) => deleteLibraryBook(bookId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["libraryBooks"] });
     },
   });
 
   const patchBookStatusMutation = useMutation({
-    mutationFn: (params: { bookId: string; readingStatus: BookStatusType }) =>
+    mutationFn: (params: { bookId: number; readingStatus: BookStatusType }) =>
       patchLibraryBookStatus(params),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["libraryBooks"] });

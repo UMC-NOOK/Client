@@ -19,9 +19,10 @@ import testBookCover from "../../assets/book-info/testBookCover.svg";
 import book_shelf from "../../assets/icons/book_shelf-gray-30.svg";
 // hooks
 import { useGetBookDetailWithISBN } from "../../hooks/queries/bookInfo/useGetBookDetailWithISBN";
-// import { useLibraryBookRegister } from "../../hooks/mutations/library/useLibraryBookRegister";
+import { useLibraryBookRegister } from "../../hooks/mutations/library/useLibraryBookRegister";
 // types
 type DetailTab = "info" | "log";
+type BookStatusType = "BEFORE" | "READING" | "FINISHED" | null;
 // values
 const detailTabs = [
   { value: "info", label: "도서 정보" },
@@ -102,9 +103,7 @@ export default function BookInfoPage() {
   const navigate = useNavigate();
 
   const [selectedTab, setSelectedTab] = useState<DetailTab>("info");
-  const [readStatus, setReadStatus] = useState<"unread" | "reading" | "read">(
-    "unread",
-  );
+  const [readStatus, setReadStatus] = useState<BookStatusType>(null);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -113,6 +112,14 @@ export default function BookInfoPage() {
   const { data: bookDetailData, isLoading } = useGetBookDetailWithISBN(
     bookISBN!,
   );
+
+  const { addBook, deleteBook, patchBookStatus } = useLibraryBookRegister();
+
+  useEffect(() => {
+    if (bookDetailData) {
+      setReadStatus(bookDetailData.readingStatus);
+    }
+  }, [bookDetailData]);
 
   // 데이터가 null일 때 alert 띄우기 (렌더링 사이드 이펙트 방지)
   useEffect(() => {
@@ -142,20 +149,6 @@ export default function BookInfoPage() {
       ...prev,
       open: false,
     }));
-  };
-
-  // 개발용 핸들러 함수
-  const toggleReadStatus = () => {
-    if (readStatus === "unread") {
-      setReadStatus("reading");
-      openSnackbar("내 서재에 책을 등록했어요.");
-    } else if (readStatus === "reading") {
-      setShowCompleteModal(true);
-    } else {
-      setShowReadingModal(true);
-    }
-
-    console.log("현재 읽기 상태:", readStatus);
   };
 
   return (
@@ -270,12 +263,18 @@ export default function BookInfoPage() {
             )}
           </div>
           <div className="flex flex-col gap-2 w-full justify-center items-center">
-            {readStatus !== "unread" && (
+            {readStatus !== null && (
               <Solid
-                text="서재에서 제거"
+                text="서재에서 삭제하기"
                 variant="alert"
                 size="m"
-                onClick={() => setReadStatus("unread")}
+                onClick={() =>
+                  deleteBook(bookDetailData!.bookId, {
+                    onSuccess: () => {
+                      setReadStatus(null);
+                    },
+                  })
+                }
               />
             )}
             {!isLoading && bookDetailData?.aladinLink && (
@@ -442,7 +441,7 @@ export default function BookInfoPage() {
         </div>
       )}
       {/* 버튼 모달 */}
-      {readStatus === "reading" && (
+      {(readStatus === "BEFORE" || readStatus === "READING") && (
         <BottomSheet
           open={true}
           onClose={() => {}}
@@ -454,13 +453,15 @@ export default function BookInfoPage() {
             leftLabel: "완독 표시",
             rightLabel: "포커스 시작하기",
             onLeftClick: () => {
-              toggleReadStatus();
+              setShowCompleteModal(true);
             },
-            onRightClick: () => {},
+            onRightClick: () => {
+              // 포커스 페이지로 이동
+            },
           }}
         />
       )}
-      {readStatus === "unread" && (
+      {readStatus === null && (
         <BottomSheet
           open={true}
           onClose={() => {}}
@@ -470,12 +471,17 @@ export default function BookInfoPage() {
             variant: "mint",
             label: "서재에 등록하기",
             onClick: () => {
-              toggleReadStatus();
+              addBook(bookDetailData!.bookId, {
+                onSuccess: () => {
+                  openSnackbar("내 서재에 책을 등록했어요.");
+                  setReadStatus("READING");
+                },
+              });
             },
           }}
         />
       )}
-      {readStatus === "read" && (
+      {readStatus === "FINISHED" && (
         <BottomSheet
           open={true}
           onClose={() => {}}
@@ -485,7 +491,7 @@ export default function BookInfoPage() {
             variant: "primarySecondaryText",
             label: "완독 취소하기",
             onClick: () => {
-              toggleReadStatus();
+              setShowReadingModal(true);
             },
           }}
         />
@@ -501,8 +507,15 @@ export default function BookInfoPage() {
           rightLabel="변경"
           onLeftClick={() => setShowCompleteModal(false)}
           onRightClick={() => {
-            setReadStatus("read");
-            setShowCompleteModal(false);
+            patchBookStatus(
+              { bookId: bookDetailData!.bookId, readingStatus: "FINISHED" },
+              {
+                onSuccess: () => {
+                  setReadStatus("FINISHED");
+                  setShowCompleteModal(false);
+                },
+              },
+            );
           }}
         />
       )}
@@ -516,8 +529,15 @@ export default function BookInfoPage() {
           rightLabel="변경"
           onLeftClick={() => setShowReadingModal(false)}
           onRightClick={() => {
-            setReadStatus("reading");
-            setShowReadingModal(false);
+            patchBookStatus(
+              { bookId: bookDetailData!.bookId, readingStatus: "READING" },
+              {
+                onSuccess: () => {
+                  setReadStatus("READING");
+                  setShowReadingModal(false);
+                },
+              },
+            );
           }}
         />
       )}
