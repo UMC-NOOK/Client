@@ -1,14 +1,10 @@
-// src/components/navigation/ProgressIndicator.tsx
+import { useEffect, useState } from "react";
 
 type Props = {
-  /** 현재 단계 (0부터 시작) */
   step: number;
-  /** 총 단계 수 */
   total: number;
-  /** 바 높이 */
-  heightClassName?: string; // default: "h-1"
-  /** 좌우 패딩  */
-  wrapperClassName?: string; // default: "w-full px-1"
+  heightClassName?: string;
+  wrapperClassName?: string;
 };
 
 export default function ProgressIndicator({
@@ -24,8 +20,15 @@ export default function ProgressIndicator({
 
   if (maxIndex > 0) {
     const clampedStep = Math.min(Math.max(step - 1, 0), maxIndex);
-    percent = (clampedStep / maxIndex) * 100;
+    percent = clampedStep / maxIndex;
   }
+
+  // 🔥 핵심: mount 애니메이션용 state
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div className={wrapperClassName}>
@@ -37,8 +40,10 @@ export default function ProgressIndicator({
         ].join(" ")}
       >
         <div
-          className="h-full bg-gray-90 rounded-[80px] transition-all duration-300"
-          style={{ width: `${percent}%` }}
+          className="h-full bg-gray-90 rounded-[80px] origin-left transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+          style={{
+            transform: `scaleX(${mounted ? percent : 0})`,
+          }}
         />
       </div>
     </div>
