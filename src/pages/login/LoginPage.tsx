@@ -59,14 +59,14 @@ export default function LoginPage() {
             alert("임시 로그인 실패");
           }
         }}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-[12px] bg-gray-10 text-label-16-sb text-gray-90"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gray-10 text-label-16-sb text-gray-90"
         >
           <span> 임시 로그인 </span>
         </button>
         <button
           type="button"
           onClick={() => handleOAuthLogin("GOOGLE")}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-[12px] bg-white text-label-16-sb text-gray-10"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl white text-label-16-sb text-gray-10"
         >
           <Icon size="s">
             {" "}
@@ -77,7 +77,7 @@ export default function LoginPage() {
         <button
           type="button"
           onClick={() => handleOAuthLogin("KAKAO")}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-[12px] bg-[#FEE500] text-label-16-sb text-gray-10"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#FEE500] text-label-16-sb text-gray-10"
         >
           <Icon size="s">
             {" "}
