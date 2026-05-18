@@ -1,14 +1,27 @@
-// src/app/AppRoutes.tsx
-
 import { useEffect } from "react";
-import { Navigate, Route, Routes, Outlet } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
 import AppShell, { useShell } from "./AppShell";
+import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
 
+import FocusMobilePage from "../pages/search/FocusMobilePage";
+import GroupMobilePage from "../pages/search/GroupMobilePage";
 import SearchPage from "../pages/search/SearchPage";
+
 import SearchNewAddPage from "../pages/search/SearchNewAddPage";
 import SearchNewAddCategoryPage from "../pages/search/SearchNewAddCategoryPage";
 import SearchNewAddMorePage from "../pages/search/SearchNewAddMorePage";
+
+import BannerActionCardTestPage from "../pages/search/test/testpage";
+import BottomSheetTestPage from "../pages/search/test/BottomSheetTestPage";
+import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
 
 import BookInfoPage from "../pages/bookInfo/BookInfoPage";
 import AllHistoryPage from "../pages/bookInfo/AllHistoryPage";
@@ -32,6 +45,53 @@ import { OnboardingProvider } from "../pages/onboarding/OnboardingContext";
 
 import LoginPage from "../pages/login/LoginPage";
 import OAuthCallbackPage from "../pages/login/OAuthCallbackPage";
+
+/* ---------------- Tabs ---------------- */
+
+type TabKey = "library" | "focus" | "record" | "group";
+
+function pathToTab(pathname: string): TabKey {
+  if (pathname.startsWith("/focus")) return "focus";
+  if (pathname.startsWith("/record")) return "record";
+  if (pathname.startsWith("/group")) return "group";
+  return "library";
+}
+
+function tabToPath(tab: TabKey) {
+  switch (tab) {
+    case "focus":
+      return "/focus";
+    case "record":
+      return "/record";
+    case "group":
+      return "/group";
+    default:
+      return "/library";
+  }
+}
+
+function MainTabsLayout() {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const activeTab = pathToTab(pathname);
+
+  return (
+    <>
+      <TopAppBar
+        activeTab={activeTab}
+        onTabChange={(tab) => navigate(tabToPath(tab))}
+        onSearchClick={() => navigate("/search")}
+        onMenuClick={() => console.log("menu click")}
+        onLogoClick={() => navigate("/library")}
+      />
+      <div className="mx-auto w-full max-w-85.75">
+        <Outlet />
+      </div>
+    </>
+  );
+}
+
+/* ---------------- Layout ---------------- */
 
 function NoFooterLayout() {
   const { setHideFooter } = useShell();
@@ -66,6 +126,8 @@ function getAuthenticatedHomePath() {
   return onboardingCompleted ? "/library" : "/onboarding";
 }
 
+/* ---------------- Routes ---------------- */
+
 export default function AppRoutes() {
   const accessToken = localStorage.getItem("accessToken");
 
@@ -88,16 +150,7 @@ export default function AppRoutes() {
 
           {/* PUBLIC */}
           <Route element={<NoFooterLayout />}>
-            <Route
-              path="/login"
-              element={
-                accessToken ? (
-                  <Navigate to={getAuthenticatedHomePath()} replace />
-                ) : (
-                  <LoginPage />
-                )
-              }
-            />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/google/oauth" element={<OAuthCallbackPage />} />
             <Route path="/kakao/callback" element={<OAuthCallbackPage />} />
           </Route>
@@ -105,7 +158,7 @@ export default function AppRoutes() {
           {/* PROTECTED */}
           <Route element={<RequireAuth />}>
 
-            {/* 🔥 ONBOARDING (Provider 포함) */}
+            {/* ONBOARDING */}
             <Route element={<NoFooterLayout />}>
               <Route
                 path="/onboarding"
@@ -122,21 +175,30 @@ export default function AppRoutes() {
               </Route>
             </Route>
 
-            {/* LIBRARY */}
-            <Route path="/library" element={<LibraryPage />} />
-            <Route path="/library/status" element={<LibraryAllBookPage />} />
-            <Route path="/users/me/onboarding/goal" element={<LibraryGoalInputPage />} />
-            <Route path="/library/:isbn13" element={<BookInfoPage />} />
-            <Route path="/library/:isbn13/history" element={<AllHistoryPage />} />
-
             {/* SEARCH */}
             <Route path="/search" element={<SearchPage />} />
             <Route path="/search/new" element={<SearchNewAddPage />} />
             <Route path="/search/new/category" element={<SearchNewAddCategoryPage />} />
             <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
 
-            {/* REPORT */}
-            <Route path="/record" element={<ReportPage />} />
+            {/* MAIN TABS + TEST 복구 */}
+            <Route element={<MainTabsLayout />}>
+              <Route path="/library" element={<LibraryPage />} />
+              <Route path="/focus" element={<FocusMobilePage />} />
+              <Route path="/record" element={<ReportPage />} />
+              <Route path="/group" element={<GroupMobilePage />} />
+
+              <Route path="/test/banner-action-card" element={<BannerActionCardTestPage />} />
+              <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
+              <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
+            </Route>
+
+            {/* 기타 */}
+            <Route path="/library/status" element={<LibraryAllBookPage />} />
+            <Route path="/users/me/onboarding/goal" element={<LibraryGoalInputPage />} />
+            <Route path="/library/:isbn13" element={<BookInfoPage />} />
+            <Route path="/library/:isbn13/history" element={<AllHistoryPage />} />
+
             <Route path="/report/search" element={<ReportSearchPage />} />
             <Route path="/report/:id" element={<IndividueleReportPage />} />
             <Route path="/report/:id/:recordId" element={<ViewReportPage />} />
