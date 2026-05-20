@@ -18,7 +18,7 @@ export default function SearchNewAddPage() {
 
   const isNextActive = !!title.trim() && !!author.trim();
 
-  const handleClose = () => navigate(-1);
+  const handleClose = () => navigate("/library");
 
   const handleNext = () => {
     if (!isNextActive) return;
