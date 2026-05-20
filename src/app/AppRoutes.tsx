@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Navigate,
   Route,
@@ -79,7 +79,7 @@ function MainTabsLayout() {
     <>
       <TopAppBar
         activeTab={activeTab}
-        onTabChange={(tab) => navigate(tabToPath(tab))}
+        onTabChange={(tab: TabKey) => navigate(tabToPath(tab))}
         onSearchClick={() => navigate("/search")}
         onMenuClick={() => console.log("menu click")}
         onLogoClick={() => navigate("/library")}
@@ -113,83 +113,7 @@ function AppShellLayout() {
   );
 }
 
-/* ---------------- Auth / Onboarding ---------------- */
-
-type OnboardingStatusResponse = {
-  isSuccess?: boolean;
-  result?: {
-    needsOnboarding: boolean;
-    completedAt: string | null;
-  };
-  needsOnboarding?: boolean;
-  completedAt?: string | null;
-};
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? "https://dev.reading-nook.site";
-
-async function fetchOnboardingStatus(accessToken: string) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/v1/users/me/onboarding/status`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch onboarding status");
-  }
-
-  const data: OnboardingStatusResponse = await response.json();
-
-  /**
-   * 백엔드 응답이 아래 둘 중 어떤 형태든 대응:
-   *
-   * 1) { isSuccess: true, result: { needsOnboarding: true, completedAt: null } }
-   * 2) { needsOnboarding: true, completedAt: null }
-   */
-  return data.result ?? data;
-}
-
-function RootRedirect() {
-  const [redirectPath, setRedirectPath] = useState<string | null>(null);
-
-  useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-
-    if (!accessToken) {
-      setRedirectPath("/login");
-      return;
-    }
-
-    fetchOnboardingStatus(accessToken)
-      .then((status) => {
-        if (status.needsOnboarding) {
-          setRedirectPath("/onboarding");
-        } else {
-          setRedirectPath("/library");
-        }
-      })
-      .catch((error) => {
-        console.error("onboarding status check failed", error);
-
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("onboardingCompleted");
-
-        setRedirectPath("/login");
-      });
-  }, []);
-
-  if (!redirectPath) {
-    return null;
-  }
-
-  return <Navigate to={redirectPath} replace />;
-}
+/* ---------------- Auth ---------------- */
 
 function RequireAuth() {
   const accessToken = localStorage.getItem("accessToken");
@@ -201,46 +125,25 @@ function RequireAuth() {
   return <Outlet />;
 }
 
-function RequireOnboardingCompleted() {
-  const [status, setStatus] = useState<
-    "loading" | "unauthenticated" | "needsOnboarding" | "completed"
-  >("loading");
+function getAuthRedirectPath() {
+  const accessToken = localStorage.getItem("accessToken");
+  const onboardingCompleted = localStorage.getItem("onboardingCompleted");
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-
-    if (!accessToken) {
-      setStatus("unauthenticated");
-      return;
-    }
-
-    fetchOnboardingStatus(accessToken)
-      .then((result) => {
-        setStatus(result.needsOnboarding ? "needsOnboarding" : "completed");
-      })
-      .catch((error) => {
-        console.error("onboarding status check failed", error);
-
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("onboardingCompleted");
-
-        setStatus("unauthenticated");
-      });
-  }, []);
-
-  if (status === "loading") {
-    return null;
+  if (!accessToken) {
+    return "/login";
   }
 
-  if (status === "unauthenticated") {
-    return <Navigate to="/login" replace />;
+  /**
+   * accessToken만 있고 onboardingCompleted가 없는 경우:
+   * 이전 테스트/OAuth 실패/임시 로그인 잔여 상태로 보고 정리
+   */
+  if (onboardingCompleted === null) {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("onboardingCompleted");
+    return "/login";
   }
 
-  if (status === "needsOnboarding") {
-    return <Navigate to="/onboarding" replace />;
-  }
-
-  return <Outlet />;
+  return onboardingCompleted === "true" ? "/library" : "/onboarding";
 }
 
 /* ---------------- Routes ---------------- */
@@ -251,7 +154,10 @@ export default function AppRoutes() {
       <Route element={<AppShell />}>
         <Route element={<AppShellLayout />}>
           {/* ROOT */}
-          <Route path="/" element={<RootRedirect />} />
+          <Route
+            path="/"
+            element={<Navigate to={getAuthRedirectPath()} replace />}
+          />
 
           {/* PUBLIC */}
           <Route element={<NoFooterLayout />}>
@@ -282,60 +188,60 @@ export default function AppRoutes() {
               </Route>
             </Route>
 
-            {/* 온보딩 완료 후 접근 가능한 페이지들 */}
-            <Route element={<RequireOnboardingCompleted />}>
-              {/* SEARCH */}
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/search/new" element={<SearchNewAddPage />} />
+            {/* SEARCH */}
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/search/new" element={<SearchNewAddPage />} />
+            <Route
+              path="/search/new/category"
+              element={<SearchNewAddCategoryPage />}
+            />
+            <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
+
+            {/* MAIN TABS + TEST */}
+            <Route element={<MainTabsLayout />}>
+              <Route path="/library" element={<LibraryPage />} />
+              <Route path="/focus" element={<FocusMobilePage />} />
+              <Route path="/record" element={<ReportPage />} />
+              <Route path="/group" element={<GroupMobilePage />} />
+
               <Route
-                path="/search/new/category"
-                element={<SearchNewAddCategoryPage />}
+                path="/test/banner-action-card"
+                element={<BannerActionCardTestPage />}
               />
-              <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
-
-              {/* MAIN TABS + TEST 복구 */}
-              <Route element={<MainTabsLayout />}>
-                <Route path="/library" element={<LibraryPage />} />
-                <Route path="/focus" element={<FocusMobilePage />} />
-                <Route path="/record" element={<ReportPage />} />
-                <Route path="/group" element={<GroupMobilePage />} />
-
-                <Route
-                  path="/test/banner-action-card"
-                  element={<BannerActionCardTestPage />}
-                />
-                <Route
-                  path="/test/bottomsheet"
-                  element={<BottomSheetTestPage />}
-                />
-                <Route
-                  path="/test/popup"
-                  element={<PopupConfirmModalTestPage />}
-                />
-              </Route>
-
-              {/* 기타 */}
-              <Route path="/library/status" element={<LibraryAllBookPage />} />
               <Route
-                path="/users/me/onboarding/goal"
-                element={<LibraryGoalInputPage />}
+                path="/test/bottomsheet"
+                element={<BottomSheetTestPage />}
               />
-              <Route path="/library/:isbn13" element={<BookInfoPage />} />
-              <Route path="/library/:isbn13/history" element={<AllHistoryPage />} />
-
-              <Route path="/report/search" element={<ReportSearchPage />} />
-              <Route path="/report/:id" element={<IndividueleReportPage />} />
-              <Route path="/report/:id/:recordId" element={<ViewReportPage />} />
-              <Route path="/report/:id/create" element={<CreateReportPage />} />
               <Route
-                path="/report/:id/:recordId/edit"
-                element={<CreateReportPage />}
+                path="/test/popup"
+                element={<PopupConfirmModalTestPage />}
               />
             </Route>
+
+            {/* 기타 */}
+            <Route path="/library/status" element={<LibraryAllBookPage />} />
+            <Route
+              path="/users/me/onboarding/goal"
+              element={<LibraryGoalInputPage />}
+            />
+            <Route path="/library/:isbn13" element={<BookInfoPage />} />
+            <Route path="/library/:isbn13/history" element={<AllHistoryPage />} />
+
+            <Route path="/report/search" element={<ReportSearchPage />} />
+            <Route path="/report/:id" element={<IndividueleReportPage />} />
+            <Route path="/report/:id/:recordId" element={<ViewReportPage />} />
+            <Route path="/report/:id/create" element={<CreateReportPage />} />
+            <Route
+              path="/report/:id/:recordId/edit"
+              element={<CreateReportPage />}
+            />
           </Route>
 
           {/* FALLBACK */}
-          <Route path="*" element={<RootRedirect />} />
+          <Route
+            path="*"
+            element={<Navigate to={getAuthRedirectPath()} replace />}
+          />
         </Route>
       </Route>
     </Routes>
