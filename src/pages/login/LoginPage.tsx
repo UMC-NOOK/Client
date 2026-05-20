@@ -1,3 +1,4 @@
+// 로그인 페이지 컴포넌트
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo/top-navigation-logo.svg";
 import google from "../../assets/icons/google.svg";
@@ -66,7 +67,7 @@ export default function LoginPage() {
         <button
           type="button"
           onClick={() => handleOAuthLogin("GOOGLE")}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl white text-label-16-sb text-gray-10"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-white text-label-16-sb text-gray-10"
         >
           <Icon size="s">
             {" "}
