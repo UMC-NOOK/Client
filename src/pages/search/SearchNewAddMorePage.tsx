@@ -39,7 +39,7 @@ export default function SearchNewAddMorePage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleClose = () => navigate(-1);
+  const handleClose = () => navigate("/library");
 
   const publicationDate = useMemo(() => {
     if (!pubDate.yyyy || !pubDate.mm || !pubDate.dd) return undefined;
