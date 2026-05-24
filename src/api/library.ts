@@ -140,11 +140,12 @@ export function getRecentBookInfo() {
   return libraryGet<RecentBookInfo>("/recent-focus");
 }
 
-export function getLibrarySpecificBookInfo(params: {
+/** 날짜별 포커스 기록 — 최초 조회 시 cursor 미전달 */
+export function getLibraryFocusRecords(params: {
   date: string;
-  cursor: number;
+  cursor?: number | null;
 }): Promise<SpecificDateBookInfo> {
-  return libraryGet<SpecificDateBookInfo>("focus-records", {
+  return libraryGet<SpecificDateBookInfo>("/focus-records", {
     date: params.date,
     cursor: params.cursor,
   });

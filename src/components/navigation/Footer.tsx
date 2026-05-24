@@ -1,5 +1,4 @@
-// Client\src\components\navigation\Footer.tsx
-import dividerIcon from "../../assets/search/search-field-text.svg";
+import dividerIcon from "../../assets/icons/line-gray-50.svg";
 
 export default function Footer() {
   return (
@@ -41,7 +40,7 @@ function Divider() {
       src={dividerIcon}
       alt=""
       aria-hidden
-      className="w-px h-3"
+      className="h-3 w-px"
       draggable={false}
     />
   );

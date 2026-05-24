@@ -1,6 +1,6 @@
-import bottomBanner from "../../../assets/images/bottom_banner.jpg";
 import movement from "../../../assets/icons/movement.svg";
-import close from "../../../assets/icons/close.svg";
+import close from "../../../assets/icons/close-gray-60.svg";
+import Icon from "../../../components/action/Button/Icon";
 import Text  from "../../../components/action/Button/Text";
 import SectionHeader from "../../../components/content/InformationText/SectionHeader";
 
@@ -24,24 +24,23 @@ export default function BottomBanner({
     onClose,
 } : BottomBannerProps) {
     return (
-        <div className="pointer-events-none fixed inset-0 z-30 flex items-end justify-center">
+        <div className="pointer-events-none fixed inset-0 z-30 flex items-end justify-center pb-1">
             <div className="pointer-events-auto flex flex-col items-end justify-center min-w-[375px] h-29 px-4"> 
                 <div className="flex justify-center items-center">
                     <Text size="12">
                             닫기
                     </Text>
                     <div onClick={onClose}>
-                    <img src={close} className="h-3 w-3"/>
+                        <Icon size="xs" className="h-3 w-3 p-0">
+                            <img src={close} alt="" />
+                        </Icon>
                     </div>
                 </div>
 
                 <div
-                    className="flex flex-row items-end justify-center justify-between w-full h-24 rounded-[10px] bg-contain bg-cover bg-no-repeat p-4 gap-4"
-                    style={{
-                        backgroundImage: `url(${bottomBanner})`,
-                    }}
+                    className="flex flex-row items-end justify-center justify-between w-full h-24 rounded-[10px] bg-gray-15 p-4 gap-4"
                 >
-                    <img src={coverUrl} className="w-11 h-full"/>
+                    <img src={coverUrl} className="w-11 h-full rounded-[2px]"/>
                     
                     <div className="flex h-full flex-1 items-center justify-between">
                         <div className="flex h-full flex-1 flex-col items-start">
