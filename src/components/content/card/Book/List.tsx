@@ -54,7 +54,7 @@ export default function BookList({
 
       <div className="flex flex-1 min-w-0 flex-col min-h-20.5 justify-between items-start">
         <div className="flex flex-col gap-0.5 min-w-0 self-stretch">
-          <p className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-90 text-title-14-sb">
+          <p className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-90 text-subtitle-14-sb">
             {title}
           </p>
           <p className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-90 text-body-13-r">

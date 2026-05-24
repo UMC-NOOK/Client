@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
-import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import Icon from "../../components/action/Button/Icon";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
 import TabBar from "../../components/navigation/tabs/TabBar";
@@ -266,7 +265,7 @@ export default function LibraryAllBookPage() {
   return (
     <div>
       <div className="pt-2">
-        <TopNavigation
+        <TabBar
           left={
             <Link to="/library">
               <Icon size="m">
@@ -275,7 +274,7 @@ export default function LibraryAllBookPage() {
             </Link>
           }
           center={
-            <div className="text-label-18-rb text-gray-90">서재 전체 보기</div>
+            <div className="text-title-18-m text-gray-90">서재 전체 보기</div>
           }
           right={
             <Icon size="m">
@@ -290,14 +289,14 @@ export default function LibraryAllBookPage() {
           size="20"
           top={
             <div className="flex items-center gap-1">
-              <label className="text-gray-90">
+              <label className="text-title-20-b text-gray-90">
                 {SECTION_SUBJECT[tab]} 책이{" "}
               </label>
-              <label className="text-yellow-70">{totalBookNum}권</label>
-              <label className="text-gray-90"> 있어요.</label>
+              <label className="text-title-20-b text-yellow-70">{totalBookNum}권</label>
+              <label className="text-title-20-b text-gray-90"> 있어요.</label>
             </div>
           }
-          bottom={<div>{SECTION_BOTTOM[tab]}</div>}
+          bottom={<div className="text-body-14-m">{SECTION_BOTTOM[tab]}</div>}
         />
       </div>
 
@@ -306,6 +305,7 @@ export default function LibraryAllBookPage() {
           options={TAB_OPTIONS}
           value={tab}
           onChange={(value) => setTab(value as LibraryTab)}
+          variant="underlineGradient"
         />
       </div>
 
