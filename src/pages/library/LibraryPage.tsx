@@ -118,10 +118,7 @@ export default function LibraryPage() {
   const page = libraryRecentBookInfoData?.page ?? 147;
   const focusTime = libraryRecentBookInfoData?.focusTime ?? "08:10:22";
 
-  const dropdownPositionClass =
-    selectedView === "focus"
-      ? "absolute right-12 z-50 bottom-94"
-      : "absolute right-12 z-50 bottom-124";
+  const dropdownPositionClass = "absolute right-20 bottom-75 z-50";
 
   const mockLibraryBookGoal = mockLibraryBookGoalResponse.result;
 
