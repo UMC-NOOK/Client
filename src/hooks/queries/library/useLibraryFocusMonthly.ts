@@ -1,6 +1,29 @@
 import { useQuery } from "@tanstack/react-query";
 import { getLibraryFocusMonthly } from "../../../api/library";
 import { mockLibraryFocusTimeResponse } from "../../../mocks/library/library";
+import type { LibraryFocusMonthly } from "../../../types/libraryInfo/library";
+
+const MOCK_FOCUS_DATE = "2026-05-14";
+
+function withMayMockFocus(data: LibraryFocusMonthly): LibraryFocusMonthly {
+  if (data.yearMonth !== "2026-05") return data;
+
+  const hasMockDate = data.focusBookItems.some(
+    (item) => item.date === MOCK_FOCUS_DATE,
+  );
+
+  if (hasMockDate) return data;
+
+  return {
+    ...data,
+    totalFocusMin:
+      data.totalFocusMin + mockLibraryFocusTimeResponse.result.totalFocusMin,
+    focusBookItems: [
+      ...data.focusBookItems,
+      ...mockLibraryFocusTimeResponse.result.focusBookItems,
+    ],
+  };
+}
 
 export function useLibraryFocusMonthly(
   yearMonth: string,
@@ -12,11 +35,7 @@ export function useLibraryFocusMonthly(
       try {
         const data = await getLibraryFocusMonthly({ yearMonth });
 
-        if (yearMonth === "2026-05" && data.focusBookItems.length === 0) {
-          return mockLibraryFocusTimeResponse.result;
-        }
-
-        return data;
+        return withMayMockFocus(data);
       } catch {
         if (yearMonth === "2026-05") {
           return mockLibraryFocusTimeResponse.result;

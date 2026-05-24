@@ -67,7 +67,7 @@ export default function DayIndicatorSet({
 
     dayInfosForArray.push({
       day: String(l),
-      disable: true,
+      disable: !entry,
       percent,
     });
   }
