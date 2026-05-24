@@ -203,15 +203,18 @@ export default function LibraryPage() {
             size="16"
             top={
               <div className="flex flex-row gap-2 items-center justify-center">
-                <div className="text-label-16-b text-gray-90">
-                  {selectedYearMonth.month}월 독서 달력
-                </div>
-                <div
-                  className="flex w-3 h-3 items-center justify-center"
+                <button
+                  type="button"
+                  className="flex items-center justify-center gap-2"
                   onClick={() => setIsDropdownOpen((prev) => !prev)}
                 >
-                  <img src={isDropdownOpen ? CaretUp : CaretDown} />
-                </div>
+                  <span className="text-label-16-b text-gray-90">
+                    {selectedYearMonth.month}월 독서 달력
+                  </span>
+                  <span className="flex w-3 h-3 items-center justify-center">
+                    <img src={isDropdownOpen ? CaretUp : CaretDown} alt="" />
+                  </span>
+                </button>
                 {isDropdownOpen && (
                   <div className={dropdownPositionClass}>
                     <DropDown
