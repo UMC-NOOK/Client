@@ -13,3 +13,7 @@
       transparent 100%
     ) !important;
   }
+
+.picker-root > div:last-child > div {
+  display: none !important;
+}
