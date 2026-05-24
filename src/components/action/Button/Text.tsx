@@ -25,7 +25,7 @@ export default function Text({
 }: Props) {
   const clickable = Boolean(onClick);
 
-  const colorClass = active ? "text-gray-90" : "text-gray-60";
+  const colorClass = active ? "text-gray-90" : "text-gray-40";
 
   return (
     <span

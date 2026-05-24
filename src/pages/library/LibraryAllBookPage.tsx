@@ -56,7 +56,7 @@ function formatDateLabel(iso: string) {
 
   if (Number.isNaN(d.getTime())) return iso.slice(0, 10);
 
-  return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}`;
+  return `${String(d.getFullYear()).slice(2)}.${d.getMonth() + 1}.${d.getDate()}`;
 }
 
 function getBookListProps(item: BookItemsStatusItems<LibraryTab>, tab: LibraryTab) {

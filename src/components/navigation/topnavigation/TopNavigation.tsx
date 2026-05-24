@@ -9,6 +9,8 @@ type TopNavigationProps = {
   right?: React.ReactNode;
   onClickRight?: () => void;
   className?: string;
+  leftPadding?: string;
+  rightPadding?: string;
 };
 
 function isTextLike(node: React.ReactNode): boolean {
@@ -80,6 +82,8 @@ export default function TopNavigation({
   right,
   onClickRight,
   className = "",
+  leftPadding,
+  rightPadding,
 }: TopNavigationProps) {
   const getPadding = (node: React.ReactNode) => {
     return isTextLike(node) ? "px-4 py-2" : "p-2";
@@ -94,7 +98,7 @@ export default function TopNavigation({
     >
       {/* LEFT */}
       <div className="absolute left-0 flex items-center">
-        {renderNavItem(left, onClickLeft, getPadding(left))}
+        {renderNavItem(left, onClickLeft, leftPadding ?? getPadding(left))}
       </div>
 
       {/* CENTER */}
@@ -104,7 +108,7 @@ export default function TopNavigation({
 
       {/* RIGHT */}
       <div className="absolute right-0 flex items-center">
-        {renderNavItem(right, onClickRight, getPadding(right))}
+        {renderNavItem(right, onClickRight, rightPadding ?? getPadding(right))}
       </div>
     </header>
   );

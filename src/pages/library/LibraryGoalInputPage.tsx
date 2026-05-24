@@ -56,12 +56,13 @@ export default function LibraryGoalInputPage() {
                             to="/library"
                             className="inline-flex text-inherit no-underline outline-none focus-visible:ring-2 focus-visible:ring-gray-40 focus-visible:ring-offset-2 rounded-full"
                         >
-                            <Icon size="m">
+                            <Icon size="s">
                                 <img src={close} alt="" />
                             </Icon>
                         </Link>
                     }
                     onClickRight={handleComplete}
+                    rightPadding="p-0"
                     right={
                         <Text
                             size="18"
