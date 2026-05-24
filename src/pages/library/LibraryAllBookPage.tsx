@@ -27,8 +27,8 @@ const PAGE_SIZE = 5;
 const LIST_MAX_HEIGHT_CLASS = "max-h-[34rem]";
 
 const TAB_OPTIONS = [
-  { label: "읽기 전", value: "BEFORE" },
-  { label: "읽는 중", value: "READING" },
+  { label: "독서 전", value: "BEFORE" },
+  { label: "독서 중", value: "READING" },
   { label: "완독", value: "FINISHED" },
 ] as const;
 
