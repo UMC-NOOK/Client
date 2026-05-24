@@ -131,31 +131,54 @@ import type {
       result: {
         readingStatus: "BEFORE",
         totalBookNum: 12,
-        bookItems: [
-          {
-            bookId: 11,
-            title: "도둑맞은 집중력",
-            author: "요한 하리",
-            coverUrl:
-              "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=400&auto=format&fit=crop",
-          },
-          {
-            bookId: 12,
-            title: "불편한 편의점",
-            author: "김호연",
-            coverUrl:
-              "https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&auto=format&fit=crop",
-          },
-          {
-            bookId: 13,
-            title: "아주 작은 습관의 힘",
-            author: "James Clear",
-            coverUrl:
-              "https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=400&auto=format&fit=crop",
-          },
-        ],
-        nextCursor: 13,
-        hasNext: true,
+        bookItems: {
+          items: [
+            {
+              bookId: 11,
+              title: "도둑맞은 집중력",
+              author: "요한 하리",
+              coverUrl:
+                "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=400&auto=format&fit=crop",
+            },
+            {
+              bookId: 12,
+              title: "불편한 편의점",
+              author: "김호연",
+              coverUrl:
+                "https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&auto=format&fit=crop",
+            },
+            {
+              bookId: 13,
+              title: "아주 작은 습관의 힘",
+              author: "James Clear",
+              coverUrl:
+                "https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=400&auto=format&fit=crop",
+            },
+            {
+              bookId: 14,
+              title: "미움받을 용기",
+              author: "기시미 이치로",
+              coverUrl:
+                "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=400&auto=format&fit=crop",
+            },
+            {
+              bookId: 15,
+              title: "1984",
+              author: "조지 오웰",
+              coverUrl:
+                "https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&auto=format&fit=crop",
+            },
+            {
+              bookId: 16,
+              title: "데미안",
+              author: "헤르만 헤세",
+              coverUrl:
+                "https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=400&auto=format&fit=crop",
+            },
+          ],
+          nextCursor: 5,
+          hasNext: true,
+        },
       },
     };
   
@@ -170,26 +193,28 @@ import type {
       result: {
         readingStatus: "READING",
         totalBookNum: 5,
-        bookItems: [
-          {
-            bookId: 21,
-            title: "혼모노",
-            author: "성해나",
-            coverUrl:
-              "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop",
-            startedAt: "2026-04-10T09:00:00",
-          },
-          {
-            bookId: 22,
-            title: "클라우드 쿠쿠 랜드",
-            author: "이소영",
-            coverUrl:
-              "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&auto=format&fit=crop",
-            startedAt: "2026-04-18T20:30:00",
-          },
-        ],
-        nextCursor: null,
-        hasNext: false,
+        bookItems: {
+          items: [
+            {
+              bookId: 21,
+              title: "혼모노",
+              author: "성해나",
+              coverUrl:
+                "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop",
+              startedAt: "2026-04-10T09:00:00",
+            },
+            {
+              bookId: 22,
+              title: "클라우드 쿠쿠 랜드",
+              author: "이소영",
+              coverUrl:
+                "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&auto=format&fit=crop",
+              startedAt: "2026-04-18T20:30:00",
+            },
+          ],
+          nextCursor: null,
+          hasNext: null,
+        },
       },
     };
   
@@ -204,28 +229,30 @@ import type {
       result: {
         readingStatus: "FINISHED",
         totalBookNum: 27,
-        bookItems: [
-          {
-            bookId: 31,
-            title: "트렌드 코리아 2026",
-            author: "김난도 외",
-            coverUrl:
-              "https://images.unsplash.com/photo-1526243741027-444d633d7365?q=80&w=400&auto=format&fit=crop",
-            startedAt: "2026-03-01T10:00:00",
-            endedAt: "2026-03-07T21:10:00",
-          },
-          {
-            bookId: 32,
-            title: "세이노의 가르침",
-            author: "세이노",
-            coverUrl:
-              "https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=400&auto=format&fit=crop",
-            startedAt: "2026-03-10T08:30:00",
-            endedAt: "2026-03-19T23:40:00",
-          },
-        ],
-        nextCursor: 32,
-        hasNext: true,
+        bookItems: {
+          items: [
+            {
+              bookId: 31,
+              title: "트렌드 코리아 2026",
+              author: "김난도 외",
+              coverUrl:
+                "https://images.unsplash.com/photo-1526243741027-444d633d7365?q=80&w=400&auto=format&fit=crop",
+              startedAt: "2026-03-01T10:00:00",
+              endedAt: "2026-03-07T21:10:00",
+            },
+            {
+              bookId: 32,
+              title: "세이노의 가르침",
+              author: "세이노",
+              coverUrl:
+                "https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=400&auto=format&fit=crop",
+              startedAt: "2026-03-10T08:30:00",
+              endedAt: "2026-03-19T23:40:00",
+            },
+          ],
+          nextCursor: 32,
+          hasNext: true,
+        },
       },
     };
   
@@ -239,9 +266,11 @@ import type {
     result: {
       readingStatus: "BEFORE",
       totalBookNum: 0,
-      bookItems: [],
-      nextCursor: null,
-      hasNext: false,
+      bookItems: {
+        items: [],
+        nextCursor: null,
+        hasNext: null,
+      },
     },
   };
 
@@ -367,7 +396,7 @@ import type {
  */
 export function getMockLibraryStatusBooksPage<T extends BookStatusType>(
     status: T,
-    cursor: number,
+    cursor: number | null,
     size: number,
 ): LibraryStatusBook<T> {
     const base =
@@ -377,18 +406,19 @@ export function getMockLibraryStatusBooksPage<T extends BookStatusType>(
               ? mockLibraryStatusReadingResponse.result
               : mockLibraryStatusFinishedResponse.result;
 
-    const full = [...(base.bookItems ?? [])];
-    const page = full.slice(cursor, cursor + size);
-    const deliveredEnd = cursor + page.length;
+    const full = [...base.bookItems.items];
+    const offset = cursor ?? 0;
+    const items = full.slice(offset, offset + size);
+    const deliveredEnd = offset + items.length;
     const hasNext = deliveredEnd < full.length;
-    const nextCursor = hasNext ? (full[deliveredEnd]?.bookId ?? null) : null;
 
     return {
-        ...base,
         readingStatus: status,
         totalBookNum: base.totalBookNum,
-        bookItems: page,
-        hasNext,
-        nextCursor,
+        bookItems: {
+            items,
+            nextCursor: hasNext ? deliveredEnd : null,
+            hasNext: hasNext ? true : null,
+        },
     } as LibraryStatusBook<T>;
 }

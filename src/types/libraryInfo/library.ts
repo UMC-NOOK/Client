@@ -24,7 +24,6 @@ export type MonthlyTopBook = {
     coverUrl: string;
   };
   
-  
 
 export type FocusBookItems = {
     bookId: number;
@@ -65,13 +64,21 @@ export type BookDetailInfo = {
 
 export type CursorPage = {
     nextCursor: number | null;
-    hasNext: boolean;
+    /** `null`이면 다음 페이지 없음 */
+    hasNext: boolean | null;
 };
 
 export type LibraryDateFocus = {
     items: BookDetailInfo[];
 } & CursorPage;
 
+
+export type SpecificDateBookInfo = {
+    items: DateBookInfo[]
+}&CursorPage;
+
+
+//상태 조회 bookItems 의 공통 부분 & 읽기 전
 export interface BaseStatusBookItems {
     bookId: number;
     title: string;
@@ -79,33 +86,43 @@ export interface BaseStatusBookItems {
     coverUrl: string;
 };
 
+//읽는 중
 export interface ReadingBookItems extends BaseStatusBookItems {
     startedAt: string;
 };
 
+//완독
 export interface FinishedBookItems extends BaseStatusBookItems {
     startedAt: string;
     endedAt: string;
 }
 
-export type BookStatusItems <T extends BookStatusType> =
+//상태별 BookITEMS의 Items 
+export type BookItemsStatusItems <T extends BookStatusType> =
     T extends "BEFORE"
         ? BaseStatusBookItems
         : T extends "READING"
             ? ReadingBookItems
             : FinishedBookItems
+;
 
-export type LibraryStatusBookItemsPage<T extends BookStatusType> = {
-    items: BookStatusItems<T>[];
-    nextCursor: number | null;
-    hasNext: boolean;
-};
-              
+//상태별 bookITEMS
+export type BookStatusBookItems<T extends BookStatusType> = {
+    items: BookItemsStatusItems<T>[];
+}&CursorPage
+
+//전체 Response
 export type LibraryStatusBook<T extends BookStatusType> = {
     readingStatus: T;
     totalBookNum: number;
-    bookItems: null | [] | BookStatusItems<T>[];
+    bookItems: BookStatusBookItems<T>;
 };
+              
+// export type LibraryStatusBook<T extends BookStatusType> = {
+//     readingStatus: T;
+//     totalBookNum: number;
+//     bookItems: null | [] | BookStatusItems<T>[];
+// };
 
 
 export type DateToggleYear = {
@@ -129,39 +146,39 @@ export type DateBookInfo = {
     coverUrl : string;
 };
 
-//해당 날짜의 repsonse
-export type SpecificDateBookInfo = {
-    items : DateBookInfo[];
-} & CursorPage;
-
-export type LibraryBookNumResponse = BaseApiResponse<LibraryBook>; // 서재 전체 도수 조회
-export type LibraryBookGoalResponse = BaseApiResponse<LibraryBookGoal>; //서재 목표 조회
-
-//포커스 조회x
-export type LibraryFocusTimeResponse = BaseApiResponse<LibraryFocusMonthly>;
-export type LibraryFocusBookResponse = BaseApiResponse<LibraryBooksMonthly>;
-
-//목표 조회
-export type LibraryBookGoalPatchResponse = BaseApiResponse<PatchBookGoal>;
-
-//날짜별 조회
-export type LibraryDateFocusResponse = BaseApiResponse<LibraryDateFocus>;
-
-//모든
+//독서 상태에 따른 책 조회
 export type LibraryStatusBooksQueryParams = {
     status: BookStatusType;
     cursor?: number;
     size?: number;
 };
 
-//상태별 조회
+//서제 전체 도수 조회
+export type LibraryBookNumResponse = BaseApiResponse<LibraryBook>;
+
+//서재 목표 조회
+export type LibraryBookGoalResponse = BaseApiResponse<LibraryBookGoal>;
+
+//월별 조회
+//시간 조회
+export type LibraryFocusTimeResponse = BaseApiResponse<LibraryFocusMonthly>;
+//책 조회
+export type LibraryFocusBookResponse = BaseApiResponse<LibraryBooksMonthly>;
+
+//목표 설정 (수정)
+export type LibraryBookGoalPatchResponse = BaseApiResponse<PatchBookGoal>;
+
+//독서 상태별 조회
 export type LibraryStatusBookResponse<T extends BookStatusType> = BaseApiResponse<LibraryStatusBook<T>>;
 
 //날짜 적용 토글 연도
 export type LibraryDateToggleYearResponse = BaseApiResponse<DateToggleYear>;
 
-//최근 도서 정보 듸우기
-export type LibraryRecentBookInfoResponse = BaseApiResponse<RecentBookInfo>;
+//날짜별 조회
+export type LibraryDateFocusResponse = BaseApiResponse<LibraryDateFocus>;
 
 //해당 날짜에 읽은 책 
 export type LibrarySpecificDateBookInfo = BaseApiResponse<SpecificDateBookInfo>;
+
+//최근 도서 정보 듸우기
+export type LibraryRecentBookInfoResponse = BaseApiResponse<RecentBookInfo>;

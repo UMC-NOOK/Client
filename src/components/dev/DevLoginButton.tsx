@@ -34,6 +34,7 @@ export default function DevLoginButton() {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("onboardingCompleted");
+    localStorage.removeItem("nickname");
     alert("로그아웃 완료");
     navigate("/login", { replace: true });
   };
