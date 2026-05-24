@@ -49,7 +49,7 @@ export default function DropDown({
   };
 
   return (
-    <div className="flex flex-col w-48.5 rounded-[4px] bg-gray-10">
+    <div className="flex flex-col w-48.5 rounded-[4px] bg-gray-10 shadow-elevation-20">
         <div className="flex flex-row">
                 <Picker
                     value={pickerValue}
