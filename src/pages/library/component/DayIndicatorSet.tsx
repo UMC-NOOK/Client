@@ -74,7 +74,7 @@ export default function DayIndicatorSet({
 
   return (
     <div className="flex flex-col w-full">
-      <div className="grid w-full grid-cols-7 pb-4 gap-y-6">
+      <div className="grid w-full grid-cols-7 gap-y-6">
         {dayInfosForArray.map((d, index) => {
           const fullDate =
             d.day.trim() === ""

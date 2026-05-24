@@ -197,7 +197,7 @@ export default function LibraryPage() {
         </Link>
       </div>
 
-      <div className="flex flex-col pt-8">
+      <div className="flex flex-col pt-8 pb-10">
         <div className="flex w-full">
           <SectionHeader
             size="16"
