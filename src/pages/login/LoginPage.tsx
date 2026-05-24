@@ -62,7 +62,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-dvh flex-col px-4 pt-50 pb-10">
+    <div className="flex min-h-dvh flex-col pt-50 pb-10">
       <div className="flex flex-col items-center justify-center gap-4">
         <img src={logo} className="w-50" alt="NOOK logo" />
         <div className="flex text-label-14-rb text-gray-90">
@@ -70,11 +70,11 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="mt-auto flex flex-col gap-4">
+      <div className="mt-auto flex flex-col gap-2">
         <button
           type="button"
           onClick={handleDevLogin}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gray-10 text-label-16-sb text-gray-90"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-gray-10 text-label-16-sb text-gray-90"
         >
           <span>임시 로그인</span>
         </button>
@@ -82,7 +82,7 @@ export default function LoginPage() {
         <button
           type="button"
           onClick={() => handleOAuthLogin("GOOGLE")}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-white text-label-16-sb text-gray-10"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-white text-label-16-sb text-gray-10"
         >
           <Icon size="s">
             <img src={google} alt="Google" />
@@ -93,7 +93,7 @@ export default function LoginPage() {
         <button
           type="button"
           onClick={() => handleOAuthLogin("KAKAO")}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#FEE500] text-label-16-sb text-gray-10"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#FEE500] text-label-16-sb text-gray-10"
         >
           <Icon size="s">
             <img src={kakao} alt="Kakao" />
