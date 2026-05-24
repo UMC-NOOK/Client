@@ -36,6 +36,7 @@ import {
 import getGoalPercent from "./utils/getGoalPercent";
 import DropDown from "../../components/section/dropDown/DropDown";
 import { useLibrarySpecificDateBookInfo } from "../../hooks/queries/library/useLibrarySpecificDateBookInfo";
+import { useAuthMe } from "../../hooks/queries/useAuthMe";
 
 
 
@@ -63,6 +64,7 @@ export default function LibraryPage() {
     const [isBannerOpen, setIsBannerOpen] = useState(true);
     const [cursor, setCursor] = useState(0);
 
+    const { data: authMe, isLoading: isAuthMeLoading } = useAuthMe();
     const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
     const { data: libraryBookGoalData } = useLibraryBookGoal();
     console.log("libraryBookGoalData:", libraryBookGoalData);
@@ -182,13 +184,15 @@ export default function LibraryPage() {
     const modalItems =
         specificDateBookInfo?.items ?? MOCK_SPECIFIC_DATE_BOOK_ITEMS;
     
-    const nickname = localStorage.getItem("nickname");
+    const nickName = authMe?.nickName ?? "";
 
     return (
         <div className="relative flex flex-col w-full">
             <div className="flex flex-col pt-6.5">
                 <div className="flex flex-row gap-1">
-                    <label className="text-label-20-b text-gray-90">{nickname}</label>
+                    <label className="text-label-20-b text-gray-90">
+                        {isAuthMeLoading ? "" : nickName}
+                    </label>
                     <label className="text-label-20-b text-gray-90">님의 서재에</label>
                 </div>
 

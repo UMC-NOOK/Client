@@ -15,3 +15,9 @@ type OAuthLogin = {
 };
 
 export type OAuthLoginResponse = BaseApiResponse<OAuthLogin>;
+
+export type AuthMe = {
+  id: number;
+  email: string;
+  nickName: string;
+};
