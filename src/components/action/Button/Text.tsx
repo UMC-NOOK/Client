@@ -7,6 +7,7 @@ type Props = {
   size: Size;
   active?: boolean;
   onClick?: () => void;
+  className?: string;
 };
 
 const baseLayout = "inline-flex justify-center items-center select-none";
@@ -22,6 +23,7 @@ export default function Text({
   size,
   active = false,
   onClick,
+  className = "",
 }: Props) {
   const clickable = Boolean(onClick);
 
@@ -35,6 +37,7 @@ export default function Text({
         baseLayout,
         sizeClassMap[size],
         colorClass,
+        className,
       ].join(" ")}
     >
       {children}
