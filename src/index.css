@@ -80,3 +80,12 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+
+@layer components {
+  .btn-14-sb {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+  }
+}

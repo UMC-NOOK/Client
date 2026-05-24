@@ -1,10 +1,10 @@
 // src/pages/onboarding/OnboardingGoalPage.tsx
-import { useMemo, useState, type ChangeEvent } from "react";
+import { useMemo, useState, type ChangeEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
-import ProgressIndicator from "../../components/navigation/ProgressIndicator";
+import OnboardingLayout from "../onboarding/OnboardingLayout";
 import { useOnboardingDraft } from "./OnboardingContext";
+import { useShell } from "../../app/AppShell";
 import chevronLeftIcon from "../../assets/icons/chevron_left.svg";
 
 const MAX_GOAL = 300;
@@ -30,6 +30,12 @@ function getRemainingDaysOfYear() {
 export default function OnboardingGoalPage() {
   const navigate = useNavigate();
   const { draft, updateDraft } = useOnboardingDraft();
+  const { setHideFooter } = useShell();
+
+  useEffect(() => {
+    setHideFooter(true);
+    return () => setHideFooter(false);
+  }, [setHideFooter]);
 
   const [goalInput, setGoalInput] = useState<string>(
     draft.goal ? String(draft.goal) : ""
@@ -51,10 +57,7 @@ export default function OnboardingGoalPage() {
     const raw = e.target.value;
     const digitsOnly = raw.replace(/\D/g, "");
 
-    if (digitsOnly === "") {
-      setGoalInput("");
-      return;
-    }
+    if (digitsOnly === "") return setGoalInput("");
 
     const sliced = digitsOnly.slice(0, 3);
     const numericValue = Number(sliced);
@@ -76,136 +79,43 @@ export default function OnboardingGoalPage() {
   };
 
   return (
-    <div className="px-0 pt-0">
-      <TopNavigation
-        className="mb-4"
-        left={
-          <img
-            src={chevronLeftIcon}
-            alt="뒤로가기"
-            className="w-6 h-6 object-contain"
-          />
-        }
-        onClickLeft={handleClose}
-        right={
-          <span
-            style={{
-              color: isNextActive
-                ? "var(--Gray-gray-80, #C5CCDB)"
-                : "var(--Gray-gray-40, #525775)",
-              textAlign: "center",
-              fontFamily: "SUIT",
-              fontSize: "18px",
-              fontStyle: "normal",
-              fontWeight: 500,
-              lineHeight: "100%",
-            }}
-          >
-            다음
-          </span>
-        }
-        onClickRight={isNextActive ? handleNext : undefined}
-      />
-
-      <ProgressIndicator step={1} total={3} />
-
-      <div className="mt-12">
-        <p
-          style={{
-            color: "var(--Gray-gray-90, #ECECEC)",
-            fontFamily: "SUIT",
-            fontSize: "20px",
-            fontStyle: "normal",
-            fontWeight: 700,
-            lineHeight: "150%",
-            whiteSpace: "pre-line",
-          }}
+    <OnboardingLayout
+      step={1}
+      left={<img src={chevronLeftIcon} className="w-6 h-6" />}
+      onClickLeft={handleClose}
+      right={
+        <span
+          className={`${
+            isNextActive ? "text-gray-80" : "text-gray-40"
+          } text-[18px] font-medium`}
         >
-          {"올해 몇 권의 책을 읽고 싶은지\n목표를 설정해주세요."}
-        </p>
+          다음
+        </span>
+      }
+      onClickRight={isNextActive ? handleNext : undefined}
+    >
+      <p className="text-gray-90 text-[20px] font-bold leading-[150%] whitespace-pre-line">
+        {"올해 몇 권의 책을 읽고 싶은지\n목표를 설정해주세요."}
+      </p>
 
-        <p
-          className="mt-0"
-          style={{
-            overflow: "hidden",
-            color: "var(--Gray-gray-50, #697198)",
-            textOverflow: "ellipsis",
-            fontFamily: "SUIT",
-            fontSize: "14px",
-            fontStyle: "normal",
-            fontWeight: 500,
-            lineHeight: "150%",
-          }}
-        >
-          {year}년은 {days}일 남았어요.
-        </p>
-      </div>
+      <p className=" text-gray-50 text-[14px] font-medium">
+        {year}년은 {days}일 남았어요.
+      </p>
 
-      <div
-        className="mt-10 flex items-center self-stretch"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "var(--spacing-round-12, 10px)",
-          alignSelf: "stretch",
-        }}
-      >
-        <div
-          className="flex-1"
-          style={{
-            display: "flex",
-            padding:
-              "var(--spacing-round-12, 12px) var(--spacing-round-16, 16px)",
-            alignItems: "center",
-            gap: "var(--spacing-round-8, 8px)",
-            alignSelf: "stretch",
-            borderRadius: "var(--spacing-round-8, 8px)",
-            background: "var(--Gray-gray-17, #1B203B)",
-          }}
-        >
+      <div className="mt-10 flex items-center gap-2">
+        <div className="flex-1 px-4 py-3 rounded-md bg-gray-17">
           <input
             type="text"
             inputMode="numeric"
-            pattern="[0-9]*"
             value={goalInput}
             onChange={handleGoalChange}
             placeholder="몇"
-            aria-label="독서 목표 권수"
-            className="w-full flex-1 border-none bg-transparent outline-none placeholder:text-[#A2A7C3]"
-            style={{
-              flex: "1 0 0",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 1,
-              display: "-webkit-box",
-              color:
-                goalInput.trim() === ""
-                  ? "var(--Gray-gray-70, #A2A7C3)"
-                  : "var(--Gray-gray-90, #EFF4FF)",
-              fontFamily: "SUIT",
-              fontSize: "20px",
-              fontStyle: "normal",
-              fontWeight: 700,
-              lineHeight: "150%",
-              padding: 0,
-            }}
+            className="w-full bg-transparent outline-none text-[20px] font-bold text-gray-90 placeholder:text-gray-70"
           />
         </div>
 
-        <span
-          style={{
-            color: "var(--Gray-gray-80, #C5CCDB)",
-            fontFamily: "SUIT",
-            fontSize: "20px",
-            fontStyle: "normal",
-            fontWeight: 700,
-            lineHeight: "150%",
-          }}
-        >
-          권
-        </span>
+        <span className="text-[20px] font-bold text-gray-80">권</span>
       </div>
-    </div>
+    </OnboardingLayout>
   );
 }

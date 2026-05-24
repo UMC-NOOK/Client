@@ -21,8 +21,7 @@ export default function SearchNewAddCategoryPage() {
   const [category, setCategory] = useState<string | null>(null);
   const isNextActive = !!category;
 
-  const handleClose = () => navigate(-1);
-
+  const handleClose = () => navigate("/library");
   const handleNext = () => {
     if (!category) return;
 

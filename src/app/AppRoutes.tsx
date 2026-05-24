@@ -1,4 +1,3 @@
-// src/app/AppRoutes.tsx
 import { useEffect } from "react";
 import {
   Navigate,
@@ -8,17 +7,18 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+
 import AppShell, { useShell } from "./AppShell";
 import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
 
 import FocusMobilePage from "../pages/search/FocusMobilePage";
-// import RecordMobilePage from "../pages/search/RecordMobilePage";
 import GroupMobilePage from "../pages/search/GroupMobilePage";
 import SearchPage from "../pages/search/SearchPage";
 
 import SearchNewAddPage from "../pages/search/SearchNewAddPage";
 import SearchNewAddCategoryPage from "../pages/search/SearchNewAddCategoryPage";
 import SearchNewAddMorePage from "../pages/search/SearchNewAddMorePage";
+
 import BannerActionCardTestPage from "../pages/search/test/testpage";
 import BottomSheetTestPage from "../pages/search/test/BottomSheetTestPage";
 import PopupConfirmModalTestPage from "../pages/search/test/PopupTestPage";
@@ -38,12 +38,15 @@ import LibraryPage from "../pages/library/LibraryPage";
 import LibraryGoalInputPage from "../pages/library/LibraryGoalInputPage";
 import LibraryAllBookPage from "../pages/library/LibraryAllBookPage";
 
-import OnboardingLayout from "../pages/onboarding/OnboardingLayout";
 import OnboardingGoalPage from "../pages/onboarding/OnboardingGoalPage";
 import { OnboardingCategoryPage } from "../pages/onboarding/OnboardingCategoryPage";
 import { OnboardingProfilePage } from "../pages/onboarding/OnboardingProfilePage";
+import { OnboardingProvider } from "../pages/onboarding/OnboardingContext";
+
 import LoginPage from "../pages/login/LoginPage";
 import OAuthCallbackPage from "../pages/login/OAuthCallbackPage";
+
+/* ---------------- Tabs ---------------- */
 
 type TabKey = "library" | "focus" | "record" | "group";
 
@@ -76,7 +79,7 @@ function MainTabsLayout() {
     <>
       <TopAppBar
         activeTab={activeTab}
-        onTabChange={(tab) => navigate(tabToPath(tab))}
+        onTabChange={(tab: TabKey) => navigate(tabToPath(tab))}
         onSearchClick={() => navigate("/search")}
         onMenuClick={() => console.log("menu click")}
         onLogoClick={() => navigate("/library")}
@@ -88,13 +91,7 @@ function MainTabsLayout() {
   );
 }
 
-function SearchLayout() {
-  return (
-    <div className="mx-auto w-full max-w-85.75">
-      <Outlet />
-    </div>
-  );
-}
+/* ---------------- Layout ---------------- */
 
 function NoFooterLayout() {
   const { setHideFooter } = useShell();
@@ -116,12 +113,7 @@ function AppShellLayout() {
   );
 }
 
-
-function getAuthenticatedHomePath() {
-  const onboardingCompleted = localStorage.getItem("onboardingCompleted") === "true";
-
-  return onboardingCompleted ? "/library" : "/onboarding";
-}
+/* ---------------- Auth ---------------- */
 
 function RequireAuth() {
   const accessToken = localStorage.getItem("accessToken");
@@ -133,71 +125,59 @@ function RequireAuth() {
   return <Outlet />;
 }
 
-export default function AppRoutes() {
+function getAuthRedirectPath() {
   const accessToken = localStorage.getItem("accessToken");
+  const onboardingCompleted = localStorage.getItem("onboardingCompleted");
 
+  if (!accessToken) {
+    return "/login";
+  }
+
+  /**
+   * accessToken만 있고 onboardingCompleted가 없는 경우:
+   * 이전 테스트/OAuth 실패/임시 로그인 잔여 상태로 보고 정리
+   */
+  if (onboardingCompleted === null) {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("onboardingCompleted");
+    return "/login";
+  }
+
+  return onboardingCompleted === "true" ? "/library" : "/onboarding";
+}
+
+/* ---------------- Routes ---------------- */
+
+export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<AppShell />}>
         <Route element={<AppShellLayout />}>
-        <Route
+          {/* ROOT */}
+          <Route
             path="/"
-            element={
-              accessToken ? (
-                <Navigate to={getAuthenticatedHomePath()} replace />
-              ) : (
-                <Navigate to="/login" replace />
-              )
-            }
+            element={<Navigate to={getAuthRedirectPath()} replace />}
           />
 
-          {/* public routes */}
+          {/* PUBLIC */}
           <Route element={<NoFooterLayout />}>
-            <Route
-              path="/login"
-              element={
-                accessToken ? (
-                  <Navigate to={getAuthenticatedHomePath()} replace />
-                ) : (
-                  <LoginPage />
-                )
-              }
-            />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/google/oauth" element={<OAuthCallbackPage />} />
             <Route path="/kakao/callback" element={<OAuthCallbackPage />} />
           </Route>
 
-          {/* protected routes */}
+          {/* PROTECTED */}
           <Route element={<RequireAuth />}>
-            <Route element={<SearchLayout />}>
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/search/new" element={<SearchNewAddPage />} />
-              <Route
-                path="/search/new/category"
-                element={<SearchNewAddCategoryPage />}
-              />
-              <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
-            </Route>
-
-            {/* Main Tabs */}
-          <Route element={<MainTabsLayout />}>
-              <Route path="/library" element={<LibraryPage />} />
-              <Route path="/focus" element={<FocusMobilePage />} />
-              <Route path="/record" element={<ReportPage />} />
-  
-            <Route path="/group" element={<GroupMobilePage />} />
-              <Route
-                path="/test/banner-action-card"
-                element={<BannerActionCardTestPage />}
-              />
-              <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
-              <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
-            </Route>
-
-            <Route path="/library/status" element={<LibraryAllBookPage />} />
-
+            {/* ONBOARDING */}
             <Route element={<NoFooterLayout />}>
-              <Route path="/onboarding" element={<OnboardingLayout />}>
+              <Route
+                path="/onboarding"
+                element={
+                  <OnboardingProvider>
+                    <Outlet />
+                  </OnboardingProvider>
+                }
+              >
                 <Route
                   index
                   element={<Navigate to="/onboarding/goal" replace />}
@@ -206,20 +186,48 @@ export default function AppRoutes() {
                 <Route path="category" element={<OnboardingCategoryPage />} />
                 <Route path="profile" element={<OnboardingProfilePage />} />
               </Route>
+            </Route>
+
+            {/* SEARCH */}
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/search/new" element={<SearchNewAddPage />} />
+            <Route
+              path="/search/new/category"
+              element={<SearchNewAddCategoryPage />}
+            />
+            <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
+
+            {/* MAIN TABS + TEST */}
+            <Route element={<MainTabsLayout />}>
+              <Route path="/library" element={<LibraryPage />} />
+              <Route path="/focus" element={<FocusMobilePage />} />
+              <Route path="/record" element={<ReportPage />} />
+              <Route path="/group" element={<GroupMobilePage />} />
 
               <Route
+                path="/test/banner-action-card"
+                element={<BannerActionCardTestPage />}
+              />
+              <Route
+                path="/test/bottomsheet"
+                element={<BottomSheetTestPage />}
+              />
+              <Route
+                path="/test/popup"
+                element={<PopupConfirmModalTestPage />}
+              />
+            </Route>
+
+            {/* 기타 */}
+            <Route path="/library/status" element={<LibraryAllBookPage />} />
+            <Route
               path="/users/me/onboarding/goal"
               element={<LibraryGoalInputPage />}
             />
-              <Route path="/library/:isbn13" element={<BookInfoPage />} />
-              <Route
-              path="/library/:isbn13/history"
-              element={<AllHistoryPage />}
-            />
-          </Route>
+            <Route path="/library/:isbn13" element={<BookInfoPage />} />
+            <Route path="/library/:isbn13/history" element={<AllHistoryPage />} />
 
-          <Route path="/report/search" element={<ReportSearchPage />} />
-          <Route element={<NoFooterLayout />}>
+            <Route path="/report/search" element={<ReportSearchPage />} />
             <Route path="/report/:id" element={<IndividueleReportPage />} />
             <Route path="/report/:id/:recordId" element={<ViewReportPage />} />
             <Route path="/report/:id/create" element={<CreateReportPage />} />
@@ -227,19 +235,13 @@ export default function AppRoutes() {
               path="/report/:id/:recordId/edit"
               element={<CreateReportPage />}
             />
-            </Route>
           </Route>
 
+          {/* FALLBACK */}
           <Route
-              path="*"
-              element={
-                accessToken ? (
-                  <Navigate to={getAuthenticatedHomePath()} replace />
-                ) : (
-                  <LoginPage />
-                )
-              }
-            />
+            path="*"
+            element={<Navigate to={getAuthRedirectPath()} replace />}
+          />
         </Route>
       </Route>
     </Routes>
