@@ -33,9 +33,14 @@ export default function AppShell({
 
   return (
     <ShellContext.Provider value={value}>
-      <div className="min-h-dvh w-full flex justify-center bg-white">
+      <div className="relative isolate min-h-dvh w-full flex justify-center bg-white">
         <div
-          className="min-h-dvh w-full bg-gradient-background"
+          aria-hidden
+          className="pointer-events-none fixed inset-y-0 left-1/2 z-0 -translate-x-1/2 bg-gradient-background"
+          style={{ width: `min(100vw, ${maxWidthPx}px)` }}
+        />
+        <div
+          className="relative z-10 min-h-dvh w-full bg-gradient-background"
           style={{ maxWidth: maxWidthPx }}
         >
           <div

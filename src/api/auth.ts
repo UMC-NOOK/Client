@@ -1,5 +1,6 @@
 // Client/src/api/auth.ts
-import type { OAuthLoginResponse } from "../types/auth/auth";
+import type BaseApiResponse from "../types/BaseApiResponse";
+import type { AuthMe, OAuthLoginResponse } from "../types/auth/auth";
 import { api } from "./axios";
 
 type DevLoginParams = {
@@ -48,4 +49,14 @@ export async function oauthLogin(params: OAuthLoginParams) {
   localStorage.setItem("onboardingCompleted", String(response.data.result.onboardingCompleted));
 
   return response.data;
+}
+
+export async function getAuthMe(): Promise<AuthMe> {
+  const response = await api.get<BaseApiResponse<AuthMe>>("/api/v1/auth/me");
+
+  if (response.data?.result === undefined) {
+    throw new Error("응답 result가 없습니다: /api/v1/auth/me");
+  }
+
+  return response.data.result;
 }

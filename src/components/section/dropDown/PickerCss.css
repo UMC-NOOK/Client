@@ -13,3 +13,12 @@
       transparent 100%
     ) !important;
   }
+
+.picker-root > div:last-child > div {
+  display: none !important;
+}
+
+.picker-column {
+  transition-duration: 0ms !important;
+  transition-property: none !important;
+}

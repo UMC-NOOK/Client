@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import Picker from "react-mobile-picker";
-import Icon from "../../../assets/icons/check.svg"
 import "./PickerCss.css";
 
 type YearMonthValue = {
@@ -50,7 +49,7 @@ export default function DropDown({
   };
 
   return (
-    <div className="flex flex-col w-48.5 rounded-[4px] bg-gray-10">
+    <div className="flex flex-col w-48.5 rounded-[4px] bg-gray-10 shadow-elevation-20">
         <div className="flex flex-row">
                 <Picker
                     value={pickerValue}
@@ -62,19 +61,16 @@ export default function DropDown({
                 >
                     <Picker.Column
                         name="year"
-                        className="picker-column flex-1 border-r border-white/5"
+                        className="picker-column flex-1 border-r border-gray-10"
                     >
                         {years.map((year) => (
                         <Picker.Item key={year} value={year}>
                             {({ selected }) => (
                             <div
-                                className={`picker-item-content flex flex-row w-full gap-2  py-2 px-3 justify-stretch text-btn-14-r transition-colors ${
-                                    selected ? "text-gray-90" : "text-gray-50"
+                                className={`picker-item-content flex flex-row w-full py-2 px-3 justify-center text-btn-14-r transition-colors ${
+                                    selected ? "bg-gray-30 text-gray-90" : "text-gray-50"
                                 }`}
                             >
-                                <span className="flex items-center justify-center w-3 h-3">
-                                    {selected ? <img src={Icon} className="flex items-center justify-center"/> : ""}
-                                </span>
                                 <span>
                                     {year}
                                 </span>
@@ -97,13 +93,10 @@ export default function DropDown({
                         <Picker.Item key={month} value={month}>
                             {({ selected }) => (
                             <div
-                                className={`picker-item-content flex flex-row w-full gap-2 py-2 px-3 justify-stretch text-btn-14-r transition-colors ${
-                                    selected ? "text-gray-90" : "text-gray-50"
+                                className={`picker-item-content flex flex-row w-full py-2 px-3 justify-center text-btn-14-r transition-colors ${
+                                    selected ? "bg-gray-30 text-gray-90" : "text-gray-50"
                                 }`}
                             >
-                               <span className="flex items-center justify-center w-3 h-3">
-                                    {selected ? <img src={Icon} className="flex items-center justify-center"/> : ""}
-                                </span>
                                 <span>
                                     {month}월
                                 </span>

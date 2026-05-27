@@ -1,27 +1,33 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
-import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import Icon from "../../components/action/Button/Icon";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
 import TabBar from "../../components/navigation/tabs/TabBar";
 import BookList from "../../components/content/card/Book/List";
+import Divider from "../../components/layout/Divider";
 
 import chevronLeft from "../../assets/icons/chevron_left.svg";
 import search from "../../assets/icons/search.svg";
 
-import {
-  type BaseStatusBookItems,
-  type BookStatusType,
+import { getLibraryStatusBooks } from "../../api/library";
+
+import type {
+  BookItemsStatusItems,
+  BookStatusType,
 } from "../../types/libraryInfo/library";
-import { getMockLibraryStatusBooksPage } from "../../mocks/library/library";
-import Divider from "../../components/layout/Divider";
 
 type LibraryTab = BookStatusType;
 
+/** API 요청·화면에 한 번에 보이는 최대 권수 */
+const PAGE_SIZE = 5;
+
+/** BookList 한 줄(min-h 106 + py-3) 기준, 약 5권 높이 */
+const LIST_MAX_HEIGHT_CLASS = "max-h-[34rem]";
+
 const TAB_OPTIONS = [
-  { label: "읽기 전", value: "BEFORE" },
-  { label: "읽는 중", value: "READING" },
+  { label: "독서 전", value: "BEFORE" },
+  { label: "독서 중", value: "READING" },
   { label: "완독", value: "FINISHED" },
 ] as const;
 
@@ -41,37 +47,42 @@ function isLibraryTab(value: string): value is LibraryTab {
   return value === "BEFORE" || value === "READING" || value === "FINISHED";
 }
 
-function parseQueryInt(value: string | null, fallback: number) {
-  if (!value) return fallback;
-  const parsed = Number(value);
-  return Number.isNaN(parsed) ? fallback : parsed;
+function hasMorePages(hasNext: boolean | null) {
+  return hasNext === true;
 }
 
 function formatDateLabel(iso: string) {
   const d = new Date(iso);
+
   if (Number.isNaN(d.getTime())) return iso.slice(0, 10);
-  return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}`;
+
+  return `${String(d.getFullYear()).slice(2)}.${d.getMonth() + 1}.${d.getDate()}`;
 }
 
-function getBookListProps(
-  item: BaseStatusBookItems & Partial<{ startedAt: string; endedAt: string }>,
-  tab: LibraryTab,
-) {
+function getBookListProps(item: BookItemsStatusItems<LibraryTab>, tab: LibraryTab) {
   if (tab === "BEFORE") {
     return { type: "BEFORE" as const, typeLabel: null };
   }
 
-  if (tab === "READING" && item.startedAt) {
+  if (tab === "READING") {
+    const readingItem = item as BookItemsStatusItems<"READING">;
+
     return {
       type: "READINGORDONE" as const,
-      typeLabel: formatDateLabel(item.startedAt),
+      typeLabel: readingItem.startedAt
+        ? formatDateLabel(readingItem.startedAt)
+        : null,
     };
   }
 
-  if (tab === "FINISHED" && item.startedAt && item.endedAt) {
+  const finishedItem = item as BookItemsStatusItems<"FINISHED">;
+
+  if (finishedItem.startedAt && finishedItem.endedAt) {
     return {
       type: "READINGORDONE" as const,
-      typeLabel: `${formatDateLabel(item.startedAt)} - ${formatDateLabel(item.endedAt)}`,
+      typeLabel: `${formatDateLabel(finishedItem.startedAt)} - ${formatDateLabel(
+        finishedItem.endedAt,
+      )}`,
     };
   }
 
@@ -81,6 +92,7 @@ function getBookListProps(
 function getEmptyText(tab: LibraryTab) {
   if (tab === "BEFORE") return "서재에 독서 전인 책이 없어요.";
   if (tab === "READING") return "서재에 독서 중인 책이 없어요.";
+
   return "서재에 완독한 책이 없어요.";
 }
 
@@ -91,8 +103,22 @@ export default function LibraryAllBookPage() {
   const tab: LibraryTab =
     statusParam && isLibraryTab(statusParam) ? statusParam : "BEFORE";
 
-  const cursor = parseQueryInt(searchParams.get("cursor"), 0);
-  const size = parseQueryInt(searchParams.get("size"), 20);
+  const [bookItems, setBookItems] = useState<BookItemsStatusItems<LibraryTab>[]>(
+    [],
+  );
+  const [totalBookNum, setTotalBookNum] = useState(0);
+
+  const [nextCursor, setNextCursor] = useState<number | null>(null);
+  const [hasNext, setHasNext] = useState(false);
+
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const scrollRootRef = useRef<HTMLDivElement | null>(null);
+  const loadMoreTargetRef = useRef<HTMLDivElement | null>(null);
+  const requestIdRef = useRef(0);
+  const isFetchingNextPageRef = useRef(false);
 
   const setTab = useCallback(
     (next: LibraryTab) => {
@@ -100,30 +126,146 @@ export default function LibraryAllBookPage() {
         (prev) => {
           const p = new URLSearchParams(prev);
           p.set("status", next);
-          p.set("cursor", "0");
-          p.set("size", String(size));
+          p.delete("cursor");
+          p.delete("size");
           return p;
         },
         { replace: true },
       );
     },
-    [setSearchParams, size],
+    [setSearchParams],
   );
 
-  const data = useMemo(() => {
-    return getMockLibraryStatusBooksPage(tab, cursor, size);
-  }, [tab, cursor, size]);
+  const fetchLibraryStatusBooks = useCallback(
+    async ({
+      cursor,
+      mode,
+    }: {
+      cursor: number | null;
+      mode: "reset" | "append";
+    }) => {
+      if (mode === "append" && isFetchingNextPageRef.current) return;
 
-  const isLoading = false;
-  const isError = false;
+      const requestId = ++requestIdRef.current;
 
-  const bookItems = data.bookItems ?? [];
-  const totalBookNum = data.totalBookNum;
+      if (mode === "append") {
+        isFetchingNextPageRef.current = true;
+      }
+
+      try {
+        if (mode === "reset") {
+          setIsInitialLoading(true);
+        } else {
+          setIsFetchingNextPage(true);
+        }
+
+        setIsError(false);
+
+        const result = await getLibraryStatusBooks({
+          status: tab,
+          cursor,
+          size: PAGE_SIZE,
+        });
+
+        if (requestId !== requestIdRef.current) return;
+
+        const page = result.bookItems;
+
+        setBookItems((prev) =>
+          mode === "append" ? [...prev, ...page.items] : page.items,
+        );
+        setTotalBookNum(result.totalBookNum ?? 0);
+        setNextCursor(page.nextCursor);
+        setHasNext(hasMorePages(page.hasNext));
+      } catch (error) {
+        console.error("서재 상태별 책 목록 조회 실패:", error);
+
+        if (requestId !== requestIdRef.current) return;
+
+        setIsError(true);
+
+        if (mode === "reset") {
+          setBookItems([]);
+          setTotalBookNum(0);
+          setNextCursor(null);
+          setHasNext(false);
+        }
+      } finally {
+        if (requestId === requestIdRef.current) {
+          if (mode === "reset") {
+            setIsInitialLoading(false);
+          } else {
+            setIsFetchingNextPage(false);
+          }
+        }
+
+        if (mode === "append") {
+          isFetchingNextPageRef.current = false;
+        }
+      }
+    },
+    [tab],
+  );
+
+  useEffect(() => {
+    setBookItems([]);
+    setTotalBookNum(0);
+    setNextCursor(null);
+    setHasNext(false);
+    setIsError(false);
+
+    void fetchLibraryStatusBooks({
+      cursor: null,
+      mode: "reset",
+    });
+  }, [fetchLibraryStatusBooks]);
+
+  useEffect(() => {
+    const target = loadMoreTargetRef.current;
+    const root = scrollRootRef.current;
+
+    if (!target || !root) return;
+    if (isInitialLoading) return;
+    if (isFetchingNextPage) return;
+    if (isError) return;
+    if (!hasNext) return;
+    if (nextCursor === null) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+
+        void fetchLibraryStatusBooks({
+          cursor: nextCursor,
+          mode: "append",
+        });
+      },
+      {
+        root,
+        rootMargin: "80px",
+        threshold: 0,
+      },
+    );
+
+    observer.observe(target);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [
+    fetchLibraryStatusBooks,
+    hasNext,
+    isError,
+    isFetchingNextPage,
+    isInitialLoading,
+    nextCursor,
+    bookItems.length,
+  ]);
 
   return (
     <div>
       <div className="pt-2">
-        <TopNavigation
+        <TabBar
           left={
             <Link to="/library">
               <Icon size="m">
@@ -132,9 +274,7 @@ export default function LibraryAllBookPage() {
             </Link>
           }
           center={
-            <div className="text-label-18-rb text-gray-90">
-              서재 전체 보기
-            </div>
+            <div className="text-title-18-m text-gray-90">서재 전체 보기</div>
           }
           right={
             <Icon size="m">
@@ -149,16 +289,14 @@ export default function LibraryAllBookPage() {
           size="20"
           top={
             <div className="flex items-center gap-1">
-              <label className="text-gray-90">
+              <label className="text-title-20-b text-gray-90">
                 {SECTION_SUBJECT[tab]} 책이{" "}
               </label>
-              <label className="text-yellow-70">
-                {isLoading ? "0권" : `${totalBookNum}권`}
-              </label>
-              <label className="text-gray-90"> 있어요.</label>
+              <label className="text-title-20-b text-yellow-70">{totalBookNum}권</label>
+              <label className="text-title-20-b text-gray-90"> 있어요.</label>
             </div>
           }
-          bottom={<div>{SECTION_BOTTOM[tab]}</div>}
+          bottom={<div className="text-body-14-m">{SECTION_BOTTOM[tab]}</div>}
         />
       </div>
 
@@ -167,45 +305,65 @@ export default function LibraryAllBookPage() {
           options={TAB_OPTIONS}
           value={tab}
           onChange={(value) => setTab(value as LibraryTab)}
+          variant="underlineGradient"
         />
       </div>
 
       <div className="flex flex-col pt-6">
-        {isLoading ? (
+        {isInitialLoading ? (
           <div className="text-label-14-sb text-gray-60">불러오는 중…</div>
-        ) : isError ? (
+        ) : isError && bookItems.length === 0 ? (
           <div className="text-label-14-sb text-gray-60">
             목록을 불러오지 못했어요.
           </div>
         ) : bookItems.length === 0 ? (
-          <div className="text-label-14-sb text-gray-60">
-            {getEmptyText(tab)}
-          </div>
+          <div className="text-label-14-sb text-gray-60">{getEmptyText(tab)}</div>
         ) : (
-          bookItems.map((item, index) => {
-            const bookListProps = getBookListProps(item, tab);
+          <div
+            ref={scrollRootRef}
+            className={`${LIST_MAX_HEIGHT_CLASS} overflow-y-auto overscroll-contain`}
+          >
+            {bookItems.map((item, index) => {
+              const bookListProps = getBookListProps(item, tab);
 
-            return (
-              <div
-                key={`${item.bookId}-${index}`}
-                className={index === 0 ? "" : "pt-4"}
-              >
-                <BookList
-                  imageUrl={item.coverUrl}
-                  title={item.title}
-                  author={item.author}
-                  type={bookListProps.type}
-                  typeLabel={bookListProps.typeLabel}
-                />
+              return (
+                <div
+                  key={`${item.bookId}-${index}`}
+                  className={index === 0 ? "" : "pt-4"}
+                >
+                  <BookList
+                    imageUrl={item.coverUrl}
+                    title={item.title}
+                    author={item.author}
+                    type={bookListProps.type}
+                    typeLabel={bookListProps.typeLabel}
+                  />
 
-                 {index !== bookItems.length - 1 ? (
+                  {index !== bookItems.length - 1 ? (
                     <div className="py-1">
-                        <Divider width={"full"} />
+                      <Divider width="full" />
                     </div>
-                    ) : null}
+                  ) : null}
+                </div>
+              );
+            })}
+
+            {hasNext ? (
+              <div ref={loadMoreTargetRef} className="h-6 shrink-0" />
+            ) : null}
+
+            {isFetchingNextPage ? (
+              <div className="py-4 text-center text-label-14-sb text-gray-60">
+                더 불러오는 중…
               </div>
-            );
-          })
+            ) : null}
+
+            {isError && bookItems.length > 0 ? (
+              <div className="py-4 text-center text-label-14-sb text-gray-60">
+                추가 목록을 불러오지 못했어요.
+              </div>
+            ) : null}
+          </div>
         )}
       </div>
     </div>
