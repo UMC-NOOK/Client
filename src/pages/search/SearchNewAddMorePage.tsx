@@ -71,7 +71,7 @@ export default function SearchNewAddMorePage() {
         coverImageKey = await uploadSingleImage(imageFile, "book");
       }
 
-      await createUserBook({
+      const createdBook = await createUserBook({
         title: title.trim(),
         author: author.trim(),
         categoryName: category.trim(),
@@ -84,7 +84,9 @@ export default function SearchNewAddMorePage() {
       });
 
       alert("도서가 등록되었습니다.");
-      navigate("/search");
+      navigate(`/library/${createdBook.bookId}?type=bookId`, {
+        replace: true,
+      });
     } catch (error) {
       console.error("도서 등록 실패:", error);
       alert("도서 등록에 실패했습니다.");

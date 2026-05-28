@@ -1,4 +1,5 @@
 import React, { useMemo, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import bookCover from "../../assets/search/mock_bookcover.svg";
 import type { LibraryHomeSection } from "../../api/search";
 
@@ -30,10 +31,12 @@ function HorizontalBookScroller({
 }: {
   books: LibraryHomeSection["items"];
 }) {
+  const navigate = useNavigate();
   const ref = useRef<HTMLDivElement | null>(null);
 
   const drag = useRef({
     isDragging: false,
+    moved: false,
     startX: 0,
     startScrollLeft: 0,
     pointerId: -1,
@@ -55,6 +58,7 @@ function HorizontalBookScroller({
     e.preventDefault();
 
     drag.current.isDragging = true;
+    drag.current.moved = false;
     drag.current.startX = e.clientX;
     drag.current.startScrollLeft = el.scrollLeft;
     drag.current.pointerId = e.pointerId;
@@ -66,6 +70,10 @@ function HorizontalBookScroller({
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = ref.current;
     if (!el || !drag.current.isDragging) return;
+
+    if (Math.abs(e.clientX - drag.current.startX) > 5) {
+      drag.current.moved = true;
+    }
 
     e.preventDefault();
     const delta = e.clientX - drag.current.startX;
@@ -96,6 +104,21 @@ function HorizontalBookScroller({
     } catch {}
   };
 
+  const handleBookClick = (book: LibraryHomeSection["items"][number]) => {
+    if (drag.current.moved) return;
+
+    if (book.bookId != null) {
+      console.log("navigate to book detail by bookId", book.bookId);
+      navigate(`/library/${book.bookId}?type=bookId`);
+      return;
+    }
+
+    if (book.isbn13) {
+      console.log("navigate to book detail by isbn13", book.isbn13);
+      navigate(`/library/${book.isbn13}?type=isbn13`);
+    }
+  };
+
   return (
     <div
       ref={ref}
@@ -117,7 +140,8 @@ function HorizontalBookScroller({
         {sliced.map((book, index) => (
           <div
             key={`${book.bookId ?? book.isbn13 ?? index}`}
-            className="flex flex-col items-start shrink-0 w-25 snap-start"
+            className="flex flex-col items-start shrink-0 w-25 snap-start cursor-pointer"
+            onClick={() => handleBookClick(book)}
           >
             <img
               src={book.coverUrl || bookCover}

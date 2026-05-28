@@ -28,13 +28,21 @@ function ResultRow({
 }) {
   const navigate = useNavigate();
 
+  const handleBookClick = () => {
+    if (book.bookId !== null) {
+      console.log("navigate to book detail by bookId", book.bookId);
+      navigate(`/library/${book.bookId}?type=bookId`);
+      return;
+    }
+
+    console.log("navigate to book detail by isbn13", book.isbn13);
+    navigate(`/library/${book.isbn13}?type=isbn13`);
+  };
+
   return (
     <div
       className="flex flex-col items-center self-stretch"
-      onClick={() => {
-        console.log("navigate to book detail", book.isbn13);
-        navigate(`/library/${book.isbn13}`);
-      }}
+      onClick={handleBookClick}
     >
       <div className="w-full flex items-start gap-3 py-3 relative">
         <div className="flex justify-center items-center shrink-0 w-14 h-20.5">
@@ -156,7 +164,7 @@ export default function SearchResultSection({
 
                   return (
                     <ResultRow
-                      key={`sr-${scope}-${book.isbn13 ?? idx}-${idx}`}
+                      key={`sr-${scope}-${book.bookId ?? book.isbn13 ?? idx}-${idx}`}
                       book={book}
                       showDivider={true}
                     />
