@@ -17,8 +17,7 @@ type DevLoginResponse = {
     email: string;
     nickName: string;
     accessToken: string;
-    refreshToken: string;
-    onboardingCompleted: boolean;
+    onboardingCompleted?: boolean;
   };
 };
 
@@ -35,34 +34,19 @@ export async function devLogin(params: DevLoginParams) {
     params,
   );
 
-  const { accessToken, refreshToken, onboardingCompleted } =
-    response.data.result;
-
+  const accessToken = response.data.result.accessToken;
   localStorage.setItem("accessToken", accessToken);
-  localStorage.setItem("refreshToken", refreshToken);
-  localStorage.setItem(
-    "onboardingCompleted",
-    onboardingCompleted ? "true" : "false",
-  );
 
   return response.data;
 }
 
 export async function oauthLogin(params: OAuthLoginParams) {
-  const response = await api.post<OAuthLoginResponse>(
-    "/api/v1/auth/oauth",
-    params,
-  );
+  const response = await api.post<OAuthLoginResponse>("/api/v1/auth/oauth", params);
 
-  const { accessToken, refreshToken, onboardingCompleted } =
-    response.data.result;
-
+  const { accessToken, refreshToken } = response.data.result;
   localStorage.setItem("accessToken", accessToken);
   localStorage.setItem("refreshToken", refreshToken);
-  localStorage.setItem(
-    "onboardingCompleted",
-    onboardingCompleted ? "true" : "false",
-  );
+  localStorage.setItem("onboardingCompleted", String(response.data.result.onboardingCompleted));
 
   return response.data;
 }
