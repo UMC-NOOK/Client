@@ -69,7 +69,7 @@ export default function SearchPage() {
     if (!historyData) return;
 
     setRecent(
-      historyData.map((text, index) => ({
+      historyData.map((text: string, index: number) => ({
         id: index + 1,
         text,
       })),
