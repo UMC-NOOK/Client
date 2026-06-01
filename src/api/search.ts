@@ -47,7 +47,7 @@ export async function searchBooks({
     },
   });
 
-  return response.data.result ?? [];
+  return response.data.result;
 }
 
 
@@ -90,7 +90,7 @@ export async function deleteSearchHistory(
 export type LibraryHomeSectionType =
   | "RECENT_FOCUS"
   | "BEFORE_READING"
-  | "RECOMMENDED";
+  | "RECOMMENDATION";
 
 export interface LibraryHomeBookItem {
   bookId?: number;

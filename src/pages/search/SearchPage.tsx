@@ -43,6 +43,7 @@ export default function SearchPage() {
     mode === "idle" && scope === "my",
   );
 
+
   const { data: bestsellersData } = useBestsellers(
     mode === "idle" && scope === "all",
   );
