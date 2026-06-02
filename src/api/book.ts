@@ -15,7 +15,7 @@ export interface BookDetail {
   coverImageUrl: string | null;
   aladinLink: string | null;
   sourceType: string;
-  bookShelfId: number | null;
+  libraryId: number | null;
 }
 
 interface BasicResponse<T> {
@@ -40,7 +40,7 @@ export interface BookDetail {
   coverImageUrl: string | null;
   aladinLink: string | null;
   sourceType: string;
-  bookShelfId: number | null;
+  libraryId: number | null;
 }
 
 interface BasicResponse<T> {

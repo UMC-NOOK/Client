@@ -161,6 +161,6 @@ export type LibrarySpecificDateBookInfo = BaseApiResponse<SpecificDateBookInfo>;
 
 export interface BookResponse {
   bookId: number;
-  bookShelfId: number | null;
+  libraryId: number | null;
   readingStatus: BookStatusType | null;
 }

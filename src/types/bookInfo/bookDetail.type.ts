@@ -15,6 +15,6 @@ export interface BookDetailResponse {
   coverImageUrl: string;
   aladinLink: string | null;
   sourceType: string;
-  bookShelfId: number | null;
+  libraryId: number | null;
   readingStatus: BookStatusType;
 }
