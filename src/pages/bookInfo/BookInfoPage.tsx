@@ -20,6 +20,7 @@ import book_shelf from "../../assets/icons/book_shelf-gray-30.svg";
 // hooks
 import { useGetBookDetailWithISBN } from "../../hooks/queries/bookInfo/useGetBookDetailWithISBN";
 import { useLibraryBookRegister } from "../../hooks/mutations/library/useLibraryBookRegister";
+import { useGetBookTimeline } from "../../hooks/queries/bookInfo/useGetBookTimeline";
 // types
 type DetailTab = "info" | "log";
 type BookStatusType = "BEFORE" | "READING" | "FINISHED" | null;
@@ -108,11 +109,14 @@ export default function BookInfoPage() {
     open: false,
     message: "",
   });
+  const [libraryId, setLibraryId] = useState<number | null>(null);
 
   const { data: bookDetailData, isLoading } = useGetBookDetailWithISBN(
     bookISBN!,
   );
+  const effectiveLibraryId = bookDetailData?.libraryId || libraryId;
 
+  const { data: bookTimelineData } = useGetBookTimeline(effectiveLibraryId);
   const { addBook, deleteBook, patchBookStatus } = useLibraryBookRegister();
 
   useEffect(() => {
@@ -156,7 +160,7 @@ export default function BookInfoPage() {
       {/* 상단 */}
       <div className="relative">
         <div className="absolute inset-0 z-0 -mx-4 -mt-2 pointer-events-none overflow-hidden">
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[375px] h-[525px]">
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-93.75 h-131.25">
             {/* 배경 흐림 커버 스켈레톤 */}
             {isLoading ? (
               <div className="w-full h-full bg-gray-20 animate-pulse blur-[20px] opacity-50" />
@@ -180,7 +184,7 @@ export default function BookInfoPage() {
           <div className="flex flex-col justify-center items-center mt-10 gap-4">
             {/* 메인 도서 커버 스켈레톤 */}
             {isLoading ? (
-              <div className="w-[140px] h-[200px] bg-gray-20 animate-pulse rounded-md" />
+              <div className="w-35 h-50 bg-gray-20 animate-pulse rounded-md" />
             ) : (
               <BookCover
                 imageUrl={bookDetailData?.coverImageUrl || testBookCover}
@@ -298,32 +302,32 @@ export default function BookInfoPage() {
             <div className="text-label-16-sb">포커스</div>
             <div
               className="text-body-14-r p-4 rounded-sm bg-gray-15"
-              onClick={() => {
-                // 개발용 토글
-                setHasFocus(!hasFocus);
-              }}
+              // onClick={() => {
+              //   // 개발용 토글
+              //   setHasFocus(!hasFocus);
+              // }}
             >
-              {hasFocus ? (
+              {libraryId ? (
                 <div className="flex flex-col gap-4">
                   <InformationSection
                     flow="horizontal"
                     top="기간"
-                    bottom="25.12.30 - 26.01.19"
+                    bottom={`${bookTimelineData?.focusSummary.startedAt} ~ ${bookTimelineData?.focusSummary.endedAt}`}
                   />
                   <InformationSection
                     flow="horizontal"
                     top="시간"
-                    bottom="3시간 4분 22초"
+                    bottom={`${Math.floor(bookTimelineData?.focusSummary.totalFocusSec! / 3600)}시간 ${Math.floor((bookTimelineData?.focusSummary.totalFocusSec! % 3600) / 60)}분`}
                   />
                   <InformationSection
                     flow="horizontal"
                     top="횟수"
-                    bottom="39번"
+                    bottom={`${bookTimelineData?.focusSummary.focusCount}번`}
                   />
                   <InformationSection
                     flow="horizontal"
                     top="페이지"
-                    bottom="~99쪽"
+                    bottom={`${bookTimelineData?.focusSummary.page}쪽`}
                   />
                 </div>
               ) : (
@@ -332,11 +336,13 @@ export default function BookInfoPage() {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            {hasRecord ? (
+            {libraryId ? (
               <div className="flex items-center justify-between">
                 <div className="flex gap-2">
                   <span className="text-label-16-sb">기록</span>
-                  <span className="text-mint-60 text-label-16-sb">16</span>
+                  <span className="text-mint-60 text-label-16-sb">
+                    {bookTimelineData?.recordSummary.recordCount}
+                  </span>
                 </div>
                 <div
                   className="curser-pointer text-btn-14-sb text-gray-60"
@@ -353,19 +359,20 @@ export default function BookInfoPage() {
 
             <div
               className="text-body-14-r p-4 rounded-sm bg-gray-15"
-              onClick={() => {
-                // 개발용 토글
-                setHasRecord(!hasRecord);
-              }}
+              // onClick={() => {
+              //   // 개발용 토글
+              //   setHasRecord(!hasRecord);
+              // }}
             >
-              {hasRecord ? (
+              {libraryId ? (
                 <InformationSection
                   flow="horizontal"
                   bottom={
                     <div className="w-full overflow-hidden line-clamp-3">
-                      [p.131] 어느 쪽의 이야기가 그럴듯하고 그들에게 어울립니까?
-                      아가씨에게 존속 상해치사의 죄를 추가하고 싶지는 않으니
-                      나는 첫번째를 고르지 않겠습니다 진짜 뭐라는 겁니까
+                      {
+                        bookTimelineData?.recordSummary.latestRecordPreview
+                          .contentPreview
+                      }
                     </div>
                   }
                 />
@@ -375,13 +382,13 @@ export default function BookInfoPage() {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            {hasHistory ? (
+            {libraryId ? (
               <div className="flex items-center justify-between">
                 <div className="text-label-16-sb">독서 히스토리</div>
                 <div
                   className="curser-pointer text-btn-14-sb text-gray-60"
                   onClick={() => {
-                    navigate("/library/123/history");
+                    navigate(`/library/${libraryId}/history`);
                   }}
                 >
                   전체 보기
@@ -391,47 +398,50 @@ export default function BookInfoPage() {
               <div className="text-label-16-sb">독서 히스토리</div>
             )}
             <div
-              className={`text-body-14-r p-4 rounded-sm bg-gray-15 ${hasHistory ? "h-80 relative overflow-hidden" : ""}`}
-              onClick={() => {
-                // 개발용 토글
-                setHasHistory(!hasHistory);
-              }}
+              className={`text-body-14-r p-4 rounded-sm bg-gray-15 ${libraryId ? "h-80 relative overflow-hidden" : ""}`}
+              // onClick={() => {
+              //   // 개발용 토글
+              //   setHasHistory(!hasHistory);
+              // }}
             >
-              {hasHistory ? (
+              {libraryId ? (
                 <>
                   <MaskGradient
                     width={"full"}
                     height={20}
                     className="-m-4 bottom-0"
                   />
-                  {bookHistoryData.map((history) => (
-                    <div
-                      key={history.year}
-                      className="flex items-start gap-2 mb-4 w-full"
-                    >
-                      <ResourceDate
-                        topText={history.monthDay}
-                        bottomText={
-                          history.showYear ? String(history.year) : ""
-                        }
-                      />
-                      <div className="min-w-0 flex flex-1 flex-col gap-1">
-                        {history.items.map((item) => (
-                          <HistoryInfoCard
-                            key={item.timelineId}
-                            variant={
-                              item.type === "RECORD" ? "history" : "time"
-                            }
-                            title={item.title}
-                            time={item.subtitle}
-                            hasIcon={
-                              item.type !== "REGISTER" && item.type !== "STATUS"
-                            }
-                          />
-                        ))}
+                  {bookTimelineData?.timelinePreview.dateGroups.map(
+                    (history) => (
+                      <div
+                        key={history.year}
+                        className="flex items-start gap-2 mb-4 w-full"
+                      >
+                        <ResourceDate
+                          topText={history.monthDay}
+                          bottomText={
+                            history.showYear ? String(history.year) : ""
+                          }
+                        />
+                        <div className="min-w-0 flex flex-1 flex-col gap-1">
+                          {history.items.map((item) => (
+                            <HistoryInfoCard
+                              key={item.timelineId}
+                              variant={
+                                item.type === "RECORD" ? "history" : "time"
+                              }
+                              title={item.title}
+                              time={item.subtitle || ""}
+                              hasIcon={
+                                item.type !== "REGISTER" &&
+                                item.type !== "STATUS"
+                              }
+                            />
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </>
               ) : (
                 "아직 독서 활동이 없어요."
@@ -473,6 +483,7 @@ export default function BookInfoPage() {
             onClick: () => {
               addBook(bookDetailData!.bookId, {
                 onSuccess: () => {
+                  setLibraryId(bookDetailData!.libraryId);
                   openSnackbar("내 서재에 책을 등록했어요.");
                   setReadStatus("READING");
                 },
