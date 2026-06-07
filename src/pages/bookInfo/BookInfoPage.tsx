@@ -29,75 +29,6 @@ const detailTabs = [
   { value: "info", label: "도서 정보" },
   { value: "log", label: "독서 이력" },
 ] as const;
-// data
-const bookHistoryData = [
-  {
-    year: 2026,
-    showYear: true,
-    monthDay: "12.09",
-    items: [
-      {
-        timelineId: 103,
-        type: "FOCUS",
-        occurredAt: "2026-12-09T23:15:00",
-        title: "1시간 13분의 포커스",
-        subtitle: "22:02 - 23:15",
-        previewText: "1시간 13분의 포커스",
-        targetId: 7001,
-      },
-      {
-        timelineId: 102,
-        type: "FOCUS",
-        occurredAt: "2026-12-09T16:50:00",
-        title: "1시간 27분의 포커스",
-        subtitle: "15:23 - 16:50",
-        previewText: "1시간 27분의 포커스",
-        targetId: 7002,
-      },
-    ],
-  },
-  {
-    year: 2026,
-    showYear: false,
-    monthDay: "12.09",
-    items: [
-      {
-        timelineId: 103,
-        type: "RECORD",
-        occurredAt: "2026-12-09T23:15:00",
-        title: "독서 기록",
-        subtitle: "[p.40] 변하는 실제가 없음은 물론 그것이 거쳐가는 길이",
-        previewText: "독서 기록",
-        targetId: 7001,
-      },
-      {
-        timelineId: 102,
-        type: "RECORD",
-        occurredAt: "2026-12-09T16:50:00",
-        title: "독서 기록",
-        subtitle: "3개의 이미지",
-        previewText: "독서 기록",
-        targetId: 7002,
-      },
-    ],
-  },
-  {
-    year: 2025,
-    showYear: true,
-    monthDay: "11.30",
-    items: [
-      {
-        timelineId: 100,
-        type: "REGISTER",
-        occurredAt: "2025-11-30T09:00:00",
-        title: "첫사랑의 침공",
-        subtitle: "서재에 등록했어요.",
-        previewText: "서재에 등록했어요.",
-        targetId: 12,
-      },
-    ],
-  },
-];
 
 export default function BookInfoPage() {
   const bookISBN = useParams().isbn13;
@@ -135,9 +66,6 @@ export default function BookInfoPage() {
   }, [isLoading, bookDetailData]);
 
   // 개발용 상태
-  const [hasFocus, setHasFocus] = useState(true);
-  const [hasRecord, setHasRecord] = useState(false);
-  const [hasHistory, setHasHistory] = useState(false);
   const [showReadingModal, setShowReadingModal] = useState(false);
   const [showCompleteModal, setShowCompleteModal] = useState(false);
 
