@@ -13,6 +13,7 @@ type DevLoginResponse = {
   code: string;
   message: string;
   result: {
+    refreshToken: any;
     id: number;
     email: string;
     nickName: string;

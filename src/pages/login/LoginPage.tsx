@@ -24,7 +24,6 @@ export default function LoginPage() {
       return;
     }
 
-    console.log(import.meta.env.VITE_GOOGLE_AUTHORIZE_URL);
     window.location.href = authorizeUrl;
   };
 
@@ -35,26 +34,36 @@ export default function LoginPage() {
         nickName: "DEV_USER",
       });
 
-      console.log("🔥 로그인 응답", response);
+      console.log("🔥 DEV 로그인 응답", response);
 
       if (!response.isSuccess) {
         alert("임시 로그인 실패");
         return;
       }
 
-      const token = response.result?.accessToken;
+      const result = response.result;
 
-      if (!token) {
+      const accessToken = result?.accessToken;
+      const refreshToken = result?.refreshToken;
+      const onboardingCompleted = result?.onboardingCompleted;
+
+      if (!accessToken) {
         console.error("❌ accessToken 없음", response);
         return;
       }
 
-      localStorage.setItem("accessToken", token);
+      localStorage.setItem("accessToken", accessToken);
 
-      // 이미 온보딩 완료한 계정 기준
-      localStorage.setItem("onboardingCompleted", "true");
+      if (refreshToken) {
+        localStorage.setItem("refreshToken", refreshToken);
+      }
 
-      navigate("/library");
+      localStorage.setItem(
+        "onboardingCompleted",
+        onboardingCompleted ? "true" : "false",
+      );
+
+      navigate(onboardingCompleted ? "/library" : "/onboarding");
     } catch (error) {
       console.error("❌ 임시 로그인 에러", error);
       alert("임시 로그인 중 오류가 발생했습니다.");
