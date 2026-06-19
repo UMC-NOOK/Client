@@ -6,11 +6,14 @@ export default function DevLoginButton() {
 
   const handleDevLogin = async () => {
     try {
-      await devLogin({
+      const response = await devLogin({
         email: "dev@test.com",
         nickName: "DEV_USER",
       });
       alert("DEV 로그인 완료");
+      navigate(response.result.onboardingCompleted ? "/library" : "/onboarding", {
+        replace: true,
+      });
     } catch (error) {
       console.error("DEV 로그인 실패:", error);
       alert("DEV 로그인 실패");
@@ -19,11 +22,14 @@ export default function DevLoginButton() {
 
   const handleDevAdminLogin = async () => {
     try {
-      await devLogin({
+      const response = await devLogin({
         email: "admin@test.com",
         nickName: "DEV_ADMIN",
       });
       alert("DEV_ADMIN 로그인 완료");
+      navigate(response.result.onboardingCompleted ? "/library" : "/onboarding", {
+        replace: true,
+      });
     } catch (error) {
       console.error("DEV_ADMIN 로그인 실패:", error);
       alert("DEV_ADMIN 로그인 실패");

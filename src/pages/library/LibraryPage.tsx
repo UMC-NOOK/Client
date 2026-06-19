@@ -8,7 +8,7 @@ import focus from "../../assets/icons/focus.svg";
 import focusGray from "../../assets/icons/focus-gray-40.svg";
 import book from "../../assets/icons/book.svg";
 import book_gray_40 from "../../assets/icons/book_gray_40.svg";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import DayOfTheWeek from "../../components/content/Calendar/Resource/DayOfTheWeek";
 import BottomBanner from "./modal/BottomBanner";
@@ -59,6 +59,7 @@ export default function LibraryPage() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isBannerOpen, setIsBannerOpen] = useState(true);
   const [modalCursor, setModalCursor] = useState<number | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { data: authMe, isLoading: isAuthMeLoading } = useAuthMe();
   const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
@@ -98,6 +99,21 @@ export default function LibraryPage() {
     setSelectedYearMonth(value);
     setIsDropdownOpen(false);
   };
+
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (dropdownRef.current?.contains(event.target as Node)) return;
+      setIsDropdownOpen(false);
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, [isDropdownOpen]);
 
   const handleSelectFocusDate = (date: string) => {
     setSelectedDate(date);
@@ -205,7 +221,10 @@ export default function LibraryPage() {
           <SectionHeader
             size="16"
             top={
-              <div className="flex flex-row gap-2 items-center justify-center">
+              <div
+                ref={dropdownRef}
+                className="flex flex-row gap-2 items-center justify-center"
+              >
                 <button
                   type="button"
                   className="flex items-center justify-center gap-2"
