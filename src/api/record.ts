@@ -11,8 +11,14 @@ import type {
   IndividueleRecordResponse,
   IndividueleRecordRequest,
 } from "../types/report/individueleRecord.type";
+import type { CreateRecordRequest } from "../types/report/creatRcord.type";
+import type {
+  ImageUploadRequest,
+  ImageUploadResponse,
+} from "../types/report/imageUpload.type";
 
 const RECORDS_ENDPOINT = "/api/v1/records";
+const IMAGES_ENDPOINT = "/api/v1/images";
 
 export async function getRecordCount(): Promise<number> {
   const response = await api.get<BaseApiResponse<RecordCountResponse>>(
@@ -49,5 +55,29 @@ export async function getIndividueleRecords(
       params,
     },
   );
+  return response.data.result;
+}
+
+export async function postCreateRecord(
+  bookId: number,
+  data: CreateRecordRequest,
+): Promise<void> {
+  await api.post(`${RECORDS_ENDPOINT}/books/${bookId}`, data);
+}
+
+export async function postImagesUpload(
+  num: number,
+): Promise<ImageUploadResponse[]> {
+  const data = Array.from({ length: num }, () => ({
+    contentType: "record",
+  })) as ImageUploadRequest[];
+
+  const response = await api.post<BaseApiResponse<ImageUploadResponse[]>>(
+    `${IMAGES_ENDPOINT}/upload-urls`,
+    {
+      files: data,
+    },
+  );
+
   return response.data.result;
 }

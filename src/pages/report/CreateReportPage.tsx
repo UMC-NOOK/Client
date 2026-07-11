@@ -12,10 +12,13 @@ import BottomSheet from "../../components/presentation/modal/bottomsheet/Origin"
 import chevron_left from "../../assets/icons/chevron_left.svg";
 // types
 import type { EmotionKey } from "../../components/action/Chip/Emotion";
+// api
+import { useCreateRecord } from "../../hooks/mutations/record/useCreateRecord";
 
 export default function CreateReportPage() {
   const navigate = useNavigate();
   const bookTitle = history.state?.usr?.bookTitle || "책 제목 없음";
+  const bookId = history.state?.usr?.bookId;
 
   const record = history.state?.usr?.record;
 
@@ -95,6 +98,8 @@ export default function CreateReportPage() {
     }
   };
 
+  const { mutate: createRecord } = useCreateRecord();
+
   return (
     <div className="flex flex-col items-center justify-start w-full h-dvh overflow-y-hidden gap-5 relative">
       {/* Top Navigation */}
@@ -170,7 +175,7 @@ export default function CreateReportPage() {
       </div>
 
       {/* Toast */}
-      <div className="absolute bottom-[100px] left-0 w-full flex justify-center z-[100]">
+      <div className="absolute bottom-25 left-0 w-full flex justify-center z-100">
         <Toast
           key={`toast-${toastKey}`}
           text="사진은 최대 5장까지 첨부할 수 있어요."
@@ -188,6 +193,13 @@ export default function CreateReportPage() {
           label: "기록 저장하기",
           onClick: () => {
             // imageFiles.filter(file => file !== null) 로 실제 새로 업로드된 파일만 추출 가능
+            createRecord({
+              bookId: bookId,
+              content,
+              emotion: selectedEmotion,
+              imageFiles: imageFiles.filter((file) => file !== null) as File[],
+            });
+            navigate(-1);
           },
         }}
       />
