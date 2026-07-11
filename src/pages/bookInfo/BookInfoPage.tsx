@@ -40,10 +40,13 @@ export default function BookInfoPage() {
     open: false,
     message: "",
   });
-  const [libraryId, setLibraryId] = useState<number | null>(null);
 
   const { data: bookDetailData, isLoading } = useGetBookDetailWithISBN(
     bookISBN!,
+  );
+
+  const [libraryId, setLibraryId] = useState<number | null>(
+    bookDetailData?.libraryId || null,
   );
   const effectiveLibraryId = bookDetailData?.libraryId || libraryId;
 
@@ -235,12 +238,12 @@ export default function BookInfoPage() {
               //   setHasFocus(!hasFocus);
               // }}
             >
-              {libraryId ? (
+              {bookTimelineData ? (
                 <div className="flex flex-col gap-4">
                   <InformationSection
                     flow="horizontal"
                     top="기간"
-                    bottom={`${bookTimelineData?.focusSummary.startedAt} ~ ${bookTimelineData?.focusSummary.endedAt}`}
+                    bottom={`${bookTimelineData?.focusSummary.startedAt} ~ ${bookTimelineData?.focusSummary.endedAt || ""}`}
                   />
                   <InformationSection
                     flow="horizontal"
@@ -264,7 +267,7 @@ export default function BookInfoPage() {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            {libraryId ? (
+            {bookTimelineData ? (
               <div className="flex items-center justify-between">
                 <div className="flex gap-2">
                   <span className="text-label-16-sb">기록</span>
@@ -275,7 +278,12 @@ export default function BookInfoPage() {
                 <div
                   className="curser-pointer text-btn-14-sb text-gray-60"
                   onClick={() => {
-                    // 전체 기록 보기로 이동
+                    navigate(`/report/${bookDetailData?.bookId}`, {
+                      state: {
+                        bookTitle: bookDetailData?.title,
+                        bookId: bookDetailData?.bookId,
+                      },
+                    });
                   }}
                 >
                   전체 보기
@@ -292,15 +300,12 @@ export default function BookInfoPage() {
               //   setHasRecord(!hasRecord);
               // }}
             >
-              {libraryId ? (
+              {bookTimelineData ? (
                 <InformationSection
                   flow="horizontal"
                   bottom={
                     <div className="w-full overflow-hidden line-clamp-3">
-                      {
-                        bookTimelineData?.recordSummary.latestRecordPreview
-                          .contentPreview
-                      }
+                      {bookTimelineData?.recordSummary.latestRecordPreview}
                     </div>
                   }
                 />
@@ -310,7 +315,7 @@ export default function BookInfoPage() {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            {libraryId ? (
+            {bookTimelineData ? (
               <div className="flex items-center justify-between">
                 <div className="text-label-16-sb">독서 히스토리</div>
                 <div
@@ -332,7 +337,7 @@ export default function BookInfoPage() {
               //   setHasHistory(!hasHistory);
               // }}
             >
-              {libraryId ? (
+              {bookTimelineData ? (
                 <>
                   <MaskGradient
                     width={"full"}

@@ -10,12 +10,7 @@ export interface focusSummary {
 
 export interface recordSummary {
   recordCount: number;
-  latestRecordPreview: {
-    recordId: number;
-    title: string;
-    contentPreview: string;
-    occurredAt: string;
-  };
+  latestRecordPreview: string;
 }
 
 export interface timelineItem {
