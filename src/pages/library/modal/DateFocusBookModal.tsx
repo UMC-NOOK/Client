@@ -78,6 +78,6 @@ export default function DateFocusBookModal({
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

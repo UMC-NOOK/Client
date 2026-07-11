@@ -4,6 +4,7 @@ import { api } from "./axios";
 export type SearchType = "GLOBAL" | "LIBRARY";
 
 export interface SearchBookItem {
+  bookId: number | null;
   isbn13: string;
   title: string;
   mallType: string;
@@ -47,7 +48,7 @@ export async function searchBooks({
     },
   });
 
-  return response.data.result ?? [];
+  return response.data.result;
 }
 
 
@@ -90,7 +91,7 @@ export async function deleteSearchHistory(
 export type LibraryHomeSectionType =
   | "RECENT_FOCUS"
   | "BEFORE_READING"
-  | "RECOMMENDED";
+  | "RECOMMENDATION";
 
 export interface LibraryHomeBookItem {
   bookId?: number;

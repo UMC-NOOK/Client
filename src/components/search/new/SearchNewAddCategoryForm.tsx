@@ -1,4 +1,5 @@
-//Client/src/components/search/new/SearchNewAddCategoryForm.tsx
+// Client/src/components/search/new/SearchNewAddCategoryForm.tsx
+
 type Props = {
   value: string | null;
   onChange: (v: string) => void;
@@ -50,10 +51,12 @@ export default function SearchNewAddCategoryForm({
           key={sec.title}
           className="flex flex-col items-start gap-4 self-stretch"
         >
-          <span className="text-[13px] font-semibold leading-3.25 text-gray-90">
+          {/* 섹션 타이틀 */}
+          <span className="text-[13px] font-semibold text-gray-90 leading-none">
             {sec.title}
           </span>
 
+          {/* 버튼 리스트 */}
           <div className="flex w-full flex-wrap gap-2">
             {sec.items.map((item) => {
               const selected = value === item;
@@ -70,7 +73,7 @@ export default function SearchNewAddCategoryForm({
                 >
                   <span
                     className={[
-                      "font-suit text-[14px] font-semibold leading-3.5",
+                      "text-[14px] font-semibold leading-none", // 🔥 핵심 수정
                       selected ? "text-[#13172A]" : "text-gray-60",
                     ].join(" ")}
                   >

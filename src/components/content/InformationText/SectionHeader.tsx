@@ -10,6 +10,7 @@ type Props = {
   top: ReactNode;
   bottom?: ReactNode; // 13, 16, 20
   showCaret?: boolean; // 14, 16, 20
+  open?: boolean;
   onToggle?: (open: boolean) => void; // caret 열 onClick
   onClick?: () => void; // 사용자용 Click
 };
@@ -24,22 +25,26 @@ export default function SectionHeader({
   top,
   bottom,
   showCaret = false,
+  open,
   onToggle,
   onClick,
 }: Props) {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isOpen = open ?? internalOpen;
 
   const handleClick = () => {
     if (showCaret) {
-      const next = !open;
-      setOpen(next);
+      const next = !isOpen;
+      if (open === undefined) {
+        setInternalOpen(next);
+      }
       onToggle?.(next);
     }
 
     onClick?.();
   };
 
-  const caretSrc = open ? caretUpIcon : caretDownIcon;
+  const caretSrc = isOpen ? caretUpIcon : caretDownIcon;
   const clickable = showCaret || Boolean(onClick);
 
   if (size === "13") {

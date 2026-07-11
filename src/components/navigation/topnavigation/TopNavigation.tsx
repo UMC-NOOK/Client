@@ -1,12 +1,79 @@
-//Client\src\components\navigation\topnavigation\TopNavigation.tsx
+// Client/src/components/navigation/topnavigation/TopNavigation.tsx
+
+import React from "react";
+
 type TopNavigationProps = {
-  left?: React.ReactNode; // 항상 버튼
-  onClickLeft?: () => void; // 왼쪽 버튼 클릭 시 실행되는 함수
-  center?: React.ReactNode; // 글씨 or 없음
-  right?: React.ReactNode; // 버튼 or 글씨
-  onClickRight?: () => void; // 오른쪽 버튼 클릭 시 실행되는 함수
+  left?: React.ReactNode;
+  onClickLeft?: () => void;
+  center?: React.ReactNode;
+  right?: React.ReactNode;
+  onClickRight?: () => void;
   className?: string;
+  leftPadding?: string;
+  rightPadding?: string;
 };
+
+function isTextLike(node: React.ReactNode): boolean {
+  if (typeof node === "string" || typeof node === "number") return true;
+
+  if (Array.isArray(node)) {
+    return node.some(isTextLike);
+  }
+
+  if (React.isValidElement(node)) {
+    const elementType = node.type;
+
+    if (typeof elementType === "string") {
+      return ["span", "p", "h1", "h2", "h3", "div"].includes(elementType);
+    }
+
+    return isTextLike((node.props as { children?: React.ReactNode })?.children);
+  }
+
+  return false;
+}
+
+function isButtonElement(node: React.ReactNode): boolean {
+  return React.isValidElement(node) && node.type === "button";
+}
+
+function renderNavItem(
+  node: React.ReactNode,
+  onClick?: () => void,
+  padding = "p-2",
+) {
+  if (!node) return null;
+
+  /**
+   * node 자체가 이미 button이면 다시 button으로 감싸지 않는다.
+   * 예: right={<button ...>...</button>}
+   */
+  if (isButtonElement(node)) {
+    return node;
+  }
+
+  /**
+   * onClick이 있는 경우에만 TopNavigation에서 button으로 감싼다.
+   * onClick이 없으면 단순 표시 요소로 렌더링한다.
+   */
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className={`${padding} rounded-lg flex items-center justify-center`}
+      >
+        {node}
+      </button>
+    );
+  }
+
+  return (
+    <div className={`${padding} flex items-center justify-center`}>
+      {node}
+    </div>
+  );
+}
 
 export default function TopNavigation({
   left,
@@ -15,36 +82,34 @@ export default function TopNavigation({
   right,
   onClickRight,
   className = "",
+  leftPadding,
+  rightPadding,
 }: TopNavigationProps) {
-  return (
-    <header className={["w-full h-10 flex items-center", className].join(" ")}>
+  const getPadding = (node: React.ReactNode) => {
+    return isTextLike(node) ? "px-4 py-2" : "p-2";
+  };
 
+  return (
+    <header
+      className={[
+        "relative w-full h-10 flex items-center justify-center",
+        className,
+      ].join(" ")}
+    >
       {/* LEFT */}
-      <div className="flex items-center justify-start">
-        {onClickLeft ? (
-          <button onClick={onClickLeft} className="focus:outline-none">
-            {left}
-          </button>
-        ) : (
-          <> {left}</>
-        )} 
+      <div className="absolute left-0 flex items-center">
+        {renderNavItem(left, onClickLeft, leftPadding ?? getPadding(left))}
       </div>
 
       {/* CENTER */}
-      <div className="flex-1 flex items-center justify-center text-title-18-m text-gray-90">
+      <div className="text-title-18-m text-gray-90 flex items-center justify-center">
         {center}
       </div>
 
       {/* RIGHT */}
-      <div className="flex items-center justify-end">
-          {onClickRight ? (
-            <button onClick={onClickRight} className="focus:outline-none">
-              {right}
-            </button>
-          ) : (
-            <> {right}</>
-          )}
-        </div>
+      <div className="absolute right-0 flex items-center">
+        {renderNavItem(right, onClickRight, rightPadding ?? getPadding(right))}
+      </div>
     </header>
   );
 }

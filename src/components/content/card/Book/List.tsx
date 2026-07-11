@@ -1,5 +1,6 @@
 import searchIcon from "../../../../assets/icons/book_shelf.svg";
-import libraryIcon from "../../../../assets/icons/focus-gray.svg";
+import libraryIcon from "../../../../assets/icons/focus-gray-60.svg";
+import Icon from "../../../action/Button/Icon";
 
 type BookListType = "SEARCH" | "BEFORE" | "READINGORDONE" | "REPORT";
 
@@ -51,39 +52,32 @@ export default function BookList({
         aria-label={imageAlt}
       />
 
-      <div className="flex flex-1 min-w-0 flex-col min-h-[82px] justify-between items-start">
-        <div className="flex flex-col gap-2.5 min-w-0 self-stretch">
-          <p className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-90 text-label-14-sb">
+      <div className="flex flex-1 min-w-0 flex-col min-h-20.5 justify-between items-start">
+        <div className="flex flex-col gap-0.5 min-w-0 self-stretch">
+          <p className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-90 text-subtitle-14-sb">
             {title}
           </p>
-          <p className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-90 text-label-13-r">
+          <p className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-90 text-body-13-r">
             {author}
           </p>
         </div>
 
         {showBottomRow ? (
-          <div className="flex items-center gap-1">
+          <div className="flex h-[clamp(16px,4.267vw,20px)] items-center gap-1">
             {meta.iconSrc ? (
-              <span
-                className="relative block shrink-0"
+              <Icon
+                size="xs"
+                className="inline-grid h-[clamp(16px,4.267vw,20px)] w-[clamp(16px,4.267vw,20px)] shrink-0 place-items-center p-0 [&_img]:block [&_img]:h-[83.333%] [&_img]:w-[83.333%] [&_img]:object-contain"
                 aria-hidden="true"
-                style={{ width: "16px", height: "16px" }}
               >
-                <img
-                  src={meta.iconSrc}
-                  className="absolute"
-                  style={{
-                    width: "13.333px",
-                    height: "13.333px",
-                    right: "1.333px",
-                    bottom: "1.333px",
-                  }}
-                />
-              </span>
+                <img src={meta.iconSrc} alt="" />
+              </Icon>
             ) : null}
 
             {typeLabel ? (
-              <span className="text-gray-60 text-label-13-r">{typeLabel}</span>
+              <span className="flex h-full items-center text-gray-60 text-label-13-r leading-none">
+                {typeLabel}
+              </span>
             ) : null}
           </div>
         ) : null}

@@ -43,6 +43,7 @@ export default function SearchPage() {
     mode === "idle" && scope === "my",
   );
 
+
   const { data: bestsellersData } = useBestsellers(
     mode === "idle" && scope === "all",
   );
@@ -69,7 +70,7 @@ export default function SearchPage() {
     if (!historyData) return;
 
     setRecent(
-      historyData.map((text, index) => ({
+      historyData.map((text: string, index: number) => ({
         id: index + 1,
         text,
       })),

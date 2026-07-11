@@ -1,3 +1,4 @@
+//Client\src\components\search\AllBookListSection.tsx
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -25,7 +26,6 @@ function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
     const el = ref.current;
     if (!el) return;
 
-    // e.preventDefault();
     isDragging.current = true;
     dragMoved.current = false;
     startX.current = e.clientX;
@@ -33,8 +33,6 @@ function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
 
     el.style.scrollSnapType = "none";
     el.style.scrollBehavior = "auto";
-    // el.style.cursor = "grabbing";
-    // el.setPointerCapture(e.pointerId);
   };
 
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -42,7 +40,6 @@ function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
     const el = ref.current;
     if (!el) return;
 
-    // 마우스 이동 거리가 5px 이상일 때만 '드래그'로 판정
     if (Math.abs(e.clientX - startX.current) > 5) {
       dragMoved.current = true;
     }
@@ -51,22 +48,16 @@ function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
     el.scrollLeft = startScrollLeft.current - (e.clientX - startX.current);
   };
 
-  const endDrag = () =>
-    //e: React.PointerEvent<HTMLDivElement>
-    {
-      if (!isDragging.current) return;
-      isDragging.current = false;
+  const endDrag = () => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
 
-      const el = ref.current;
-      if (!el) return;
+    const el = ref.current;
+    if (!el) return;
 
-      el.style.scrollSnapType = "x mandatory";
-      el.style.scrollBehavior = "smooth";
-      // el.style.cursor = "grab";
-      // try {
-      //   el.releasePointerCapture(e.pointerId);
-      // } catch {}
-    };
+    el.style.scrollSnapType = "x mandatory";
+    el.style.scrollBehavior = "smooth";
+  };
 
   return (
     <div
@@ -97,8 +88,9 @@ function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
                 e.stopPropagation();
                 return;
               }
-              console.log("navigate to book detail", book.isbn13);
-              navigate(`/library/${book.isbn13}`);
+
+              console.log("navigate to book detail by isbn13", book.isbn13);
+              navigate(`/library/${book.isbn13}?type=isbn13`);
             }}
           >
             <img
@@ -149,8 +141,8 @@ export default function AllBookListSection({
               key={`best-${book.isbn13}-${idx}`}
               className="w-full h-7 flex items-center gap-2"
               onClick={() => {
-                console.log("navigate to book detail", book.isbn13);
-                navigate(`/library/${book.isbn13}`);
+                console.log("navigate to book detail by isbn13", book.isbn13);
+                navigate(`/library/${book.isbn13}?type=isbn13`);
               }}
             >
               <div className="w-7 h-7 flex items-center justify-center">

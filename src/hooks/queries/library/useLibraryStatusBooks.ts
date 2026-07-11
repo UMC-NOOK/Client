@@ -4,7 +4,7 @@ import type { BookStatusType } from "../../../types/libraryInfo/library";
 
 export type UseLibraryStatusBooksParams = {
     status: BookStatusType;
-    cursor: number;
+    cursor: number | null;
     size: number;
 };
 

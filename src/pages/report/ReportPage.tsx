@@ -65,10 +65,11 @@ export default function ReportPage() {
           <SectionHeader
             size="14"
             showCaret={true}
+            open={showSortSheet}
             top={
               <span>{options.find((o) => o.value === sortOption)?.label}</span>
             }
-            onClick={() => setShowSortSheet(true)}
+            onToggle={setShowSortSheet}
           />
         </div>
         <div

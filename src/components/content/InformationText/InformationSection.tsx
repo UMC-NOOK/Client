@@ -8,6 +8,7 @@ type Props = {
   top?: string;
   bottom: string | ReactNode;
   showCaret?: boolean;
+  open?: boolean;
   onToggle?: (open: boolean) => void;
   onClick?: () => void;
 };
@@ -17,6 +18,7 @@ export default function InformationSection({
   top,
   bottom,
   showCaret = false,
+  open,
   onToggle,
   onClick,
 }: Props) {
@@ -27,6 +29,7 @@ export default function InformationSection({
           size="14"
           top={top}
           showCaret={showCaret}
+          open={open}
           onToggle={onToggle}
           onClick={onClick}
         />

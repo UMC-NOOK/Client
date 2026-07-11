@@ -1,4 +1,5 @@
 // src/components/navigation/tabs/TabBar.tsx
+import type { ReactNode } from "react";
 
 export type TabOption<T extends string = string> = {
   value: T;
@@ -7,7 +8,7 @@ export type TabOption<T extends string = string> = {
 
 type Variant = "default" | "underlineGradient";
 
-type Props<T extends string> = {
+type TabsProps<T extends string> = {
   options: readonly TabOption<T>[];
   value: T;
   onChange: (v: T) => void;
@@ -19,14 +20,46 @@ type Props<T extends string> = {
   className?: string;
 };
 
-export default function TabBar<T extends string>({
+type SlotProps = {
+  left?: ReactNode;
+  center?: ReactNode;
+  right?: ReactNode;
+  className?: string;
+};
+
+type Props<T extends string> = TabsProps<T> | SlotProps;
+
+function isTabsProps<T extends string>(props: Props<T>): props is TabsProps<T> {
+  return "options" in props;
+}
+
+export default function TabBar<T extends string>(props: Props<T>) {
+  if (!isTabsProps(props)) {
+    const { left, center, right, className = "" } = props;
+
+    return (
+      <header
+        className={[
+          "relative h-10 w-full flex items-center justify-center",
+          className,
+        ].join(" ")}
+      >
+        <div className="absolute left-0 flex items-center">{left}</div>
+        <div className="flex items-center justify-center">{center}</div>
+        <div className="absolute right-0 flex items-center">{right}</div>
+      </header>
+    );
+  }
+
+  const {
   options,
   value,
   onChange,
   buttonWidthPx,
   variant = "default",
   className = "",
-}: Props<T>) {
+  } = props;
+
   return (
     <nav
       className={["relative h-[38px] flex items-center", className].join(" ")}
@@ -70,7 +103,7 @@ export default function TabBar<T extends string>({
             <span
               className={[
                 "truncate text-center",
-                variant === "default" ? "text-body-16-b" : "text-body-14-m",
+                variant === "default" ? "text-btn-16-sb" : "text-btn-14-sb",
                 selected ? "text-gray-90" : "text-gray-50",
               ].join(" ")}
             >
