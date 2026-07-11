@@ -104,23 +104,24 @@ export default function IndividueleReportPage() {
       </div>
       <div className="flex-1 w-full overflow-y-auto flex flex-col items-center justify-start gap-1 pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {isFetchingRecords && <EmptyState text="기록을 불러오는 중이에요..." />}
-        {recordsData?.items.length === 0 && (
+        {!isFetchingRecords && recordsData?.items.length === 0 && (
           <EmptyState text="작성한 기록이 없어요." />
         )}
-        {(recordsData?.items ?? []).map((record) => (
-          <ReportList
-            key={record.recordId}
-            date={record.createdDate}
-            emojiKey={record.emotion as emotion | null}
-            review={record.content}
-            images={record.imageUrl}
-            onClick={() =>
-              navigate(`/report/${id}/${record.recordId}`, {
-                state: { bookTitle, record, bookId },
-              })
-            }
-          />
-        ))}
+        {!isFetchingRecords &&
+          (recordsData?.items ?? []).map((record) => (
+            <ReportList
+              key={record.recordId}
+              date={record.createdDate}
+              emojiKey={record.emotion as emotion | null}
+              review={record.content}
+              images={record.imageUrl}
+              onClick={() =>
+                navigate(`/report/${id}/${record.recordId}`, {
+                  state: { bookTitle, record, bookId },
+                })
+              }
+            />
+          ))}
       </div>
       <FAB
         icon={<img src={plus} alt="plus" />}
