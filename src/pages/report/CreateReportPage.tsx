@@ -193,13 +193,21 @@ export default function CreateReportPage() {
           label: "기록 저장하기",
           onClick: () => {
             // imageFiles.filter(file => file !== null) 로 실제 새로 업로드된 파일만 추출 가능
-            createRecord({
-              bookId: bookId,
-              content,
-              emotion: selectedEmotion,
-              imageFiles: imageFiles.filter((file) => file !== null) as File[],
-            });
-            navigate(-1);
+            createRecord(
+              {
+                bookId: bookId,
+                content,
+                emotion: selectedEmotion,
+                imageFiles: imageFiles.filter(
+                  (file) => file !== null,
+                ) as File[],
+              },
+              {
+                onSuccess: () => {
+                  navigate(`/report/${bookId}`);
+                },
+              },
+            );
           },
         }}
       />
