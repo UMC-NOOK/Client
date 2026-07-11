@@ -13,7 +13,6 @@ import type {
   DateToggleYear,
   RecentBookInfo,
   SpecificDateBookInfo,
-  BookResponse,
 } from "../types/libraryInfo/library";
 
 const LIBRARY_BASE = "/api/v1/library";
@@ -153,32 +152,22 @@ export function getLibraryFocusRecords(params: {
 }
 
 // 서재 책 등록
-export async function postLibraryBook(bookId: number): Promise<BookResponse> {
-  const response = await api.post<BaseApiResponse<BookResponse>>(
-    `${LIBRARY_BASE}/${bookId}`,
-  );
-  return response.data.result;
+export async function postLibraryBook(bookId: string): Promise<void> {
+  await api.post(`"/api/library/${bookId}"`);
 }
 
 // 서재 책 삭제
-export async function deleteLibraryBook(bookId: number): Promise<BookResponse> {
-  const response = await api.delete<BaseApiResponse<BookResponse>>(
-    `${LIBRARY_BASE}/${bookId}`,
-  );
-  return response.data.result;
+export async function deleteLibraryBook(bookId: string): Promise<void> {
+  await api.delete(`/api/library/${bookId}`);
 }
 
 // 서재 책 상태 변경 => 수정 필요
 export async function patchLibraryBookStatus(params: {
-  bookId: number;
+  bookId: string;
   readingStatus: BookStatusType;
-}): Promise<BookResponse> {
-  const response = await api.patch<BaseApiResponse<BookResponse>>(
-    `${LIBRARY_BASE}/status`,
-    {
-      bookId: params.bookId,
-      readingStatus: params.readingStatus,
-    },
-  );
-  return response.data.result;
+}): Promise<void> {
+  await api.patch(`/api/library/status`, {
+    bookId: params.bookId,
+    readingStatus: params.readingStatus,
+  });
 }
