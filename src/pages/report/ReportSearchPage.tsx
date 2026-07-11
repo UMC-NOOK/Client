@@ -109,7 +109,7 @@ export default function ReportSearchPage() {
           center="도서 선택"
         />
         <SearchInput
-          placeholder="도서 제목, 저자명으로 검색해보세요."
+          placeholder="내 서제에서 책을 찾아보세요."
           onChange={(value) => {
             setSearchQuery(value);
             value.trim() === "" ? setMode("searching") : setMode("results");
