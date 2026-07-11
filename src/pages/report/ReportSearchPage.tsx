@@ -17,7 +17,7 @@ import RecentKeywordSection, {
 import type { SortOption } from "../../types/report/sortOption.type";
 type ViewMode = "idle" | "searching" | "results";
 // hooks
-import { useLibrarySearchHome } from "../../hooks/queries/useLibrarySearchHome";
+import { useGetLibraryBooks } from "../../hooks/queries/report/useGetLibraryBooks";
 import { useGetLibrarySearchItem } from "../../hooks/queries/report/useGetSearchItem";
 // assets
 import chevron_left from "../../assets/icons/chevron_left.svg";
@@ -40,7 +40,7 @@ export default function ReportSearchPage() {
     { label: "기록 적은 순", value: "RECORD_COUNT_ASC" },
   ];
 
-  const { data: recordData } = useLibrarySearchHome();
+  const { data: recordData } = useGetLibraryBooks();
   const {
     data: searchItemData,
     isFetching: isFetchingSearchItem,
@@ -65,30 +65,31 @@ export default function ReportSearchPage() {
 
   // 개발용 상태
   // const [hasReport, setHasReport] = useState(true);
-  const data = {
-    items: [
-      {
-        bookId: 19,
-        title: "테라피스트",
-        author: "B. A. 패리스 (지은이), 박설영 (옮긴이)",
-        readingStatus: "READING",
+  // const data = {
+  //   items: [
+  //     {
+  //       bookId: 19,
+  //       title: "테라피스트",
+  //       author: "B. A. 패리스 (지은이), 박설영 (옮긴이)",
+  //       readingStatus: "READING",
 
-        coverImageUrl:
-          "https://image.aladin.co.kr/product/28446/67/cover200/k512835515_1.jpg",
-      },
-      {
-        bookId: 99,
-        title: "소년이 온다",
-        author: "한강",
+  //       coverImageUrl:
+  //         "https://image.aladin.co.kr/product/28446/67/cover200/k512835515_1.jpg",
+  //     },
+  //     {
+  //       bookId: 99,
+  //       title: "소년이 온다",
+  //       author: "한강",
 
-        coverImageUrl:
-          "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbPz6QM%2FbtsFm0GA4WY%2FAAAAAAAAAAAAAAAAAAAAADt7715qbAHxp6NPPLfY-0Z9m3jPraCk2sDQrSAblEhK%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1777561199%26allow_ip%3D%26allow_referer%3D%26signature%3DE6ifvpq2kHb2bLJwKR2Ofrv2Bzc%253D",
-      },
-    ],
-    nextCursor: "fDk5fDIwMjYtMDQtMDFUMDk6MzA",
-    hasNext: true,
-  };
+  //       coverImageUrl:
+  //         "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbPz6QM%2FbtsFm0GA4WY%2FAAAAAAAAAAAAAAAAAAAAADt7715qbAHxp6NPPLfY-0Z9m3jPraCk2sDQrSAblEhK%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1777561199%26allow_ip%3D%26allow_referer%3D%26signature%3DE6ifvpq2kHb2bLJwKR2Ofrv2Bzc%253D",
+  //     },
+  //   ],
+  //   nextCursor: "fDk5fDIwMjYtMDQtMDFUMDk6MzA",
+  //   hasNext: true,
+  // };
 
+  console.log("recordData", recordData);
   const deleteHistory = (
     params: { type: string; keyword: string },
     options?: { onSuccess: () => void },
@@ -145,11 +146,11 @@ export default function ReportSearchPage() {
             className="flex flex-col gap-2"
             // onClick={() => setHasReport(!hasReport)}
           >
-            {data.items.map((item) => (
+            {recordData?.items.map((item) => (
               <BookList
                 key={item.bookId}
                 {...item}
-                imageUrl={item.coverImageUrl}
+                imageUrl={item.coverUrl}
                 title={item.title}
                 author={item.author}
                 type="REPORT"

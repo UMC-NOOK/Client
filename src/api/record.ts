@@ -17,10 +17,15 @@ import type {
   ImageUploadResponse,
 } from "../types/report/imageUpload.type";
 import type { LibrarySearchItemResult } from "../types/report/searchLibraryBook.type";
+import type {
+  LibraryBooksResult,
+  LibraryBooksRequest,
+} from "../types/report/librarybooks.type";
 
 const RECORDS_ENDPOINT = "/api/v1/records";
 const IMAGES_ENDPOINT = "/api/v1/images";
 const LIBRARY_SEARCH_ENDPOINT = "/api/v1/books/search";
+const LIBRARY_BOOKS_ENDPOINT = "/api/v1/library/books";
 
 // 기록 갯수 조회
 export async function getRecordCount(): Promise<number> {
@@ -114,4 +119,12 @@ export async function putUpdateRecord(
   data: CreateRecordRequest,
 ): Promise<void> {
   await api.put(`${RECORDS_ENDPOINT}/${recordId}`, data);
+}
+
+// 서재 도서 전체 조회
+export async function getLibraryBooks(
+  params: LibraryBooksRequest,
+): Promise<LibraryBooksResult> {
+  const response = await api.get(`${LIBRARY_BOOKS_ENDPOINT}`, { params });
+  return response.data.result;
 }
