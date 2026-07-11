@@ -107,3 +107,11 @@ export async function getLibrarySearchItem(
 export async function deleteRecord(recordId: number): Promise<void> {
   await api.delete(`${RECORDS_ENDPOINT}/${recordId}`);
 }
+
+// 독서 기록 수정
+export async function putUpdateRecord(
+  recordId: number,
+  data: CreateRecordRequest,
+): Promise<void> {
+  await api.put(`${RECORDS_ENDPOINT}/${recordId}`, data);
+}
