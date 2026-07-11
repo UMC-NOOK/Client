@@ -8,9 +8,9 @@ import type {
 } from "../types/report/record.type";
 import type { EmotionResponse } from "../types/report/emotions.type";
 import type {
-  IndividueleRecordResponse,
-  IndividueleRecordRequest,
-} from "../types/report/individueleRecord.type";
+  EmotionRecordsResponse,
+  EmotionRecordsRequest,
+} from "../types/report/emotionRecords.type";
 import type { CreateRecordRequest } from "../types/report/creatRcord.type";
 import type {
   ImageUploadRequest,
@@ -20,6 +20,7 @@ import type {
 const RECORDS_ENDPOINT = "/api/v1/records";
 const IMAGES_ENDPOINT = "/api/v1/images";
 
+// 기록 갯수 조회
 export async function getRecordCount(): Promise<number> {
   const response = await api.get<BaseApiResponse<RecordCountResponse>>(
     `${RECORDS_ENDPOINT}/count`,
@@ -27,6 +28,7 @@ export async function getRecordCount(): Promise<number> {
   return response.data.result.count;
 }
 
+// 기록 조회
 export async function getRecords(
   params: RecordRequest,
 ): Promise<RecordResponse> {
@@ -39,17 +41,19 @@ export async function getRecords(
   return response.data.result;
 }
 
+// 독서 기록 감정별 개수 조회
 export async function getEmotions(bookId: number): Promise<EmotionResponse> {
   const response = await api.get<BaseApiResponse<EmotionResponse>>(
-    `${RECORDS_ENDPOINT}/${bookId}/emotions`,
+    `${RECORDS_ENDPOINT}/emotions/${bookId}`,
   );
   return response.data.result;
 }
 
-export async function getIndividueleRecords(
-  params: IndividueleRecordRequest,
-): Promise<IndividueleRecordResponse> {
-  const response = await api.get<BaseApiResponse<IndividueleRecordResponse>>(
+// 독서 기록 감정별 기록 조회
+export async function getEmotionRecords(
+  params: EmotionRecordsRequest,
+): Promise<EmotionRecordsResponse> {
+  const response = await api.get<BaseApiResponse<EmotionRecordsResponse>>(
     `${RECORDS_ENDPOINT}/${params.bookId}`,
     {
       params,
@@ -58,6 +62,7 @@ export async function getIndividueleRecords(
   return response.data.result;
 }
 
+// 독서 기록 생성
 export async function postCreateRecord(
   bookId: number,
   data: CreateRecordRequest,
@@ -65,6 +70,7 @@ export async function postCreateRecord(
   await api.post(`${RECORDS_ENDPOINT}/books/${bookId}`, data);
 }
 
+// 이미지 업로드 URL 조회
 export async function postImagesUpload(
   num: number,
 ): Promise<ImageUploadResponse[]> {
@@ -81,3 +87,5 @@ export async function postImagesUpload(
 
   return response.data.result;
 }
+
+//

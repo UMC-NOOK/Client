@@ -28,7 +28,7 @@ import AllHistoryPage from "../pages/bookInfo/AllHistoryPage";
 
 import ReportPage from "../pages/report/ReportPage";
 import ReportSearchPage from "../pages/report/ReportSearchPage";
-import IndividueleReportPage from "../pages/report/IndividueleReportPage";
+import IndividueleReportPage from "../pages/report/EmotionRecordsPage";
 import ViewReportPage from "../pages/report/ViewReportPage";
 import CreateReportPage from "../pages/report/CreateReportPage";
 
@@ -116,9 +116,9 @@ function AppShellLayout() {
   );
 }
 
-
 function getAuthenticatedHomePath() {
-  const onboardingCompleted = localStorage.getItem("onboardingCompleted") === "true";
+  const onboardingCompleted =
+    localStorage.getItem("onboardingCompleted") === "true";
 
   return onboardingCompleted ? "/library" : "/onboarding";
 }
@@ -140,7 +140,7 @@ export default function AppRoutes() {
     <Routes>
       <Route element={<AppShell />}>
         <Route element={<AppShellLayout />}>
-        <Route
+          <Route
             path="/"
             element={
               accessToken ? (
@@ -176,22 +176,31 @@ export default function AppRoutes() {
                 path="/search/new/category"
                 element={<SearchNewAddCategoryPage />}
               />
-              <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
+              <Route
+                path="/search/new/more"
+                element={<SearchNewAddMorePage />}
+              />
             </Route>
 
             {/* Main Tabs */}
-          <Route element={<MainTabsLayout />}>
+            <Route element={<MainTabsLayout />}>
               <Route path="/library" element={<LibraryPage />} />
               <Route path="/focus" element={<FocusMobilePage />} />
               <Route path="/record" element={<ReportPage />} />
-  
-            <Route path="/group" element={<GroupMobilePage />} />
+
+              <Route path="/group" element={<GroupMobilePage />} />
               <Route
                 path="/test/banner-action-card"
                 element={<BannerActionCardTestPage />}
               />
-              <Route path="/test/bottomsheet" element={<BottomSheetTestPage />} />
-              <Route path="/test/popup" element={<PopupConfirmModalTestPage />} />
+              <Route
+                path="/test/bottomsheet"
+                element={<BottomSheetTestPage />}
+              />
+              <Route
+                path="/test/popup"
+                element={<PopupConfirmModalTestPage />}
+              />
             </Route>
 
             <Route path="/library/status" element={<LibraryAllBookPage />} />
@@ -208,38 +217,41 @@ export default function AppRoutes() {
               </Route>
 
               <Route
-              path="/users/me/onboarding/goal"
-              element={<LibraryGoalInputPage />}
-            />
+                path="/users/me/onboarding/goal"
+                element={<LibraryGoalInputPage />}
+              />
               <Route path="/library/:isbn13" element={<BookInfoPage />} />
               <Route
-              path="/library/:isbn13/history"
-              element={<AllHistoryPage />}
-            />
-          </Route>
+                path="/library/:isbn13/history"
+                element={<AllHistoryPage />}
+              />
+            </Route>
 
-          <Route path="/report/search" element={<ReportSearchPage />} />
-          <Route element={<NoFooterLayout />}>
-            <Route path="/report/:id" element={<IndividueleReportPage />} />
-            <Route path="/report/:id/:recordId" element={<ViewReportPage />} />
-            <Route path="/report/:id/create" element={<CreateReportPage />} />
-            <Route
-              path="/report/:id/:recordId/edit"
-              element={<CreateReportPage />}
-            />
+            <Route path="/report/search" element={<ReportSearchPage />} />
+            <Route element={<NoFooterLayout />}>
+              <Route path="/report/:id" element={<IndividueleReportPage />} />
+              <Route
+                path="/report/:id/:recordId"
+                element={<ViewReportPage />}
+              />
+              <Route path="/report/:id/create" element={<CreateReportPage />} />
+              <Route
+                path="/report/:id/:recordId/edit"
+                element={<CreateReportPage />}
+              />
             </Route>
           </Route>
 
           <Route
-              path="*"
-              element={
-                accessToken ? (
-                  <Navigate to={getAuthenticatedHomePath()} replace />
-                ) : (
-                  <LoginPage />
-                )
-              }
-            />
+            path="*"
+            element={
+              accessToken ? (
+                <Navigate to={getAuthenticatedHomePath()} replace />
+              ) : (
+                <LoginPage />
+              )
+            }
+          />
         </Route>
       </Route>
     </Routes>

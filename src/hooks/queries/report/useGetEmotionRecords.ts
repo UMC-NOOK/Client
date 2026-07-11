@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { EmotionKey } from "../../../types/report/emotions.type";
 
 // 개발용
-import type { IndividueleRecordResponse } from "../../../types/report/individueleRecord.type";
+import type { EmotionRecordsResponse } from "../../../types/report/emotionRecords.type";
 
 export function useGetIndividueleRecords(
   bookId: number,
@@ -19,7 +19,7 @@ export function useGetIndividueleRecords(
 }
 
 // 개발용
-const dummyRecords: IndividueleRecordResponse["items"] = [
+const dummyRecords: EmotionRecordsResponse["items"] = [
   {
     recordId: 31,
     content: "가장 인상 깊었던 장면을 적어둔 기록",
@@ -107,7 +107,7 @@ const getMockIndividueleRecords = async (
   bookId: number,
   size?: string,
   emotion?: EmotionKey,
-): Promise<IndividueleRecordResponse> => {
+): Promise<EmotionRecordsResponse> => {
   return new Promise((resolve) => {
     console.log(
       `Fetching records for bookId=${bookId}, size=${size}, emotion=${emotion}`,

@@ -8,7 +8,7 @@ import ReportList from "../../components/content/card/Report/List";
 import EmptyState from "../../components/content/EmptyState/EmptyState";
 import FAB from "../../components/action/Button/FAB";
 // api
-import { useGetIndividueleRecords } from "../../hooks/queries/report/useGetIndividueleRecords";
+import { useGetIndividueleRecords } from "../../hooks/queries/report/useGetEmotionRecords";
 import { useGetEmotions } from "../../hooks/queries/report/useGetEmotions";
 // types
 import type { EmotionKey } from "../../types/report/emotions.type";
@@ -20,6 +20,7 @@ import plus from "../../assets/icons/plus-gray-10.svg";
 export default function IndividueleReportPage() {
   const { id } = useParams();
   const bookTitle = history.state?.usr?.bookTitle || "책 제목 없음";
+  const bookId = history.state?.usr?.bookId || id;
   const navigate = useNavigate();
 
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey>("ALL");
@@ -113,7 +114,7 @@ export default function IndividueleReportPage() {
             images={record.imageUrl}
             onClick={() =>
               navigate(`/report/${id}/${record.recordId}`, {
-                state: { bookTitle, record },
+                state: { bookTitle, record, bookId },
               })
             }
           />
@@ -122,7 +123,7 @@ export default function IndividueleReportPage() {
       <FAB
         icon={<img src={plus} alt="plus" />}
         onClick={() =>
-          navigate(`/report/${id}/create`, { state: { bookTitle } })
+          navigate(`/report/${id}/create`, { state: { bookTitle, bookId } })
         }
         className="absolute bottom-6 right-4 z-10"
       />
