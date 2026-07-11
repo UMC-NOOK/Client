@@ -56,9 +56,12 @@ export async function getEmotionRecords(
   params: EmotionRecordsRequest,
 ): Promise<EmotionRecordsResponse> {
   const response = await api.get<BaseApiResponse<EmotionRecordsResponse>>(
-    `${RECORDS_ENDPOINT}/${params.bookId}`,
+    `${RECORDS_ENDPOINT}/books/${params.bookId}`,
     {
-      params,
+      params: {
+        size: params.size,
+        emotion: params.emotion,
+      },
     },
   );
   return response.data.result;

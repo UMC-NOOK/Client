@@ -25,11 +25,12 @@ export default function IndividueleReportPage() {
 
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey>("ALL");
 
-  const { data: recordsData } = useGetIndividueleRecords(
-    parseInt(id || "0", 10),
-    undefined,
-    selectedEmotion,
-  );
+  const { data: recordsData, isFetching: isFetchingRecords } =
+    useGetIndividueleRecords(
+      parseInt(id || "0", 10),
+      undefined,
+      selectedEmotion,
+    );
   const { data: emotionsData } = useGetEmotions(parseInt(id || "0", 10));
 
   const emotionMetaMap: Record<EmotionKey, { text: string; count: number }> = {
@@ -102,6 +103,7 @@ export default function IndividueleReportPage() {
         ))}
       </div>
       <div className="flex-1 w-full overflow-y-auto flex flex-col items-center justify-start gap-1 pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        {isFetchingRecords && <EmptyState text="기록을 불러오는 중이에요..." />}
         {recordsData?.items.length === 0 && (
           <EmptyState text="작성한 기록이 없어요." />
         )}
