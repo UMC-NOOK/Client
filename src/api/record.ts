@@ -102,3 +102,8 @@ export async function getLibrarySearchItem(
   );
   return response.data.result;
 }
+
+// 독서 기록 삭제
+export async function deleteRecord(recordId: number): Promise<void> {
+  await api.delete(`${RECORDS_ENDPOINT}/${recordId}`);
+}

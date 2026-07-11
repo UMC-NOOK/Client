@@ -9,14 +9,32 @@ import BottomSheet from "../../components/presentation/modal/bottomsheet/Origin"
 import PopupConfirmModal from "../../components/presentation/modal/popup/Origin";
 // assets
 import chevron_left from "../../assets/icons/chevron_left.svg";
+// hooks
+import { useDeleteRecord } from "../../hooks/mutations/record/useDeleteRecord";
 
 export default function ViewReportPage() {
   const { id, recordId } = useParams();
   const record = history.state?.usr?.record;
   const bookTitle = history.state?.usr?.bookTitle || "책 제목 없음";
+  const bookId = history.state?.usr?.bookId;
   const navigate = useNavigate();
 
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+
+  const { mutate: deleteRecord } = useDeleteRecord();
+
+  const handleDeleteRecord = () => {
+    deleteRecord(record.recordId, {
+      onSuccess: () => {
+        setDeleteConfirmOpen(false);
+        navigate(`/report/${bookId}`, {
+          state: { bookTitle, bookId },
+        });
+      },
+    });
+  };
+
+  console.log("record", record);
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-dvh overflow-y-hidden gap-5 relative">
@@ -35,9 +53,9 @@ export default function ViewReportPage() {
         {record?.emotion ? (
           <Emotion size="m" emojiKey={record.emotion} active />
         ) : null}
-        {record?.imageUrl.length > 0 ? (
+        {record?.imgUrls.length > 0 ? (
           <div className="flex flex-col gap-1 w-full">
-            {record.imageUrl.map((url: string) => (
+            {record.imgUrls.map((url: string) => (
               <img
                 src={url}
                 alt="record"
@@ -62,7 +80,7 @@ export default function ViewReportPage() {
           },
           onRightClick: () => {
             navigate(`/report/${id}/${recordId}/edit`, {
-              state: { bookTitle, record },
+              state: { bookTitle, record, bookId },
             });
           },
         }}
@@ -77,8 +95,7 @@ export default function ViewReportPage() {
           rightLabel="삭제"
           onLeftClick={() => setDeleteConfirmOpen(false)}
           onRightClick={() => {
-            // Handle delete logic here
-            setDeleteConfirmOpen(false);
+            handleDeleteRecord();
           }}
         />
       )}
