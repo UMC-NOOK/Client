@@ -152,18 +152,18 @@ export function getLibraryFocusRecords(params: {
 }
 
 // 서재 책 등록
-export async function postLibraryBook(bookId: string): Promise<void> {
+export async function postLibraryBook(bookId: number): Promise<void> {
   await api.post(`"/api/library/${bookId}"`);
 }
 
 // 서재 책 삭제
-export async function deleteLibraryBook(bookId: string): Promise<void> {
+export async function deleteLibraryBook(bookId: number): Promise<void> {
   await api.delete(`/api/library/${bookId}`);
 }
 
 // 서재 책 상태 변경 => 수정 필요
 export async function patchLibraryBookStatus(params: {
-  bookId: string;
+  bookId: number;
   readingStatus: BookStatusType;
 }): Promise<void> {
   await api.patch(`/api/library/status`, {
