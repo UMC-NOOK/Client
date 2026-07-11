@@ -42,26 +42,12 @@ export default function LoginPage() {
       }
 
       const result = response.result;
-
-      const accessToken = result?.accessToken;
-      const refreshToken = result?.refreshToken;
       const onboardingCompleted = result?.onboardingCompleted;
 
-      if (!accessToken) {
+      if (!result?.accessToken) {
         console.error("❌ accessToken 없음", response);
         return;
       }
-
-      localStorage.setItem("accessToken", accessToken);
-
-      if (refreshToken) {
-        localStorage.setItem("refreshToken", refreshToken);
-      }
-
-      localStorage.setItem(
-        "onboardingCompleted",
-        onboardingCompleted ? "true" : "false",
-      );
 
       navigate(onboardingCompleted ? "/library" : "/onboarding");
     } catch (error) {
