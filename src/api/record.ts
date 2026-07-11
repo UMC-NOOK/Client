@@ -16,9 +16,11 @@ import type {
   ImageUploadRequest,
   ImageUploadResponse,
 } from "../types/report/imageUpload.type";
+import type { LibrarySearchItemResult } from "../types/report/searchLibraryBook.type";
 
 const RECORDS_ENDPOINT = "/api/v1/records";
 const IMAGES_ENDPOINT = "/api/v1/images";
+const LIBRARY_SEARCH_ENDPOINT = "/api/v1/books/search";
 
 // 기록 갯수 조회
 export async function getRecordCount(): Promise<number> {
@@ -88,4 +90,12 @@ export async function postImagesUpload(
   return response.data.result;
 }
 
-//
+// 서재 도서 검색 조회
+export async function getLibrarySearchItem(
+  keyword: string,
+): Promise<LibrarySearchItemResult> {
+  const response = await api.get(
+    `${LIBRARY_SEARCH_ENDPOINT}/LIBRARY?keyword=${keyword}`,
+  );
+  return response.data.result;
+}
