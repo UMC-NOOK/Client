@@ -1,12 +1,12 @@
-import type { EmotionKey } from "../report/emotions.type";
+import type { EmotionKey } from "./emotions.type";
 
-export interface IndividueleRecordRequest {
+export interface EmotionRecordsRequest {
   bookId: number;
   size?: string;
   emotion?: EmotionKey;
 }
 
-export interface IndividueleRecordResponse {
+export interface EmotionRecordsResponse {
   items: item[];
   nextCursor: string | null;
   hasNext: boolean;

@@ -10,7 +10,6 @@ import ContainerText from "../../components/action/Button/ContainerText";
 import plus from "../../assets/icons/plus.svg";
 //types
 import type { SortOption } from "../../types/report/sortOption.type";
-
 // hooks
 import { useGetReportCount } from "../../hooks/queries/report/useGetReportCount";
 import { useGetReport } from "../../hooks/queries/report/useGetReort";
@@ -29,7 +28,7 @@ export default function ReportPage() {
   ];
 
   // 개발용 상태
-  const [hasReport, setHasReport] = useState(true);
+  // const [hasReport, setHasReport] = useState(true);
 
   // hooks 호출
   const { data: recordCount } = useGetReportCount();
@@ -75,10 +74,10 @@ export default function ReportPage() {
         </div>
         <div
           className="flex flex-col gap-2"
-          onClick={() => setHasReport(!hasReport)}
+          // onClick={() => setHasReport(!hasReport)}
         >
-          {hasReport ? (
-            recordData?.items.map((item) => (
+          {recordData?.items && recordData.items.length > 0 ? (
+            recordData.items.map((item) => (
               <Report
                 key={item.bookId}
                 {...item}
@@ -89,7 +88,7 @@ export default function ReportPage() {
                 reviewNumber={item.recordCount}
                 onClick={() =>
                   navigate(`/report/${item.bookId}`, {
-                    state: { bookTitle: item.title },
+                    state: { bookTitle: item.title, bookId: item.bookId },
                   })
                 }
               />

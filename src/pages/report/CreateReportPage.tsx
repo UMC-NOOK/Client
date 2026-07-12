@@ -12,28 +12,29 @@ import BottomSheet from "../../components/presentation/modal/bottomsheet/Origin"
 import chevron_left from "../../assets/icons/chevron_left.svg";
 // types
 import type { EmotionKey } from "../../components/action/Chip/Emotion";
+// hooks
+import { useCreateRecord } from "../../hooks/mutations/record/useCreateRecord";
+import { useEditRecord } from "../../hooks/mutations/record/useEditRecord";
 
 export default function CreateReportPage() {
   const navigate = useNavigate();
   const bookTitle = history.state?.usr?.bookTitle || "책 제목 없음";
+  const bookId = history.state?.usr?.bookId;
 
   const record = history.state?.usr?.record;
+  const isEditMode = !!record; // record가 존재하면 수정 모드, 없으면 생성 모드
 
-  const initialImages: string[] = record?.imgUrls || record?.imageUrl || [];
-  const imageArray = Array.isArray(initialImages)
-    ? initialImages
-    : [initialImages].filter(Boolean);
+  const initialImages: string[] = record?.imgUrls || [];
+  const initialImageKeys: string[] = record?.imageKeys || [];
 
   const [content, setContent] = useState(record?.content || "");
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey>(
     record?.emotion || null,
   );
 
-  const [images, setImages] = useState<string[]>(imageArray);
-
-  const [imageFiles, setImageFiles] = useState<(File | null)[]>(
-    imageArray.map(() => null),
-  );
+  const [images, setImages] = useState<string[]>(initialImages);
+  const [imageFiles, setImageFiles] =
+    useState<(File | string)[]>(initialImageKeys);
 
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
 
@@ -72,7 +73,10 @@ export default function CreateReportPage() {
 
     const newImageUrls = allowedFiles.map((file) => URL.createObjectURL(file));
 
+    // UI용 배열에는 브라우저 임시 URL을 추가
     setImages((prev) => [...prev, ...newImageUrls]);
+
+    // 전송용 배열에는 실제 File 객체를 추가
     setImageFiles((prev) => [...prev, ...allowedFiles]);
 
     if (fileInputRef.current) {
@@ -94,6 +98,9 @@ export default function CreateReportPage() {
       setDeleteIndex(index);
     }
   };
+
+  const { mutate: createRecord } = useCreateRecord();
+  const { mutate: editRecord } = useEditRecord();
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-dvh overflow-y-hidden gap-5 relative">
@@ -170,7 +177,7 @@ export default function CreateReportPage() {
       </div>
 
       {/* Toast */}
-      <div className="absolute bottom-[100px] left-0 w-full flex justify-center z-[100]">
+      <div className="absolute bottom-25 left-0 w-full flex justify-center z-100">
         <Toast
           key={`toast-${toastKey}`}
           text="사진은 최대 5장까지 첨부할 수 있어요."
@@ -188,6 +195,39 @@ export default function CreateReportPage() {
           label: "기록 저장하기",
           onClick: () => {
             // imageFiles.filter(file => file !== null) 로 실제 새로 업로드된 파일만 추출 가능
+            if (!content) return;
+
+            if (isEditMode) {
+              editRecord(
+                {
+                  recordId: record.recordId,
+                  content,
+                  emotion: selectedEmotion,
+                  mixedImages: imageFiles, // ["기존키.png", File, File] 형태
+                },
+                {
+                  onSuccess: () => navigate(`/report/${bookId}`),
+                },
+              );
+
+              console.log("이미지 추가", imageFiles);
+            } else {
+              createRecord(
+                {
+                  bookId: bookId,
+                  content,
+                  emotion: selectedEmotion,
+                  imageFiles: imageFiles.filter(
+                    (file) => file !== null,
+                  ) as File[],
+                },
+                {
+                  onSuccess: () => {
+                    navigate(`/report/${bookId}`);
+                  },
+                },
+              );
+            }
           },
         }}
       />

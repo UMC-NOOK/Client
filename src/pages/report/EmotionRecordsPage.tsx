@@ -8,7 +8,7 @@ import ReportList from "../../components/content/card/Report/List";
 import EmptyState from "../../components/content/EmptyState/EmptyState";
 import FAB from "../../components/action/Button/FAB";
 // api
-import { useGetIndividueleRecords } from "../../hooks/queries/report/useGetIndividueleRecords";
+import { useGetIndividueleRecords } from "../../hooks/queries/report/useGetEmotionRecords";
 import { useGetEmotions } from "../../hooks/queries/report/useGetEmotions";
 // types
 import type { EmotionKey } from "../../types/report/emotions.type";
@@ -20,15 +20,17 @@ import plus from "../../assets/icons/plus-gray-10.svg";
 export default function IndividueleReportPage() {
   const { id } = useParams();
   const bookTitle = history.state?.usr?.bookTitle || "책 제목 없음";
+  const bookId = history.state?.usr?.bookId || id;
   const navigate = useNavigate();
 
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey>("ALL");
 
-  const { data: recordsData } = useGetIndividueleRecords(
-    parseInt(id || "0", 10),
-    undefined,
-    selectedEmotion,
-  );
+  const { data: recordsData, isFetching: isFetchingRecords } =
+    useGetIndividueleRecords(
+      parseInt(id || "0", 10),
+      undefined,
+      selectedEmotion,
+    );
   const { data: emotionsData } = useGetEmotions(parseInt(id || "0", 10));
 
   const emotionMetaMap: Record<EmotionKey, { text: string; count: number }> = {
@@ -101,28 +103,30 @@ export default function IndividueleReportPage() {
         ))}
       </div>
       <div className="flex-1 w-full overflow-y-auto flex flex-col items-center justify-start gap-1 pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        {recordsData?.items.length === 0 && (
+        {isFetchingRecords && <EmptyState text="기록을 불러오는 중이에요..." />}
+        {!isFetchingRecords && recordsData?.items.length === 0 && (
           <EmptyState text="작성한 기록이 없어요." />
         )}
-        {(recordsData?.items ?? []).map((record) => (
-          <ReportList
-            key={record.recordId}
-            date={record.createdDate}
-            emojiKey={record.emotion as emotion | null}
-            review={record.content}
-            images={record.imageUrl}
-            onClick={() =>
-              navigate(`/report/${id}/${record.recordId}`, {
-                state: { bookTitle, record },
-              })
-            }
-          />
-        ))}
+        {!isFetchingRecords &&
+          (recordsData?.items ?? []).map((record) => (
+            <ReportList
+              key={record.recordId}
+              date={record.createdDate}
+              emojiKey={record.emotion as emotion | null}
+              review={record.content}
+              images={record.imageUrl}
+              onClick={() =>
+                navigate(`/report/${id}/${record.recordId}`, {
+                  state: { bookTitle, record, bookId },
+                })
+              }
+            />
+          ))}
       </div>
       <FAB
         icon={<img src={plus} alt="plus" />}
         onClick={() =>
-          navigate(`/report/${id}/create`, { state: { bookTitle } })
+          navigate(`/report/${id}/create`, { state: { bookTitle, bookId } })
         }
         className="absolute bottom-6 right-4 z-10"
       />

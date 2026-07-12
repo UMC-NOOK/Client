@@ -5,18 +5,20 @@ import { useNavigate } from "react-router-dom";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import SearchInput from "../../components/input/SearchField";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
-import Report from "../../components/content/card/Book/List/Report";
+import BookList from "../../components/content/card/Book/List";
 import BottomSheet from "../../components/presentation/modal/bottomsheet/Origin";
 import ContainerText from "../../components/action/Button/ContainerText";
-import EmptyState from "../../components/content/EmptyState/EmptyState";
+import Divider from "../../components/layout/Divider";
+// import EmptyState from "../../components/content/EmptyState/EmptyState";
 import RecentKeywordSection, {
   type RecentKeyword,
 } from "../../components/search/RecentKeywordSection";
 // types
 import type { SortOption } from "../../types/report/sortOption.type";
 type ViewMode = "idle" | "searching" | "results";
-// api
-
+// hooks
+import { useGetLibraryBooks } from "../../hooks/queries/report/useGetLibraryBooks";
+import { useGetLibrarySearchItem } from "../../hooks/queries/report/useGetSearchItem";
 // assets
 import chevron_left from "../../assets/icons/chevron_left.svg";
 
@@ -38,8 +40,16 @@ export default function ReportSearchPage() {
     { label: "기록 적은 순", value: "RECORD_COUNT_ASC" },
   ];
 
+  const { data: recordData } = useGetLibraryBooks();
+  const {
+    data: searchItemData,
+    isFetching: isFetchingSearchItem,
+    isError: isErrorSearchItem,
+  } = useGetLibrarySearchItem(searchQuery);
+
   const handleSearch = (overrideQuery?: string) => {
     const target = (overrideQuery ?? searchQuery).trim();
+
     if (!target) return;
 
     setSearchQuery(target);
@@ -48,36 +58,38 @@ export default function ReportSearchPage() {
 
     setRecent((prev) => {
       const withoutDup = prev.filter((item) => item.text !== target);
+
       return [{ id: Date.now(), text: target }, ...withoutDup].slice(0, 10);
     });
   };
 
   // 개발용 상태
-  const [hasReport, setHasReport] = useState(true);
-  const data = {
-    items: [
-      {
-        bookId: 101,
-        title: "작별하지 않는다",
-        author: "한강",
-        recordContent: "가장 오래 남았던 문장을 기록한 독서 메모입니다.",
-        coverImageUrl:
-          "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FA63nA%2FbtsFqKitYc4%2FAAAAAAAAAAAAAAAAAAAAAKUGtE-rV1MNFhMn5XNnw1bxEgBggGOxwdRzsu3XHcdD%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1777561199%26allow_ip%3D%26allow_referer%3D%26signature%3Ds3s6yuo6E8Qa4sVG%252FjRIQEV12jA%253D",
-        recordCount: 4,
-      },
-      {
-        bookId: 99,
-        title: "소년이 온다",
-        author: "한강",
-        recordContent: "감정이 크게 남은 부분을 짧게 정리한 기록입니다.",
-        coverImageUrl:
-          "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbPz6QM%2FbtsFm0GA4WY%2FAAAAAAAAAAAAAAAAAAAAADt7715qbAHxp6NPPLfY-0Z9m3jPraCk2sDQrSAblEhK%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1777561199%26allow_ip%3D%26allow_referer%3D%26signature%3DE6ifvpq2kHb2bLJwKR2Ofrv2Bzc%253D",
-        recordCount: 2,
-      },
-    ],
-    nextCursor: "fDk5fDIwMjYtMDQtMDFUMDk6MzA",
-    hasNext: true,
-  };
+  // const [hasReport, setHasReport] = useState(true);
+  // const data = {
+  //   items: [
+  //     {
+  //       bookId: 19,
+  //       title: "테라피스트",
+  //       author: "B. A. 패리스 (지은이), 박설영 (옮긴이)",
+  //       readingStatus: "READING",
+
+  //       coverImageUrl:
+  //         "https://image.aladin.co.kr/product/28446/67/cover200/k512835515_1.jpg",
+  //     },
+  //     {
+  //       bookId: 99,
+  //       title: "소년이 온다",
+  //       author: "한강",
+
+  //       coverImageUrl:
+  //         "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbPz6QM%2FbtsFm0GA4WY%2FAAAAAAAAAAAAAAAAAAAAADt7715qbAHxp6NPPLfY-0Z9m3jPraCk2sDQrSAblEhK%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1777561199%26allow_ip%3D%26allow_referer%3D%26signature%3DE6ifvpq2kHb2bLJwKR2Ofrv2Bzc%253D",
+  //     },
+  //   ],
+  //   nextCursor: "fDk5fDIwMjYtMDQtMDFUMDk6MzA",
+  //   hasNext: true,
+  // };
+
+  console.log("recordData", recordData);
   const deleteHistory = (
     params: { type: string; keyword: string },
     options?: { onSuccess: () => void },
@@ -89,7 +101,7 @@ export default function ReportSearchPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-start w-full h-full gap-5">
+    <div className="flex flex-col items-center justify-start w-full h-full">
       {/* header + search */}
       <div className="flex flex-col gap-4 w-full">
         <TopNavigation
@@ -98,22 +110,26 @@ export default function ReportSearchPage() {
           center="도서 선택"
         />
         <SearchInput
-          placeholder="도서 제목, 저자명으로 검색해보세요."
-          onChange={(v) => {
-            setSearchQuery(v);
-            setMode("searching");
+          placeholder="내 서제에서 책을 찾아보세요."
+          onChange={(value) => {
+            setSearchQuery(value);
+            value.trim() === "" ? setMode("searching") : setMode("results");
           }}
           value={searchQuery}
-          onSearchClick={() => handleSearch()}
-          onEnter={() => handleSearch()}
-          onFocus={() => setMode("searching")}
+          onSearchClick={handleSearch}
+          onEnter={handleSearch}
+          onFocus={() => {
+            if (mode !== "results") {
+              setMode("searching");
+            }
+          }}
           onBlur={() => {}}
         />
       </div>
 
       {/* content */}
       {mode === "idle" && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full mt-5">
           <div className="self-end m-2">
             <SectionHeader
               size="14"
@@ -129,23 +145,30 @@ export default function ReportSearchPage() {
           </div>
           <div
             className="flex flex-col gap-2"
-            onClick={() => setHasReport(!hasReport)}
+            // onClick={() => setHasReport(!hasReport)}
           >
-            {hasReport ? (
-              data.items.map((item) => (
-                <Report
-                  key={item.bookId}
-                  {...item}
-                  imageUrl={item.coverImageUrl}
-                  title={item.title}
-                  author={item.author}
-                  recent={item.recordContent}
-                  reviewNumber={item.recordCount}
-                />
-              ))
-            ) : (
-              <EmptyState text="작성한 기록이 없어요." />
-            )}
+            {recordData?.items.map((item) => (
+              <BookList
+                key={item.bookId}
+                {...item}
+                imageUrl={item.coverUrl}
+                title={item.title}
+                author={item.author}
+                type="REPORT"
+                typeLabel={`${
+                  item.readingStatus === "BEFORE"
+                    ? "읽기 전"
+                    : item.readingStatus === "READING"
+                      ? "독서 중"
+                      : "완독"
+                }`}
+                onClick={() =>
+                  navigate(`/report/${item.bookId}`, {
+                    state: { bookTitle: item.title, bookId: item.bookId },
+                  })
+                }
+              />
+            ))}
           </div>
         </div>
       )}
@@ -172,6 +195,66 @@ export default function ReportSearchPage() {
             handleSearch(text);
           }}
         />
+      )}
+      {mode === "results" && (
+        <div className="flex flex-col gap-4 w-full mt-8">
+          {isFetchingSearchItem && (
+            <SectionHeader
+              size="13"
+              top={<>검색 결과를 불러오는 중이에요...</>}
+            />
+          )}
+
+          {isErrorSearchItem && (
+            <SectionHeader
+              size="13"
+              top={<>검색 결과를 불러오지 못했어요.</>}
+            />
+          )}
+
+          {!isFetchingSearchItem && !isErrorSearchItem && (
+            <>
+              <SectionHeader
+                size="13"
+                top={
+                  <>
+                    {searchItemData?.books.length || 0}권의 도서가 검색되었어요.
+                  </>
+                }
+              />
+              {searchItemData?.books?.map((item, index) => (
+                <>
+                  <BookList
+                    key={item.bookId}
+                    {...item}
+                    imageUrl={item.coverImageUrl}
+                    title={item.title}
+                    author={item.author}
+                    type="REPORT"
+                    typeLabel={
+                      item.readingStatus === "BEFORE"
+                        ? "읽기 전"
+                        : item.readingStatus === "READING"
+                          ? "독서 중"
+                          : "완독"
+                    }
+                    onClick={() =>
+                      navigate(`/report/${item.bookId}`, {
+                        state: {
+                          bookTitle: item.title,
+                          bookId: item.bookId,
+                        },
+                      })
+                    }
+                  />
+                  {index !== (searchItemData?.books.length || 0) - 1 && (
+                    <Divider width="full" />
+                  )}
+                </>
+              ))}
+            </>
+          )}
+        </div>
       )}
 
       {/* bottom sheet */}

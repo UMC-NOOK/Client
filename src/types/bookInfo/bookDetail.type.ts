@@ -1,3 +1,5 @@
+type BookStatusType = "BEFORE" | "READING" | "FINISHED";
+
 export interface BookDetailResponse {
   isbn13: string;
   bookId: number;
@@ -13,5 +15,6 @@ export interface BookDetailResponse {
   coverImageUrl: string;
   aladinLink: string | null;
   sourceType: string;
-  bookShelfId: number | null;
+  libraryId: number | null;
+  readingStatus: BookStatusType;
 }

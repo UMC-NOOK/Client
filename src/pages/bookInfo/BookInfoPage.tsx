@@ -19,92 +19,23 @@ import testBookCover from "../../assets/book-info/testBookCover.svg";
 import book_shelf from "../../assets/icons/book_shelf-gray-30.svg";
 // hooks
 import { useGetBookDetailWithISBN } from "../../hooks/queries/bookInfo/useGetBookDetailWithISBN";
-// import { useLibraryBookRegister } from "../../hooks/mutations/library/useLibraryBookRegister";
+import { useLibraryBookRegister } from "../../hooks/mutations/library/useLibraryBookRegister";
+import { useGetBookTimeline } from "../../hooks/queries/bookInfo/useGetBookTimeline";
 // types
 type DetailTab = "info" | "log";
+type BookStatusType = "BEFORE" | "READING" | "FINISHED" | null;
 // values
 const detailTabs = [
   { value: "info", label: "도서 정보" },
   { value: "log", label: "독서 이력" },
 ] as const;
-// data
-const bookHistoryData = [
-  {
-    year: 2026,
-    showYear: true,
-    monthDay: "12.09",
-    items: [
-      {
-        timelineId: 103,
-        type: "FOCUS",
-        occurredAt: "2026-12-09T23:15:00",
-        title: "1시간 13분의 포커스",
-        subtitle: "22:02 - 23:15",
-        previewText: "1시간 13분의 포커스",
-        targetId: 7001,
-      },
-      {
-        timelineId: 102,
-        type: "FOCUS",
-        occurredAt: "2026-12-09T16:50:00",
-        title: "1시간 27분의 포커스",
-        subtitle: "15:23 - 16:50",
-        previewText: "1시간 27분의 포커스",
-        targetId: 7002,
-      },
-    ],
-  },
-  {
-    year: 2026,
-    showYear: false,
-    monthDay: "12.09",
-    items: [
-      {
-        timelineId: 103,
-        type: "RECORD",
-        occurredAt: "2026-12-09T23:15:00",
-        title: "독서 기록",
-        subtitle: "[p.40] 변하는 실제가 없음은 물론 그것이 거쳐가는 길이",
-        previewText: "독서 기록",
-        targetId: 7001,
-      },
-      {
-        timelineId: 102,
-        type: "RECORD",
-        occurredAt: "2026-12-09T16:50:00",
-        title: "독서 기록",
-        subtitle: "3개의 이미지",
-        previewText: "독서 기록",
-        targetId: 7002,
-      },
-    ],
-  },
-  {
-    year: 2025,
-    showYear: true,
-    monthDay: "11.30",
-    items: [
-      {
-        timelineId: 100,
-        type: "REGISTER",
-        occurredAt: "2025-11-30T09:00:00",
-        title: "첫사랑의 침공",
-        subtitle: "서재에 등록했어요.",
-        previewText: "서재에 등록했어요.",
-        targetId: 12,
-      },
-    ],
-  },
-];
 
 export default function BookInfoPage() {
   const bookISBN = useParams().isbn13;
   const navigate = useNavigate();
 
   const [selectedTab, setSelectedTab] = useState<DetailTab>("info");
-  const [readStatus, setReadStatus] = useState<"unread" | "reading" | "read">(
-    "unread",
-  );
+  const [readStatus, setReadStatus] = useState<BookStatusType>(null);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -113,6 +44,20 @@ export default function BookInfoPage() {
   const { data: bookDetailData, isLoading } = useGetBookDetailWithISBN(
     bookISBN!,
   );
+
+  const [libraryId, setLibraryId] = useState<number | null>(
+    bookDetailData?.libraryId || null,
+  );
+  const effectiveLibraryId = bookDetailData?.libraryId || libraryId;
+
+  const { data: bookTimelineData } = useGetBookTimeline(effectiveLibraryId);
+  const { addBook, deleteBook, patchBookStatus } = useLibraryBookRegister();
+
+  useEffect(() => {
+    if (bookDetailData) {
+      setReadStatus(bookDetailData.readingStatus);
+    }
+  }, [bookDetailData]);
 
   // 데이터가 null일 때 alert 띄우기 (렌더링 사이드 이펙트 방지)
   useEffect(() => {
@@ -124,9 +69,6 @@ export default function BookInfoPage() {
   }, [isLoading, bookDetailData]);
 
   // 개발용 상태
-  const [hasFocus, setHasFocus] = useState(true);
-  const [hasRecord, setHasRecord] = useState(false);
-  const [hasHistory, setHasHistory] = useState(false);
   const [showReadingModal, setShowReadingModal] = useState(false);
   const [showCompleteModal, setShowCompleteModal] = useState(false);
 
@@ -144,26 +86,12 @@ export default function BookInfoPage() {
     }));
   };
 
-  // 개발용 핸들러 함수
-  const toggleReadStatus = () => {
-    if (readStatus === "unread") {
-      setReadStatus("reading");
-      openSnackbar("내 서재에 책을 등록했어요.");
-    } else if (readStatus === "reading") {
-      setShowCompleteModal(true);
-    } else {
-      setShowReadingModal(true);
-    }
-
-    console.log("현재 읽기 상태:", readStatus);
-  };
-
   return (
     <div className="relative flex flex-col pb-[calc(120px+env(safe-area-inset-bottom))]">
       {/* 상단 */}
       <div className="relative">
         <div className="absolute inset-0 z-0 -mx-4 -mt-2 pointer-events-none overflow-hidden">
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[375px] h-[525px]">
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-93.75 h-131.25">
             {/* 배경 흐림 커버 스켈레톤 */}
             {isLoading ? (
               <div className="w-full h-full bg-gray-20 animate-pulse blur-[20px] opacity-50" />
@@ -187,7 +115,7 @@ export default function BookInfoPage() {
           <div className="flex flex-col justify-center items-center mt-10 gap-4">
             {/* 메인 도서 커버 스켈레톤 */}
             {isLoading ? (
-              <div className="w-[140px] h-[200px] bg-gray-20 animate-pulse rounded-md" />
+              <div className="w-35 h-50 bg-gray-20 animate-pulse rounded-md" />
             ) : (
               <BookCover
                 imageUrl={bookDetailData?.coverImageUrl || testBookCover}
@@ -270,12 +198,18 @@ export default function BookInfoPage() {
             )}
           </div>
           <div className="flex flex-col gap-2 w-full justify-center items-center">
-            {readStatus !== "unread" && (
+            {readStatus !== null && (
               <Solid
-                text="서재에서 제거"
+                text="서재에서 삭제하기"
                 variant="alert"
                 size="m"
-                onClick={() => setReadStatus("unread")}
+                onClick={() =>
+                  deleteBook(bookDetailData!.bookId, {
+                    onSuccess: () => {
+                      setReadStatus(null);
+                    },
+                  })
+                }
               />
             )}
             {!isLoading && bookDetailData?.aladinLink && (
@@ -299,32 +233,32 @@ export default function BookInfoPage() {
             <div className="text-label-16-sb">포커스</div>
             <div
               className="text-body-14-r p-4 rounded-sm bg-gray-15"
-              onClick={() => {
-                // 개발용 토글
-                setHasFocus(!hasFocus);
-              }}
+              // onClick={() => {
+              //   // 개발용 토글
+              //   setHasFocus(!hasFocus);
+              // }}
             >
-              {hasFocus ? (
+              {bookTimelineData ? (
                 <div className="flex flex-col gap-4">
                   <InformationSection
                     flow="horizontal"
                     top="기간"
-                    bottom="25.12.30 - 26.01.19"
+                    bottom={`${bookTimelineData?.focusSummary.startedAt} ~ ${bookTimelineData?.focusSummary.endedAt || ""}`}
                   />
                   <InformationSection
                     flow="horizontal"
                     top="시간"
-                    bottom="3시간 4분 22초"
+                    bottom={`${Math.floor(bookTimelineData?.focusSummary.totalFocusSec! / 3600)}시간 ${Math.floor((bookTimelineData?.focusSummary.totalFocusSec! % 3600) / 60)}분`}
                   />
                   <InformationSection
                     flow="horizontal"
                     top="횟수"
-                    bottom="39번"
+                    bottom={`${bookTimelineData?.focusSummary.focusCount}번`}
                   />
                   <InformationSection
                     flow="horizontal"
                     top="페이지"
-                    bottom="~99쪽"
+                    bottom={`${bookTimelineData?.focusSummary.page}쪽`}
                   />
                 </div>
               ) : (
@@ -333,16 +267,23 @@ export default function BookInfoPage() {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            {hasRecord ? (
+            {bookTimelineData ? (
               <div className="flex items-center justify-between">
                 <div className="flex gap-2">
                   <span className="text-label-16-sb">기록</span>
-                  <span className="text-mint-60 text-label-16-sb">16</span>
+                  <span className="text-mint-60 text-label-16-sb">
+                    {bookTimelineData?.recordSummary.recordCount}
+                  </span>
                 </div>
                 <div
                   className="curser-pointer text-btn-14-sb text-gray-60"
                   onClick={() => {
-                    // 전체 기록 보기로 이동
+                    navigate(`/report/${bookDetailData?.bookId}`, {
+                      state: {
+                        bookTitle: bookDetailData?.title,
+                        bookId: bookDetailData?.bookId,
+                      },
+                    });
                   }}
                 >
                   전체 보기
@@ -354,19 +295,17 @@ export default function BookInfoPage() {
 
             <div
               className="text-body-14-r p-4 rounded-sm bg-gray-15"
-              onClick={() => {
-                // 개발용 토글
-                setHasRecord(!hasRecord);
-              }}
+              // onClick={() => {
+              //   // 개발용 토글
+              //   setHasRecord(!hasRecord);
+              // }}
             >
-              {hasRecord ? (
+              {bookTimelineData ? (
                 <InformationSection
                   flow="horizontal"
                   bottom={
                     <div className="w-full overflow-hidden line-clamp-3">
-                      [p.131] 어느 쪽의 이야기가 그럴듯하고 그들에게 어울립니까?
-                      아가씨에게 존속 상해치사의 죄를 추가하고 싶지는 않으니
-                      나는 첫번째를 고르지 않겠습니다 진짜 뭐라는 겁니까
+                      {bookTimelineData?.recordSummary.latestRecordPreview}
                     </div>
                   }
                 />
@@ -376,13 +315,13 @@ export default function BookInfoPage() {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            {hasHistory ? (
+            {bookTimelineData ? (
               <div className="flex items-center justify-between">
                 <div className="text-label-16-sb">독서 히스토리</div>
                 <div
                   className="curser-pointer text-btn-14-sb text-gray-60"
                   onClick={() => {
-                    navigate("/library/123/history");
+                    navigate(`/library/${libraryId}/history`);
                   }}
                 >
                   전체 보기
@@ -392,47 +331,50 @@ export default function BookInfoPage() {
               <div className="text-label-16-sb">독서 히스토리</div>
             )}
             <div
-              className={`text-body-14-r p-4 rounded-sm bg-gray-15 ${hasHistory ? "h-80 relative overflow-hidden" : ""}`}
-              onClick={() => {
-                // 개발용 토글
-                setHasHistory(!hasHistory);
-              }}
+              className={`text-body-14-r p-4 rounded-sm bg-gray-15 ${libraryId ? "h-80 relative overflow-hidden" : ""}`}
+              // onClick={() => {
+              //   // 개발용 토글
+              //   setHasHistory(!hasHistory);
+              // }}
             >
-              {hasHistory ? (
+              {bookTimelineData ? (
                 <>
                   <MaskGradient
                     width={"full"}
                     height={20}
                     className="-m-4 bottom-0"
                   />
-                  {bookHistoryData.map((history) => (
-                    <div
-                      key={history.year}
-                      className="flex items-start gap-2 mb-4 w-full"
-                    >
-                      <ResourceDate
-                        topText={history.monthDay}
-                        bottomText={
-                          history.showYear ? String(history.year) : ""
-                        }
-                      />
-                      <div className="min-w-0 flex flex-1 flex-col gap-1">
-                        {history.items.map((item) => (
-                          <HistoryInfoCard
-                            key={item.timelineId}
-                            variant={
-                              item.type === "RECORD" ? "history" : "time"
-                            }
-                            title={item.title}
-                            time={item.subtitle}
-                            hasIcon={
-                              item.type !== "REGISTER" && item.type !== "STATUS"
-                            }
-                          />
-                        ))}
+                  {bookTimelineData?.timelinePreview.dateGroups.map(
+                    (history) => (
+                      <div
+                        key={history.year}
+                        className="flex items-start gap-2 mb-4 w-full"
+                      >
+                        <ResourceDate
+                          topText={history.monthDay}
+                          bottomText={
+                            history.showYear ? String(history.year) : ""
+                          }
+                        />
+                        <div className="min-w-0 flex flex-1 flex-col gap-1">
+                          {history.items.map((item) => (
+                            <HistoryInfoCard
+                              key={item.timelineId}
+                              variant={
+                                item.type === "RECORD" ? "history" : "time"
+                              }
+                              title={item.title}
+                              time={item.subtitle || ""}
+                              hasIcon={
+                                item.type !== "REGISTER" &&
+                                item.type !== "STATUS"
+                              }
+                            />
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </>
               ) : (
                 "아직 독서 활동이 없어요."
@@ -442,7 +384,7 @@ export default function BookInfoPage() {
         </div>
       )}
       {/* 버튼 모달 */}
-      {readStatus === "reading" && (
+      {(readStatus === "BEFORE" || readStatus === "READING") && (
         <BottomSheet
           open={true}
           onClose={() => {}}
@@ -454,13 +396,15 @@ export default function BookInfoPage() {
             leftLabel: "완독 표시",
             rightLabel: "포커스 시작하기",
             onLeftClick: () => {
-              toggleReadStatus();
+              setShowCompleteModal(true);
             },
-            onRightClick: () => {},
+            onRightClick: () => {
+              // 포커스 페이지로 이동
+            },
           }}
         />
       )}
-      {readStatus === "unread" && (
+      {readStatus === null && (
         <BottomSheet
           open={true}
           onClose={() => {}}
@@ -470,12 +414,18 @@ export default function BookInfoPage() {
             variant: "mint",
             label: "서재에 등록하기",
             onClick: () => {
-              toggleReadStatus();
+              addBook(bookDetailData!.bookId, {
+                onSuccess: () => {
+                  setLibraryId(bookDetailData!.libraryId);
+                  openSnackbar("내 서재에 책을 등록했어요.");
+                  setReadStatus("READING");
+                },
+              });
             },
           }}
         />
       )}
-      {readStatus === "read" && (
+      {readStatus === "FINISHED" && (
         <BottomSheet
           open={true}
           onClose={() => {}}
@@ -485,7 +435,7 @@ export default function BookInfoPage() {
             variant: "primarySecondaryText",
             label: "완독 취소하기",
             onClick: () => {
-              toggleReadStatus();
+              setShowReadingModal(true);
             },
           }}
         />
@@ -501,8 +451,15 @@ export default function BookInfoPage() {
           rightLabel="변경"
           onLeftClick={() => setShowCompleteModal(false)}
           onRightClick={() => {
-            setReadStatus("read");
-            setShowCompleteModal(false);
+            patchBookStatus(
+              { bookId: bookDetailData!.bookId, readingStatus: "FINISHED" },
+              {
+                onSuccess: () => {
+                  setReadStatus("FINISHED");
+                  setShowCompleteModal(false);
+                },
+              },
+            );
           }}
         />
       )}
@@ -516,8 +473,15 @@ export default function BookInfoPage() {
           rightLabel="변경"
           onLeftClick={() => setShowReadingModal(false)}
           onRightClick={() => {
-            setReadStatus("reading");
-            setShowReadingModal(false);
+            patchBookStatus(
+              { bookId: bookDetailData!.bookId, readingStatus: "READING" },
+              {
+                onSuccess: () => {
+                  setReadStatus("READING");
+                  setShowReadingModal(false);
+                },
+              },
+            );
           }}
         />
       )}

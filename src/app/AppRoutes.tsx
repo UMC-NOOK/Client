@@ -28,7 +28,7 @@ import AllHistoryPage from "../pages/bookInfo/AllHistoryPage";
 
 import ReportPage from "../pages/report/ReportPage";
 import ReportSearchPage from "../pages/report/ReportSearchPage";
-import IndividueleReportPage from "../pages/report/IndividueleReportPage";
+import IndividueleReportPage from "../pages/report/EmotionRecordsPage";
 import ViewReportPage from "../pages/report/ViewReportPage";
 import CreateReportPage from "../pages/report/CreateReportPage";
 
@@ -220,21 +220,37 @@ export default function AppRoutes() {
 
             {/* 기타 */}
             <Route path="/library/status" element={<LibraryAllBookPage />} />
+
+
+            <Route element={<NoFooterLayout />}>
+              
+              <Route path="/library/:isbn13" element={<BookInfoPage />} />
+              <Route
+                path="/library/:isbn13/history"
+                element={<AllHistoryPage />}
+              />
+            </Route>
+
+            <Route path="/report/search" element={<ReportSearchPage />} />
+            <Route element={<NoFooterLayout />}>
+              <Route path="/report/:id" element={<IndividueleReportPage />} />
+              <Route
+                path="/report/:id/:recordId"
+                element={<ViewReportPage />}
+              />
+              <Route path="/report/:id/create" element={<CreateReportPage />} />
+              <Route
+                path="/report/:id/:recordId/edit"
+                element={<CreateReportPage />}
+              />
+            </Route>
+
             <Route
               path="/users/me/onboarding/goal"
               element={<LibraryGoalInputPage />}
             />
-            <Route path="/library/:isbn13" element={<BookInfoPage />} />
-            <Route path="/library/:isbn13/history" element={<AllHistoryPage />} />
+           
 
-            <Route path="/report/search" element={<ReportSearchPage />} />
-            <Route path="/report/:id" element={<IndividueleReportPage />} />
-            <Route path="/report/:id/:recordId" element={<ViewReportPage />} />
-            <Route path="/report/:id/create" element={<CreateReportPage />} />
-            <Route
-              path="/report/:id/:recordId/edit"
-              element={<CreateReportPage />}
-            />
           </Route>
 
           {/* FALLBACK */}
