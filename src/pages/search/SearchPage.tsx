@@ -108,7 +108,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="w-full pb-10">
+    <div className="w-full pb-0">
       <SearchTopSection
         title="도서 검색"
         activeScope={scope}
