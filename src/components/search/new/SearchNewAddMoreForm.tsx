@@ -99,7 +99,7 @@ export default function SearchNewAddMoreForm({
           )}
         </label>
 
-        <div className="w-full flex flex-col items-start gap-6 px-1">
+        <div className="w-full flex flex-col items-start gap-6 ">
           {/* 소개 */}
           <TextArea
             title="소개"
