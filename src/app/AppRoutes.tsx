@@ -37,6 +37,7 @@ import DevLoginButton from "../components/dev/DevLoginButton";
 import LibraryPage from "../pages/library/LibraryPage";
 import LibraryGoalInputPage from "../pages/library/LibraryGoalInputPage";
 import LibraryAllBookPage from "../pages/library/LibraryAllBookPage";
+import MainMyPage from "../pages/myPage/MainMyPage";
 
 import OnboardingGoalPage from "../pages/onboarding/OnboardingGoalPage";
 import { OnboardingCategoryPage } from "../pages/onboarding/OnboardingCategoryPage";
@@ -219,6 +220,7 @@ export default function AppRoutes() {
             </Route>
 
             {/* 기타 */}
+            <Route path="/mypage" element={<MainMyPage />} />
             <Route path="/library/status" element={<LibraryAllBookPage />} />
 
 
