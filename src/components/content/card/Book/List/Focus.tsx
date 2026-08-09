@@ -6,7 +6,8 @@ type Props = {
   timeText: string;
   title: string;
   author: string;
-  onClick?: () => void;
+  /** 카드 전체가 아니라 재생 버튼만 눌렀을 때 반응한다 (open-questions.md 17번) */
+  onPlayClick?: () => void;
 };
 
 export function Focus({
@@ -15,19 +16,12 @@ export function Focus({
   timeText,
   title,
   author,
-  onClick,
+  onPlayClick,
 }: Props) {
-  const clickable = Boolean(onClick);
-
   return (
-    <div
-      className="flex w-full h-full min-h-[96px] items-center p-4"
-      onClick={onClick}
-      role={clickable ? "button" : undefined}
-      tabIndex={clickable ? 0 : undefined}
-    >
+    <div className="flex w-full h-full min-h-24 items-center rounded-[10px] bg-gray-15 p-4">
       <div
-        className="h-[64px] w-[44px] shrink-0 rounded-[2px] bg-cover bg-center bg-no-repeat"
+        className="h-16 w-11 shrink-0 rounded-xs bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${imageUrl})` }}
         aria-label={imageAlt}
       />
@@ -50,6 +44,7 @@ export function Focus({
         type="button"
         className="flex h-8 w-8 shrink-0 items-center justify-center"
         aria-label="play"
+        onClick={onPlayClick}
       >
         <img src={playIcon} className="h-full w-full" />
       </button>
