@@ -38,6 +38,7 @@ import LibraryPage from "../pages/library/LibraryPage";
 import LibraryGoalInputPage from "../pages/library/LibraryGoalInputPage";
 import LibraryAllBookPage from "../pages/library/LibraryAllBookPage";
 import MainMyPage from "../pages/myPage/MainMyPage";
+import ProfileMyPage from "../pages/myPage/ProfileMyPage";
 
 import OnboardingGoalPage from "../pages/onboarding/OnboardingGoalPage";
 import { OnboardingCategoryPage } from "../pages/onboarding/OnboardingCategoryPage";
@@ -82,7 +83,7 @@ function MainTabsLayout() {
         activeTab={activeTab}
         onTabChange={(tab: TabKey) => navigate(tabToPath(tab))}
         onSearchClick={() => navigate("/search")}
-        onMenuClick={() => console.log("menu click")}
+        onMenuClick={() => navigate("/mypage")}
         onLogoClick={() => navigate("/library")}
       />
       <div className="mx-auto w-full max-w-85.75">
@@ -221,6 +222,7 @@ export default function AppRoutes() {
 
             {/* 기타 */}
             <Route path="/mypage" element={<MainMyPage />} />
+            <Route path="/mypage/profile" element={<ProfileMyPage />} />
             <Route path="/library/status" element={<LibraryAllBookPage />} />
 
 
