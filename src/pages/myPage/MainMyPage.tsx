@@ -25,20 +25,25 @@ export default function MainMyPage() {
               <img src={close} alt="" />
             </Icon>
           }
-          onClickLeft={() => navigate(-1)}
+          onClickLeft={() => navigate("/library")}
           leftPadding="p-0"
         />
       </div>
       {/* 프로필 */}
       <div className="flex flex-row gap-4"> 
           {/* 프로필 */}
-          <div className="h-14 w-14 overflow-hidden rounded-full">
+          <button
+            type="button"
+            onClick={() => navigate("/mypage/profile")}
+            aria-label="프로필 수정"
+            className="h-14 w-14 shrink-0 overflow-hidden rounded-full"
+          >
             <img
               src={defaultProfile}
               alt="프로필"
               className="h-full w-full object-cover"
             />
-          </div>
+          </button>
           {/* 프로필 정보 */}
           <div className="flex min-w-0 flex-1 items-center">
             <SectionHeader
