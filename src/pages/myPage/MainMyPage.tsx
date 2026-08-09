@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import defaultProfile from "../../assets/icons/Profile Image.svg";
@@ -10,10 +11,15 @@ import Divider from "../../components/layout/Divider";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import { useAuthMe } from "../../hooks/queries/useAuthMe";
 import { mainMyPageRecentBookList } from "../../mocks/mypage/mainMyPage_RecentBookList";
+import DeleteAccountModal from "./modal/DeleteAccountModal";
+import LogoutModal from "./modal/LogoutModal";
 
 export default function MainMyPage() {
   const navigate = useNavigate();
   const { data: authMe } = useAuthMe();
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
+    useState(false);
 
   return (
     <div className="flex w-full flex-col gap-4">
@@ -106,12 +112,31 @@ export default function MainMyPage() {
               top={<span className="text-gray-60">계정</span>}
               bottom={
                 <div className="flex flex-col">
-                  <ContainerText text="로그아웃" active />
-                  <ContainerText text="계정 삭제" active danger />
+                  <ContainerText
+                    text="로그아웃"
+                    active
+                    onClick={() => setIsLogoutModalOpen(true)}
+                  />
+                  <ContainerText
+                    text="계정 삭제"
+                    active
+                    danger
+                    onClick={() => setIsDeleteAccountModalOpen(true)}
+                  />
                 </div>
                 }
           />
       </div>
+      <LogoutModal
+        open={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={() => setIsLogoutModalOpen(false)}
+      />
+      <DeleteAccountModal
+        open={isDeleteAccountModalOpen}
+        onClose={() => setIsDeleteAccountModalOpen(false)}
+        onConfirm={() => setIsDeleteAccountModalOpen(false)}
+      />
     </div>
   );
 }

@@ -126,7 +126,11 @@ export default function ProfileMyPage() {
             {/*수정완료 버튼*/}
             {isSaveActive ? (
               <div className="w-full">
-                <Solid text="수정 완료" variant="primary" />
+                <Solid
+                  text="수정 완료"
+                  variant="primary"
+                  onClick={() => navigate("/mypage")}
+                />
               </div>
             ) : null}
         </div>
