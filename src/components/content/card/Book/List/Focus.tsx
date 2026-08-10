@@ -6,8 +6,12 @@ type Props = {
   timeText: string;
   title: string;
   author: string;
-  /** 카드 전체가 아니라 재생 버튼만 눌렀을 때 반응한다 (open-questions.md 17번) */
-  onPlayClick?: () => void;
+  /**
+   * 재생 버튼만이 아니라 카드 전체가 터치 영역이다 — Figma 컴포넌트 코멘트에서 디자이너가
+   * 명시적으로 확인함(2026-08-10): "터치 영역은 아이콘이 아닌 Card/Book/List/Focus 컴포넌트
+   * 전체로 설정했습니다. 컴포넌트 선택 시 'focus : 테마 선택/이미지'로 이동합니다."
+   */
+  onClick?: () => void;
 };
 
 export function Focus({
@@ -16,10 +20,17 @@ export function Focus({
   timeText,
   title,
   author,
-  onPlayClick,
+  onClick,
 }: Props) {
+  const clickable = Boolean(onClick);
+
   return (
-    <div className="flex w-full h-full min-h-24 items-center rounded-[10px] bg-gray-15 p-4">
+    <div
+      className="flex w-full h-full min-h-24 items-center rounded-[10px] bg-gray-15 p-4"
+      onClick={onClick}
+      role={clickable ? "button" : undefined}
+      tabIndex={clickable ? 0 : undefined}
+    >
       <div
         className="h-16 w-11 shrink-0 rounded-xs bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${imageUrl})` }}
@@ -40,14 +51,12 @@ export function Focus({
         </div>
       </div>
 
-      <button
-        type="button"
+      <span
         className="flex h-8 w-8 shrink-0 items-center justify-center"
-        aria-label="play"
-        onClick={onPlayClick}
+        aria-hidden="true"
       >
         <img src={playIcon} className="h-full w-full" />
-      </button>
+      </span>
     </div>
   );
 }

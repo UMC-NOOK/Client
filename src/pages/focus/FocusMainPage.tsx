@@ -134,7 +134,7 @@ export default function FocusMainPage() {
                 title={book.title}
                 author={book.author}
                 timeText={formatHms(book.todayFocusSeconds)}
-                onPlayClick={() => navigate("/focus/theme")}
+                onClick={() => navigate("/focus/theme")}
               />
             ))}
           </div>
