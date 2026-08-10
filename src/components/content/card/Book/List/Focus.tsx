@@ -26,6 +26,7 @@ export function Focus({
 
   return (
     <div
+      // rounded-[10px]: Tailwind v4 기본 radius 스케일에 10px가 없음(8px=lg, 12px=xl) — Figma 실측값 그대로 arbitrary 유지
       className="flex w-full h-full min-h-24 items-center rounded-[10px] bg-gray-15 p-4"
       onClick={onClick}
       role={clickable ? "button" : undefined}
@@ -37,7 +38,7 @@ export function Focus({
         aria-label={imageAlt}
       />
 
-      <div className="flex flex-1 flex-col min-w-0 min-h-[64px] justify-between pl-4 pr-2">
+      <div className="flex flex-1 flex-col min-w-0 min-h-16 justify-between pl-4 pr-2">
         <p className="text-label-13-sb text-gray-60">{timeText}</p>
 
         <div className="mt-auto flex min-w-0 flex-col gap-2">
