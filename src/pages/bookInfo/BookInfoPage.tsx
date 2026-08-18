@@ -276,7 +276,7 @@ export default function BookInfoPage() {
                   </span>
                 </div>
                 <div
-                  className="curser-pointer text-btn-14-sb text-gray-60"
+                  className="curser-pointer text-btn-14-sb text-gray-60 px-2 py-1"
                   onClick={() => {
                     navigate(`/report/${bookDetailData?.bookId}`, {
                       state: {
@@ -319,7 +319,7 @@ export default function BookInfoPage() {
               <div className="flex items-center justify-between">
                 <div className="text-label-16-sb">독서 히스토리</div>
                 <div
-                  className="curser-pointer text-btn-14-sb text-gray-60"
+                  className="curser-pointer text-btn-14-sb text-gray-60  px-2 py-1"
                   onClick={() => {
                     navigate(`/library/${libraryId}/history`);
                   }}
