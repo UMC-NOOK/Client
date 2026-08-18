@@ -7,7 +7,7 @@ type ButtonProps = {
   text: string;
   variant?: Variant;
   size?: Size;
-  /** 가로폭을 부모에 꽉 채울지 여부. Figma "가로폭을 Fill로 사용하기를 권장" 기본값 유지, 컴팩트 버튼만 false로 지정 */
+  /** 가로폭을 부모에 꽉 채울지 여부. 기본은 꽉 채움. */
   fullWidth?: boolean;
   onClick?: () => void;
   className?: string;
