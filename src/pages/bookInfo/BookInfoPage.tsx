@@ -385,7 +385,7 @@ export default function BookInfoPage() {
       )}
       {/* 버튼 모달 */}
       {(readStatus === "BEFORE" || readStatus === "READING") && (
-        <div className="relative">
+        <>
           <BottomSheet
             open={true}
             onClose={() => {}}
@@ -413,7 +413,7 @@ export default function BookInfoPage() {
             buttonText="서재로 이동"
             onButtonClick={onClickSnackbar}
           />
-        </div>
+        </>
       )}
       {readStatus === "UNREGISTERED" && (
         <BottomSheet

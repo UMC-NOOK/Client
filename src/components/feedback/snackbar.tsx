@@ -35,7 +35,7 @@ export default function Snackbar({
       setTimeout(() => {
         onClose?.();
       }, 300); // 닫히는 애니메이션 시간
-    }, 4000); // 유지 시간 4초
+    }, 5000); // 유지 시간 5초
 
     return () => {
       cancelAnimationFrame(enterTimer);
@@ -48,8 +48,8 @@ export default function Snackbar({
   return (
     <div
       className={`
-        absolute bottom-4 z-[100]
-        flex h-[46px] w-full items-center gap-2 rounded-lg bg-gray-90 px-4 py-3
+        fixed bottom-4 z-50
+        flex h-[46px] w-85.75 items-center gap-2 rounded-lg bg-gray-90 px-4 py-3
         transition-all duration-300 ease-out
         ${visible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"}
       `}
