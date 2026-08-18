@@ -59,7 +59,7 @@ const base =
   "flex shrink-0 whitespace-nowrap w-fit justify-center items-center select-none";
 
 const sizeClassMap: Record<Size, string> = {
-  s: "p-1 h-[20px] rounded-[4px] text-label-12-sb",
+  s: "p-1 h-[20px] rounded-[4px] text-label-12-sb bg-gray-20",
   m: "p-2 h-[30px] gap-2 rounded-[2px]",
 };
 
@@ -105,12 +105,7 @@ export default function Emotion({
   if (size === "s") {
     return (
       <span
-        className={[
-          base,
-          sizeClassMap.s,
-          background,
-          active ? color : inactive,
-        ].join(" ")}
+        className={[base, sizeClassMap.s, active ? color : inactive].join(" ")}
       >
         <span className={emoji}>{emojiFeature}</span>
       </span>
