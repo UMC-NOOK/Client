@@ -23,7 +23,7 @@ import { useLibraryBookRegister } from "../../hooks/mutations/library/useLibrary
 import { useGetBookTimeline } from "../../hooks/queries/bookInfo/useGetBookTimeline";
 // types
 type DetailTab = "info" | "log";
-type BookStatusType = "BEFORE" | "READING" | "FINISHED" | null;
+type BookStatusType = "BEFORE" | "READING" | "FINISHED" | "UNREGISTERED";
 // values
 const detailTabs = [
   { value: "info", label: "도서 정보" },
@@ -35,7 +35,7 @@ export default function BookInfoPage() {
   const navigate = useNavigate();
 
   const [selectedTab, setSelectedTab] = useState<DetailTab>("info");
-  const [readStatus, setReadStatus] = useState<BookStatusType>(null);
+  const [readStatus, setReadStatus] = useState<BookStatusType>("UNREGISTERED");
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -155,7 +155,7 @@ export default function BookInfoPage() {
       {/* 하단 */}
       {selectedTab === "info" ? (
         <div className="flex flex-col justify-center items-center gap-10 mt-8">
-          <div className="grid grid-cols-2 gap-8 text-gray-90 w-full px-4">
+          <div className="grid grid-cols-2 gap-8 text-gray-90 w-full px-1">
             {/* 정보 섹션 스켈레톤 */}
             {isLoading ? (
               <>
@@ -198,7 +198,7 @@ export default function BookInfoPage() {
             )}
           </div>
           <div className="flex flex-col gap-2 w-full justify-center items-center">
-            {readStatus !== null && (
+            {readStatus !== "UNREGISTERED" && (
               <Solid
                 text="서재에서 삭제하기"
                 variant="alert"
@@ -206,7 +206,7 @@ export default function BookInfoPage() {
                 onClick={() =>
                   deleteBook(bookDetailData!.bookId, {
                     onSuccess: () => {
-                      setReadStatus(null);
+                      setReadStatus("UNREGISTERED");
                     },
                   })
                 }
@@ -385,26 +385,37 @@ export default function BookInfoPage() {
       )}
       {/* 버튼 모달 */}
       {(readStatus === "BEFORE" || readStatus === "READING") && (
-        <BottomSheet
-          open={true}
-          onClose={() => {}}
-          overlay={false}
-          footer={{
-            layout: "double",
-            sizeMode: "split",
-            leftVariant: "secondary",
-            leftLabel: "완독 표시",
-            rightLabel: "포커스 시작하기",
-            onLeftClick: () => {
-              setShowCompleteModal(true);
-            },
-            onRightClick: () => {
-              // 포커스 페이지로 이동
-            },
-          }}
-        />
+        <div className="relative">
+          <BottomSheet
+            open={true}
+            onClose={() => {}}
+            overlay={false}
+            footer={{
+              layout: "double",
+              sizeMode: "split",
+              leftVariant: "secondary",
+              leftLabel: "완독 표시",
+              rightLabel: "포커스 시작하기",
+              onLeftClick: () => {
+                setShowCompleteModal(true);
+              },
+              onRightClick: () => {
+                // 포커스 페이지로 이동
+              },
+            }}
+          />
+          {/* 스낵바 */}
+          <Snackbar
+            icon={book_shelf}
+            isOpen={snackbar.open}
+            onClose={() => setSnackbar({ ...snackbar, open: false })}
+            text={snackbar.message}
+            buttonText="서재로 이동"
+            onButtonClick={onClickSnackbar}
+          />
+        </div>
       )}
-      {readStatus === null && (
+      {readStatus === "UNREGISTERED" && (
         <BottomSheet
           open={true}
           onClose={() => {}}
@@ -485,15 +496,6 @@ export default function BookInfoPage() {
           }}
         />
       )}
-      {/* 스낵바 */}
-      <Snackbar
-        icon={book_shelf}
-        isOpen={snackbar.open}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-        text={snackbar.message}
-        buttonText="서재로 이동"
-        onButtonClick={onClickSnackbar}
-      />
     </div>
   );
 }
