@@ -26,21 +26,21 @@ export default function BookCover({
   className,
 }: BookCoverProps) {
   const sizeClasses = {
-    XS: "w-11 h-16",
-    S: "w-14 h-[82px]",
-    M: "w-25 h-36",
-    XL: "w-40 h-56",
+    XS: "w-11 h-16 rounded-xs",
+    S: "w-14 h-[82px] rounded-xs",
+    M: "w-25 h-36 rounded-xs",
+    XL: "w-40 h-56 rounded-sm",
   };
 
   return (
     <div
-      className={`${sizeClasses[size]} rounded-xs bg-gray-17 flex items-center justify-center ${className || ""}`}
+      className={`${sizeClasses[size]} bg-gray-17 flex items-center justify-center ${className || ""}`}
     >
       {type === "Image" && imageUrl && (
         <img
           src={imageUrl}
           alt="Book Cover"
-          className="w-full h-full object-cover"
+          className={`w-full h-full object-cover ${sizeClasses[size]}`}
         />
       )}
       {type === "Upload" && (
