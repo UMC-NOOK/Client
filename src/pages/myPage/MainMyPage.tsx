@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 import defaultProfile from "../../assets/icons/Profile Image.svg";
@@ -9,17 +10,54 @@ import SectionHeader from "../../components/content/InformationText/SectionHeade
 import { Normal } from "../../components/content/card/Book/Normal";
 import Divider from "../../components/layout/Divider";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
-import { useAuthMe } from "../../hooks/queries/useAuthMe";
+import { useLogout } from "../../hooks/mutations/useLogout";
+import { useWithdraw } from "../../hooks/mutations/useWithdraw";
+import { useUserMe } from "../../hooks/queries/useUserMe";
 import { mainMyPageRecentBookList } from "../../mocks/mypage/mainMyPage_RecentBookList";
 import DeleteAccountModal from "./modal/DeleteAccountModal";
 import LogoutModal from "./modal/LogoutModal";
 
 export default function MainMyPage() {
   const navigate = useNavigate();
-  const { data: authMe } = useAuthMe();
+  const queryClient = useQueryClient();
+  const { data: userMe } = useUserMe();
+  const logoutMutation = useLogout();
+  const withdrawMutation = useWithdraw();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
     useState(false);
+
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("onboardingCompleted");
+        queryClient.clear();
+        setIsLogoutModalOpen(false);
+        navigate("/login", { replace: true });
+      },
+      onError: (error) => {
+        console.error("로그아웃에 실패했습니다.", error);
+      },
+    });
+  };
+
+  const handleDeleteAccount = () => {
+    withdrawMutation.mutate(undefined, {
+      onSuccess: () => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("onboardingCompleted");
+        queryClient.clear();
+        setIsDeleteAccountModalOpen(false);
+        navigate("/login", { replace: true });
+      },
+      onError: (error) => {
+        console.error("계정 삭제에 실패했습니다.", error);
+      },
+    });
+  };
 
   return (
     <div className="flex w-full flex-col gap-4">
@@ -31,7 +69,7 @@ export default function MainMyPage() {
               <img src={close} alt="" />
             </Icon>
           }
-          onClickLeft={() => navigate("/library")}
+          onClickLeft={() => navigate(-1)}
           leftPadding="p-0"
         />
       </div>
@@ -45,17 +83,21 @@ export default function MainMyPage() {
             className="h-14 w-14 shrink-0 overflow-hidden rounded-full"
           >
             <img
-              src={defaultProfile}
+              src={userMe?.profileImageUrl || defaultProfile}
               alt="프로필"
               className="h-full w-full object-cover"
+              onError={(event) => {
+                event.currentTarget.onerror = null;
+                event.currentTarget.src = defaultProfile;
+              }}
             />
           </button>
           {/* 프로필 정보 */}
           <div className="flex min-w-0 flex-1 items-center">
             <SectionHeader
               size="16"
-              top={authMe?.nickName ?? ""}
-              bottom={authMe?.email ?? ""}
+              top={userMe?.nickName ?? ""}
+              bottom={userMe?.email ?? ""}
             />
           </div>
       </div>
@@ -130,12 +172,12 @@ export default function MainMyPage() {
       <LogoutModal
         open={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
-        onConfirm={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleLogout}
       />
       <DeleteAccountModal
         open={isDeleteAccountModalOpen}
         onClose={() => setIsDeleteAccountModalOpen(false)}
-        onConfirm={() => setIsDeleteAccountModalOpen(false)}
+        onConfirm={handleDeleteAccount}
       />
     </div>
   );
