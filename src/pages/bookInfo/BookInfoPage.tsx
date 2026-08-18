@@ -100,7 +100,7 @@ export default function BookInfoPage() {
                 imageUrl={bookDetailData?.coverImageUrl || testBookCover}
                 size="XL"
                 type="Image"
-                className="w-full h-full blur-[20px] opacity-50"
+                className="w-full h-full blur-[20px] opacity-50 "
               />
             )}
             <div className="absolute inset-0 bg-black opacity-40" />
