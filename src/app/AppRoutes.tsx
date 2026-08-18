@@ -11,7 +11,10 @@ import {
 import AppShell, { useShell } from "./AppShell";
 import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
 
-import FocusMobilePage from "../pages/search/FocusMobilePage";
+import FocusMainPage from "../pages/focus/FocusMainPage";
+import FocusSelectPage from "../pages/focus/FocusSelectPage";
+import FocusThemePage from "../pages/focus/FocusThemePage";
+import FocusSessionPage from "../pages/focus/FocusSessionPage";
 import GroupMobilePage from "../pages/search/GroupMobilePage";
 import SearchPage from "../pages/search/SearchPage";
 
@@ -202,7 +205,7 @@ export default function AppRoutes() {
             {/* MAIN TABS + TEST */}
             <Route element={<MainTabsLayout />}>
               <Route path="/library" element={<LibraryPage />} />
-              <Route path="/focus" element={<FocusMobilePage />} />
+              <Route path="/focus" element={<FocusMainPage />} />
               <Route path="/record" element={<ReportPage />} />
               <Route path="/group" element={<GroupMobilePage />} />
 
@@ -218,6 +221,13 @@ export default function AppRoutes() {
                 path="/test/popup"
                 element={<PopupConfirmModalTestPage />}
               />
+            </Route>
+
+            {/* 포커스 도메인 서브 화면 - 상단 탭 없이 뒤로가기 헤더만 사용 (TopNavigation은 각 페이지에서 구현) */}
+            <Route element={<NoFooterLayout />}>
+              <Route path="/focus/select" element={<FocusSelectPage />} />
+              <Route path="/focus/theme" element={<FocusThemePage />} />
+              <Route path="/focus/session" element={<FocusSessionPage />} />
             </Route>
 
             {/* 기타 */}
