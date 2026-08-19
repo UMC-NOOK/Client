@@ -29,9 +29,8 @@ export const mockFocusThemes: FocusTheme[] = [
 ];
 
 /**
- * 테마 선택 화면(focus/theme) 전용. 테마는 잔디/우주/서재 3종 고정(2026-08-18 디자이너 확인
- * — 4번째 "기본 테마" 타일 추가는 전날의 착오였고 원복됨). "선택 안 함"은 별도 타일이 아니라
- * 셋 중 아무것도 select 상태가 아닌 것으로 표현한다.
+ * 테마 선택 화면(focus/theme) 전용. 잔디/우주/서재 3종 고정.
+ * "선택 안 함"은 별도 타일이 아니라 셋 중 아무것도 select 상태가 아닌 것으로 표현한다.
  */
 export type FocusThemeSelectOption = {
   themeId: number;
