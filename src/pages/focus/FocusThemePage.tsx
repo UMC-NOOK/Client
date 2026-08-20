@@ -26,6 +26,12 @@ export default function FocusThemePage() {
   const [selectedThemeId, setSelectedThemeId] = useState<number | null>(
     readStoredThemeId,
   );
+  const [imageError, setImageError] = useState(false);
+
+  const selectTheme = useCallback((themeId: number | null) => {
+    setSelectedThemeId(themeId);
+    setImageError(false);
+  }, []);
 
   const selectedOption = useMemo(
     () =>
@@ -48,12 +54,20 @@ export default function FocusThemePage() {
   return (
     // 부모(AppShell Outlet)가 display:block이라 h-full(퍼센트 높이)이 안 먹어서 같은 높이를 직접 계산한다.
     <div className="relative -mx-4 flex min-h-[calc(100dvh-8px-env(safe-area-inset-top)-env(safe-area-inset-bottom))] flex-col justify-between">
-      {selectedOption && (
+      {/* TODO: 디자인팀 미확정 임시 처리(텍스트 대체) — 정식 에러 화면 스펙 나오면 교체 */}
+      {selectedOption && imageError && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <p className="text-body-14-r text-gray-50">이미지를 불러오지 못했습니다</p>
+        </div>
+      )}
+
+      {selectedOption && !imageError && (
         <div className="pointer-events-none absolute inset-0" aria-hidden>
           <img
             src={selectedOption.backgroundUrl}
             alt=""
             className="h-full w-full object-cover"
+            onError={() => setImageError(true)}
           />
           <Dim width="full" height="full" top={0} left={0} />
           {/* MaskGradient의 width/height prop은 동적으로 조립돼 Tailwind가 못 읽는다. 실제 높이는 이 래퍼의 h-20이 담당. */}
@@ -88,7 +102,7 @@ export default function FocusThemePage() {
             variant="secondary"
             size="s"
             fullWidth={false}
-            onClick={() => setSelectedThemeId(null)}
+            onClick={() => selectTheme(null)}
           />
         )}
 
@@ -98,7 +112,7 @@ export default function FocusThemePage() {
               key={option.themeId}
               imageUrl={option.thumbnailUrl}
               select={option.themeId === selectedThemeId}
-              onClick={() => setSelectedThemeId(option.themeId)}
+              onClick={() => selectTheme(option.themeId)}
             />
           ))}
         </div>
