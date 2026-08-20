@@ -1,4 +1,4 @@
-import bg from "../../../assets/images/bottom_banner.jpg";
+import bg from "../../../assets/images/book_history.png";
 
 type Variant = "history" | "time";
 

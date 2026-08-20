@@ -25,7 +25,7 @@ const variantClassMap: Record<Variant, string> = {
 
 const sizeClassMap: Record<Size, string> = {
   s: "h-[38px] text-btn-14-sb rounded-sm px-8 py-3",
-  m: "h-12 text-label-16-sb rounded-lg px-6 py-4",
+  m: "h-12 text-btn-16-sb rounded-lg px-6 py-4",
 };
 
 export default function Solid({

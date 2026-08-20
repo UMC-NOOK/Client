@@ -29,6 +29,12 @@ type OAuthLoginParams = {
   code: string;
 };
 
+type LogoutResponse = {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+};
+
 function saveAuthTokens(result: {
   accessToken: string;
   refreshToken?: string;
@@ -73,4 +79,19 @@ export async function getAuthMe(): Promise<AuthMe> {
   }
 
   return response.data.result;
+}
+
+export async function logout(): Promise<LogoutResponse> {
+  const response = await api.post<LogoutResponse>(
+    "/api/v1/auth/logout",
+    new URLSearchParams(),
+  );
+
+  return response.data;
+}
+
+export async function withdraw(): Promise<LogoutResponse> {
+  const response = await api.delete<LogoutResponse>("/api/v1/auth/withdraw");
+
+  return response.data;
 }
