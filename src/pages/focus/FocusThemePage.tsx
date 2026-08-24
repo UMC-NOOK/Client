@@ -52,50 +52,55 @@ export default function FocusThemePage() {
 
   return (
     // 부모(AppShell Outlet)가 display:block이라 h-full(퍼센트 높이)이 안 먹어서 같은 높이를 직접 계산한다.
-    <div className="relative -mx-4 flex min-h-[calc(100dvh-8px-env(safe-area-inset-top)-env(safe-area-inset-bottom))] flex-col justify-between">
-      {/* TODO: 디자인팀 미확정 임시 처리(텍스트 대체) — 정식 에러 화면 스펙 나오면 교체 */}
-      {selectedOption && imageError && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <p className="text-body-14-r text-gray-50">이미지를 불러오지 못했습니다</p>
-        </div>
-      )}
+    // 하단 Section을 always-bottom으로 고정하는 기준 높이로도 쓰인다.
+    <div className="relative -mx-4 min-h-[calc(100dvh-8px-env(safe-area-inset-top)-env(safe-area-inset-bottom))]">
+      {/* 상단바는 X 아이콘 줄만 포함(40px, bg-navy-1 전체 폭). 이 레벨은 이미 페이지 루트에서
+          -mx-4로 꽉 찬 상태라, 배경색은 그대로 두고 아이콘만 px-4로 들여쓴다 */}
+      <div className="relative bg-navy-1">
+        <TopNavigation
+          className="px-4"
+          left={<img src={closeIcon} alt="닫기" className="h-6 w-6" />}
+          onClickLeft={() => navigate(-1)}
+        />
+      </div>
 
-      {selectedOption && !imageError && (
-        <div className="pointer-events-none absolute inset-0" aria-hidden>
-          <img
-            src={selectedOption.backgroundUrl}
-            alt=""
-            className="h-full w-full object-cover"
-            onError={() => setImageError(true)}
-          />
-          {/* Figma 스펙(node 3456:12756)엔 전체 Dim이 없고 상하단 그라디언트(132.489px≈h-33)만 있다.
-              MaskGradient의 width/height prop은 동적으로 조립돼 Tailwind가 못 읽는다. 실제 높이는
-              이 래퍼의 h-33이 담당. */}
-          <div className="absolute inset-x-0 top-0 h-33 rotate-180">
-            <MaskGradient width="full" height="full" />
+      {/* 배경 이미지: Figma 원본 에셋 그대로 375×684 고정(h-171) — 화면 전체 높이로 늘려 씌우지
+          않는다. 상단바 바로 아래부터 자기 공간을 차지하고, 하단 Section이 꼬리 부분과 겹치며
+          얹힌다(Figma node 3456:12756 기준). 타이틀은 별도 블록이 아니라 이 배경 위에 얹히는
+          오버레이다(gap-40 = 상단바 기준 top-10). */}
+      <div className="relative h-171 w-full overflow-hidden">
+        {selectedOption && !imageError && (
+          <div aria-hidden>
+            <img
+              src={selectedOption.backgroundUrl}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover"
+              onError={() => setImageError(true)}
+            />
+            {/* MaskGradient의 width/height prop은 동적으로 조립돼 Tailwind가 못 읽는다
+                (design-system-in-code.md 참고). 실제 높이(132.489px≈h-33)는 이 래퍼가 담당. */}
+            <div className="absolute inset-x-0 top-0 h-33 rotate-180">
+              <MaskGradient width="full" height="full" />
+            </div>
+            <div className="absolute inset-x-0 bottom-0 h-33">
+              <MaskGradient width="full" height="full" />
+            </div>
           </div>
-          <div className="absolute inset-x-0 bottom-0 h-33">
-            <MaskGradient width="full" height="full" />
-          </div>
-        </div>
-      )}
+        )}
 
-      <div className="relative flex flex-col gap-10">
-        {/* 이 레벨은 이미 페이지 루트에서 -mx-4로 꽉 찬 상태라, 배경색은 그대로 두고
-            아이콘만 px-4로 들여쓴다 */}
-        <div className="relative bg-navy-1">
-          <TopNavigation
-            className="px-4"
-            left={<img src={closeIcon} alt="닫기" className="h-6 w-6" />}
-            onClickLeft={() => navigate(-1)}
-          />
-        </div>
-        <div className="px-4">
+        {selectedOption && imageError && (
+          // TODO: 디자인팀 미확정 임시 처리(텍스트 대체) — 정식 에러 화면 스펙 나오면 교체
+          <div className="absolute inset-0 flex items-center justify-center" aria-hidden>
+            <p className="text-body-14-r text-gray-50">이미지를 불러오지 못했습니다</p>
+          </div>
+        )}
+
+        <div className="absolute inset-x-0 top-10 px-4">
           <SectionHeader size="20" top="포커스 테마를 선택해주세요." />
         </div>
       </div>
 
-      <div className="relative flex flex-col items-center gap-5">
+      <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-5">
         {selectedThemeId !== null && (
           <Solid
             text="테마 해제하기"
