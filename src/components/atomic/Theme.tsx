@@ -1,11 +1,3 @@
-/*
-<Theme
-  imageUrl=""
-  select={select}
-  onClick={() => setSelect(!select)}
-/>
-*/
-
 import Dim from "../layout/Dim";
 
 type ThemeProps = {
