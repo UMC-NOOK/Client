@@ -5,7 +5,6 @@ import closeIcon from "../../assets/icons/close.svg";
 import Solid from "../../components/action/Button/Solid";
 import Theme from "../../components/atomic/Theme";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
-import Dim from "../../components/layout/Dim";
 import MaskGradient from "../../components/layout/MaskGradient";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import { mockFocusThemeSelectOptions } from "../../mocks/focus/focus";
@@ -69,12 +68,13 @@ export default function FocusThemePage() {
             className="h-full w-full object-cover"
             onError={() => setImageError(true)}
           />
-          <Dim width="full" height="full" top={0} left={0} />
-          {/* MaskGradient의 width/height prop은 동적으로 조립돼 Tailwind가 못 읽는다. 실제 높이는 이 래퍼의 h-20이 담당. */}
-          <div className="absolute inset-x-0 top-0 h-20 rotate-180">
+          {/* Figma 스펙(node 3456:12756)엔 전체 Dim이 없고 상하단 그라디언트(132.489px≈h-33)만 있다.
+              MaskGradient의 width/height prop은 동적으로 조립돼 Tailwind가 못 읽는다. 실제 높이는
+              이 래퍼의 h-33이 담당. */}
+          <div className="absolute inset-x-0 top-0 h-33 rotate-180">
             <MaskGradient width="full" height="full" />
           </div>
-          <div className="absolute inset-x-0 bottom-0 h-20">
+          <div className="absolute inset-x-0 bottom-0 h-33">
             <MaskGradient width="full" height="full" />
           </div>
         </div>
