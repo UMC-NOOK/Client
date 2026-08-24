@@ -54,9 +54,8 @@ export default function FocusThemePage() {
     // h-full은 부모(AppShell Outlet)가 block이라 안 먹는다. 스크롤 없이 잘리는 게 정책이라
     // min-height가 아닌 고정 높이 + overflow-hidden.
     <div className="relative -mx-4 h-[calc(100dvh-8px-env(safe-area-inset-top)-env(safe-area-inset-bottom))] overflow-hidden">
-      <div className="relative bg-navy-1">
+      <div className="relative bg-navy-1 px-4">
         <TopNavigation
-          className="px-4"
           left={<img src={closeIcon} alt="닫기" className="h-6 w-6" />}
           onClickLeft={() => navigate(-1)}
         />
