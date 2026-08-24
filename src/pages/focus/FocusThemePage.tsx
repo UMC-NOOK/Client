@@ -51,11 +51,9 @@ export default function FocusThemePage() {
   }, [navigate, selectedThemeId]);
 
   return (
-    // 부모(AppShell Outlet)가 display:block이라 h-full(퍼센트 높이)이 안 먹어서 같은 높이를 직접 계산한다.
-    // 하단 Section을 always-bottom으로 고정하는 기준 높이로도 쓰인다.
-    <div className="relative -mx-4 min-h-[calc(100dvh-8px-env(safe-area-inset-top)-env(safe-area-inset-bottom))]">
-      {/* 상단바는 X 아이콘 줄만 포함(40px, bg-navy-1 전체 폭). 이 레벨은 이미 페이지 루트에서
-          -mx-4로 꽉 찬 상태라, 배경색은 그대로 두고 아이콘만 px-4로 들여쓴다 */}
+    // h-full은 부모(AppShell Outlet)가 block이라 안 먹는다. 스크롤 없이 잘리는 게 정책이라
+    // min-height가 아닌 고정 높이 + overflow-hidden.
+    <div className="relative -mx-4 h-[calc(100dvh-8px-env(safe-area-inset-top)-env(safe-area-inset-bottom))] overflow-hidden">
       <div className="relative bg-navy-1">
         <TopNavigation
           className="px-4"
@@ -64,11 +62,8 @@ export default function FocusThemePage() {
         />
       </div>
 
-      {/* 배경 이미지: Figma 원본 에셋 그대로 375×684 고정(h-171) — 화면 전체 높이로 늘려 씌우지
-          않는다. 상단바 바로 아래부터 자기 공간을 차지하고, 하단 Section이 꼬리 부분과 겹치며
-          얹힌다(Figma node 3456:12756 기준). 타이틀은 별도 블록이 아니라 이 배경 위에 얹히는
-          오버레이다(gap-40 = 상단바 기준 top-10). */}
-      <div className="relative h-171 w-full overflow-hidden">
+      {/* aspect-ratio로 Figma 원본 비율(375:684) 유지 — 폭이 줄어도 비율 그대로 축소 */}
+      <div className="relative w-full aspect-375/684 overflow-hidden">
         {selectedOption && !imageError && (
           <div aria-hidden>
             <img
@@ -77,8 +72,7 @@ export default function FocusThemePage() {
               className="absolute inset-0 h-full w-full object-cover"
               onError={() => setImageError(true)}
             />
-            {/* MaskGradient의 width/height prop은 동적으로 조립돼 Tailwind가 못 읽는다
-                (design-system-in-code.md 참고). 실제 높이(132.489px≈h-33)는 이 래퍼가 담당. */}
+            {/* MaskGradient는 width/height prop을 동적 조립해 Tailwind가 못 읽는다(design-system-in-code.md) — 높이는 이 래퍼가 담당 */}
             <div className="absolute inset-x-0 top-0 h-33 rotate-180">
               <MaskGradient width="full" height="full" />
             </div>
