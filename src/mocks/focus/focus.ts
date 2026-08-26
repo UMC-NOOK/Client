@@ -49,20 +49,14 @@ export const mockFocusThemeSelectOptions: FocusThemeSelectOption[] = [
   { themeId: 3, name: "서재", thumbnailUrl: themeLibrary80, backgroundUrl: themeLibrary684 },
 ];
 
-/**
- * 포커스 진입/진행 화면(focus/session) 전용 전체 화면 배경(375x812).
- * 테마 선택 화면의 375x684(콘텐츠 영역)와 크기가 다르다 — 진행 화면은 화면 전체를 덮는다.
- */
+// 세션 화면은 테마 선택 화면(375x684)과 달리 전체 화면용 375x812 에셋을 사용한다.
 export const mockFocusSessionBackgroundByThemeId: Record<number, string> = {
   1: themeGrass812,
   2: themeSpace812,
   3: themeLibrary812,
 };
 
-/**
- * 진행 중인 포커스 세션. 도서 선택→테마 선택→세션 화면 간 libraryId 전달이 아직 연결되지 않아
- * 목업으로 대체(docs/development/focus-component-mapping.md "2. 포커스 진입" 참고).
- */
+// 도서 선택부터 세션까지 libraryId 전달이 연결되면 실제 세션 데이터로 교체한다.
 export const mockActiveFocusSession: ActiveFocusSession = {
   focusId: 9001,
   libraryId: 1,

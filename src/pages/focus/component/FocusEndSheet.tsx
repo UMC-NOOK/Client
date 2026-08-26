@@ -42,15 +42,14 @@ export default function FocusEndSheet({
       }}
     >
       <div className="flex w-full flex-col gap-4">
-        {/* 좌하단 취소 버튼과 기능이 겹쳐서 X는 뺐다(2026-08-24 디자이너 확인, Figma 미반영).
+        {/* 좌하단 취소 버튼과 기능이 겹쳐서 X는 뺐다(디자이너 확인, Figma 미반영).
             title prop 대신 여기서 직접 렌더링해 공용 BottomSheet 헤더(X 포함)는 건드리지 않는다. */}
         <div className="flex h-10 items-center justify-center">
           <span className="text-title-18-m text-gray-90">포커스 종료</span>
         </div>
 
         <div className="flex w-full flex-col gap-6">
-          {/* 공용 TextField는 기본 배경이 gray-17인데 이 화면은 Figma에 gray-20으로 못박혀 있고
-              읽은 분량에는 값 뒤에 단위를 붙여야 하므로 두 필드는 이 화면 전용으로 구성한다. */}
+          {/* 공용 TextField와 배경색·단위 표현이 달라 종료 시트 전용 필드로 구성한다. */}
           <div className="flex w-full flex-col items-start gap-3">
             <span className="text-label-13-sb text-gray-90">독서 시간</span>
             <div className="flex h-11.25 w-full items-center rounded-lg bg-gray-20 px-4 py-3">
@@ -60,7 +59,7 @@ export default function FocusEndSheet({
             </div>
           </div>
 
-          {/* 값 문자열 안에 "쪽"을 직접 넣으면 backspace가 단위만 지우므로 숫자와 단위를 분리한다. */}
+          {/* 숫자 삭제를 방해하지 않도록 "쪽" 단위를 input 값과 분리한다. */}
           <div className="flex w-full flex-col items-start gap-3">
             <span className="text-label-13-sb text-gray-90">읽은 분량</span>
             <div

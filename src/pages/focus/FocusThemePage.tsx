@@ -38,8 +38,7 @@ export default function FocusThemePage() {
 
   const handleStart = useCallback(() => {
     saveStoredFocusThemeId(selectedThemeId);
-    // 퍼블리싱 단계에서는 서버 startedAt 대신 탭 단위 임시 시작 시각을 저장한다.
-    // 기록 작성 화면을 다녀와도 벽시계 기준 경과 시간이 계속 계산된다.
+    // 실제 API 연동 시 저장값 대신 start 응답의 startedAt을 타이머 기준으로 사용한다.
     resetFocusSessionTimer();
     // TODO: POST /api/v1/focuses/start 연동. 선택한 책(libraryId)이 아직 이 화면까지 전달되지 않아 이동만 처리.
     navigate("/focus/session");

@@ -4,7 +4,7 @@ import React from "react";
 
 type CheckboxProps = {
   text: string;
-  /** 부모가 체크 상태를 직접 관리해야 할 때(예: 폼 제출값)만 전달. 없으면 기존처럼 내부 state로 동작 */
+  /** 부모가 체크 상태를 직접 관리해야 할 때(예: 폼 제출값)만 전달. 없으면 내부 state로 동작 */
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
 };
@@ -14,7 +14,6 @@ export default function Checkbox({
   checked,
   onCheckedChange,
 }: CheckboxProps) {
-  // checked prop이 없으면 내부 state로 비제어 동작을 유지한다.
   const [uncontrolledChecked, setUncontrolledChecked] = React.useState(false);
   const isControlled = checked !== undefined;
   const resolvedChecked = isControlled ? checked : uncontrolledChecked;
