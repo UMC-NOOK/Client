@@ -26,3 +26,14 @@ export type FocusMainSummary = {
 };
 
 export type FocusMainSummaryResponse = BaseApiResponse<FocusMainSummary>;
+
+// 진행 중인 포커스 세션. libraryId→테마 선택→세션 화면 간 전달 로직이 아직 없어
+// 이 화면은 당분간 mock으로 채운다(docs/development/focus-component-mapping.md "2. 포커스 진입" 참고).
+export type ActiveFocusSession = {
+  focusId: number;
+  libraryId: number;
+  bookId: number;
+  bookTitle: string;
+  author: string;
+  coverUrl: string;
+};
