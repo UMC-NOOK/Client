@@ -102,7 +102,7 @@ function BottomSheetFooter({
     "flex items-center justify-center",
     "h-12", // 버튼 2개 케이스 왼쪽 버튼 48px 고정
     "px-6 py-4",
-    "rounded-[8px]",
+    "rounded-lg",
     "text-btn-16-sb",
   ].join(" ");
 
@@ -208,9 +208,10 @@ export default function BottomSheet({
         className={[
           "absolute inset-x-0 bottom-0 mx-auto",
           "pointer-events-auto",
-          "w-93.75",
+          // 작은 화면에서는 viewport를 채우고, 큰 화면에서는 AppShell과 같은 375px까지만 확장
+          "w-full max-w-93.75",
           "flex flex-col items-start",
-          "px-4 pt-4 pb-8", // 16 16 32
+          "px-4 pt-4 pb-[calc(2rem+env(safe-area-inset-bottom))]", // 16 16 32 + bottom safe area
           "rounded-t-2xl",
           "bg-gray-15",
           className,
