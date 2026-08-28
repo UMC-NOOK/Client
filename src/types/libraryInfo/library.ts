@@ -8,6 +8,8 @@ export type FocusTimeSlotType =
   | "FOCUS_04";
 export type BookStatusType = "BEFORE" | "READING" | "FINISHED";
 
+export type LibraryStatusCounts = Record<BookStatusType, number>;
+
 export type LibraryBook = {
   totalBookNum: number;
 };

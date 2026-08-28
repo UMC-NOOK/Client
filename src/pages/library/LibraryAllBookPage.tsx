@@ -11,6 +11,7 @@ import chevronLeft from "../../assets/icons/chevron_left.svg";
 import search from "../../assets/icons/search.svg";
 
 import { getLibraryStatusBooks } from "../../api/library";
+import { useLibraryStatusCounts } from "../../hooks/queries/library/useLibraryStatusCounts";
 
 import type {
   BookItemsStatusItems,
@@ -98,6 +99,7 @@ function getEmptyText(tab: LibraryTab) {
 
 export default function LibraryAllBookPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { data: statusCounts } = useLibraryStatusCounts();
 
   const statusParam = searchParams.get("status");
   const tab: LibraryTab =
@@ -106,8 +108,6 @@ export default function LibraryAllBookPage() {
   const [bookItems, setBookItems] = useState<BookItemsStatusItems<LibraryTab>[]>(
     [],
   );
-  const [totalBookNum, setTotalBookNum] = useState(0);
-
   const [nextCursor, setNextCursor] = useState<number | null>(null);
   const [hasNext, setHasNext] = useState(false);
 
@@ -174,7 +174,6 @@ export default function LibraryAllBookPage() {
         setBookItems((prev) =>
           mode === "append" ? [...prev, ...page.items] : page.items,
         );
-        setTotalBookNum(result.totalBookNum ?? 0);
         setNextCursor(page.nextCursor);
         setHasNext(hasMorePages(page.hasNext));
       } catch (error) {
@@ -186,7 +185,6 @@ export default function LibraryAllBookPage() {
 
         if (mode === "reset") {
           setBookItems([]);
-          setTotalBookNum(0);
           setNextCursor(null);
           setHasNext(false);
         }
@@ -209,7 +207,6 @@ export default function LibraryAllBookPage() {
 
   useEffect(() => {
     setBookItems([]);
-    setTotalBookNum(0);
     setNextCursor(null);
     setHasNext(false);
     setIsError(false);
@@ -292,7 +289,9 @@ export default function LibraryAllBookPage() {
               <label className="text-title-20-b text-gray-90">
                 {SECTION_SUBJECT[tab]} 책이{" "}
               </label>
-              <label className="text-title-20-b text-yellow-70">{totalBookNum}권</label>
+              <label className="text-title-20-b text-yellow-70">
+                {statusCounts?.[tab] ?? 0}권
+              </label>
               <label className="text-title-20-b text-gray-90"> 있어요.</label>
             </div>
           }
