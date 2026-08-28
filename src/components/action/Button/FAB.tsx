@@ -15,7 +15,7 @@ const sizeClassMap: Record<FabSize, string> = {
 };
 
 const variantClassMap: Record<FabVariant, string> = {
-  light: "bg-gray-90",
+  light: "bg-gray-90 shadow-elevation-20",
   dark: "bg-gray-25 shadow-elevation-20",
 };
 
