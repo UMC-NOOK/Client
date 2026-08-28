@@ -15,7 +15,7 @@ import FocusMainPage from "../pages/focus/FocusMainPage";
 import FocusSelectPage from "../pages/focus/FocusSelectPage";
 import FocusThemePage from "../pages/focus/FocusThemePage";
 import FocusSessionPage from "../pages/focus/FocusSessionPage";
-import GroupMobilePage from "../pages/search/GroupMobilePage";
+import GroupPage from "../pages/group/GroupPage";
 import SearchPage from "../pages/search/SearchPage";
 
 import SearchNewAddPage from "../pages/search/SearchNewAddPage";
@@ -207,7 +207,7 @@ export default function AppRoutes() {
               <Route path="/library" element={<LibraryPage />} />
               <Route path="/focus" element={<FocusMainPage />} />
               <Route path="/record" element={<ReportPage />} />
-              <Route path="/group" element={<GroupMobilePage />} />
+              <Route path="/group" element={<GroupPage />} />
 
               <Route
                 path="/test/banner-action-card"
