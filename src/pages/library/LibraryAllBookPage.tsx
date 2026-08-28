@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import Icon from "../../components/action/Button/Icon";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
@@ -22,9 +22,6 @@ type LibraryTab = BookStatusType;
 
 /** API 요청·화면에 한 번에 보이는 최대 권수 */
 const PAGE_SIZE = 5;
-
-/** BookList 한 줄(min-h 106 + py-3) 기준, 약 5권 높이 */
-const LIST_MAX_HEIGHT_CLASS = "max-h-[34rem]";
 
 const TAB_OPTIONS = [
   { label: "독서 전", value: "BEFORE" },
@@ -98,6 +95,7 @@ function getEmptyText(tab: LibraryTab) {
 }
 
 export default function LibraryAllBookPage() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { data: statusCounts } = useLibraryStatusCounts();
 
@@ -115,7 +113,6 @@ export default function LibraryAllBookPage() {
   const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const scrollRootRef = useRef<HTMLDivElement | null>(null);
   const loadMoreTargetRef = useRef<HTMLDivElement | null>(null);
   const requestIdRef = useRef(0);
   const isFetchingNextPageRef = useRef(false);
@@ -219,9 +216,8 @@ export default function LibraryAllBookPage() {
 
   useEffect(() => {
     const target = loadMoreTargetRef.current;
-    const root = scrollRootRef.current;
 
-    if (!target || !root) return;
+    if (!target) return;
     if (isInitialLoading) return;
     if (isFetchingNextPage) return;
     if (isError) return;
@@ -238,7 +234,7 @@ export default function LibraryAllBookPage() {
         });
       },
       {
-        root,
+        root: null,
         rootMargin: "80px",
         threshold: 0,
       },
@@ -319,8 +315,7 @@ export default function LibraryAllBookPage() {
           <div className="text-label-14-sb text-gray-60">{getEmptyText(tab)}</div>
         ) : (
           <div
-            ref={scrollRootRef}
-            className={`${LIST_MAX_HEIGHT_CLASS} scrollbar-hide overflow-y-auto overscroll-contain`}
+            className="flex flex-col"
           >
             {bookItems.map((item, index) => {
               const bookListProps = getBookListProps(item, tab);
@@ -336,6 +331,9 @@ export default function LibraryAllBookPage() {
                     author={item.author}
                     type={bookListProps.type}
                     typeLabel={bookListProps.typeLabel}
+                    onClick={() =>
+                      navigate(`/library/${item.bookId}`)
+                    }
                   />
 
                   {index !== bookItems.length - 1 ? (

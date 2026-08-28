@@ -97,7 +97,7 @@ export default function DayBookSet({
                 coverUrl={d.coverUrl}
                 bookNum={d.bookNum}
                 onClick={
-                  d.visible && !d.disable
+                  d.visible
                     ? () => onSelectDate?.(fullDate)
                     : undefined
                 }

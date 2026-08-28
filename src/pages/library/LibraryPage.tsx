@@ -35,9 +35,6 @@ import DropDown from "../../components/section/dropDown/DropDown";
 import { useLibrarySpecificDateBookInfo } from "../../hooks/queries/library/useLibrarySpecificDateBookInfo";
 import { useAuthMe } from "../../hooks/queries/useAuthMe";
 
-const DEFAULT_BANNER_COVER_URL =
-  "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop";
-
 type SelectedYearMonth = {
   year: number;
   month: number;
@@ -57,7 +54,9 @@ export default function LibraryPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isBannerOpen, setIsBannerOpen] = useState(true);
+  const [isBannerOpen, setIsBannerOpen] = useState(
+    () => sessionStorage.getItem("libraryBottomBannerDismissed") !== "true",
+  );
   const [modalCursor, setModalCursor] = useState<number | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -128,11 +127,6 @@ export default function LibraryPage() {
   );
 
   const { data: libraryRecentBookInfoData } = useLibraryRecentBookInfo();
-  const bookId = libraryRecentBookInfoData?.bookId ?? 0;
-  const title = libraryRecentBookInfoData?.title ?? "클라우드 쿠쿠 랜드";
-  const coverUrl = libraryRecentBookInfoData?.coverUrl ?? DEFAULT_BANNER_COVER_URL;
-  const page = libraryRecentBookInfoData?.page ?? 147;
-  const focusTime = libraryRecentBookInfoData?.focusTime ?? "08:10:22";
 
   const dropdownPositionClass =
     selectedView === "focus"
@@ -311,17 +305,18 @@ export default function LibraryPage() {
         </div>
       </div>
 
-      {isBannerOpen ? (
+      {isBannerOpen && libraryRecentBookInfoData ? (
         <BottomBanner
-          bookId={bookId}
-          title={title}
-          coverUrl={coverUrl}
-          page={page}
-          focusTime={focusTime}
+          bookId={libraryRecentBookInfoData.bookId}
+          title={libraryRecentBookInfoData.title}
+          coverUrl={libraryRecentBookInfoData.coverUrl}
+          page={libraryRecentBookInfoData.page}
+          focusTime={libraryRecentBookInfoData.focusTime}
           onClick={() => {
-            console.log("이동:", bookId);
+            console.log("이동:", libraryRecentBookInfoData.bookId);
           }}
           onClose={() => {
+            sessionStorage.setItem("libraryBottomBannerDismissed", "true");
             setIsBannerOpen(false);
           }}
         />

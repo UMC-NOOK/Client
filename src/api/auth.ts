@@ -41,6 +41,7 @@ function saveAuthTokens(result: {
   onboardingCompleted?: boolean;
 }) {
   localStorage.setItem("accessToken", result.accessToken);
+  sessionStorage.removeItem("libraryBottomBannerDismissed");
 
   if (result.refreshToken) {
     localStorage.setItem("refreshToken", result.refreshToken);
