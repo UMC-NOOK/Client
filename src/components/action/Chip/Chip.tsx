@@ -12,11 +12,11 @@ type ChipProps = {
   onClick?: () => void;
   onIconClick?: () => void;
   iconAriaLabel?: string;
-  textClassName?: string;   // 타입 추가(비활성 글자색 오버라이드)
+  textClassName?: string; // 타입 추가(비활성 글자색 오버라이드)
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const base =
-  "inline-flex items-center justify-center whitespace-nowrap text-sm gap-1";
+  "inline-flex items-center justify-center whitespace-nowrap text-sm gap-1 leading-[14px]";
 
 const variantClassMap: Record<Variant, string> = {
   none: "py-3 px-4 rounded-[20px]",
@@ -31,7 +31,7 @@ export default function Chip({
   onClick,
   onIconClick,
   iconAriaLabel = "삭제",
-  textClassName,            
+  textClassName,
   type = "button",
   ...props
 }: ChipProps) {
