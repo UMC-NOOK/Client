@@ -1,122 +1,276 @@
-// src/pages/onboarding/OnboardingProfilePage.tsx
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import OnboardingLayout from "../onboarding/OnboardingLayout";
 import { useOnboardingDraft } from "./OnboardingContext";
 import { TextField } from "../../components/input/textinput/TextField";
 
-import { completeOnboarding } from "../../api/onboarding";
-import { uploadSingleImage } from "../../api/image";
+import {
+  completeOnboarding,
+  uploadProfileImage,
+} from "../../api/onboarding";
 
 import { useShell } from "../../app/AppShell";
 
 import chevronLeftIcon from "../../assets/icons/chevron_left.svg";
 import cameraIcon from "../../assets/icons/Shape.svg";
-import defaultProfile from "../../assets/icons/Profile Image.svg"; // ✅ 추가
+import defaultProfile from "../../assets/icons/Profile Image.svg";
 
 export function OnboardingProfilePage() {
   const navigate = useNavigate();
   const { draft } = useOnboardingDraft();
   const { setHideFooter } = useShell();
 
-  useEffect(() => {
-    setHideFooter(true);
-    return () => setHideFooter(false);
-  }, [setHideFooter]);
+  const submittingRef = useRef(false);
 
   const [nickname, setNickname] = useState(draft.nickname ?? "");
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const isNextActive = nickname.trim().length > 0;
+  useEffect(() => {
+    setHideFooter(true);
 
-  const handleClose = () => navigate(-1);
+    return () => {
+      setHideFooter(false);
+    };
+  }, [setHideFooter]);
+
+  /**
+   * URL.createObjectURL로 생성한 미리보기 URL 정리
+   */
+  useEffect(() => {
+    return () => {
+      if (image) {
+        URL.revokeObjectURL(image);
+      }
+    };
+  }, [image]);
+
+  const trimmedNickname = nickname.trim();
+
+  const isNextActive =
+    trimmedNickname.length >= 1 &&
+    trimmedNickname.length <= 10 &&
+    file !== null &&
+    !isSubmitting;
+
+  const handleClose = () => {
+    if (isSubmitting) return;
+
+    navigate(-1);
+  };
+
+  const handleImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const selectedFile = event.target.files?.[0];
+
+    if (!selectedFile) return;
+
+    const allowedTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+    ];
+
+    if (!allowedTypes.includes(selectedFile.type)) {
+      setErrorMessage(
+        "JPEG, PNG, WEBP 이미지만 업로드할 수 있습니다.",
+      );
+      event.target.value = "";
+      return;
+    }
+
+    setErrorMessage("");
+    setFile(selectedFile);
+    setImage(URL.createObjectURL(selectedFile));
+  };
 
   const handleNext = async () => {
+    if (submittingRef.current) return;
+
+    const goal = Number(draft.goal);
+    const categories = draft.categories;
+
+    if (!Number.isInteger(goal) || goal < 1 || goal > 300) {
+      setErrorMessage("독서 목표는 1~300 사이여야 합니다.");
+      return;
+    }
+
+    if (
+      !categories ||
+      categories.length < 1 ||
+      categories.length > 2
+    ) {
+      setErrorMessage("카테고리는 1~2개를 선택해야 합니다.");
+      return;
+    }
+
+    if (
+      trimmedNickname.length < 1 ||
+      trimmedNickname.length > 10
+    ) {
+      setErrorMessage("닉네임은 1~10자로 입력해 주세요.");
+      return;
+    }
+
+    if (!file) {
+      setErrorMessage("프로필 이미지를 선택해 주세요.");
+      return;
+    }
+
+    submittingRef.current = true;
+    setIsSubmitting(true);
+    setErrorMessage("");
+
     try {
-      if (!draft.goal || !draft.categories?.length) return;
-      if (!nickname.trim()) return;
+      /**
+       * 1. 이미지 업로드
+       * 2. 업로드 완료 후 서버에서 발급한 key 획득
+       */
+      const profileImageKey = await uploadProfileImage(file);
 
-      let imageKey = "";
+      /**
+       * 온보딩 완료 요청 Body
+       */
+      const payload = {
+        goal,
+        categories,
+        nickname: trimmedNickname,
+        profileImageKey,
+      };
 
-      if (file) {
-        imageKey = await uploadSingleImage(file, "profile");
-      }
+      console.log("온보딩 요청 Payload:", payload);
 
-      await completeOnboarding({
-        goal: draft.goal,
-        categories: draft.categories,
-        nickname,
-        profileImageKey: imageKey,
+      await completeOnboarding(payload);
+
+      localStorage.setItem("onboardingCompleted", "true");
+
+      navigate("/library", {
+        replace: true,
       });
+    } catch (error: any) {
+      console.error("❌ 온보딩 실패", error);
+      console.error(
+        "❌ 서버 응답",
+        error?.response?.data,
+      );
 
-      navigate("/library");
-    } catch (e) {
-      console.error("❌ 온보딩 실패", e);
+      const responseData = error?.response?.data;
+      const validationResult = responseData?.result;
+
+      if (
+        validationResult &&
+        typeof validationResult === "object"
+      ) {
+        const validationMessages =
+          Object.values(validationResult).join(" ");
+
+        setErrorMessage(validationMessages);
+      } else {
+        setErrorMessage(
+          responseData?.message ??
+            "온보딩 처리 중 오류가 발생했습니다.",
+        );
+      }
+    } finally {
+      submittingRef.current = false;
+      setIsSubmitting(false);
     }
   };
 
   return (
     <OnboardingLayout
       step={3}
-      left={<img src={chevronLeftIcon} className="w-6 h-6" />}
+      left={
+        <img
+          src={chevronLeftIcon}
+          alt="뒤로 가기"
+          className="h-6 w-6"
+        />
+      }
       onClickLeft={handleClose}
       right={
         <span
-          className={`${
-            isNextActive ? "text-gray-80" : "text-gray-40"
-          } text-[18px] font-medium`}
+          className={`text-[18px] font-medium ${
+            isNextActive
+              ? "text-gray-80"
+              : "text-gray-40"
+          }`}
         >
-          시작
+          {isSubmitting ? "처리 중..." : "시작"}
         </span>
       }
-      onClickRight={isNextActive ? handleNext : undefined}
+      onClickRight={
+        isNextActive ? handleNext : undefined
+      }
     >
-      <p className="text-gray-90 text-[20px] font-bold leading-[150%]">
+      <p className="text-[20px] font-bold leading-[150%] text-gray-90">
         프로필 정보를 확인해주세요.
       </p>
 
-      <p className="text-gray-50 text-[14px] font-medium">
+      <p className="text-[14px] font-medium text-gray-50">
         작성 후에도 언제든지 수정하실 수 있습니다.
       </p>
 
       <div className="mt-10 flex flex-col items-center gap-8">
-        {/* 🔥 프로필 이미지 */}
         <div className="relative">
-          <div className="w-30 h-30 rounded-full bg-gray-17 overflow-hidden flex items-center justify-center">
+          <div className="flex h-30 w-30 items-center justify-center overflow-hidden rounded-full bg-gray-17">
             <img
               src={image ?? defaultProfile}
-              className={`w-full h-full ${
-                image ? "object-cover" : "object-contain "
+              alt="프로필 이미지"
+              className={`h-full w-full ${
+                image
+                  ? "object-cover"
+                  : "object-contain"
               }`}
             />
           </div>
 
-          <label className="absolute right-0 bottom-0 w-8 h-8 rounded-full bg-gray-90 flex items-center justify-center cursor-pointer">
-            <img src={cameraIcon} className="w-4.75 h-4.25" />
+          <label
+            className={`absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-gray-90 ${
+              isSubmitting
+                ? "pointer-events-none opacity-50"
+                : "cursor-pointer"
+            }`}
+          >
+            <img
+              src={cameraIcon}
+              alt="프로필 이미지 선택"
+              className="h-4.25 w-4.75"
+            />
+
             <input
               type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (!f) return;
-                setFile(f);
-                setImage(URL.createObjectURL(f));
-              }}
+              accept="image/jpeg,image/png,image/webp"
+              onChange={handleImageChange}
+              disabled={isSubmitting}
               className="hidden"
             />
           </label>
         </div>
 
-        {/* 닉네임 */}
         <div className="w-full">
           <TextField
             title="닉네임"
             value={nickname}
-            onChange={setNickname}
+            onChange={(value) => {
+              setNickname(value);
+
+              if (errorMessage) {
+                setErrorMessage("");
+              }
+            }}
             placeholder="닉네임을 입력해주세요."
           />
+
+          {errorMessage && (
+            <p className="mt-2 text-[13px] font-medium text-red-500">
+              {errorMessage}
+            </p>
+          )}
         </div>
       </div>
     </OnboardingLayout>

@@ -1,24 +1,28 @@
 import { api } from "./axios";
-import type { OnboardingRequest } from "../types/onboarding/onboarding";
+import { uploadSingleImage } from "./image";
 
-export const uploadProfileImage = async (file: File): Promise<string> => {
-  const formData = new FormData();
-  formData.append("file", file);
+import type BaseApiResponse from "../types/BaseApiResponse";
+import type {
+  OnboardingRequest,
+  OnboardingCompleteResponse,
+} from "../types/onboarding/onboarding";
 
-  const res = await api.post("/api/v1/images/upload", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+export async function uploadProfileImage(
+  file: File,
+): Promise<string> {
+  return uploadSingleImage(file, "profile");
+}
 
-  return res.data.result.imageKey;
-};
 
-export const completeOnboarding = async (data: OnboardingRequest) => {
-  const res = await api.post(
+export async function completeOnboarding(
+  data: OnboardingRequest,
+): Promise<BaseApiResponse<OnboardingCompleteResponse>> {
+  const response = await api.post<
+    BaseApiResponse<OnboardingCompleteResponse>
+  >(
     "/api/v1/users/me/onboarding/complete",
-    data
+    data,
   );
 
-  return res.data;
-};
+  return response.data;
+}

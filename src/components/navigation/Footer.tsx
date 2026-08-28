@@ -18,10 +18,6 @@ export default function Footer() {
       <span className="text-gray-50 text-body-12-r">
         메일(고객 전용) : help@bnook.kr
       </span>
-
-      <span className="mt-1 text-gray-50 text-body-12-r self-stretch">
-        사업자 등록번호 : 302-01-12345
-      </span>
     </footer>
   );
 }
