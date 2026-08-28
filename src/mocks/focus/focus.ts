@@ -1,14 +1,18 @@
 import themeGrass from "../../assets/focus/themes/theme-grass-343x304.png";
 import themeGrass80 from "../../assets/focus/themes/theme-grass-80x80.png";
 import themeGrass684 from "../../assets/focus/themes/theme-grass-375x684.png";
+import themeGrass812 from "../../assets/focus/themes/theme-grass-375x812.png";
 import themeLibrary from "../../assets/focus/themes/theme-library-343x304.png";
 import themeLibrary80 from "../../assets/focus/themes/theme-library-80x80.png";
 import themeLibrary684 from "../../assets/focus/themes/theme-library-375x684.png";
+import themeLibrary812 from "../../assets/focus/themes/theme-library-375x812.png";
 import themeSpace from "../../assets/focus/themes/theme-space-343x304.png";
 import themeSpace80 from "../../assets/focus/themes/theme-space-80x80.png";
 import themeSpace684 from "../../assets/focus/themes/theme-space-375x684.png";
+import themeSpace812 from "../../assets/focus/themes/theme-space-375x812.png";
 import mockBookCover from "../../assets/search/mock_bookcover.svg";
 import type {
+  ActiveFocusSession,
   FocusBookItem,
   FocusMainSummaryResponse,
   FocusTheme,
@@ -44,6 +48,23 @@ export const mockFocusThemeSelectOptions: FocusThemeSelectOption[] = [
   { themeId: 2, name: "우주", thumbnailUrl: themeSpace80, backgroundUrl: themeSpace684 },
   { themeId: 3, name: "서재", thumbnailUrl: themeLibrary80, backgroundUrl: themeLibrary684 },
 ];
+
+// 세션 화면은 테마 선택 화면(375x684)과 달리 전체 화면용 375x812 에셋을 사용한다.
+export const mockFocusSessionBackgroundByThemeId: Record<number, string> = {
+  1: themeGrass812,
+  2: themeSpace812,
+  3: themeLibrary812,
+};
+
+// 도서 선택부터 세션까지 libraryId 전달이 연결되면 실제 세션 데이터로 교체한다.
+export const mockActiveFocusSession: ActiveFocusSession = {
+  focusId: 9001,
+  libraryId: 1,
+  bookId: 101,
+  bookTitle: "첫사랑의 침공",
+  author: "권혁일",
+  coverUrl: mockBookCover,
+};
 
 const beforeBooks: FocusBookItem[] = [
   {

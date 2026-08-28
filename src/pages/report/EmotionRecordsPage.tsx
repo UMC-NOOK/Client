@@ -124,6 +124,7 @@ export default function IndividueleReportPage() {
           ))}
       </div>
       <FAB
+        aria-label="기록 작성"
         icon={<img src={plus} alt="plus" />}
         onClick={() =>
           navigate(`/report/${id}/create`, { state: { bookTitle, bookId } })

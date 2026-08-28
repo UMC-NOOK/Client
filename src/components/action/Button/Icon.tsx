@@ -14,7 +14,7 @@ const base = [
 ].join(" ");
 
 const sizeClassMap: Record<IconSize, string> = {
-  xs: "h-[18px] w-[18px] p-0.5",
+  xs: "h-4.5 w-4.5 p-0.5",
   s: "h-6 w-6 p-0.5",
   m: "h-10 w-10 p-2",
 };

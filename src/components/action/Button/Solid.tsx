@@ -13,8 +13,7 @@ type ButtonProps = {
   className?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
-const base =
-  "inline-flex h-12 items-center justify-center whitespace-nowrap px-6 py-4 rounded-lg ";
+const base = "inline-flex items-center justify-center whitespace-nowrap";
 
 const variantClassMap: Record<Variant, string> = {
   primary: "bg-mint-60 text-gray-10",
@@ -24,7 +23,7 @@ const variantClassMap: Record<Variant, string> = {
 };
 
 const sizeClassMap: Record<Size, string> = {
-  s: "h-[38px] text-btn-14-sb rounded-sm px-8 py-3",
+  s: "h-9.5 text-btn-14-sb rounded-sm px-8 py-3",
   m: "h-12 text-btn-16-sb rounded-lg px-6 py-4",
 };
 
