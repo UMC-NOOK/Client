@@ -129,7 +129,7 @@ export default function ProfileMyPage() {
                 aria-label="프로필 사진 변경"
                 className="sr-only"
                 onChange={(event) =>
-                  handleProfileChange(event.target.files?.[0])
+                  handleProfileChange(event.currentTarget.files?.[0])
                 }
               />
             </label>
@@ -165,11 +165,6 @@ export default function ProfileMyPage() {
                         aria-invalid={isEmailInvalid}
                         className="w-full rounded-md bg-gray-17 px-4 py-3 text-body-14-r text-gray-50 outline-none placeholder:text-gray-50"
                       />
-                      {isEmailInvalid ? (
-                        <span className="text-label-12-r text-red-60">
-                          올바르지 않은 이메일 형식입니다.
-                        </span>
-                      ) : null}
                     </span>
                   }
                 />

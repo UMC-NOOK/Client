@@ -92,7 +92,6 @@ export default function MainMyPage() {
               className="h-full w-full object-contain"
               onError={(event) => {
                 event.currentTarget.onerror = null;
-                //event.currentTarget.src = defaultProfile;
               }}
             />
           </span>
@@ -115,11 +114,15 @@ export default function MainMyPage() {
               size="13"
               top={<span className="text-gray-60">최근 열람 도서</span>}
               bottom={
-                 <div className="w-full overflow-x-auto">
+                 <div className="scrollbar-hide w-full overflow-x-auto">
                   <div className="flex w-max gap-2">
                     {isRecentBooksLoading ? (
                       <p className="text-label-12-r text-gray-60">
                         불러오는 중...
+                      </p>
+                    ) : isRecentBooksError ? (
+                      <p className="text-label-12-r text-gray-60">
+                        최근 열람 도서를 불러오지 못했어요.
                       </p>
                    ) : recentBooks.length === 0 ? (
                       <div className="flex h-[200px] w-[343px] max-w-full items-center justify-center py-24">
