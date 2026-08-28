@@ -321,7 +321,7 @@ export default function LibraryAllBookPage() {
         ) : (
           <div
             ref={scrollRootRef}
-            className={`${LIST_MAX_HEIGHT_CLASS} overflow-y-auto overscroll-contain`}
+            className={`${LIST_MAX_HEIGHT_CLASS} scrollbar-hide overflow-y-auto overscroll-contain`}
           >
             {bookItems.map((item, index) => {
               const bookListProps = getBookListProps(item, tab);
