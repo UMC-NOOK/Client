@@ -1,9 +1,28 @@
-import { getBookDetailWithBookId } from "../../../api/bookInfo";
 import { useQuery } from "@tanstack/react-query";
 
-export function useGetBookDetailWithBookId(bookId: number) {
+import { getBookDetailWithBookId } from "../../../api/bookInfo";
+
+export function useGetBookDetailWithBookId(
+  bookId: number | null,
+  enabled = true,
+) {
   return useQuery({
-    queryKey: ["bookDetail", bookId],
-    queryFn: () => getBookDetailWithBookId(bookId),
+    queryKey: [
+      "bookDetail",
+      "bookId",
+      bookId,
+    ],
+    queryFn: () => {
+      if (bookId === null) {
+        throw new Error("bookId가 없습니다.");
+      }
+
+      return getBookDetailWithBookId(bookId);
+    },
+    enabled:
+      enabled &&
+      bookId !== null &&
+      Number.isInteger(bookId) &&
+      bookId > 0,
   });
 }

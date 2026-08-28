@@ -55,8 +55,6 @@ function HorizontalBookScroller({
     const el = ref.current;
     if (!el) return;
 
-    e.preventDefault();
-
     drag.current.isDragging = true;
     drag.current.moved = false;
     drag.current.startX = e.clientX;
