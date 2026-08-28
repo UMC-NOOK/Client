@@ -129,7 +129,7 @@ export default function IndividueleReportPage() {
         onClick={() =>
           navigate(`/report/${id}/create`, { state: { bookTitle, bookId } })
         }
-        className="absolute bottom-6 right-4 z-10"
+        className="absolute bottom-6 right-0 z-10"
       />
     </div>
   );
