@@ -1,4 +1,4 @@
-//Client/src/components/search/SearchTopSection.tsx
+// Client/src/components/search/SearchTopSection.tsx
 import { useEffect, useState } from "react";
 import closeIcon from "../../assets/logo/close-button.svg";
 import SearchInput from "../input/SearchField";
@@ -9,21 +9,15 @@ export type SearchScope = "all" | "my";
 
 type Props = {
   title?: string;
-
   activeScope?: SearchScope;
   onScopeChange?: (scope: SearchScope) => void;
-
   query?: string;
   onQueryChange?: (v: string) => void;
-
   onClose?: () => void;
   onSearchClick?: () => void;
-
   onFocus?: () => void;
   onBlur?: () => void;
-
   onEnter?: () => void;
-
   placeholder?: string;
 };
 
@@ -55,18 +49,29 @@ export default function SearchTopSection({
     <section className="w-full flex flex-col items-start gap-4">
       {/* ✅ 공용 헤더 */}
       <TopNavigation
-        left={<div className="w-6 h-6" aria-hidden="true" />}
+        // 오른쪽 X와 대칭 맞추려 좌측 스페이서도 40x40으로
+        left={<div className="h-10 w-10" aria-hidden="true" />}
         center={
           <h1 className="text-gray-90 text-title-18-m text-center">{title}</h1>
         }
         right={
+          // 2겹: 40x40 버튼 + padding round-8(8px)
           <button
             type="button"
             onClick={onClose}
-            className="w-6 h-6 flex items-center justify-center"
             aria-label="닫기"
+            className="flex h-10 w-10 items-center justify-center p-2"
           >
-            <img src={closeIcon} alt="" className="w-6 h-6" draggable={false} />
+            {/* 3겹: 24x24 컨테이너 */}
+            <span className="flex h-6 w-6 items-center justify-center">
+              {/* 4겹: 17.5 글리프 (gray-90) */}
+              <img
+                src={closeIcon}
+                alt=""
+                draggable={false}
+                className="h-[1.094rem] w-[1.094rem]" /* 17.5px */
+              />
+            </span>
           </button>
         }
       />
@@ -91,7 +96,6 @@ export default function SearchTopSection({
           onEnter={onEnter}
           onFocus={onFocus}
           onBlur={onBlur}
-          
           placeholder={placeholder}
         />
       </div>

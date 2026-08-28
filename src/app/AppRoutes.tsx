@@ -11,8 +11,11 @@ import {
 import AppShell, { useShell } from "./AppShell";
 import TopAppBar from "../components/layout/TopAppBar/TopAppBar";
 
-import FocusMobilePage from "../pages/search/FocusMobilePage";
-import GroupMobilePage from "../pages/search/GroupMobilePage";
+import FocusMainPage from "../pages/focus/FocusMainPage";
+import FocusSelectPage from "../pages/focus/FocusSelectPage";
+import FocusThemePage from "../pages/focus/FocusThemePage";
+import FocusSessionPage from "../pages/focus/FocusSessionPage";
+import GroupPage from "../pages/group/GroupPage";
 import SearchPage from "../pages/search/SearchPage";
 
 import SearchNewAddPage from "../pages/search/SearchNewAddPage";
@@ -37,6 +40,8 @@ import DevLoginButton from "../components/dev/DevLoginButton";
 import LibraryPage from "../pages/library/LibraryPage";
 import LibraryGoalInputPage from "../pages/library/LibraryGoalInputPage";
 import LibraryAllBookPage from "../pages/library/LibraryAllBookPage";
+import MainMyPage from "../pages/myPage/MainMyPage";
+import ProfileMyPage from "../pages/myPage/ProfileMyPage";
 
 import OnboardingGoalPage from "../pages/onboarding/OnboardingGoalPage";
 import { OnboardingCategoryPage } from "../pages/onboarding/OnboardingCategoryPage";
@@ -81,7 +86,7 @@ function MainTabsLayout() {
         activeTab={activeTab}
         onTabChange={(tab: TabKey) => navigate(tabToPath(tab))}
         onSearchClick={() => navigate("/search")}
-        onMenuClick={() => console.log("menu click")}
+        onMenuClick={() => navigate("/mypage")}
         onLogoClick={() => navigate("/library")}
       />
       <div className="mx-auto w-full max-w-85.75">
@@ -200,9 +205,9 @@ export default function AppRoutes() {
             {/* MAIN TABS + TEST */}
             <Route element={<MainTabsLayout />}>
               <Route path="/library" element={<LibraryPage />} />
-              <Route path="/focus" element={<FocusMobilePage />} />
+              <Route path="/focus" element={<FocusMainPage />} />
               <Route path="/record" element={<ReportPage />} />
-              <Route path="/group" element={<GroupMobilePage />} />
+              <Route path="/group" element={<GroupPage />} />
 
               <Route
                 path="/test/banner-action-card"
@@ -218,7 +223,16 @@ export default function AppRoutes() {
               />
             </Route>
 
+            {/* 포커스 도메인 서브 화면 - 상단 탭 없이 뒤로가기 헤더만 사용 (TopNavigation은 각 페이지에서 구현) */}
+            <Route element={<NoFooterLayout />}>
+              <Route path="/focus/select" element={<FocusSelectPage />} />
+              <Route path="/focus/theme" element={<FocusThemePage />} />
+              <Route path="/focus/session" element={<FocusSessionPage />} />
+            </Route>
+
             {/* 기타 */}
+            <Route path="/mypage" element={<MainMyPage />} />
+            <Route path="/mypage/profile" element={<ProfileMyPage />} />
             <Route path="/library/status" element={<LibraryAllBookPage />} />
 
 

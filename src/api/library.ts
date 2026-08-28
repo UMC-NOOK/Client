@@ -153,12 +153,12 @@ export function getLibraryFocusRecords(params: {
 
 // 서재 책 등록
 export async function postLibraryBook(bookId: number): Promise<void> {
-  await api.post(`"/api/library/${bookId}"`);
+  await api.post(`${LIBRARY_BASE}/${bookId}`);
 }
 
 // 서재 책 삭제
 export async function deleteLibraryBook(bookId: number): Promise<void> {
-  await api.delete(`/api/library/${bookId}`);
+  await api.delete(`${LIBRARY_BASE}/${bookId}`);
 }
 
 // 서재 책 상태 변경 => 수정 필요
@@ -166,7 +166,7 @@ export async function patchLibraryBookStatus(params: {
   bookId: number;
   readingStatus: BookStatusType;
 }): Promise<void> {
-  await api.patch(`/api/library/status`, {
+  await api.patch(`${LIBRARY_BASE}/status`, {
     bookId: params.bookId,
     readingStatus: params.readingStatus,
   });

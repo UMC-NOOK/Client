@@ -530,43 +530,53 @@ const [birth, setBirth] = useState({
 
 #### Path
 
-`src/components/action/chip/Chip.tsx`
+`src/components/action/Chip/Chip.tsx`
 
 #### Props
 
-| Name      | Type               | Required | Default | Note                 |
-| :-------- | :----------------- | :------: | :------ | :------------------- |
-| `text`    | `string`           |    O     | -       | 텍스트 내용          |
-| `variant` | `"none" \| "icon"` |    O     | -       | 활성화/비활성화 유무 |
-| `active`  | `boolean`          |    O     | `false` | 활성화/비활성화 유무 |
-| `icon`    | `ReactNode`        |    X     | -       | 아이콘               |
-| `onClick` | `()=> void`        |    X     | -       | 눌럿을 때의 기능     |
+| Name            | Type               | Required | Default          | Note                                                                 |
+| :-------------- | :----------------- | :------: | :--------------- | :------------------------------------------------------------------ |
+| `text`          | `string`           |    O     | -                | 텍스트 내용                                                          |
+| `variant`       | `"none" \| "icon"` |    O     | -                | 칩 모양 (`none`: pill, 아이콘 없음 / `icon`: 아이콘 슬롯 포함)        |
+| `active`        | `boolean`          |    X     | `false`          | 활성화 상태 (활성 시 `bg-mint-60`, 비활성 시 `bg-gray-17`)           |
+| `icon`          | `ReactNode`        |    X     | -                | 아이콘 (`variant="icon"`일 때 사용)                                  |
+| `onClick`       | `() => void`       |    X     | -                | 칩 본체 클릭                                                         |
+| `onIconClick`   | `() => void`       |    X     | -                | 아이콘(예: X) 전용 클릭. 지정 시 아이콘이 독립 버튼처럼 동작하며 본체 클릭과 분리됨 |
+| `iconAriaLabel` | `string`           |    X     | `"삭제"`         | `onIconClick` 사용 시 아이콘 버튼의 접근성 라벨                       |
+| `textClassName` | `string`           |    X     | `"text-gray-60"` | 비활성 상태 글자색 오버라이드 (예: `"text-gray-90"`)                  |
+
+> 그 외 표준 `<button>` 속성(`className`, `disabled`, `type` 등)은 `ButtonHTMLAttributes`를 확장하므로 그대로 전달됩니다.
 
 #### Usage
 
 ```tsx
+// 삭제 버튼(X) 있는 칩 — 최근 검색어 등 (본체=검색, X=삭제)
+<Chip
+  text="체인소맨"
+  variant="icon"
+  active={false}
+  textClassName="text-gray-90"
+  onClick={() => onClickKeyword("체인소맨")}
+  onIconClick={() => onDelete(id)}
+  iconAriaLabel="최근 검색어 삭제"
+  icon={<img src={DeleteIcon} alt="" />}
+/>
+
+// 토글되는 아이콘 칩
 const [isActive, setIsActive] = useState(false);
 
-//icon 있는 칩
 <Chip
   text="Text"
   variant="icon"
   active={isActive}
-  icon={<img src={PlusIcon} alt="Plus Icon"/>}
+  icon={<img src={PlusIcon} alt="Plus Icon" />}
   onClick={() => setIsActive(!isActive)}
 />
 
-//text만 있는 칩
-<Chip
-  text="Text"
-  variant="none"
-  active={true}
-/>
+// text만 있는 칩
+<Chip text="Text" variant="none" active />
 ```
 
-### [ Emotion ]
-
-#### Path
 
 `src/components/Chip/Emotion.tsx`
 

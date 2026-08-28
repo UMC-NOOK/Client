@@ -7,12 +7,14 @@ type ButtonProps = {
   text: string;
   variant?: Variant;
   size?: Size;
+  /** 가로폭을 부모에 꽉 채울지 여부. 기본은 꽉 채움. */
+  fullWidth?: boolean;
   onClick?: () => void;
   className?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const base =
-  "inline-flex h-12 w-full items-center justify-center whitespace-nowrap px-6 py-4 rounded-lg ";
+  "inline-flex h-12 items-center justify-center whitespace-nowrap px-6 py-4 rounded-lg ";
 
 const variantClassMap: Record<Variant, string> = {
   primary: "bg-mint-60 text-gray-10",
@@ -23,13 +25,14 @@ const variantClassMap: Record<Variant, string> = {
 
 const sizeClassMap: Record<Size, string> = {
   s: "h-[38px] text-btn-14-sb rounded-sm px-8 py-3",
-  m: "h-12 text-label-16-sb rounded-lg px-6 py-4",
+  m: "h-12 text-btn-16-sb rounded-lg px-6 py-4",
 };
 
 export default function Solid({
   text,
   variant = "primary",
   size = "m",
+  fullWidth = true,
   className = "",
   type = "button",
   ...props
@@ -39,6 +42,7 @@ export default function Solid({
       type={type}
       className={[
         base,
+        fullWidth ? "w-full" : "",
         variantClassMap[variant],
         sizeClassMap[size],
         className,

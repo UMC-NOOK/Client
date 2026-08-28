@@ -15,7 +15,7 @@ export default function SearchNewAddInfoForm({
   onChangeAuthor,
 }: Props) {
   return (
-    <div className="w-full flex flex-col gap-8 px-1">
+    <div className="w-full flex flex-col gap-8">
       <TextField
         title="제목"
         value={title}

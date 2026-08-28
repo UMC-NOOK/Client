@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import SearchTopSection, {
   type SearchScope,
@@ -24,11 +24,22 @@ type ViewMode = "idle" | "searching" | "results";
 
 export default function SearchPage() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [scope, setScope] = useState<SearchScope>("all");
-  const [query, setQuery] = useState("");
-  const [submittedQuery, setSubmittedQuery] = useState("");
-  const [mode, setMode] = useState<ViewMode>("idle");
+  const restoredQuery = location.state?.restoreSearch
+    ? (location.state.searchQuery ?? "")
+    : "";
+
+  const restoredScope = location.state?.restoreSearch
+    ? (location.state.searchScope ?? "all")
+    : "all";
+
+  const [scope, setScope] = useState<SearchScope>(restoredScope);
+  const [query, setQuery] = useState(restoredQuery);
+  const [submittedQuery, setSubmittedQuery] = useState(restoredQuery);
+  const [mode, setMode] = useState<ViewMode>(
+    restoredQuery ? "results" : "idle",
+  );
   const [recent, setRecent] = useState<RecentKeyword[]>([]);
 
   const searchType = scope === "all" ? "GLOBAL" : "LIBRARY";
@@ -42,7 +53,6 @@ export default function SearchPage() {
   const { data: libraryHomeData } = useLibrarySearchHome(
     mode === "idle" && scope === "my",
   );
-
 
   const { data: bestsellersData } = useBestsellers(
     mode === "idle" && scope === "all",
@@ -101,6 +111,15 @@ export default function SearchPage() {
     setSubmittedQuery(target);
     setMode("results");
 
+    navigate("/search", {
+      replace: true,
+      state: {
+        restoreSearch: true,
+        searchQuery: target,
+        searchScope: scope,
+      },
+    });
+
     setRecent((prev) => {
       const withoutDup = prev.filter((item) => item.text !== target);
       return [{ id: Date.now(), text: target }, ...withoutDup].slice(0, 10);
@@ -108,7 +127,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="w-full pb-10">
+    <div className="w-full pb-0">
       <SearchTopSection
         title="도서 검색"
         activeScope={scope}

@@ -54,7 +54,7 @@ export function OnboardingCategoryPage() {
       </p>
 
       <p className=" text-gray-50 text-[14px] font-medium">
-        최대 2개 선택가능합니다.
+        최대 2개 선택 가능합니다.
       </p>
 
       <div className="mt-8 mb-10">
