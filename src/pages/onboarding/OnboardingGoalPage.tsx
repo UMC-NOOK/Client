@@ -81,7 +81,6 @@ export default function OnboardingGoalPage() {
   return (
     <OnboardingLayout
       step={1}
-      left={<img src={chevronLeftIcon} className="w-6 h-6" />}
       onClickLeft={handleClose}
       right={
         <span
