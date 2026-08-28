@@ -106,7 +106,7 @@ export default function ReportPage() {
         onClose={() => setShowSortSheet(false)}
         title="정렬"
       >
-        <div className="flex flex-col gap-1 p-4">
+        <div className="flex flex-col gap-1">
           {options.map((option) => (
             <ContainerText
               key={option.value}
