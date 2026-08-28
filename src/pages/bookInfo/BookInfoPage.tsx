@@ -87,7 +87,7 @@ export default function BookInfoPage() {
   };
 
   return (
-    <div className="relative flex flex-col pb-[calc(120px+env(safe-area-inset-bottom))]">
+    <div className="relative flex flex-col pb-[calc(130px+env(safe-area-inset-bottom))]">
       {/* 상단 */}
       <div className="relative">
         <div className="absolute inset-0 z-0 -mx-4 -mt-2 pointer-events-none overflow-hidden">
