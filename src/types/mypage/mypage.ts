@@ -1,5 +1,3 @@
-import type BaseApiResponse from "../BaseApiResponse";
-
 export type ResultOfRecentView ={
     bookId: number;
     title : string;
@@ -7,8 +5,15 @@ export type ResultOfRecentView ={
     coverImageUrl : string;
 }
 
-export type RecentViewGroup = {
-    result: ResultOfRecentView[];
+export type personalInformationRequest = {
+    nickName : string;
+    profileImageKey : string;
 }
 
-export type RecentVieW = BaseApiResponse<RecentViewGroup>;
+export type personalInformationResult = {
+    nickName : string;
+    profileImageUrl : string;
+}
+
+export type Profile = personalInformationResult;
+export type RecentView = ResultOfRecentView[];

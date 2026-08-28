@@ -12,8 +12,8 @@ import Divider from "../../components/layout/Divider";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import { useLogout } from "../../hooks/mutations/useLogout";
 import { useWithdraw } from "../../hooks/mutations/useWithdraw";
+import { useRecentView } from "../../hooks/queries/mypage/useRecentView";
 import { useUserMe } from "../../hooks/queries/useUserMe";
-import { mainMyPageRecentBookList } from "../../mocks/mypage/mainMyPage_RecentBookList";
 import DeleteAccountModal from "./modal/DeleteAccountModal";
 import LogoutModal from "./modal/LogoutModal";
 
@@ -21,6 +21,11 @@ export default function MainMyPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data: userMe } = useUserMe();
+  const {
+    data: recentBooks = [],
+    isLoading: isRecentBooksLoading,
+    isError: isRecentBooksError,
+  } = useRecentView();
   const logoutMutation = useLogout();
   const withdrawMutation = useWithdraw();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -74,33 +79,32 @@ export default function MainMyPage() {
         />
       </div>
       {/* 프로필 */}
-      <div className="flex flex-row gap-4"> 
-          {/* 프로필 */}
-          <button
-            type="button"
-            onClick={() => navigate("/mypage/profile")}
-            aria-label="프로필 수정"
-            className="h-14 w-14 shrink-0 overflow-hidden rounded-full"
-          >
+      <button
+        type="button"
+        onClick={() => navigate("/mypage/profile")}
+        aria-label="프로필 수정"
+        className="flex w-full flex-row items-center gap-4 text-left"
+      >
+          <span className="flex h-14 w-14 shrink-0 items-center justify-center">
             <img
               src={userMe?.profileImageUrl || defaultProfile}
               alt="프로필"
-              className="h-full w-full object-cover"
+              className="h-full w-full object-contain"
               onError={(event) => {
                 event.currentTarget.onerror = null;
-                event.currentTarget.src = defaultProfile;
+                //event.currentTarget.src = defaultProfile;
               }}
             />
-          </button>
+          </span>
           {/* 프로필 정보 */}
-          <div className="flex min-w-0 flex-1 items-center">
+          <span className="flex min-w-0 flex-1 items-center">
             <SectionHeader
               size="16"
               top={userMe?.nickName ?? ""}
               bottom={userMe?.email ?? ""}
             />
-          </div>
-      </div>
+          </span>
+      </button>
       {/* diver */}
       <div className="w-full">
         <Divider width="full" />
@@ -113,14 +117,26 @@ export default function MainMyPage() {
               bottom={
                  <div className="w-full overflow-x-auto">
                   <div className="flex w-max gap-2">
-                    {mainMyPageRecentBookList.map((book) => (
+                    {isRecentBooksLoading ? (
+                      <p className="text-label-12-r text-gray-60">
+                        불러오는 중...
+                      </p>
+                   ) : recentBooks.length === 0 ? (
+                      <div className="flex h-[200px] w-[343px] max-w-full items-center justify-center py-24">
+                        <p className="text-label-14-sb text-gray-60">
+                          최근 열람한 도서가 없어요.
+                        </p>
+                      </div>
+                    ) : (
+                      recentBooks.map((book) => (
                       <Normal
-                        key={book.id}
-                        imageUrl={book.imageUrl}
+                        key={book.bookId}
+                        imageUrl={book.coverImageUrl}
                         title={book.title}
                         author={book.author}
                       />
-                    ))}
+                      ))
+                    )}
                   </div>
                 </div>}
           />
