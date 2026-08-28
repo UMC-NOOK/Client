@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import OnboardingLayout from "../onboarding/OnboardingLayout";
 import { useOnboardingDraft } from "./OnboardingContext";
 import { useShell } from "../../app/AppShell";
-import chevronLeftIcon from "../../assets/icons/chevron_left.svg";
 
 const MAX_GOAL = 300;
 
