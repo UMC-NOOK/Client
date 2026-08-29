@@ -1,8 +1,8 @@
 //Client\src\components\navigation\Gnb.tsx
 import React from "react";
 
-import searchPng from "../../assets/logo/top-navigation-button-icon-search.svg";
-import menuPng from "../../assets/logo/top-navigation-button-icon.svg";
+import searchPng from "../../assets/icons/search.svg";
+import menuPng from "../../assets/icons/hamburger.svg";
 import logoSvg from "../../assets/logo/top-navigation-logo.svg";
 
 type Props = {
