@@ -1,15 +1,17 @@
-import { useCallback } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import searchIcon from "../../assets/icons/search.svg";
 import Icon from "../../components/action/Button/Icon";
 import { Focus as FocusBookRow } from "../../components/content/card/Book/List/Focus";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
+import Toast from "../../components/feedback/toast";
 import Dim from "../../components/layout/Dim";
 import MaskGradient from "../../components/layout/MaskGradient";
 import TabBar from "../../components/navigation/tabs/TabBar";
 import { mockFocusMainSummaryResponse } from "../../mocks/focus/focus";
 import type { FocusBookStatus } from "../../types/focus/focus";
+import { formatDurationHms } from "./utils/formatDurationHms";
 
 const STATUS_TABS: {
   value: FocusBookStatus;
@@ -25,16 +27,18 @@ function isFocusStatus(value: string): value is FocusBookStatus {
   return value === "BEFORE" || value === "READING" || value === "FINISHED";
 }
 
-function formatHms(totalSeconds: number) {
-  const pad = (n: number) => String(n).padStart(2, "0");
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-}
-
 export default function FocusMainPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const navigationState = location.state as {
+    showFocusEndToast?: boolean;
+  } | null;
+  const [focusEndToastOpen, setFocusEndToastOpen] = useState(
+    navigationState?.showFocusEndToast === true,
+  );
+  const handleFocusEndToastClose = useCallback(() => {
+    setFocusEndToastOpen(false);
+  }, []);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const statusParam = searchParams.get("status");
@@ -62,6 +66,22 @@ export default function FocusMainPage() {
   const activeTab = STATUS_TABS.find((tab) => tab.value === activeStatus)!;
   const visibleBooks = books.filter((book) => book.status === activeStatus);
 
+  // 새로고침이나 뒤로가기로 완료 Toast가 다시 뜨지 않도록 일회성 navigation state를 지운다.
+  // 로컬 state의 open 값은 유지되므로 현재 진입에서는 Toast의 4초 노출이 정상 진행된다.
+  useEffect(() => {
+    if (!navigationState?.showFocusEndToast) return;
+
+    navigate(`${location.pathname}${location.search}`, {
+      replace: true,
+      state: null,
+    });
+  }, [
+    location.pathname,
+    location.search,
+    navigate,
+    navigationState?.showFocusEndToast,
+  ]);
+
   return (
     <div className="flex flex-col pb-8">
       {/* Figma node 2621:27492 (focus : 메인/이미지) 기준 정확한 스펙 반영, 2026-08-10 */}
@@ -88,7 +108,7 @@ export default function FocusMainPage() {
         <div className="relative flex h-full flex-col items-center justify-center gap-2">
           <p className="text-body-16-b text-gray-90">오늘 독서한 시간</p>
           <p className="text-title-40-b text-gray-90 tabular-nums">
-            {formatHms(todayTotalFocusSeconds)}
+            {formatDurationHms(todayTotalFocusSeconds)}
           </p>
         </div>
       </section>
@@ -133,13 +153,21 @@ export default function FocusMainPage() {
                 imageUrl={book.coverUrl}
                 title={book.title}
                 author={book.author}
-                timeText={formatHms(book.todayFocusSeconds)}
+                timeText={formatDurationHms(book.todayFocusSeconds)}
                 onClick={() => navigate("/focus/theme")}
               />
             ))}
           </div>
         )}
       </section>
+
+      <div className="fixed inset-x-0 bottom-[calc(16px+env(safe-area-inset-bottom))] z-50 mx-auto flex w-full max-w-93.75 justify-center px-4">
+        <Toast
+          text="포커스를 종료했어요."
+          isOpen={focusEndToastOpen}
+          onClose={handleFocusEndToastClose}
+        />
+      </div>
     </div>
   );
 }

@@ -8,22 +8,18 @@ import SectionHeader from "../../components/content/InformationText/SectionHeade
 import MaskGradient from "../../components/layout/MaskGradient";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import { mockFocusThemeSelectOptions } from "../../mocks/focus/focus";
-
-const RECENT_FOCUS_THEME_ID_KEY = "recentFocusThemeId";
-
-function readStoredThemeId(): number | null {
-  const raw = localStorage.getItem(RECENT_FOCUS_THEME_ID_KEY);
-  if (raw === null) return null;
-  const parsed = Number(raw);
-  return Number.isNaN(parsed) ? null : parsed;
-}
+import { resetFocusSessionTimer } from "./utils/focusSessionTimer";
+import {
+  readStoredFocusThemeId,
+  saveStoredFocusThemeId,
+} from "./utils/focusThemeStorage";
 
 export default function FocusThemePage() {
   const navigate = useNavigate();
 
   // 최근 선택한 테마를 로컬(localStorage)에서 읽어와 기본 선택한다. 서버에는 저장하지 않는다.
   const [selectedThemeId, setSelectedThemeId] = useState<number | null>(
-    readStoredThemeId,
+    readStoredFocusThemeId,
   );
   const [imageError, setImageError] = useState(false);
 
@@ -41,11 +37,9 @@ export default function FocusThemePage() {
   );
 
   const handleStart = useCallback(() => {
-    if (selectedThemeId === null) {
-      localStorage.removeItem(RECENT_FOCUS_THEME_ID_KEY);
-    } else {
-      localStorage.setItem(RECENT_FOCUS_THEME_ID_KEY, String(selectedThemeId));
-    }
+    saveStoredFocusThemeId(selectedThemeId);
+    // 실제 API 연동 시 저장값 대신 start 응답의 startedAt을 타이머 기준으로 사용한다.
+    resetFocusSessionTimer();
     // TODO: POST /api/v1/focuses/start 연동. 선택한 책(libraryId)이 아직 이 화면까지 전달되지 않아 이동만 처리.
     navigate("/focus/session");
   }, [navigate, selectedThemeId]);
