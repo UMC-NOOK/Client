@@ -49,7 +49,7 @@ export default function TopGnb({
         />
       </button>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center">
         {showSearch && (
           <IconButton ariaLabel="Search" onClick={onSearchClick}>
             <img src={searchPng} alt="" className="w-6 h-6" draggable={false} />
