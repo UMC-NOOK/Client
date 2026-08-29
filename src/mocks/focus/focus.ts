@@ -10,6 +10,7 @@ import themeSpace684 from "../../assets/focus/themes/theme-space-375x684.png";
 import mockBookCover from "../../assets/search/mock_bookcover.svg";
 import type {
   FocusBookItem,
+  FocusLibraryBookItem,
   FocusMainSummaryResponse,
   FocusTheme,
 } from "../../types/focus/focus";
@@ -136,3 +137,17 @@ export const mockFocusMainSummaryResponse: FocusMainSummaryResponse = {
     books,
   },
 };
+
+/**
+ * 도서 선택(focus/select) 화면 전용. 메인과 같은 서재 책 7권을 그대로 재사용하고
+ * 정렬(최근 포커스/기록 많은/기록 적은 순)에 필요한 값만 추가했다.
+ */
+export const mockFocusLibraryBooks: FocusLibraryBookItem[] = [
+  { ...readingBooks[2], recentFocusedAt: "2026-08-26T21:40:00", focusRecordCount: 12 },
+  { ...readingBooks[1], recentFocusedAt: "2026-08-26T13:05:00", focusRecordCount: 9 },
+  { ...readingBooks[0], recentFocusedAt: "2026-08-25T22:10:00", focusRecordCount: 6 },
+  { ...readingBooks[3], recentFocusedAt: "2026-08-24T19:30:00", focusRecordCount: 4 },
+  { ...finishedBooks[0], recentFocusedAt: "2026-08-20T10:00:00", focusRecordCount: 15 },
+  { ...beforeBooks[0], recentFocusedAt: null, focusRecordCount: 0 },
+  { ...beforeBooks[1], recentFocusedAt: null, focusRecordCount: 0 },
+];
