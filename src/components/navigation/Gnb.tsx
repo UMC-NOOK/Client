@@ -3,7 +3,7 @@ import React from "react";
 
 import searchPng from "../../assets/icons/search.svg";
 import menuPng from "../../assets/icons/hamburger.svg";
-import logoSvg from "../../assets/icons/logo.svg.svg";
+import logoSvg from "../../assets/icons/logo.svg";
 
 type Props = {
   onSearchClick?: () => void;
