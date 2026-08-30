@@ -35,6 +35,9 @@ const STATUS_LABEL: Record<FocusBookStatus, string> = {
   FINISHED: "완독",
 };
 
+// 최근 검색어 칩 말줄임 기준(공백 포함 글자수)— 확정되면 숫자만 바꾸면 됨.
+const RECENT_KEYWORD_MAX_CHARS = 7;
+
 function sortLibraryBooks(items: FocusLibraryBookItem[], sort: SortValue) {
   const sorted = [...items];
 
@@ -91,7 +94,9 @@ export default function FocusSelectPage() {
   const [showSortSheet, setShowSortSheet] = useState(false);
   const [recentKeywords, setRecentKeywords] = useState<RecentKeyword[]>([]);
 
-  const isSearchActive = mode === "searching" || mode === "results";
+  // 헤더 </>X 전환은 "검색 제출(엔터/검색 아이콘)" 시점 기준. 포커스만 했을 때는 그대로 <를 유지한다
+  // (2026-08-30 Figma 코멘트 확인 전 임시 결정 — PM/디자이너 확인 후 바뀔 수 있음).
+  const showHeaderClose = mode === "results";
 
   const sortedBooks = useMemo(
     () => sortLibraryBooks(mockFocusLibraryBooks, sortOption),
@@ -99,12 +104,14 @@ export default function FocusSelectPage() {
   );
 
   const trimmedQuery = query.trim();
+  // 검색 결과는 정렬 옵션과 무관하게 항상 관련도순이다(기능 정의 [도서 선택_검색] H103).
+  // sortedBooks가 아니라 원본 배열을 그대로 쓴다.
   const searchResults = useMemo(
     () =>
       trimmedQuery
-        ? sortedBooks.filter((book) => book.title.includes(trimmedQuery))
+        ? mockFocusLibraryBooks.filter((book) => book.title.includes(trimmedQuery))
         : [],
-    [sortedBooks, trimmedQuery],
+    [trimmedQuery],
   );
 
   // 책 선택 시 메인 화면의 책 카드와 동일하게 테마 선택으로 이동한다.
@@ -127,33 +134,46 @@ export default function FocusSelectPage() {
     <div className="flex flex-col">
       <div className="flex flex-col gap-4">
         <TopNavigation
-          left={isSearchActive ? undefined : <img src={chevronLeftIcon} alt="뒤로가기" />}
-          onClickLeft={isSearchActive ? undefined : () => navigate(-1)}
+          left={showHeaderClose ? undefined : <img src={chevronLeftIcon} alt="뒤로가기" />}
+          onClickLeft={showHeaderClose ? undefined : () => navigate(-1)}
           center="도서 선택"
-          right={isSearchActive ? <img src={closeIcon} alt="닫기" /> : undefined}
-          onClickRight={isSearchActive ? () => navigate(-1) : undefined}
+          right={showHeaderClose ? <img src={closeIcon} alt="닫기" /> : undefined}
+          onClickRight={showHeaderClose ? () => navigate(-1) : undefined}
         />
 
         <SearchInput
           placeholder="내 서재에서 책을 찾아보세요."
           value={query}
           onChange={(value) => {
+            // 타이핑만으로는 검색을 실행하지 않는다 — 엔터/검색 아이콘으로 제출해야 결과가 뜬다
             setQuery(value);
-            setMode(value.trim() === "" ? "searching" : "results");
+            setMode("searching");
           }}
           onSearchClick={() => commitSearch()}
           onEnter={() => commitSearch()}
           onFocus={() => {
             if (mode === "idle") setMode("searching");
           }}
+          onBlur={() => {
+            // 검색어를 아무것도 입력하지 않은 채로 포커스가 빠지면(다른 곳 클릭 등) 목록으로 복귀.
+            // Chip.tsx/SearchField.tsx의 다른 버튼들은 mousedown에서 blur 자체를 막아두고 있어
+            // 이 로직과 충돌하지 않는다(docs/note/2026-08-27-blur-before-click-race.md 참고).
+            if (query.trim() === "") setMode("idle");
+          }}
+          maxLength={500}
+          showClearOnFocus
+          onClear={() => {
+            setQuery("");
+            setMode("idle");
+          }}
         />
       </div>
 
       {mode === "idle" &&
         (mockFocusLibraryBooks.length === 0 ? (
-          <p className="py-16 text-center text-body-14-r text-gray-50">
-            서재에 등록한 책이 없어요.
-          </p>
+          <div className="mt-24 flex w-full items-center justify-center py-24">
+            <p className="text-label-14-sb text-gray-60">서재에 등록한 책이 없어요.</p>
+          </div>
         ) : (
           <div className="mt-5 flex w-full flex-col items-end gap-2">
             <div className="p-2">
@@ -176,6 +196,7 @@ export default function FocusSelectPage() {
             setRecentKeywords((prev) => prev.filter((keyword) => keyword.id !== id))
           }
           onClickKeyword={(text) => commitSearch(text)}
+          maxTextLength={RECENT_KEYWORD_MAX_CHARS}
         />
       )}
 

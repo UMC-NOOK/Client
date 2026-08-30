@@ -42,6 +42,7 @@ export default function Chip({
   return (
     <button
       type={type}
+      onMouseDown={(e) => e.preventDefault()} // 검색 인풋 옆에서 쓰일 때 클릭이 blur보다 먼저 잡히게
       onClick={onClick}
       className={[base, variantClassMap[variant], colorClass].join(" ")}
       {...props}
