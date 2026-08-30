@@ -8,12 +8,10 @@ type Props = {
   keywords: RecentKeyword[];
   onDelete?: (id: number) => void;
   onClickKeyword?: (text: string) => void;
-  // 지정하면 이 글자수(공백 포함) 이상인 검색어를 (maxLength-1)자 + "…"로 잘라서 보여준다.
-  // 예: maxLength=7이면 7자 이상부터 6자+…로 자름(잘린 부분이 있다는 뜻의 …가 실제로 뭔가 자른 경우에만 붙게).
-  // 클릭/삭제는 원본 text 그대로 동작.
-  maxTextLength?: number;
+  maxTextLength?: number; // 지정하면 이 글자수부터 말줄임 표시. 클릭·삭제는 원본 text로 동작
 };
 
+// "…"는 잘렸다는 뜻이므로 maxLength-1자까지만 보여주고 붙인다(maxLength자를 다 보여주면 안 잘린 것처럼 보인다).
 function truncateKeyword(text: string, maxLength?: number) {
   if (!maxLength || text.length < maxLength) return text;
   return `${text.slice(0, maxLength - 1)}…`;

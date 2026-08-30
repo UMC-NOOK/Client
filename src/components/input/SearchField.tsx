@@ -67,7 +67,7 @@ export default function SearchInput({
         "
       />
 
-      {/* 입력값 있을 때만: 2겹(20x20 래퍼) + 1겹(16.67 아이콘). 자체 좌우 여백 없음 */}
+      {/* 2겹(20x20 래퍼) + 1겹(16.67 아이콘). 자체 좌우 여백 없음 */}
       {showClearButton && (
         <button
           type="button"
@@ -75,7 +75,7 @@ export default function SearchInput({
           onMouseDown={(e) => e.preventDefault()} // input 포커스 유지
           onClick={() => {
             if (onClear) {
-              // onClear가 있으면 "검색 종료"로 취급 — 값만 지우지 않고 포커스도 명시적으로 뺀다
+              // onClear는 값 삭제가 아니라 "검색 종료"라 포커스도 명시적으로 뺀다
               onClear();
               inputRef.current?.blur();
             } else {
