@@ -19,7 +19,6 @@ const base =
   "inline-flex items-center justify-center whitespace-nowrap text-sm gap-1";
 
 const variantClassMap: Record<Variant, string> = {
-  // Tailwind radius scale에 20px 토큰이 없어 Figma의 pill radius를 그대로 유지한다.
   none: "py-3 px-4 rounded-[20px]",
   icon: "rounded-lg px-3 py-1.5",
 };

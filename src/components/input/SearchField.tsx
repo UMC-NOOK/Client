@@ -67,7 +67,6 @@ export default function SearchInput({
         "
       />
 
-      {/* 아이콘 실측값은 spacing scale에 없어 Figma 크기를 arbitrary size로 유지한다. */}
       {/* 2겹(20x20 래퍼) + 1겹(16.67 아이콘). 자체 좌우 여백 없음 */}
       {showClearButton && (
         <button
