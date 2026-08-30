@@ -194,6 +194,7 @@ export default function FocusSelectPage() {
           }
           onClickKeyword={(text) => commitSearch(text)}
           maxTextLength={RECENT_KEYWORD_MAX_CHARS}
+          showAllKeywords
         />
       )}
 
