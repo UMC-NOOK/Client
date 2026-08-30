@@ -29,12 +29,12 @@ export function Normal({
 
     <div className="flex flex-col items-start self-stretch w-full">
         <p
-          className="line-clamp-2 self-stretch overflow-hidden text-ellipsis text-gray-90 text-subtitle-14-sb">
+          className="line-clamp-2 self-stretch overflow-hidden text-ellipsis text-gray-90 text-subtitle-12-sb">
           {title}
         </p>
 
         <p
-          className="line-clamp-1 self-stretch overflow-hidden text-ellipsis text-gray-70 text-label-12-r">
+          className="line-clamp-1 self-stretch overflow-hidden text-ellipsis text-gray-70 text-label-10-r">
             {author}
         </p>
       </div>

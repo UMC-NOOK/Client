@@ -152,9 +152,9 @@ export default function MainMyPage() {
       <div className="flex flex-col w-full">
         <SectionHeader
               size="13"
-              top={<span className="text-gray-60">고객센터</span>}
+              top={<span className="text-gray-60 text-label-13-r">고객센터</span>}
               bottom={
-                <div className="flex flex-col">
+                <div className="flex flex-col [&>*]:!text-btn-14-r">
                   <ContainerText text="자주 묻는 질문" active />
                   <ContainerText text="이용 약관" active />
                   <ContainerText text="개인 정보 취급방침" active />
@@ -170,9 +170,9 @@ export default function MainMyPage() {
       <div className="flex flex-col w-full">
         <SectionHeader
               size="13"
-              top={<span className="text-gray-60">계정</span>}
+              top={<span className="text-gray-60 text-label-13-r">계정</span>}
               bottom={
-                <div className="flex flex-col">
+                <div className="flex flex-col [&>*]:!text-btn-14-r">
                   <ContainerText
                     text="로그아웃"
                     active
