@@ -61,12 +61,13 @@ export default function SearchInput({
         className="
           flex-1
           bg-transparent outline-none
-          text-[16px] font-normal leading-6 text-gray-90
+          text-body-16-r text-gray-90
           placeholder-gray-70
-          caret-[#697198]
+          caret-gray-50
         "
       />
 
+      {/* 아이콘 실측값은 spacing scale에 없어 Figma 크기를 arbitrary size로 유지한다. */}
       {/* 2겹(20x20 래퍼) + 1겹(16.67 아이콘). 자체 좌우 여백 없음 */}
       {showClearButton && (
         <button
@@ -87,7 +88,7 @@ export default function SearchInput({
           <img
             src={clearIcon}
             alt=""
-            className="h-[16.67px] w-[16.67px]"
+            className="size-[16.67px]"
             draggable={false}
           />
         </button>
@@ -98,12 +99,12 @@ export default function SearchInput({
         type="button"
         onMouseDown={(e) => e.preventDefault()}
         onClick={onSearchClick}
-        className="flex h-[35.5px] w-[35.5px] shrink-0 items-center justify-center"
+        className="flex size-[35.5px] shrink-0 items-center justify-center"
       >
         <img
           src={searchIcon}
           alt="검색"
-          className="h-[19.5px] w-[19.5px]"
+          className="size-[19.5px]"
           draggable={false}
         />
       </button>

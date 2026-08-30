@@ -38,7 +38,8 @@ export default function RecentKeywordSection({
                 text={truncateKeyword(k.text, maxTextLength)}
                 variant="icon"
                 active={false}
-                textClassName="text-gray-90"   
+                textClassName="text-gray-90"
+                onMouseDown={(event) => event.preventDefault()}
                 onClick={() => onClickKeyword?.(k.text)}
                 onIconClick={() => onDelete?.(k.id)}
                 iconAriaLabel="최근 검색어 삭제"

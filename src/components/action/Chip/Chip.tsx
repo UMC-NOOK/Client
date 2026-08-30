@@ -12,15 +12,16 @@ type ChipProps = {
   onClick?: () => void;
   onIconClick?: () => void;
   iconAriaLabel?: string;
-  textClassName?: string;   // 타입 추가(비활성 글자색 오버라이드)
+  textClassName?: string; // 타입 추가(비활성 글자색 오버라이드)
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const base =
   "inline-flex items-center justify-center whitespace-nowrap text-sm gap-1";
 
 const variantClassMap: Record<Variant, string> = {
+  // Tailwind radius scale에 20px 토큰이 없어 Figma의 pill radius를 그대로 유지한다.
   none: "py-3 px-4 rounded-[20px]",
-  icon: "py-[6px] px-3 rounded-[8px]",
+  icon: "rounded-lg px-3 py-1.5",
 };
 
 export default function Chip({
@@ -31,7 +32,7 @@ export default function Chip({
   onClick,
   onIconClick,
   iconAriaLabel = "삭제",
-  textClassName,            
+  textClassName,
   type = "button",
   ...props
 }: ChipProps) {
@@ -42,7 +43,6 @@ export default function Chip({
   return (
     <button
       type={type}
-      onMouseDown={(e) => e.preventDefault()} // 검색 인풋 옆에서 쓰일 때 클릭이 blur보다 먼저 잡히게
       onClick={onClick}
       className={[base, variantClassMap[variant], colorClass].join(" ")}
       {...props}
