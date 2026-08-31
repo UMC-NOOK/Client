@@ -14,16 +14,14 @@ import mockBookCover from "../../assets/search/mock_bookcover.svg";
 import type {
   ActiveFocusSession,
   FocusBookItem,
+  FocusLibraryBookItem,
   FocusMainSummaryResponse,
   FocusTheme,
 } from "../../types/focus/focus";
 
 /**
- * 실제 API 계약(오늘/책별 누적 시간 조회 endpoint, 테마 목록)이 아직 없어 목업으로 대체.
- * docs/api/focus.md "구현 전 확인할 계약" 참고 — API 확정되면 이 파일 대신
- * src/hooks/queries/focus의 실제 query hook으로 교체.
- * 테마 이미지 원본: docs/피그마 화면/포커스 도메인_My/테마 png 모음 (343x304 버전만 우선 반영,
- * 80x80/375x684/375x812은 테마 선택·포커스 진입 화면 작업 시 추가)
+ * 실제 API 계약(오늘/책별 누적 시간 조회 endpoint, 테마 목록)이 아직 없어 목업으로 대체했다.
+ * API가 확정되면 이 파일 대신 src/hooks/queries/focus의 실제 query hook으로 교체한다.
  */
 
 export const mockFocusThemes: FocusTheme[] = [
@@ -157,3 +155,17 @@ export const mockFocusMainSummaryResponse: FocusMainSummaryResponse = {
     books,
   },
 };
+
+/**
+ * 도서 선택(focus/select) 화면 전용. 메인과 같은 서재 책 7권을 그대로 재사용하고
+ * 정렬(최근 포커스/기록 많은/기록 적은 순)에 필요한 값만 추가했다.
+ */
+export const mockFocusLibraryBooks: FocusLibraryBookItem[] = [
+  { ...readingBooks[2], recentFocusedAt: "2026-08-26T21:40:00", focusRecordCount: 12 },
+  { ...readingBooks[1], recentFocusedAt: "2026-08-26T13:05:00", focusRecordCount: 9 },
+  { ...readingBooks[0], recentFocusedAt: "2026-08-25T22:10:00", focusRecordCount: 6 },
+  { ...readingBooks[3], recentFocusedAt: "2026-08-24T19:30:00", focusRecordCount: 4 },
+  { ...finishedBooks[0], recentFocusedAt: "2026-08-20T10:00:00", focusRecordCount: 15 },
+  { ...beforeBooks[0], recentFocusedAt: null, focusRecordCount: 0 },
+  { ...beforeBooks[1], recentFocusedAt: null, focusRecordCount: 0 },
+];
