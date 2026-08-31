@@ -84,8 +84,13 @@ export default function IndividueleReportPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-start w-full h-dvh overflow-y-hidden gap-4 relative">
+    <div
+      className="flex flex-col items-center justify-start w-full h-dvh overflow-y-hidden gap-4 relative  
+        h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-8px)]
+        max-h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-8px)]"
+    >
       <TopNavigation
+        right={null}
         left={<img src={chevron_left} alt="back" />}
         onClickLeft={() => navigate(-1)}
         center={bookTitle}
