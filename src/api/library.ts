@@ -10,6 +10,7 @@ import type {
   PatchBookGoal,
   LibraryFocusMonthly,
   LibraryBooksMonthly,
+  LibraryStatusCounts,
   DateToggleYear,
   RecentBookInfo,
   SpecificDateBookInfo,
@@ -119,6 +120,41 @@ export function getLibraryStatusBooks<T extends BookStatusType>(params: {
     cursor: params.cursor,
     size: params.size,
   });
+}
+
+type RawLibraryStatusCounts = Partial<LibraryStatusCounts> & {
+  before?: number;
+  reading?: number;
+  finished?: number;
+  beforeCount?: number;
+  beforeReading?: number;
+  beforeReadingCount?: number;
+  readingCount?: number;
+  finishedCount?: number;
+};
+
+// 독서 상태별 책 권수 조회
+export async function getLibraryStatusCounts(): Promise<LibraryStatusCounts> {
+  const result = await libraryGet<RawLibraryStatusCounts>("/status-counts");
+
+  const before =
+    result.BEFORE ??
+    result.before ??
+    result.beforeCount ??
+    result.beforeReading ??
+    result.beforeReadingCount;
+  const reading = result.READING ?? result.reading ?? result.readingCount;
+  const finished = result.FINISHED ?? result.finished ?? result.finishedCount;
+
+  if (before === undefined || reading === undefined || finished === undefined) {
+    throw new Error("상태별 책 권수 응답 형식이 올바르지 않습니다.");
+  }
+
+  return {
+    BEFORE: before,
+    READING: reading,
+    FINISHED: finished,
+  };
 }
 
 // 월별 독서 책 조회

@@ -35,7 +35,7 @@ export async function getBookDetailWithISBN(
  *
  * GET /api/v1/books/id/{bookId}
  */
-export async function getBookDetailWithBookId(
+export async function getBookDetailWithBookId (
   bookId: number,
 ): Promise<BookDetailResponse> {
   const response =

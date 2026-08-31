@@ -111,7 +111,7 @@ export default function MainMyPage() {
               size="13"
               top={<span className="text-gray-60">최근 열람 도서</span>}
               bottom={
-                 <div className="w-full overflow-x-auto">
+                 <div className="scrollbar-hide w-full overflow-x-auto">
                   <div className="flex w-max gap-2">
                     {mainMyPageRecentBookList.map((book) => (
                       <Normal

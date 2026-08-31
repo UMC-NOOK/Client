@@ -49,7 +49,7 @@ export default function DropDown({
   };
 
   return (
-    <div className="flex flex-col w-48.5 rounded-[4px] bg-gray-10 shadow-elevation-20">
+    <div className="flex w-48.5 cursor-default select-none flex-col rounded-[4px] bg-gray-10 shadow-elevation-20">
         <div className="flex flex-row">
                 <Picker
                     value={pickerValue}
@@ -112,7 +112,7 @@ export default function DropDown({
             <button
                 type="button"
                 onClick={handleApply}
-                className="flex w-full rounded-[4px] bg-gray-25 text-label-14-sb text-gray-70 px-8 py-3 items-center justify-center"
+                className="flex w-full cursor-pointer items-center justify-center rounded-[4px] bg-gray-25 px-8 py-3 text-label-14-sb text-gray-70"
             >
                 적용
             </button>
