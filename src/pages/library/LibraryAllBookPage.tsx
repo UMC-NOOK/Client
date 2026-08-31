@@ -6,6 +6,7 @@ import SectionHeader from "../../components/content/InformationText/SectionHeade
 import TabBar from "../../components/navigation/tabs/TabBar";
 import BookList from "../../components/content/card/Book/List";
 import Divider from "../../components/layout/Divider";
+import LoadingState from "../../components/feedback/LoadingState";
 
 import chevronLeft from "../../assets/icons/chevron_left.svg";
 import search from "../../assets/icons/search.svg";
@@ -99,7 +100,8 @@ function getEmptyText(tab: LibraryTab) {
 export default function LibraryAllBookPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { data: statusCounts } = useLibraryStatusCounts();
+  const { data: statusCounts, isLoading: isStatusCountsLoading } =
+    useLibraryStatusCounts();
 
   const statusParam = searchParams.get("status");
   const tab: LibraryTab =
@@ -271,6 +273,10 @@ export default function LibraryAllBookPage() {
     bookItems.length,
   ]);
 
+  if (isInitialLoading || isStatusCountsLoading) {
+    return <LoadingState variant="fullscreen" />;
+  }
+
   return (
     <div>
       <div className="pt-2">
@@ -321,9 +327,7 @@ export default function LibraryAllBookPage() {
       </div>
 
       <div className="flex flex-col pt-6">
-        {isInitialLoading ? (
-          <div className="text-label-14-sb text-gray-60">불러오는 중…</div>
-        ) : isError && bookItems.length === 0 ? (
+        {isError && bookItems.length === 0 ? (
           <div className="text-label-14-sb text-gray-60">
             목록을 불러오지 못했어요.
           </div>

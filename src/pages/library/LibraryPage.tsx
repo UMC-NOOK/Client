@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import DayOfTheWeek from "../../components/content/Calendar/Resource/DayOfTheWeek";
 import BottomBanner from "./modal/BottomBanner";
 import DateFocusBookModal from "./modal/DateFocusBookModal";
+import LoadingState from "../../components/feedback/LoadingState";
 import CaretDown from "../../assets/icons/caret_down.svg";
 import CaretUp from "../../assets/icons/caret_up.svg";
 
@@ -62,8 +63,10 @@ export default function LibraryPage() {
 
   const { data: authMe, isLoading: isAuthMeLoading } = useAuthMe();
   const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
-  const { data: libraryBookGoalData } = useLibraryBookGoal();
-  const { data: libraryToggleYearsData } = useLibraryDateToggle();
+  const { data: libraryBookGoalData, isLoading: isBookGoalLoading } =
+    useLibraryBookGoal();
+  const { data: libraryToggleYearsData, isLoading: isYearsLoading } =
+    useLibraryDateToggle();
 
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
@@ -120,13 +123,15 @@ export default function LibraryPage() {
     setIsModalOpen(true);
   };
 
-  const { data: specificDateBookInfo } = useLibrarySpecificDateBookInfo(
-    isModalOpen,
-    selectedDate,
-    modalCursor,
-  );
+  const {
+    data: specificDateBookInfo,
+    isLoading: isSpecificDateLoading,
+  } = useLibrarySpecificDateBookInfo(isModalOpen, selectedDate, modalCursor);
 
-  const { data: libraryRecentBookInfoData } = useLibraryRecentBookInfo();
+  const {
+    data: libraryRecentBookInfoData,
+    isLoading: isRecentBookLoading,
+  } = useLibraryRecentBookInfo();
 
   const dropdownPositionClass =
     selectedView === "focus"
@@ -171,6 +176,21 @@ export default function LibraryPage() {
   const modalItems = specificDateBookInfo?.items ?? [];
 
   const nickName = authMe?.nickName ?? "";
+
+  const isPageLoading =
+    isAuthMeLoading ||
+    isBookLoading ||
+    isBookGoalLoading ||
+    isYearsLoading ||
+    isRecentBookLoading ||
+    isSpecificDateLoading ||
+    (selectedView === "focus"
+      ? isFocusMonthlyLoading
+      : isBooksMonthlyLoading);
+
+  if (isPageLoading) {
+    return <LoadingState variant="fullscreen" />;
+  }
 
   return (
     <div className="relative flex flex-col w-full">

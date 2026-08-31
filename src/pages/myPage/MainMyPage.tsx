@@ -10,6 +10,7 @@ import Icon from "../../components/action/Button/Icon";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
 import { Normal } from "../../components/content/card/Book/Normal";
 import Divider from "../../components/layout/Divider";
+import LoadingState from "../../components/feedback/LoadingState";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import { useLogout } from "../../hooks/mutations/useLogout";
 import { useWithdraw } from "../../hooks/mutations/useWithdraw";
@@ -17,11 +18,12 @@ import { useRecentView } from "../../hooks/queries/mypage/useRecentView";
 import { useUserMe } from "../../hooks/queries/useUserMe";
 import DeleteAccountModal from "./modal/DeleteAccountModal";
 import LogoutModal from "./modal/LogoutModal";
+import { getBookDetailWithBookId } from "../../api/bookInfo";
 
 export default function MainMyPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { data: userMe } = useUserMe();
+  const { data: userMe, isLoading: isUserMeLoading } = useUserMe();
   const {
     data: recentBooks = [],
     isLoading: isRecentBooksLoading,
@@ -64,6 +66,29 @@ export default function MainMyPage() {
       },
     });
   };
+
+  const handleBookClick = async (bookId: number) => {
+      try {
+        const bookDetail = await getBookDetailWithBookId(bookId);
+  
+        if (!bookDetail.isbn13) {
+          throw new Error(`ISBN13이 없는 도서입니다: ${bookId}`);
+        }
+  
+        navigate(`/library/${encodeURIComponent(bookDetail.isbn13)}`);
+      } catch (error) {
+        console.error("도서 상세 정보 조회에 실패했습니다.", error);
+      }
+    };
+
+  if (
+    isUserMeLoading ||
+    isRecentBooksLoading ||
+    logoutMutation.isPending ||
+    withdrawMutation.isPending
+  ) {
+    return <LoadingState variant="fullscreen" />;
+  }
 
   return (
     <div className="flex w-full flex-col gap-4">
@@ -117,11 +142,7 @@ export default function MainMyPage() {
               bottom={
                  <div className="scrollbar-hide w-full overflow-x-auto">
                   <div className="flex w-max gap-2">
-                    {isRecentBooksLoading ? (
-                      <p className="text-label-12-r text-gray-60">
-                        불러오는 중...
-                      </p>
-                    ) : isRecentBooksError ? (
+                    {isRecentBooksError ? (
                       <p className="text-label-12-r text-gray-60">
                         최근 열람 도서를 불러오지 못했어요.
                       </p>
@@ -138,6 +159,7 @@ export default function MainMyPage() {
                         imageUrl={book.coverImageUrl || bookCoverPlaceholder}
                         title={book.title}
                         author={book.author}
+                        onClick={() => handleBookClick(book.bookId)}
                       />
                       ))
                     )}

@@ -240,7 +240,6 @@ export default function AppRoutes() {
 
 
             <Route element={<NoFooterLayout />}>
-              
               <Route path="/library/:isbn13" element={<BookInfoPage />} />
               <Route
                 path="/library/:isbn13/history"
