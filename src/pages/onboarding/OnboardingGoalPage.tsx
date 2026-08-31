@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import OnboardingLayout from "../onboarding/OnboardingLayout";
 import { useOnboardingDraft } from "./OnboardingContext";
 import { useShell } from "../../app/AppShell";
-import chevronLeftIcon from "../../assets/icons/chevron_left.svg";
 
 const MAX_GOAL = 300;
 
@@ -81,7 +80,6 @@ export default function OnboardingGoalPage() {
   return (
     <OnboardingLayout
       step={1}
-      left={<img src={chevronLeftIcon} className="w-6 h-6" />}
       onClickLeft={handleClose}
       right={
         <span

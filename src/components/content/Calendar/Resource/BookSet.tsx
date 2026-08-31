@@ -31,7 +31,7 @@ export default function BookSet({
     <button
       type="button"
       onClick={onClick}
-      disabled={disable}
+      disabled={!onClick}
       className="flex flex-col items-center gap-1 disabled:cursor-default"
     >
       <Day text={day} disable={disable} />

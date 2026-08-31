@@ -223,12 +223,14 @@ export default function AppRoutes() {
               />
             </Route>
 
-            {/* 포커스 도메인 서브 화면 - 상단 탭 없이 뒤로가기 헤더만 사용 (TopNavigation은 각 페이지에서 구현) */}
+            {/* 포커스 테마 선택/진행 - 스크롤 없는 고정 1화면이라 사이트 푸터를 숨긴다 */}
             <Route element={<NoFooterLayout />}>
-              <Route path="/focus/select" element={<FocusSelectPage />} />
               <Route path="/focus/theme" element={<FocusThemePage />} />
               <Route path="/focus/session" element={<FocusSessionPage />} />
             </Route>
+
+            {/* 포커스 도서 선택 - report/search와 같은 스크롤 목록 화면이라 사이트 푸터를 그대로 노출 (Figma 기준) */}
+            <Route path="/focus/select" element={<FocusSelectPage />} />
 
             {/* 기타 */}
             <Route element={<NoFooterLayout />}>
