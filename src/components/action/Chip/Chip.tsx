@@ -12,7 +12,7 @@ type ChipProps = {
   onClick?: () => void;
   onIconClick?: () => void;
   iconAriaLabel?: string;
-  textClassName?: string;   // 타입 추가(비활성 글자색 오버라이드)
+  textClassName?: string; // 타입 추가(비활성 글자색 오버라이드)
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const base =
@@ -20,7 +20,7 @@ const base =
 
 const variantClassMap: Record<Variant, string> = {
   none: "py-3 px-4 rounded-[20px]",
-  icon: "py-[6px] px-3 rounded-[8px]",
+  icon: "rounded-lg px-3 py-1.5",
 };
 
 export default function Chip({
@@ -31,7 +31,7 @@ export default function Chip({
   onClick,
   onIconClick,
   iconAriaLabel = "삭제",
-  textClassName,            
+  textClassName,
   type = "button",
   ...props
 }: ChipProps) {
