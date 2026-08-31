@@ -11,6 +11,7 @@ import chevronLeft from "../../assets/icons/chevron_left.svg";
 import search from "../../assets/icons/search.svg";
 
 import { getLibraryStatusBooks } from "../../api/library";
+import { getBookDetailWithBookId } from "../../api/bookInfo";
 import { useLibraryStatusCounts } from "../../hooks/queries/library/useLibraryStatusCounts";
 
 import type {
@@ -132,6 +133,20 @@ export default function LibraryAllBookPage() {
     },
     [setSearchParams],
   );
+
+  const handleBookClick = async (bookId: number) => {
+    try {
+      const bookDetail = await getBookDetailWithBookId(bookId);
+
+      if (!bookDetail.isbn13) {
+        throw new Error(`ISBN13이 없는 도서입니다: ${bookId}`);
+      }
+
+      navigate(`/library/${encodeURIComponent(bookDetail.isbn13)}`);
+    } catch (error) {
+      console.error("도서 상세 정보 조회에 실패했습니다.", error);
+    }
+  };
 
   const fetchLibraryStatusBooks = useCallback(
     async ({
@@ -331,9 +346,7 @@ export default function LibraryAllBookPage() {
                     author={item.author}
                     type={bookListProps.type}
                     typeLabel={bookListProps.typeLabel}
-                    onClick={() =>
-                      navigate(`/library/${item.bookId}`)
-                    }
+                    onClick={() => void handleBookClick(item.bookId)}
                   />
 
                   {index !== bookItems.length - 1 ? (
