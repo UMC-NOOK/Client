@@ -20,7 +20,7 @@ export async function getBookDetailWithBookId(
   bookId: number,
 ): Promise<BookDetailResponse> {
   const response = await api.get<BaseApiResponse<BookDetailResponse>>(
-    `${BOOKS_ENDPOINT}/${bookId}`,
+    `${BOOKS_ENDPOINT}/id/${bookId}`,
   );
   return response.data.result;
 }
