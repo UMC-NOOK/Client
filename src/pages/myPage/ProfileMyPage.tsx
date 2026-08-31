@@ -10,11 +10,24 @@ import Solid from "../../components/action/Button/Solid";
 import InformationSection from "../../components/content/InformationText/InformationSection";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import { usePatchProfile } from "../../hooks/mutations/mypage/usePatchProfile";
-import { useAuthMe } from "../../hooks/queries/useAuthMe";
+import { useUserMe } from "../../hooks/queries/useUserMe";
+
+function extractProfileImageKey(profileImageUrl?: string | null) {
+  if (!profileImageUrl) return undefined;
+
+  try {
+    const pathname = new URL(profileImageUrl).pathname;
+    const key = decodeURIComponent(pathname).replace(/^\/+/, "");
+
+    return key || undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 export default function ProfileMyPage() {
   const navigate = useNavigate();
-  const { data: authMe } = useAuthMe();
+  const { data: userMe } = useUserMe();
   const patchProfileMutation = usePatchProfile();
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
@@ -23,12 +36,16 @@ export default function ProfileMyPage() {
   const isEmailInvalid =
     email.length > 0 && !/^[^\s@]+@(naver\.com|gmail\.com)$/i.test(email);
   const isSaveActive =
-    nickname !== (authMe?.nickName ?? "") || profileFile !== null;
+    nickname !== (userMe?.nickName ?? "") || profileFile !== null;
 
   useEffect(() => {
-    if (authMe?.nickName) setNickname(authMe.nickName);
-    if (authMe?.email) setEmail(authMe.email);
-  }, [authMe?.nickName, authMe?.email]);
+    if (userMe?.nickName) setNickname(userMe.nickName);
+    if (userMe?.email) setEmail(userMe.email);
+
+    if (!profileFile) {
+      setProfilePreview(userMe?.profileImageUrl || defaultProfile);
+    }
+  }, [profileFile, userMe?.email, userMe?.nickName, userMe?.profileImageUrl]);
 
   useEffect(() => {
     return () => {
@@ -47,37 +64,48 @@ export default function ProfileMyPage() {
 
   const handleSave = async () => {
     const trimmedNickname = nickname.trim();
+    const isNicknameChanged = trimmedNickname !== (userMe?.nickName ?? "");
 
-    if (nickname !== trimmedNickname) {
+    if (isNicknameChanged && nickname !== trimmedNickname) {
       window.alert("닉네임의 맨 앞과 맨 뒤에는 띄어쓰기를 사용할 수 없어요.");
       return;
     }
 
-    if (trimmedNickname.length < 2 || trimmedNickname.length > 20) {
+    if (
+      isNicknameChanged &&
+      (trimmedNickname.length < 2 || trimmedNickname.length > 20)
+    ) {
       window.alert("닉네임은 2자 이상 20자 이하로 입력해주세요.");
       return;
     }
 
-    if (!/^[\p{Script=Hangul}A-Za-z0-9 ]+$/u.test(trimmedNickname)) {
+    if (
+      isNicknameChanged &&
+      !/^[\p{Script=Hangul}A-Za-z0-9 ]+$/u.test(trimmedNickname)
+    ) {
       window.alert("닉네임은 영문, 숫자, 한글, 띄어쓰기만 사용할 수 있어요.");
       return;
     }
 
-    if (!profileFile) {
-      window.alert("프로필 이미지를 선택해주세요.");
+    if (!isNicknameChanged && !profileFile) {
       return;
     }
 
     try {
-      const profileImageKey = await uploadSingleImage(
-        profileFile,
-        "profile",
-      );
+      const profileImageKey = profileFile
+        ? await uploadSingleImage(profileFile, "profile")
+        : undefined;
+      const existingProfileImageKey =
+        userMe?.profileImageKey ??
+        extractProfileImageKey(userMe?.profileImageUrl);
 
       patchProfileMutation.mutate(
         {
-          nickName: trimmedNickname,
-          profileImageKey,
+          nickName: isNicknameChanged
+            ? trimmedNickname
+            : userMe?.nickName,
+          profileImageKey:
+            profileImageKey ?? existingProfileImageKey,
         },
         {
           onSuccess: () => navigate(-1),
@@ -117,7 +145,7 @@ export default function ProfileMyPage() {
                 <img
                   src={profilePreview}
                   alt="프로필"
-                  className="h-full w-full object-contain"
+                  className="h-full w-full object-cover"
                 />
               </div>
               <span className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-white">
@@ -161,7 +189,6 @@ export default function ProfileMyPage() {
                         type="email"
                         value={email}
                         readOnly
-                        placeholder="이메일을 입력해주세요."
                         aria-invalid={isEmailInvalid}
                         className="w-full rounded-md bg-gray-17 px-4 py-3 text-body-14-r text-gray-50 outline-none placeholder:text-gray-50"
                       />

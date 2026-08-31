@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import defaultProfile from "../../assets/icons/Profile Image.svg";
 import close from "../../assets/icons/close.svg";
+import bookCoverPlaceholder from "../../assets/images/book-cover-placeholder.png";
 import ContainerText from "../../components/action/Button/ContainerText";
 import Icon from "../../components/action/Button/Icon";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
@@ -85,11 +86,11 @@ export default function MainMyPage() {
         aria-label="프로필 수정"
         className="flex w-full flex-row items-center gap-4 text-left"
       >
-          <span className="flex h-14 w-14 shrink-0 items-center justify-center">
+          <span className="flex h-14 w-14 aspect-square shrink-0 items-center justify-center overflow-hidden rounded-full">
             <img
               src={userMe?.profileImageUrl || defaultProfile}
               alt="프로필"
-              className="h-full w-full object-contain"
+              className="block h-full min-h-full w-full min-w-full rounded-full object-cover object-center"
               onError={(event) => {
                 event.currentTarget.onerror = null;
               }}
@@ -109,7 +110,7 @@ export default function MainMyPage() {
         <Divider width="full" />
       </div>
       {/* 최근 열람 도서 */}
-       <div className="flex w-full flex-col gap-2">
+       <div className="flex w-full flex-col gap-2.5">
           <SectionHeader
               size="13"
               top={<span className="text-gray-60">최근 열람 도서</span>}
@@ -134,7 +135,7 @@ export default function MainMyPage() {
                       recentBooks.map((book) => (
                       <Normal
                         key={book.bookId}
-                        imageUrl={book.coverImageUrl}
+                        imageUrl={book.coverImageUrl || bookCoverPlaceholder}
                         title={book.title}
                         author={book.author}
                       />
@@ -155,9 +156,12 @@ export default function MainMyPage() {
               top={<span className="text-gray-60 text-label-13-r">고객센터</span>}
               bottom={
                 <div className="flex flex-col [&>*]:!text-btn-14-r">
-                  <ContainerText text="자주 묻는 질문" active />
-                  <ContainerText text="이용 약관" active />
-                  <ContainerText text="개인 정보 취급방침" active />
+                  <ContainerText text="자주 묻는 질문" active
+                    onClick={() => window.open("https://magic-moat-e7b.notion.site/3cd5fbef9af38031b72fe6fed4bfd6fe?source=copy_link")}/>
+                  <ContainerText text="이용 약관" active 
+                    onClick={() => window.open("https://magic-moat-e7b.notion.site/3ca5fbef9af380c38a3ddbbab9a4150e?source=copy_link")}/>
+                  <ContainerText text="개인 정보 취급방침" active 
+                    onClick={()=> window.open("https://magic-moat-e7b.notion.site/3cd5fbef9af3800b8087d0c96b2f8bba?source=copy_link")}/>
                 </div>
                 }
           />

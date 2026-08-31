@@ -6,8 +6,8 @@ export type ResultOfRecentView ={
 }
 
 export type personalInformationRequest = {
-    nickName : string;
-    profileImageKey : string;
+    nickName?: string;
+    profileImageKey?: string;
 }
 
 export type personalInformationResult = {
