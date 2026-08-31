@@ -5,6 +5,7 @@ import close from "../../assets/icons/close.svg";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import Text  from "../../components/action/Button/Text";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
+import LoadingState from "../../components/feedback/LoadingState";
 import { usePatchLibraryBookGoal } from "../../hooks/mutations/library/usePatchLibraryBookGoal";
 
 function getRemainingDaysInYear(date = new Date()) {
@@ -46,6 +47,10 @@ export default function LibraryGoalInputPage() {
             },
         );
     };
+
+    if (isPending) {
+      return <LoadingState variant="fullscreen" />;
+    }
 
     return(
         <div className="flex flex-col">

@@ -9,6 +9,7 @@ import Icon from "../../components/action/Button/Icon";
 import Solid from "../../components/action/Button/Solid";
 import InformationSection from "../../components/content/InformationText/InformationSection";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
+import LoadingState from "../../components/feedback/LoadingState";
 import { usePatchProfile } from "../../hooks/mutations/mypage/usePatchProfile";
 import { useUserMe } from "../../hooks/queries/useUserMe";
 
@@ -27,7 +28,7 @@ function extractProfileImageKey(profileImageUrl?: string | null) {
 
 export default function ProfileMyPage() {
   const navigate = useNavigate();
-  const { data: userMe } = useUserMe();
+  const { data: userMe, isLoading: isUserMeLoading } = useUserMe();
   const patchProfileMutation = usePatchProfile();
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
@@ -125,6 +126,10 @@ export default function ProfileMyPage() {
       window.alert("프로필 이미지 업로드에 실패했어요.");
     }
   };
+
+  if (isUserMeLoading || patchProfileMutation.isPending) {
+    return <LoadingState variant="fullscreen" />;
+  }
 
   return (
     <div className="flex w-full flex-col gap-10">
