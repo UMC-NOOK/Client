@@ -21,6 +21,7 @@ type Props = {
 
   /** 접근성: 팝업 구분용 라벨 */
   ariaLabel?: string;
+  onClick?: () => void;
 };
 
 export default function PopupConfirmModal({
@@ -35,6 +36,7 @@ export default function PopupConfirmModal({
   closeOnOverlayClick = true,
   className = "",
   ariaLabel = "popup confirm modal",
+  onClick
 }: Props) {
   if (!open) return null;
 
@@ -71,6 +73,7 @@ export default function PopupConfirmModal({
       >
         {/* Popup box */}
         <div
+          onClick={onClick}
           className={[
             // base
             "w-77.75",

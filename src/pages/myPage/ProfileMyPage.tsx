@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { uploadSingleImage } from "../../api/image";
 import defaultProfile from "../../assets/icons/Profile Image.svg";
 import camera from "../../assets/icons/camera-black.svg";
 import chevron_left from "../../assets/icons/chevron_left.svg";
@@ -8,11 +9,26 @@ import Icon from "../../components/action/Button/Icon";
 import Solid from "../../components/action/Button/Solid";
 import InformationSection from "../../components/content/InformationText/InformationSection";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
-import { useAuthMe } from "../../hooks/queries/useAuthMe";
+import { usePatchProfile } from "../../hooks/mutations/mypage/usePatchProfile";
+import { useUserMe } from "../../hooks/queries/useUserMe";
+
+function extractProfileImageKey(profileImageUrl?: string | null) {
+  if (!profileImageUrl) return undefined;
+
+  try {
+    const pathname = new URL(profileImageUrl).pathname;
+    const key = decodeURIComponent(pathname).replace(/^\/+/, "");
+
+    return key || undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 export default function ProfileMyPage() {
   const navigate = useNavigate();
-  const { data: authMe } = useAuthMe();
+  const { data: userMe } = useUserMe();
+  const patchProfileMutation = usePatchProfile();
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [profileFile, setProfileFile] = useState<File | null>(null);
@@ -20,12 +36,16 @@ export default function ProfileMyPage() {
   const isEmailInvalid =
     email.length > 0 && !/^[^\s@]+@(naver\.com|gmail\.com)$/i.test(email);
   const isSaveActive =
-    nickname !== (authMe?.nickName ?? "") || profileFile !== null;
+    nickname !== (userMe?.nickName ?? "") || profileFile !== null;
 
   useEffect(() => {
-    if (authMe?.nickName) setNickname(authMe.nickName);
-    if (authMe?.email) setEmail(authMe.email);
-  }, [authMe?.nickName, authMe?.email]);
+    if (userMe?.nickName) setNickname(userMe.nickName);
+    if (userMe?.email) setEmail(userMe.email);
+
+    if (!profileFile) {
+      setProfilePreview(userMe?.profileImageUrl || defaultProfile);
+    }
+  }, [profileFile, userMe?.email, userMe?.nickName, userMe?.profileImageUrl]);
 
   useEffect(() => {
     return () => {
@@ -42,6 +62,70 @@ export default function ProfileMyPage() {
     setProfilePreview(URL.createObjectURL(file));
   };
 
+  const handleSave = async () => {
+    const trimmedNickname = nickname.trim();
+    const isNicknameChanged = trimmedNickname !== (userMe?.nickName ?? "");
+
+    if (/^\s/.test(nickname)) {
+      window.alert("닉네임 앞에는 공백을 사용할 수 없어요.");
+      return;
+    }
+
+    if (/\s$/.test(nickname)) {
+      window.alert("닉네임 뒤에는 공백을 사용할 수 없어요.");
+      return;
+    }
+
+    if (
+      isNicknameChanged &&
+      (trimmedNickname.length < 2 || trimmedNickname.length > 20)
+    ) {
+      window.alert("닉네임은 2자 이상 20자 이하로 입력해주세요.");
+      return;
+    }
+
+    if (
+      isNicknameChanged &&
+      !/^[\p{Script=Hangul}A-Za-z0-9 ]+$/u.test(trimmedNickname)
+    ) {
+      window.alert("닉네임은 영문, 숫자, 한글, 띄어쓰기만 사용할 수 있어요.");
+      return;
+    }
+
+    if (!isNicknameChanged && !profileFile) {
+      return;
+    }
+
+    try {
+      const profileImageKey = profileFile
+        ? await uploadSingleImage(profileFile, "profile")
+        : undefined;
+      const existingProfileImageKey =
+        userMe?.profileImageKey ??
+        extractProfileImageKey(userMe?.profileImageUrl);
+
+      patchProfileMutation.mutate(
+        {
+          nickName: isNicknameChanged
+            ? trimmedNickname
+            : userMe?.nickName,
+          profileImageKey:
+            profileImageKey ?? existingProfileImageKey,
+        },
+        {
+          onSuccess: () => navigate(-1),
+          onError: (error) => {
+            console.error("프로필 수정에 실패했습니다.", error);
+            window.alert("프로필 수정에 실패했어요. 다시 시도해주세요.");
+          },
+        },
+      );
+    } catch (error) {
+      console.error("프로필 이미지 업로드에 실패했습니다.", error);
+      window.alert("프로필 이미지 업로드에 실패했어요.");
+    }
+  };
+
   return (
     <div className="flex w-full flex-col gap-10">
         <div className="w-full">
@@ -54,14 +138,14 @@ export default function ProfileMyPage() {
             center={
                 <p className="text-title-18-m">프로필 수정</p>
             }
-            onClickLeft={() => navigate("/mypage")}
+            onClickLeft={() => navigate(-1)}
             leftPadding="p-0"
             />
         </div>
       {/* 프로필 */}
         <div className="flex flex-col gap-12"> 
             {/* 프로필 */}
-            <div className="relative h-30 w-30 self-center">
+            <label className="relative h-30 w-30 cursor-pointer self-center">
               <div className="h-full w-full overflow-hidden rounded-full">
                 <img
                   src={profilePreview}
@@ -69,19 +153,19 @@ export default function ProfileMyPage() {
                   className="h-full w-full object-cover"
                 />
               </div>
-              <label className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white">
+              <span className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-white">
                 <img src={camera} alt="" className="h-5 w-5" />
-                <input
-                  type="file"
-                  accept="image/*"
-                  aria-label="프로필 사진 변경"
-                  className="hidden"
-                  onChange={(event) =>
-                    handleProfileChange(event.target.files?.[0])
-                  }
-                />
-              </label>
-            </div>
+              </span>
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                aria-label="프로필 사진 변경"
+                className="sr-only"
+                onChange={(event) =>
+                  handleProfileChange(event.currentTarget.files?.[0])
+                }
+              />
+            </label>
             {/*닉네임*/}
             <div className="w-full [&_.text-label-14-sb]:!text-label-13-sb">
                 <InformationSection
@@ -92,7 +176,7 @@ export default function ProfileMyPage() {
                     type="text"
                     value={nickname}
                     onChange={(event) => setNickname(event.target.value)}
-                    maxLength={10}
+                    maxLength={20}
                     placeholder="닉네임을 입력해주세요."
                     className="w-full rounded-md bg-gray-17 px-4 py-3 text-body-14-r text-gray-90 outline-none placeholder:text-gray-50"
                   />
@@ -110,15 +194,9 @@ export default function ProfileMyPage() {
                         type="email"
                         value={email}
                         readOnly
-                        placeholder="이메일을 입력해주세요."
                         aria-invalid={isEmailInvalid}
                         className="w-full rounded-md bg-gray-17 px-4 py-3 text-body-14-r text-gray-50 outline-none placeholder:text-gray-50"
                       />
-                      {isEmailInvalid ? (
-                        <span className="text-label-12-r text-red-60">
-                          올바르지 않은 이메일 형식입니다.
-                        </span>
-                      ) : null}
                     </span>
                   }
                 />
@@ -127,9 +205,10 @@ export default function ProfileMyPage() {
             {isSaveActive ? (
               <div className="w-full">
                 <Solid
-                  text="수정 완료"
-                  variant="primary"
-                  onClick={() => navigate("/mypage")}
+                  text={patchProfileMutation.isPending ? "수정 중..." : "수정 완료"}
+                  variant={patchProfileMutation.isPending ? "disabled" : "primary"}
+                  disabled={patchProfileMutation.isPending}
+                  onClick={handleSave}
                 />
               </div>
             ) : null}

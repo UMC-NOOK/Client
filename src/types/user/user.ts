@@ -3,4 +3,5 @@ export type UserMe = {
   nickName: string;
   email: string;
   profileImageUrl: string | null;
+  profileImageKey?: string | null;
 };

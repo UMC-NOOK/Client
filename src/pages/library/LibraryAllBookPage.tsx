@@ -9,6 +9,7 @@ import Divider from "../../components/layout/Divider";
 
 import chevronLeft from "../../assets/icons/chevron_left.svg";
 import search from "../../assets/icons/search.svg";
+import bookCoverPlaceholder from "../../assets/images/book-cover-placeholder.png";
 
 import { getLibraryStatusBooks } from "../../api/library";
 import { getBookDetailWithBookId } from "../../api/bookInfo";
@@ -341,7 +342,7 @@ export default function LibraryAllBookPage() {
                   className={index === 0 ? "" : "pt-4"}
                 >
                   <BookList
-                    imageUrl={item.coverUrl}
+                    imageUrl={item.coverUrl || bookCoverPlaceholder}
                     title={item.title}
                     author={item.author}
                     type={bookListProps.type}

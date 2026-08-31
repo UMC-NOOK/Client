@@ -91,7 +91,9 @@ export default {
         "title-40-b": ["40px", { lineHeight: "1.5", fontWeight: "700" }],
 
         // subtitle
-        "subtitle-14-sb": ["14px", { lineHeight: "1.5", fontWeight: "600" }],
+        "subtitle-12-sb": ["12px", { lineHeight: "1.5", fontWeight: "400" }],
+        "subtitle-14-sb": ["14px", { lineHeight: "1.5", fontWeight: "400" }],
+
 
         // body
         "body-12-r": ["12px", { lineHeight: "1.5", fontWeight: "400" }],
@@ -111,6 +113,7 @@ export default {
         "btn-18-m": ["18px", { lineHeight: "1", fontWeight: "500" }],
 
         // label
+        "label-10-r" : ["10px", { lineHeight: "1.5", fontWeight: "400" }],
         "label-12-r" : ["12px", { lineHeight: "1", fontWeight: "400" }],
         "label-12-sb": ["12px", { lineHeight: "1", fontWeight: "600" }],
         "label-12-b": ["12px", { lineHeight: "1", fontWeight: "700" }],

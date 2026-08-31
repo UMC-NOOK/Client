@@ -233,9 +233,10 @@ export default function AppRoutes() {
             <Route path="/focus/select" element={<FocusSelectPage />} />
 
             {/* 기타 */}
-            <Route path="/mypage" element={<MainMyPage />} />
-            <Route path="/mypage/profile" element={<ProfileMyPage />} />
-            <Route path="/library/status" element={<LibraryAllBookPage />} />
+            <Route element={<NoFooterLayout />}>
+                <Route path="/mypage" element={<MainMyPage />} />
+                <Route path="/mypage/profile" element={<ProfileMyPage />} />
+            </Route>
 
 
             <Route element={<NoFooterLayout />}>
@@ -260,11 +261,13 @@ export default function AppRoutes() {
                 element={<CreateReportPage />}
               />
             </Route>
-
+            
+            {/*library*/}
             <Route
               path="/users/me/onboarding/goal"
               element={<LibraryGoalInputPage />}
             />
+            <Route path="/library/status" element={<LibraryAllBookPage />} />
            
 
           </Route>
