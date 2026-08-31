@@ -89,11 +89,6 @@ export async function postImagesUpload(
     contentType,
   })) as ImageUploadRequest[];
 
-  // const data = Array.from({ length: num }, () => ({
-  //   uploadType: "record",
-  //   contentType: type[num],
-  // })) as ImageUploadRequest[];
-
   const response = await api.post<BaseApiResponse<ImageUploadResponse[]>>(
     `${IMAGES_ENDPOINT}/upload-urls`,
     {

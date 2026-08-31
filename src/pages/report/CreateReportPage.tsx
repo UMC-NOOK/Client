@@ -269,7 +269,10 @@ export default function CreateReportPage() {
                 },
                 {
                   onSuccess: () => {
-                    navigate(`/report/${bookId}`);
+                    navigate(`/report/${bookId}`, {
+                      replace: true,
+                      state: { bookTitle, bookId },
+                    });
                   },
                 },
               );
@@ -288,7 +291,10 @@ export default function CreateReportPage() {
               },
               {
                 onSuccess: () => {
-                  navigate(`/report/${bookId}`);
+                  navigate(`/report/${bookId}`, {
+                    replace: true,
+                    state: { bookTitle, bookId },
+                  });
                 },
               },
             );
