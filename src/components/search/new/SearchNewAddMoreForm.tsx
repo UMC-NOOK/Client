@@ -1,8 +1,13 @@
 // Client/src/components/search/new/SearchNewAddMoreForm.tsx
+
 import React, { useEffect, useState } from "react";
+
 import CameraIcon from "../../../assets/search/atomic-icon-shape.svg";
 import TextArea from "../../input/textinput/TextArea";
-import { TextField, TripleTextField } from "../../input/textinput/TextField";
+import {
+  TextField,
+  TripleTextField,
+} from "../../input/textinput/TextField";
 
 type DateParts = {
   yyyy: string;
@@ -28,6 +33,7 @@ type Props = {
 };
 
 const MAX_INTRO = 500;
+const MAX_ISBN_LENGTH = 13;
 
 export default function SearchNewAddMoreForm({
   imageFile,
@@ -51,28 +57,38 @@ export default function SearchNewAddMoreForm({
       setPreviewUrl(null);
       return;
     }
+
     const url = URL.createObjectURL(imageFile);
     setPreviewUrl(url);
+
     return () => URL.revokeObjectURL(url);
   }, [imageFile]);
 
   const handlePick = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0] ?? null;
-    onChangeImage(f);
+    const file = e.target.files?.[0] ?? null;
+
+    onChangeImage(file);
     e.target.value = "";
+  };
+
+  const handleIsbnChange = (value: string) => {
+    const numericValue = value
+      .replace(/\D/g, "")
+      .slice(0, MAX_ISBN_LENGTH);
+
+    onChangeIsbn(numericValue);
   };
 
   return (
     <div className="w-full">
-      <div className="w-full flex flex-col items-center gap-8 px-1">
+      <div className="flex w-full flex-col items-center gap-8 px-1">
         {/* 이미지 */}
         <label
           aria-label="사진 추가"
           className="
-            flex w-25 h-36
-            items-center justify-center
-            rounded-xs bg-gray-17
-            cursor-pointer overflow-hidden
+            flex h-36 w-25
+            cursor-pointer items-center justify-center
+            overflow-hidden rounded-xs bg-gray-17
           "
         >
           <input
@@ -86,20 +102,20 @@ export default function SearchNewAddMoreForm({
             <img
               src={previewUrl}
               alt="선택한 책 이미지"
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
               draggable={false}
             />
           ) : (
             <img
               src={CameraIcon}
               alt=""
-              className="w-6 h-6"
+              className="h-6 w-6"
               draggable={false}
             />
           )}
         </label>
 
-        <div className="w-full flex flex-col items-start gap-6 ">
+        <div className="flex w-full flex-col items-start gap-6">
           {/* 소개 */}
           <TextArea
             title="소개"
@@ -132,9 +148,21 @@ export default function SearchNewAddMoreForm({
             value={pubDate}
             onChange={onChangePubDate}
             fields={[
-              { key: "yyyy", placeholder: "YYYY", maxLen: 4 },
-              { key: "mm", placeholder: "MM", maxLen: 2 },
-              { key: "dd", placeholder: "DD", maxLen: 2 },
+              {
+                key: "yyyy",
+                placeholder: "YYYY",
+                maxLen: 4,
+              },
+              {
+                key: "mm",
+                placeholder: "MM",
+                maxLen: 2,
+              },
+              {
+                key: "dd",
+                placeholder: "DD",
+                maxLen: 2,
+              },
             ]}
             digitsOnly
           />
@@ -143,8 +171,9 @@ export default function SearchNewAddMoreForm({
           <TextField
             title="ISBN"
             value={isbn}
-            onChange={onChangeIsbn}
+            onChange={handleIsbnChange}
             placeholder="책의 ISBN을 입력해주세요."
+            inputMode="numeric"
           />
         </div>
       </div>
