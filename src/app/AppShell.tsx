@@ -48,11 +48,16 @@ export default function AppShell({
 
   return (
     <ShellContext.Provider value={value}>
-      {/* 배경 확장, 반응형 */}
-      <div className="relative isolate flex min-h-dvh w-full justify-center bg-gradient-background">
-        {/* 최대 375px로 제한 */}
+      <div className="relative isolate min-h-dvh w-full">
+        {/* 화면 상하좌우 전체를 채우는 고정 배경 */}
         <div
-          className="relative z-10 min-h-dvh w-full"
+          aria-hidden
+          className="pointer-events-none fixed inset-0 z-0 bg-gradient-background"
+        />
+
+        {/* 실제 앱 콘텐츠는 최대 375px */}
+        <div
+          className="relative z-10 mx-auto min-h-dvh w-full"
           style={{ maxWidth: maxWidthPx }}
         >
           <div
@@ -64,12 +69,10 @@ export default function AppShell({
               "pb-[env(safe-area-inset-bottom)]",
             ].join(" ")}
           >
-            {/* main */}
             <main className="w-full flex-1 px-4">
               <Outlet />
             </main>
 
-            {/* footer */}
             {!hideFooter && (
               <div className="w-full px-4">
                 <Footer />
