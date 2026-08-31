@@ -21,8 +21,17 @@ export function useCreateRecord() {
       let imageKeys: string[] = [];
 
       if (imageFiles.length > 0) {
+        let imageTypes: ("image/jpeg" | "image/png" | "image/webp")[] =
+          imageFiles.map((file) => {
+            if (file.type === "image/jpeg") return "image/jpeg";
+            if (file.type === "image/png") return "image/png";
+            if (file.type === "image/webp") return "image/webp";
+            throw new Error(`Unsupported image type: ${file.type}`);
+          });
+        console.log("imageTypes:", imageTypes);
+
         let uploadImageUrls: ImageUploadResponse[] = [];
-        uploadImageUrls = await postImagesUpload(imageFiles.length);
+        uploadImageUrls = await postImagesUpload(imageTypes);
 
         const uploadPromises = imageFiles.map(async (file, index) => {
           const { imageUrl, key } = uploadImageUrls[index];

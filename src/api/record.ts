@@ -82,11 +82,17 @@ export async function postCreateRecord(
 
 // 이미지 업로드 URL 조회
 export async function postImagesUpload(
-  num: number,
+  type: string[],
 ): Promise<ImageUploadResponse[]> {
-  const data = Array.from({ length: num }, () => ({
-    contentType: "record",
+  const data: ImageUploadRequest[] = type.map((contentType) => ({
+    uploadType: "record",
+    contentType,
   })) as ImageUploadRequest[];
+
+  // const data = Array.from({ length: num }, () => ({
+  //   uploadType: "record",
+  //   contentType: type[num],
+  // })) as ImageUploadRequest[];
 
   const response = await api.post<BaseApiResponse<ImageUploadResponse[]>>(
     `${IMAGES_ENDPOINT}/upload-urls`,
