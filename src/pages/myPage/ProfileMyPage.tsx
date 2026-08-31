@@ -66,8 +66,13 @@ export default function ProfileMyPage() {
     const trimmedNickname = nickname.trim();
     const isNicknameChanged = trimmedNickname !== (userMe?.nickName ?? "");
 
-    if (isNicknameChanged && nickname !== trimmedNickname) {
-      window.alert("닉네임의 맨 앞과 맨 뒤에는 띄어쓰기를 사용할 수 없어요.");
+    if (/^\s/.test(nickname)) {
+      window.alert("닉네임 앞에는 공백을 사용할 수 없어요.");
+      return;
+    }
+
+    if (/\s$/.test(nickname)) {
+      window.alert("닉네임 뒤에는 공백을 사용할 수 없어요.");
       return;
     }
 
