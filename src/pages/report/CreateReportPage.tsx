@@ -9,6 +9,7 @@ import Emotion from "../../components/action/Chip/Emotion";
 import Image from "../../components/atomic/Image";
 import Toast from "../../components/feedback/toast";
 import BottomSheet from "../../components/presentation/modal/bottomsheet/Origin";
+import PopupConfirmModal from "../../components/presentation/modal/popup/Origin";
 
 // assets
 import chevron_left from "../../assets/icons/chevron_left.svg";
@@ -47,6 +48,16 @@ export default function CreateReportPage() {
 
   const [isToastOpen, setIsToastOpen] = useState(false);
   const [toastKey, setToastKey] = useState<number>(0);
+
+  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
+
+  const handleBack = () => {
+    if (isEditMode) {
+      setIsExitModalOpen(true);
+      return;
+    }
+    navigate(-1);
+  };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -130,7 +141,7 @@ export default function CreateReportPage() {
       <div className="flex w-full shrink-0 flex-col items-center justify-start gap-2">
         <TopNavigation
           left={<img src={chevron_left} alt="back" />}
-          onClickLeft={() => navigate(-1)}
+          onClickLeft={handleBack}
           center={bookTitle}
         />
 
@@ -300,6 +311,17 @@ export default function CreateReportPage() {
             );
           },
         }}
+      />
+      {/* Exit Modal */}
+      <PopupConfirmModal
+        open={isExitModalOpen}
+        title="기록 수정 화면에서 나갈까요?"
+        description="수정한 내용이 저장되지 않아요."
+        leftLabel="취소"
+        rightLabel="나가기"
+        onLeftClick={() => setIsExitModalOpen(false)}
+        onRightClick={() => navigate(-1)}
+        onClose={() => setIsExitModalOpen(false)}
       />
     </div>
   );
