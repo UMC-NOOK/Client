@@ -65,6 +65,7 @@ export async function getEmotionRecords(
     {
       params: {
         size: params.size,
+        cursor: params.cursor,
         emotion: params.emotion,
       },
     },

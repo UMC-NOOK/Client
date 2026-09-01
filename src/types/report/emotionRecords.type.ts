@@ -4,11 +4,12 @@ export interface EmotionRecordsRequest {
   bookId: number;
   size?: string;
   emotion?: EmotionKey;
+  cursor?: number;
 }
 
 export interface EmotionRecordsResponse {
   items: item[];
-  nextCursor: string | null;
+  nextCursor: number | null;
   hasNext: boolean;
 }
 
