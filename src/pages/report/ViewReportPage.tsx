@@ -50,7 +50,7 @@ export default function ViewReportPage() {
         <div className="text-gray-90 text-body-13-r">
           {record ? record.content : "내용을 불러올 수 없습니다."}
         </div>
-        {record?.emotion ? (
+        {record?.emotion != "EMPTY" ? (
           <Emotion size="m" emojiKey={record.emotion} active />
         ) : null}
         {record?.imgUrls.length > 0 ? (

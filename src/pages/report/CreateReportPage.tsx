@@ -34,8 +34,8 @@ export default function CreateReportPage() {
 
   const [content, setContent] = useState(record?.content || "");
 
-  const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey>(
-    record?.emotion || null,
+  const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey | "EMPTY">(
+    record?.emotion || "EMPTY",
   );
 
   const [images, setImages] = useState<string[]>(initialImages);
@@ -184,7 +184,7 @@ export default function CreateReportPage() {
               active={selectedEmotion === key}
               size="m"
               onClick={() =>
-                setSelectedEmotion(selectedEmotion === key ? null : key)
+                setSelectedEmotion(selectedEmotion === key ? "EMPTY" : key)
               }
             />
           ))}
@@ -269,7 +269,7 @@ export default function CreateReportPage() {
                 },
                 {
                   onSuccess: () => {
-                    navigate(`/report/${bookId}`, {
+                    navigate(`/report/${bookId}/${record.recordId}`, {
                       replace: true,
                       state: { bookTitle, bookId },
                     });
@@ -291,7 +291,7 @@ export default function CreateReportPage() {
               },
               {
                 onSuccess: () => {
-                  navigate(`/report/${bookId}`, {
+                  navigate(`/report/${bookId}/${record.recordId}`, {
                     replace: true,
                     state: { bookTitle, bookId },
                   });
