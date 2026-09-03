@@ -18,7 +18,10 @@ import chevron_left from "../../assets/icons/chevron_left.svg";
 import testBookCover from "../../assets/book-info/testBookCover.svg";
 import book_shelf from "../../assets/icons/book_shelf-gray-30.svg";
 // hooks
-import { useGetBookDetailWithISBN } from "../../hooks/queries/bookInfo/useGetBookDetailWithISBN";
+import {
+  useGetBookDetailWithISBN,
+  useGetBookDetailWithId,
+} from "../../hooks/queries/bookInfo/useGetBookDetailWithISBN";
 import { useLibraryBookRegister } from "../../hooks/mutations/library/useLibraryBookRegister";
 import { useGetBookTimeline } from "../../hooks/queries/bookInfo/useGetBookTimeline";
 // types
@@ -33,6 +36,7 @@ const detailTabs = [
 export default function BookInfoPage() {
   const bookISBN = useParams().isbn13;
   const navigate = useNavigate();
+  const bookId = history.state?.usr?.bookId || null;
 
   const [selectedTab, setSelectedTab] = useState<DetailTab>("info");
   const [readStatus, setReadStatus] = useState<BookStatusType>("UNREGISTERED");
@@ -41,9 +45,9 @@ export default function BookInfoPage() {
     message: "",
   });
 
-  const { data: bookDetailData, isLoading } = useGetBookDetailWithISBN(
-    bookISBN!,
-  );
+  const { data: bookDetailData, isLoading } = bookId
+    ? useGetBookDetailWithId(bookId)
+    : useGetBookDetailWithISBN(bookISBN!);
 
   const [libraryId, setLibraryId] = useState<number | null>(
     bookDetailData?.libraryId || null,

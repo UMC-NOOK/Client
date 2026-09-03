@@ -132,8 +132,8 @@ export default function IndividueleReportPage() {
                   size="18"
                   active={false}
                   onClick={() =>
-                    navigate(`/report/${id}/create`, {
-                      state: { bookTitle, bookId },
+                    navigate(`/library/${bookId}`, {
+                      state: { bookTitle, bookId, book },
                     })
                   }
                 >

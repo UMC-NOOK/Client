@@ -1,9 +1,19 @@
-import { getBookDetailWithISBN } from "../../../api/bookInfo";
+import {
+  getBookDetailWithISBN,
+  getBookDetailWithBookId,
+} from "../../../api/bookInfo";
 import { useQuery } from "@tanstack/react-query";
 
 export function useGetBookDetailWithISBN(isbn: string) {
   return useQuery({
     queryKey: ["bookDetail", isbn],
     queryFn: () => getBookDetailWithISBN(isbn),
+  });
+}
+
+export function useGetBookDetailWithId(bookId: number) {
+  return useQuery({
+    queryKey: ["bookDetail", bookId],
+    queryFn: () => getBookDetailWithBookId(bookId),
   });
 }

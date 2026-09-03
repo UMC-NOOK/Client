@@ -172,9 +172,16 @@ export default function CreateReportPage() {
             [-ms-overflow-style:none]
             [scrollbar-width:none]
           "
+          maxLength={700}
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
+        <div className="mt-2 flex self-end text-[16px]">
+          <span className="text-gray-90 text-label-13-sb">
+            {content.length}
+          </span>
+          <span className="text-gray-50 text-label-13-sb">/{700}</span>
+        </div>
       </div>
 
       {/* 하단 UI 영역 */}
