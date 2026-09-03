@@ -27,6 +27,7 @@ export default function CreateReportPage() {
   const bookTitle = history.state?.usr?.bookTitle || "책 제목 없음";
   const bookId = history.state?.usr?.bookId;
   const record = history.state?.usr?.record;
+  const book = history.state?.usr?.book || null;
 
   const isEditMode = !!record;
 
@@ -279,10 +280,10 @@ export default function CreateReportPage() {
                   mixedImages: imageFiles,
                 },
                 {
-                  onSuccess: () => {
-                    navigate(`/report/${bookId}/${record.recordId}`, {
+                  onSuccess: (data) => {
+                    navigate(`/report/${bookId}/${data.recordId}`, {
                       replace: true,
-                      state: { bookTitle, bookId },
+                      state: { bookTitle, bookId, record: data, book },
                     });
                   },
                 },
@@ -301,10 +302,10 @@ export default function CreateReportPage() {
                 ),
               },
               {
-                onSuccess: () => {
-                  navigate(`/report/${bookId}/${record.recordId}`, {
+                onSuccess: (data) => {
+                  navigate(`/report/${bookId}/${data.recordId}`, {
                     replace: true,
-                    state: { bookTitle, bookId },
+                    state: { bookTitle, bookId, record: data, book },
                   });
                 },
               },

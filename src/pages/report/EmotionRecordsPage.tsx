@@ -113,8 +113,8 @@ export default function IndividueleReportPage() {
             left={<img src={chevron_left} alt="back" />}
             onClickLeft={() => navigate(-1)}
           />
-          <div className="flex flex-col items-center justify-center gap-8 w-full min-w-0">
-            <div className="flex justify-center items-center mt-4 gap-7 w-full ">
+          <div className="flex flex-col items-start justify-start gap-8 w-full min-w-0">
+            <div className="flex justify-start items-start mt-4 gap-7 w-full ">
               <BookCover
                 imageUrl={book?.coverImageUrl || testBookCover}
                 size="M"
@@ -172,7 +172,7 @@ export default function IndividueleReportPage() {
               images={record.imgUrls}
               onClick={() =>
                 navigate(`/report/${id}/${record.recordId}`, {
-                  state: { bookTitle, record, bookId },
+                  state: { bookTitle, record, bookId, book },
                 })
               }
             />

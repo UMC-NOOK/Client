@@ -11,7 +11,10 @@ import type {
   EmotionRecordsResponse,
   EmotionRecordsRequest,
 } from "../types/report/emotionRecords.type";
-import type { CreateRecordRequest } from "../types/report/creatRcord.type";
+import type {
+  CreateRecordRequest,
+  CreateRecordResponse,
+} from "../types/report/creatRcord.type";
 import type {
   ImageUploadRequest,
   ImageUploadResponse,
@@ -77,8 +80,12 @@ export async function getEmotionRecords(
 export async function postCreateRecord(
   bookId: number,
   data: CreateRecordRequest,
-): Promise<void> {
-  await api.post(`${RECORDS_ENDPOINT}/books/${bookId}`, data);
+): Promise<CreateRecordResponse> {
+  const response = await api.post<BaseApiResponse<CreateRecordResponse>>(
+    `${RECORDS_ENDPOINT}/books/${bookId}`,
+    data,
+  );
+  return response.data.result;
 }
 
 // 이미지 업로드 URL 조회
@@ -119,8 +126,12 @@ export async function deleteRecord(recordId: number): Promise<void> {
 export async function putUpdateRecord(
   recordId: number,
   data: CreateRecordRequest,
-): Promise<void> {
-  await api.put(`${RECORDS_ENDPOINT}/${recordId}`, data);
+): Promise<CreateRecordResponse> {
+  const response = await api.put<BaseApiResponse<CreateRecordResponse>>(
+    `${RECORDS_ENDPOINT}/${recordId}`,
+    data,
+  );
+  return response.data.result;
 }
 
 // 서재 도서 전체 조회

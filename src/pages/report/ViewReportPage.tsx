@@ -17,6 +17,7 @@ export default function ViewReportPage() {
   const record = history.state?.usr?.record;
   const bookTitle = history.state?.usr?.bookTitle || "책 제목 없음";
   const bookId = history.state?.usr?.bookId;
+  const book = history.state?.usr?.book || null;
   const navigate = useNavigate();
 
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -28,7 +29,8 @@ export default function ViewReportPage() {
       onSuccess: () => {
         setDeleteConfirmOpen(false);
         navigate(`/report/${bookId}`, {
-          state: { bookTitle, bookId },
+          replace: true,
+          state: { bookTitle, bookId, book },
         });
       },
     });
@@ -80,6 +82,7 @@ export default function ViewReportPage() {
           },
           onRightClick: () => {
             navigate(`/report/${id}/${recordId}/edit`, {
+              replace: true,
               state: { bookTitle, record, bookId },
             });
           },
