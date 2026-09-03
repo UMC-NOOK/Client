@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import DayOfTheWeek from "../../components/content/Calendar/Resource/DayOfTheWeek";
 import BottomBanner from "./modal/BottomBanner";
 import DateFocusBookModal from "./modal/DateFocusBookModal";
+import LoadingState from "../../components/feedback/LoadingState";
 import CaretDown from "../../assets/icons/caret_down.svg";
 import CaretUp from "../../assets/icons/caret_up.svg";
 
@@ -35,9 +36,6 @@ import DropDown from "../../components/section/dropDown/DropDown";
 import { useLibrarySpecificDateBookInfo } from "../../hooks/queries/library/useLibrarySpecificDateBookInfo";
 import { useAuthMe } from "../../hooks/queries/useAuthMe";
 
-const DEFAULT_BANNER_COVER_URL =
-  "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop";
-
 type SelectedYearMonth = {
   year: number;
   month: number;
@@ -57,14 +55,18 @@ export default function LibraryPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isBannerOpen, setIsBannerOpen] = useState(true);
+  const [isBannerOpen, setIsBannerOpen] = useState(
+    () => sessionStorage.getItem("libraryBottomBannerDismissed") !== "true",
+  );
   const [modalCursor, setModalCursor] = useState<number | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { data: authMe, isLoading: isAuthMeLoading } = useAuthMe();
   const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
-  const { data: libraryBookGoalData } = useLibraryBookGoal();
-  const { data: libraryToggleYearsData } = useLibraryDateToggle();
+  const { data: libraryBookGoalData, isLoading: isBookGoalLoading } =
+    useLibraryBookGoal();
+  const { data: libraryToggleYearsData, isLoading: isYearsLoading } =
+    useLibraryDateToggle();
 
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
@@ -121,18 +123,15 @@ export default function LibraryPage() {
     setIsModalOpen(true);
   };
 
-  const { data: specificDateBookInfo } = useLibrarySpecificDateBookInfo(
-    isModalOpen,
-    selectedDate,
-    modalCursor,
-  );
+  const {
+    data: specificDateBookInfo,
+    isLoading: isSpecificDateLoading,
+  } = useLibrarySpecificDateBookInfo(isModalOpen, selectedDate, modalCursor);
 
-  const { data: libraryRecentBookInfoData } = useLibraryRecentBookInfo();
-  const bookId = libraryRecentBookInfoData?.bookId ?? 0;
-  const title = libraryRecentBookInfoData?.title ?? "클라우드 쿠쿠 랜드";
-  const coverUrl = libraryRecentBookInfoData?.coverUrl ?? DEFAULT_BANNER_COVER_URL;
-  const page = libraryRecentBookInfoData?.page ?? 147;
-  const focusTime = libraryRecentBookInfoData?.focusTime ?? "08:10:22";
+  const {
+    data: libraryRecentBookInfoData,
+    isLoading: isRecentBookLoading,
+  } = useLibraryRecentBookInfo();
 
   const dropdownPositionClass =
     selectedView === "focus"
@@ -177,6 +176,21 @@ export default function LibraryPage() {
   const modalItems = specificDateBookInfo?.items ?? [];
 
   const nickName = authMe?.nickName ?? "";
+
+  const isPageLoading =
+    isAuthMeLoading ||
+    isBookLoading ||
+    isBookGoalLoading ||
+    isYearsLoading ||
+    isRecentBookLoading ||
+    isSpecificDateLoading ||
+    (selectedView === "focus"
+      ? isFocusMonthlyLoading
+      : isBooksMonthlyLoading);
+
+  if (isPageLoading) {
+    return <LoadingState variant="fullscreen" />;
+  }
 
   return (
     <div className="relative flex flex-col w-full">
@@ -311,17 +325,18 @@ export default function LibraryPage() {
         </div>
       </div>
 
-      {isBannerOpen ? (
+      {isBannerOpen && libraryRecentBookInfoData ? (
         <BottomBanner
-          bookId={bookId}
-          title={title}
-          coverUrl={coverUrl}
-          page={page}
-          focusTime={focusTime}
+          bookId={libraryRecentBookInfoData.bookId}
+          title={libraryRecentBookInfoData.title}
+          coverUrl={libraryRecentBookInfoData.coverUrl}
+          page={libraryRecentBookInfoData.page}
+          focusTime={libraryRecentBookInfoData.focusTime}
           onClick={() => {
-            console.log("이동:", bookId);
+            console.log("이동:", libraryRecentBookInfoData.bookId);
           }}
           onClose={() => {
+            sessionStorage.setItem("libraryBottomBannerDismissed", "true");
             setIsBannerOpen(false);
           }}
         />

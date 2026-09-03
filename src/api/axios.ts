@@ -10,7 +10,8 @@ api.interceptors.request.use((config) => {
 
   const isAuthRequest =
     config.url?.includes("/auth/oauth") ||
-    config.url?.includes("/auth/dev/login");
+    config.url?.includes("/auth/dev/login") ||
+    config.url?.includes("/auth/reissue");
 
   if (accessToken && !isAuthRequest) {
     config.headers.Authorization = `Bearer ${accessToken}`;

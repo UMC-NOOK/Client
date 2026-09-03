@@ -20,7 +20,7 @@ const base =
 
 const variantClassMap: Record<Variant, string> = {
   none: "py-3 px-4 rounded-[20px]",
-  icon: "py-[6px] px-3 rounded-[8px]",
+  icon: "rounded-lg px-3 py-1.5",
 };
 
 export default function Chip({

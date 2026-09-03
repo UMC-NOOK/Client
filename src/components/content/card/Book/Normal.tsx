@@ -15,7 +15,7 @@ export function Normal({
 }: Props) {
   return (
     <div
-      className={[ "inline-flex w-[100px] flex-col items-start gap-1", ].join(" ")}
+      className={[ "inline-flex w-[100px] flex-col items-start gap-1.5", ].join(" ")}
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
@@ -34,7 +34,7 @@ export function Normal({
         </p>
 
         <p
-          className="line-clamp-1 self-stretch overflow-hidden text-ellipsis text-gray-70 text-label-12-r">
+          className="line-clamp-1 self-stretch overflow-hidden text-ellipsis text-gray-70 text-body-12-r">
             {author}
         </p>
       </div>

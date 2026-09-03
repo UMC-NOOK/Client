@@ -1,16 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import Icon from "../../components/action/Button/Icon";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
 import TabBar from "../../components/navigation/tabs/TabBar";
 import BookList from "../../components/content/card/Book/List";
 import Divider from "../../components/layout/Divider";
+import LoadingState from "../../components/feedback/LoadingState";
 
 import chevronLeft from "../../assets/icons/chevron_left.svg";
 import search from "../../assets/icons/search.svg";
+import bookCoverPlaceholder from "../../assets/images/book-cover-placeholder.png";
 
 import { getLibraryStatusBooks } from "../../api/library";
+import { getBookDetailWithBookId } from "../../api/bookInfo";
+import { useLibraryStatusCounts } from "../../hooks/queries/library/useLibraryStatusCounts";
 
 import type {
   BookItemsStatusItems,
@@ -21,9 +25,6 @@ type LibraryTab = BookStatusType;
 
 /** API 요청·화면에 한 번에 보이는 최대 권수 */
 const PAGE_SIZE = 5;
-
-/** BookList 한 줄(min-h 106 + py-3) 기준, 약 5권 높이 */
-const LIST_MAX_HEIGHT_CLASS = "max-h-[34rem]";
 
 const TAB_OPTIONS = [
   { label: "독서 전", value: "BEFORE" },
@@ -97,7 +98,10 @@ function getEmptyText(tab: LibraryTab) {
 }
 
 export default function LibraryAllBookPage() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { data: statusCounts, isLoading: isStatusCountsLoading } =
+    useLibraryStatusCounts();
 
   const statusParam = searchParams.get("status");
   const tab: LibraryTab =
@@ -106,8 +110,6 @@ export default function LibraryAllBookPage() {
   const [bookItems, setBookItems] = useState<BookItemsStatusItems<LibraryTab>[]>(
     [],
   );
-  const [totalBookNum, setTotalBookNum] = useState(0);
-
   const [nextCursor, setNextCursor] = useState<number | null>(null);
   const [hasNext, setHasNext] = useState(false);
 
@@ -115,7 +117,6 @@ export default function LibraryAllBookPage() {
   const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const scrollRootRef = useRef<HTMLDivElement | null>(null);
   const loadMoreTargetRef = useRef<HTMLDivElement | null>(null);
   const requestIdRef = useRef(0);
   const isFetchingNextPageRef = useRef(false);
@@ -135,6 +136,20 @@ export default function LibraryAllBookPage() {
     },
     [setSearchParams],
   );
+
+  const handleBookClick = async (bookId: number) => {
+    try {
+      const bookDetail = await getBookDetailWithBookId(bookId);
+
+      if (!bookDetail.isbn13) {
+        throw new Error(`ISBN13이 없는 도서입니다: ${bookId}`);
+      }
+
+      navigate(`/library/${encodeURIComponent(bookDetail.isbn13)}`);
+    } catch (error) {
+      console.error("도서 상세 정보 조회에 실패했습니다.", error);
+    }
+  };
 
   const fetchLibraryStatusBooks = useCallback(
     async ({
@@ -174,7 +189,6 @@ export default function LibraryAllBookPage() {
         setBookItems((prev) =>
           mode === "append" ? [...prev, ...page.items] : page.items,
         );
-        setTotalBookNum(result.totalBookNum ?? 0);
         setNextCursor(page.nextCursor);
         setHasNext(hasMorePages(page.hasNext));
       } catch (error) {
@@ -186,7 +200,6 @@ export default function LibraryAllBookPage() {
 
         if (mode === "reset") {
           setBookItems([]);
-          setTotalBookNum(0);
           setNextCursor(null);
           setHasNext(false);
         }
@@ -209,7 +222,6 @@ export default function LibraryAllBookPage() {
 
   useEffect(() => {
     setBookItems([]);
-    setTotalBookNum(0);
     setNextCursor(null);
     setHasNext(false);
     setIsError(false);
@@ -222,9 +234,8 @@ export default function LibraryAllBookPage() {
 
   useEffect(() => {
     const target = loadMoreTargetRef.current;
-    const root = scrollRootRef.current;
 
-    if (!target || !root) return;
+    if (!target) return;
     if (isInitialLoading) return;
     if (isFetchingNextPage) return;
     if (isError) return;
@@ -241,7 +252,7 @@ export default function LibraryAllBookPage() {
         });
       },
       {
-        root,
+        root: null,
         rootMargin: "80px",
         threshold: 0,
       },
@@ -261,6 +272,10 @@ export default function LibraryAllBookPage() {
     nextCursor,
     bookItems.length,
   ]);
+
+  if (isInitialLoading || isStatusCountsLoading) {
+    return <LoadingState variant="fullscreen" />;
+  }
 
   return (
     <div>
@@ -292,7 +307,9 @@ export default function LibraryAllBookPage() {
               <label className="text-title-20-b text-gray-90">
                 {SECTION_SUBJECT[tab]} 책이{" "}
               </label>
-              <label className="text-title-20-b text-yellow-70">{totalBookNum}권</label>
+              <label className="text-title-20-b text-yellow-70">
+                {statusCounts?.[tab] ?? 0}권
+              </label>
               <label className="text-title-20-b text-gray-90"> 있어요.</label>
             </div>
           }
@@ -310,9 +327,7 @@ export default function LibraryAllBookPage() {
       </div>
 
       <div className="flex flex-col pt-6">
-        {isInitialLoading ? (
-          <div className="text-label-14-sb text-gray-60">불러오는 중…</div>
-        ) : isError && bookItems.length === 0 ? (
+        {isError && bookItems.length === 0 ? (
           <div className="text-label-14-sb text-gray-60">
             목록을 불러오지 못했어요.
           </div>
@@ -320,8 +335,7 @@ export default function LibraryAllBookPage() {
           <div className="text-label-14-sb text-gray-60">{getEmptyText(tab)}</div>
         ) : (
           <div
-            ref={scrollRootRef}
-            className={`${LIST_MAX_HEIGHT_CLASS} overflow-y-auto overscroll-contain`}
+            className="flex flex-col"
           >
             {bookItems.map((item, index) => {
               const bookListProps = getBookListProps(item, tab);
@@ -332,11 +346,12 @@ export default function LibraryAllBookPage() {
                   className={index === 0 ? "" : "pt-4"}
                 >
                   <BookList
-                    imageUrl={item.coverUrl}
+                    imageUrl={item.coverUrl || bookCoverPlaceholder}
                     title={item.title}
                     author={item.author}
                     type={bookListProps.type}
                     typeLabel={bookListProps.typeLabel}
+                    onClick={() => void handleBookClick(item.bookId)}
                   />
 
                   {index !== bookItems.length - 1 ? (

@@ -1,5 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+// Client/src/pages/search/SearchPage.tsx
+
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import {
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
 import SearchTopSection, {
   type SearchScope,
@@ -16,9 +26,9 @@ import { useSearchHistories } from "../../hooks/queries/useSearchHistories";
 import { useLibrarySearchHome } from "../../hooks/queries/useLibrarySearchHome";
 import { useBestsellers } from "../../hooks/queries/useBestsellers";
 import { useRecommendations } from "../../hooks/queries/useRecommendations";
+import { useDeleteSearchHistory } from "../../hooks/mutations/useDeleteSearchHIstory";
 
 import type { SearchBooksResult } from "../../api/search";
-import { useDeleteSearchHistory } from "../../hooks/mutations/useDeleteSearchHIstory";
 
 type ViewMode = "idle" | "searching" | "results";
 
@@ -30,37 +40,52 @@ export default function SearchPage() {
     ? (location.state.searchQuery ?? "")
     : "";
 
-  const restoredScope = location.state?.restoreSearch
-    ? (location.state.searchScope ?? "all")
-    : "all";
+  const restoredScope: SearchScope =
+    location.state?.restoreSearch
+      ? (location.state.searchScope ?? "all")
+      : "all";
 
-  const [scope, setScope] = useState<SearchScope>(restoredScope);
-  const [query, setQuery] = useState(restoredQuery);
-  const [submittedQuery, setSubmittedQuery] = useState(restoredQuery);
+  const [scope, setScope] =
+    useState<SearchScope>(restoredScope);
+
+  const [query, setQuery] =
+    useState(restoredQuery);
+
+  const [submittedQuery, setSubmittedQuery] =
+    useState(restoredQuery);
+
   const [mode, setMode] = useState<ViewMode>(
     restoredQuery ? "results" : "idle",
   );
-  const [recent, setRecent] = useState<RecentKeyword[]>([]);
 
-  const searchType = scope === "all" ? "GLOBAL" : "LIBRARY";
-  const { mutate: deleteHistory } = useDeleteSearchHistory();
+  const [recent, setRecent] =
+    useState<RecentKeyword[]>([]);
+
+  const searchType =
+    scope === "all" ? "GLOBAL" : "LIBRARY";
+
+  const { mutate: deleteHistory } =
+    useDeleteSearchHistory();
 
   const { data: historyData } = useSearchHistories({
     type: searchType,
     enabled: mode === "searching",
   });
 
-  const { data: libraryHomeData } = useLibrarySearchHome(
-    mode === "idle" && scope === "my",
-  );
+  const { data: libraryHomeData } =
+    useLibrarySearchHome(
+      mode === "idle" && scope === "my",
+    );
 
-  const { data: bestsellersData } = useBestsellers(
-    mode === "idle" && scope === "all",
-  );
+  const { data: bestsellersData } =
+    useBestsellers(
+      mode === "idle" && scope === "all",
+    );
 
-  const { data: recommendationsData } = useRecommendations(
-    mode === "idle" && scope === "all",
-  );
+  const { data: recommendationsData } =
+    useRecommendations(
+      mode === "idle" && scope === "all",
+    );
 
   const {
     data,
@@ -73,17 +98,21 @@ export default function SearchPage() {
   } = useInfiniteSearchBooks({
     type: searchType,
     keyword: submittedQuery,
-    enabled: mode === "results" && !!submittedQuery.trim(),
+    enabled:
+      mode === "results" &&
+      Boolean(submittedQuery.trim()),
   });
 
   useEffect(() => {
     if (!historyData) return;
 
     setRecent(
-      historyData.map((text: string, index: number) => ({
-        id: index + 1,
-        text,
-      })),
+      historyData.map(
+        (text: string, index: number) => ({
+          id: index + 1,
+          text,
+        }),
+      ),
     );
   }, [historyData]);
 
@@ -92,57 +121,115 @@ export default function SearchPage() {
 
     return data.pages
       .flatMap((page: SearchBooksResult) =>
-        Array.isArray(page.books) ? page.books : [],
+        Array.isArray(page.books)
+          ? page.books
+          : [],
       )
       .filter(Boolean);
   }, [data]);
 
-  const totalResults = data?.pages?.[0]?.totalResults ?? 0;
-  const safeBooks = Array.isArray(books) ? books : [];
-  const librarySections = libraryHomeData?.sections ?? [];
-  const recommendedBooks = recommendationsData ?? [];
-  const bestBooks = bestsellersData ?? [];
+  const totalResults =
+    data?.pages?.[0]?.totalResults ?? 0;
 
-  const handleSearch = (overrideQuery?: string) => {
-    const target = (overrideQuery ?? query).trim();
-    if (!target) return;
+  const safeBooks = Array.isArray(books)
+    ? books
+    : [];
 
-    setQuery(target);
-    setSubmittedQuery(target);
-    setMode("results");
+  const librarySections =
+    libraryHomeData?.sections ?? [];
 
-    navigate("/search", {
-      replace: true,
-      state: {
-        restoreSearch: true,
-        searchQuery: target,
-        searchScope: scope,
-      },
-    });
+  const recommendedBooks =
+    recommendationsData ?? [];
 
-    setRecent((prev) => {
-      const withoutDup = prev.filter((item) => item.text !== target);
-      return [{ id: Date.now(), text: target }, ...withoutDup].slice(0, 10);
-    });
-  };
+  const bestBooks =
+    bestsellersData ?? [];
+
+  const handleSearch = useCallback(
+    (overrideQuery?: string) => {
+      const target = (
+        overrideQuery ?? query
+      ).trim();
+
+      if (!target) return;
+
+      setQuery(target);
+      setSubmittedQuery(target);
+      setMode("results");
+
+      navigate("/search", {
+        replace: true,
+        state: {
+          restoreSearch: true,
+          searchQuery: target,
+          searchScope: scope,
+        },
+      });
+
+      setRecent((previous) => {
+        const withoutDuplicate =
+          previous.filter(
+            (item) => item.text !== target,
+          );
+
+        return [
+          {
+            id: Date.now(),
+            text: target,
+          },
+          ...withoutDuplicate,
+        ].slice(0, 10);
+      });
+    },
+    [navigate, query, scope],
+  );
+
+  const handleLoadMore = useCallback(() => {
+    if (
+      !hasNextPage ||
+      isFetchingNextPage
+    ) {
+      return;
+    }
+
+    void fetchNextPage();
+  }, [
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  ]);
+
+  const handleDirectAdd = useCallback(() => {
+    navigate("/search/new");
+  }, [navigate]);
 
   return (
     <div className="w-full pb-0">
       <SearchTopSection
         title="도서 검색"
         activeScope={scope}
-        onScopeChange={(next) => {
-          setScope(next);
-          setMode((prev) => (prev === "results" ? "results" : "idle"));
+        onScopeChange={(nextScope) => {
+          setScope(nextScope);
+
+          setMode((previousMode) =>
+            previousMode === "results"
+              ? "results"
+              : "idle",
+          );
         }}
         query={query}
-        onQueryChange={(v) => {
-          setQuery(v);
+        onQueryChange={(value) => {
+          setQuery(value);
           setMode("searching");
         }}
-        onSearchClick={() => handleSearch()}
-        onEnter={() => handleSearch()}
-        onFocus={() => setMode("searching")}
+        onSearchClick={() => {
+          handleSearch();
+        }}
+        onEnter={() => {
+          handleSearch();
+        }}
+        onFocus={() => {
+          setMode("searching");
+        }}
         onBlur={() => {}}
         onClose={() => {
           setQuery("");
@@ -156,7 +243,12 @@ export default function SearchPage() {
         <RecentKeywordSection
           keywords={recent}
           onDelete={(id) => {
-            const target = recent.find((k) => k.id === id);
+            const target =
+              recent.find(
+                (keyword) =>
+                  keyword.id === id,
+              );
+
             if (!target) return;
 
             deleteHistory(
@@ -166,7 +258,12 @@ export default function SearchPage() {
               },
               {
                 onSuccess: () => {
-                  setRecent((prev) => prev.filter((k) => k.id !== id));
+                  setRecent((previous) =>
+                    previous.filter(
+                      (keyword) =>
+                        keyword.id !== id,
+                    ),
+                  );
                 },
               },
             );
@@ -180,11 +277,15 @@ export default function SearchPage() {
       {mode === "idle" &&
         (scope === "all" ? (
           <AllBookListSection
-            recommendedBooks={recommendedBooks}
+            recommendedBooks={
+              recommendedBooks
+            }
             bestBooks={bestBooks}
           />
         ) : (
-          <MyLibraryListSection sections={librarySections} />
+          <MyLibraryListSection
+            sections={librarySections}
+          />
         ))}
 
       {mode === "results" && (
@@ -200,14 +301,12 @@ export default function SearchPage() {
               ? error.message
               : "검색 중 오류가 발생했습니다."
           }
-          hasNext={!!hasNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-          onLoadMore={() => {
-            if (hasNextPage && !isFetchingNextPage) {
-              fetchNextPage();
-            }
-          }}
-          onDirectAdd={() => navigate("/search/new")}
+          hasNext={Boolean(hasNextPage)}
+          isFetchingNextPage={
+            isFetchingNextPage
+          }
+          onLoadMore={handleLoadMore}
+          onDirectAdd={handleDirectAdd}
         />
       )}
     </div>

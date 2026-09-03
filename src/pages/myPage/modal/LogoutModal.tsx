@@ -4,12 +4,14 @@ type LogoutModalProps = {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
+  onClick?: ()=> void;
 };
 
 export default function LogoutModal({
   open,
   onClose,
   onConfirm,
+  onClick
 }: LogoutModalProps) {
   return (
     <PopupConfirmModal
@@ -22,6 +24,7 @@ export default function LogoutModal({
       onRightClick={onConfirm}
       onClose={onClose}
       ariaLabel="로그아웃 확인"
+      onClick = {onClick}
     />
   );
 }

@@ -4,23 +4,31 @@ import { useNavigate } from "react-router-dom";
 
 import defaultProfile from "../../assets/icons/Profile Image.svg";
 import close from "../../assets/icons/close.svg";
+import bookCoverPlaceholder from "../../assets/images/book-cover-placeholder.png";
 import ContainerText from "../../components/action/Button/ContainerText";
 import Icon from "../../components/action/Button/Icon";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
 import { Normal } from "../../components/content/card/Book/Normal";
 import Divider from "../../components/layout/Divider";
+import LoadingState from "../../components/feedback/LoadingState";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import { useLogout } from "../../hooks/mutations/useLogout";
 import { useWithdraw } from "../../hooks/mutations/useWithdraw";
+import { useRecentView } from "../../hooks/queries/mypage/useRecentView";
 import { useUserMe } from "../../hooks/queries/useUserMe";
-import { mainMyPageRecentBookList } from "../../mocks/mypage/mainMyPage_RecentBookList";
 import DeleteAccountModal from "./modal/DeleteAccountModal";
 import LogoutModal from "./modal/LogoutModal";
+import { getBookDetailWithBookId } from "../../api/bookInfo";
 
 export default function MainMyPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { data: userMe } = useUserMe();
+  const { data: userMe, isLoading: isUserMeLoading } = useUserMe();
+  const {
+    data: recentBooks = [],
+    isLoading: isRecentBooksLoading,
+    isError: isRecentBooksError,
+  } = useRecentView();
   const logoutMutation = useLogout();
   const withdrawMutation = useWithdraw();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -59,6 +67,29 @@ export default function MainMyPage() {
     });
   };
 
+  const handleBookClick = async (bookId: number) => {
+      try {
+        const bookDetail = await getBookDetailWithBookId(bookId);
+  
+        if (!bookDetail.isbn13) {
+          throw new Error(`ISBN13이 없는 도서입니다: ${bookId}`);
+        }
+  
+        navigate(`/library/${encodeURIComponent(bookDetail.isbn13)}`);
+      } catch (error) {
+        console.error("도서 상세 정보 조회에 실패했습니다.", error);
+      }
+    };
+
+  if (
+    isUserMeLoading ||
+    isRecentBooksLoading ||
+    logoutMutation.isPending ||
+    withdrawMutation.isPending
+  ) {
+    return <LoadingState variant="fullscreen" />;
+  }
+
   return (
     <div className="flex w-full flex-col gap-4">
       {/* top navagation 바 */}
@@ -74,53 +105,64 @@ export default function MainMyPage() {
         />
       </div>
       {/* 프로필 */}
-      <div className="flex flex-row gap-4"> 
-          {/* 프로필 */}
-          <button
-            type="button"
-            onClick={() => navigate("/mypage/profile")}
-            aria-label="프로필 수정"
-            className="h-14 w-14 shrink-0 overflow-hidden rounded-full"
-          >
+      <button
+        type="button"
+        onClick={() => navigate("/mypage/profile")}
+        aria-label="프로필 수정"
+        className="flex w-full flex-row items-center gap-4 text-left"
+      >
+          <span className="flex h-14 w-14 aspect-square shrink-0 items-center justify-center overflow-hidden rounded-full">
             <img
               src={userMe?.profileImageUrl || defaultProfile}
               alt="프로필"
-              className="h-full w-full object-cover"
+              className="block h-full min-h-full w-full min-w-full rounded-full object-cover object-center"
               onError={(event) => {
                 event.currentTarget.onerror = null;
-                event.currentTarget.src = defaultProfile;
               }}
             />
-          </button>
+          </span>
           {/* 프로필 정보 */}
-          <div className="flex min-w-0 flex-1 items-center">
+          <span className="flex min-w-0 flex-1 items-center">
             <SectionHeader
               size="16"
               top={userMe?.nickName ?? ""}
               bottom={userMe?.email ?? ""}
             />
-          </div>
-      </div>
+          </span>
+      </button>
       {/* diver */}
       <div className="w-full">
         <Divider width="full" />
       </div>
       {/* 최근 열람 도서 */}
-       <div className="flex w-full flex-col gap-2">
+       <div className="flex w-full flex-col gap-2.5">
           <SectionHeader
               size="13"
               top={<span className="text-gray-60">최근 열람 도서</span>}
               bottom={
-                 <div className="w-full overflow-x-auto">
+                 <div className="scrollbar-hide w-full overflow-x-auto">
                   <div className="flex w-max gap-2">
-                    {mainMyPageRecentBookList.map((book) => (
+                    {isRecentBooksError ? (
+                      <p className="text-label-12-r text-gray-60">
+                        최근 열람 도서를 불러오지 못했어요.
+                      </p>
+                   ) : recentBooks.length === 0 ? (
+                      <div className="flex h-[200px] w-[343px] max-w-full items-center justify-center py-24">
+                        <p className="text-label-14-sb text-gray-60">
+                          최근 열람한 도서가 없어요.
+                        </p>
+                      </div>
+                    ) : (
+                      recentBooks.map((book) => (
                       <Normal
-                        key={book.id}
-                        imageUrl={book.imageUrl}
+                        key={book.bookId}
+                        imageUrl={book.coverImageUrl || bookCoverPlaceholder}
                         title={book.title}
                         author={book.author}
+                        onClick={() => handleBookClick(book.bookId)}
                       />
-                    ))}
+                      ))
+                    )}
                   </div>
                 </div>}
           />
@@ -133,12 +175,15 @@ export default function MainMyPage() {
       <div className="flex flex-col w-full">
         <SectionHeader
               size="13"
-              top={<span className="text-gray-60">고객센터</span>}
+              top={<span className="text-gray-60 text-label-13-r">고객센터</span>}
               bottom={
-                <div className="flex flex-col">
-                  <ContainerText text="자주 묻는 질문" active />
-                  <ContainerText text="이용 약관" active />
-                  <ContainerText text="개인 정보 취급방침" active />
+                <div className="flex flex-col [&>*]:!text-btn-14-r">
+                  <ContainerText text="자주 묻는 질문" active
+                    onClick={() => window.open("https://magic-moat-e7b.notion.site/3cd5fbef9af38031b72fe6fed4bfd6fe?source=copy_link")}/>
+                  <ContainerText text="이용 약관" active 
+                    onClick={() => window.open("https://magic-moat-e7b.notion.site/3ca5fbef9af380c38a3ddbbab9a4150e?source=copy_link")}/>
+                  <ContainerText text="개인 정보 취급방침" active 
+                    onClick={()=> window.open("https://magic-moat-e7b.notion.site/3cd5fbef9af3800b8087d0c96b2f8bba?source=copy_link")}/>
                 </div>
                 }
           />
@@ -151,9 +196,9 @@ export default function MainMyPage() {
       <div className="flex flex-col w-full">
         <SectionHeader
               size="13"
-              top={<span className="text-gray-60">계정</span>}
+              top={<span className="text-gray-60 text-label-13-r">계정</span>}
               bottom={
-                <div className="flex flex-col">
+                <div className="flex flex-col [&>*]:!text-btn-14-r">
                   <ContainerText
                     text="로그아웃"
                     active

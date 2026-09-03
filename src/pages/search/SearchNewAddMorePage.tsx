@@ -83,7 +83,6 @@ export default function SearchNewAddMorePage() {
         coverImageKey,
       });
 
-      alert("도서가 등록되었습니다.");
       navigate(`/library/${createdBook.bookId}?type=bookId`, {
         replace: true,
       });
