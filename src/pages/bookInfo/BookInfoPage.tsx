@@ -6,6 +6,7 @@ import {
 } from "react";
 
 import {
+  useLocation,
   useNavigate,
   useParams,
   useSearchParams,
@@ -42,6 +43,10 @@ type BookStatusType =
   | "FINISHED"
   | "UNREGISTERED";
 
+type BookInfoLocationState = {
+  backTo?: string;
+};
+
 const detailTabs = [
   {
     value: "info",
@@ -55,6 +60,10 @@ const detailTabs = [
 
 export default function BookInfoPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const locationState =
+    location.state as BookInfoLocationState | null;
 
   const { isbn13: identifier } =
     useParams<{
@@ -165,6 +174,21 @@ export default function BookInfoPage() {
     deleteBook,
     patchBookStatus,
   } = useLibraryBookRegister();
+
+  const handleBack = () => {
+    if (locationState?.backTo) {
+      navigate(
+        locationState.backTo,
+        {
+          replace: true,
+        },
+      );
+
+      return;
+    }
+
+    navigate(-1);
+  };
 
   useEffect(() => {
     if (!bookDetailData) return;
@@ -318,9 +342,9 @@ export default function BookInfoPage() {
                 alt="뒤로 가기"
               />
             }
-            onClickLeft={() => {
-              navigate(-1);
-            }}
+            onClickLeft={
+              handleBack
+            }
           />
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4">
