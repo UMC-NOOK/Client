@@ -18,10 +18,8 @@ import chevron_left from "../../assets/icons/chevron_left.svg";
 import testBookCover from "../../assets/book-info/testBookCover.svg";
 import book_shelf from "../../assets/icons/book_shelf-gray-30.svg";
 // hooks
-import {
-  useGetBookDetailWithISBN,
-  useGetBookDetailWithId,
-} from "../../hooks/queries/bookInfo/useGetBookDetailWithISBN";
+import { useGetBookDetailWithISBN } from "../../hooks/queries/bookInfo/useGetBookDetailWithISBN";
+import { useGetBookDetailWithBookId } from "../../hooks/queries/bookInfo/useGetBookDetailWithBookId";
 import { useLibraryBookRegister } from "../../hooks/mutations/library/useLibraryBookRegister";
 import { useGetBookTimeline } from "../../hooks/queries/bookInfo/useGetBookTimeline";
 // types
@@ -46,7 +44,7 @@ export default function BookInfoPage() {
   });
 
   const { data: bookDetailData, isLoading } = bookId
-    ? useGetBookDetailWithId(bookId)
+    ? useGetBookDetailWithBookId(bookId)
     : useGetBookDetailWithISBN(bookISBN!);
 
   const [libraryId, setLibraryId] = useState<number | null>(
