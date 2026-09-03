@@ -88,7 +88,11 @@ export default function ReportPage() {
                 reviewNumber={item.recordCount}
                 onClick={() =>
                   navigate(`/report/${item.bookId}`, {
-                    state: { bookTitle: item.title, bookId: item.bookId },
+                    state: {
+                      bookTitle: item.title,
+                      bookId: item.bookId,
+                      book: item,
+                    },
                   })
                 }
               />

@@ -16,7 +16,8 @@ export interface EmotionRecordsResponse {
 interface item {
   recordId: number;
   content: string;
-  imageUrl: string[];
+  imgUrls: string[];
   emotion: EmotionKey | null;
   createdDate: string;
+  imageKeys: string[];
 }
