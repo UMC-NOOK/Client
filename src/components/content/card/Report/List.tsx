@@ -4,7 +4,7 @@ import type { EmotionKey } from "../../../action/Chip/Emotion";
 
 type Props = {
   date: string;
-  emojiKey: EmotionKey | null;
+  emojiKey: EmotionKey | "EMPTY";
   review: string;
   images?: string[];
   onClick?: () => void;
@@ -22,7 +22,7 @@ export default function ReportList({
 
   return (
     <div
-      className="flex w-full min-w-[343px] flex-col items-start gap-2 rounded-[4px] bg-gray-15 px-3 py-4"
+      className="flex w-full min-w-85.75 flex-col items-start gap-2 rounded-sm bg-gray-15 px-3 py-4"
       onClick={onClick}
       role={clickable ? "button" : undefined}
       tabIndex={clickable ? 0 : undefined}
@@ -32,11 +32,13 @@ export default function ReportList({
         top={
           <div className="flex items-center gap-2">
             <span className="text-gray-50">{date}</span>
-            {emojiKey ? <Emotion size="s" emojiKey={emojiKey} active /> : null}
+            {emojiKey != "EMPTY" ? (
+              <Emotion size="s" emojiKey={emojiKey} active />
+            ) : null}
           </div>
         }
         bottom={
-          <p className="w-full min-w-0 whitespace-pre-wrap break-words text-gray-80 text-body-12-r ">
+          <p className="w-full min-w-0 whitespace-pre-wrap wrap-break-word text-gray-80 text-body-12-r ">
             {review}
           </p>
         }
@@ -47,7 +49,7 @@ export default function ReportList({
           {limitedImages.map((imageUrl, index) => (
             <div
               key={`${imageUrl}-${index}`}
-              className="h-14 w-14 shrink-0 rounded-[2px] bg-cover bg-center bg-no-repeat"
+              className="h-14 w-14 shrink-0 rounded-xs bg-cover bg-center bg-no-repeat"
               style={{ backgroundImage: `url(${imageUrl})` }}
               aria-label={`summary image ${index + 1}`}
             />

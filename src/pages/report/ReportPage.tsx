@@ -88,7 +88,11 @@ export default function ReportPage() {
                 reviewNumber={item.recordCount}
                 onClick={() =>
                   navigate(`/report/${item.bookId}`, {
-                    state: { bookTitle: item.title, bookId: item.bookId },
+                    state: {
+                      bookTitle: item.title,
+                      bookId: item.bookId,
+                      book: item,
+                    },
                   })
                 }
               />
@@ -106,7 +110,7 @@ export default function ReportPage() {
         onClose={() => setShowSortSheet(false)}
         title="정렬"
       >
-        <div className="flex flex-col gap-1 p-4">
+        <div className="flex flex-col gap-1">
           {options.map((option) => (
             <ContainerText
               key={option.value}

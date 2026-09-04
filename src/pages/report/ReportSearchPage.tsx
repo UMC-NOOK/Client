@@ -1,6 +1,6 @@
 // libraries
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useMemo, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 // components
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import SearchInput from "../../components/input/SearchField";
@@ -15,23 +15,33 @@ import RecentKeywordSection, {
 } from "../../components/search/RecentKeywordSection";
 // types
 import type { SortOption } from "../../types/report/sortOption.type";
+import type { SearchBooksResult } from "../../api/search";
 type ViewMode = "idle" | "searching" | "results";
 // hooks
 import { useGetLibraryBooks } from "../../hooks/queries/report/useGetLibraryBooks";
-import { useGetLibrarySearchItem } from "../../hooks/queries/report/useGetSearchItem";
+import { useDeleteSearchHistory } from "../../hooks/mutations/useDeleteSearchHIstory";
+import { useSearchHistories } from "../../hooks/queries/useSearchHistories";
+import { useInfiniteSearchBooks } from "../../hooks/queries/useInfiniteSearchBooks";
 // assets
 import chevron_left from "../../assets/icons/chevron_left.svg";
 
 export default function ReportSearchPage() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const restoredQuery = location.state?.restoreSearch
+    ? (location.state.searchQuery ?? "")
+    : "";
+
+  const [searchQuery, setSearchQuery] = useState(restoredQuery);
   // const [submittedQuery, setSubmittedQuery] = useState("");
-  const [, setSubmittedQuery] = useState("");
+  const [submittedQuery, setSubmittedQuery] = useState(restoredQuery);
   const [showSortSheet, setShowSortSheet] = useState(false);
   const [recent, setRecent] = useState<RecentKeyword[]>([]);
   const [sortOption, setSortOption] = useState<SortOption>("RECENT_RECORDED");
-  const [mode, setMode] = useState<ViewMode>("idle");
+  const [mode, setMode] = useState<ViewMode>(
+    restoredQuery ? "results" : "idle",
+  );
 
   const options: { label: string; value: SortOption }[] = [
     { label: "최신 기록 순", value: "RECENT_RECORDED" },
@@ -40,64 +50,103 @@ export default function ReportSearchPage() {
     { label: "기록 적은 순", value: "RECORD_COUNT_ASC" },
   ];
 
+  const { mutate: deleteHistory } = useDeleteSearchHistory();
+
   const { data: recordData } = useGetLibraryBooks();
+  // const {
+  //   data: searchItemData,
+  //   isFetching: isFetchingSearchItem,
+  //   isError: isErrorSearchItem,
+  // } = useGetLibrarySearchItem(submittedQuery);
   const {
-    data: searchItemData,
-    isFetching: isFetchingSearchItem,
+    data,
+    isLoading: isFetchingSearchItem,
     isError: isErrorSearchItem,
-  } = useGetLibrarySearchItem(searchQuery);
+  } = useInfiniteSearchBooks({
+    type: "LIBRARY",
+    keyword: submittedQuery,
+    enabled: mode === "results" && !!submittedQuery.trim(),
+  });
+
+  const searchItemData = useMemo(() => {
+    if (!data?.pages) return [];
+
+    return data.pages
+      .flatMap((page: SearchBooksResult) =>
+        Array.isArray(page.books) ? page.books : [],
+      )
+      .filter(Boolean);
+  }, [data]);
+
+  const { data: historyData } = useSearchHistories({
+    type: "LIBRARY",
+    enabled: mode === "searching",
+  });
+
+  useEffect(() => {
+    if (!historyData) return;
+
+    setRecent(
+      historyData.map((text: string, index: number) => ({
+        id: index + 1,
+        text,
+      })),
+    );
+  }, [historyData]);
 
   const handleSearch = (overrideQuery?: string) => {
-    const target = (overrideQuery ?? searchQuery).trim();
+    const query =
+      typeof overrideQuery === "string" ? overrideQuery : searchQuery;
 
-    if (!target) return;
+    const target = query.trim();
+
+    if (!target) {
+      setSearchQuery("");
+      setSubmittedQuery("");
+      setMode("idle");
+
+      navigate(location.pathname, {
+        replace: true,
+        state: {
+          ...location.state,
+          restoreSearch: false,
+          searchQuery: "",
+        },
+      });
+
+      return;
+    }
 
     setSearchQuery(target);
     setSubmittedQuery(target);
     setMode("results");
 
+    // 현재 검색 페이지의 히스토리 state를 갱신
+    navigate(location.pathname, {
+      replace: true,
+      state: {
+        ...location.state,
+        restoreSearch: true,
+        searchQuery: target,
+      },
+    });
+
     setRecent((prev) => {
       const withoutDup = prev.filter((item) => item.text !== target);
 
-      return [{ id: Date.now(), text: target }, ...withoutDup].slice(0, 10);
+      return [
+        {
+          id: Date.now(),
+          text: target,
+        },
+        ...withoutDup,
+      ].slice(0, 10);
     });
   };
 
-  // 개발용 상태
-  // const [hasReport, setHasReport] = useState(true);
-  // const data = {
-  //   items: [
-  //     {
-  //       bookId: 19,
-  //       title: "테라피스트",
-  //       author: "B. A. 패리스 (지은이), 박설영 (옮긴이)",
-  //       readingStatus: "READING",
-
-  //       coverImageUrl:
-  //         "https://image.aladin.co.kr/product/28446/67/cover200/k512835515_1.jpg",
-  //     },
-  //     {
-  //       bookId: 99,
-  //       title: "소년이 온다",
-  //       author: "한강",
-
-  //       coverImageUrl:
-  //         "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbPz6QM%2FbtsFm0GA4WY%2FAAAAAAAAAAAAAAAAAAAAADt7715qbAHxp6NPPLfY-0Z9m3jPraCk2sDQrSAblEhK%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1777561199%26allow_ip%3D%26allow_referer%3D%26signature%3DE6ifvpq2kHb2bLJwKR2Ofrv2Bzc%253D",
-  //     },
-  //   ],
-  //   nextCursor: "fDk5fDIwMjYtMDQtMDFUMDk6MzA",
-  //   hasNext: true,
-  // };
-
-  console.log("recordData", recordData);
-  const deleteHistory = (
-    params: { type: string; keyword: string },
-    options?: { onSuccess: () => void },
-  ) => {
-    console.log("삭제 요청", params);
-    if (options?.onSuccess) {
-      options.onSuccess();
-    }
+  const onQueryChange = (v: string) => {
+    setSearchQuery(v);
+    setMode("searching");
   };
 
   return (
@@ -110,14 +159,11 @@ export default function ReportSearchPage() {
           center="도서 선택"
         />
         <SearchInput
-          placeholder="내 서제에서 책을 찾아보세요."
-          onChange={(value) => {
-            setSearchQuery(value);
-            value.trim() === "" ? setMode("searching") : setMode("results");
-          }}
+          placeholder="내 서재에서 책을 찾아보세요."
+          onChange={(v) => onQueryChange?.(v)}
           value={searchQuery}
-          onSearchClick={handleSearch}
-          onEnter={handleSearch}
+          onSearchClick={() => handleSearch()}
+          onEnter={() => handleSearch()}
           onFocus={() => {
             if (mode !== "results") {
               setMode("searching");
@@ -217,12 +263,10 @@ export default function ReportSearchPage() {
               <SectionHeader
                 size="13"
                 top={
-                  <>
-                    {searchItemData?.books.length || 0}권의 도서가 검색되었어요.
-                  </>
+                  <>{searchItemData?.length || 0}권의 도서가 검색되었어요.</>
                 }
               />
-              {searchItemData?.books?.map((item, index) => (
+              {searchItemData?.map((item, index) => (
                 <>
                   <BookList
                     key={item.bookId}
@@ -247,7 +291,7 @@ export default function ReportSearchPage() {
                       })
                     }
                   />
-                  {index !== (searchItemData?.books.length || 0) - 1 && (
+                  {index !== (searchItemData?.length || 0) - 1 && (
                     <Divider width="full" />
                   )}
                 </>
@@ -263,7 +307,7 @@ export default function ReportSearchPage() {
         onClose={() => setShowSortSheet(false)}
         title="정렬"
       >
-        <div className="flex flex-col gap-1 p-4">
+        <div className="flex flex-col gap-1">
           {options.map((option) => (
             <ContainerText
               key={option.value}
