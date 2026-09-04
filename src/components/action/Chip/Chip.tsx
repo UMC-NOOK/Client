@@ -16,7 +16,7 @@ type ChipProps = {
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const base =
-  "inline-flex items-center justify-center whitespace-nowrap text-sm gap-1";
+  "inline-flex items-center justify-center whitespace-nowrap text-sm gap-1 leading-[14px]";
 
 const variantClassMap: Record<Variant, string> = {
   none: "py-3 px-4 rounded-[20px]",

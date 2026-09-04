@@ -6,8 +6,7 @@ export type EmotionKey =
   | "USEFUL"
   | "SAD"
   | "COMPLICATED"
-  | "UNCOMFORTABLE"
-  | null;
+  | "UNCOMFORTABLE";
 
 type EmotionMeta = {
   variant: Variant;
@@ -15,7 +14,7 @@ type EmotionMeta = {
   text: string;
 };
 
-const emotionMetaMap: Record<Exclude<EmotionKey, null>, EmotionMeta> = {
+const emotionMetaMap: Record<Exclude<EmotionKey, "EMPTY">, EmotionMeta> = {
   FUN: {
     variant: "yellow",
     emoji: "(^_^)",

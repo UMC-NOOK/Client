@@ -8,7 +8,7 @@ type Props = {
   onClick?: () => void;
 };
 
-import reportIcon from "../../../../../assets/icons/report.svg";
+import reportIcon from "../../../../../assets/icons/report-gray-80.svg";
 
 export default function Report({
   imageUrl,
@@ -47,7 +47,10 @@ export default function Report({
               aria-hidden="true"
               className="h-4 w-4 shrink-0"
             />
-            <span className="text-label-13-sb text-gray-80"> {reviewNumber} </span>
+            <span className="text-label-13-sb text-gray-80">
+              {" "}
+              {reviewNumber}{" "}
+            </span>
           </div>
         </div>
 

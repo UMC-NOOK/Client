@@ -38,13 +38,9 @@ export async function getBookDetailWithISBN(
 export async function getBookDetailWithBookId (
   bookId: number,
 ): Promise<BookDetailResponse> {
-  const response =
-    await api.get<
-      BaseApiResponse<BookDetailResponse>
-    >(
-      `${BOOKS_ENDPOINT}/id/${bookId}`,
-    );
-
+  const response = await api.get<BaseApiResponse<BookDetailResponse>>(
+    `${BOOKS_ENDPOINT}/id/${bookId}`,
+  );
   return response.data.result;
 }
 

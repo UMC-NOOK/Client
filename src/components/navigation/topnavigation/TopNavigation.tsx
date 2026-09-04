@@ -69,9 +69,7 @@ function renderNavItem(
   }
 
   return (
-    <div className={`${padding} flex items-center justify-center`}>
-      {node}
-    </div>
+    <div className={`${padding} flex items-center justify-center`}>{node}</div>
   );
 }
 
@@ -102,7 +100,7 @@ export default function TopNavigation({
       </div>
 
       {/* CENTER */}
-      <div className="text-title-18-m text-gray-90 flex items-center justify-center">
+      <div className="max-w-49.5 truncate text-title-18-m text-gray-90">
         {center}
       </div>
 

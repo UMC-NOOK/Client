@@ -1,8 +1,5 @@
 import { useCallback, useRef, useState, useSyncExternalStore } from "react";
-import {
-  DotLottieReact,
-  type DotLottie,
-} from "@lottiefiles/dotlottie-react";
+import { DotLottieReact, type DotLottie } from "@lottiefiles/dotlottie-react";
 
 import loadingAnimation from "../../assets/animations/loading-state.json?raw";
 import loadingFallback from "../../assets/icons/loading-state.svg";

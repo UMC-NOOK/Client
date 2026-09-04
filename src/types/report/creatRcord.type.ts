@@ -5,3 +5,12 @@ export interface CreateRecordRequest {
   emotion: EmotionKey | "EMPTY"; // 감정이 선택되지 않은 경우 "EMPTY"로 처리
   imageKeys?: string[] | null; // Optional array of image keys
 }
+
+export interface CreateRecordResponse {
+  recordId: number;
+  content: string;
+  emotion: EmotionKey | null;
+  imgUrls: string[];
+  createdDate: string;
+  imageKeys: string[];
+}
