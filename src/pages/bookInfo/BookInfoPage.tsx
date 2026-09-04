@@ -29,6 +29,10 @@ type DetailTab = "info" | "log";
 
 type BookStatusType = "BEFORE" | "READING" | "FINISHED" | "UNREGISTERED";
 
+type BookInfoLocationState = {
+  backTo?: string;
+};
+
 const detailTabs = [
   {
     value: "info",
@@ -42,6 +46,10 @@ const detailTabs = [
 
 export default function BookInfoPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const locationState =
+    location.state as BookInfoLocationState | null;
   const stateBookId = history.state?.usr?.bookId || null;
 
   const { isbn13: identifier } = useParams<{
@@ -96,6 +104,21 @@ export default function BookInfoPage() {
   const { data: bookTimelineData } = useGetBookTimeline(effectiveLibraryId);
 
   const { addBook, deleteBook, patchBookStatus } = useLibraryBookRegister();
+
+  const handleBack = () => {
+    if (locationState?.backTo) {
+      navigate(
+        locationState.backTo,
+        {
+          replace: true,
+        },
+      );
+
+      return;
+    }
+
+    navigate(-1);
+  };
 
   useEffect(() => {
     if (!bookDetailData) return;
@@ -193,10 +216,17 @@ export default function BookInfoPage() {
 
         <div className="relative z-10">
           <TopNavigation
-            left={<img src={chevronLeft} alt="뒤로 가기" />}
-            onClickLeft={() => {
-              navigate(-1);
-            }}
+            left={
+              <img
+                src={
+                  chevronLeft
+                }
+                alt="뒤로 가기"
+              />
+            }
+            onClickLeft={
+              handleBack
+            }
           />
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4">
