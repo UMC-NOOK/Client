@@ -15,7 +15,9 @@ import {
 } from "../../api/onboarding";
 import { TextField } from "../../components/input/textinput/TextField";
 import type { OnboardingRequest } from "../../types/onboarding/onboarding";
+
 import OnboardingLayout from "./OnboardingLayout";
+import { useOnboardingDraft } from "./OnboardingContext";
 
 import chevronLeftIcon from "../../assets/icons/chevron_left.svg";
 import cameraIcon from "../../assets/icons/Shape.svg";
@@ -88,7 +90,6 @@ export function OnboardingProfilePage() {
       setErrorMessage(
         "JPEG, PNG, WEBP 이미지만 업로드할 수 있습니다.",
       );
-
       event.target.value = "";
       return;
     }
@@ -96,6 +97,9 @@ export function OnboardingProfilePage() {
     setErrorMessage("");
     setFile(selectedFile);
     setImage(URL.createObjectURL(selectedFile));
+
+    // 같은 파일을 다시 선택해도 change 이벤트가 발생하도록 초기화
+    event.target.value = "";
   };
 
   const handleNext = async () => {
@@ -157,10 +161,7 @@ export function OnboardingProfilePage() {
           : {}),
       };
 
-      console.log(
-        "온보딩 요청 Payload:",
-        payload,
-      );
+      console.log("온보딩 요청 Payload:", payload);
 
       await completeOnboarding(payload);
 
@@ -173,34 +174,24 @@ export function OnboardingProfilePage() {
         replace: true,
       });
     } catch (error: any) {
-      console.error(
-        "❌ 온보딩 실패",
-        error,
-      );
-
+      console.error("❌ 온보딩 실패", error);
       console.error(
         "❌ 서버 응답",
         error?.response?.data,
       );
 
-      const responseData =
-        error?.response?.data;
-
-      const validationResult =
-        responseData?.result;
+      const responseData = error?.response?.data;
+      const validationResult = responseData?.result;
 
       if (
         validationResult &&
         typeof validationResult === "object"
       ) {
-        const validationMessages =
-          Object.values(
-            validationResult,
-          ).join(" ");
+        const validationMessages = Object.values(
+          validationResult,
+        ).join(" ");
 
-        setErrorMessage(
-          validationMessages,
-        );
+        setErrorMessage(validationMessages);
       } else {
         setErrorMessage(
           responseData?.message ??
@@ -232,15 +223,11 @@ export function OnboardingProfilePage() {
               : "text-gray-40"
           }`}
         >
-          {isSubmitting
-            ? "처리 중..."
-            : "시작"}
+          {isSubmitting ? "처리 중..." : "시작"}
         </span>
       }
       onClickRight={
-        isNextActive
-          ? handleNext
-          : undefined
+        isNextActive ? handleNext : undefined
       }
     >
       <p className="text-[20px] font-bold leading-[150%] text-gray-90">
