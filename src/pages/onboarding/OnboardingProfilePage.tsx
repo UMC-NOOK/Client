@@ -1,16 +1,21 @@
-import { useEffect, useRef, useState } from "react";
+// src/pages/onboarding/OnboardingProfilePage.tsx
+
+import {
+  type ChangeEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 
-import OnboardingLayout from "../onboarding/OnboardingLayout";
-import { useOnboardingDraft } from "./OnboardingContext";
-import { TextField } from "../../components/input/textinput/TextField";
-
+import { useShell } from "../../app/AppShell";
 import {
   completeOnboarding,
   uploadProfileImage,
 } from "../../api/onboarding";
-
-import { useShell } from "../../app/AppShell";
+import { TextField } from "../../components/input/textinput/TextField";
+import type { OnboardingRequest } from "../../types/onboarding/onboarding";
+import OnboardingLayout from "./OnboardingLayout";
 
 import chevronLeftIcon from "../../assets/icons/chevron_left.svg";
 import cameraIcon from "../../assets/icons/Shape.svg";
@@ -23,7 +28,9 @@ export function OnboardingProfilePage() {
 
   const submittingRef = useRef(false);
 
-  const [nickname, setNickname] = useState(draft.nickname ?? "");
+  const [nickname, setNickname] = useState(
+    draft.nickname ?? "",
+  );
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,10 +57,12 @@ export function OnboardingProfilePage() {
 
   const trimmedNickname = nickname.trim();
 
+  /**
+   * 닉네임은 필수, 프로필 이미지는 선택
+   */
   const isNextActive =
     trimmedNickname.length >= 1 &&
     trimmedNickname.length <= 10 &&
-    file !== null &&
     !isSubmitting;
 
   const handleClose = () => {
@@ -63,7 +72,7 @@ export function OnboardingProfilePage() {
   };
 
   const handleImageChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: ChangeEvent<HTMLInputElement>,
   ) => {
     const selectedFile = event.target.files?.[0];
 
@@ -79,6 +88,7 @@ export function OnboardingProfilePage() {
       setErrorMessage(
         "JPEG, PNG, WEBP 이미지만 업로드할 수 있습니다.",
       );
+
       event.target.value = "";
       return;
     }
@@ -94,8 +104,14 @@ export function OnboardingProfilePage() {
     const goal = Number(draft.goal);
     const categories = draft.categories;
 
-    if (!Number.isInteger(goal) || goal < 1 || goal > 300) {
-      setErrorMessage("독서 목표는 1~300 사이여야 합니다.");
+    if (
+      !Number.isInteger(goal) ||
+      goal < 1 ||
+      goal > 300
+    ) {
+      setErrorMessage(
+        "독서 목표는 1~300 사이여야 합니다.",
+      );
       return;
     }
 
@@ -104,7 +120,9 @@ export function OnboardingProfilePage() {
       categories.length < 1 ||
       categories.length > 2
     ) {
-      setErrorMessage("카테고리는 1~2개를 선택해야 합니다.");
+      setErrorMessage(
+        "카테고리는 1~2개를 선택해야 합니다.",
+      );
       return;
     }
 
@@ -112,12 +130,9 @@ export function OnboardingProfilePage() {
       trimmedNickname.length < 1 ||
       trimmedNickname.length > 10
     ) {
-      setErrorMessage("닉네임은 1~10자로 입력해 주세요.");
-      return;
-    }
-
-    if (!file) {
-      setErrorMessage("프로필 이미지를 선택해 주세요.");
+      setErrorMessage(
+        "닉네임은 1~10자로 입력해 주세요.",
+      );
       return;
     }
 
@@ -127,48 +142,65 @@ export function OnboardingProfilePage() {
 
     try {
       /**
-       * 1. 이미지 업로드
-       * 2. 업로드 완료 후 서버에서 발급한 key 획득
+       * 이미지가 선택된 경우에만 업로드
        */
-      const profileImageKey = await uploadProfileImage(file);
+      const profileImageKey = file
+        ? await uploadProfileImage(file)
+        : undefined;
 
-      /**
-       * 온보딩 완료 요청 Body
-       */
-      const payload = {
+      const payload: OnboardingRequest = {
         goal,
         categories,
         nickname: trimmedNickname,
-        profileImageKey,
+        ...(profileImageKey
+          ? { profileImageKey }
+          : {}),
       };
 
-      console.log("온보딩 요청 Payload:", payload);
+      console.log(
+        "온보딩 요청 Payload:",
+        payload,
+      );
 
       await completeOnboarding(payload);
 
-      localStorage.setItem("onboardingCompleted", "true");
+      localStorage.setItem(
+        "onboardingCompleted",
+        "true",
+      );
 
       navigate("/library", {
         replace: true,
       });
     } catch (error: any) {
-      console.error("❌ 온보딩 실패", error);
+      console.error(
+        "❌ 온보딩 실패",
+        error,
+      );
+
       console.error(
         "❌ 서버 응답",
         error?.response?.data,
       );
 
-      const responseData = error?.response?.data;
-      const validationResult = responseData?.result;
+      const responseData =
+        error?.response?.data;
+
+      const validationResult =
+        responseData?.result;
 
       if (
         validationResult &&
         typeof validationResult === "object"
       ) {
         const validationMessages =
-          Object.values(validationResult).join(" ");
+          Object.values(
+            validationResult,
+          ).join(" ");
 
-        setErrorMessage(validationMessages);
+        setErrorMessage(
+          validationMessages,
+        );
       } else {
         setErrorMessage(
           responseData?.message ??
@@ -200,11 +232,15 @@ export function OnboardingProfilePage() {
               : "text-gray-40"
           }`}
         >
-          {isSubmitting ? "처리 중..." : "시작"}
+          {isSubmitting
+            ? "처리 중..."
+            : "시작"}
         </span>
       }
       onClickRight={
-        isNextActive ? handleNext : undefined
+        isNextActive
+          ? handleNext
+          : undefined
       }
     >
       <p className="text-[20px] font-bold leading-[150%] text-gray-90">
