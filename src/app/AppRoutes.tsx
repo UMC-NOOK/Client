@@ -48,7 +48,7 @@ import ProfileMyPage from "../pages/myPage/ProfileMyPage";
 import OnboardingLoadingPage from "../pages/onboarding/OnboardingLoadingPage";
 import OnboardingGoalPage from "../pages/onboarding/OnboardingGoalPage";
 import { OnboardingCategoryPage } from "../pages/onboarding/OnboardingCategoryPage";
-import { OnboardingProfilePage } from "../pages/onboarding/OnboardingProfilePage";
+// import { OnboardingProfilePage } from "../pages/onboarding/OnboardingProfilePage";
 import { OnboardingProvider } from "../pages/onboarding/OnboardingContext";
 
 import LoginPage from "../pages/login/LoginPage";
@@ -143,9 +143,7 @@ function RequireAuth() {
 
 function getAuthRedirectPath() {
   const accessToken = localStorage.getItem("accessToken");
-  const onboardingCompleted = localStorage.getItem(
-    "onboardingCompleted",
-  );
+  const onboardingCompleted = localStorage.getItem("onboardingCompleted");
 
   if (!accessToken) {
     return "/login";
@@ -162,9 +160,7 @@ function getAuthRedirectPath() {
     return "/login";
   }
 
-  return onboardingCompleted === "true"
-    ? "/library"
-    : "/onboarding";
+  return onboardingCompleted === "true" ? "/library" : "/onboarding";
 }
 
 /* ---------------- Routes ---------------- */
@@ -177,30 +173,16 @@ export default function AppRoutes() {
           {/* ROOT */}
           <Route
             path="/"
-            element={
-              <Navigate
-                to={getAuthRedirectPath()}
-                replace
-              />
-            }
+            element={<Navigate to={getAuthRedirectPath()} replace />}
           />
 
           {/* PUBLIC */}
           <Route element={<NoFooterLayout />}>
-            <Route
-              path="/login"
-              element={<LoginPage />}
-            />
+            <Route path="/login" element={<LoginPage />} />
 
-            <Route
-              path="/google/oauth"
-              element={<OAuthCallbackPage />}
-            />
+            <Route path="/google/oauth" element={<OAuthCallbackPage />} />
 
-            <Route
-              path="/kakao/callback"
-              element={<OAuthCallbackPage />}
-            />
+            <Route path="/kakao/callback" element={<OAuthCallbackPage />} />
           </Route>
 
           {/* PROTECTED */}
@@ -216,70 +198,40 @@ export default function AppRoutes() {
                 }
               >
                 {/* 로딩 화면을 거친 후 /onboarding/goal로 이동 */}
-                <Route
-                  index
-                  element={<OnboardingLoadingPage />}
-                />
+                <Route index element={<OnboardingLoadingPage />} />
 
-                <Route
-                  path="goal"
-                  element={<OnboardingGoalPage />}
-                />
+                <Route path="goal" element={<OnboardingGoalPage />} />
 
-                <Route
-                  path="category"
-                  element={<OnboardingCategoryPage />}
-                />
+                <Route path="category" element={<OnboardingCategoryPage />} />
 
-                <Route
+                {/* <Route
                   path="profile"
                   element={<OnboardingProfilePage />}
-                />
+                /> */}
               </Route>
             </Route>
 
             {/* SEARCH */}
-            <Route
-              path="/search"
-              element={<SearchPage />}
-            />
+            <Route path="/search" element={<SearchPage />} />
 
-            <Route
-              path="/search/new"
-              element={<SearchNewAddPage />}
-            />
+            <Route path="/search/new" element={<SearchNewAddPage />} />
 
             <Route
               path="/search/new/category"
               element={<SearchNewAddCategoryPage />}
             />
 
-            <Route
-              path="/search/new/more"
-              element={<SearchNewAddMorePage />}
-            />
+            <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
 
             {/* MAIN TABS + TEST */}
             <Route element={<MainTabsLayout />}>
-              <Route
-                path="/library"
-                element={<LibraryPage />}
-              />
+              <Route path="/library" element={<LibraryPage />} />
 
-              <Route
-                path="/focus"
-                element={<FocusMainPage />}
-              />
+              <Route path="/focus" element={<FocusMainPage />} />
 
-              <Route
-                path="/record"
-                element={<ReportPage />}
-              />
+              <Route path="/record" element={<ReportPage />} />
 
-              <Route
-                path="/group"
-                element={<GroupPage />}
-              />
+              <Route path="/group" element={<GroupPage />} />
 
               <Route
                 path="/test/banner-action-card"
@@ -299,45 +251,24 @@ export default function AppRoutes() {
 
             {/* 포커스 테마 선택/진행 - 스크롤 없는 고정 1화면이라 사이트 푸터를 숨긴다 */}
             <Route element={<NoFooterLayout />}>
-              <Route
-                path="/focus/theme"
-                element={<FocusThemePage />}
-              />
+              <Route path="/focus/theme" element={<FocusThemePage />} />
 
-              <Route
-                path="/focus/session"
-                element={<FocusSessionPage />}
-              />
+              <Route path="/focus/session" element={<FocusSessionPage />} />
             </Route>
 
             {/* 포커스 도서 선택 - report/search와 같은 스크롤 목록 화면이라 사이트 푸터를 그대로 노출 */}
-            <Route
-              path="/focus/select"
-              element={<FocusSelectPage />}
-            />
+            <Route path="/focus/select" element={<FocusSelectPage />} />
 
             {/* MY PAGE */}
-            <Route
-              path="/mypage"
-              element={<MainMyPage />}
-            />
+            <Route path="/mypage" element={<MainMyPage />} />
 
-            <Route
-              path="/mypage/profile"
-              element={<ProfileMyPage />}
-            />
+            <Route path="/mypage/profile" element={<ProfileMyPage />} />
 
             {/* LIBRARY */}
-            <Route
-              path="/library/status"
-              element={<LibraryAllBookPage />}
-            />
+            <Route path="/library/status" element={<LibraryAllBookPage />} />
 
             <Route element={<NoFooterLayout />}>
-              <Route
-                path="/library/:isbn13"
-                element={<BookInfoPage />}
-              />
+              <Route path="/library/:isbn13" element={<BookInfoPage />} />
 
               <Route
                 path="/library/:isbn13/history"
@@ -346,26 +277,17 @@ export default function AppRoutes() {
             </Route>
 
             {/* REPORT */}
-            <Route
-              path="/report/search"
-              element={<ReportSearchPage />}
-            />
+            <Route path="/report/search" element={<ReportSearchPage />} />
 
             <Route element={<NoFooterLayout />}>
-              <Route
-                path="/report/:id"
-                element={<IndividueleReportPage />}
-              />
+              <Route path="/report/:id" element={<IndividueleReportPage />} />
 
               <Route
                 path="/report/:id/:recordId"
                 element={<ViewReportPage />}
               />
 
-              <Route
-                path="/report/:id/create"
-                element={<CreateReportPage />}
-              />
+              <Route path="/report/:id/create" element={<CreateReportPage />} />
 
               <Route
                 path="/report/:id/:recordId/edit"
@@ -382,12 +304,7 @@ export default function AppRoutes() {
           {/* FALLBACK */}
           <Route
             path="*"
-            element={
-              <Navigate
-                to={getAuthRedirectPath()}
-                replace
-              />
-            }
+            element={<Navigate to={getAuthRedirectPath()} replace />}
           />
         </Route>
       </Route>
