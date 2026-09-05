@@ -1,44 +1,114 @@
 // src/pages/onboarding/OnboardingContext.tsx
+
 import {
   createContext,
+  type ReactNode,
+  useCallback,
   useContext,
   useMemo,
   useState,
-  type ReactNode,
 } from "react";
 
 export type OnboardingDraft = {
   goal: number | null;
   categories: string[];
   nickname: string;
-  profileImageKey: string;
+  profileImageKey?: string;
 };
 
 type OnboardingContextValue = {
   draft: OnboardingDraft;
-  updateDraft: (patch: Partial<OnboardingDraft>) => void;
+  updateDraft: (
+    patch: Partial<OnboardingDraft>,
+  ) => void;
   resetDraft: () => void;
 };
+
+const STORAGE_KEY = "onboardingDraft";
 
 const initialDraft: OnboardingDraft = {
   goal: null,
   categories: [],
   nickname: "",
-  profileImageKey: "",
 };
 
-const OnboardingContext = createContext<OnboardingContextValue | null>(null);
+function loadInitialDraft(): OnboardingDraft {
+  try {
+    const savedDraft =
+      sessionStorage.getItem(STORAGE_KEY);
 
-export function OnboardingProvider({ children }: { children: ReactNode }) {
-  const [draft, setDraft] = useState<OnboardingDraft>(initialDraft);
+    if (!savedDraft) {
+      return initialDraft;
+    }
 
-  const updateDraft = (patch: Partial<OnboardingDraft>) => {
-    setDraft((prev) => ({ ...prev, ...patch }));
-  };
+    const parsed = JSON.parse(
+      savedDraft,
+    ) as Partial<OnboardingDraft>;
 
-  const resetDraft = () => {
-    setDraft(initialDraft);
-  };
+    return {
+      goal:
+        typeof parsed.goal === "number"
+          ? parsed.goal
+          : null,
+      categories: Array.isArray(parsed.categories)
+        ? parsed.categories
+        : [],
+      nickname:
+        typeof parsed.nickname === "string"
+          ? parsed.nickname
+          : "",
+      profileImageKey:
+        typeof parsed.profileImageKey === "string"
+          ? parsed.profileImageKey
+          : undefined,
+    };
+  } catch {
+    sessionStorage.removeItem(STORAGE_KEY);
+    return initialDraft;
+  }
+}
+
+const OnboardingContext =
+  createContext<OnboardingContextValue | null>(
+    null,
+  );
+
+export function OnboardingProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const [draft, setDraft] =
+    useState<OnboardingDraft>(loadInitialDraft);
+
+  const updateDraft = useCallback(
+    (patch: Partial<OnboardingDraft>) => {
+      setDraft((previous) => {
+        const nextDraft = {
+          ...previous,
+          ...patch,
+        };
+
+        sessionStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(nextDraft),
+        );
+
+        return nextDraft;
+      });
+    },
+    [],
+  );
+
+  const resetDraft = useCallback(() => {
+    sessionStorage.removeItem(STORAGE_KEY);
+
+    setDraft({
+      goal: null,
+      categories: [],
+      nickname: "",
+    });
+  }, []);
 
   const value = useMemo(
     () => ({
@@ -46,7 +116,7 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
       updateDraft,
       resetDraft,
     }),
-    [draft]
+    [draft, updateDraft, resetDraft],
   );
 
   return (
@@ -61,7 +131,7 @@ export function useOnboardingDraft() {
 
   if (!context) {
     throw new Error(
-      "useOnboardingDraft must be used within OnboardingProvider"
+      "useOnboardingDraft must be used within OnboardingProvider",
     );
   }
 
