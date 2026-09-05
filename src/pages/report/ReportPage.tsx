@@ -56,7 +56,7 @@ export default function ReportPage() {
 
   const onClickPlus = () => {
     if (recordCount && recordCount > 0) {
-      navigate("/search");
+      navigate("/report/search");
     } else {
       openSnackbar("내 서재에 기록을 남길 책이 없어요.");
     }
@@ -86,9 +86,9 @@ export default function ReportPage() {
           isOpen={snackbar.open}
           onClose={closeSnackbar}
           text={snackbar.message}
-          buttonText="서재 검색"
+          buttonText="도서 검색"
           onButtonClick={() => {
-            navigate("/report/search");
+            navigate("/search");
             closeSnackbar();
           }}
         />
