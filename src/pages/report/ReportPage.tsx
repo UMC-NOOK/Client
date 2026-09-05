@@ -6,6 +6,8 @@ import SectionHeader from "../../components/content/InformationText/SectionHeade
 import Report from "../../components/content/card/Book/List/Report";
 import BottomSheet from "../../components/presentation/modal/bottomsheet/Origin";
 import ContainerText from "../../components/action/Button/ContainerText";
+import EmptyState from "../../components/content/EmptyState/EmptyState";
+import Snackbar from "../../components/feedback/snackbar";
 // assets
 import plus from "../../assets/icons/plus.svg";
 //types
@@ -19,6 +21,10 @@ export default function ReportPage() {
 
   const [showSortSheet, setShowSortSheet] = useState(false);
   const [sortOption, setSortOption] = useState<SortOption>("RECENT_RECORDED");
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+  });
 
   const options: { label: string; value: SortOption }[] = [
     { label: "최신 기록 순", value: "RECENT_RECORDED" },
@@ -33,6 +39,28 @@ export default function ReportPage() {
   // hooks 호출
   const { data: recordCount } = useGetReportCount();
   const { data: recordData } = useGetReport("10", sortOption);
+
+  const openSnackbar = (message: string) => {
+    setSnackbar({
+      open: true,
+      message,
+    });
+  };
+
+  const closeSnackbar = () => {
+    setSnackbar((previous) => ({
+      ...previous,
+      open: false,
+    }));
+  };
+
+  const onClickPlus = () => {
+    if (recordCount && recordCount > 0) {
+      navigate("/search");
+    } else {
+      openSnackbar("내 서재에 기록을 남길 책이 없어요.");
+    }
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -51,12 +79,19 @@ export default function ReportPage() {
             )
           }
         />
-        <div
-          className="cursor-pointer p-2 w-auto h-auto"
-          onClick={() => navigate("/report/search")}
-        >
+        <div className="cursor-pointer p-2 w-auto h-auto" onClick={onClickPlus}>
           <img src={plus} alt="plus" />
         </div>
+        <Snackbar
+          isOpen={snackbar.open}
+          onClose={closeSnackbar}
+          text={snackbar.message}
+          buttonText="서재 검색"
+          onButtonClick={() => {
+            navigate("/report/search");
+            closeSnackbar();
+          }}
+        />
       </div>
 
       {/* content */}
@@ -98,9 +133,7 @@ export default function ReportPage() {
               />
             ))
           ) : (
-            <p className="text-body-14-sb text-gray-60 text-center mt-24">
-              작성한 기록이 없어요.
-            </p>
+            <EmptyState text="작성한 기록이 없어요." />
           )}
         </div>
       </div>
