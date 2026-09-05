@@ -16,7 +16,7 @@ export default function Footer() {
       </div>
 
       <span className="text-gray-50 text-body-12-r">
-        메일(고객 전용) : help@bnook.kr
+        메일(고객 전용) : help@booknook.page
       </span>
     </footer>
   );
