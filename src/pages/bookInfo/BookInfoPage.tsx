@@ -21,7 +21,7 @@ import InformationSection from "../../components/content/InformationText/Informa
 import ResourceDate from "../../components/content/list/Resource/Date";
 
 import chevronLeft from "../../assets/icons/chevron_left.svg";
-import testBookCover from "../../assets/book-info/testBookCover.svg";
+import testBookCover from "../../assets/images/book-cover-placeholder.png";
 import bookShelf from "../../assets/icons/book_shelf-gray-30.svg";
 
 import { useGetBookDetailWithISBN } from "../../hooks/queries/bookInfo/useGetBookDetailWithISBN";

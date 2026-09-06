@@ -9,7 +9,6 @@ import BookList from "../../components/content/card/Book/List";
 import BottomSheet from "../../components/presentation/modal/bottomsheet/Origin";
 import ContainerText from "../../components/action/Button/ContainerText";
 import Divider from "../../components/layout/Divider";
-// import EmptyState from "../../components/content/EmptyState/EmptyState";
 import RecentKeywordSection, {
   type RecentKeyword,
 } from "../../components/search/RecentKeywordSection";
@@ -24,6 +23,7 @@ import { useSearchHistories } from "../../hooks/queries/useSearchHistories";
 import { useInfiniteSearchBooks } from "../../hooks/queries/useInfiniteSearchBooks";
 // assets
 import chevron_left from "../../assets/icons/chevron_left.svg";
+import testBookCover from "../../assets/images/book-cover-placeholder.png";
 
 export default function ReportSearchPage() {
   const navigate = useNavigate();
@@ -197,7 +197,7 @@ export default function ReportSearchPage() {
               <BookList
                 key={item.bookId}
                 {...item}
-                imageUrl={item.coverUrl}
+                imageUrl={item.coverUrl || testBookCover}
                 title={item.title}
                 author={item.author}
                 type="REPORT"
@@ -210,7 +210,11 @@ export default function ReportSearchPage() {
                 }`}
                 onClick={() =>
                   navigate(`/report/${item.bookId}`, {
-                    state: { bookTitle: item.title, bookId: item.bookId },
+                    state: {
+                      bookTitle: item.title,
+                      bookId: item.bookId,
+                      book: item,
+                    },
                   })
                 }
               />
