@@ -1,3 +1,5 @@
+import type { EmotionKey } from "../../components/action/Chip/Emotion";
+
 type TimelineType = "REGISTER" | "STATUS" | "FOCUS" | "RECORD";
 
 export interface focusSummary {
@@ -40,3 +42,46 @@ export interface BookTimelineResponse {
   recordSummary: recordSummary;
   timelinePreview: timelinePreview;
 }
+
+type TimelineDetailBase = {
+  timelineId: number;
+  occurredAt: string;
+};
+
+export type RegisterTimelineDetail = TimelineDetailBase & {
+  type: "REGISTER";
+  detail: {
+    description: string;
+  };
+};
+
+export type StatusTimelineDetail = TimelineDetailBase & {
+  type: "STATUS";
+  detail: {
+    title: string;
+    description: string;
+  };
+};
+
+export type FocusTimelineDetail = TimelineDetailBase & {
+  type: "FOCUS";
+  detail: {
+    timeText: string;
+    page: number | null;
+  };
+};
+
+export type RecordTimelineDetail = TimelineDetailBase & {
+  type: "RECORD";
+  detail: {
+    content: string;
+    emotion: EmotionKey;
+    imageUrls: string[];
+  };
+};
+
+export type TimelineDetailResponse =
+  | RegisterTimelineDetail
+  | StatusTimelineDetail
+  | FocusTimelineDetail
+  | RecordTimelineDetail;

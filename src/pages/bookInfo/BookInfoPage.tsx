@@ -458,7 +458,12 @@ export default function BookInfoPage() {
                     if (!effectiveLibraryId) {
                       return;
                     }
-                    navigate(`/library/${effectiveLibraryId}/history`);
+                    navigate(`/library/${effectiveLibraryId}/history`, {
+                      state: {
+                        libraryId: effectiveLibraryId,
+                        book: bookDetailData,
+                      },
+                    });
                   }}
                 >
                   전체 보기
