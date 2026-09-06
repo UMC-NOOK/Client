@@ -62,7 +62,7 @@ export default function AllHistoryPage() {
                   key={item.timelineId}
                   variant={item.type === "RECORD" ? "history" : "time"}
                   title={item.title}
-                  time={item.subtitle}
+                  time={item.subtitle || item.previewText}
                   hasIcon={item.type !== "REGISTER" && item.type !== "STATUS"}
                   onClick={() => setSelectedTimelineId(item.timelineId)}
                 />
