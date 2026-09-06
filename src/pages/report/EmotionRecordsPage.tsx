@@ -132,14 +132,14 @@ export default function IndividueleReportPage() {
                 </div>
                 <div className="flex justify-end">
                   <Text
-                    size="18"
+                    size="14r"
                     active={false}
                     onClick={() =>
                       navigate(`/library/${bookId}`, {
                         state: { bookTitle, bookId, book },
                       })
                     }
-                    className="pl-5 pt-5 w-29"
+                    className="pl-4.5 pt-4.5 w-29"
                     extraPadding={true}
                   >
                     도서 상세 보기 →
