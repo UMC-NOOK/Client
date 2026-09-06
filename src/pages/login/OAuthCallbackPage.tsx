@@ -16,10 +16,6 @@ export default function OAuthCallbackPage() {
     const code = searchParams.get("code");
     const oauthError = searchParams.get("error");
 
-    console.log("oauth callback", {
-      pathname,code,oauthError,
-    });
-
     const provider: OAuthProvider | null =
       pathname === "/google/oauth"
         ? "GOOGLE"
@@ -27,7 +23,6 @@ export default function OAuthCallbackPage() {
           ? "KAKAO"
           : null;
 
-    console.log("oauth provider", provider);
 
     if (oauthError || !code || !provider) {
       navigate("/login", { replace: true });
@@ -39,11 +34,6 @@ export default function OAuthCallbackPage() {
     const run = async () => {
       try {
         const result = await mutateAsync({ provider, code });
-
-        console.log("oauth login request", {
-          provider,
-          code,
-        });
 
         navigate(
           result.result.onboardingCompleted ? "/library" : "/onboarding",
