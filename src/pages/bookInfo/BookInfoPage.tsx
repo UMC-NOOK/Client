@@ -24,6 +24,7 @@ import chevronLeft from "../../assets/icons/chevron_left.svg";
 import testBookCover from "../../assets/book-info/testBookCover.svg";
 import bookShelf from "../../assets/icons/book_shelf-gray-30.svg";
 
+import { useGetBookDetailWithISBN } from "../../hooks/queries/bookInfo/useGetBookDetailWithISBN";
 import { useGetBookDetailWithBookId } from "../../hooks/queries/bookInfo/useGetBookDetailWithBookId";
 import { useLibraryBookRegister } from "../../hooks/mutations/library/useLibraryBookRegister";
 import { useGetBookTimeline } from "../../hooks/queries/bookInfo/useGetBookTimeline";
@@ -86,18 +87,33 @@ export default function BookInfoPage() {
   const effectiveBookId = urlBookId ?? stateBookId;
   const shouldQueryByBookId = effectiveBookId !== null;
 
+  const isbn =
+    !shouldQueryByBookId && identifier
+      ? identifier
+      : null;
+
   const bookIdQuery = useGetBookDetailWithBookId(
     effectiveBookId,
     shouldQueryByBookId,
   );
 
+  const isbnQuery = useGetBookDetailWithISBN(
+    isbn,
+    !shouldQueryByBookId,
+  );
+
+  const activeQuery = shouldQueryByBookId
+    ? bookIdQuery
+    : isbnQuery;
+
   const {
     data: bookDetailData,
     isLoading,
     isError,
-  } = bookIdQuery;
+  } = activeQuery;
 
-  const hasValidIdentifier = shouldQueryByBookId;
+  const hasValidIdentifier =
+    shouldQueryByBookId || Boolean(isbn);
 
   const [selectedTab, setSelectedTab] =
     useState<DetailTab>("info");
@@ -338,7 +354,7 @@ export default function BookInfoPage() {
                   top="분량"
                   bottom={
                     bookDetailData
-                      ? `${bookDetailData.pages}쪽`
+                      ? `${bookDetailData.pages ?? 0}쪽`
                       : ""
                   }
                 />
@@ -348,7 +364,10 @@ export default function BookInfoPage() {
                   top="출판"
                   bottom={
                     bookDetailData
-                      ? `${bookDetailData.publisher} (${bookDetailData.publicationDate})`
+                      ? bookDetailData.publisher === null &&
+                        bookDetailData.publicationDate === null
+                        ? "-"
+                        : `${bookDetailData.publisher ?? "-"} (${bookDetailData.publicationDate ?? "-"})`
                       : ""
                   }
                 />
