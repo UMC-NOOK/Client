@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useNavigationType} from "react-router-dom";
 import defaultProfile from "../../assets/icons/Profile Image.svg";
 import close from "../../assets/icons/close.svg";
 import bookCoverPlaceholder from "../../assets/images/book-cover-placeholder.png";
@@ -22,6 +21,7 @@ import { getBookDetailWithBookId } from "../../api/bookInfo";
 
 export default function MainMyPage() {
   const navigate = useNavigate();
+  const navigationType = useNavigationType();
   const queryClient = useQueryClient();
   const { data: userMe, isLoading: isUserMeLoading } = useUserMe();
   const {
@@ -37,6 +37,7 @@ export default function MainMyPage() {
   const [isPageVisible, setIsPageVisible] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const closeTimerRef = useRef<number | null>(null);
+  const shouldAnimate = navigationType === "PUSH";
 
   const isPageLoading =
     isUserMeLoading ||
@@ -61,6 +62,21 @@ export default function MainMyPage() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (!shouldAnimate) {
+      setIsPageVisible(true);
+      return;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      setIsPageVisible(true);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [shouldAnimate]);
 
   const handleClosePage = () => {
     if (isClosing) return;
