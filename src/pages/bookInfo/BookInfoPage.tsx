@@ -31,11 +31,7 @@ import { useGetBookTimeline } from "../../hooks/queries/bookInfo/useGetBookTimel
 
 type DetailTab = "info" | "log";
 
-type BookStatusType =
-  | "BEFORE"
-  | "READING"
-  | "FINISHED"
-  | "UNREGISTERED";
+type BookStatusType = "BEFORE" | "READING" | "FINISHED" | "UNREGISTERED";
 
 type BookInfoLocationState = {
   backTo?: string;
@@ -57,8 +53,7 @@ export default function BookInfoPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const locationState =
-    location.state as BookInfoLocationState | null;
+  const locationState = location.state as BookInfoLocationState | null;
 
   const { isbn13: identifier } = useParams<{
     isbn13: string;
@@ -71,9 +66,7 @@ export default function BookInfoPage() {
   const parsedBookId = Number(identifier);
 
   const urlBookId =
-    isBookId &&
-    Number.isInteger(parsedBookId) &&
-    parsedBookId > 0
+    isBookId && Number.isInteger(parsedBookId) && parsedBookId > 0
       ? parsedBookId
       : null;
 
@@ -87,65 +80,45 @@ export default function BookInfoPage() {
   const effectiveBookId = urlBookId ?? stateBookId;
   const shouldQueryByBookId = effectiveBookId !== null;
 
-  const isbn =
-    !shouldQueryByBookId && identifier
-      ? identifier
-      : null;
+  const isbn = !shouldQueryByBookId && identifier ? identifier : null;
 
   const bookIdQuery = useGetBookDetailWithBookId(
     effectiveBookId,
     shouldQueryByBookId,
   );
 
-  const isbnQuery = useGetBookDetailWithISBN(
-    isbn,
-    !shouldQueryByBookId,
+  const isbnQuery = useGetBookDetailWithISBN(isbn, !shouldQueryByBookId);
+
+  const activeQuery = shouldQueryByBookId ? bookIdQuery : isbnQuery;
+
+  const { data: bookDetailData, isLoading, isError } = activeQuery;
+
+  const hasValidIdentifier = shouldQueryByBookId || Boolean(isbn);
+
+  const [selectedTab, setSelectedTab] = useState<DetailTab>("info");
+
+  const [readStatus, setReadStatus] = useState<BookStatusType>("UNREGISTERED");
+
+  const [libraryId, setLibraryId] = useState<number | null | undefined>(
+    undefined,
   );
-
-  const activeQuery = shouldQueryByBookId
-    ? bookIdQuery
-    : isbnQuery;
-
-  const {
-    data: bookDetailData,
-    isLoading,
-    isError,
-  } = activeQuery;
-
-  const hasValidIdentifier =
-    shouldQueryByBookId || Boolean(isbn);
-
-  const [selectedTab, setSelectedTab] =
-    useState<DetailTab>("info");
-
-  const [readStatus, setReadStatus] =
-    useState<BookStatusType>("UNREGISTERED");
-
-  const [libraryId, setLibraryId] =
-    useState<number | null>(null);
 
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
   });
 
-  const [showReadingModal, setShowReadingModal] =
-    useState(false);
+  const [showReadingModal, setShowReadingModal] = useState(false);
 
-  const [showCompleteModal, setShowCompleteModal] =
-    useState(false);
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
 
   const effectiveLibraryId =
-    libraryId ?? bookDetailData?.libraryId ?? null;
+    libraryId === undefined ? (bookDetailData?.libraryId ?? null) : libraryId;
 
-  const { data: bookTimelineData } =
+  const { data: bookTimelineData, refetch: refetchBookTimeline } =
     useGetBookTimeline(effectiveLibraryId);
 
-  const {
-    addBook,
-    deleteBook,
-    patchBookStatus,
-  } = useLibraryBookRegister();
+  const { addBook, deleteBook, patchBookStatus } = useLibraryBookRegister();
 
   const handleBack = () => {
     if (locationState?.backTo) {
@@ -162,9 +135,7 @@ export default function BookInfoPage() {
   useEffect(() => {
     if (!bookDetailData) return;
 
-    setReadStatus(
-      bookDetailData.readingStatus ?? "UNREGISTERED",
-    );
+    setReadStatus(bookDetailData.readingStatus ?? "UNREGISTERED");
 
     setLibraryId(bookDetailData.libraryId ?? null);
   }, [bookDetailData]);
@@ -176,20 +147,11 @@ export default function BookInfoPage() {
       return;
     }
 
-    if (
-      !isLoading &&
-      (isError || bookDetailData === null)
-    ) {
+    if (!isLoading && (isError || bookDetailData === null)) {
       alert("도서 정보를 불러오지 못했습니다.");
       navigate(-1);
     }
-  }, [
-    hasValidIdentifier,
-    isLoading,
-    isError,
-    bookDetailData,
-    navigate,
-  ]);
+  }, [hasValidIdentifier, isLoading, isError, bookDetailData, navigate]);
 
   const openSnackbar = (message: string) => {
     setSnackbar({
@@ -212,6 +174,8 @@ export default function BookInfoPage() {
       onSuccess: () => {
         setLibraryId(null);
         setReadStatus("UNREGISTERED");
+
+        openSnackbar("내 서재에서 책을 삭제했어요.");
       },
     });
   };
@@ -220,11 +184,9 @@ export default function BookInfoPage() {
     if (!bookDetailData) return;
 
     addBook(bookDetailData.bookId, {
-      onSuccess: () => {
-        setLibraryId(
-          bookDetailData.libraryId ?? null,
-        );
-
+      onSuccess: (data) => {
+        setLibraryId(data.result.libraryId);
+        console.log("data", data, "libraryId", libraryId);
         openSnackbar("내 서재에 책을 등록했어요.");
         setReadStatus("READING");
       },
@@ -234,11 +196,7 @@ export default function BookInfoPage() {
   const handleOpenPurchaseLink = () => {
     if (!bookDetailData?.aladinLink) return;
 
-    window.open(
-      bookDetailData.aladinLink,
-      "_blank",
-      "noopener,noreferrer",
-    );
+    window.open(bookDetailData.aladinLink, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -250,10 +208,7 @@ export default function BookInfoPage() {
               <div className="h-full w-full animate-pulse bg-gray-20 opacity-50 blur-[20px]" />
             ) : (
               <BookCover
-                imageUrl={
-                  bookDetailData?.coverImageUrl ||
-                  testBookCover
-                }
+                imageUrl={bookDetailData?.coverImageUrl || testBookCover}
                 size="XL"
                 type="Image"
                 className="h-full w-full opacity-50 blur-[20px]"
@@ -267,12 +222,7 @@ export default function BookInfoPage() {
 
         <div className="relative z-10">
           <TopNavigation
-            left={
-              <img
-                src={chevronLeft}
-                alt="뒤로 가기"
-              />
-            }
+            left={<img src={chevronLeft} alt="뒤로 가기" />}
             onClickLeft={handleBack}
           />
 
@@ -281,10 +231,7 @@ export default function BookInfoPage() {
               <div className="h-50 w-35 animate-pulse rounded-md bg-gray-20" />
             ) : (
               <BookCover
-                imageUrl={
-                  bookDetailData?.coverImageUrl ||
-                  testBookCover
-                }
+                imageUrl={bookDetailData?.coverImageUrl || testBookCover}
                 size="XL"
                 type="Image"
               />
@@ -337,9 +284,7 @@ export default function BookInfoPage() {
                   <InformationSection
                     flow="vertical"
                     top="소개"
-                    bottom={
-                      bookDetailData?.description
-                    }
+                    bottom={bookDetailData?.description}
                   />
                 </div>
 
@@ -352,11 +297,7 @@ export default function BookInfoPage() {
                 <InformationSection
                   flow="vertical"
                   top="분량"
-                  bottom={
-                    bookDetailData
-                      ? `${bookDetailData.pages}쪽`
-                      : ""
-                  }
+                  bottom={bookDetailData ? `${bookDetailData.pages}쪽` : ""}
                 />
 
                 <InformationSection
@@ -379,54 +320,44 @@ export default function BookInfoPage() {
           </div>
 
           <div className="flex w-full flex-col items-center justify-center gap-2">
-            {!isLoading &&
-              bookDetailData &&
-              readStatus !== "UNREGISTERED" && (
-                <Solid
-                  text="서재에서 삭제하기"
-                  variant="alert"
-                  size="m"
-                  onClick={handleDeleteBook}
-                />
-              )}
+            {!isLoading && bookDetailData && readStatus !== "UNREGISTERED" && (
+              <Solid
+                text="서재에서 삭제하기"
+                variant="alert"
+                size="m"
+                onClick={handleDeleteBook}
+              />
+            )}
 
-            {!isLoading &&
-              bookDetailData?.aladinLink && (
-                <div className="flex gap-2 text-label-12-sb text-gray-50">
-                  <div>도서 DB 제공: 알라딘</div>
+            {!isLoading && bookDetailData?.aladinLink && (
+              <div className="flex gap-2 text-label-12-sb text-gray-50">
+                <div>도서 DB 제공: 알라딘</div>
 
-                  <button
-                    type="button"
-                    className="cursor-pointer underline"
-                    onClick={
-                      handleOpenPurchaseLink
-                    }
-                  >
-                    도서 구매하기
-                  </button>
-                </div>
-              )}
+                <button
+                  type="button"
+                  className="cursor-pointer underline"
+                  onClick={handleOpenPurchaseLink}
+                >
+                  도서 구매하기
+                </button>
+              </div>
+            )}
           </div>
         </div>
       ) : (
         <div className="mt-8 flex flex-col gap-8 px-1 text-gray-90">
           <div className="flex flex-col gap-3">
-            <div className="text-label-16-sb">
-              포커스
-            </div>
+            <div className="text-label-16-sb">포커스</div>
 
             <div className="rounded-sm bg-gray-15 p-4 text-body-14-r">
-              {bookTimelineData ? (
+              {bookTimelineData &&
+              bookTimelineData.focusSummary.totalFocusSec > 0 ? (
                 <div className="flex flex-col gap-4">
                   <InformationSection
                     flow="horizontal"
                     top="기간"
-                    bottom={`${
-                      bookTimelineData.focusSummary
-                        .startedAt
-                    } ~ ${
-                      bookTimelineData.focusSummary
-                        .endedAt || ""
+                    bottom={`${bookTimelineData.focusSummary.startedAt} ~ ${
+                      bookTimelineData.focusSummary.endedAt || ""
                     }`}
                   />
 
@@ -434,13 +365,9 @@ export default function BookInfoPage() {
                     flow="horizontal"
                     top="시간"
                     bottom={`${Math.floor(
-                      bookTimelineData.focusSummary
-                        .totalFocusSec / 3600,
+                      bookTimelineData.focusSummary.totalFocusSec / 3600,
                     )}시간 ${Math.floor(
-                      (bookTimelineData.focusSummary
-                        .totalFocusSec %
-                        3600) /
-                        60,
+                      (bookTimelineData.focusSummary.totalFocusSec % 3600) / 60,
                     )}분`}
                   />
 
@@ -466,15 +393,10 @@ export default function BookInfoPage() {
             {bookTimelineData ? (
               <div className="flex items-center justify-between">
                 <div className="flex gap-2">
-                  <span className="text-label-16-sb">
-                    기록
-                  </span>
+                  <span className="text-label-16-sb">기록</span>
 
                   <span className="text-label-16-sb text-mint-60">
-                    {
-                      bookTimelineData.recordSummary
-                        .recordCount
-                    }
+                    {bookTimelineData.recordSummary.recordCount}
                   </span>
                 </div>
 
@@ -484,26 +406,19 @@ export default function BookInfoPage() {
                   onClick={() => {
                     if (!bookDetailData) return;
 
-                    navigate(
-                      `/report/${bookDetailData.bookId}`,
-                      {
-                        state: {
-                          bookTitle:
-                            bookDetailData.title,
-                          bookId:
-                            bookDetailData.bookId,
-                        },
+                    navigate(`/report/${bookDetailData.bookId}`, {
+                      state: {
+                        bookTitle: bookDetailData.title,
+                        bookId: bookDetailData.bookId,
                       },
-                    );
+                    });
                   }}
                 >
                   전체 보기
                 </button>
               </div>
             ) : (
-              <div className="text-label-16-sb">
-                기록
-              </div>
+              <div className="text-label-16-sb">기록</div>
             )}
 
             <div className="rounded-sm bg-gray-15 p-4 text-body-14-r">
@@ -512,11 +427,8 @@ export default function BookInfoPage() {
                   flow="horizontal"
                   bottom={
                     <div className="line-clamp-3 w-full overflow-hidden">
-                      {
-                        bookTimelineData
-                          .recordSummary
-                          .latestRecordPreview
-                      }
+                      {bookTimelineData.recordSummary.latestRecordPreview ||
+                        "아직 기록이 없어요."}
                     </div>
                   }
                 />
@@ -529,9 +441,7 @@ export default function BookInfoPage() {
           <div className="flex flex-col gap-3">
             {bookTimelineData ? (
               <div className="flex items-center justify-between">
-                <div className="text-label-16-sb">
-                  독서 히스토리
-                </div>
+                <div className="text-label-16-sb">독서 히스토리</div>
 
                 <button
                   type="button"
@@ -540,82 +450,56 @@ export default function BookInfoPage() {
                     if (!effectiveLibraryId) {
                       return;
                     }
-
-                    navigate(
-                      `/library/${effectiveLibraryId}/history`,
-                    );
+                    navigate(`/library/${effectiveLibraryId}/history`);
                   }}
                 >
                   전체 보기
                 </button>
               </div>
             ) : (
-              <div className="text-label-16-sb">
-                독서 히스토리
-              </div>
+              <div className="text-label-16-sb">독서 히스토리</div>
             )}
 
             <div
               className={`rounded-sm bg-gray-15 p-4 text-body-14-r ${
-                effectiveLibraryId
-                  ? "relative h-80 overflow-hidden"
-                  : ""
+                effectiveLibraryId ? "relative max-h-80 overflow-hidden" : ""
               }`}
             >
               {bookTimelineData ? (
                 <>
                   <MaskGradient
                     width="full"
-                    height={20}
-                    className="-m-4 bottom-0"
+                    className="-m-4 bottom-0 max-h-80"
                   />
 
                   {bookTimelineData.timelinePreview.dateGroups.map(
                     (history) => (
                       <div
                         key={`${history.year}-${history.monthDay}`}
-                        className="mb-4 flex w-full items-start gap-2"
+                        className="flex w-full items-start gap-2"
                       >
                         <ResourceDate
-                          topText={
-                            history.monthDay
-                          }
+                          topText={history.monthDay}
                           bottomText={
-                            history.showYear
-                              ? String(
-                                  history.year,
-                                )
-                              : ""
+                            history.showYear ? String(history.year) : ""
                           }
                         />
 
                         <div className="flex min-w-0 flex-1 flex-col gap-1">
-                          {history.items.map(
-                            (item) => (
-                              <HistoryInfoCard
-                                key={
-                                  item.timelineId
-                                }
-                                variant={
-                                  item.type ===
-                                  "RECORD"
-                                    ? "history"
-                                    : "time"
-                                }
-                                title={item.title}
-                                time={
-                                  item.subtitle ||
-                                  ""
-                                }
-                                hasIcon={
-                                  item.type !==
-                                    "REGISTER" &&
-                                  item.type !==
-                                    "STATUS"
-                                }
-                              />
-                            ),
-                          )}
+                          {history.items.map((item) => (
+                            <HistoryInfoCard
+                              key={item.timelineId}
+                              variant={
+                                item.type === "RECORD" ? "history" : "time"
+                              }
+                              title={item.title}
+                              time={item.subtitle || ""}
+                              hasIcon={
+                                item.type !== "REGISTER" &&
+                                item.type !== "STATUS"
+                              }
+                            />
+                          ))}
                         </div>
                       </div>
                     ),
@@ -631,8 +515,7 @@ export default function BookInfoPage() {
 
       {!isLoading &&
         bookDetailData &&
-        (readStatus === "BEFORE" ||
-          readStatus === "READING") && (
+        (readStatus === "BEFORE" || readStatus === "READING") && (
           <>
             <BottomSheet
               open
@@ -664,40 +547,35 @@ export default function BookInfoPage() {
           </>
         )}
 
-      {!isLoading &&
-        bookDetailData &&
-        readStatus === "UNREGISTERED" && (
-          <BottomSheet
-            open
-            onClose={() => {}}
-            overlay={false}
-            footer={{
-              layout: "single",
-              variant: "mint",
-              label: "서재에 등록하기",
-              onClick: handleRegisterBook,
-            }}
-          />
-        )}
+      {!isLoading && bookDetailData && readStatus === "UNREGISTERED" && (
+        <BottomSheet
+          open
+          onClose={() => {}}
+          overlay={false}
+          footer={{
+            layout: "single",
+            variant: "mint",
+            label: "서재에 등록하기",
+            onClick: handleRegisterBook,
+          }}
+        />
+      )}
 
-      {!isLoading &&
-        bookDetailData &&
-        readStatus === "FINISHED" && (
-          <BottomSheet
-            open
-            onClose={() => {}}
-            overlay={false}
-            footer={{
-              layout: "single",
-              variant:
-                "primarySecondaryText",
-              label: "완독 취소하기",
-              onClick: () => {
-                setShowReadingModal(true);
-              },
-            }}
-          />
-        )}
+      {!isLoading && bookDetailData && readStatus === "FINISHED" && (
+        <BottomSheet
+          open
+          onClose={() => {}}
+          overlay={false}
+          footer={{
+            layout: "single",
+            variant: "primarySecondaryText",
+            label: "완독 취소하기",
+            onClick: () => {
+              setShowReadingModal(true);
+            },
+          }}
+        />
+      )}
 
       {showCompleteModal && bookDetailData && (
         <PopupConfirmModal
@@ -722,6 +600,7 @@ export default function BookInfoPage() {
                 onSuccess: () => {
                   setReadStatus("FINISHED");
                   setShowCompleteModal(false);
+                  refetchBookTimeline();
                 },
               },
             );
@@ -752,6 +631,7 @@ export default function BookInfoPage() {
                 onSuccess: () => {
                   setReadStatus("READING");
                   setShowReadingModal(false);
+                  refetchBookTimeline();
                 },
               },
             );
