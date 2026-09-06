@@ -48,7 +48,7 @@ import ProfileMyPage from "../pages/myPage/ProfileMyPage";
 import OnboardingLoadingPage from "../pages/onboarding/OnboardingLoadingPage";
 import OnboardingGoalPage from "../pages/onboarding/OnboardingGoalPage";
 import { OnboardingCategoryPage } from "../pages/onboarding/OnboardingCategoryPage";
-import { OnboardingProfilePage } from "../pages/onboarding/OnboardingProfilePage";
+import OnboardingProfilePage from "../pages/onboarding/OnboardingProfilePage";
 import { OnboardingProvider } from "../pages/onboarding/OnboardingContext";
 
 import LoginPage from "../pages/login/LoginPage";
