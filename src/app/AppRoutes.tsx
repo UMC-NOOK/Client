@@ -319,7 +319,11 @@ export default function AppRoutes() {
             {/* MY PAGE */}
             <Route
               path="/mypage"
-              element={<MainMyPage />}
+              element={
+                <div className="-mx-4 w-[calc(100%+2rem)] overflow-x-clip px-4">
+                  <MainMyPage />
+                </div>
+              }
             />
 
             <Route
