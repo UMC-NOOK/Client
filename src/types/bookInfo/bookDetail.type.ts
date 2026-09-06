@@ -5,12 +5,12 @@ export interface BookDetailResponse {
   bookId: number;
   title: string;
   author: string;
-  publisher: string;
-  publicationDate: string;
+  publisher: string | null;
+  publicationDate: string | null;
   mallType: string;
   mallTypeCode: string;
   category: string;
-  pages: number;
+  pages: number | null;
   description: string;
   coverImageUrl: string;
   aladinLink: string | null;

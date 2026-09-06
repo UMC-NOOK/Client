@@ -338,7 +338,7 @@ export default function BookInfoPage() {
                   top="분량"
                   bottom={
                     bookDetailData
-                      ? `${bookDetailData.pages}쪽`
+                      ? `${bookDetailData.pages ?? 0}쪽`
                       : ""
                   }
                 />
@@ -348,7 +348,10 @@ export default function BookInfoPage() {
                   top="출판"
                   bottom={
                     bookDetailData
-                      ? `${bookDetailData.publisher} (${bookDetailData.publicationDate})`
+                      ? bookDetailData.publisher === null &&
+                        bookDetailData.publicationDate === null
+                        ? "-"
+                        : `${bookDetailData.publisher ?? "-"} (${bookDetailData.publicationDate ?? "-"})`
                       : ""
                   }
                 />

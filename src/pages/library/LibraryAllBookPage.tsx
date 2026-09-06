@@ -294,9 +294,16 @@ export default function LibraryAllBookPage() {
             <div className="text-title-18-m text-gray-90">서재 전체 보기</div>
           }
           right={
-            <Icon size="m">
-              <img src={search} alt="검색" />
-            </Icon>
+            <button
+              type="button"
+              aria-label="도서 검색"
+              onClick={() => navigate("/search")}
+              className="cursor-pointer"
+            >
+              <Icon size="m">
+                <img src={search} alt="" />
+              </Icon>
+            </button>
           }
         />
       </div>
