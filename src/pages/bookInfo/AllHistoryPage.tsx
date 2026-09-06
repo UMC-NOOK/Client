@@ -1,5 +1,6 @@
 // libraries
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 // components
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import HistoryInfoCard from "../../components/content/list/History";
@@ -27,11 +28,21 @@ export default function AllHistoryPage() {
     return timelineDetailMockMap[selectedTimelineId] ?? null;
   }, [selectedTimelineId]);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    });
+  }, []);
+
+  const navigate = useNavigate();
+
   return (
-    <div className="flex flex-col h-full w-full items-center justify-center pb-10">
+    <div className="flex flex-col h-full w-full items-center justify-start pb-10">
       <TopNavigation
         left={<img src={chevron_left} alt="back" />}
-        onClickLeft={() => window.history.back()}
+        onClickLeft={() => navigate(-1)}
         center="독서 히스토리"
         className="mb-10"
       />
