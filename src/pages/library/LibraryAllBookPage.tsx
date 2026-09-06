@@ -145,7 +145,9 @@ export default function LibraryAllBookPage() {
         throw new Error(`ISBN13이 없는 도서입니다: ${bookId}`);
       }
 
-      navigate(`/library/${encodeURIComponent(bookDetail.isbn13)}`);
+      navigate(`/library/${encodeURIComponent(bookDetail.isbn13)}`, {
+        state: { bookId },
+      });
     } catch (error) {
       console.error("도서 상세 정보 조회에 실패했습니다.", error);
     }
