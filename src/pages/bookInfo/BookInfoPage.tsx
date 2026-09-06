@@ -550,7 +550,12 @@ export default function BookInfoPage() {
               onClose={closeSnackbar}
               text={snackbar.message}
               buttonText="서재로 이동"
-              onButtonClick={closeSnackbar}
+              onButtonClick={() => {
+                if (!effectiveLibraryId) return;
+
+                navigate(`/library/status`);
+                closeSnackbar();
+              }}
             />
           </>
         )}
