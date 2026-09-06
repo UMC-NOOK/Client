@@ -474,7 +474,7 @@ export default function BookInfoPage() {
             )}
 
             <div
-              className={`rounded-sm bg-gray-15 p-4 text-body-14-r ${
+              className={`flex flex-col gap-2 rounded-sm bg-gray-15 p-4 text-body-14-r ${
                 effectiveLibraryId ? "relative max-h-80 overflow-hidden" : ""
               }`}
             >
