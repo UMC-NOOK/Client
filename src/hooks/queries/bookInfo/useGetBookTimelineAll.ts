@@ -2,13 +2,31 @@ import {
   getBookTimelineAll,
   getBookTimelineAllDetail,
 } from "../../../api/history";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
+
+/**
+ * 서재 도서 타임라인 조회
+ *
+ * GET /api/v1/library/{libraryId}/timeline
+ */
 
 export function useGetBookTimelineAll(libraryId: number | null | undefined) {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["bookTimeline", libraryId],
-    queryFn: () => getBookTimelineAll(libraryId as number),
-    enabled: !!libraryId,
+    queryFn: ({ pageParam }) =>
+      getBookTimelineAll(libraryId as number, pageParam),
+
+    initialPageParam: null as string | null,
+
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.hasNext) {
+        return undefined;
+      }
+
+      return lastPage.nextCursor ?? undefined;
+    },
+
+    enabled: libraryId != null,
   });
 }
 

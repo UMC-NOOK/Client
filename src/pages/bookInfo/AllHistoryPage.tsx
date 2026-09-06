@@ -1,5 +1,5 @@
 // libraries
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // components
@@ -29,11 +29,20 @@ export default function AllHistoryPage() {
   const libraryId = history.state?.usr?.libraryId || null;
   const bookDetailData = history.state?.usr?.book || null;
 
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
   const [selectedTimelineId, setSelectedTimelineId] = useState<number | null>(
     null,
   );
 
-  const { data: timelineData } = useGetBookTimelineAll(libraryId);
+  const {
+    data: timelineData,
+    isPending: isTimelinePending,
+    isError: isTimelineError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useGetBookTimelineAll(libraryId);
 
   const {
     data: selectedDetail,
@@ -41,7 +50,73 @@ export default function AllHistoryPage() {
     isError: isDetailError,
   } = useGetBookTimelineAllDetail(libraryId, selectedTimelineId);
 
-  const historyData = timelineData?.dateGroups ?? [];
+  const { deleteBook } = useLibraryBookRegister();
+
+  /**
+   * 각 페이지의 dateGroups를 하나의 배열로 합친다.
+   *
+   * 페이지 마지막 날짜와 다음 페이지 첫 날짜가 같은 경우
+   * 날짜 헤더가 중복되지 않도록 items를 하나로 합친다.
+   */
+  const historyData = useMemo(() => {
+    const groups = timelineData?.pages.flatMap((page) => page.dateGroups);
+
+    if (!groups) {
+      return [];
+    }
+
+    return groups.reduce<typeof groups>((result, currentGroup) => {
+      const previousGroup = result[result.length - 1];
+
+      const isSameDate =
+        previousGroup &&
+        previousGroup.year === currentGroup.year &&
+        previousGroup.monthDay === currentGroup.monthDay;
+
+      if (isSameDate) {
+        previousGroup.items = [...previousGroup.items, ...currentGroup.items];
+
+        return result;
+      }
+
+      result.push({
+        ...currentGroup,
+        items: [...currentGroup.items],
+      });
+
+      return result;
+    }, []);
+  }, [timelineData]);
+
+  /**
+   * 화면 하단 감지 후 다음 페이지 조회
+   */
+  useEffect(() => {
+    const target = loadMoreRef.current;
+
+    if (!target || !hasNextPage) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          void fetchNextPage();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "200px 0px",
+        threshold: 0,
+      },
+    );
+
+    observer.observe(target);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   useEffect(() => {
     window.scrollTo({
@@ -51,18 +126,20 @@ export default function AllHistoryPage() {
     });
   }, []);
 
-  const { deleteBook } = useLibraryBookRegister();
-
   const handleCloseBottomSheet = () => {
     setSelectedTimelineId(null);
   };
+
   const handleDeleteBook = () => {
-    if (!bookDetailData) return;
-    console.log("bookDetailData", bookDetailData);
+    if (!bookDetailData) {
+      return;
+    }
 
     deleteBook(bookDetailData.bookId, {
       onSuccess: () => {
-        navigate(`/library/${bookDetailData.isbn13}`, { replace: true });
+        navigate(`/library/${bookDetailData.isbn13}`, {
+          replace: true,
+        });
       },
     });
   };
@@ -76,32 +153,54 @@ export default function AllHistoryPage() {
         className="mb-10"
       />
 
-      <div className="flex w-full flex-col gap-4">
-        {historyData.map((yearGroup) => (
-          <div
-            key={`${yearGroup.year}-${yearGroup.monthDay}`}
-            className="flex items-start gap-2"
-          >
-            <ResourceDate
-              topText={yearGroup.monthDay}
-              bottomText={yearGroup.showYear ? String(yearGroup.year) : ""}
-            />
+      {isTimelinePending ? (
+        <div className="py-10 text-center text-body-14-r text-gray-60">
+          독서 히스토리를 불러오는 중이에요.
+        </div>
+      ) : isTimelineError ? (
+        <div className="py-10 text-center text-body-14-r text-gray-60">
+          독서 히스토리를 불러오지 못했어요.
+        </div>
+      ) : (
+        <div className="flex w-full flex-col gap-4">
+          {historyData.map((yearGroup) => (
+            <div
+              key={`${yearGroup.year}-${yearGroup.monthDay}`}
+              className="flex items-start gap-2"
+            >
+              <ResourceDate
+                topText={yearGroup.monthDay}
+                bottomText={yearGroup.showYear ? String(yearGroup.year) : ""}
+              />
 
-            <div className="flex min-w-0 flex-1 flex-col gap-1">
-              {yearGroup.items.map((item) => (
-                <HistoryInfoCard
-                  key={item.timelineId}
-                  variant={item.type === "RECORD" ? "history" : "time"}
-                  title={item.title}
-                  time={item.subtitle || item.previewText}
-                  hasIcon={item.type !== "REGISTER" && item.type !== "STATUS"}
-                  onClick={() => setSelectedTimelineId(item.timelineId)}
-                />
-              ))}
+              <div className="flex min-w-0 flex-1 flex-col gap-1">
+                {yearGroup.items.map((item) => (
+                  <HistoryInfoCard
+                    key={item.timelineId}
+                    variant={item.type === "RECORD" ? "history" : "time"}
+                    title={item.title}
+                    time={item.subtitle || item.previewText}
+                    hasIcon={item.type !== "REGISTER" && item.type !== "STATUS"}
+                    onClick={() => setSelectedTimelineId(item.timelineId)}
+                  />
+                ))}
+              </div>
             </div>
+          ))}
+
+          {/* 이 요소가 화면 근처에 보이면 다음 페이지를 불러온다. */}
+          <div
+            ref={loadMoreRef}
+            className="flex min-h-10 items-center justify-center"
+          >
+            {isFetchingNextPage ? (
+              <p className="text-body-14-r text-gray-60">
+                히스토리를 더 불러오는 중이에요.
+              </p>
+            ) : null}
           </div>
-        ))}
-      </div>
+        </div>
+      )}
 
       {selectedTimelineId !== null ? (
         <BottomSheet
@@ -127,11 +226,17 @@ export default function AllHistoryPage() {
                   ? "포커스 기록 삭제하기"
                   : "기록 상세 보기",
             onClick: () => {
-              selectedDetail?.type === "REGISTER"
-                ? handleDeleteBook()
-                : selectedDetail?.type === "FOCUS"
-                  ? alert("포커스 기록 삭제하기")
-                  : alert("기록 상세 보기");
+              if (selectedDetail?.type === "REGISTER") {
+                handleDeleteBook();
+                return;
+              }
+
+              if (selectedDetail?.type === "FOCUS") {
+                alert("포커스 기록 삭제하기");
+                return;
+              }
+
+              alert("기록 상세 보기");
             },
           }}
           overlay={true}
@@ -203,13 +308,14 @@ export default function AllHistoryPage() {
                 <p className="text-body-16-r text-gray-70">
                   {selectedDetail.detail.content}
                 </p>
-                {selectedDetail.detail.emotion && (
+
+                {selectedDetail.detail.emotion ? (
                   <Emotion
                     active={true}
                     size="s"
                     emojiKey={selectedDetail.detail.emotion}
                   />
-                )}
+                ) : null}
               </div>
 
               {selectedDetail.detail.imageUrls.length > 0 ? (

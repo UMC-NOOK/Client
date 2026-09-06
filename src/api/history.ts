@@ -2,9 +2,9 @@ import { api } from "./axios";
 
 import type { BaseApiResponse } from "../types/index.type";
 import type {
-  timelinePreview,
+  TimelinePreview,
   TimelineDetailResponse,
-} from "../types/bookInfo/timeline.type";
+} from "../types/bookInfo/history.type";
 
 const LIBRARY_ENDPOINT = "/api/v1/library";
 
@@ -15,9 +15,13 @@ const LIBRARY_ENDPOINT = "/api/v1/library";
  */
 export async function getBookTimelineAll(
   libraryId: number,
-): Promise<timelinePreview> {
-  const response = await api.get<BaseApiResponse<timelinePreview>>(
+  cursor: string | null = null,
+): Promise<TimelinePreview> {
+  const response = await api.get<BaseApiResponse<TimelinePreview>>(
     `${LIBRARY_ENDPOINT}/${libraryId}/timeline`,
+    {
+      params: cursor ? { cursor } : undefined,
+    },
   );
 
   return response.data.result;
