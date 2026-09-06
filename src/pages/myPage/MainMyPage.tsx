@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -34,6 +34,44 @@ export default function MainMyPage() {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
     useState(false);
+  const [isPageVisible, setIsPageVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const closeTimerRef = useRef<number | null>(null);
+
+  const isPageLoading =
+    isUserMeLoading ||
+    isRecentBooksLoading ||
+    logoutMutation.isPending ||
+    withdrawMutation.isPending;
+
+  useEffect(() => {
+    const frameId = window.requestAnimationFrame(() => {
+      setIsPageVisible(true);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current !== null) {
+        window.clearTimeout(closeTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleClosePage = () => {
+    if (isClosing) return;
+
+    setIsClosing(true);
+    setIsPageVisible(false);
+
+    closeTimerRef.current = window.setTimeout(() => {
+      navigate(-1);
+    }, 300);
+  };
 
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {
@@ -81,17 +119,22 @@ export default function MainMyPage() {
       }
     };
 
-  if (
-    isUserMeLoading ||
-    isRecentBooksLoading ||
-    logoutMutation.isPending ||
-    withdrawMutation.isPending
-  ) {
-    return <LoadingState variant="fullscreen" />;
-  }
-
   return (
-    <div className="flex w-full flex-col gap-4">
+    <div
+      className={[
+        "flex w-full flex-col gap-4",
+        "transform-gpu transition-transform duration-300 ease-out",
+        isPageVisible && !isClosing
+          ? "translate-x-0"
+          : "translate-x-[calc(100%+1rem)]",
+      ].join(" ")}
+    >
+      {isPageLoading ? (
+        <div className="flex min-h-dvh w-full items-center justify-center">
+          <LoadingState />
+        </div>
+      ) : (
+        <>
       {/* top navagation 바 */}
       <div className="w-full">
         <TopNavigation
@@ -100,7 +143,7 @@ export default function MainMyPage() {
               <img src={close} alt="" />
             </Icon>
           }
-          onClickLeft={() => navigate(-1)}
+          onClickLeft={handleClosePage}
           leftPadding="p-0"
         />
       </div>
@@ -224,6 +267,8 @@ export default function MainMyPage() {
         onClose={() => setIsDeleteAccountModalOpen(false)}
         onConfirm={handleDeleteAccount}
       />
+        </>
+      )}
     </div>
   );
 }
