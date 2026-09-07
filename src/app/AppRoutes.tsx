@@ -316,20 +316,22 @@ export default function AppRoutes() {
               element={<FocusSelectPage />}
             />
 
-            {/* MY PAGE */}
-            <Route
-              path="/mypage"
-              element={
-                <div className="-mx-4 w-[calc(100%+2rem)] overflow-x-clip px-4">
-                  <MainMyPage />
-                </div>
-              }
-            />
+            <Route element={<NoFooterLayout/>}>
+                {/* MY PAGE */}
+                <Route
+                  path="/mypage"
+                  element={
+                    <div className="-mx-4 w-[calc(100%+2rem)] overflow-x-clip px-4">
+                      <MainMyPage />
+                    </div>
+                  }
+                />
 
-            <Route
-              path="/mypage/profile"
-              element={<ProfileMyPage />}
-            />
+                <Route
+                  path="/mypage/profile"
+                  element={<ProfileMyPage />}
+                />
+            </Route>
 
             {/* LIBRARY */}
             <Route
