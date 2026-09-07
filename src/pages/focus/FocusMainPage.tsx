@@ -1,17 +1,27 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
+import themeGrass from "../../assets/focus/themes/theme-grass-343x304.png";
+import themeLibrary from "../../assets/focus/themes/theme-library-343x304.png";
+import themeSpace from "../../assets/focus/themes/theme-space-343x304.png";
 import searchIcon from "../../assets/icons/search.svg";
 import Icon from "../../components/action/Button/Icon";
 import { Focus as FocusBookRow } from "../../components/content/card/Book/List/Focus";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
+import LoadingState from "../../components/feedback/LoadingState";
 import Toast from "../../components/feedback/toast";
 import Dim from "../../components/layout/Dim";
 import MaskGradient from "../../components/layout/MaskGradient";
 import TabBar from "../../components/navigation/tabs/TabBar";
-import { mockFocusMainSummaryResponse } from "../../mocks/focus/focus";
+import { useFocusHome } from "../../hooks/queries/focus/useFocusHome";
 import type { FocusBookStatus } from "../../types/focus/focus";
-import { formatDurationHms } from "./utils/formatDurationHms";
+import { readStoredFocusThemeId } from "./utils/focusThemeStorage";
+
+const FOCUS_MAIN_THEME_IMAGE_BY_ID: Record<number, string> = {
+  1: themeGrass,
+  2: themeSpace,
+  3: themeLibrary,
+};
 
 const STATUS_TABS: {
   value: FocusBookStatus;
@@ -30,6 +40,7 @@ function isFocusStatus(value: string): value is FocusBookStatus {
 export default function FocusMainPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const loadMoreTargetRef = useRef<HTMLDivElement | null>(null);
   const navigationState = location.state as {
     showFocusEndToast?: boolean;
   } | null;
@@ -44,6 +55,27 @@ export default function FocusMainPage() {
   const statusParam = searchParams.get("status");
   const activeStatus: FocusBookStatus =
     statusParam && isFocusStatus(statusParam) ? statusParam : "BEFORE";
+  const [recentThemeId] = useState<number | null>(readStoredFocusThemeId);
+  const recentThemeImageUrl =
+    recentThemeId === null
+      ? undefined
+      : FOCUS_MAIN_THEME_IMAGE_BY_ID[recentThemeId];
+
+  const {
+    data,
+    isLoading,
+    isError,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isFetchNextPageError,
+  } = useFocusHome({ status: activeStatus });
+
+  const books = useMemo(
+    () => data?.pages.flatMap((page) => page.books.items) ?? [],
+    [data],
+  );
+  const todayFocusTime = data?.pages[0]?.todayFocusTime;
 
   const setActiveStatus = useCallback(
     (next: FocusBookStatus) => {
@@ -59,12 +91,7 @@ export default function FocusMainPage() {
     [setSearchParams],
   );
 
-  // TODO(담당자): docs/api/focus.md 계약 확정 후 실제 query hook으로 교체
-  const { todayTotalFocusSeconds, recentTheme, books } =
-    mockFocusMainSummaryResponse.result;
-
   const activeTab = STATUS_TABS.find((tab) => tab.value === activeStatus)!;
-  const visibleBooks = books.filter((book) => book.status === activeStatus);
 
   // 새로고침이나 뒤로가기로 완료 Toast가 다시 뜨지 않도록 일회성 navigation state를 지운다.
   // 로컬 state의 open 값은 유지되므로 현재 진입에서는 Toast의 4초 노출이 정상 진행된다.
@@ -82,14 +109,51 @@ export default function FocusMainPage() {
     navigationState?.showFocusEndToast,
   ]);
 
+  useEffect(() => {
+    const target = loadMoreTargetRef.current;
+
+    if (!target || !hasNextPage || isFetchingNextPage || isFetchNextPageError) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+
+        void fetchNextPage();
+      },
+      {
+        root: null,
+        rootMargin: "200px 0px",
+        threshold: 0,
+      },
+    );
+
+    observer.observe(target);
+
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchNextPageError, isFetchingNextPage, books.length]);
+
+  if (isLoading) {
+    return <LoadingState variant="fullscreen" />;
+  }
+
+  if (isError && books.length === 0) {
+    return (
+      <p className="py-16 text-center text-label-14-sb text-gray-60">
+        목록을 불러오지 못했어요.
+      </p>
+    );
+  }
+
   return (
     <div className="flex flex-col pb-8">
       {/* Figma node 2621:27492 (focus : 메인/이미지) 기준 정확한 스펙 반영, 2026-08-10 */}
       <section className="relative mt-3 h-76 w-full">
-        {recentTheme && (
+        {recentThemeImageUrl && (
           <>
             <img
-              src={recentTheme.imageUrl}
+              src={recentThemeImageUrl}
               alt=""
               className="absolute inset-0 h-full w-full object-cover"
             />
@@ -108,7 +172,7 @@ export default function FocusMainPage() {
         <div className="relative flex h-full flex-col items-center justify-center gap-2">
           <p className="text-body-16-b text-gray-90">오늘 독서한 시간</p>
           <p className="text-title-40-b text-gray-90 tabular-nums">
-            {formatDurationHms(todayTotalFocusSeconds)}
+            {todayFocusTime}
           </p>
         </div>
       </section>
@@ -141,22 +205,40 @@ export default function FocusMainPage() {
           />
         </div>
 
-        {visibleBooks.length === 0 ? (
+        {books.length === 0 ? (
           <p className="py-16 text-center text-body-14-r text-gray-50">
             {activeTab.emptyText}
           </p>
         ) : (
           <div className="flex flex-col gap-2.5">
-            {visibleBooks.map((book) => (
+            {books.map((book) => (
               <FocusBookRow
-                key={book.libraryId}
+                key={book.bookId}
                 imageUrl={book.coverUrl}
                 title={book.title}
                 author={book.author}
-                timeText={formatDurationHms(book.todayFocusSeconds)}
-                onClick={() => navigate("/focus/theme")}
+                timeText={book.todayFocusTime}
+                onClick={() =>
+                  navigate(`/focus/theme?bookId=${encodeURIComponent(book.bookId)}`)
+                }
               />
             ))}
+
+            {hasNextPage && !isFetchNextPageError ? (
+              <div ref={loadMoreTargetRef} className="h-6 shrink-0" />
+            ) : null}
+
+            {isFetchingNextPage ? (
+              <p className="py-4 text-center text-label-14-sb text-gray-60">
+                더 불러오는 중…
+              </p>
+            ) : null}
+
+            {isFetchNextPageError ? (
+              <p className="py-4 text-center text-label-14-sb text-gray-60">
+                추가 목록을 불러오지 못했어요.
+              </p>
+            ) : null}
           </div>
         )}
       </section>
