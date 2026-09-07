@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
-import themeGrass from "../../assets/focus/themes/theme-grass-343x304.png";
-import themeLibrary from "../../assets/focus/themes/theme-library-343x304.png";
-import themeSpace from "../../assets/focus/themes/theme-space-343x304.png";
 import searchIcon from "../../assets/icons/search.svg";
 import Icon from "../../components/action/Button/Icon";
 import { Focus as FocusBookRow } from "../../components/content/card/Book/List/Focus";
@@ -15,13 +12,8 @@ import MaskGradient from "../../components/layout/MaskGradient";
 import TabBar from "../../components/navigation/tabs/TabBar";
 import { useFocusHome } from "../../hooks/queries/focus/useFocusHome";
 import type { FocusBookStatus } from "../../types/focus/focus";
+import { findFocusTheme } from "./utils/focusThemes";
 import { readStoredFocusThemeId } from "./utils/focusThemeStorage";
-
-const FOCUS_MAIN_THEME_IMAGE_BY_ID: Record<number, string> = {
-  1: themeGrass,
-  2: themeSpace,
-  3: themeLibrary,
-};
 
 const STATUS_TABS: {
   value: FocusBookStatus;
@@ -55,11 +47,8 @@ export default function FocusMainPage() {
   const statusParam = searchParams.get("status");
   const activeStatus: FocusBookStatus =
     statusParam && isFocusStatus(statusParam) ? statusParam : "BEFORE";
-  const [recentThemeId] = useState<number | null>(readStoredFocusThemeId);
-  const recentThemeImageUrl =
-    recentThemeId === null
-      ? undefined
-      : FOCUS_MAIN_THEME_IMAGE_BY_ID[recentThemeId];
+  const [recentThemeId] = useState(readStoredFocusThemeId);
+  const recentThemeImageUrl = findFocusTheme(recentThemeId)?.mainImageUrl;
 
   const {
     data,

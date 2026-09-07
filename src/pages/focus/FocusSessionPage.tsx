@@ -6,12 +6,10 @@ import FAB from "../../components/action/Button/FAB";
 import Solid from "../../components/action/Button/Solid";
 import BookCover from "../../components/atomic/BookCover";
 import MaskGradient from "../../components/layout/MaskGradient";
-import {
-  mockActiveFocusSession,
-  mockFocusSessionBackgroundByThemeId,
-} from "../../mocks/focus/focus";
+import { mockActiveFocusSession } from "../../mocks/focus/focus";
 import FocusEndSheet from "./component/FocusEndSheet";
 import { formatDurationHms } from "./utils/formatDurationHms";
+import { findFocusTheme } from "./utils/focusThemes";
 import { readStoredFocusThemeId } from "./utils/focusThemeStorage";
 import {
   clearFocusSessionTimer,
@@ -27,7 +25,7 @@ export default function FocusSessionPage() {
   const session = mockActiveFocusSession;
 
   // 테마 선택 화면과 같은 키를 읽어 마지막으로 시작한 테마 배경을 이어서 보여준다.
-  const [themeId] = useState<number | null>(readStoredFocusThemeId);
+  const [themeId] = useState(readStoredFocusThemeId);
   const [imageError, setImageError] = useState(false);
 
   const [timerState, setTimerState] = useState<FocusSessionTimerState>(
@@ -52,8 +50,7 @@ export default function FocusSessionPage() {
     return () => window.clearInterval(timerId);
   }, [timerState]);
 
-  const backgroundUrl =
-    themeId !== null ? mockFocusSessionBackgroundByThemeId[themeId] : undefined;
+  const backgroundUrl = findFocusTheme(themeId)?.sessionBackgroundUrl;
 
   const handleCloseSheet = () => {
     const resumedTimer = resumeFocusSessionTimer(timerState);

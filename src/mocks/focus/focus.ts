@@ -1,12 +1,3 @@
-import themeGrass80 from "../../assets/focus/themes/theme-grass-80x80.png";
-import themeGrass684 from "../../assets/focus/themes/theme-grass-375x684.png";
-import themeGrass812 from "../../assets/focus/themes/theme-grass-375x812.png";
-import themeLibrary80 from "../../assets/focus/themes/theme-library-80x80.png";
-import themeLibrary684 from "../../assets/focus/themes/theme-library-375x684.png";
-import themeLibrary812 from "../../assets/focus/themes/theme-library-375x812.png";
-import themeSpace80 from "../../assets/focus/themes/theme-space-80x80.png";
-import themeSpace684 from "../../assets/focus/themes/theme-space-375x684.png";
-import themeSpace812 from "../../assets/focus/themes/theme-space-375x812.png";
 import mockBookCover from "../../assets/search/mock_bookcover.svg";
 import type {
   ActiveFocusSession,
@@ -18,30 +9,6 @@ import type {
  * 실제 API 계약(오늘/책별 누적 시간 조회 endpoint, 테마 목록)이 아직 없어 목업으로 대체했다.
  * API가 확정되면 이 파일 대신 src/hooks/queries/focus의 실제 query hook으로 교체한다.
  */
-
-/**
- * 테마 선택 화면(focus/theme) 전용. 잔디/우주/서재 3종 고정.
- * "선택 안 함"은 별도 타일이 아니라 셋 중 아무것도 select 상태가 아닌 것으로 표현한다.
- */
-export type FocusThemeSelectOption = {
-  themeId: number;
-  name: string;
-  thumbnailUrl: string; // 80x80, 타일 썸네일
-  backgroundUrl: string; // 375x684, 선택 시 화면 배경
-};
-
-export const mockFocusThemeSelectOptions: FocusThemeSelectOption[] = [
-  { themeId: 1, name: "잔디", thumbnailUrl: themeGrass80, backgroundUrl: themeGrass684 },
-  { themeId: 2, name: "우주", thumbnailUrl: themeSpace80, backgroundUrl: themeSpace684 },
-  { themeId: 3, name: "서재", thumbnailUrl: themeLibrary80, backgroundUrl: themeLibrary684 },
-];
-
-// 세션 화면은 테마 선택 화면(375x684)과 달리 전체 화면용 375x812 에셋을 사용한다.
-export const mockFocusSessionBackgroundByThemeId: Record<number, string> = {
-  1: themeGrass812,
-  2: themeSpace812,
-  3: themeLibrary812,
-};
 
 // 도서 선택부터 세션까지 libraryId 전달이 연결되면 실제 세션 데이터로 교체한다.
 export const mockActiveFocusSession: ActiveFocusSession = {
