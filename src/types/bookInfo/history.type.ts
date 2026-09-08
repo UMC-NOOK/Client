@@ -34,6 +34,7 @@ export interface BaseApiResponse<TType extends TimelineType, TDetail> {
   timelineId: number;
   type: TType;
   occurredAt: string;
+  targetId: number;
   detail: TDetail;
 }
 

@@ -359,7 +359,7 @@ export default function BookInfoPage() {
 
             <div className="rounded-sm bg-gray-15 p-4 text-body-14-r">
               {bookTimelineData &&
-              bookTimelineData.focusSummary.totalFocusSec > 0 ? (
+              (bookTimelineData.focusSummary.totalFocusSec ?? 0) > 0 ? (
                 <div className="flex flex-col gap-4">
                   <InformationSection
                     flow="horizontal"
@@ -544,7 +544,11 @@ export default function BookInfoPage() {
                   setShowCompleteModal(true);
                 },
                 onRightClick: () => {
-                  // 포커스 페이지 이동
+                  navigate(`/focus/theme`, {
+                    state: {
+                      bookId: bookDetailData.bookId,
+                    },
+                  });
                 },
               }}
             />

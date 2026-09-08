@@ -12,7 +12,7 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 
 export function useGetBookTimelineAll(libraryId: number | null | undefined) {
   return useInfiniteQuery({
-    queryKey: ["bookTimeline", libraryId],
+    queryKey: ["bookTimeline", "infinite", libraryId],
     queryFn: ({ pageParam }) =>
       getBookTimelineAll(libraryId as number, pageParam),
 

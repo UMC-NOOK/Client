@@ -34,6 +34,8 @@ export default function AllHistoryPage() {
   const [selectedTimelineId, setSelectedTimelineId] = useState<number | null>(
     null,
   );
+  console.log("history state", history.state);
+  console.log("libraryId", libraryId);
 
   const {
     data: timelineData,
@@ -43,6 +45,8 @@ export default function AllHistoryPage() {
     isFetchingNextPage,
     fetchNextPage,
   } = useGetBookTimelineAll(libraryId);
+
+  console.log("timelineData", timelineData);
 
   const {
     data: selectedDetail,
@@ -216,26 +220,46 @@ export default function AllHistoryPage() {
             layout: "single",
             variant:
               selectedDetail?.type === "REGISTER" ||
-              selectedDetail?.type === "FOCUS"
+              selectedDetail?.type === "FOCUS" ||
+              selectedDetail?.type === "STATUS"
                 ? "primaryAlert"
                 : "mint",
             label:
-              selectedDetail?.type === "REGISTER"
+              selectedDetail?.type === "REGISTER" ||
+              selectedDetail?.type === "STATUS"
                 ? "서재에서 제거하기"
                 : selectedDetail?.type === "FOCUS"
                   ? "포커스 기록 삭제하기"
-                  : "기록 상세 보기",
+                  : selectedDetail?.type === "RECORD"
+                    ? "기록 상세 보기"
+                    : "",
             onClick: () => {
-              if (selectedDetail?.type === "REGISTER") {
+              if (
+                selectedDetail?.type === "REGISTER" ||
+                selectedDetail?.type === "STATUS"
+              ) {
                 handleDeleteBook();
                 return;
               }
-
               if (selectedDetail?.type === "FOCUS") {
                 alert("포커스 기록 삭제하기");
                 return;
               }
-
+              if (selectedDetail?.type === "RECORD") {
+                console.log("selectedDetail", selectedDetail);
+                navigate(
+                  `/report/${bookDetailData.bookId}/${selectedDetail.targetId}`,
+                  {
+                    state: {
+                      record: selectedDetail.detail,
+                      bookTitle: bookDetailData.title,
+                      bookId: bookDetailData.bookId,
+                      book: bookDetailData,
+                    },
+                  },
+                );
+                return;
+              }
               alert("기록 상세 보기");
             },
           }}
@@ -318,7 +342,7 @@ export default function AllHistoryPage() {
                 ) : null}
               </div>
 
-              {selectedDetail.detail.imageUrls.length > 0 ? (
+              {(selectedDetail.detail.imageUrls?.length ?? 0) > 0 ? (
                 <div className="flex gap-1 overflow-x-auto">
                   {selectedDetail.detail.imageUrls.map((url, index) => (
                     <img
