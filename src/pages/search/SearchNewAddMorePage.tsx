@@ -80,7 +80,7 @@ export default function SearchNewAddMorePage() {
     const accessToken = localStorage.getItem("accessToken");
 
     if (!accessToken) {
-      alert("먼저 DEV 로그인 해주세요.");
+      alert("먼저 로그인 해주세요.");
       return;
     }
 

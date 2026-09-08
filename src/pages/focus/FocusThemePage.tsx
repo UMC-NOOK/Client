@@ -7,8 +7,12 @@ import Theme from "../../components/atomic/Theme";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
 import MaskGradient from "../../components/layout/MaskGradient";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
-import { mockFocusThemeSelectOptions } from "../../mocks/focus/focus";
 import { resetFocusSessionTimer } from "./utils/focusSessionTimer";
+import {
+  findFocusTheme,
+  FOCUS_THEMES,
+  type FocusThemeId,
+} from "./utils/focusThemes";
 import {
   readStoredFocusThemeId,
   saveStoredFocusThemeId,
@@ -18,21 +22,19 @@ export default function FocusThemePage() {
   const navigate = useNavigate();
 
   // 최근 선택한 테마를 로컬(localStorage)에서 읽어와 기본 선택한다. 서버에는 저장하지 않는다.
-  const [selectedThemeId, setSelectedThemeId] = useState<number | null>(
+  const [selectedThemeId, setSelectedThemeId] = useState<FocusThemeId | null>(
     readStoredFocusThemeId,
   );
   const [imageError, setImageError] = useState(false);
 
-  const selectTheme = useCallback((themeId: number | null) => {
+  const selectTheme = useCallback((themeId: FocusThemeId | null) => {
     setSelectedThemeId(themeId);
     setImageError(false);
   }, []);
 
   const selectedOption = useMemo(
     () =>
-      mockFocusThemeSelectOptions.find(
-        (option) => option.themeId === selectedThemeId,
-      ),
+      findFocusTheme(selectedThemeId),
     [selectedThemeId],
   );
 
@@ -60,7 +62,7 @@ export default function FocusThemePage() {
         {selectedOption && !imageError && (
           <div aria-hidden>
             <img
-              src={selectedOption.backgroundUrl}
+              src={selectedOption.selectBackgroundUrl}
               alt=""
               className="absolute inset-0 h-full w-full object-cover"
               onError={() => setImageError(true)}
@@ -99,7 +101,7 @@ export default function FocusThemePage() {
         )}
 
         <div className="flex w-full items-center justify-center gap-4 px-12">
-          {mockFocusThemeSelectOptions.map((option) => (
+          {FOCUS_THEMES.map((option) => (
             <Theme
               key={option.themeId}
               imageUrl={option.thumbnailUrl}

@@ -48,7 +48,7 @@ import ProfileMyPage from "../pages/myPage/ProfileMyPage";
 import OnboardingLoadingPage from "../pages/onboarding/OnboardingLoadingPage";
 import OnboardingGoalPage from "../pages/onboarding/OnboardingGoalPage";
 import { OnboardingCategoryPage } from "../pages/onboarding/OnboardingCategoryPage";
-// import { OnboardingProfilePage } from "../pages/onboarding/OnboardingProfilePage";
+import OnboardingProfilePage from "../pages/onboarding/OnboardingProfilePage";
 import { OnboardingProvider } from "../pages/onboarding/OnboardingContext";
 
 import LoginPage from "../pages/login/LoginPage";
@@ -259,10 +259,22 @@ export default function AppRoutes() {
             {/* 포커스 도서 선택 - report/search와 같은 스크롤 목록 화면이라 사이트 푸터를 그대로 노출 */}
             <Route path="/focus/select" element={<FocusSelectPage />} />
 
-            {/* MY PAGE */}
-            <Route path="/mypage" element={<MainMyPage />} />
+            <Route element={<NoFooterLayout/>}>
+                {/* MY PAGE */}
+                <Route
+                  path="/mypage"
+                  element={
+                    <div className="-mx-4 w-[calc(100%+2rem)] overflow-x-clip px-4">
+                      <MainMyPage />
+                    </div>
+                  }
+                />
 
-            <Route path="/mypage/profile" element={<ProfileMyPage />} />
+                <Route
+                  path="/mypage/profile"
+                  element={<ProfileMyPage />}
+                />
+            </Route>
 
             {/* LIBRARY */}
             <Route path="/library/status" element={<LibraryAllBookPage />} />

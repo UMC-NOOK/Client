@@ -23,6 +23,7 @@ export default function OAuthCallbackPage() {
           ? "KAKAO"
           : null;
 
+
     if (oauthError || !code || !provider) {
       navigate("/login", { replace: true });
       return;

@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useNavigationType} from "react-router-dom";
 import defaultProfile from "../../assets/icons/Profile Image.svg";
 import close from "../../assets/icons/close.svg";
 import bookCoverPlaceholder from "../../assets/images/book-cover-placeholder.png";
@@ -22,6 +21,7 @@ import { getBookDetailWithBookId } from "../../api/bookInfo";
 
 export default function MainMyPage() {
   const navigate = useNavigate();
+  const navigationType = useNavigationType();
   const queryClient = useQueryClient();
   const { data: userMe, isLoading: isUserMeLoading } = useUserMe();
   const {
@@ -34,6 +34,60 @@ export default function MainMyPage() {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
     useState(false);
+  const [isPageVisible, setIsPageVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const closeTimerRef = useRef<number | null>(null);
+  const shouldAnimate = navigationType === "PUSH";
+
+  const isPageLoading =
+    isUserMeLoading ||
+    isRecentBooksLoading ||
+    logoutMutation.isPending ||
+    withdrawMutation.isPending;
+
+  useEffect(() => {
+    const frameId = window.requestAnimationFrame(() => {
+      setIsPageVisible(true);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current !== null) {
+        window.clearTimeout(closeTimerRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!shouldAnimate) {
+      setIsPageVisible(true);
+      return;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      setIsPageVisible(true);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [shouldAnimate]);
+
+  const handleClosePage = () => {
+    if (isClosing) return;
+
+    setIsClosing(true);
+    setIsPageVisible(false);
+
+    closeTimerRef.current = window.setTimeout(() => {
+      navigate(-1);
+    }, 300);
+  };
 
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {
@@ -75,23 +129,30 @@ export default function MainMyPage() {
           throw new Error(`ISBN13이 없는 도서입니다: ${bookId}`);
         }
   
-        navigate(`/library/${encodeURIComponent(bookDetail.isbn13)}`);
+        navigate(`/library/${encodeURIComponent(bookDetail.isbn13)}`, {
+          state: { bookId },
+        });
       } catch (error) {
         console.error("도서 상세 정보 조회에 실패했습니다.", error);
       }
     };
 
-  if (
-    isUserMeLoading ||
-    isRecentBooksLoading ||
-    logoutMutation.isPending ||
-    withdrawMutation.isPending
-  ) {
-    return <LoadingState variant="fullscreen" />;
-  }
-
   return (
-    <div className="flex w-full flex-col gap-4">
+    <div
+      className={[
+        "flex w-full flex-col gap-4",
+        "transform-gpu transition-transform duration-300 ease-out",
+        isPageVisible && !isClosing
+          ? "translate-x-0"
+          : "translate-x-[calc(100%+1rem)]",
+      ].join(" ")}
+    >
+      {isPageLoading ? (
+        <div className="flex min-h-dvh w-full items-center justify-center">
+          <LoadingState />
+        </div>
+      ) : (
+        <>
       {/* top navagation 바 */}
       <div className="w-full">
         <TopNavigation
@@ -100,7 +161,7 @@ export default function MainMyPage() {
               <img src={close} alt="" />
             </Icon>
           }
-          onClickLeft={() => navigate(-1)}
+          onClickLeft={handleClosePage}
           leftPadding="p-0"
         />
       </div>
@@ -224,6 +285,8 @@ export default function MainMyPage() {
         onClose={() => setIsDeleteAccountModalOpen(false)}
         onConfirm={handleDeleteAccount}
       />
+        </>
+      )}
     </div>
   );
 }

@@ -24,8 +24,8 @@ import chevronLeft from "../../assets/icons/chevron_left.svg";
 import testBookCover from "../../assets/images/book-cover-placeholder.png";
 import bookShelf from "../../assets/icons/book_shelf-gray-30.svg";
 
-import { useGetBookDetailWithISBN } from "../../hooks/queries/bookInfo/useGetBookDetailWithISBN";
 import { useGetBookDetailWithBookId } from "../../hooks/queries/bookInfo/useGetBookDetailWithBookId";
+import { useGetBookDetailWithISBN } from "../../hooks/queries/bookInfo/useGetBookDetailWithISBN";
 import { useLibraryBookRegister } from "../../hooks/mutations/library/useLibraryBookRegister";
 import { useGetBookTimeline } from "../../hooks/queries/bookInfo/useGetBookTimeline";
 
@@ -35,7 +35,6 @@ type BookStatusType = "BEFORE" | "READING" | "FINISHED" | "UNREGISTERED";
 
 type BookInfoLocationState = {
   backTo?: string;
-  bookId?: number;
 };
 
 const detailTabs = [
@@ -60,10 +59,15 @@ export default function BookInfoPage() {
   }>();
 
   const [searchParams] = useSearchParams();
-  const identifierType = searchParams.get("type");
-  const isBookId = identifierType === "bookId";
 
-  const parsedBookId = Number(identifier);
+  const identifierType = searchParams.get("type");
+  const shouldQueryByBookId =
+    identifierType === "bookId";
+
+  const normalizedIdentifier =
+    identifier?.trim() ?? "";
+
+  const parsedBookId = Number(normalizedIdentifier);
 
   const urlBookId =
     isBookId && Number.isInteger(parsedBookId) && parsedBookId > 0
@@ -81,19 +85,40 @@ export default function BookInfoPage() {
   const shouldQueryByBookId = effectiveBookId !== null;
 
   const isbn = !shouldQueryByBookId && identifier ? identifier : null;
+  const bookId =
+    shouldQueryByBookId &&
+    Number.isInteger(parsedBookId) &&
+    parsedBookId > 0
+      ? parsedBookId
+      : null;
+
+  /*
+   * type=bookId가 아니면 기본적으로 ISBN 조회를 사용합니다.
+   * 따라서 type=isbn13이 명시된 경우와 type이 없는 경우 모두
+   * ISBN 조회로 처리됩니다.
+   */
+  const isbn13 =
+    !shouldQueryByBookId && normalizedIdentifier
+      ? normalizedIdentifier
+      : null;
 
   const bookIdQuery = useGetBookDetailWithBookId(
-    effectiveBookId,
+    bookId,
     shouldQueryByBookId,
   );
 
-  const isbnQuery = useGetBookDetailWithISBN(isbn, !shouldQueryByBookId);
+  const isbnQuery = useGetBookDetailWithISBN(
+    isbn13,
+    !shouldQueryByBookId,
+  );
 
   const activeQuery = shouldQueryByBookId ? bookIdQuery : isbnQuery;
 
   const { data: bookDetailData, isLoading, isError } = activeQuery;
 
-  const hasValidIdentifier = shouldQueryByBookId || Boolean(isbn);
+  const hasValidIdentifier = shouldQueryByBookId
+    ? bookId !== null
+    : isbn13 !== null;
 
   const [selectedTab, setSelectedTab] = useState<DetailTab>("info");
 
@@ -147,7 +172,10 @@ export default function BookInfoPage() {
       return;
     }
 
-    if (!isLoading && (isError || bookDetailData === null)) {
+    if (
+      !isLoading &&
+      (isError || !bookDetailData)
+    ) {
       alert("도서 정보를 불러오지 못했습니다.");
       navigate(-1);
     }
@@ -305,7 +333,11 @@ export default function BookInfoPage() {
                 <InformationSection
                   flow="vertical"
                   top="분량"
-                  bottom={bookDetailData ? `${bookDetailData.pages}쪽` : ""}
+                  bottom={
+                    bookDetailData
+                      ? `${bookDetailData.pages ?? 0}쪽`
+                      : ""
+                  }
                 />
 
                 <InformationSection
@@ -313,7 +345,10 @@ export default function BookInfoPage() {
                   top="출판"
                   bottom={
                     bookDetailData
-                      ? `${bookDetailData.publisher} (${bookDetailData.publicationDate})`
+                      ? bookDetailData.publisher === null &&
+                        bookDetailData.publicationDate === null
+                        ? "-"
+                        : `${bookDetailData.publisher ?? "-"} (${bookDetailData.publicationDate ?? "-"})`
                       : ""
                   }
                 />

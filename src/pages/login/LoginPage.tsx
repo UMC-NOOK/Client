@@ -1,6 +1,6 @@
 // 로그인 페이지 컴포넌트
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/logo/top-navigation-logo.svg";
+import logo from "../../assets/logo/login-main-logo.svg";
 import google from "../../assets/icons/google.svg";
 import kakao from "../../assets/icons/kakao.svg";
 import Icon from "../../components/action/Button/Icon";

@@ -145,7 +145,9 @@ export default function LibraryAllBookPage() {
         throw new Error(`ISBN13이 없는 도서입니다: ${bookId}`);
       }
 
-      navigate(`/library/${encodeURIComponent(bookDetail.isbn13)}`);
+      navigate(`/library/${encodeURIComponent(bookDetail.isbn13)}`, {
+        state: { bookId },
+      });
     } catch (error) {
       console.error("도서 상세 정보 조회에 실패했습니다.", error);
     }
@@ -292,9 +294,16 @@ export default function LibraryAllBookPage() {
             <div className="text-title-18-m text-gray-90">서재 전체 보기</div>
           }
           right={
-            <Icon size="m">
-              <img src={search} alt="검색" />
-            </Icon>
+            <button
+              type="button"
+              aria-label="도서 검색"
+              onClick={() => navigate("/search")}
+              className="cursor-pointer"
+            >
+              <Icon size="m">
+                <img src={search} alt="" />
+              </Icon>
+            </button>
           }
         />
       </div>

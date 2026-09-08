@@ -235,7 +235,9 @@ export default function SearchPage() {
           setQuery("");
           setSubmittedQuery("");
           setMode("idle");
-          navigate(-1);
+          navigate("/library", {
+            replace: true,
+          });
         }}
       />
 
