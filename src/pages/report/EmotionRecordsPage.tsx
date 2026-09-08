@@ -123,7 +123,7 @@ export default function IndividueleReportPage() {
                 type="Image"
                 className="shrink-0 "
               />
-              <div className="flex flex-col justify-between h-36 ">
+              <div className="flex flex-col flex-1 w-full justify-between h-36 ">
                 <div className="flex flex-col items-start gap-1.5">
                   <p className="text-title-18-m text-gray-90 ">{bookTitle}</p>
                   <p className="text-body-16-r text-gray-80 ">

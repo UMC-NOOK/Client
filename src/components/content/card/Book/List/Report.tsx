@@ -9,6 +9,7 @@ type Props = {
 };
 
 import reportIcon from "../../../../../assets/icons/report-gray-80.svg";
+import testBookCover from "../../../../../assets/images/book-cover-placeholder.png";
 
 export default function Report({
   imageUrl,
@@ -30,7 +31,7 @@ export default function Report({
     >
       <div
         className="flex w-14 self-stretch shrink-0 items-center justify-center rounded-[2px] bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${imageUrl})` }}
+        style={{ backgroundImage: `url(${imageUrl || testBookCover})` }}
         aria-label={imageAlt}
       />
 

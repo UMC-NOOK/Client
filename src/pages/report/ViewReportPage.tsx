@@ -85,7 +85,7 @@ export default function ViewReportPage() {
           onRightClick: () => {
             navigate(`/report/${id}/${recordId}/edit`, {
               replace: true,
-              state: { bookTitle, record, bookId },
+              state: { bookTitle, record, bookId, recordId },
             });
           },
         }}

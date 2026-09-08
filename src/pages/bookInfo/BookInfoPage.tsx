@@ -418,6 +418,7 @@ export default function BookInfoPage() {
                       state: {
                         bookTitle: bookDetailData.title,
                         bookId: bookDetailData.bookId,
+                        book: bookDetailData,
                       },
                     });
                   }}
