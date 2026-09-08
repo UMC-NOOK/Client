@@ -31,7 +31,7 @@ function ResultRow({
   const navigate = useNavigate();
 
   const handleBookClick = () => {
-    if (book.bookId !== null) {
+    if (book.bookId != null) {
       navigate(`/library/${book.bookId}?type=bookId`);
       return;
     }
