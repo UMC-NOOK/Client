@@ -7,33 +7,35 @@ export type Emotion =
   | "COMPLICATED"
   | "UNCOMFORTABLE";
 
-export type HistoryItem = {
+export interface timelineItem {
   timelineId: number;
   type: TimelineType;
   occurredAt: string;
   title: string;
-  subtitle: string;
+  subtitle: string | null;
   previewText: string;
   targetId: number;
-};
+}
 
-export type HistoryGroup = {
+export interface dateGroup {
   year: number;
-  showYear: boolean;
   monthDay: string;
-  items: HistoryItem[];
-};
+  showYear: boolean;
+  items: timelineItem[];
+}
+
+export interface TimelinePreview {
+  dateGroups: dateGroup[];
+  hasNext: boolean;
+  nextCursor: string | null;
+}
 
 export interface BaseApiResponse<TType extends TimelineType, TDetail> {
-  isSuccess: true;
-  code: "SUCCESS-200";
-  message: string;
-  result: {
-    timelineId: number;
-    type: TType;
-    occurredAt: string;
-    detail: TDetail;
-  };
+  timelineId: number;
+  type: TType;
+  occurredAt: string;
+  targetId: number;
+  detail: TDetail;
 }
 
 export interface RegisterDetail {

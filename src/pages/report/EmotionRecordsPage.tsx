@@ -18,7 +18,7 @@ import type { EmotionKey as emotion } from "../../components/action/Chip/Emotion
 // assets
 import chevron_left from "../../assets/icons/chevron_left.svg";
 import plus from "../../assets/icons/plus-gray-10.svg";
-import testBookCover from "../../assets/book-info/testBookCover.svg";
+import testBookCover from "../../assets/images/book-cover-placeholder.png";
 
 export default function IndividueleReportPage() {
   const { id } = useParams();
@@ -116,29 +116,35 @@ export default function IndividueleReportPage() {
           <div className="flex flex-col items-start justify-start gap-8 w-full min-w-0">
             <div className="flex justify-start items-start mt-4 gap-7 w-full ">
               <BookCover
-                imageUrl={book?.coverImageUrl || testBookCover}
+                imageUrl={
+                  book?.coverImageUrl || book?.coverUrl || testBookCover
+                }
                 size="M"
                 type="Image"
                 className="shrink-0 "
               />
-              <div className="flex flex-col justify-between h-36 ">
+              <div className="flex flex-col flex-1 w-full justify-between h-36 ">
                 <div className="flex flex-col items-start gap-1.5">
                   <p className="text-title-18-m text-gray-90 ">{bookTitle}</p>
                   <p className="text-body-16-r text-gray-80 ">
                     {book?.author || "작가 정보 없음"}
                   </p>
                 </div>
-                <Text
-                  size="18"
-                  active={false}
-                  onClick={() =>
-                    navigate(`/library/${bookId}`, {
-                      state: { bookTitle, bookId, book },
-                    })
-                  }
-                >
-                  도서 상세 보기 →
-                </Text>
+                <div className="flex justify-end">
+                  <Text
+                    size="14r"
+                    active={false}
+                    onClick={() =>
+                      navigate(`/library/${bookId}`, {
+                        state: { bookTitle, bookId, book },
+                      })
+                    }
+                    className="pl-4.5 pt-4.5 w-29"
+                    extraPadding={true}
+                  >
+                    도서 상세 보기 →
+                  </Text>
+                </div>
               </div>
             </div>
             <div className="flex items-start w-full min-w-0 overflow-x-scroll gap-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">

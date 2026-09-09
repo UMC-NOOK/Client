@@ -14,10 +14,12 @@ import { useDeleteRecord } from "../../hooks/mutations/record/useDeleteRecord";
 
 export default function ViewReportPage() {
   const { id, recordId } = useParams();
+
   const record = history.state?.usr?.record;
   const bookTitle = history.state?.usr?.bookTitle || "책 제목 없음";
   const bookId = history.state?.usr?.bookId;
   const book = history.state?.usr?.book || null;
+
   const navigate = useNavigate();
 
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -83,7 +85,7 @@ export default function ViewReportPage() {
           onRightClick: () => {
             navigate(`/report/${id}/${recordId}/edit`, {
               replace: true,
-              state: { bookTitle, record, bookId },
+              state: { bookTitle, record, bookId, recordId },
             });
           },
         }}

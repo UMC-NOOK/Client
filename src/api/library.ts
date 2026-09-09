@@ -15,6 +15,7 @@ import type {
   RecentBookInfo,
   SpecificDateBookInfo,
 } from "../types/libraryInfo/library";
+import type { BookAddResponse } from "../types/bookInfo/bookAdd.type";
 
 const LIBRARY_BASE = "/api/v1/library";
 
@@ -188,8 +189,11 @@ export function getLibraryFocusRecords(params: {
 }
 
 // 서재 책 등록
-export async function postLibraryBook(bookId: number): Promise<void> {
-  await api.post(`${LIBRARY_BASE}/${bookId}`);
+export async function postLibraryBook(
+  bookId: number,
+): Promise<BaseApiResponse<BookAddResponse>> {
+  const response = await api.post(`${LIBRARY_BASE}/${bookId}`);
+  return response.data;
 }
 
 // 서재 책 삭제
