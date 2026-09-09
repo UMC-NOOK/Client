@@ -204,10 +204,7 @@ export default function AppRoutes() {
 
                 <Route path="category" element={<OnboardingCategoryPage />} />
 
-                {/* <Route
-                  path="profile"
-                  element={<OnboardingProfilePage />}
-                /> */}
+                <Route path="profile" element={<OnboardingProfilePage />} />
               </Route>
             </Route>
 
@@ -259,21 +256,18 @@ export default function AppRoutes() {
             {/* 포커스 도서 선택 - report/search와 같은 스크롤 목록 화면이라 사이트 푸터를 그대로 노출 */}
             <Route path="/focus/select" element={<FocusSelectPage />} />
 
-            <Route element={<NoFooterLayout/>}>
-                {/* MY PAGE */}
-                <Route
-                  path="/mypage"
-                  element={
-                    <div className="-mx-4 w-[calc(100%+2rem)] overflow-x-clip px-4">
-                      <MainMyPage />
-                    </div>
-                  }
-                />
+            <Route element={<NoFooterLayout />}>
+              {/* MY PAGE */}
+              <Route
+                path="/mypage"
+                element={
+                  <div className="-mx-4 w-[calc(100%+2rem)] overflow-x-clip px-4">
+                    <MainMyPage />
+                  </div>
+                }
+              />
 
-                <Route
-                  path="/mypage/profile"
-                  element={<ProfileMyPage />}
-                />
+              <Route path="/mypage/profile" element={<ProfileMyPage />} />
             </Route>
 
             {/* LIBRARY */}
