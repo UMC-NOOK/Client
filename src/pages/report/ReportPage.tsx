@@ -149,7 +149,10 @@ export default function ReportPage() {
               key={option.value}
               text={option.label}
               active={sortOption === option.value}
-              onClick={() => setSortOption(option.value)}
+              onClick={() => {
+                setSortOption(option.value);
+                setShowSortSheet(false);
+              }}
             />
           ))}
         </div>

@@ -184,14 +184,18 @@ export default function IndividueleReportPage() {
             />
           ))}
       </div>
-      <FAB
-        aria-label="기록 작성"
-        icon={<img src={plus} alt="plus" />}
-        onClick={() =>
-          navigate(`/report/${id}/create`, { state: { bookTitle, bookId } })
-        }
-        className="absolute bottom-6 right-0 z-10"
-      />
+      <div className="pointer-events-none fixed bottom-6 left-1/2 z-50 flex w-full max-w-[375px] -translate-x-1/2 justify-end px-8">
+        <FAB
+          aria-label="기록 작성"
+          icon={<img src={plus} alt="" />}
+          onClick={() =>
+            navigate(`/report/${id}/create`, {
+              state: { bookTitle, bookId },
+            })
+          }
+          className="pointer-events-auto"
+        />
+      </div>
     </div>
   );
 }
