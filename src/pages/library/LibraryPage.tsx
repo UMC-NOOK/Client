@@ -62,7 +62,8 @@ export default function LibraryPage() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { data: authMe, isLoading: isAuthMeLoading } = useAuthMe();
-  const { data: libraryBookData, isLoading: isBookLoading } = useLibraryBookNum();
+  const { data: libraryBookData, isLoading: isBookLoading } =
+    useLibraryBookNum();
   const { data: libraryBookGoalData, isLoading: isBookGoalLoading } =
     useLibraryBookGoal();
   const { data: libraryToggleYearsData, isLoading: isYearsLoading } =
@@ -76,10 +77,12 @@ export default function LibraryPage() {
   const endYear =
     availableYears.length > 0 ? Math.max(...availableYears) : currentYear;
 
-  const [selectedYearMonth, setSelectedYearMonth] = useState<SelectedYearMonth>({
-    year: startYear,
-    month: currentMonth,
-  });
+  const [selectedYearMonth, setSelectedYearMonth] = useState<SelectedYearMonth>(
+    {
+      year: startYear,
+      month: currentMonth,
+    },
+  );
 
   const yearMonth = useMemo(() => {
     return `${selectedYearMonth.year}-${String(selectedYearMonth.month).padStart(2, "0")}`;
@@ -123,15 +126,11 @@ export default function LibraryPage() {
     setIsModalOpen(true);
   };
 
-  const {
-    data: specificDateBookInfo,
-    isLoading: isSpecificDateLoading,
-  } = useLibrarySpecificDateBookInfo(isModalOpen, selectedDate, modalCursor);
+  const { data: specificDateBookInfo, isLoading: isSpecificDateLoading } =
+    useLibrarySpecificDateBookInfo(isModalOpen, selectedDate, modalCursor);
 
-  const {
-    data: libraryRecentBookInfoData,
-    isLoading: isRecentBookLoading,
-  } = useLibraryRecentBookInfo();
+  const { data: libraryRecentBookInfoData, isLoading: isRecentBookLoading } =
+    useLibraryRecentBookInfo();
 
   const dropdownPositionClass =
     selectedView === "focus"
@@ -184,9 +183,7 @@ export default function LibraryPage() {
     isYearsLoading ||
     isRecentBookLoading ||
     isSpecificDateLoading ||
-    (selectedView === "focus"
-      ? isFocusMonthlyLoading
-      : isBooksMonthlyLoading);
+    (selectedView === "focus" ? isFocusMonthlyLoading : isBooksMonthlyLoading);
 
   if (isPageLoading) {
     return <LoadingState variant="fullscreen" />;
@@ -210,7 +207,9 @@ export default function LibraryPage() {
                 : totalBookNum}
             </label>
             <label className="text-label-20-b text-yellow-70">권</label>
-            <label className="text-label-20-b text-gray-90">의 책이 있어요.</label>
+            <label className="text-label-20-b text-gray-90">
+              의 책이 있어요.
+            </label>
           </div>
           <Link to="/library/status">
             <Icon size="m" className="items-center">
@@ -221,7 +220,7 @@ export default function LibraryPage() {
 
         <Link
           to="/users/me/onboarding/goal"
-          className="block w-full pt-4 text-inherit no-underline outline-none focus-visible:ring-2 focus-visible:ring-gray-40 focus-visible:ring-offset-2 rounded-[8px]"
+          className="block w-full pt-4 text-inherit no-underline outline-none focus-visible:ring-2 focus-visible:ring-gray-40 focus-visible:ring-offset-2 rounded-lg"
         >
           <BookGoal
             percent={iconProgressPercent}
