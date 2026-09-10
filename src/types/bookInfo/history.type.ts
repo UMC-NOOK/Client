@@ -54,7 +54,7 @@ export interface FocusDetail {
 
 export interface RecordDetail {
   content: string;
-  emotion: Emotion;
+  emotion: Emotion | "EMPTY";
   imageUrls: string[];
 }
 

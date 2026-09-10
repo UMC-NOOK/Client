@@ -333,7 +333,7 @@ export default function AllHistoryPage() {
                   {selectedDetail.detail.content}
                 </p>
 
-                {selectedDetail.detail.emotion ? (
+                {selectedDetail.detail.emotion != "EMPTY" ? (
                   <Emotion
                     active={true}
                     size="s"
