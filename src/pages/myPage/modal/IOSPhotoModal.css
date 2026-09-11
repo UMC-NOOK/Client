@@ -1,0 +1,69 @@
+.ios-photo-modal {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.ios-photo-modal[open] {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.ios-photo-modal::backdrop {
+  background: rgb(0 0 0 / 40%);
+}
+
+.ios-photo-modal__container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 430px;
+  padding: 0 8px max(8px, env(safe-area-inset-bottom));
+}
+
+.ios-photo-modal__actions {
+  overflow: hidden;
+  border-radius: 14px;
+  background: rgb(249 249 249 / 96%);
+  backdrop-filter: blur(20px);
+}
+
+.ios-photo-modal__container button {
+  display: block;
+  width: 100%;
+  min-height: 57px;
+  padding: 16px;
+  color: #007aff;
+  font-size: 20px;
+  line-height: 25px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.ios-photo-modal__actions button + button {
+  border-top: 1px solid rgb(60 60 67 / 20%);
+}
+
+.ios-photo-modal__default {
+  border-radius: 14px;
+  background: white;
+  font-weight: 600;
+}
+
+.ios-photo-modal__container button:active {
+  background: #e5e5ea;
+}
+
+.ios-photo-modal__container button:focus-visible {
+  outline: 2px solid #007aff;
+  outline-offset: -4px;
+}

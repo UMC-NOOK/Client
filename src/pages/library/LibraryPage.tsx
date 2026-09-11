@@ -9,7 +9,7 @@ import focusGray from "../../assets/icons/focus-gray-40.svg";
 import book from "../../assets/icons/book.svg";
 import book_gray_40 from "../../assets/icons/book_gray_40.svg";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DayOfTheWeek from "../../components/content/Calendar/Resource/DayOfTheWeek";
 import BottomBanner from "./modal/BottomBanner";
 import DateFocusBookModal from "./modal/DateFocusBookModal";
@@ -51,6 +51,7 @@ function formatFocusMinutes(totalFocusMin: number) {
 }
 
 export default function LibraryPage() {
+  const navigate = useNavigate();
   const [selectedView, setSelectedView] = useState<"focus" | "book">("focus");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>("");
@@ -331,9 +332,7 @@ export default function LibraryPage() {
           coverUrl={libraryRecentBookInfoData.coverUrl}
           page={libraryRecentBookInfoData.page}
           focusTime={libraryRecentBookInfoData.focusTime}
-          onClick={() => {
-            console.log("이동:", libraryRecentBookInfoData.bookId);
-          }}
+          onClick={() => navigate("/focus/theme")}
           onClose={() => {
             sessionStorage.setItem("libraryBottomBannerDismissed", "true");
             setIsBannerOpen(false);

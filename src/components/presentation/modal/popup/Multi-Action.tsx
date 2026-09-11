@@ -1,7 +1,9 @@
+import type { ReactNode } from "react";
+
 type Props = {
   title: string;
-  buttonContext1: string;
-  buttonContext2: string;
+  buttonContext1: ReactNode;
+  buttonContext2: ReactNode;
   buttonContext3: string;
   onButton1Click?: () => void;
   onButton2Click?: () => void;
@@ -21,7 +23,7 @@ export default function MultiAction({
 }: Props){
     return(
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className={`flex w-77.75 flex-col items-center justify-center gap-5 p-8 bg-gray-17 rounded-lg ${className}`}>
+            <div role="dialog" aria-modal="true" aria-label={title} className={`flex w-77.75 flex-col items-center justify-center gap-5 p-8 bg-gray-17 rounded-lg ${className}`}>
                 <div className="text-gray-90 items-center text-body-16-b">
                     {title}
                 </div>

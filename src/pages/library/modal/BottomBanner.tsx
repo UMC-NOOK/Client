@@ -40,8 +40,11 @@ export default function BottomBanner({
                     </Icon>
                 </button>
 
-                <div
-                    className="flex flex-row items-end justify-center justify-between w-full h-24 rounded-[10px] bg-gray-15 p-4 gap-4"
+                <button
+                    type="button"
+                    onClick={() => onClick?.(bookId)}
+                    aria-label={`${title} 이어서 포커스하기`}
+                    className="flex flex-row items-end justify-center justify-between w-full h-24 rounded-[10px] bg-gray-15 p-4 gap-4 text-left cursor-pointer"
                 >
                     <img src={coverUrl} className="w-11 h-full rounded-[2px]"/>
                     
@@ -55,21 +58,18 @@ export default function BottomBanner({
                                 <SectionHeader
                                     size="16"
                                     top={title}
-                                    bottom={`${page}쪽부터 이어서 포커스하기`}
+                                    bottom={`이어서 포커스하기`}
                                 />
                             </div>
                         </div>
 
-                        <button
-                            type="button"
+                        <span
                             className="flex shrink-0 items-center justify-center"
-                            onClick={() => onClick?.(bookId)}
-                            aria-label={`${title} 이어서 포커스하기`}
                         >
                             <img src={movement} className="w-8 h-8" alt="" />
-                        </button>
+                        </span>
                     </div>
-                </div>
+                </button>
             </div>
         </div>
     );
