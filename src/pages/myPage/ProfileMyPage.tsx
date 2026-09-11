@@ -4,14 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { uploadSingleImage } from "../../api/image";
 import defaultProfile from "../../assets/icons/Profile Image.svg";
 import camera from "../../assets/icons/camera-black.svg";
-import pencil from "../../assets/icons/pencil.svg";
 import chevron_left from "../../assets/icons/chevron_left.svg";
 import Icon from "../../components/action/Button/Icon";
 import Solid from "../../components/action/Button/Solid";
 import InformationSection from "../../components/content/InformationText/InformationSection";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import LoadingState from "../../components/feedback/LoadingState";
-import MultiAction from "../../components/presentation/modal/popup/Multi-Action";
 import IOSPhotoModal from "./modal/IOSPhotoModal";
 import { createDefaultProfileFile } from "./utils/createDefaultProfileFile";
 import { usePatchProfile } from "../../hooks/mutations/mypage/usePatchProfile";
@@ -39,7 +37,6 @@ export default function ProfileMyPage() {
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [profilePreview, setProfilePreview] = useState(defaultProfile);
   const [imageError, setImageError] = useState("");
-  const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [useDefaultProfile, setUseDefaultProfile] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
@@ -60,15 +57,6 @@ export default function ProfileMyPage() {
       setProfilePreview(userMe?.profileImageUrl || defaultProfile);
     }
   }, [profileFile, useDefaultProfile, userMe?.profileImageUrl]);
-
-  useEffect(() => {
-    if (!isPickerOpen) return;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsPickerOpen(false);
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isPickerOpen]);
 
   useEffect(() => {
     return () => {
@@ -187,7 +175,7 @@ export default function ProfileMyPage() {
             <button
               type="button"
               aria-label="프로필 사진 변경"
-              onClick={() => setIsPickerOpen(true)}
+              onClick={() => setIsPhotoModalOpen(true)}
               className="relative h-30 w-30 cursor-pointer self-center"
             >
               <div className="h-full w-full overflow-hidden rounded-full">
@@ -212,38 +200,6 @@ export default function ProfileMyPage() {
                 setImageError("");
               }}
             />
-            {isPickerOpen && (
-              <div className="absolute inset-0 z-50 bg-black/50 [&>div]:absolute">
-                <MultiAction
-                  title="프로필 사진 변경"
-                  buttonContext1={
-                    <span className="flex items-center gap-2">
-                      <img src={pencil} alt="" className="h-5 w-5" />
-                      사진 선택
-                    </span>
-                  }
-                  buttonContext2={
-                    <span className="flex items-center gap-2">
-                      <img src={defaultProfile} alt="" className="h-5 w-5 rounded-full" />
-                      기본 이미지로 변경
-                    </span>
-                  }
-                  buttonContext3="취소"
-                  onButton1Click={() => {
-                    setIsPhotoModalOpen(true);
-                    setIsPickerOpen(false);
-                  }}
-                  onButton2Click={() => {
-                    setUseDefaultProfile(true);
-                    setProfileFile(null);
-                    setProfilePreview(defaultProfile);
-                    setImageError("");
-                    setIsPickerOpen(false);
-                  }}
-                  onButton3Click={() => setIsPickerOpen(false)}
-                />
-              </div>
-            )}
             {imageError && (
               <p role="alert" className="text-label-13-r text-red-500">
                 {imageError}
