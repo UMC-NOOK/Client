@@ -88,10 +88,7 @@ export default function IndividueleReportPage() {
   };
 
   return (
-    <div
-      className="flex flex-col items-center justify-start w-full gap-4 relative  
-       "
-    >
+    <div className="flex flex-col items-center justify-start w-full gap-4 relative">
       <div className="relative w-full min-w-0">
         {/*배경영역*/}
         <div className="absolute inset-0 z-0 -mx-4 -mt-2 pointer-events-none overflow-hidden">
@@ -147,7 +144,7 @@ export default function IndividueleReportPage() {
                 </div>
               </div>
             </div>
-            <div className="flex items-start w-full min-w-0 overflow-x-scroll gap-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div className="flex items-start min-w-0 overflow-x-scroll gap-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] -ml-4 w-[calc(100%+2rem)] px-4">
               {Object.entries(emotionMetaMap).map(([key, { text, count }]) => (
                 <div key={key} className="shrink-0">
                   <Chip
@@ -184,7 +181,7 @@ export default function IndividueleReportPage() {
             />
           ))}
       </div>
-      <div className="pointer-events-none fixed bottom-6 left-1/2 z-50 flex w-full max-w-[375px] -translate-x-1/2 justify-end px-8">
+      <div className="pointer-events-none fixed bottom-6 left-1/2 z-50 flex w-full max-w-93.75 -translate-x-1/2 justify-end px-8">
         <FAB
           aria-label="기록 작성"
           icon={<img src={plus} alt="" />}
