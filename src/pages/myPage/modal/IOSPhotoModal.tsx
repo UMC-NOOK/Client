@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useRef,
   type ChangeEvent,
   type ReactNode,
@@ -41,6 +42,33 @@ export function IOSPhotoModal({
 
   const cameraInputRef =
     useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleOutsidePointerDown = (event: PointerEvent) => {
+      const dialog = dialogRef.current;
+      if (!dialog?.open || !(event.target instanceof Node)) return;
+      if (
+        !dialog.contains(event.target) &&
+        !triggerRef.current?.contains(event.target)
+      ) {
+        dialog.close();
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && dialogRef.current?.open) {
+        dialogRef.current.close();
+        triggerRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("pointerdown", handleOutsidePointerDown, true);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("pointerdown", handleOutsidePointerDown, true);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
 
 
 

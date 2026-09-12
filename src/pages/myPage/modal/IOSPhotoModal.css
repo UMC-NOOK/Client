@@ -25,28 +25,27 @@
 /* 실제 glass 영역 */
 .ios-photo-modal__actions {
 
+  position: relative;
   display: flex;
   flex-direction: column;
 
   padding: 6px 0;
 
 
-  border-radius: 22px;
+  border-radius: 36px;
 
 
-  /*
-    여기 opacity를 낮춰야 뒤가 보임
-  */
   background:
     linear-gradient(
       180deg,
       rgba(25, 28, 52, 0.25),
       rgba(20, 23, 45, 0.42)
     );
+  background-clip: padding-box;
 
 
   border:
-    1px solid rgba(170,180,220,0.25);
+    1px solid transparent;
 
 
   box-shadow:
@@ -61,6 +60,27 @@
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
 
+}
+
+.ios-photo-modal__actions::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(190, 200, 245, 0.4) 25%,
+    rgba(56, 63, 106, 0.08) 50%,
+    rgba(170, 185, 235, 0.3) 75%,
+    rgba(255, 255, 255, 0.55) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 }
 
 
