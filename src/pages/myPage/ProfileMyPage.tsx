@@ -39,7 +39,6 @@ export default function ProfileMyPage() {
   const [imageError, setImageError] = useState("");
   const [useDefaultProfile, setUseDefaultProfile] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const savingRef = useRef(false);
   const isEmailInvalid =
     email.length > 0 && !/^[^\s@]+@(naver\.com|gmail\.com)$/i.test(email);
@@ -172,10 +171,15 @@ export default function ProfileMyPage() {
       {/* 프로필 */}
         <div className="flex flex-col gap-12"> 
             {/* 프로필 */}
-            <button
-              type="button"
-              aria-label="프로필 사진 변경"
-              onClick={() => setIsPhotoModalOpen(true)}
+            <IOSPhotoModal
+              onSelectImage={handleProfileChange}
+              onSelectDefaultImage={() => {
+                setUseDefaultProfile(true);
+                setProfileFile(null);
+                setProfilePreview(defaultProfile);
+                setImageError("");
+              }}
+              disabled={isSaving || patchProfileMutation.isPending}
               className="relative h-30 w-30 cursor-pointer self-center"
             >
               <div className="h-full w-full overflow-hidden rounded-full">
@@ -188,18 +192,7 @@ export default function ProfileMyPage() {
               <span className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-white">
                 <img src={camera} alt="프로필 이미지 선택" className="h-5 w-5" />
               </span>
-            </button>
-            <IOSPhotoModal
-              isOpen={isPhotoModalOpen}
-              onClose={() => setIsPhotoModalOpen(false)}
-              onSelectImage={handleProfileChange}
-              onSelectDefaultImage={() => {
-                setUseDefaultProfile(true);
-                setProfileFile(null);
-                setProfilePreview(defaultProfile);
-                setImageError("");
-              }}
-            />
+            </IOSPhotoModal>
             {imageError && (
               <p role="alert" className="text-label-13-r text-red-500">
                 {imageError}
