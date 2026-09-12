@@ -18,7 +18,6 @@ export default function BottomBanner({
     bookId,
     title,
     coverUrl,
-    page,
     focusTime,
     onClick,
     onClose,

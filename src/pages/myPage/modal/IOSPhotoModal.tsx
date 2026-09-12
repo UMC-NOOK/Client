@@ -89,10 +89,6 @@ export function IOSPhotoModal({
         dialog.offsetWidth;
 
 
-      const modalHeight =
-        dialog.offsetHeight;
-
-
       const left =
         Math.min(
           triggerRect.left,
