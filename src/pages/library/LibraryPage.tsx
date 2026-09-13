@@ -35,6 +35,7 @@ import getGoalPercent from "./utils/getGoalPercent";
 import DropDown from "../../components/section/dropDown/DropDown";
 import { useLibrarySpecificDateBookInfo } from "../../hooks/queries/library/useLibrarySpecificDateBookInfo";
 import { useAuthMe } from "../../hooks/queries/useAuthMe";
+import { dismissBottomBanner, isBottomBannerDismissed } from "./utils/bottomBannerState";
 
 type SelectedYearMonth = {
   year: number;
@@ -57,7 +58,7 @@ export default function LibraryPage() {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isBannerOpen, setIsBannerOpen] = useState(
-    () => sessionStorage.getItem("libraryBottomBannerDismissed") !== "true",
+    () => !isBottomBannerDismissed(),
   );
   const [modalCursor, setModalCursor] = useState<number | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -241,7 +242,7 @@ export default function LibraryPage() {
               >
                 <button
                   type="button"
-                  className="flex items-center justify-center gap-2"
+                  className="flex cursor-pointer items-center justify-center gap-2"
                   onClick={() => setIsDropdownOpen((prev) => !prev)}
                 >
                   <span className="text-label-16-b text-gray-90">
@@ -334,7 +335,7 @@ export default function LibraryPage() {
           focusTime={libraryRecentBookInfoData.focusTime}
           onClick={() => navigate("/focus/theme")}
           onClose={() => {
-            sessionStorage.setItem("libraryBottomBannerDismissed", "true");
+            dismissBottomBanner();
             setIsBannerOpen(false);
           }}
         />

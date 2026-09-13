@@ -3,6 +3,7 @@ import axios, { type InternalAxiosRequestConfig } from "axios";
 import type BaseApiResponse from "../types/BaseApiResponse";
 import type { AuthMe, OAuthLoginResponse } from "../types/auth/auth";
 import { api } from "./axios";
+import { resetBottomBanner } from "../pages/library/utils/bottomBannerState";
 
 type DevLoginParams = {
   email: string;
@@ -51,7 +52,7 @@ function saveAuthTokens(result: {
   onboardingCompleted?: boolean;
 }) {
   localStorage.setItem("accessToken", result.accessToken);
-  sessionStorage.removeItem("libraryBottomBannerDismissed");
+  resetBottomBanner();
 
   if (result.refreshToken) {
     localStorage.setItem("refreshToken", result.refreshToken);

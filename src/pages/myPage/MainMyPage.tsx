@@ -239,7 +239,7 @@ export default function MainMyPage() {
               size="13"
               top={<span className="text-gray-60 text-label-13-r">고객센터</span>}
               bottom={
-                <div className="flex flex-col [&>*]:!text-btn-14-r">
+                <div className="flex flex-col [&>*]:cursor-pointer [&>*]:!text-btn-14-r">
                   <ContainerText text="자주 묻는 질문" active
                     onClick={() => window.open("https://magic-moat-e7b.notion.site/3cd5fbef9af38031b72fe6fed4bfd6fe?source=copy_link")}/>
                   <ContainerText text="이용 약관" active 
@@ -260,7 +260,7 @@ export default function MainMyPage() {
               size="13"
               top={<span className="text-gray-60 text-label-13-r">계정</span>}
               bottom={
-                <div className="flex flex-col [&>*]:!text-btn-14-r">
+                <div className="flex flex-col [&>*]:cursor-pointer [&>*]:!text-btn-14-r">
                   <ContainerText
                     text="로그아웃"
                     active
