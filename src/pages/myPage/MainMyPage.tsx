@@ -138,6 +138,7 @@ export default function MainMyPage() {
     };
 
   return (
+    <>
     <div
       className={[
         "flex w-full flex-col gap-4",
@@ -275,6 +276,12 @@ export default function MainMyPage() {
                 }
           />
       </div>
+        </>
+      )}
+    </div>
+    {/* 페이지 전환 transform 밖에서 main 전체를 기준으로 모달을 배치한다. */}
+    {!isPageLoading && (isLogoutModalOpen || isDeleteAccountModalOpen) && (
+      <div className="absolute inset-0 z-50 [&>div]:absolute">
       <LogoutModal
         open={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
@@ -285,8 +292,8 @@ export default function MainMyPage() {
         onClose={() => setIsDeleteAccountModalOpen(false)}
         onConfirm={handleDeleteAccount}
       />
-        </>
-      )}
-    </div>
+      </div>
+    )}
+    </>
   );
 }

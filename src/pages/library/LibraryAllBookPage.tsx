@@ -121,6 +121,18 @@ export default function LibraryAllBookPage() {
   const requestIdRef = useRef(0);
   const isFetchingNextPageRef = useRef(false);
 
+  useEffect(() => {
+    const scrollRoot = document.documentElement;
+    const wasScrollbarHidden = scrollRoot.classList.contains("scrollbar-hide");
+    scrollRoot.classList.add("scrollbar-hide");
+
+    return () => {
+      if (!wasScrollbarHidden) {
+        scrollRoot.classList.remove("scrollbar-hide");
+      }
+    };
+  }, []);
+
   const setTab = useCallback(
     (next: LibraryTab) => {
       setSearchParams(

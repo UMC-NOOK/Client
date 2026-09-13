@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { uploadSingleImage } from "../../api/image";
@@ -10,7 +10,8 @@ import Solid from "../../components/action/Button/Solid";
 import InformationSection from "../../components/content/InformationText/InformationSection";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import LoadingState from "../../components/feedback/LoadingState";
-import MultiAction from "../../components/presentation/modal/popup/Multi-Action"
+import IOSPhotoModal from "./modal/IOSPhotoModal";
+import { createDefaultProfileFile } from "./utils/createDefaultProfileFile";
 import { usePatchProfile } from "../../hooks/mutations/mypage/usePatchProfile";
 import { useUserMe } from "../../hooks/queries/useUserMe";
 
@@ -35,24 +36,26 @@ export default function ProfileMyPage() {
   const [email, setEmail] = useState("");
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [profilePreview, setProfilePreview] = useState(defaultProfile);
-  const [isMultiActionOpen, setIsMultiActionOpen] = useState(false);
-  const [isActive, setIsActive] = useState(false);
+  const [imageError, setImageError] = useState("");
+  const [useDefaultProfile, setUseDefaultProfile] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const savingRef = useRef(false);
   const isEmailInvalid =
     email.length > 0 && !/^[^\s@]+@(naver\.com|gmail\.com)$/i.test(email);
   const isSaveActive =
       nickname !== (userMe?.nickName ?? "") ||
-        profileFile !== null ||
-        isActive;
-  const fileInputRef = useRef<HTMLInputElement>(null);
+        profileFile !== null || useDefaultProfile;
 
   useEffect(() => {
     if (userMe?.nickName) setNickname(userMe.nickName);
     if (userMe?.email) setEmail(userMe.email);
+  }, [userMe?.email, userMe?.nickName]);
 
-    if (!profileFile) {
+  useEffect(() => {
+    if (!profileFile && !useDefaultProfile) {
       setProfilePreview(userMe?.profileImageUrl || defaultProfile);
     }
-  }, [profileFile, userMe?.email, userMe?.nickName, userMe?.profileImageUrl]);
+  }, [profileFile, useDefaultProfile, userMe?.profileImageUrl]);
 
   useEffect(() => {
     return () => {
@@ -65,12 +68,19 @@ export default function ProfileMyPage() {
   const handleProfileChange = (file?: File) => {
     if (!file) return;
 
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      setImageError("JPEG, PNG, WEBP 이미지만 업로드할 수 있습니다.");
+      return;
+    }
+
+    setImageError("");
+    setUseDefaultProfile(false);
     setProfileFile(file);
     setProfilePreview(URL.createObjectURL(file));
-    setIsActive(false);
   };
 
   const handleSave = async () => {
+    if (savingRef.current) return;
     const trimmedNickname = nickname.trim();
     const isNicknameChanged = trimmedNickname !== (userMe?.nickName ?? "");
 
@@ -100,19 +110,24 @@ export default function ProfileMyPage() {
       return;
     }
 
-    if (!isNicknameChanged && !profileFile) {
+    if (!isNicknameChanged && !profileFile && !useDefaultProfile) {
       return;
     }
 
+    savingRef.current = true;
+    setIsSaving(true);
     try {
-      const profileImageKey = profileFile
-        ? await uploadSingleImage(profileFile, "profile")
+      const imageFile = useDefaultProfile
+        ? await createDefaultProfileFile()
+        : profileFile;
+      const profileImageKey = imageFile
+        ? await uploadSingleImage(imageFile, "profile")
         : undefined;
       const existingProfileImageKey =
         userMe?.profileImageKey ??
         extractProfileImageKey(userMe?.profileImageUrl);
 
-      patchProfileMutation.mutate(
+      await patchProfileMutation.mutateAsync(
         {
           nickName: isNicknameChanged
             ? trimmedNickname
@@ -122,19 +137,18 @@ export default function ProfileMyPage() {
         },
         {
           onSuccess: () => navigate(-1),
-          onError: (error) => {
-            console.error("프로필 수정에 실패했습니다.", error);
-            window.alert("프로필 수정에 실패했어요. 다시 시도해주세요.");
-          },
         },
       );
     } catch (error) {
-      console.error("프로필 이미지 업로드에 실패했습니다.", error);
-      window.alert("프로필 이미지 업로드에 실패했어요.");
+      console.error("프로필 수정에 실패했습니다.", error);
+      window.alert("프로필 수정에 실패했어요. 다시 시도해주세요.");
+    } finally {
+      savingRef.current = false;
+      setIsSaving(false);
     }
   };
 
-  if (isUserMeLoading || patchProfileMutation.isPending) {
+  if (isUserMeLoading || isSaving || patchProfileMutation.isPending) {
     return <LoadingState variant="fullscreen" />;
   }
 
@@ -157,12 +171,16 @@ export default function ProfileMyPage() {
       {/* 프로필 */}
         <div className="flex flex-col gap-12"> 
             {/* 프로필 */}
-            <span className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-white">
-              <img src={camera} alt="" className="h-5 w-5" />
-            </span>
-            <div
+            <IOSPhotoModal
+              onSelectImage={handleProfileChange}
+              onSelectDefaultImage={() => {
+                setUseDefaultProfile(true);
+                setProfileFile(null);
+                setProfilePreview(defaultProfile);
+                setImageError("");
+              }}
+              disabled={isSaving || patchProfileMutation.isPending}
               className="relative h-30 w-30 cursor-pointer self-center"
-              onClick={() => setIsMultiActionOpen(true)}
             >
               <div className="h-full w-full overflow-hidden rounded-full">
                 <img
@@ -172,41 +190,13 @@ export default function ProfileMyPage() {
                 />
               </div>
               <span className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-white">
-                <img src={camera} alt="" className="h-5 w-5" />
+                <img src={camera} alt="프로필 이미지 선택" className="h-5 w-5" />
               </span>
-            </div>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              className="hidden"
-              onChange={(event) =>
-                handleProfileChange(event.currentTarget.files?.[0])
-              }
-            />
-            {/* 모달 띄우기 */}
-            {isMultiActionOpen && (
-              <MultiAction
-                title="프로필 사진 변경"
-                buttonContext1="앨범에서 사진 선택"
-                buttonContext2="기본 이미지 선택"
-                buttonContext3="취소"
-                onButton1Click={() => {
-                  setIsMultiActionOpen(false);
-                  fileInputRef.current?.click();
-                }}
-                onButton2Click={() => {
-                  setIsMultiActionOpen(false);
-                  setIsActive(true);
-                  setProfileFile(null);
-                  setProfilePreview(defaultProfile);
-                }}
-
-                onButton3Click={() => {
-                  setIsMultiActionOpen(false);
-                  setProfileFile(null);
-                }}
-              />
+            </IOSPhotoModal>
+            {imageError && (
+              <p role="alert" className="text-label-13-r text-red-500">
+                {imageError}
+              </p>
             )}
             {/*닉네임*/}
             <div className="w-full [&_.text-label-14-sb]:!text-label-13-sb">

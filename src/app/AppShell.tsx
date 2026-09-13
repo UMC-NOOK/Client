@@ -61,15 +61,16 @@ export default function AppShell({
           style={{ maxWidth: maxWidthPx }}
         >
           <div
-            className={[
-              "flex min-h-dvh flex-col",
-              disableSafeAreaTop
-                ? ""
-                : "pt-[calc(env(safe-area-inset-top)+8px)]",
-              "pb-[env(safe-area-inset-bottom)]",
-            ].join(" ")}
+            className="flex min-h-dvh flex-col pb-[env(safe-area-inset-bottom)]"
           >
-            <main className="w-full flex-1 px-4">
+            <main
+              className={[
+                "relative w-full flex-1 px-4",
+                disableSafeAreaTop
+                  ? ""
+                  : "pt-[calc(env(safe-area-inset-top)+8px)]",
+              ].join(" ")}
+            >
               <Outlet />
             </main>
 
