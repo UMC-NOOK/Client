@@ -61,7 +61,7 @@ export default function DropDown({
                 >
                     <Picker.Column
                         name="year"
-                        className="picker-column flex-1 border-r border-gray-10"
+                        className="picker-column cursor-pointer flex-1 border-r border-gray-10"
                     >
                         {years.map((year) => (
                         <Picker.Item key={year} value={year}>
@@ -88,7 +88,7 @@ export default function DropDown({
                     itemHeight={30}
                     className="picker-root flex w-24 bg-gray-20 rounded-r-[4px]"
                 >
-                    <Picker.Column name="month" className="picker-column flex-1">
+                    <Picker.Column name="month" className="picker-column cursor-pointer flex-1">
                         {months.map((month) => (
                         <Picker.Item key={month} value={month}>
                             {({ selected }) => (
