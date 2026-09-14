@@ -15,6 +15,7 @@ import type { SortOption } from "../../types/report/sortOption.type";
 // hooks
 import { useGetReportCount } from "../../hooks/queries/report/useGetReportCount";
 import { useGetReport } from "../../hooks/queries/report/useGetReort";
+import { useLibraryBookNum } from "../../hooks/queries/library/useLibraryBookNum";
 
 export default function ReportPage() {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ export default function ReportPage() {
   // hooks 호출
   const { data: recordCount } = useGetReportCount();
   const { data: recordData } = useGetReport("10", sortOption);
+  const { data: libraryBookCount } = useLibraryBookNum();
 
   const openSnackbar = (message: string) => {
     setSnackbar({
@@ -55,7 +57,7 @@ export default function ReportPage() {
   };
 
   const onClickPlus = () => {
-    if (recordCount && recordCount > 0) {
+    if (libraryBookCount && libraryBookCount.totalBookNum > 0) {
       navigate("/report/search");
     } else {
       openSnackbar("내 서재에 기록을 남길 책이 없어요.");
