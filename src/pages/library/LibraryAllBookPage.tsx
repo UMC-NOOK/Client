@@ -154,7 +154,10 @@ export default function LibraryAllBookPage() {
       const bookDetail = await getBookDetailWithBookId(bookId);
 
       if (!bookDetail.isbn13) {
-        throw new Error(`ISBN13이 없는 도서입니다: ${bookId}`);
+        // throw new Error(`ISBN13이 없는 도서입니다: ${bookId}`);
+          navigate(`/library/${encodeURIComponent(bookDetail.bookId)}`, {
+        state: { bookId },
+      });
       }
 
       navigate(`/library/${encodeURIComponent(bookDetail.isbn13)}`, {

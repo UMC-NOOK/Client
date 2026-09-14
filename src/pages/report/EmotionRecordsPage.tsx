@@ -181,7 +181,7 @@ export default function IndividueleReportPage() {
             />
           ))}
       </div>
-      <div className="pointer-events-none fixed bottom-6 left-1/2 z-50 flex w-full max-w-93.75 -translate-x-1/2 justify-end px-8">
+      <div className="pointer-events-none fixed bottom-6 left-1/2 z-50 flex w-full max-w-93.75 -translate-x-1/2 justify-end px-4">
         <FAB
           aria-label="기록 작성"
           icon={<img src={plus} alt="" />}
