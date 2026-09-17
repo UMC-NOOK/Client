@@ -20,22 +20,6 @@ export type FocusHomeResult = {
   };
 };
 
-export type FocusBookItem = {
-  libraryId: number;
-  bookId: number;
-  title: string;
-  author: string;
-  coverUrl: string;
-  status: FocusBookStatus;
-  todayFocusSeconds: number;
-};
-
-// 도서 선택(focus/select) 화면 전용. 정렬(최근 포커스/기록 많은/기록 적은/가나다) 기준값을 더 가진다.
-export type FocusLibraryBookItem = FocusBookItem & {
-  recentFocusedAt: string | null; // ISO date-time, 포커스한 적 없으면 null
-  focusRecordCount: number; // 기록 많은 순 / 기록 적은 순 정렬 기준
-};
-
 // GET /api/v1/library/books의 실제 sort enum. report 도메인의 SortOption과는 값이 다르므로 공유하지 않는다.
 export type FocusLibrarySort =
   | "RECENT_FOCUSED"
