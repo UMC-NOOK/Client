@@ -4,8 +4,13 @@ import SearchNewAddLayout from "../../components/search/new/SearchNewAddLayout";
 import SearchNewAddCategoryForm from "../../components/search/new/SearchNewAddCategoryForm";
 import { useShell } from "../../app/AppShell";
 
-export default function SearchNewAddCategoryPage() {
+export default function SearchNewAddCategoryPage(isEditMode?: {
+  isEditMode: boolean;
+}) {
   const { setHideFooter } = useShell();
+
+  const bookId = history.state?.usr?.bookId ?? null;
+  const bookData = history.state?.usr?.bookData ?? null;
 
   useEffect(() => {
     setHideFooter(true);
@@ -18,7 +23,9 @@ export default function SearchNewAddCategoryPage() {
   const title = useMemo(() => sp.get("title") ?? "", [sp]);
   const author = useMemo(() => sp.get("author") ?? "", [sp]);
 
-  const [category, setCategory] = useState<string | null>(null);
+  const [category, setCategory] = useState<string | null>(
+    bookData?.category ?? null,
+  );
   const isNextActive = !!category;
 
   const handleClose = () => navigate("/library");
@@ -31,7 +38,12 @@ export default function SearchNewAddCategoryPage() {
       category,
     });
 
-    navigate(`/search/new/more?${params.toString()}`);
+    isEditMode
+      ? navigate(`/library/${bookId}/edit/more?${params.toString()}`, {
+          replace: true,
+          state: { bookId, bookData: { ...bookData, category } },
+        })
+      : navigate(`/search/new/more?${params.toString()}`, { replace: true });
   };
 
   return (

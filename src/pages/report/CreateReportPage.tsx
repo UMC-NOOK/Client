@@ -29,6 +29,7 @@ export default function CreateReportPage() {
   const record = history.state?.usr?.record;
   const book = history.state?.usr?.book || null;
   const recordIdState = history.state?.usr?.recordId || null;
+  const libraryId = history.state?.usr?.libraryId || null;
 
   const isEditMode = !!record;
 
@@ -273,15 +274,15 @@ export default function CreateReportPage() {
         overlay={false}
         footer={{
           layout: "single",
-          variant: content ? "mint" : "primaryDisabled",
+          variant: content || images.length > 0 ? "mint" : "primaryDisabled",
           label: "기록 저장하기",
 
           onClick: () => {
-            if (!content) return;
-
             if (isEditMode) {
               editRecord(
                 {
+                  libraryId,
+                  bookId,
                   recordId: record.recordId || recordIdState,
                   content,
                   emotion: selectedEmotion,

@@ -4,21 +4,27 @@ import SearchNewAddLayout from "../../components/search/new/SearchNewAddLayout";
 import SearchNewAddInfoForm from "../../components/search/new/SearchNewAddInfoForm";
 import { useShell } from "../../app/AppShell";
 
-export default function SearchNewAddPage() {
+export default function SearchNewAddPage(isEditMode?: { isEditMode: boolean }) {
   const { setHideFooter } = useShell();
+
+  const bookId = history.state?.usr?.bookId ?? null;
+  const bookData = history.state?.usr?.bookData ?? null;
 
   useEffect(() => {
     setHideFooter(true);
+    window.scrollTo(0, 0);
     return () => setHideFooter(false);
   }, [setHideFooter]);
 
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
+  const [title, setTitle] = useState(isEditMode ? (bookData?.title ?? "") : "");
+  const [author, setAuthor] = useState(
+    isEditMode ? (bookData?.author ?? "") : "",
+  );
 
   const isNextActive = !!title.trim() && !!author.trim();
 
-  const handleClose = () => navigate("/library");
+  const handleClose = () => (isEditMode ? navigate(-1) : navigate("/library"));
 
   const handleNext = () => {
     if (!isNextActive) return;
@@ -28,7 +34,14 @@ export default function SearchNewAddPage() {
       author: author.trim(),
     });
 
-    navigate(`/search/new/category?${params.toString()}`);
+    isEditMode
+      ? navigate(`/library/${bookId}/edit/category?${params.toString()}`, {
+          replace: true,
+          state: { bookId, bookData: { ...bookData, title, author } },
+        })
+      : navigate(`/search/new/category?${params.toString()}`, {
+          replace: true,
+        });
   };
 
   return (
