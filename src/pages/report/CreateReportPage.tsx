@@ -29,6 +29,7 @@ export default function CreateReportPage() {
   const record = history.state?.usr?.record;
   const book = history.state?.usr?.book || null;
   const recordIdState = history.state?.usr?.recordId || null;
+  const libraryId = history.state?.usr?.libraryId || null;
 
   const isEditMode = !!record;
 
@@ -280,6 +281,8 @@ export default function CreateReportPage() {
             if (isEditMode) {
               editRecord(
                 {
+                  libraryId,
+                  bookId,
                   recordId: record.recordId || recordIdState,
                   content,
                   emotion: selectedEmotion,

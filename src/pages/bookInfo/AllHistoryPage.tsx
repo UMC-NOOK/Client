@@ -255,6 +255,7 @@ export default function AllHistoryPage() {
                       bookTitle: bookDetailData.title,
                       bookId: bookDetailData.bookId,
                       book: bookDetailData,
+                      libraryId: libraryId,
                     },
                   },
                 );
