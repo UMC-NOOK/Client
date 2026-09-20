@@ -211,14 +211,20 @@ export default function AppRoutes() {
             {/* SEARCH */}
             <Route path="/search" element={<SearchPage />} />
 
-            <Route path="/search/new" element={<SearchNewAddPage />} />
+            <Route
+              path="/search/new"
+              element={<SearchNewAddPage isEditMode={false} />}
+            />
 
             <Route
               path="/search/new/category"
-              element={<SearchNewAddCategoryPage />}
+              element={<SearchNewAddCategoryPage isEditMode={false} />}
             />
 
-            <Route path="/search/new/more" element={<SearchNewAddMorePage />} />
+            <Route
+              path="/search/new/more"
+              element={<SearchNewAddMorePage isEditMode={false} />}
+            />
 
             {/* MAIN TABS + TEST */}
             <Route element={<MainTabsLayout />}>
@@ -279,6 +285,21 @@ export default function AppRoutes() {
               <Route
                 path="/library/:isbn13/history"
                 element={<AllHistoryPage />}
+              />
+
+              <Route
+                path="/library/:bookId/edit"
+                element={<SearchNewAddPage isEditMode={true} />}
+              />
+
+              <Route
+                path="/library/:bookId/edit/category"
+                element={<SearchNewAddCategoryPage isEditMode={true} />}
+              />
+
+              <Route
+                path="/library/:bookId/edit/more"
+                element={<SearchNewAddMorePage isEditMode={true} />}
               />
             </Route>
 

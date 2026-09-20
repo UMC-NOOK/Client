@@ -34,8 +34,6 @@ export default function AllHistoryPage() {
   const [selectedTimelineId, setSelectedTimelineId] = useState<number | null>(
     null,
   );
-  console.log("history state", history.state);
-  console.log("libraryId", libraryId);
 
   const {
     data: timelineData,
@@ -45,8 +43,6 @@ export default function AllHistoryPage() {
     isFetchingNextPage,
     fetchNextPage,
   } = useGetBookTimelineAll(libraryId);
-
-  console.log("timelineData", timelineData);
 
   const {
     data: selectedDetail,
