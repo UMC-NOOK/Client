@@ -273,12 +273,10 @@ export default function CreateReportPage() {
         overlay={false}
         footer={{
           layout: "single",
-          variant: content ? "mint" : "primaryDisabled",
+          variant: content || images.length > 0 ? "mint" : "primaryDisabled",
           label: "기록 저장하기",
 
           onClick: () => {
-            if (!content) return;
-
             if (isEditMode) {
               editRecord(
                 {
