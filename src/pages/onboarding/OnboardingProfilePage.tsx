@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import { useShell } from "../../app/AppShell";
 import {
@@ -15,6 +16,10 @@ import {
 } from "../../api/onboarding";
 import { TextField } from "../../components/input/textinput/TextField";
 import type { OnboardingRequest } from "../../types/onboarding/onboarding";
+import {
+  getNicknameValidationMessage,
+  NICKNAME_MAX_LENGTH,
+} from "../../utils/nickname";
 
 import OnboardingLayout from "./OnboardingLayout";
 import { useOnboardingDraft } from "./OnboardingContext";
@@ -72,8 +77,8 @@ export default function OnboardingProfilePage() {
    * 닉네임은 필수, 프로필 이미지는 선택
    */
   const isNextActive =
-    trimmedNickname.length >= 1 &&
-    trimmedNickname.length <= 10 &&
+    nickname.length > 0 &&
+    nickname.length <= NICKNAME_MAX_LENGTH &&
     !isSubmitting;
 
   const handleClose = () => {
@@ -157,13 +162,9 @@ export default function OnboardingProfilePage() {
       return;
     }
 
-    if (
-      trimmedNickname.length < 1 ||
-      trimmedNickname.length > 10
-    ) {
-      setErrorMessage(
-        "닉네임은 1~10자로 입력해 주세요.",
-      );
+    const nicknameValidationMessage = getNicknameValidationMessage(nickname);
+    if (nicknameValidationMessage) {
+      window.alert(nicknameValidationMessage);
       return;
     }
 
@@ -205,22 +206,25 @@ export default function OnboardingProfilePage() {
       navigate("/library", {
         replace: true,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(
         "온보딩 실패:",
         error,
       );
 
+      const responseData = axios.isAxiosError(error)
+        ? error.response?.data
+        : undefined;
+
       console.error(
         "서버 응답:",
-        error?.response?.data,
+        responseData,
       );
 
-      const responseData =
-        error?.response?.data;
-
       const validationResult =
-        responseData?.result;
+        typeof responseData === "object" && responseData !== null
+          ? (responseData as { result?: unknown }).result
+          : undefined;
 
       if (
         validationResult &&
@@ -236,8 +240,11 @@ export default function OnboardingProfilePage() {
         );
       } else {
         setErrorMessage(
-          responseData?.message ??
-            "온보딩 처리 중 오류가 발생했습니다.",
+          typeof responseData === "object" &&
+            responseData !== null &&
+            typeof (responseData as { message?: unknown }).message === "string"
+            ? (responseData as { message: string }).message
+            : "온보딩 처리 중 오류가 발생했습니다.",
         );
       }
     } finally {
@@ -329,6 +336,7 @@ export default function OnboardingProfilePage() {
               handleNicknameChange
             }
             placeholder="닉네임을 입력해주세요."
+            maxLength={NICKNAME_MAX_LENGTH}
           />
 
           {errorMessage &&

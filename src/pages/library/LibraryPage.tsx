@@ -8,7 +8,7 @@ import focus from "../../assets/icons/focus.svg";
 import focusGray from "../../assets/icons/focus-gray-40.svg";
 import book from "../../assets/icons/book.svg";
 import book_gray_40 from "../../assets/icons/book_gray_40.svg";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import DayOfTheWeek from "../../components/content/Calendar/Resource/DayOfTheWeek";
 import BottomBanner from "./modal/BottomBanner";
@@ -35,7 +35,7 @@ import getGoalPercent from "./utils/getGoalPercent";
 import DropDown from "../../components/section/dropDown/DropDown";
 import { useLibrarySpecificDateBookInfo } from "../../hooks/queries/library/useLibrarySpecificDateBookInfo";
 import { useAuthMe } from "../../hooks/queries/useAuthMe";
-import { dismissBottomBanner, isBottomBannerDismissed } from "./utils/bottomBannerState";
+import { dismissBottomBanner, isBottomBannerDismissed, subscribeBottomBanner } from "./utils/bottomBannerState";
 
 type SelectedYearMonth = {
   year: number;
@@ -57,8 +57,9 @@ export default function LibraryPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isBannerOpen, setIsBannerOpen] = useState(
-    () => !isBottomBannerDismissed(),
+  const isBannerOpen = !useSyncExternalStore(
+    subscribeBottomBanner,
+    isBottomBannerDismissed,
   );
   const [modalCursor, setModalCursor] = useState<number | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -334,10 +335,7 @@ export default function LibraryPage() {
           page={libraryRecentBookInfoData.page}
           focusTime={libraryRecentBookInfoData.focusTime}
           onClick={() => navigate("/focus/theme")}
-          onClose={() => {
-            dismissBottomBanner();
-            setIsBannerOpen(false);
-          }}
+          onClose={dismissBottomBanner}
         />
       ) : null}
 
