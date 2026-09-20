@@ -31,7 +31,7 @@ export default function SearchNewAddCategoryPage() {
       category,
     });
 
-    navigate(`/search/new/more?${params.toString()}`);
+    navigate(`/search/new/more?${params.toString()}`, { replace: true });
   };
 
   return (

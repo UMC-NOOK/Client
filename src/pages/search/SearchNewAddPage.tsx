@@ -28,7 +28,7 @@ export default function SearchNewAddPage() {
       author: author.trim(),
     });
 
-    navigate(`/search/new/category?${params.toString()}`);
+    navigate(`/search/new/category?${params.toString()}`, { replace: true });
   };
 
   return (
