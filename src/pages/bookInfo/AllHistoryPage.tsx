@@ -339,9 +339,9 @@ export default function AllHistoryPage() {
                 ) : null}
               </div>
 
-              {(selectedDetail.detail.imageUrls?.length ?? 0) > 0 ? (
+              {(selectedDetail.detail.imgUrls?.length ?? 0) > 0 ? (
                 <div className="flex gap-1 overflow-x-auto">
-                  {selectedDetail.detail.imageUrls.map((url, index) => (
+                  {selectedDetail.detail.imgUrls.map((url, index) => (
                     <img
                       key={`${url}-${index}`}
                       src={url}
