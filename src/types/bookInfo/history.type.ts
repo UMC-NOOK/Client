@@ -55,7 +55,7 @@ export interface FocusDetail {
 export interface RecordDetail {
   content: string;
   emotion: Emotion | "EMPTY";
-  imageUrls: string[];
+  imgUrls: string[];
 }
 
 export type RegisterDetailResponse = BaseApiResponse<
