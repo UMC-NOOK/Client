@@ -1,12 +1,10 @@
 // 로그인 페이지 컴포넌트
-import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo/login-main-logo.svg";
 import google from "../../assets/icons/google.svg";
 import kakao from "../../assets/icons/kakao.svg";
 import Icon from "../../components/action/Button/Icon";
 
 import type { OAuthProvider } from "../../api/auth";
-import { devLogin } from "../../api/auth";
 
 const OAUTH_AUTHORIZE_URL: Record<OAuthProvider, string | undefined> = {
   GOOGLE: import.meta.env.VITE_GOOGLE_AUTHORIZE_URL ?? "",
@@ -14,8 +12,6 @@ const OAUTH_AUTHORIZE_URL: Record<OAuthProvider, string | undefined> = {
 };
 
 export default function LoginPage() {
-  const navigate = useNavigate();
-
   const handleOAuthLogin = (provider: OAuthProvider) => {
     const authorizeUrl = OAUTH_AUTHORIZE_URL[provider];
 
@@ -25,35 +21,6 @@ export default function LoginPage() {
     }
 
     window.location.href = authorizeUrl;
-  };
-
-  const handleDevLogin = async () => {
-    try {
-      const response = await devLogin({
-        email: "dev@test.com",
-        nickName: "DEV_USER",
-      });
-
-      console.log("🔥 DEV 로그인 응답", response);
-
-      if (!response.isSuccess) {
-        alert("임시 로그인 실패");
-        return;
-      }
-
-      const result = response.result;
-      const onboardingCompleted = result?.onboardingCompleted;
-
-      if (!result?.accessToken) {
-        console.error("❌ accessToken 없음", response);
-        return;
-      }
-
-      navigate(onboardingCompleted ? "/library" : "/onboarding");
-    } catch (error) {
-      console.error("❌ 임시 로그인 에러", error);
-      alert("임시 로그인 중 오류가 발생했습니다.");
-    }
   };
 
   return (
@@ -66,14 +33,6 @@ export default function LoginPage() {
       </div>
 
       <div className="mt-auto flex flex-col gap-2">
-        <button
-          type="button"
-          onClick={handleDevLogin}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-gray-10 text-label-16-sb text-gray-90"
-        >
-          <span>임시 로그인</span>
-        </button>
-
         <button
           type="button"
           onClick={() => handleOAuthLogin("GOOGLE")}
