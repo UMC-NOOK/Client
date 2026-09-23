@@ -8,9 +8,15 @@ export function useEndFocus() {
 
   return useMutation({
     mutationFn: (data: FocusEndRequest) => postFocusEnd(data),
-    onSuccess: () =>
-      queryClient.invalidateQueries({
-        queryKey: ["focus", "home"],
-      }),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["focus", "home"],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["bookTimeline"],
+        }),
+      ]);
+    },
   });
 }

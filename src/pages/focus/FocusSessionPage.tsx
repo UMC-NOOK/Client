@@ -9,6 +9,7 @@ import MaskGradient from "../../components/layout/MaskGradient";
 import { useEndFocus } from "../../hooks/mutations/focus/useEndFocus";
 import { usePatchFocusBookStatus } from "../../hooks/mutations/focus/usePatchFocusBookStatus";
 import { useGetBookDetailWithBookId } from "../../hooks/queries/bookInfo/useGetBookDetailWithBookId";
+import { useGetBookTimeline } from "../../hooks/queries/bookInfo/useGetBookTimeline";
 import type { FocusEndResult } from "../../types/focus/focus";
 import FocusEndSheet from "./component/FocusEndSheet";
 import { formatDurationHms } from "./utils/formatDurationHms";
@@ -50,6 +51,7 @@ export default function FocusSessionPage() {
     session?.bookId ?? null,
     session !== null,
   );
+  const { data: bookTimeline } = useGetBookTimeline(bookDetail?.libraryId);
 
   // 테마 선택 화면과 같은 키를 읽어 마지막으로 시작한 테마 배경을 이어서 보여준다.
   const [themeId] = useState(readStoredFocusThemeId);
@@ -65,7 +67,7 @@ export default function FocusSessionPage() {
     getFocusElapsedSeconds(timerState),
   );
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [pageInput, setPageInput] = useState("");
+  const [pageInputDraft, setPageInputDraft] = useState<string | null>(null);
   const [isFinishedDraft, setIsFinishedDraft] = useState<boolean | null>(null);
   const [completedEndResult, setCompletedEndResult] =
     useState<FocusEndResult | null>(null);
@@ -76,6 +78,18 @@ export default function FocusSessionPage() {
   // 이 초기값과 handleSubmitEnd의 상태 보정 PATCH를 함께 재검토해야 한다.
   const isFinished =
     isFinishedDraft ?? bookDetail?.readingStatus === "FINISHED";
+  const lastReadPage = bookTimeline?.focusSummary.page;
+
+  // 임시 정책(PM 미확정): 종료 시트에는 이 책의 서버 타임라인에 저장된 마지막 페이지를
+  // 기본값으로 보여주고, 취소한 입력은 저장하지 않는다. 정책 철회 시 이 조회·파생값과
+  // handleCloseSheet의 pageInputDraft 초기화를 함께 제거하면 된다.
+  const pageInput =
+    pageInputDraft ??
+    (typeof lastReadPage === "number" &&
+    Number.isSafeInteger(lastReadPage) &&
+    lastReadPage > 0
+      ? String(lastReadPage)
+      : "");
   const isSubmitting = isEndPending || isStatusPending;
 
   // setInterval 횟수가 아니라 저장한 시작 시각과 현재 시각의 차이로 계산한다.
@@ -99,6 +113,7 @@ export default function FocusSessionPage() {
     const resumedTimer = resumeFocusSessionTimer(timerState);
     setTimerState(resumedTimer);
     setElapsedSeconds(getFocusElapsedSeconds(resumedTimer));
+    setPageInputDraft(null);
     setIsFinishedDraft(null);
     setSubmitError(undefined);
     setSheetOpen(false);
@@ -253,7 +268,7 @@ export default function FocusSessionPage() {
         isSubmitting={isSubmitting}
         isEndCompleted={completedEndResult !== null}
         submitError={submitError}
-        onPageInputChange={setPageInput}
+        onPageInputChange={setPageInputDraft}
         onFinishedChange={setIsFinishedDraft}
         onClose={handleCloseSheet}
         onSubmit={handleSubmitEnd}
