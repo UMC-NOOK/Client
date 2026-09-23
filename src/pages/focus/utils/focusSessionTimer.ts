@@ -24,9 +24,9 @@ function isFocusSessionTimerState(
   );
 }
 
-export function resetFocusSessionTimer(now = Date.now()) {
+export function resetFocusSessionTimer(startedAtMs = Date.now()) {
   return saveFocusSessionTimer({
-    startedAtMs: now,
+    startedAtMs: Number.isFinite(startedAtMs) ? startedAtMs : Date.now(),
     pausedAtMs: null,
     totalPausedMs: 0,
   });
