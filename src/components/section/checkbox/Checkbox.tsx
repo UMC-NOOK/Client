@@ -6,12 +6,14 @@ type CheckboxProps = {
   text: string;
   /** 부모가 체크 상태를 직접 관리해야 할 때(예: 폼 제출값)만 전달. 없으면 내부 state로 동작 */
   checked?: boolean;
+  disabled?: boolean;
   onCheckedChange?: (checked: boolean) => void;
 };
 
 export default function Checkbox({
   text,
   checked,
+  disabled = false,
   onCheckedChange,
 }: CheckboxProps) {
   const [uncontrolledChecked, setUncontrolledChecked] = React.useState(false);
@@ -27,6 +29,7 @@ export default function Checkbox({
     <div className="flex h-6.5 items-center gap-2 py-1">
       <CheckboxLib.Root
         checked={resolvedChecked}
+        disabled={disabled}
         onCheckedChange={(value) => handleCheckedChange(value === true)}
         className="h-4.5 w-4.5 rounded-xs border border-gray-90 data-[state=checked]:bg-gray-90"
       >

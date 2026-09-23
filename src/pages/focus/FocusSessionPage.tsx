@@ -7,6 +7,9 @@ import Solid from "../../components/action/Button/Solid";
 import BookCover from "../../components/atomic/BookCover";
 import MaskGradient from "../../components/layout/MaskGradient";
 import { useEndFocus } from "../../hooks/mutations/focus/useEndFocus";
+import { usePatchFocusBookStatus } from "../../hooks/mutations/focus/usePatchFocusBookStatus";
+import { useGetBookDetailWithBookId } from "../../hooks/queries/bookInfo/useGetBookDetailWithBookId";
+import type { FocusEndResult } from "../../types/focus/focus";
 import FocusEndSheet from "./component/FocusEndSheet";
 import { formatDurationHms } from "./utils/formatDurationHms";
 import {
@@ -40,8 +43,13 @@ function getFocusEndErrorMessage(error: unknown) {
 export default function FocusSessionPage() {
   const navigate = useNavigate();
   const [session] = useState(readFocusSession);
-  const { mutate: endFocus, isPending: isEndPending, error: endError } =
-    useEndFocus();
+  const { mutateAsync: endFocus, isPending: isEndPending } = useEndFocus();
+  const { mutateAsync: patchFocusBookStatus, isPending: isStatusPending } =
+    usePatchFocusBookStatus();
+  const { data: bookDetail } = useGetBookDetailWithBookId(
+    session?.bookId ?? null,
+    session !== null,
+  );
 
   // 테마 선택 화면과 같은 키를 읽어 마지막으로 시작한 테마 배경을 이어서 보여준다.
   const [themeId] = useState(readStoredFocusThemeId);
@@ -58,7 +66,17 @@ export default function FocusSessionPage() {
   );
   const [sheetOpen, setSheetOpen] = useState(false);
   const [pageInput, setPageInput] = useState("");
-  const [isFinished, setIsFinished] = useState(false);
+  const [isFinishedDraft, setIsFinishedDraft] = useState<boolean | null>(null);
+  const [completedEndResult, setCompletedEndResult] =
+    useState<FocusEndResult | null>(null);
+  const [submitError, setSubmitError] = useState<string>();
+
+  // 임시 정책(PM 미확정): 완독 책으로 다시 포커스하면 종료 시트를 체크 상태로 열고,
+  // 체크를 풀어 종료할 때 READING으로 되돌린다. 정책이 확정되거나 철회되면
+  // 이 초기값과 handleSubmitEnd의 상태 보정 PATCH를 함께 재검토해야 한다.
+  const isFinished =
+    isFinishedDraft ?? bookDetail?.readingStatus === "FINISHED";
+  const isSubmitting = isEndPending || isStatusPending;
 
   // setInterval 횟수가 아니라 저장한 시작 시각과 현재 시각의 차이로 계산한다.
   // 따라서 기록 작성 화면으로 이동해 컴포넌트가 unmount되어도 포커스 시간은 계속 흐른다.
@@ -76,9 +94,13 @@ export default function FocusSessionPage() {
   const backgroundUrl = findFocusTheme(themeId)?.sessionBackgroundUrl;
 
   const handleCloseSheet = () => {
+    if (completedEndResult !== null) return;
+
     const resumedTimer = resumeFocusSessionTimer(timerState);
     setTimerState(resumedTimer);
     setElapsedSeconds(getFocusElapsedSeconds(resumedTimer));
+    setIsFinishedDraft(null);
+    setSubmitError(undefined);
     setSheetOpen(false);
   };
 
@@ -90,25 +112,52 @@ export default function FocusSessionPage() {
   };
 
   const handleSubmitEnd = () => {
-    if (session === null || isEndPending) return;
+    if (session === null || isSubmitting) return;
 
     const page = pageInput ? Number(pageInput) : undefined;
     if (page !== undefined && !Number.isSafeInteger(page)) return;
 
-    endFocus(
-      {
-        focusId: session.focusId,
-        ...(page === undefined ? {} : { page }),
-        isFinished,
-      },
-      {
-        onSuccess: () => {
-          clearFocusSessionTimer();
-          clearFocusSession();
-          navigate("/focus", { state: { showFocusEndToast: true } });
-        },
-      },
-    );
+    setSubmitError(undefined);
+
+    void (async () => {
+      let endWasCompleted = completedEndResult !== null;
+
+      try {
+        // 종료 성공 후 상태 변경만 실패한 경우 FOCUS-003을 만들지 않도록
+        // 저장해둔 종료 결과를 재사용하고 상태 변경만 다시 시도한다.
+        const endResult =
+          completedEndResult ??
+          (await endFocus({
+            focusId: session.focusId,
+            ...(page === undefined ? {} : { page }),
+            isFinished,
+          }));
+
+        if (completedEndResult === null) {
+          setCompletedEndResult(endResult);
+          endWasCompleted = true;
+        }
+
+        const desiredStatus = isFinished ? "FINISHED" : "READING";
+
+        if (endResult.readingStatus !== desiredStatus) {
+          await patchFocusBookStatus({
+            bookId: session.bookId,
+            readingStatus: desiredStatus,
+          });
+        }
+
+        clearFocusSessionTimer();
+        clearFocusSession();
+        navigate("/focus", { state: { showFocusEndToast: true } });
+      } catch (error) {
+        setSubmitError(
+          endWasCompleted
+            ? "포커스는 종료했지만 독서 상태를 변경하지 못했어요. 다시 시도해주세요."
+            : getFocusEndErrorMessage(error),
+        );
+      }
+    })();
   };
 
   if (session === null) {
@@ -201,10 +250,11 @@ export default function FocusSessionPage() {
         elapsedSeconds={elapsedSeconds}
         pageInput={pageInput}
         isFinished={isFinished}
-        isSubmitting={isEndPending}
-        submitError={endError ? getFocusEndErrorMessage(endError) : undefined}
+        isSubmitting={isSubmitting}
+        isEndCompleted={completedEndResult !== null}
+        submitError={submitError}
         onPageInputChange={setPageInput}
-        onFinishedChange={setIsFinished}
+        onFinishedChange={setIsFinishedDraft}
         onClose={handleCloseSheet}
         onSubmit={handleSubmitEnd}
       />
