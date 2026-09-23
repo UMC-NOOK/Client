@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { useBlocker, useNavigate } from "react-router-dom";
 
 import pencilIcon from "../../assets/icons/pencil.svg";
 import FAB from "../../components/action/Button/FAB";
@@ -107,8 +107,8 @@ export default function FocusSessionPage() {
 
   const backgroundUrl = findFocusTheme(themeId)?.sessionBackgroundUrl;
 
-  const handleCloseSheet = () => {
-    if (completedEndResult !== null) return;
+  const handleCloseSheet = useCallback(() => {
+    if (isSubmitting || completedEndResult !== null) return;
 
     const resumedTimer = resumeFocusSessionTimer(timerState);
     setTimerState(resumedTimer);
@@ -117,14 +117,42 @@ export default function FocusSessionPage() {
     setIsFinishedDraft(null);
     setSubmitError(undefined);
     setSheetOpen(false);
-  };
+  }, [completedEndResult, isSubmitting, timerState]);
 
-  const handleOpenSheet = () => {
+  const handleOpenSheet = useCallback(() => {
     const pausedTimer = pauseFocusSessionTimer(timerState);
     setTimerState(pausedTimer);
     setElapsedSeconds(getFocusElapsedSeconds(pausedTimer));
     setSheetOpen(true);
-  };
+  }, [timerState]);
+
+  const navigationBlocker = useBlocker(({ nextLocation }) => {
+    const activeSession = readFocusSession();
+
+    if (activeSession === null) return false;
+    if (nextLocation.pathname === `/report/${activeSession.bookId}/create`) {
+      return false;
+    }
+
+    if (sheetOpen) {
+      handleCloseSheet();
+    } else {
+      handleOpenSheet();
+    }
+
+    return true;
+  });
+
+  useEffect(() => {
+    if (navigationBlocker.state !== "blocked") return;
+
+    const resetNavigation = navigationBlocker.reset;
+    const taskId = window.setTimeout(() => {
+      resetNavigation();
+    }, 0);
+
+    return () => window.clearTimeout(taskId);
+  }, [navigationBlocker]);
 
   const handleSubmitEnd = () => {
     if (session === null || isSubmitting) return;
