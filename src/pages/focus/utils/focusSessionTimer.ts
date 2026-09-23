@@ -32,7 +32,7 @@ export function resetFocusSessionTimer(startedAtMs = Date.now()) {
   });
 }
 
-export function readOrCreateFocusSessionTimer() {
+export function readOrCreateFocusSessionTimer(startedAtMs?: number) {
   const stored = sessionStorage.getItem(FOCUS_SESSION_TIMER_KEY);
 
   if (stored !== null) {
@@ -44,7 +44,7 @@ export function readOrCreateFocusSessionTimer() {
     }
   }
 
-  return resetFocusSessionTimer();
+  return resetFocusSessionTimer(startedAtMs);
 }
 
 export function pauseFocusSessionTimer(

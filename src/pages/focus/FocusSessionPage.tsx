@@ -6,9 +6,13 @@ import FAB from "../../components/action/Button/FAB";
 import Solid from "../../components/action/Button/Solid";
 import BookCover from "../../components/atomic/BookCover";
 import MaskGradient from "../../components/layout/MaskGradient";
-import { mockActiveFocusSession } from "../../mocks/focus/focus";
+import { useEndFocus } from "../../hooks/mutations/focus/useEndFocus";
 import FocusEndSheet from "./component/FocusEndSheet";
 import { formatDurationHms } from "./utils/formatDurationHms";
+import {
+  clearFocusSession,
+  readFocusSession,
+} from "./utils/focusSessionStorage";
 import { findFocusTheme } from "./utils/focusThemes";
 import { readStoredFocusThemeId } from "./utils/focusThemeStorage";
 import {
@@ -20,16 +24,34 @@ import {
   type FocusSessionTimerState,
 } from "./utils/focusSessionTimer";
 
+function getFocusEndErrorMessage(error: unknown) {
+  if (typeof error === "object" && error !== null) {
+    const response = error as {
+      response?: { data?: { message?: unknown } };
+    };
+    if (typeof response.response?.data?.message === "string") {
+      return response.response.data.message;
+    }
+  }
+
+  return "포커스를 종료하지 못했어요. 다시 시도해주세요.";
+}
+
 export default function FocusSessionPage() {
   const navigate = useNavigate();
-  const session = mockActiveFocusSession;
+  const [session] = useState(readFocusSession);
+  const { mutate: endFocus, isPending: isEndPending, error: endError } =
+    useEndFocus();
 
   // 테마 선택 화면과 같은 키를 읽어 마지막으로 시작한 테마 배경을 이어서 보여준다.
   const [themeId] = useState(readStoredFocusThemeId);
   const [imageError, setImageError] = useState(false);
 
   const [timerState, setTimerState] = useState<FocusSessionTimerState>(
-    readOrCreateFocusSessionTimer,
+    () =>
+      readOrCreateFocusSessionTimer(
+        session ? new Date(session.startedAt).getTime() : undefined,
+      ),
   );
   const [elapsedSeconds, setElapsedSeconds] = useState(() =>
     getFocusElapsedSeconds(timerState),
@@ -42,13 +64,14 @@ export default function FocusSessionPage() {
   // 따라서 기록 작성 화면으로 이동해 컴포넌트가 unmount되어도 포커스 시간은 계속 흐른다.
   // 종료 시트가 열린 동안만 pausedAtMs를 기록한다.
   useEffect(() => {
+    if (session === null) return;
     if (timerState.pausedAtMs !== null) return;
 
     const timerId = window.setInterval(() => {
       setElapsedSeconds(getFocusElapsedSeconds(timerState));
     }, 1000);
     return () => window.clearInterval(timerId);
-  }, [timerState]);
+  }, [session, timerState]);
 
   const backgroundUrl = findFocusTheme(themeId)?.sessionBackgroundUrl;
 
@@ -67,10 +90,42 @@ export default function FocusSessionPage() {
   };
 
   const handleSubmitEnd = () => {
-    // TODO: 종료 API 연동 시 focusId, pageInput, isFinished를 mutation으로 전달한다.
-    clearFocusSessionTimer();
-    navigate("/focus", { state: { showFocusEndToast: true } });
+    if (session === null || isEndPending) return;
+
+    const page = pageInput ? Number(pageInput) : undefined;
+    if (page !== undefined && !Number.isSafeInteger(page)) return;
+
+    endFocus(
+      {
+        focusId: session.focusId,
+        ...(page === undefined ? {} : { page }),
+        isFinished,
+      },
+      {
+        onSuccess: () => {
+          clearFocusSessionTimer();
+          clearFocusSession();
+          navigate("/focus", { state: { showFocusEndToast: true } });
+        },
+      },
+    );
   };
+
+  if (session === null) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
+        <div className="flex flex-col gap-1">
+          <p className="text-body-16-b text-gray-90">
+            진행 중인 포커스 정보가 없어요.
+          </p>
+          <p className="text-body-14-r text-gray-50">
+            책을 선택하고 포커스를 시작해주세요.
+          </p>
+        </div>
+        <Solid text="포커스 홈으로" onClick={() => navigate("/focus")} />
+      </div>
+    );
+  }
 
   return (
     // AppShell 전역 padding은 유지하고 배경형 세션 화면만 상단으로 확장한다.
@@ -103,7 +158,7 @@ export default function FocusSessionPage() {
 
       <div className="absolute inset-x-0 top-49 flex flex-col items-center">
         <div className="flex flex-col items-center gap-3 py-3">
-          <BookCover imageUrl={session.coverUrl} size="S" type="Image" />
+          <BookCover size="S" type="Image" />
           <div className="flex flex-col items-center gap-0.5 text-center">
             <p className="text-subtitle-14-sb text-gray-90">{session.bookTitle}</p>
             <p className="text-body-13-r text-gray-90">{session.author}</p>
@@ -146,6 +201,8 @@ export default function FocusSessionPage() {
         elapsedSeconds={elapsedSeconds}
         pageInput={pageInput}
         isFinished={isFinished}
+        isSubmitting={isEndPending}
+        submitError={endError ? getFocusEndErrorMessage(endError) : undefined}
         onPageInputChange={setPageInput}
         onFinishedChange={setIsFinished}
         onClose={handleCloseSheet}
