@@ -222,7 +222,11 @@ export default function FocusSessionPage() {
 
       <div className="absolute inset-x-0 top-49 flex flex-col items-center">
         <div className="flex flex-col items-center gap-3 py-3">
-          <BookCover size="S" type="Image" />
+          <BookCover
+            size="S"
+            type="Image"
+            imageUrl={bookDetail?.coverImageUrl}
+          />
           <div className="flex flex-col items-center gap-0.5 text-center">
             <p className="text-subtitle-14-sb text-gray-90">{session.bookTitle}</p>
             <p className="text-body-13-r text-gray-90">{session.author}</p>
