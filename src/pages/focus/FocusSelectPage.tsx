@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import chevronLeftIcon from "../../assets/icons/chevron_left.svg";
-import closeIcon from "../../assets/icons/close.svg";
 import ContainerText from "../../components/action/Button/ContainerText";
 import BookList from "../../components/content/card/Book/List";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
@@ -80,9 +79,6 @@ export default function FocusSelectPage() {
   const [mode, setMode] = useState<ViewMode>("idle");
   const [sortOption, setSortOption] = useState<FocusLibrarySort>("RECENT_FOCUSED");
   const [showSortSheet, setShowSortSheet] = useState(false);
-
-  // 헤더 아이콘은 검색 제출(엔터/검색 아이콘 클릭) 시점에만 </>X로 바뀐다. 포커스만 한 상태는 <를 유지한다.
-  const showHeaderClose = mode === "results";
 
   const {
     data: libraryData,
@@ -193,11 +189,9 @@ export default function FocusSelectPage() {
     <div className="flex flex-col">
       <div className="flex flex-col gap-4">
         <TopNavigation
-          left={showHeaderClose ? undefined : <img src={chevronLeftIcon} alt="뒤로가기" />}
-          onClickLeft={showHeaderClose ? undefined : () => navigate(-1)}
+          left={<img src={chevronLeftIcon} alt="뒤로가기" />}
+          onClickLeft={() => navigate(-1)}
           center="도서 선택"
-          right={showHeaderClose ? <img src={closeIcon} alt="닫기" /> : undefined}
-          onClickRight={showHeaderClose ? () => navigate(-1) : undefined}
         />
 
         <SearchInput
@@ -219,7 +213,6 @@ export default function FocusSelectPage() {
             if (query.trim() === "") setMode("idle");
           }}
           maxLength={500}
-          showClearOnFocus
           onClear={() => {
             setQuery("");
             setMode("idle");
