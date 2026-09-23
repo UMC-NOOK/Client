@@ -83,8 +83,9 @@ export default function FocusThemePage() {
         />
       </div>
 
-      {/* aspect-ratio로 Figma 원본 비율(375:684) 유지 — 폭이 줄어도 비율 그대로 축소 */}
-      <div className="relative w-full aspect-375/684 overflow-hidden">
+      {/* 375×812 기준에서는 기존 684px 배경 영역을 유지하고, 더 긴 viewport에서는
+          세션 화면처럼 영역과 이미지를 함께 늘려 object-cover로 채운다. */}
+      <div className="absolute inset-x-0 top-10 bottom-20 overflow-hidden">
         {selectedOption && !imageError && (
           <div aria-hidden>
             <img
