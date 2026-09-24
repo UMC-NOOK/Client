@@ -256,7 +256,9 @@ export default function FocusSessionPage() {
             imageUrl={bookDetail?.coverImageUrl}
           />
           <div className="flex flex-col items-center gap-0.5 text-center">
-            <p className="text-subtitle-14-sb text-gray-90">{session.bookTitle}</p>
+            <p className="max-w-85.75 truncate text-subtitle-14-sb text-gray-90">
+              {session.bookTitle}
+            </p>
             <p className="text-body-13-r text-gray-90">{session.author}</p>
           </div>
         </div>
