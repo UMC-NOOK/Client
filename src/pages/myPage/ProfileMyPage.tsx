@@ -14,6 +14,10 @@ import IOSPhotoModal from "./modal/IOSPhotoModal";
 import { createDefaultProfileFile } from "./utils/createDefaultProfileFile";
 import { usePatchProfile } from "../../hooks/mutations/mypage/usePatchProfile";
 import { useUserMe } from "../../hooks/queries/useUserMe";
+import {
+  getNicknameValidationMessage,
+  NICKNAME_MAX_LENGTH,
+} from "../../utils/nickname";
 
 function extractProfileImageKey(profileImageUrl?: string | null) {
   if (!profileImageUrl) return undefined;
@@ -83,30 +87,10 @@ export default function ProfileMyPage() {
     if (savingRef.current) return;
     const trimmedNickname = nickname.trim();
     const isNicknameChanged = trimmedNickname !== (userMe?.nickName ?? "");
+    const nicknameValidationMessage = getNicknameValidationMessage(nickname);
 
-    if (/^\s/.test(nickname)) {
-      window.alert("닉네임 앞에는 공백을 사용할 수 없어요.");
-      return;
-    }
-
-    if (/\s$/.test(nickname)) {
-      window.alert("닉네임 뒤에는 공백을 사용할 수 없어요.");
-      return;
-    }
-
-    if (
-      isNicknameChanged &&
-      (trimmedNickname.length < 2 || trimmedNickname.length > 20)
-    ) {
-      window.alert("닉네임은 2자 이상 20자 이하로 입력해주세요.");
-      return;
-    }
-
-    if (
-      isNicknameChanged &&
-      !/^[\p{Script=Hangul}A-Za-z0-9 ]+$/u.test(trimmedNickname)
-    ) {
-      window.alert("닉네임은 영문, 숫자, 한글, 띄어쓰기만 사용할 수 있어요.");
+    if (nicknameValidationMessage) {
+      window.alert(nicknameValidationMessage);
       return;
     }
 
@@ -208,7 +192,7 @@ export default function ProfileMyPage() {
                     type="text"
                     value={nickname}
                     onChange={(event) => setNickname(event.target.value)}
-                    maxLength={20}
+                    maxLength={NICKNAME_MAX_LENGTH}
                     placeholder="닉네임을 입력해주세요."
                     className="w-full rounded-md bg-gray-17 px-4 py-3 text-body-14-r text-gray-90 outline-none placeholder:text-gray-50"
                   />

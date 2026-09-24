@@ -9,6 +9,7 @@ type TextFieldProps = {
   placeholder?: string;
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   disabled?: boolean;
+  maxLength?: number;
 };
 
 export function TextField({
@@ -18,6 +19,7 @@ export function TextField({
   placeholder = "",
   inputMode,
   disabled = false,
+  maxLength,
 }: TextFieldProps) {
   return (
     <div className="w-full flex flex-col items-start gap-3">
@@ -29,6 +31,7 @@ export function TextField({
         placeholder={placeholder}
         inputMode={inputMode}
         disabled={disabled}
+        maxLength={maxLength}
         className={[
           "w-full px-4 py-3 rounded-md bg-gray-17 outline-none",
           "text-gray-90 text-body-14-r placeholder:text-gray-50",
