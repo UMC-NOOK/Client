@@ -12,6 +12,8 @@ type EditRecordVariables = {
   recordId: number;
   content: CreateRecordRequest["content"];
   emotion: CreateRecordRequest["emotion"];
+  bookId: number;
+  libraryId: number | null;
 
   // 기존 이미지: key 문자열
   // 새 이미지: File 객체
@@ -120,9 +122,24 @@ export function useEditRecord() {
       return putUpdateRecord(recordId, body);
     },
 
-    onSuccess: () => {
+    onSuccess: (_, { bookId, emotion, libraryId }) => {
       queryClient.invalidateQueries({
         queryKey: ["records"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["emotions", bookId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["individueleRecords", bookId, "10", "ALL"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["individueleRecords", bookId, "10", emotion],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["bookTimelineDetail", libraryId, null],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["bookTimeline", "infinite", libraryId],
       });
     },
   });
