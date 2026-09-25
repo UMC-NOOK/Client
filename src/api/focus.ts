@@ -2,9 +2,13 @@ import { api } from "./axios";
 import type BaseApiResponse from "../types/BaseApiResponse";
 import type {
   FocusBookStatus,
+  FocusEndRequest,
+  FocusEndResult,
   FocusHomeResult,
   FocusLibraryBooksResult,
   FocusLibrarySort,
+  FocusStartRequest,
+  FocusStartResult,
 } from "../types/focus/focus";
 
 const FOCUS_BASE = "/api/v1/focuses";
@@ -41,6 +45,36 @@ export async function getFocusLibraryBooks(params: {
 
   if (response.data?.result === undefined) {
     throw new Error(`응답 result가 없습니다: ${LIBRARY_BOOKS_ENDPOINT}`);
+  }
+
+  return response.data.result;
+}
+
+export async function postFocusStart(
+  data: FocusStartRequest,
+): Promise<FocusStartResult> {
+  const response = await api.post<BaseApiResponse<FocusStartResult>>(
+    `${FOCUS_BASE}/start`,
+    data,
+  );
+
+  if (response.data?.result === undefined) {
+    throw new Error("응답 result가 없습니다: /api/v1/focuses/start");
+  }
+
+  return response.data.result;
+}
+
+export async function postFocusEnd(
+  data: FocusEndRequest,
+): Promise<FocusEndResult> {
+  const response = await api.post<BaseApiResponse<FocusEndResult>>(
+    `${FOCUS_BASE}/end`,
+    data,
+  );
+
+  if (response.data?.result === undefined) {
+    throw new Error("응답 result가 없습니다: /api/v1/focuses/end");
   }
 
   return response.data.result;

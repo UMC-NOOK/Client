@@ -9,6 +9,9 @@ type FocusEndSheetProps = {
   elapsedSeconds: number;
   pageInput: string;
   isFinished: boolean;
+  isSubmitting: boolean;
+  isEndCompleted: boolean;
+  submitError?: string;
   onPageInputChange: (value: string) => void;
   onFinishedChange: (checked: boolean) => void;
   onClose: () => void;
@@ -20,6 +23,9 @@ export default function FocusEndSheet({
   elapsedSeconds,
   pageInput,
   isFinished,
+  isSubmitting,
+  isEndCompleted,
+  submitError,
   onPageInputChange,
   onFinishedChange,
   onClose,
@@ -31,14 +37,21 @@ export default function FocusEndSheet({
     <BottomSheet
       open={open}
       onClose={onClose}
+      closeOnOverlayClick={!isSubmitting && !isEndCompleted}
       footer={{
         layout: "double",
         sizeMode: "equal",
         leftVariant: "secondary",
         leftLabel: "취소",
-        rightLabel: "종료",
+        rightLabel: isSubmitting
+          ? "종료 중..."
+          : isEndCompleted
+            ? "다시 시도"
+            : "종료",
         onLeftClick: onClose,
         onRightClick: onSubmit,
+        leftDisabled: isSubmitting || isEndCompleted,
+        rightDisabled: isSubmitting,
       }}
     >
       <div className="flex w-full flex-col gap-4">
@@ -69,6 +82,7 @@ export default function FocusEndSheet({
               <input
                 ref={pageInputRef}
                 value={pageInput}
+                disabled={isEndCompleted}
                 onChange={(event) =>
                   onPageInputChange(event.target.value.replace(/\D/g, ""))
                 }
@@ -92,8 +106,15 @@ export default function FocusEndSheet({
           <Checkbox
             text="완독했어요."
             checked={isFinished}
+            disabled={isEndCompleted}
             onCheckedChange={onFinishedChange}
           />
+
+          {submitError && (
+            <p className="text-body-13-r text-red-1" role="alert">
+              {submitError}
+            </p>
+          )}
         </div>
       </div>
     </BottomSheet>

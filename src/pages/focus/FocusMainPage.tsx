@@ -50,8 +50,11 @@ export default function FocusMainPage() {
   const [recentThemeId] = useState(readStoredFocusThemeId);
   const recentThemeImageUrl = findFocusTheme(recentThemeId)?.mainImageUrl;
 
+  // 오늘 전체 시간은 status와 무관한 값이므로 BEFORE query를 고정 구독한다.
+  // 탭별 목록 query의 오래된 캐시가 상단 누적 시간을 잠깐 되돌리지 않게 한다.
+  const { data: summaryHomeData } = useFocusHome({ status: "BEFORE" });
   const {
-    data,
+    data: activeHomeData,
     isLoading,
     isError,
     hasNextPage,
@@ -61,10 +64,12 @@ export default function FocusMainPage() {
   } = useFocusHome({ status: activeStatus });
 
   const books = useMemo(
-    () => data?.pages.flatMap((page) => page.books.items) ?? [],
-    [data],
+    () => activeHomeData?.pages.flatMap((page) => page.books.items) ?? [],
+    [activeHomeData],
   );
-  const todayFocusTime = data?.pages[0]?.todayFocusTime;
+  const todayFocusTime =
+    summaryHomeData?.pages[0]?.todayFocusTime ??
+    activeHomeData?.pages[0]?.todayFocusTime;
 
   const setActiveStatus = useCallback(
     (next: FocusBookStatus) => {
@@ -123,7 +128,7 @@ export default function FocusMainPage() {
     return () => observer.disconnect();
   }, [fetchNextPage, hasNextPage, isFetchNextPageError, isFetchingNextPage, books.length]);
 
-  if (isLoading) {
+  if (isLoading && todayFocusTime === undefined) {
     return <LoadingState variant="fullscreen" />;
   }
 
@@ -194,7 +199,11 @@ export default function FocusMainPage() {
           />
         </div>
 
-        {books.length === 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center py-16">
+            <LoadingState />
+          </div>
+        ) : books.length === 0 ? (
           <p className="py-16 text-center text-body-14-r text-gray-50">
             {activeTab.emptyText}
           </p>

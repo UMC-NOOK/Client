@@ -15,6 +15,7 @@ import FocusMainPage from "../pages/focus/FocusMainPage";
 import FocusSelectPage from "../pages/focus/FocusSelectPage";
 import FocusThemePage from "../pages/focus/FocusThemePage";
 import FocusSessionPage from "../pages/focus/FocusSessionPage";
+import ActiveFocusGuard from "../pages/focus/component/ActiveFocusGuard";
 
 import GroupPage from "../pages/group/GroupPage";
 
@@ -124,7 +125,7 @@ function AppShellLayout() {
   return (
     <>
       <DevLoginButton />
-      <Outlet />
+      <ActiveFocusGuard />
     </>
   );
 }

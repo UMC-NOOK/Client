@@ -41,13 +41,32 @@ export type FocusLibraryBooksResult = {
   hasNext: boolean;
 };
 
-// 진행 중인 포커스 세션. libraryId→테마 선택→세션 화면 간 전달 로직이 아직 없어
-// 이 화면은 당분간 mock으로 채운다.
-export type ActiveFocusSession = {
+export type FocusStartRequest = {
+  bookId: number;
+};
+
+export type FocusStartResult = {
   focusId: number;
-  libraryId: number;
   bookId: number;
   bookTitle: string;
   author: string;
-  coverUrl: string;
+  startedAt: string;
+};
+
+export type FocusEndRequest = {
+  focusId: number;
+  page?: number;
+  isFinished: boolean;
+};
+
+export type FocusEndResult = {
+  focusId: number;
+  bookId: number;
+  startedAt: string;
+  endedAt: string;
+  durationSec: number;
+  durationText: string;
+  page: number | null;
+  totalFocusSec: number;
+  readingStatus: FocusBookStatus;
 };
