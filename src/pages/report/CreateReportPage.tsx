@@ -1,6 +1,7 @@
 // libraries
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import imageCompression from "browser-image-compression";
 
 // components
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
@@ -44,6 +45,7 @@ export default function CreateReportPage() {
 
   const [images, setImages] = useState<string[]>(initialImages);
 
+  // 기존 이미지는 key(string), 새 이미지는 File
   const [imageFiles, setImageFiles] =
     useState<(File | string)[]>(initialImageKeys);
 
@@ -54,13 +56,8 @@ export default function CreateReportPage() {
 
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
 
-  const handleBack = () => {
-    if (isEditMode) {
-      setIsExitModalOpen(true);
-      return;
-    }
-    navigate(-1);
-  };
+  // 이미지 압축 중 여부
+  const [isCompressing, setIsCompressing] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -75,7 +72,60 @@ export default function CreateReportPage() {
 
   const MAX_IMAGES = 5;
 
+  /**
+   * 이미지 압축
+   *
+   * - 최대 용량: 약 0.7MB
+   * - 최대 가로/세로: 1600px
+   * - 압축 실패 시 원본 파일 사용
+   */
+  const compressImage = async (file: File): Promise<File> => {
+    try {
+      const compressedBlob = await imageCompression(file, {
+        maxSizeMB: 0.7,
+        maxWidthOrHeight: 1600,
+        useWebWorker: true,
+      });
+
+      // 압축 결과 Blob → File 변환
+      const compressedFile = new File([compressedBlob], file.name, {
+        type: compressedBlob.type || file.type,
+        lastModified: file.lastModified,
+      });
+
+      console.log("압축 전:", {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      });
+
+      console.log("압축 후:", {
+        name: compressedFile.name,
+        size: compressedFile.size,
+        type: compressedFile.type,
+        isFile: compressedFile instanceof File,
+      });
+
+      return compressedFile;
+    } catch (error) {
+      console.error("이미지 압축 실패:", error);
+
+      return file;
+    }
+  };
+  const handleBack = () => {
+    if (isEditMode) {
+      setIsExitModalOpen(true);
+      return;
+    }
+
+    navigate(-1);
+  };
+
   const handleUploadClick = () => {
+    // 압축 중 중복 선택 방지
+    if (isCompressing) return;
+
     if (images.length < MAX_IMAGES) {
       fileInputRef.current?.click();
       return;
@@ -85,27 +135,56 @@ export default function CreateReportPage() {
     setToastKey(Date.now());
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /**
+   * 이미지 선택
+   *
+   * 1. 최대 5장 제한
+   * 2. 선택된 이미지 압축
+   * 3. 압축된 File을 서버 전송용 배열에 저장
+   * 4. 압축된 File로 미리보기 URL 생성
+   */
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
     if (!files) return;
 
     const selectedFiles = Array.from(files);
+
     const remainingSlots = MAX_IMAGES - images.length;
+
     const allowedFiles = selectedFiles.slice(0, remainingSlots);
 
-    const newImageUrls = allowedFiles.map((file) => URL.createObjectURL(file));
-
-    // UI용 배열에는 브라우저 임시 URL 추가
-    setImages((prev) => [...prev, ...newImageUrls]);
-
-    // 전송용 배열에는 실제 File 객체 추가
-    setImageFiles((prev) => [...prev, ...allowedFiles]);
-
+    // 같은 파일을 다시 선택할 수 있도록 초기화
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
 
+    if (allowedFiles.length === 0) return;
+
+    try {
+      setIsCompressing(true);
+
+      // 여러 장 선택 시 동시에 압축
+      const compressedFiles = await Promise.all(
+        allowedFiles.map((file) => compressImage(file)),
+      );
+
+      // UI 미리보기용 URL
+      const newImageUrls = compressedFiles.map((file) =>
+        URL.createObjectURL(file),
+      );
+
+      setImages((prev) => [...prev, ...newImageUrls]);
+
+      // 실제 서버에는 압축된 File 전달
+      setImageFiles((prev) => [...prev, ...compressedFiles]);
+    } catch (error) {
+      console.error("이미지 처리 중 오류:", error);
+    } finally {
+      setIsCompressing(false);
+    }
+
+    // 최대 이미지 개수를 초과해서 선택한 경우
     if (selectedFiles.length > remainingSlots) {
       setIsToastOpen(true);
       setToastKey(Date.now());
@@ -114,7 +193,17 @@ export default function CreateReportPage() {
 
   const handleImageClick = (index: number) => {
     if (deleteIndex === index) {
-      setImages((prev) => prev.filter((_, i) => i !== index));
+      setImages((prev) => {
+        const targetUrl = prev[index];
+
+        // 새로 선택한 이미지의 object URL이면 메모리 해제
+        if (targetUrl?.startsWith("blob:")) {
+          URL.revokeObjectURL(targetUrl);
+        }
+
+        return prev.filter((_, i) => i !== index);
+      });
+
       setImageFiles((prev) => prev.filter((_, i) => i !== index));
 
       setDeleteIndex(null);
@@ -178,10 +267,12 @@ export default function CreateReportPage() {
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
+
         <div className="mt-2 flex self-end text-[16px]">
           <span className="text-gray-90 text-label-13-sb">
             {content.length}
           </span>
+
           <span className="text-gray-50 text-label-13-sb">/{700}</span>
         </div>
       </div>
@@ -231,7 +322,14 @@ export default function CreateReportPage() {
           />
 
           {/* 업로드 버튼 */}
-          <div onClick={handleUploadClick} className="shrink-0 cursor-pointer">
+          <div
+            onClick={handleUploadClick}
+            className={`shrink-0 ${
+              isCompressing
+                ? "pointer-events-none opacity-50"
+                : "cursor-pointer"
+            }`}
+          >
             <Image type="Upload" />
           </div>
 
@@ -274,10 +372,20 @@ export default function CreateReportPage() {
         overlay={false}
         footer={{
           layout: "single",
-          variant: content || images.length > 0 ? "mint" : "primaryDisabled",
-          label: "기록 저장하기",
+
+          // 압축 중에는 저장하지 못하도록 처리
+          variant:
+            !isCompressing && (content || images.length > 0)
+              ? "mint"
+              : "primaryDisabled",
+
+          label: isCompressing ? "사진 처리 중..." : "기록 저장하기",
 
           onClick: () => {
+            if (isCompressing) return;
+
+            console.log("imageFiles:", imageFiles);
+
             if (isEditMode) {
               editRecord(
                 {
@@ -292,7 +400,12 @@ export default function CreateReportPage() {
                   onSuccess: (data) => {
                     navigate(`/report/${bookId}/${data.recordId}`, {
                       replace: true,
-                      state: { bookTitle, bookId, record: data, book },
+                      state: {
+                        bookTitle,
+                        bookId,
+                        record: data,
+                        book,
+                      },
                     });
                   },
                 },
@@ -300,15 +413,27 @@ export default function CreateReportPage() {
 
               return;
             }
+            const onlyFiles = imageFiles.filter(
+              (file): file is File => file instanceof File,
+            );
+
+            console.log("페이지 imageFiles:", imageFiles);
+            console.log(
+              "File 여부:",
+              imageFiles.map((file) => ({
+                value: file,
+                isFile: file instanceof File,
+                type: typeof file,
+              })),
+            );
+            console.log("hook에 넘길 onlyFiles:", onlyFiles);
 
             createRecord(
               {
                 bookId,
                 content,
                 emotion: selectedEmotion,
-                imageFiles: imageFiles.filter(
-                  (file): file is File => file instanceof File,
-                ),
+                imageFiles: onlyFiles,
               },
               {
                 onSuccess: (data) => {
@@ -322,6 +447,7 @@ export default function CreateReportPage() {
           },
         }}
       />
+
       {/* Exit Modal */}
       <PopupConfirmModal
         open={isExitModalOpen}
