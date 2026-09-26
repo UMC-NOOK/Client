@@ -1,31 +1,28 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import chevronLeftIcon from "../../assets/icons/chevron_left.svg";
-import closeIcon from "../../assets/icons/close.svg";
 import ContainerText from "../../components/action/Button/ContainerText";
 import BookList from "../../components/content/card/Book/List";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
+import LoadingState from "../../components/feedback/LoadingState";
 import SearchInput from "../../components/input/SearchField";
 import Divider from "../../components/layout/Divider";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import BottomSheet from "../../components/presentation/modal/bottomsheet/Origin";
-import RecentKeywordSection, {
-  type RecentKeyword,
-} from "../../components/search/RecentKeywordSection";
-import { mockFocusLibraryBooks } from "../../mocks/focus/focus";
-import type {
-  FocusBookStatus,
-  FocusLibraryBookItem,
-} from "../../types/focus/focus";
+import RecentKeywordSection from "../../components/search/RecentKeywordSection";
+import { useDeleteSearchHistory } from "../../hooks/mutations/useDeleteSearchHIstory";
+import { useFocusLibraryBooks } from "../../hooks/queries/focus/useFocusLibraryBooks";
+import { useInfiniteSearchBooks } from "../../hooks/queries/useInfiniteSearchBooks";
+import { useSearchHistories } from "../../hooks/queries/useSearchHistories";
+import type { FocusBookStatus, FocusLibrarySort } from "../../types/focus/focus";
 
 type ViewMode = "idle" | "searching" | "results";
-type SortValue = "RECENT_FOCUS" | "RECORD_MOST" | "RECORD_LEAST" | "ALPHABETICAL";
 
-const SORT_OPTIONS: { value: SortValue; label: string }[] = [
-  { value: "RECENT_FOCUS", label: "최근 포커스 한 순" },
-  { value: "RECORD_MOST", label: "기록 많은 순" },
-  { value: "RECORD_LEAST", label: "기록 적은 순" },
+const SORT_OPTIONS: { value: FocusLibrarySort; label: string }[] = [
+  { value: "RECENT_FOCUSED", label: "최근 포커스 한 순" },
+  { value: "RECORD_COUNT_DESC", label: "기록 많은 순" },
+  { value: "RECORD_COUNT_ASC", label: "기록 적은 순" },
   { value: "ALPHABETICAL", label: "가나다 순" },
 ];
 
@@ -38,45 +35,33 @@ const STATUS_LABEL: Record<FocusBookStatus, string> = {
 // 최근 검색어 칩 말줄임 기준(공백 포함 글자수) — 값이 바뀌면 이 숫자만 바꾸면 된다.
 const RECENT_KEYWORD_MAX_CHARS = 7;
 
-function sortLibraryBooks(items: FocusLibraryBookItem[], sort: SortValue) {
-  const sorted = [...items];
-
-  if (sort === "RECENT_FOCUS") {
-    sorted.sort((a, b) => {
-      if (!a.recentFocusedAt && !b.recentFocusedAt) return 0;
-      if (!a.recentFocusedAt) return 1;
-      if (!b.recentFocusedAt) return -1;
-      return b.recentFocusedAt.localeCompare(a.recentFocusedAt);
-    });
-  } else if (sort === "RECORD_MOST") {
-    sorted.sort((a, b) => b.focusRecordCount - a.focusRecordCount);
-  } else if (sort === "RECORD_LEAST") {
-    sorted.sort((a, b) => a.focusRecordCount - b.focusRecordCount);
-  } else {
-    sorted.sort((a, b) => a.title.localeCompare(b.title, "ko"));
-  }
-
-  return sorted;
-}
+// 서재 목록(FocusLibraryListItem)과 검색 결과(SearchBookItem)의 필드명이 달라 화면 렌더링용으로 통일한다.
+type SelectableBook = {
+  bookId: number;
+  title: string;
+  author: string;
+  coverUrl: string;
+  status: FocusBookStatus;
+};
 
 function BookListRows({
   books,
   onSelectBook,
 }: {
-  books: FocusLibraryBookItem[];
-  onSelectBook: () => void;
+  books: SelectableBook[];
+  onSelectBook: (bookId: number) => void;
 }) {
   return (
     <div className="flex w-full flex-col gap-1">
       {books.map((book, index) => (
-        <div key={book.libraryId}>
+        <div key={book.bookId}>
           <BookList
             imageUrl={book.coverUrl}
             title={book.title}
             author={book.author}
             type="REPORT"
             typeLabel={STATUS_LABEL[book.status]}
-            onClick={onSelectBook}
+            onClick={() => onSelectBook(book.bookId)}
           />
           {index !== books.length - 1 && <Divider width="full" />}
         </div>
@@ -87,56 +72,126 @@ function BookListRows({
 
 export default function FocusSelectPage() {
   const navigate = useNavigate();
+  const loadMoreTargetRef = useRef<HTMLDivElement | null>(null);
 
   const [query, setQuery] = useState("");
+  const [submittedQuery, setSubmittedQuery] = useState("");
   const [mode, setMode] = useState<ViewMode>("idle");
-  const [sortOption, setSortOption] = useState<SortValue>("RECENT_FOCUS");
+  const [sortOption, setSortOption] = useState<FocusLibrarySort>("RECENT_FOCUSED");
   const [showSortSheet, setShowSortSheet] = useState(false);
-  const [recentKeywords, setRecentKeywords] = useState<RecentKeyword[]>([]);
 
-  // 헤더 아이콘은 검색 제출(엔터/검색 아이콘 클릭) 시점에만 </>X로 바뀐다. 포커스만 한 상태는 <를 유지한다.
-  const showHeaderClose = mode === "results";
+  const {
+    data: libraryData,
+    isLoading: isLibraryLoading,
+    isError: isLibraryError,
+    hasNextPage: hasNextLibraryPage,
+    fetchNextPage: fetchNextLibraryPage,
+    isFetchingNextPage: isFetchingNextLibraryPage,
+  } = useFocusLibraryBooks(sortOption);
 
-  const sortedBooks = useMemo(
-    () => sortLibraryBooks(mockFocusLibraryBooks, sortOption),
-    [sortOption],
-  );
-
-  const trimmedQuery = query.trim();
-  // 검색 결과는 idle 목록의 정렬 옵션과 무관하게 항상 원본 순서(관련도순)로 보여준다.
-  const searchResults = useMemo(
+  const libraryBooks = useMemo<SelectableBook[]>(
     () =>
-      trimmedQuery
-        ? mockFocusLibraryBooks.filter((book) => book.title.includes(trimmedQuery))
-        : [],
-    [trimmedQuery],
+      libraryData?.pages.flatMap((page) =>
+        page.items.map((item) => ({
+          bookId: item.bookId,
+          title: item.title,
+          author: item.author,
+          coverUrl: item.coverUrl,
+          status: item.readingStatus,
+        })),
+      ) ?? [],
+    [libraryData],
   );
 
-  // 메인 화면의 책 카드와 동일하게 테마 선택으로 이동한다. 메인도 아직 libraryId를 다음 화면에
-  // 넘기지 않는 상태라, 이 화면만 먼저 넘기지 않고 그 상태에 맞춘다.
-  const goToThemeSelect = () => navigate("/focus/theme");
+  const {
+    data: searchData,
+    isLoading: isSearchLoading,
+    isError: isSearchError,
+    hasNextPage: hasNextSearchPage,
+    fetchNextPage: fetchNextSearchPage,
+    isFetchingNextPage: isFetchingNextSearchPage,
+  } = useInfiniteSearchBooks({
+    type: "LIBRARY",
+    keyword: submittedQuery,
+    enabled: mode === "results",
+  });
+
+  // 검색 결과는 idle 목록의 정렬 옵션과 무관하게 항상 서버가 주는 관련도순 그대로 보여준다.
+  const searchResults = useMemo<SelectableBook[]>(
+    () =>
+      searchData?.pages.flatMap((page) =>
+        page.books.map((item) => ({
+          // LIBRARY 검색은 항상 내부 도서 ID를 채워서 준다(GLOBAL만 null).
+          bookId: item.bookId ?? 0,
+          title: item.title,
+          author: item.author,
+          coverUrl: item.coverImageUrl,
+          status: (item.readingStatus as FocusBookStatus | null) ?? "BEFORE",
+        })),
+      ) ?? [],
+    [searchData],
+  );
+  const totalSearchResults = searchData?.pages[0]?.totalResults ?? 0;
+
+  const { data: historyData } = useSearchHistories({
+    type: "LIBRARY",
+    enabled: mode === "searching",
+  });
+  // 서버는 검색 기록을 문자열 배열로만 준다(id 없음) — 화면 렌더링용 id는 index로 붙인다.
+  const recentKeywords = useMemo(
+    () => (historyData ?? []).map((text, index) => ({ id: index, text })),
+    [historyData],
+  );
+  const { mutate: deleteHistory } = useDeleteSearchHistory();
+
+  const goToThemeSelect = (bookId: number) => {
+    navigate(`/focus/theme?bookId=${encodeURIComponent(bookId)}`);
+  };
 
   const commitSearch = (overrideQuery?: string) => {
     const target = (overrideQuery ?? query).trim();
     if (!target) return;
 
     setQuery(target);
+    setSubmittedQuery(target);
     setMode("results");
-    setRecentKeywords((prev) => {
-      const withoutDup = prev.filter((keyword) => keyword.text !== target);
-      return [{ id: Date.now(), text: target }, ...withoutDup].slice(0, 10);
-    });
   };
+
+  useEffect(() => {
+    const target = loadMoreTargetRef.current;
+    const hasNextPage = mode === "idle" ? hasNextLibraryPage : hasNextSearchPage;
+    const isFetchingNextPage =
+      mode === "idle" ? isFetchingNextLibraryPage : isFetchingNextSearchPage;
+
+    if (!target || !hasNextPage || isFetchingNextPage) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        void (mode === "idle" ? fetchNextLibraryPage() : fetchNextSearchPage());
+      },
+      { root: null, rootMargin: "200px 0px", threshold: 0 },
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [
+    mode,
+    hasNextLibraryPage,
+    hasNextSearchPage,
+    isFetchingNextLibraryPage,
+    isFetchingNextSearchPage,
+    fetchNextLibraryPage,
+    fetchNextSearchPage,
+  ]);
 
   return (
     <div className="flex flex-col">
       <div className="flex flex-col gap-4">
         <TopNavigation
-          left={showHeaderClose ? undefined : <img src={chevronLeftIcon} alt="뒤로가기" />}
-          onClickLeft={showHeaderClose ? undefined : () => navigate(-1)}
+          left={<img src={chevronLeftIcon} alt="뒤로가기" />}
+          onClickLeft={() => navigate(-1)}
           center="도서 선택"
-          right={showHeaderClose ? <img src={closeIcon} alt="닫기" /> : undefined}
-          onClickRight={showHeaderClose ? () => navigate(-1) : undefined}
         />
 
         <SearchInput
@@ -158,7 +213,6 @@ export default function FocusSelectPage() {
             if (query.trim() === "") setMode("idle");
           }}
           maxLength={500}
-          showClearOnFocus
           onClear={() => {
             setQuery("");
             setMode("idle");
@@ -167,7 +221,15 @@ export default function FocusSelectPage() {
       </div>
 
       {mode === "idle" &&
-        (mockFocusLibraryBooks.length === 0 ? (
+        (isLibraryLoading ? (
+          <div className="mt-16 flex w-full items-center justify-center py-16">
+            <LoadingState />
+          </div>
+        ) : isLibraryError && libraryBooks.length === 0 ? (
+          <p className="mt-16 py-16 text-center text-label-14-sb text-gray-60">
+            목록을 불러오지 못했어요.
+          </p>
+        ) : libraryBooks.length === 0 ? (
           <div className="mt-24 flex w-full items-center justify-center py-24">
             <p className="text-label-14-sb text-gray-60">서재에 등록한 책이 없어요.</p>
           </div>
@@ -182,28 +244,54 @@ export default function FocusSelectPage() {
                 onToggle={setShowSortSheet}
               />
             </div>
-            <BookListRows books={sortedBooks} onSelectBook={goToThemeSelect} />
+            <BookListRows books={libraryBooks} onSelectBook={goToThemeSelect} />
+            {hasNextLibraryPage ? (
+              <div ref={loadMoreTargetRef} className="h-6 w-full shrink-0" />
+            ) : null}
+            {isFetchingNextLibraryPage ? (
+              <p className="w-full py-4 text-center text-label-14-sb text-gray-60">
+                더 불러오는 중…
+              </p>
+            ) : null}
           </div>
         ))}
 
       {mode === "searching" && (
         <RecentKeywordSection
           keywords={recentKeywords}
-          onDelete={(id) =>
-            setRecentKeywords((prev) => prev.filter((keyword) => keyword.id !== id))
-          }
+          onDelete={(id) => {
+            const target = recentKeywords.find((keyword) => keyword.id === id);
+            if (target) deleteHistory({ type: "LIBRARY", keyword: target.text });
+          }}
           onClickKeyword={(text) => commitSearch(text)}
           maxTextLength={RECENT_KEYWORD_MAX_CHARS}
           showAllKeywords
         />
       )}
 
-      {mode === "results" && (
-        <div className="mt-8 flex flex-col gap-4">
-          <SectionHeader size="13" top={`${searchResults.length}권의 도서가 검색되었어요.`} />
-          <BookListRows books={searchResults} onSelectBook={goToThemeSelect} />
-        </div>
-      )}
+      {mode === "results" &&
+        (isSearchLoading ? (
+          <div className="mt-8 flex w-full items-center justify-center py-16">
+            <LoadingState />
+          </div>
+        ) : isSearchError ? (
+          <p className="mt-8 py-16 text-center text-label-14-sb text-gray-60">
+            검색 결과를 불러오지 못했어요.
+          </p>
+        ) : (
+          <div className="mt-8 flex flex-col gap-4">
+            <SectionHeader size="13" top={`${totalSearchResults}권의 도서가 검색되었어요.`} />
+            <BookListRows books={searchResults} onSelectBook={goToThemeSelect} />
+            {hasNextSearchPage ? (
+              <div ref={loadMoreTargetRef} className="h-6 w-full shrink-0" />
+            ) : null}
+            {isFetchingNextSearchPage ? (
+              <p className="w-full py-4 text-center text-label-14-sb text-gray-60">
+                더 불러오는 중…
+              </p>
+            ) : null}
+          </div>
+        ))}
 
       <BottomSheet open={showSortSheet} onClose={() => setShowSortSheet(false)} title="정렬">
         <div className="flex w-full flex-col gap-1">

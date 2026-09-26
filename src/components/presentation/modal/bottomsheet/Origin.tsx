@@ -28,6 +28,8 @@ export type BottomSheetFooterConfig =
       rightLabel: string;
       onLeftClick?: () => void;
       onRightClick?: () => void;
+      leftDisabled?: boolean;
+      rightDisabled?: boolean;
       ariaLabelLeft?: string;
       ariaLabelRight?: string;
     };
@@ -150,12 +152,13 @@ function BottomSheetFooter({
       <button
         type="button"
         aria-label={config.ariaLabelLeft}
-        onClick={config.onLeftClick}
+        onClick={config.leftDisabled ? undefined : config.onLeftClick}
+        disabled={config.leftDisabled}
         className={[
           baseBtn,
           leftClassByVariant[config.leftVariant],
           equal ? "flex-1" : "",
-          "cursor-pointer",
+          config.leftDisabled ? "cursor-not-allowed" : "cursor-pointer",
         ].join(" ")}
       >
         {config.leftLabel}
@@ -164,10 +167,14 @@ function BottomSheetFooter({
       <button
         type="button"
         aria-label={config.ariaLabelRight}
-        onClick={config.onRightClick}
-        className={[baseBtn, rightBtnClass, "flex-1", "cursor-pointer"].join(
-          " ",
-        )}
+        onClick={config.rightDisabled ? undefined : config.onRightClick}
+        disabled={config.rightDisabled}
+        className={[
+          baseBtn,
+          config.rightDisabled ? "bg-gray-25 text-gray-50" : rightBtnClass,
+          "flex-1",
+          config.rightDisabled ? "cursor-not-allowed" : "cursor-pointer",
+        ].join(" ")}
       >
         {config.rightLabel}
       </button>

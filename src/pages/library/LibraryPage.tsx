@@ -334,7 +334,9 @@ export default function LibraryPage() {
           coverUrl={libraryRecentBookInfoData.coverUrl}
           page={libraryRecentBookInfoData.page}
           focusTime={libraryRecentBookInfoData.focusTime}
-          onClick={() => navigate("/focus/theme")}
+          onClick={(bookId) =>
+            navigate(`/focus/theme?bookId=${encodeURIComponent(bookId)}`)
+          }
           onClose={dismissBottomBanner}
         />
       ) : null}

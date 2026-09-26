@@ -565,11 +565,9 @@ export default function BookInfoPage() {
                   setShowCompleteModal(true);
                 },
                 onRightClick: () => {
-                  navigate(`/focus/theme`, {
-                    state: {
-                      bookId: bookDetailData.bookId,
-                    },
-                  });
+                  navigate(
+                    `/focus/theme?bookId=${encodeURIComponent(bookDetailData.bookId)}`,
+                  );
                 },
               }}
             />
