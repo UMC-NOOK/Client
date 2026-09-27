@@ -19,6 +19,7 @@ export default function ViewReportPage() {
   const bookTitle = history.state?.usr?.bookTitle || "책 제목 없음";
   const bookId = history.state?.usr?.bookId;
   const book = history.state?.usr?.book || null;
+  const libraryId = history.state?.usr?.libraryId || null;
 
   const navigate = useNavigate();
 
@@ -37,8 +38,6 @@ export default function ViewReportPage() {
       },
     });
   };
-
-  console.log("record", record);
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-dvh overflow-y-hidden gap-5 relative">
@@ -85,7 +84,7 @@ export default function ViewReportPage() {
           onRightClick: () => {
             navigate(`/report/${id}/${recordId}/edit`, {
               replace: true,
-              state: { bookTitle, record, bookId, recordId },
+              state: { bookTitle, record, bookId, recordId, libraryId },
             });
           },
         }}

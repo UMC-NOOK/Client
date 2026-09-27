@@ -1,10 +1,7 @@
 // src/pages/search/SearchNewAddMorePage.tsx
 
 import { useEffect, useMemo, useState } from "react";
-import {
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { useShell } from "../../app/AppShell";
 import { createUserBook } from "../../api/book";
@@ -12,16 +9,25 @@ import { uploadSingleImage } from "../../api/image";
 import SearchNewAddLayout from "../../components/search/new/SearchNewAddLayout";
 import SearchNewAddMoreForm from "../../components/search/new/SearchNewAddMoreForm";
 
+import { useEditUserBook } from "../../hooks/mutations/useEditBook";
+
 type DateParts = {
   yyyy: string;
   mm: string;
   dd: string;
 };
 
-export default function SearchNewAddMorePage() {
+export default function SearchNewAddMorePage(isEditMode?: {
+  isEditMode: boolean;
+}) {
   const { setHideFooter } = useShell();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  const bookId = history.state?.usr?.bookId ?? null;
+  const bookData = history.state?.usr?.bookData ?? null;
+
+  const { mutateAsync: editBook } = useEditUserBook();
 
   useEffect(() => {
     setHideFooter(true);
@@ -31,10 +37,7 @@ export default function SearchNewAddMorePage() {
     };
   }, [setHideFooter]);
 
-  const title = useMemo(
-    () => searchParams.get("title") ?? "",
-    [searchParams],
-  );
+  const title = useMemo(() => searchParams.get("title") ?? "", [searchParams]);
 
   const author = useMemo(
     () => searchParams.get("author") ?? "",
@@ -47,15 +50,20 @@ export default function SearchNewAddMorePage() {
   );
 
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [intro, setIntro] = useState("");
-  const [pages, setPages] = useState("");
-  const [publisher, setPublisher] = useState("");
-  const [isbn, setIsbn] = useState("");
+  const [intro, setIntro] = useState(bookData?.description ?? "");
+  const [pages, setPages] = useState(
+    bookData?.pages ? String(bookData.pages) : "",
+  );
+  const [publisher, setPublisher] = useState(bookData?.publisher ?? "");
+  const [isbn, setIsbn] = useState(bookData?.isbn13 ?? "");
+  const [coverImageUrl] = useState<string | null>(
+    bookData?.coverImageUrl ?? null,
+  );
 
   const [pubDate, setPubDate] = useState<DateParts>({
-    yyyy: "",
-    mm: "",
-    dd: "",
+    yyyy: bookData?.publicationDate?.split(".")[0] ?? "",
+    mm: bookData?.publicationDate?.split(".")[1] ?? "",
+    dd: bookData?.publicationDate?.split(".")[2] ?? "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -84,11 +92,7 @@ export default function SearchNewAddMorePage() {
       return;
     }
 
-    if (
-      !title.trim() ||
-      !author.trim() ||
-      !category.trim()
-    ) {
+    if (!title.trim() || !author.trim() || !category.trim()) {
       alert("필수 정보가 누락되었습니다.");
       return;
     }
@@ -100,38 +104,56 @@ export default function SearchNewAddMorePage() {
     try {
       setIsSubmitting(true);
 
-      let coverImageKey: string | undefined;
+      if (isEditMode && !bookId) {
+        let coverImageKey: string | undefined;
 
-      if (imageFile) {
-        coverImageKey = await uploadSingleImage(
-          imageFile,
-          "book",
-        );
-      }
+        if (imageFile) {
+          coverImageKey = await uploadSingleImage(imageFile, "book");
+        }
 
-      const createdBook = await createUserBook({
-        title: title.trim(),
-        author: author.trim(),
-        categoryName: category.trim(),
-        description: intro.trim() || undefined,
-        pages: pages.trim()
-          ? Number(pages)
-          : undefined,
-        publisher: publisher.trim() || undefined,
-        publicationDate,
-        isbn13: isbn.trim() || undefined,
-        coverImageKey,
-      });
+        editBook({
+          bookId: bookId,
+          params: {
+            title: title.trim(),
+            author: author.trim(),
+            categoryName: category.trim(),
+            description: intro.trim() || undefined,
+            pages: pages.trim() ? Number(pages) : undefined,
+            publisher: publisher.trim() || undefined,
+            publicationDate,
+            isbn13: isbn.trim() || undefined,
+            coverImageKey,
+          },
+        });
 
-      navigate(
-        `/library/${createdBook.bookId}?type=bookId`,
-        {
+        navigate(`/library/${bookId}`, {
+          replace: true,
+        });
+      } else {
+        let coverImageKey: string | undefined;
+
+        if (imageFile) {
+          coverImageKey = await uploadSingleImage(imageFile, "book");
+        }
+
+        const createdBook = await createUserBook({
+          title: title.trim(),
+          author: author.trim(),
+          categoryName: category.trim(),
+          description: intro.trim() || undefined,
+          pages: pages.trim() ? Number(pages) : undefined,
+          publisher: publisher.trim() || undefined,
+          publicationDate,
+          isbn13: isbn.trim() || undefined,
+          coverImageKey,
+        });
+        navigate(`/library/${createdBook.bookId}?type=bookId`, {
           replace: true,
           state: {
             backTo: "/search",
           },
-        },
-      );
+        });
+      }
     } catch (error) {
       console.error("도서 등록 실패:", error);
       alert("도서 등록에 실패했습니다.");
@@ -158,6 +180,7 @@ export default function SearchNewAddMorePage() {
         publisher={publisher}
         isbn={isbn}
         pubDate={pubDate}
+        coverImageUrl={coverImageUrl ?? undefined}
         onChangeImage={setImageFile}
         onChangeIntro={setIntro}
         onChangePages={setPages}

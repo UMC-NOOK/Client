@@ -101,15 +101,6 @@ export default function BookInfoPage() {
     ? bookId !== null
     : isbn13 !== null;
 
-  console.log(
-    "hasValidIdentifier",
-    hasValidIdentifier,
-    "bookId",
-    bookId,
-    "isbn13",
-    isbn13,
-  );
-
   const [selectedTab, setSelectedTab] = useState<DetailTab>("info");
 
   const [readStatus, setReadStatus] = useState<BookStatusType>("UNREGISTERED");
@@ -197,8 +188,28 @@ export default function BookInfoPage() {
       onSuccess: () => {
         setLibraryId(null);
         setReadStatus("UNREGISTERED");
+        if (
+          !bookDetailData.sourceType ||
+          bookDetailData.sourceType === "USER"
+        ) {
+          navigate(-1);
+        }
 
         openSnackbar("내 서재에서 책을 삭제했어요.");
+      },
+    });
+  };
+
+  const handleEditBookInfo = () => {
+    console.log(
+      "handleEditBookInfo called with bookDetailData:",
+      bookDetailData,
+    );
+
+    navigate(`/library/${bookDetailData?.bookId}/edit`, {
+      state: {
+        bookId: bookDetailData?.bookId,
+        bookData: bookDetailData,
       },
     });
   };
@@ -209,7 +220,6 @@ export default function BookInfoPage() {
     addBook(bookDetailData.bookId, {
       onSuccess: (data) => {
         setLibraryId(data.result.libraryId);
-        console.log("data", data, "libraryId", libraryId);
         openSnackbar("내 서재에 책을 등록했어요.");
         setReadStatus("READING");
       },
@@ -307,21 +317,25 @@ export default function BookInfoPage() {
                   <InformationSection
                     flow="vertical"
                     top="소개"
-                    bottom={bookDetailData?.description}
+                    bottom={bookDetailData?.description ?? "-"}
                   />
                 </div>
 
                 <InformationSection
                   flow="vertical"
                   top="분야"
-                  bottom={bookDetailData?.category}
+                  bottom={bookDetailData?.category ?? "-"}
                 />
 
                 <InformationSection
                   flow="vertical"
                   top="분량"
                   bottom={
-                    bookDetailData ? `${bookDetailData.pages ?? 0}쪽` : ""
+                    bookDetailData
+                      ? bookDetailData.pages
+                        ? `${bookDetailData.pages ?? 0}쪽`
+                        : "-"
+                      : "-"
                   }
                 />
 
@@ -334,20 +348,30 @@ export default function BookInfoPage() {
                         bookDetailData.publicationDate === null
                         ? "-"
                         : `${bookDetailData.publisher ?? "-"} (${bookDetailData.publicationDate ?? "-"})`
-                      : ""
+                      : "-"
                   }
                 />
 
                 <InformationSection
                   flow="vertical"
                   top="ISBN"
-                  bottom={bookDetailData?.isbn13}
+                  bottom={bookDetailData?.isbn13 ?? "-"}
                 />
               </>
             )}
           </div>
 
           <div className="flex w-full flex-col items-center justify-center gap-2">
+            {!isLoading &&
+              bookDetailData &&
+              bookDetailData.sourceType === "USER" && (
+                <Solid
+                  text="도서 정보 수정하기"
+                  variant="secondary"
+                  size="m"
+                  onClick={handleEditBookInfo}
+                />
+              )}
             {!isLoading && bookDetailData && readStatus !== "UNREGISTERED" && (
               <Solid
                 text="서재에서 삭제하기"

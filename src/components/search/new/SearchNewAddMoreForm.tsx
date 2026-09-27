@@ -4,10 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import CameraIcon from "../../../assets/search/atomic-icon-shape.svg";
 import TextArea from "../../input/textinput/TextArea";
-import {
-  TextField,
-  TripleTextField,
-} from "../../input/textinput/TextField";
+import { TextField, TripleTextField } from "../../input/textinput/TextField";
 
 type DateParts = {
   yyyy: string;
@@ -23,6 +20,8 @@ type Props = {
   publisher: string;
   isbn: string;
   pubDate: DateParts;
+
+  coverImageUrl?: string;
 
   onChangeImage: (f: File | null) => void;
   onChangeIntro: (v: string) => void;
@@ -42,6 +41,7 @@ export default function SearchNewAddMoreForm({
   publisher,
   isbn,
   pubDate,
+  coverImageUrl,
   onChangeImage,
   onChangeIntro,
   onChangePages,
@@ -50,19 +50,22 @@ export default function SearchNewAddMoreForm({
   onChangePubDate,
 }: Props) {
   /** ───────── 이미지 프리뷰 ───────── */
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  console.log("SearchNewAddMoreForm coverImageUrl:", coverImageUrl);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(
+    coverImageUrl ?? null,
+  );
 
   useEffect(() => {
-    if (!imageFile) {
-      setPreviewUrl(null);
-      return;
+    if (imageFile) {
+      const url = URL.createObjectURL(imageFile);
+      setPreviewUrl(url);
+
+      return () => URL.revokeObjectURL(url);
     }
 
-    const url = URL.createObjectURL(imageFile);
-    setPreviewUrl(url);
-
-    return () => URL.revokeObjectURL(url);
-  }, [imageFile]);
+    setPreviewUrl(coverImageUrl ?? null);
+  }, [imageFile, coverImageUrl]);
 
   const handlePick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
@@ -72,9 +75,7 @@ export default function SearchNewAddMoreForm({
   };
 
   const handleIsbnChange = (value: string) => {
-    const numericValue = value
-      .replace(/\D/g, "")
-      .slice(0, MAX_ISBN_LENGTH);
+    const numericValue = value.replace(/\D/g, "").slice(0, MAX_ISBN_LENGTH);
 
     onChangeIsbn(numericValue);
   };

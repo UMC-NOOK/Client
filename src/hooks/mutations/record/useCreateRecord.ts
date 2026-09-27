@@ -20,6 +20,8 @@ export function useCreateRecord() {
     }) => {
       let imageKeys: string[] = [];
 
+      console.log("imageFiles length:", imageFiles.length);
+
       if (imageFiles.length > 0) {
         let imageTypes: ("image/jpeg" | "image/png" | "image/webp")[] =
           imageFiles.map((file) => {

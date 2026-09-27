@@ -136,7 +136,7 @@ export default function IndividueleReportPage() {
                         state: { bookTitle, bookId, book },
                       })
                     }
-                    className="pl-4.5 pt-4.5 w-29"
+                    className="pl-4.5 pt-4.5 w-29 text-gray-60"
                     extraPadding={true}
                   >
                     도서 상세 보기 →

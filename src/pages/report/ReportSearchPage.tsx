@@ -193,31 +193,37 @@ export default function ReportSearchPage() {
             className="flex flex-col gap-2"
             // onClick={() => setHasReport(!hasReport)}
           >
-            {recordData?.items.map((item) => (
-              <BookList
-                key={item.bookId}
-                {...item}
-                imageUrl={item.coverUrl || testBookCover}
-                title={item.title}
-                author={item.author}
-                type="REPORT"
-                typeLabel={`${
-                  item.readingStatus === "BEFORE"
-                    ? "읽기 전"
-                    : item.readingStatus === "READING"
-                      ? "독서 중"
-                      : "완독"
-                }`}
-                onClick={() =>
-                  navigate(`/report/${item.bookId}`, {
-                    state: {
-                      bookTitle: item.title,
-                      bookId: item.bookId,
-                      book: item,
-                    },
-                  })
-                }
-              />
+            {recordData?.items.map((item, index) => (
+              <>
+                {" "}
+                <BookList
+                  key={item.bookId}
+                  {...item}
+                  imageUrl={item.coverUrl || testBookCover}
+                  title={item.title}
+                  author={item.author}
+                  type="REPORT"
+                  typeLabel={`${
+                    item.readingStatus === "BEFORE"
+                      ? "읽기 전"
+                      : item.readingStatus === "READING"
+                        ? "독서 중"
+                        : "완독"
+                  }`}
+                  onClick={() =>
+                    navigate(`/report/${item.bookId}`, {
+                      state: {
+                        bookTitle: item.title,
+                        bookId: item.bookId,
+                        book: item,
+                      },
+                    })
+                  }
+                />
+                {index !== (recordData?.items.length || 0) - 1 && (
+                  <Divider width="full" />
+                )}
+              </>
             ))}
           </div>
         </div>

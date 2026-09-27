@@ -47,3 +47,15 @@ export async function createUserBook(
 
   return response.data.result;
 }
+
+export async function editUserBook(
+  bookId: number,
+  params: CreateUserBookParams,
+): Promise<BookDetail> {
+  const response = await api.patch<BasicResponse<BookDetail>>(
+    `/api/v1/books/user/${bookId}`,
+    params,
+  );
+
+  return response.data.result;
+}
