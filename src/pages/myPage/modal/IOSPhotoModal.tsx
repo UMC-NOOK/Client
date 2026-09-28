@@ -22,7 +22,6 @@ interface IOSPhotoModalProps {
   onSelectDefaultImage: () => void;
 }
 
-
 export function IOSPhotoModal({
   children,
   className,
@@ -38,6 +37,9 @@ export function IOSPhotoModal({
     useRef<HTMLButtonElement>(null);
 
   const fileInputRef =
+    useRef<HTMLInputElement>(null);
+
+  const photoInputRef =
     useRef<HTMLInputElement>(null);
 
   const cameraInputRef =
@@ -146,7 +148,7 @@ export function IOSPhotoModal({
 
 
   const selectFile = (
-    type: "library" | "camera",
+    type: "library" | "camera" | "file",
   ) => {
 
     closeDialog();
@@ -167,7 +169,12 @@ export function IOSPhotoModal({
     }
 
 
-    fileInputRef.current?.click();
+    if (type === "file") {
+      fileInputRef.current?.click();
+      return;
+    }
+
+    photoInputRef.current?.click();
   };
 
 
@@ -245,7 +252,7 @@ export function IOSPhotoModal({
             type="button"
             disabled={disabled}
             onClick={() =>
-              selectFile("library")
+              selectFile("file")
             }
           >
 
@@ -294,13 +301,18 @@ export function IOSPhotoModal({
 
 
       <input
+        ref={photoInputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        onChange={handleFileChange}
+        disabled={disabled}
+        className="hidden"
+      />
+
+      <input
         ref={fileInputRef}
         type="file"
-        accept="
-          image/jpeg,
-          image/png,
-          image/webp
-        "
+        accept="*/*"
         onChange={handleFileChange}
         disabled={disabled}
         className="hidden"
@@ -311,11 +323,7 @@ export function IOSPhotoModal({
       <input
         ref={cameraInputRef}
         type="file"
-        accept="
-          image/jpeg,
-          image/png,
-          image/webp
-        "
+        accept="image/*"
         capture="user"
         onChange={handleFileChange}
         disabled={disabled}
