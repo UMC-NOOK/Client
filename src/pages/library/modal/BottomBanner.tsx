@@ -9,9 +9,14 @@ const MAX_TITLE_LENGTH = 18;
 function formatTitle(title: string) {
   const characters = Array.from(title);
 
-  if (characters.length <= MAX_TITLE_LENGTH) return title;
+  if (characters.length <= MAX_TITLE_LENGTH) {
+    return { text: title, isTruncated: false };
+  }
 
-  return `${characters.slice(0, MAX_TITLE_LENGTH).join("").trimEnd()}...`;
+  return {
+    text: characters.slice(0, MAX_TITLE_LENGTH).join("").trimEnd(),
+    isTruncated: true,
+  };
 }
 
 type BottomBannerProps = {
@@ -32,6 +37,8 @@ export default function BottomBanner({
   onClick,
   onClose,
 }: BottomBannerProps) {
+  const formattedTitle = formatTitle(title);
+
   return (
     <div className="pointer-events-none fixed inset-0 z-30 flex items-end justify-center pb-1">
       <div className="pointer-events-auto flex h-29 w-full max-w-93.75 flex-col items-end justify-center px-4">
@@ -69,9 +76,17 @@ export default function BottomBanner({
               <div className="mt-auto w-full min-w-0">
                 <SectionHeader
                   size="16"
-                  top={formatTitle(title)}
+                  top={
+                    <span className="flex w-full min-w-0 whitespace-nowrap">
+                      <span className="min-w-0 overflow-hidden">
+                        {formattedTitle.text}
+                      </span>
+                      {formattedTitle.isTruncated ? (
+                        <span className="shrink-0">...</span>
+                      ) : null}
+                    </span>
+                  }
                   bottom="이어서 포커스하기"
-                  truncateTop
                 />
               </div>
             </div>
