@@ -1,5 +1,15 @@
 import playIcon from "../../../../../assets/icons/movement.svg";
 
+const MAX_TEXT_LENGTH = 18;
+
+function formatText(text: string) {
+  const characters = Array.from(text);
+
+  if (characters.length <= MAX_TEXT_LENGTH) return text;
+
+  return `${characters.slice(0, MAX_TEXT_LENGTH).join("").trimEnd()}...`;
+}
+
 type Props = {
   imageUrl: string;
   imageAlt?: string;
@@ -42,12 +52,18 @@ export function Focus({
         <p className="text-label-13-sb text-gray-60">{timeText}</p>
 
         <div className="mt-auto flex min-w-0 flex-col gap-2">
-          <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-label-16-sb text-gray-90">
-            {title}
+          <p
+            className="w-full overflow-hidden whitespace-nowrap text-label-16-sb text-gray-90"
+            aria-label={title}
+          >
+            {formatText(title)}
           </p>
 
-          <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-label-14-sb text-gray-50">
-            {author}
+          <p
+            className="w-full overflow-hidden whitespace-nowrap text-label-14-sb text-gray-50"
+            aria-label={author}
+          >
+            {formatText(author)}
           </p>
         </div>
       </div>
