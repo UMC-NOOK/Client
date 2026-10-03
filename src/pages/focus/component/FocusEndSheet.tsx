@@ -90,11 +90,13 @@ export default function FocusEndSheet({
                   pageInput ? undefined : "몇 쪽까지 읽었는지 입력해주세요."
                 }
                 inputMode="numeric"
-                size={pageInput ? pageInput.length : undefined}
+                style={
+                  pageInput ? { width: `${pageInput.length}ch` } : undefined
+                }
                 className={[
-                  "bg-transparent text-gray-90 text-body-14-r placeholder:text-gray-50",
+                  "bg-transparent text-gray-90 text-body-14-r tabular-nums placeholder:text-gray-50",
                   "caret-gray-50 outline-none",
-                  pageInput ? "w-auto min-w-0" : "w-full",
+                  pageInput ? "min-w-0 shrink-0" : "w-full",
                 ].join(" ")}
               />
               {pageInput && (
