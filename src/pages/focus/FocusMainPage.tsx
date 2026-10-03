@@ -204,7 +204,7 @@ export default function FocusMainPage() {
             <LoadingState />
           </div>
         ) : books.length === 0 ? (
-          <p className="py-16 text-center text-body-14-r text-gray-50">
+          <p className="py-17 text-center text-body-14-r text-gray-50">
             {activeTab.emptyText}
           </p>
         ) : (
