@@ -12,6 +12,7 @@ import MaskGradient from "../../components/layout/MaskGradient";
 import TabBar from "../../components/navigation/tabs/TabBar";
 import { useFocusHome } from "../../hooks/queries/focus/useFocusHome";
 import type { FocusBookStatus } from "../../types/focus/focus";
+import { formatDurationHmsWithSpacing } from "./utils/formatDurationHms";
 import { findFocusTheme } from "./utils/focusThemes";
 import { readStoredFocusThemeId } from "./utils/focusThemeStorage";
 
@@ -166,7 +167,7 @@ export default function FocusMainPage() {
         <div className="relative flex h-full flex-col items-center justify-center gap-2">
           <p className="text-body-16-b text-gray-90">오늘 독서한 시간</p>
           <p className="text-title-40-b text-gray-90 tabular-nums">
-            {todayFocusTime}
+            {todayFocusTime && formatDurationHmsWithSpacing(todayFocusTime)}
           </p>
         </div>
       </section>
