@@ -1,69 +1,5 @@
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
-
 import playIcon from "../../../../../assets/icons/movement.svg";
-
-const ELLIPSIS = "...";
-
-type FittedTextProps = {
-  text: string;
-  className: string;
-};
-
-function FittedText({ text, className }: FittedTextProps) {
-  const containerRef = useRef<HTMLParagraphElement>(null);
-  const measureRef = useRef<HTMLSpanElement>(null);
-  const [isTruncated, setIsTruncated] = useState(false);
-
-  const fitText = useCallback(() => {
-    const container = containerRef.current;
-    const measurer = measureRef.current;
-
-    if (!container || !measurer) return;
-
-    const availableWidth = container.clientWidth;
-    measurer.textContent = text;
-    setIsTruncated(measurer.getBoundingClientRect().width > availableWidth);
-  }, [text]);
-
-  useLayoutEffect(() => {
-    const container = containerRef.current;
-
-    if (!container) return;
-
-    const animationFrame = window.requestAnimationFrame(fitText);
-    const resizeObserver = new ResizeObserver(fitText);
-
-    resizeObserver.observe(container);
-    void document.fonts.ready.then(fitText);
-
-    return () => {
-      window.cancelAnimationFrame(animationFrame);
-      resizeObserver.disconnect();
-    };
-  }, [fitText]);
-
-  return (
-    <p
-      ref={containerRef}
-      className={`relative w-full min-w-0 overflow-hidden whitespace-nowrap ${className}`}
-      aria-label={text}
-    >
-      <span className="flex w-full min-w-0" aria-hidden="true">
-        <span className="min-w-0 overflow-hidden">{text}</span>
-        {isTruncated ? (
-          <span className="shrink-0">{ELLIPSIS}</span>
-        ) : null}
-      </span>
-      <span
-        ref={measureRef}
-        className="invisible absolute left-0 top-0 w-max whitespace-nowrap"
-        aria-hidden="true"
-      >
-        {text}
-      </span>
-    </p>
-  );
-}
+import WidthAwareEllipsis from "../../../WidthAwareEllipsis";
 
 type Props = {
   imageUrl: string;
@@ -108,12 +44,12 @@ export function Focus({
           <p className="text-label-13-sb text-gray-60">{timeText}</p>
 
           <div className="mt-auto flex min-w-0 flex-col gap-2">
-            <FittedText
+            <WidthAwareEllipsis
               text={title}
               className="text-label-16-sb text-gray-90"
             />
 
-            <FittedText
+            <WidthAwareEllipsis
               text={author}
               className="text-label-14-sb text-gray-50"
             />
