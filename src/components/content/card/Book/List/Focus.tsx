@@ -1,4 +1,5 @@
 import playIcon from "../../../../../assets/icons/movement.svg";
+import SectionHeader from "../../../InformationText/SectionHeader";
 import WidthAwareEllipsis from "../../../WidthAwareEllipsis";
 
 type Props = {
@@ -43,15 +44,11 @@ export function Focus({
         <div className="flex min-h-16 min-w-0 flex-1 flex-col justify-between">
           <p className="text-label-13-sb text-gray-60">{timeText}</p>
 
-          <div className="mt-auto flex min-w-0 flex-col gap-2">
-            <WidthAwareEllipsis
-              text={title}
-              className="text-label-16-sb text-gray-90"
-            />
-
-            <WidthAwareEllipsis
-              text={author}
-              className="text-label-14-sb text-gray-50"
+          <div className="mt-auto w-full min-w-0">
+            <SectionHeader
+              size="16"
+              top={<WidthAwareEllipsis text={title} />}
+              bottom={<WidthAwareEllipsis text={author} />}
             />
           </div>
         </div>
