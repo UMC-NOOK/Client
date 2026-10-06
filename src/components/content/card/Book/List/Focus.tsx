@@ -1,13 +1,68 @@
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
+
 import playIcon from "../../../../../assets/icons/movement.svg";
 
-const MAX_TEXT_LENGTH = 18;
+const ELLIPSIS = "...";
 
-function formatText(text: string) {
-  const characters = Array.from(text);
+type FittedTextProps = {
+  text: string;
+  className: string;
+};
 
-  if (characters.length <= MAX_TEXT_LENGTH) return text;
+function FittedText({ text, className }: FittedTextProps) {
+  const containerRef = useRef<HTMLParagraphElement>(null);
+  const measureRef = useRef<HTMLSpanElement>(null);
+  const [isTruncated, setIsTruncated] = useState(false);
 
-  return `${characters.slice(0, MAX_TEXT_LENGTH).join("").trimEnd()}...`;
+  const fitText = useCallback(() => {
+    const container = containerRef.current;
+    const measurer = measureRef.current;
+
+    if (!container || !measurer) return;
+
+    const availableWidth = container.clientWidth;
+    measurer.textContent = text;
+    setIsTruncated(measurer.getBoundingClientRect().width > availableWidth);
+  }, [text]);
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+
+    if (!container) return;
+
+    const animationFrame = window.requestAnimationFrame(fitText);
+    const resizeObserver = new ResizeObserver(fitText);
+
+    resizeObserver.observe(container);
+    void document.fonts.ready.then(fitText);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      resizeObserver.disconnect();
+    };
+  }, [fitText]);
+
+  return (
+    <p
+      ref={containerRef}
+      className={`relative w-full min-w-0 overflow-hidden whitespace-nowrap ${className}`}
+      aria-label={text}
+    >
+      <span className="flex w-full min-w-0" aria-hidden="true">
+        <span className="min-w-0 overflow-hidden">{text}</span>
+        {isTruncated ? (
+          <span className="shrink-0">{ELLIPSIS}</span>
+        ) : null}
+      </span>
+      <span
+        ref={measureRef}
+        className="invisible absolute left-0 top-0 w-max whitespace-nowrap"
+        aria-hidden="true"
+      >
+        {text}
+      </span>
+    </p>
+  );
 }
 
 type Props = {
@@ -48,32 +103,30 @@ export function Focus({
         aria-label={imageAlt}
       />
 
-      <div className="flex flex-1 flex-col min-w-0 min-h-16 justify-between pl-4 pr-2">
-        <p className="text-label-13-sb text-gray-60">{timeText}</p>
+      <div className="flex min-w-0 flex-1 items-center gap-2 pl-4">
+        <div className="flex min-h-16 min-w-0 flex-1 flex-col justify-between">
+          <p className="text-label-13-sb text-gray-60">{timeText}</p>
 
-        <div className="mt-auto flex min-w-0 flex-col gap-2">
-          <p
-            className="w-full overflow-hidden whitespace-nowrap text-label-16-sb text-gray-90"
-            aria-label={title}
-          >
-            {formatText(title)}
-          </p>
+          <div className="mt-auto flex min-w-0 flex-col gap-2">
+            <FittedText
+              text={title}
+              className="text-label-16-sb text-gray-90"
+            />
 
-          <p
-            className="w-full overflow-hidden whitespace-nowrap text-label-14-sb text-gray-50"
-            aria-label={author}
-          >
-            {formatText(author)}
-          </p>
+            <FittedText
+              text={author}
+              className="text-label-14-sb text-gray-50"
+            />
+          </div>
         </div>
-      </div>
 
-      <span
-        className="flex h-8 w-8 shrink-0 items-center justify-center"
-        aria-hidden="true"
-      >
-        <img src={playIcon} className="h-full w-full" />
-      </span>
+        <span
+          className="flex h-8 w-8 shrink-0 items-center justify-center"
+          aria-hidden="true"
+        >
+          <img src={playIcon} className="h-full w-full" />
+        </span>
+      </div>
     </div>
   );
 }
