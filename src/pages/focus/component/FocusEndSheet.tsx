@@ -2,7 +2,7 @@ import { useRef } from "react";
 
 import Checkbox from "../../../components/section/checkbox/Checkbox";
 import BottomSheet from "../../../components/presentation/modal/bottomsheet/Origin";
-import { formatDurationHms } from "../utils/formatDurationHms";
+import { formatDurationHmsWithSpacing } from "../utils/formatDurationHms";
 
 type FocusEndSheetProps = {
   open: boolean;
@@ -67,7 +67,7 @@ export default function FocusEndSheet({
             <span className="text-label-13-sb text-gray-90">독서 시간</span>
             <div className="flex h-11.25 w-full items-center rounded-lg bg-gray-20 px-4 py-3">
               <span className="text-body-14-r text-gray-90">
-                {formatDurationHms(elapsedSeconds)}
+                {formatDurationHmsWithSpacing(elapsedSeconds)}
               </span>
             </div>
           </div>
