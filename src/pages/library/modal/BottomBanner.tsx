@@ -62,6 +62,7 @@ export default function BottomBanner({
                   size="16"
                   top={<WidthAwareEllipsis text={title} />}
                   bottom="이어서 포커스하기"
+                  truncateTop
                 />
               </div>
             </div>

@@ -1,27 +1,64 @@
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
+
 const ELLIPSIS = "...";
-const MAX_LENGTH = 16;
 
 type Props = {
   text: string;
   className?: string;
 };
 
-// 공백 포함 MAX_LENGTH자까지만 보여주고, 초과 시 끝 공백을 제외하고 `...`을 붙인다.
-function truncateText(text: string) {
-  const characters = Array.from(text);
-
-  if (characters.length <= MAX_LENGTH) return text;
-
-  return `${characters.slice(0, MAX_LENGTH).join("").trimEnd()}${ELLIPSIS}`;
-}
-
 export default function WidthAwareEllipsis({ text, className = "" }: Props) {
+  const containerRef = useRef<HTMLSpanElement>(null);
+  const measureRef = useRef<HTMLSpanElement>(null);
+  const [isTruncated, setIsTruncated] = useState(false);
+
+  const fitText = useCallback(() => {
+    const container = containerRef.current;
+    const measurer = measureRef.current;
+
+    if (!container || !measurer) return;
+
+    const availableWidth = container.clientWidth;
+    measurer.textContent = text;
+    setIsTruncated(measurer.getBoundingClientRect().width > availableWidth);
+  }, [text]);
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+
+    if (!container) return;
+
+    const animationFrame = window.requestAnimationFrame(fitText);
+    const resizeObserver = new ResizeObserver(fitText);
+
+    resizeObserver.observe(container);
+    void document.fonts.ready.then(fitText);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      resizeObserver.disconnect();
+    };
+  }, [fitText]);
+
   return (
     <span
-      className={`block w-full min-w-0 overflow-hidden whitespace-nowrap ${className}`}
+      ref={containerRef}
+      className={`relative block w-full min-w-0 overflow-hidden whitespace-nowrap ${className}`}
       aria-label={text}
     >
-      <span aria-hidden="true">{truncateText(text)}</span>
+      <span className="flex w-full min-w-0" aria-hidden="true">
+        <span className="min-w-0 overflow-hidden">{text}</span>
+        {isTruncated ? (
+          <span className="ml-auto shrink-0">{ELLIPSIS}</span>
+        ) : null}
+      </span>
+      <span
+        ref={measureRef}
+        className="invisible absolute left-0 top-0 w-max whitespace-nowrap"
+        aria-hidden="true"
+      >
+        {text}
+      </span>
     </span>
   );
 }
