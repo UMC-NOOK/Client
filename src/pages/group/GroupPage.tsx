@@ -8,11 +8,11 @@ export default function GroupPage() {
           src={comingSoonImage}
           alt=""
           aria-hidden
-          className="w-full"
+          className="h-67.5 w-full object-contain"
           draggable={false}
         />
         <p className="text-label-14-sb text-gray-60">
-          곧 만나보실 수 있도록 현재 준비 중이에요!
+          아직 준비 중이에요!
         </p>
       </section>
     </main>
