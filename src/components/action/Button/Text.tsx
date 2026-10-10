@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 type Size = "12" | "14" | "14r" | "18";
+type Color = "gray-40" | "gray-60" | "gray-90";
 
 type Props = {
   children: ReactNode;
@@ -9,6 +10,7 @@ type Props = {
   onClick?: () => void;
   className?: string;
   extraPadding?: boolean;
+  color?: Color;
 };
 
 const baseLayout = "inline-flex justify-center items-center select-none";
@@ -27,6 +29,12 @@ const paddingClassMap: Record<Size, string> = {
   "18": "h-10 px-4",
 };
 
+const colorClassMap: Record<Color, string> = {
+  "gray-40": "text-gray-40",
+  "gray-60": "text-gray-60",
+  "gray-90": "text-gray-90",
+};
+
 export default function Text({
   children,
   size,
@@ -34,10 +42,15 @@ export default function Text({
   onClick,
   className = "",
   extraPadding = false,
+  color,
 }: Props) {
   const clickable = Boolean(onClick);
 
-  const colorClass = active ? "text-gray-90" : "text-gray-40";
+  const colorClass = color
+    ? colorClassMap[color]
+    : active
+      ? "text-gray-90"
+      : "text-gray-40";
 
   return (
     <span

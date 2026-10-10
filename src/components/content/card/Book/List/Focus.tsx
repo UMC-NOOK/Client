@@ -1,4 +1,32 @@
 import playIcon from "../../../../../assets/icons/movement.svg";
+import SectionHeader from "../../../InformationText/SectionHeader";
+
+const MAX_TEXT_LENGTH = 18;
+const ELLIPSIS = "...";
+
+type LimitedTextProps = {
+  text: string;
+};
+
+function LimitedText({ text }: LimitedTextProps) {
+  const characters = Array.from(text);
+  const content =
+    characters.length > MAX_TEXT_LENGTH
+      ? `${characters
+          .slice(0, MAX_TEXT_LENGTH)
+          .join("")
+          .trimEnd()}${ELLIPSIS}`
+      : text;
+
+  return (
+    <span
+      className="block w-full min-w-0 overflow-hidden whitespace-nowrap"
+      aria-label={text}
+    >
+      <span aria-hidden="true">{content}</span>
+    </span>
+  );
+}
 
 type Props = {
   imageUrl: string;
@@ -38,26 +66,26 @@ export function Focus({
         aria-label={imageAlt}
       />
 
-      <div className="flex flex-1 flex-col min-w-0 min-h-16 justify-between pl-4 pr-2">
-        <p className="text-label-13-sb text-gray-60">{timeText}</p>
+      <div className="flex min-w-0 flex-1 items-center gap-2 pl-4">
+        <div className="flex min-h-16 min-w-0 flex-1 flex-col justify-between">
+          <p className="text-label-13-sb text-gray-60">{timeText}</p>
 
-        <div className="mt-auto flex min-w-0 flex-col gap-2">
-          <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-label-16-sb text-gray-90">
-            {title}
-          </p>
-
-          <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-label-14-sb text-gray-50">
-            {author}
-          </p>
+          <div className="mt-auto w-full min-w-0">
+            <SectionHeader
+              size="16"
+              top={<LimitedText text={title} />}
+              bottom={<LimitedText text={author} />}
+            />
+          </div>
         </div>
-      </div>
 
-      <span
-        className="flex h-8 w-8 shrink-0 items-center justify-center"
-        aria-hidden="true"
-      >
-        <img src={playIcon} className="h-full w-full" />
-      </span>
+        <span
+          className="flex h-8 w-8 shrink-0 items-center justify-center"
+          aria-hidden="true"
+        >
+          <img src={playIcon} className="h-full w-full" />
+        </span>
+      </div>
     </div>
   );
 }

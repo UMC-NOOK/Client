@@ -2,7 +2,7 @@ import { useRef } from "react";
 
 import Checkbox from "../../../components/section/checkbox/Checkbox";
 import BottomSheet from "../../../components/presentation/modal/bottomsheet/Origin";
-import { formatDurationHms } from "../utils/formatDurationHms";
+import { formatDurationHmsWithSpacing } from "../utils/formatDurationHms";
 
 type FocusEndSheetProps = {
   open: boolean;
@@ -67,7 +67,7 @@ export default function FocusEndSheet({
             <span className="text-label-13-sb text-gray-90">독서 시간</span>
             <div className="flex h-11.25 w-full items-center rounded-lg bg-gray-20 px-4 py-3">
               <span className="text-body-14-r text-gray-90">
-                {formatDurationHms(elapsedSeconds)}
+                {formatDurationHmsWithSpacing(elapsedSeconds)}
               </span>
             </div>
           </div>
@@ -90,11 +90,13 @@ export default function FocusEndSheet({
                   pageInput ? undefined : "몇 쪽까지 읽었는지 입력해주세요."
                 }
                 inputMode="numeric"
-                size={pageInput ? pageInput.length : undefined}
+                style={
+                  pageInput ? { width: `${pageInput.length}ch` } : undefined
+                }
                 className={[
-                  "bg-transparent text-gray-90 text-body-14-r placeholder:text-gray-50",
+                  "bg-transparent text-gray-90 text-body-14-r tabular-nums placeholder:text-gray-50",
                   "caret-gray-50 outline-none",
-                  pageInput ? "w-auto min-w-0" : "w-full",
+                  pageInput ? "min-w-0 shrink-0" : "w-full",
                 ].join(" ")}
               />
               {pageInput && (

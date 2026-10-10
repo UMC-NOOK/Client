@@ -6,3 +6,13 @@ export function formatDurationHms(totalSeconds: number) {
 
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
+
+export function formatDurationHmsWithSpacing(duration: string | number) {
+  const durationText =
+    typeof duration === "number" ? formatDurationHms(duration) : duration;
+
+  return durationText
+    .split(":")
+    .map((unit) => unit.trim())
+    .join(" : ");
+}

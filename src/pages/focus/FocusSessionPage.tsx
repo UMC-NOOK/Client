@@ -12,7 +12,7 @@ import { useGetBookDetailWithBookId } from "../../hooks/queries/bookInfo/useGetB
 import { useGetBookTimeline } from "../../hooks/queries/bookInfo/useGetBookTimeline";
 import type { FocusEndResult } from "../../types/focus/focus";
 import FocusEndSheet from "./component/FocusEndSheet";
-import { formatDurationHms } from "./utils/formatDurationHms";
+import { formatDurationHmsWithSpacing } from "./utils/formatDurationHms";
 import {
   clearFocusSession,
   readFocusSession,
@@ -263,7 +263,7 @@ export default function FocusSessionPage() {
           </div>
         </div>
         <p className="text-title-40-b tabular-nums text-gray-90">
-          {formatDurationHms(elapsedSeconds)}
+          {formatDurationHmsWithSpacing(elapsedSeconds)}
         </p>
       </div>
 
