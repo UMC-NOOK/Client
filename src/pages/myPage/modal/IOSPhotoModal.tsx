@@ -109,34 +109,6 @@ export function IOSPhotoModal({
     dialog.show();
 
 
-    requestAnimationFrame(() => {
-
-      const triggerRect =
-        trigger.getBoundingClientRect();
-
-
-      const modalWidth =
-        dialog.offsetWidth;
-
-
-      const left =
-        Math.min(
-          triggerRect.left,
-          window.innerWidth -
-            modalWidth - 16,
-        );
-
-
-      const top = triggerRect.top + 100;
-
-      dialog.style.left =
-        `${Math.max(16, left)}px`;
-
-
-      dialog.style.top =
-        `${Math.max(16, top)}px`;
-
-    });
   };
 
 
