@@ -4,7 +4,11 @@ import SearchNewAddLayout from "../../components/search/new/SearchNewAddLayout";
 import SearchNewAddInfoForm from "../../components/search/new/SearchNewAddInfoForm";
 import { useShell } from "../../app/AppShell";
 
-export default function SearchNewAddPage(isEditMode?: { isEditMode: boolean }) {
+export default function SearchNewAddPage({
+  isEditMode,
+}: {
+  isEditMode: boolean;
+}) {
   const { setHideFooter } = useShell();
 
   const bookId = history.state?.usr?.bookId ?? null;

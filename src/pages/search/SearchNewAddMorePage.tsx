@@ -17,7 +17,9 @@ type DateParts = {
   dd: string;
 };
 
-export default function SearchNewAddMorePage(isEditMode?: {
+export default function SearchNewAddMorePage({
+  isEditMode,
+}: {
   isEditMode: boolean;
 }) {
   const { setHideFooter } = useShell();
