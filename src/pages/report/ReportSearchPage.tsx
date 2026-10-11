@@ -13,7 +13,7 @@ import RecentKeywordSection, {
   type RecentKeyword,
 } from "../../components/search/RecentKeywordSection";
 // types
-import type { SortOption } from "../../types/report/sortOption.type";
+import type { SortOptionForSearch } from "../../types/report/sortOption.type";
 import type { SearchBooksResult } from "../../api/search";
 type ViewMode = "idle" | "searching" | "results";
 // hooks
@@ -38,21 +38,22 @@ export default function ReportSearchPage() {
   const [submittedQuery, setSubmittedQuery] = useState(restoredQuery);
   const [showSortSheet, setShowSortSheet] = useState(false);
   const [recent, setRecent] = useState<RecentKeyword[]>([]);
-  const [sortOption, setSortOption] = useState<SortOption>("RECENT_RECORDED");
+  const [sortOption, setSortOption] =
+    useState<SortOptionForSearch>("RECENT_FOCUSED");
   const [mode, setMode] = useState<ViewMode>(
     restoredQuery ? "results" : "idle",
   );
 
-  const options: { label: string; value: SortOption }[] = [
-    { label: "최신 기록 순", value: "RECENT_RECORDED" },
-    { label: "오래된 기록 순", value: "OLDEST_RECORDED" },
+  const options: { label: string; value: SortOptionForSearch }[] = [
+    { label: "최근 포커스한 순", value: "RECENT_FOCUSED" },
     { label: "기록 많은 순", value: "RECORD_COUNT_DESC" },
     { label: "기록 적은 순", value: "RECORD_COUNT_ASC" },
+    { label: "가나다 순", value: "ALPHABETICAL" },
   ];
 
   const { mutate: deleteHistory } = useDeleteSearchHistory();
 
-  const { data: recordData } = useGetLibraryBooks();
+  const { data: recordData } = useGetLibraryBooks(sortOption);
   // const {
   //   data: searchItemData,
   //   isFetching: isFetchingSearchItem,
@@ -297,6 +298,7 @@ export default function ReportSearchPage() {
                         state: {
                           bookTitle: item.title,
                           bookId: item.bookId,
+                          book: item,
                         },
                       })
                     }
@@ -323,7 +325,10 @@ export default function ReportSearchPage() {
               key={option.value}
               text={option.label}
               active={sortOption === option.value}
-              onClick={() => setSortOption(option.value)}
+              onClick={() => {
+                setSortOption(option.value);
+                setShowSortSheet(false);
+              }}
             />
           ))}
         </div>

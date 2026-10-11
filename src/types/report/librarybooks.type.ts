@@ -1,4 +1,4 @@
-import type { SortOption } from "./sortOption.type";
+import type { SortOptionForSearch } from "./sortOption.type";
 
 type item = {
   bookId: number;
@@ -10,7 +10,7 @@ type item = {
 export interface LibraryBooksRequest {
   size?: number;
   cursor?: string;
-  sort?: SortOption;
+  sort?: SortOptionForSearch;
 }
 export interface LibraryBooksResult {
   items: item[];
