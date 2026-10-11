@@ -9,6 +9,7 @@ import EmptyState from "../../components/content/EmptyState/EmptyState";
 import FAB from "../../components/action/Button/FAB";
 import BookCover from "../../components/atomic/BookCover";
 import Text from "../../components/action/Button/Text";
+import LoadingState from "../../components/feedback/LoadingState";
 // api
 import { useGetIndividueleRecords } from "../../hooks/queries/report/useGetEmotionRecords";
 import { useGetEmotions } from "../../hooks/queries/report/useGetEmotions";
@@ -86,6 +87,10 @@ export default function IndividueleReportPage() {
           ?.recordCount || 0,
     },
   };
+
+  if (isLoadingRecords) {
+    return <LoadingState variant="fullscreen" />;
+  }
 
   return (
     <div className="flex flex-col items-center justify-start w-full gap-4 relative">

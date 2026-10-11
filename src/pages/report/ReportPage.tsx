@@ -8,6 +8,7 @@ import BottomSheet from "../../components/presentation/modal/bottomsheet/Origin"
 import ContainerText from "../../components/action/Button/ContainerText";
 import EmptyState from "../../components/content/EmptyState/EmptyState";
 import Snackbar from "../../components/feedback/snackbar";
+import LoadingState from "../../components/feedback/LoadingState";
 // assets
 import plus from "../../assets/icons/plus.svg";
 //types
@@ -39,7 +40,10 @@ export default function ReportPage() {
 
   // hooks 호출
   const { data: recordCount } = useGetReportCount();
-  const { data: recordData } = useGetReport("10", sortOption);
+  const { data: recordData, isFetching: isFetchingReport } = useGetReport(
+    "10",
+    sortOption,
+  );
   const { data: libraryBookCount } = useLibraryBookNum();
 
   const openSnackbar = (message: string) => {
@@ -60,9 +64,13 @@ export default function ReportPage() {
     if (libraryBookCount && libraryBookCount.totalBookNum > 0) {
       navigate("/report/search");
     } else {
-      openSnackbar("내 서재에 기록을 남길 책이 없어요.");
+      openSnackbar("먼저 내 서재에 책을 등록해 주세요.");
     }
   };
+
+  if (isFetchingReport) {
+    return <LoadingState variant="fullscreen" />;
+  }
 
   return (
     <div className="flex flex-col gap-2">
