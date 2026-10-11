@@ -10,7 +10,7 @@ import Solid from "../../components/action/Button/Solid";
 import InformationSection from "../../components/content/InformationText/InformationSection";
 import TopNavigation from "../../components/navigation/topnavigation/TopNavigation";
 import LoadingState from "../../components/feedback/LoadingState";
-import IOSPhotoModal from "./modal/IOSPhotoModal";
+import ProfilePhotoModal from "./modal/ProfilePhotoModal";
 import { createDefaultProfileFile } from "./utils/createDefaultProfileFile";
 import { usePatchProfile } from "../../hooks/mutations/mypage/usePatchProfile";
 import { useUserMe } from "../../hooks/queries/useUserMe";
@@ -155,9 +155,9 @@ export default function ProfileMyPage() {
       {/* 프로필 */}
         <div className="flex flex-col gap-12"> 
             {/* 프로필 */}
-            <IOSPhotoModal
+            <ProfilePhotoModal
               onSelectImage={handleProfileChange}
-              onSelectDefaultImage={() => {
+              onDeleteProfile={() => {
                 setUseDefaultProfile(true);
                 setProfileFile(null);
                 setProfilePreview(defaultProfile);
@@ -176,7 +176,7 @@ export default function ProfileMyPage() {
               <span className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-white">
                 <img src={camera} alt="프로필 이미지 선택" className="h-5 w-5" />
               </span>
-            </IOSPhotoModal>
+            </ProfilePhotoModal>
             {imageError && (
               <p role="alert" className="text-label-13-r text-red-500">
                 {imageError}
