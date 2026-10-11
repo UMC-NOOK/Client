@@ -1,11 +1,6 @@
 // src/app/AppShell.tsx
 
-import React, {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import React, { createContext, useContext, useMemo, useState } from "react";
 import { Outlet } from "react-router-dom";
 
 import Footer from "../components/navigation/Footer";
@@ -48,7 +43,7 @@ export default function AppShell({
 
   return (
     <ShellContext.Provider value={value}>
-      <div className="relative isolate min-h-dvh w-full">
+      <div className="relative isolate min-h-dvh w-full bg-gradient-background">
         {/* 화면 상하좌우 전체를 채우는 고정 배경 */}
         <div
           aria-hidden
@@ -60,9 +55,7 @@ export default function AppShell({
           className="relative z-10 mx-auto min-h-dvh w-full"
           style={{ maxWidth: maxWidthPx }}
         >
-          <div
-            className="flex min-h-dvh flex-col pb-[env(safe-area-inset-bottom)]"
-          >
+          <div className="flex min-h-dvh flex-col pb-[env(safe-area-inset-bottom)]">
             <main
               className={[
                 "relative w-full flex-1 px-4",
