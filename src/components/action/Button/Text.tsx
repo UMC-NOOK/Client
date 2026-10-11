@@ -23,7 +23,7 @@ const sizeClassMap: Record<Size, string> = {
 const paddingClassMap: Record<Size, string> = {
   "12": "px-2 py-1",
   "14": "px-2 py-1",
-  "14r": "px-2 py-1",
+  "14r": "",
   "18": "h-10 px-4",
 };
 
