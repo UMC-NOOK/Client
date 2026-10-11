@@ -12,6 +12,7 @@ import Divider from "../../components/layout/Divider";
 import RecentKeywordSection, {
   type RecentKeyword,
 } from "../../components/search/RecentKeywordSection";
+import Text from "../../components/action/Button/Text";
 // types
 import type { SortOptionForSearch } from "../../types/report/sortOption.type";
 import type { SearchBooksResult } from "../../api/search";
@@ -32,6 +33,7 @@ export default function ReportSearchPage() {
   const restoredQuery = location.state?.restoreSearch
     ? (location.state.searchQuery ?? "")
     : "";
+  const restoredSearchMode = location.state?.searchMode ?? "LIBRARY";
 
   const [searchQuery, setSearchQuery] = useState(restoredQuery);
   // const [submittedQuery, setSubmittedQuery] = useState("");
@@ -42,6 +44,9 @@ export default function ReportSearchPage() {
     useState<SortOptionForSearch>("RECENT_FOCUSED");
   const [mode, setMode] = useState<ViewMode>(
     restoredQuery ? "results" : "idle",
+  );
+  const [searchMode, setSearchMode] = useState<"LIBRARY" | "GLOBAL">(
+    restoredSearchMode,
   );
 
   const options: { label: string; value: SortOptionForSearch }[] = [
@@ -64,7 +69,7 @@ export default function ReportSearchPage() {
     isLoading: isFetchingSearchItem,
     isError: isErrorSearchItem,
   } = useInfiniteSearchBooks({
-    type: "LIBRARY",
+    type: searchMode,
     keyword: submittedQuery,
     enabled: mode === "results" && !!submittedQuery.trim(),
   });
@@ -274,7 +279,25 @@ export default function ReportSearchPage() {
               <SectionHeader
                 size="13"
                 top={
-                  <>{searchItemData?.length || 0}권의 도서가 검색되었어요.</>
+                  <div className="flex items-center">
+                    {searchItemData?.length > 0 ? (
+                      <>{searchItemData?.length}권의 도서가 검색되었어요.</>
+                    ) : (
+                      <>
+                        내 서재에 없는 도서예요.
+                        <Text
+                          size="14"
+                          className=" underline underline-offset-2"
+                          onClick={() => {
+                            setSearchMode("GLOBAL");
+                            handleSearch();
+                          }}
+                        >
+                          전체 도서 검색
+                        </Text>
+                      </>
+                    )}
+                  </div>
                 }
               />
               {searchItemData?.map((item, index) => (
@@ -285,22 +308,42 @@ export default function ReportSearchPage() {
                     imageUrl={item.coverImageUrl}
                     title={item.title}
                     author={item.author}
-                    type="REPORT"
+                    type={searchMode === "LIBRARY" ? "REPORT" : "SEARCH"}
                     typeLabel={
-                      item.readingStatus === "BEFORE"
-                        ? "읽기 전"
-                        : item.readingStatus === "READING"
-                          ? "독서 중"
-                          : "완독"
+                      searchMode === "LIBRARY"
+                        ? item.readingStatus === "BEFORE"
+                          ? "읽기 전"
+                          : item.readingStatus === "READING"
+                            ? "독서 중"
+                            : "완독"
+                        : null
                     }
                     onClick={() =>
-                      navigate(`/report/${item.bookId}`, {
-                        state: {
-                          bookTitle: item.title,
-                          bookId: item.bookId,
-                          book: item,
-                        },
-                      })
+                      searchMode === "LIBRARY"
+                        ? navigate(`/report/${item.bookId}`, {
+                            state: {
+                              bookTitle: item.title,
+                              bookId: item.bookId,
+                              book: item,
+                            },
+                          })
+                        : item.bookId != null
+                          ? navigate(`/library/${item.bookId}?type=bookId`, {
+                              state: {
+                                searchMode: "GLOBAL",
+                                backTo: location.pathname,
+                                restoreSearch: true,
+                                searchQuery: searchQuery,
+                              },
+                            })
+                          : navigate(`/library/${item.isbn13}?type=isbn13`, {
+                              state: {
+                                searchMode: "GLOBAL",
+                                backTo: location.pathname,
+                                restoreSearch: true,
+                                searchQuery: searchQuery,
+                              },
+                            })
                     }
                   />
                   {index !== (searchItemData?.length || 0) - 1 && (
