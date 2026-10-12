@@ -4,7 +4,9 @@ import SearchNewAddLayout from "../../components/search/new/SearchNewAddLayout";
 import SearchNewAddCategoryForm from "../../components/search/new/SearchNewAddCategoryForm";
 import { useShell } from "../../app/AppShell";
 
-export default function SearchNewAddCategoryPage(isEditMode?: {
+export default function SearchNewAddCategoryPage({
+  isEditMode,
+}: {
   isEditMode: boolean;
 }) {
   const { setHideFooter } = useShell();

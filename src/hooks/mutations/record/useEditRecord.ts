@@ -115,10 +115,6 @@ export function useEditRecord() {
         imageKeys: uniqueFinalImageKeys,
       };
 
-      console.log("기존 mixedImages:", mixedImages);
-      console.log("새 이미지 key:", newUploadKeys);
-      console.log("최종 imageKeys:", uniqueFinalImageKeys);
-
       return putUpdateRecord(recordId, body);
     },
 

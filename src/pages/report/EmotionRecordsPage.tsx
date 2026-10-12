@@ -9,6 +9,7 @@ import EmptyState from "../../components/content/EmptyState/EmptyState";
 import FAB from "../../components/action/Button/FAB";
 import BookCover from "../../components/atomic/BookCover";
 import Text from "../../components/action/Button/Text";
+import LoadingState from "../../components/feedback/LoadingState";
 // api
 import { useGetIndividueleRecords } from "../../hooks/queries/report/useGetEmotionRecords";
 import { useGetEmotions } from "../../hooks/queries/report/useGetEmotions";
@@ -87,75 +88,61 @@ export default function IndividueleReportPage() {
     },
   };
 
+  if (isLoadingRecords) {
+    return <LoadingState variant="fullscreen" />;
+  }
+
   return (
     <div className="flex flex-col items-center justify-start w-full gap-4 relative">
-      <div className="relative w-full min-w-0">
-        {/*배경영역*/}
-        <div className="absolute inset-0 z-0 -mx-4 -mt-2 pointer-events-none overflow-hidden">
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-131.25">
+      {/* 상단 네비게이션 및 책 정보 영역 */}
+      <div className="relative z-10 w-full min-w-0">
+        <TopNavigation
+          right={null}
+          left={<img src={chevron_left} alt="back" />}
+          onClickLeft={() => navigate(-1)}
+        />
+        <div className="flex flex-col items-start justify-start gap-8 w-full min-w-0">
+          <div className="flex justify-start items-start mt-4 gap-5 w-full ">
             <BookCover
-              imageUrl={book?.coverImageUrl || testBookCover}
-              size="XL"
+              imageUrl={book?.coverImageUrl || book?.coverUrl || testBookCover}
+              size="M"
               type="Image"
-              className="w-full h-full blur-[20px] opacity-50 "
+              className="shrink-0 "
             />
-            <div className="absolute inset-0 bg-black opacity-40" />
-            <div className="absolute inset-0 bg-linear-to-b from-transparent to-gray-10" />
-          </div>
-        </div>
-        {/* 상단 네비게이션 및 책 정보 영역 */}
-        <div className="relative z-10 w-full min-w-0">
-          <TopNavigation
-            right={null}
-            left={<img src={chevron_left} alt="back" />}
-            onClickLeft={() => navigate(-1)}
-          />
-          <div className="flex flex-col items-start justify-start gap-8 w-full min-w-0">
-            <div className="flex justify-start items-start mt-4 gap-7 w-full ">
-              <BookCover
-                imageUrl={
-                  book?.coverImageUrl || book?.coverUrl || testBookCover
-                }
-                size="M"
-                type="Image"
-                className="shrink-0 "
-              />
-              <div className="flex flex-col flex-1 w-full justify-between h-36 ">
-                <div className="flex flex-col items-start gap-1.5">
-                  <p className="text-title-18-m text-gray-90 ">{bookTitle}</p>
-                  <p className="text-body-16-r text-gray-80 ">
-                    {book?.author || "작가 정보 없음"}
-                  </p>
-                </div>
-                <div className="flex justify-end">
-                  <Text
-                    size="14r"
-                    active={false}
-                    onClick={() =>
-                      navigate(`/library/${bookId}`, {
-                        state: { bookTitle, bookId, book },
-                      })
-                    }
-                    className="pl-4.5 pt-4.5 w-29 text-gray-60"
-                    extraPadding={true}
-                  >
-                    도서 상세 보기 →
-                  </Text>
-                </div>
+            <div className="flex flex-col flex-1 w-full justify-between min-h-36 items-start">
+              <div className="flex flex-col items-start gap-1.5">
+                <p className="text-title-18-m text-gray-90 ">{bookTitle}</p>
+                <p className="text-body-16-r text-gray-80 ">
+                  {book?.author || "작가 정보 없음"}
+                </p>
               </div>
+
+              <Text
+                size="14r"
+                active={false}
+                onClick={() =>
+                  navigate(`/library/${bookId}`, {
+                    state: { bookTitle, bookId, book },
+                  })
+                }
+                className="pt-4.5 text-gray-60"
+                extraPadding={true}
+              >
+                도서 상세 보기 →
+              </Text>
             </div>
-            <div className="flex items-start min-w-0 overflow-x-scroll gap-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] -ml-4 w-[calc(100%+2rem)] px-4">
-              {Object.entries(emotionMetaMap).map(([key, { text, count }]) => (
-                <div key={key} className="shrink-0">
-                  <Chip
-                    active={selectedEmotion === key}
-                    text={`${text} ${count}`}
-                    variant="none"
-                    onClick={() => setSelectedEmotion(key as EmotionKey)}
-                  />
-                </div>
-              ))}
-            </div>
+          </div>
+          <div className="flex items-start min-w-0 overflow-x-scroll gap-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] -ml-4 w-[calc(100%+2rem)] px-4">
+            {Object.entries(emotionMetaMap).map(([key, { text, count }]) => (
+              <div key={key} className="shrink-0">
+                <Chip
+                  active={selectedEmotion === key}
+                  text={`${text} ${count}`}
+                  variant="none"
+                  onClick={() => setSelectedEmotion(key as EmotionKey)}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>

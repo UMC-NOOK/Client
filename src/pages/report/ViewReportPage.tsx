@@ -49,7 +49,7 @@ export default function ViewReportPage() {
         />
         <Divider width="full" />
       </div>
-      <div className="flex flex-col items-start justify-start w-full gap-5 overflow-y-auto &::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-30">
+      <div className="flex flex-col items-start justify-start w-full gap-5 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-30">
         <div className="text-gray-90 text-body-13-r">
           {record ? record.content : "내용을 불러올 수 없습니다."}
         </div>

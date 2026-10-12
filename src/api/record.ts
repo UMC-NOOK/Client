@@ -117,6 +117,16 @@ export async function getLibrarySearchItem(
   return response.data.result;
 }
 
+// 독서 기록 조회
+export async function getRecord(
+  recordId: number,
+): Promise<CreateRecordResponse> {
+  const response = await api.get<BaseApiResponse<CreateRecordResponse>>(
+    `${RECORDS_ENDPOINT}/${recordId}`,
+  );
+  return response.data.result;
+}
+
 // 독서 기록 삭제
 export async function deleteRecord(recordId: number): Promise<void> {
   await api.delete(`${RECORDS_ENDPOINT}/${recordId}`);

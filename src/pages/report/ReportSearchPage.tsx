@@ -12,8 +12,9 @@ import Divider from "../../components/layout/Divider";
 import RecentKeywordSection, {
   type RecentKeyword,
 } from "../../components/search/RecentKeywordSection";
+import Text from "../../components/action/Button/Text";
 // types
-import type { SortOption } from "../../types/report/sortOption.type";
+import type { SortOptionForSearch } from "../../types/report/sortOption.type";
 import type { SearchBooksResult } from "../../api/search";
 type ViewMode = "idle" | "searching" | "results";
 // hooks
@@ -32,27 +33,32 @@ export default function ReportSearchPage() {
   const restoredQuery = location.state?.restoreSearch
     ? (location.state.searchQuery ?? "")
     : "";
+  const restoredSearchMode = location.state?.searchMode ?? "LIBRARY";
 
   const [searchQuery, setSearchQuery] = useState(restoredQuery);
   // const [submittedQuery, setSubmittedQuery] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState(restoredQuery);
   const [showSortSheet, setShowSortSheet] = useState(false);
   const [recent, setRecent] = useState<RecentKeyword[]>([]);
-  const [sortOption, setSortOption] = useState<SortOption>("RECENT_RECORDED");
+  const [sortOption, setSortOption] =
+    useState<SortOptionForSearch>("RECENT_FOCUSED");
   const [mode, setMode] = useState<ViewMode>(
     restoredQuery ? "results" : "idle",
   );
+  const [searchMode, setSearchMode] = useState<"LIBRARY" | "GLOBAL">(
+    restoredSearchMode,
+  );
 
-  const options: { label: string; value: SortOption }[] = [
-    { label: "최신 기록 순", value: "RECENT_RECORDED" },
-    { label: "오래된 기록 순", value: "OLDEST_RECORDED" },
+  const options: { label: string; value: SortOptionForSearch }[] = [
+    { label: "최근 포커스한 순", value: "RECENT_FOCUSED" },
     { label: "기록 많은 순", value: "RECORD_COUNT_DESC" },
     { label: "기록 적은 순", value: "RECORD_COUNT_ASC" },
+    { label: "가나다 순", value: "ALPHABETICAL" },
   ];
 
   const { mutate: deleteHistory } = useDeleteSearchHistory();
 
-  const { data: recordData } = useGetLibraryBooks();
+  const { data: recordData } = useGetLibraryBooks(sortOption);
   // const {
   //   data: searchItemData,
   //   isFetching: isFetchingSearchItem,
@@ -63,7 +69,7 @@ export default function ReportSearchPage() {
     isLoading: isFetchingSearchItem,
     isError: isErrorSearchItem,
   } = useInfiniteSearchBooks({
-    type: "LIBRARY",
+    type: searchMode,
     keyword: submittedQuery,
     enabled: mode === "results" && !!submittedQuery.trim(),
   });
@@ -273,7 +279,25 @@ export default function ReportSearchPage() {
               <SectionHeader
                 size="13"
                 top={
-                  <>{searchItemData?.length || 0}권의 도서가 검색되었어요.</>
+                  <div className="flex items-center">
+                    {searchItemData?.length > 0 ? (
+                      <>{searchItemData?.length}권의 도서가 검색되었어요.</>
+                    ) : (
+                      <>
+                        내 서재에 없는 도서예요.
+                        <Text
+                          size="14"
+                          className=" underline underline-offset-2"
+                          onClick={() => {
+                            setSearchMode("GLOBAL");
+                            handleSearch();
+                          }}
+                        >
+                          전체 도서 검색
+                        </Text>
+                      </>
+                    )}
+                  </div>
                 }
               />
               {searchItemData?.map((item, index) => (
@@ -284,21 +308,42 @@ export default function ReportSearchPage() {
                     imageUrl={item.coverImageUrl}
                     title={item.title}
                     author={item.author}
-                    type="REPORT"
+                    type={searchMode === "LIBRARY" ? "REPORT" : "SEARCH"}
                     typeLabel={
-                      item.readingStatus === "BEFORE"
-                        ? "읽기 전"
-                        : item.readingStatus === "READING"
-                          ? "독서 중"
-                          : "완독"
+                      searchMode === "LIBRARY"
+                        ? item.readingStatus === "BEFORE"
+                          ? "읽기 전"
+                          : item.readingStatus === "READING"
+                            ? "독서 중"
+                            : "완독"
+                        : null
                     }
                     onClick={() =>
-                      navigate(`/report/${item.bookId}`, {
-                        state: {
-                          bookTitle: item.title,
-                          bookId: item.bookId,
-                        },
-                      })
+                      searchMode === "LIBRARY"
+                        ? navigate(`/report/${item.bookId}`, {
+                            state: {
+                              bookTitle: item.title,
+                              bookId: item.bookId,
+                              book: item,
+                            },
+                          })
+                        : item.bookId != null
+                          ? navigate(`/library/${item.bookId}?type=bookId`, {
+                              state: {
+                                searchMode: "GLOBAL",
+                                backTo: location.pathname,
+                                restoreSearch: true,
+                                searchQuery: searchQuery,
+                              },
+                            })
+                          : navigate(`/library/${item.isbn13}?type=isbn13`, {
+                              state: {
+                                searchMode: "GLOBAL",
+                                backTo: location.pathname,
+                                restoreSearch: true,
+                                searchQuery: searchQuery,
+                              },
+                            })
                     }
                   />
                   {index !== (searchItemData?.length || 0) - 1 && (
@@ -323,7 +368,10 @@ export default function ReportSearchPage() {
               key={option.value}
               text={option.label}
               active={sortOption === option.value}
-              onClick={() => setSortOption(option.value)}
+              onClick={() => {
+                setSortOption(option.value);
+                setShowSortSheet(false);
+              }}
             />
           ))}
         </div>

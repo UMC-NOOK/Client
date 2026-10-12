@@ -36,6 +36,9 @@ type BookStatusType = "BEFORE" | "READING" | "FINISHED" | "UNREGISTERED";
 type BookInfoLocationState = {
   backTo?: string;
   bookId?: number;
+  searchMode?: "LIBRARY" | "GLOBAL";
+  restoreSearch?: boolean;
+  searchQuery?: string;
 };
 
 const detailTabs = [
@@ -130,6 +133,11 @@ export default function BookInfoPage() {
     if (locationState?.backTo) {
       navigate(locationState.backTo, {
         replace: true,
+        state: {
+          searchMode: locationState.searchMode ?? "GLOBAL",
+          restoreSearch: locationState.restoreSearch ?? false,
+          searchQuery: locationState.searchQuery ?? "",
+        },
       });
 
       return;
