@@ -28,13 +28,15 @@ export default function ProfilePhotoModal({
   useEffect(() => {
     const handleOutsidePointerDown = (event: PointerEvent) => {
       const dialog = dialogRef.current;
+
+      if (!dialog?.open) return;
       if (!(event.target instanceof Node)) return;
 
       if (
-        !dialog?.contains(event.target) &&
+        !dialog.contains(event.target) &&
         !triggerRef.current?.contains(event.target)
       ) {
-        dialog?.close();
+        dialog.close();
       }
     };
 
@@ -49,16 +51,23 @@ export default function ProfilePhotoModal({
     document.addEventListener("keydown", handleEscape);
 
     return () => {
-      document.removeEventListener("pointerdown", handleOutsidePointerDown, true);
+      document.removeEventListener(
+        "pointerdown",
+        handleOutsidePointerDown,
+        true
+      );
       document.removeEventListener("keydown", handleEscape);
     };
   }, []);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.currentTarget.files?.[0];
+
     event.currentTarget.value = "";
 
-    if (file) onSelectImage(file);
+    if (file) {
+      onSelectImage(file);
+    }
   };
 
   const closeDialog = () => {
@@ -66,7 +75,14 @@ export default function ProfilePhotoModal({
   };
 
   const openDialog = () => {
-    dialogRef.current?.show();
+    const dialog = dialogRef.current;
+
+    if (!dialog || dialog.open || disabled) return;
+
+    dialog.show();
+
+    // iOS Safari에서 삭제 버튼에 자동 포커스가 잡히는 현상 방지
+    dialog.focus({ preventScroll: true });
   };
 
   return (
@@ -85,23 +101,34 @@ export default function ProfilePhotoModal({
 
       <dialog
         ref={dialogRef}
+        tabIndex={-1}
+        autoFocus
         className="profile-photo-modal absolute left-auto right-4 top-47 h-27 w-65"
         aria-label="프로필 사진 설정"
         onClick={(event) => {
-          if (event.target === event.currentTarget) closeDialog();
+          if (event.target === event.currentTarget) {
+            closeDialog();
+          }
         }}
       >
         <div className="flex w-full flex-col items-start gap-4.5">
+          {/* 사진 변경 */}
           <label
             className={`flex w-full items-center text-left text-btn-14-sb text-gray-90 ${
-              disabled ? "pointer-events-none opacity-50" : "cursor-pointer"
+              disabled
+                ? "pointer-events-none opacity-50"
+                : "cursor-pointer"
             }`}
           >
             <span
               aria-hidden="true"
               className="profile-photo-modal__change-icon"
             />
-            <div className="px-2 py-1 text-btn-14-sb text-gray-90">사진 변경</div>
+
+            <div className="px-2 py-1 text-btn-14-sb text-gray-90">
+              사진 변경
+            </div>
+
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp"
@@ -110,6 +137,8 @@ export default function ProfilePhotoModal({
               className="hidden"
             />
           </label>
+
+          {/* 프로필 사진 삭제 */}
           <button
             type="button"
             className="flex w-full items-center border-0 bg-transparent text-left text-btn-14-sb text-red-60"
@@ -118,18 +147,18 @@ export default function ProfilePhotoModal({
               closeDialog();
               onDeleteProfile();
             }}
-            >
+          >
             <span
               aria-hidden="true"
               className="profile-photo-modal__profile-icon"
             />
+
             <div className="px-2 py-1 text-btn-14-sb text-red-60">
               프로필 사진 삭제
             </div>
           </button>
         </div>
       </dialog>
-
     </>
   );
 }

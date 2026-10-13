@@ -1,6 +1,14 @@
+/* ========================================
+   Dialog Backdrop
+======================================== */
+
 .profile-photo-modal::backdrop {
   background: transparent;
 }
+
+/* ========================================
+   Dialog Container
+======================================== */
 
 .profile-photo-modal {
   display: none;
@@ -21,6 +29,10 @@
   font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
 }
 
+/* ========================================
+   Dialog Border Gradient
+======================================== */
+
 .profile-photo-modal::before {
   content: "";
   position: absolute;
@@ -28,6 +40,7 @@
   padding: 1px;
   border-radius: inherit;
   pointer-events: none;
+
   background: linear-gradient(
     135deg,
     rgba(179, 180, 190, 1) 0%,
@@ -36,23 +49,40 @@
     rgba(179, 180, 190, 0.18) 75%,
     rgba(179, 180, 190, 1) 100%
   );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+
+  -webkit-mask: linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  mask: linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
   -webkit-mask-composite: xor;
   mask-composite: exclude;
 }
 
+/* ========================================
+   Dialog Open State
+======================================== */
+
 .profile-photo-modal[open] {
   display: flex;
 }
+
+/* ========================================
+   Icons
+======================================== */
 
 .profile-photo-modal__profile-icon {
   width: 24px;
   height: 24px;
   flex: 0 0 24px;
   background-color: currentColor;
-  -webkit-mask: url("../../../assets/icons/Icon-Profile.svg") center / contain no-repeat;
-  mask: url("../../../assets/icons/Icon-Profile.svg") center / contain no-repeat;
+
+  -webkit-mask: url("../../../assets/icons/Icon-Profile.svg")
+    center / contain no-repeat;
+
+  mask: url("../../../assets/icons/Icon-Profile.svg")
+    center / contain no-repeat;
 }
 
 .profile-photo-modal__change-icon {
@@ -60,10 +90,44 @@
   height: 24px;
   flex: 0 0 24px;
   background-color: currentColor;
-  -webkit-mask: url("../../../assets/icons/Profile-photo.svg") center / contain no-repeat;
-  mask: url("../../../assets/icons/Profile-photo.svg") center / contain no-repeat;
+
+  -webkit-mask: url("../../../assets/icons/Profile-photo.svg")
+    center / contain no-repeat;
+
+  mask: url("../../../assets/icons/Profile-photo.svg")
+    center / contain no-repeat;
 }
+
+/* ========================================
+   Disabled State
+======================================== */
 
 .profile-photo-modal button:disabled {
   opacity: 0.5;
+}
+
+/* ========================================
+   iOS Safari Focus Fix
+======================================== */
+
+/* 다이얼로그 자체에 포커스가 잡혀도 테두리 표시 X */
+.profile-photo-modal:focus {
+  outline: none;
+}
+
+/* iOS Safari 터치 하이라이트 제거 */
+.profile-photo-modal button,
+.profile-photo-modal label {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 터치로 포커스된 버튼의 테두리 제거 */
+.profile-photo-modal button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* 키보드 사용자를 위한 포커스 스타일 유지 */
+.profile-photo-modal button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
 }
