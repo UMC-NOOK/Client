@@ -1,32 +1,6 @@
 import playIcon from "../../../../../assets/icons/movement.svg";
+import CharacterLimitedText from "../../../CharacterLimitedText";
 import SectionHeader from "../../../InformationText/SectionHeader";
-
-const MAX_TEXT_LENGTH = 18;
-const ELLIPSIS = "...";
-
-type LimitedTextProps = {
-  text: string;
-};
-
-function LimitedText({ text }: LimitedTextProps) {
-  const characters = Array.from(text);
-  const content =
-    characters.length > MAX_TEXT_LENGTH
-      ? `${characters
-          .slice(0, MAX_TEXT_LENGTH)
-          .join("")
-          .trimEnd()}${ELLIPSIS}`
-      : text;
-
-  return (
-    <span
-      className="block w-full min-w-0 overflow-hidden whitespace-nowrap"
-      aria-label={text}
-    >
-      <span aria-hidden="true">{content}</span>
-    </span>
-  );
-}
 
 type Props = {
   imageUrl: string;
@@ -73,8 +47,8 @@ export function Focus({
           <div className="mt-auto w-full min-w-0">
             <SectionHeader
               size="16"
-              top={<LimitedText text={title} />}
-              bottom={<LimitedText text={author} />}
+              top={<CharacterLimitedText text={title} />}
+              bottom={<CharacterLimitedText text={author} />}
             />
           </div>
         </div>
