@@ -174,6 +174,7 @@ export default function FocusSessionPage() {
             focusId: session.focusId,
             ...(page === undefined ? {} : { page }),
             isFinished,
+            durationSec: elapsedSeconds,
           }));
 
         if (completedEndResult === null) {

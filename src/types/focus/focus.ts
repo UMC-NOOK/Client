@@ -57,6 +57,7 @@ export type FocusEndRequest = {
   focusId: number;
   page?: number;
   isFinished: boolean;
+  durationSec?: number;
 };
 
 export type FocusEndResult = {
