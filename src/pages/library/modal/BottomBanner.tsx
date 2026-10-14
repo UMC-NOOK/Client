@@ -2,8 +2,8 @@ import movement from "../../../assets/icons/movement.svg";
 import close from "../../../assets/icons/close-gray-60.svg";
 import Icon from "../../../components/action/Button/Icon";
 import Text from "../../../components/action/Button/Text";
+import CharacterLimitedText from "../../../components/content/CharacterLimitedText";
 import SectionHeader from "../../../components/content/InformationText/SectionHeader";
-import WidthAwareEllipsis from "../../../components/content/WidthAwareEllipsis";
 
 type BottomBannerProps = {
   bookId: number;
@@ -60,9 +60,8 @@ export default function BottomBanner({
               <div className="mt-auto w-full min-w-0">
                 <SectionHeader
                   size="16"
-                  top={<WidthAwareEllipsis text={title} />}
+                  top={<CharacterLimitedText text={title} />}
                   bottom="이어서 포커스하기"
-                  truncateTop
                 />
               </div>
             </div>
