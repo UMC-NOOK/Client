@@ -66,6 +66,7 @@ export default function ProfilePhotoModal({
     event.currentTarget.value = "";
 
     if (file) {
+      closeDialog();
       onSelectImage(file);
     }
   };
