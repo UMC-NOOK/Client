@@ -5,12 +5,15 @@ import {
   type BookDetail,
 } from "../../api/book";
 
-export function useEditUserBook() {
+export function useEditUserBook(onSuccess: () => void) {
   return useMutation<
     BookDetail,
     Error,
     { bookId: number; params: CreateUserBookParams }
   >({
     mutationFn: ({ bookId, params }) => editUserBook(bookId, params),
+    onSuccess: () => {
+      onSuccess();
+    },
   });
 }
