@@ -391,7 +391,7 @@ export default function BookInfoPage() {
 
             {!isLoading && bookDetailData?.aladinLink && (
               <div className="flex gap-2 text-label-12-sb text-gray-50">
-                <div>도서 DB 제공: 알라딘</div>
+                <div>도서 DB 제공: YES24</div>
 
                 <button
                   type="button"
