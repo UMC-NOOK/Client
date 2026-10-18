@@ -192,20 +192,23 @@ export default function BookInfoPage() {
   const handleDeleteBook = () => {
     if (!bookDetailData) return;
 
-    deleteBook(bookDetailData.bookId, {
-      onSuccess: () => {
-        setLibraryId(null);
-        setReadStatus("UNREGISTERED");
-        if (
-          !bookDetailData.sourceType ||
-          bookDetailData.sourceType === "USER"
-        ) {
-          navigate(-1);
-        }
+    deleteBook(
+      { bookId: bookDetailData.bookId },
+      {
+        onSuccess: () => {
+          setLibraryId(null);
+          setReadStatus("UNREGISTERED");
+          if (
+            !bookDetailData.sourceType ||
+            bookDetailData.sourceType === "USER"
+          ) {
+            navigate(-1);
+          }
 
-        openSnackbar("내 서재에서 책을 삭제했어요.");
+          openSnackbar("내 서재에서 책을 삭제했어요.");
+        },
       },
-    });
+    );
   };
 
   const handleEditBookInfo = () => {

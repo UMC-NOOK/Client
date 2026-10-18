@@ -79,3 +79,7 @@ export async function postFocusEnd(
 
   return response.data.result;
 }
+
+export async function deleteFocusRecord(focusId: number): Promise<void> {
+  await api.delete(`${FOCUS_BASE}/${focusId}`);
+}
