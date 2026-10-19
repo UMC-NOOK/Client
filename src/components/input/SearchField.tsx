@@ -59,7 +59,7 @@ export default function SearchInput({
         }}
         placeholder={!isFocused && !value ? placeholder : ""}
         className="
-          flex-1
+          min-w-0 flex-1
           bg-transparent outline-none
           text-body-16-r text-gray-90
           placeholder-gray-70
