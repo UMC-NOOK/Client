@@ -186,7 +186,9 @@ export default function FocusSelectPage() {
   ]);
 
   return (
-    <div className="flex flex-col">
+    // AppShell의 375px 최대 폭 밖으로 모바일 viewport만큼 확장하되,
+    // 화면 내부의 디자인 여백 16px은 이 래퍼에서 유지한다.
+    <div className="relative left-1/2 flex w-dvw -translate-x-1/2 flex-col px-4 sm:w-93.75">
       <div className="flex flex-col gap-4">
         <TopNavigation
           left={<img src={chevronLeftIcon} alt="뒤로가기" />}

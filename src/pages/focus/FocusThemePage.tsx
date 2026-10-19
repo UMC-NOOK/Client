@@ -91,9 +91,10 @@ export default function FocusThemePage() {
   }, [bookId, isStartPending, navigate, selectedThemeId, startFocus]);
 
   return (
+    // AppShell의 375px 최대 폭 밖으로 모바일 viewport만큼 확장한다.
     // h-full은 부모(AppShell Outlet)가 block이라 안 먹는다. 스크롤 없이 잘리는 게 정책이라
     // min-height가 아닌 고정 높이 + overflow-hidden.
-    <div className="relative -mx-4 h-[calc(100dvh-8px-env(safe-area-inset-top)-env(safe-area-inset-bottom))] overflow-hidden">
+    <div className="relative left-1/2 h-[calc(100dvh-8px-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-dvw -translate-x-1/2 overflow-hidden sm:w-93.75">
       <div className="relative bg-navy-1 px-4">
         <TopNavigation
           left={<img src={closeIcon} alt="닫기" className="h-6 w-6" />}
