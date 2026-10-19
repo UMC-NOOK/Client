@@ -1,7 +1,7 @@
 //Client\src\components\presentation\modal\bottomsheet\Origin.tsx
 //이거 하나로 조정 가능
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import closeIcon from "../../../../assets/icons/close.svg";
 
 type DoubleSizeMode = "equal" | "split"; // equal=5:5 / split=left 80px + right fill
@@ -192,7 +192,41 @@ export default function BottomSheet({
   closeOnOverlayClick = true,
   className = "",
 }: Props) {
-  if (!open) return null;
+  // 닫힘 애니메이션이 끝날 때까지 컴포넌트를 유지
+  const [isRendered, setIsRendered] = useState(open);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    let frameId1: number | undefined;
+    let frameId2: number | undefined;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+    if (open) {
+      setIsRendered(true);
+      setIsVisible(false);
+
+      // 초기 위치를 먼저 브라우저에 반영한 뒤 애니메이션 시작
+      frameId1 = requestAnimationFrame(() => {
+        frameId2 = requestAnimationFrame(() => {
+          setIsVisible(true);
+        });
+      });
+    } else {
+      setIsVisible(false);
+
+      timeoutId = setTimeout(() => {
+        setIsRendered(false);
+      }, 300);
+    }
+
+    return () => {
+      if (frameId1 !== undefined) cancelAnimationFrame(frameId1);
+      if (frameId2 !== undefined) cancelAnimationFrame(frameId2);
+      if (timeoutId !== undefined) clearTimeout(timeoutId);
+    };
+  }, [open]);
+
+  if (!isRendered) return null;
 
   return (
     <div className="fixed inset-0 z-50 pointer-events-none">
@@ -203,8 +237,11 @@ export default function BottomSheet({
           aria-label="close overlay"
           onClick={closeOnOverlayClick ? onClose : undefined}
           className={[
-            "absolute inset-0 pointer-events-auto",
+            "absolute inset-0",
+            open ? "pointer-events-auto" : "pointer-events-none",
             "bg-black/50",
+            "transition-opacity duration-300 ease-out",
+            isVisible ? "opacity-100" : "opacity-0",
             closeOnOverlayClick ? "cursor-pointer" : "cursor-default",
           ].join(" ")}
         />
@@ -214,29 +251,31 @@ export default function BottomSheet({
       <div
         className={[
           "absolute inset-x-0 bottom-0 mx-auto",
-          "pointer-events-auto",
-          // AppShell 너비를 상한으로 두되 375px 미만 화면에서는 overflow를 막는다.
+          open ? "pointer-events-auto" : "pointer-events-none",
           "w-full max-w-93.75",
           "flex flex-col items-start",
           "px-4 pt-4 pb-[calc(2rem+env(safe-area-inset-bottom))]",
           "rounded-t-2xl",
           "bg-gray-15",
+          "transition-transform duration-300 ease-out",
+          "will-change-transform",
+          isVisible ? "translate-y-0" : "translate-y-full",
           className,
         ].join(" ")}
         role="dialog"
         aria-modal={overlay ? "true" : undefined}
       >
-        {/* Header (ON/OFF) */}
+        {/* Header */}
         {title ? <BottomSheetHeader title={title} onClose={onClose} /> : null}
 
-        {/* Body: header와의 gap 16px */}
+        {/* Body */}
         {children ? (
           <div className={["w-full", title ? "mt-4" : ""].join(" ")}>
             {children}
           </div>
         ) : null}
 
-        {/* Footer: body와의 gap 32px */}
+        {/* Footer */}
         {footer ? (
           <div className={["w-full", children ? "mt-8" : ""].join(" ")}>
             <BottomSheetFooter config={footer} />

@@ -19,6 +19,7 @@ import {
   useGetBookTimelineAllDetail,
 } from "../../hooks/queries/bookInfo/useGetBookTimelineAll";
 import { useLibraryBookRegister } from "../../hooks/mutations/library/useLibraryBookRegister";
+import { useDeleteFocusRecord } from "../../hooks/mutations/focus/useDeleteFocusRecord";
 
 // utils
 import { formatDateKorean, formatDateDot } from "../../utils/formatDateParts";
@@ -51,6 +52,7 @@ export default function AllHistoryPage() {
   } = useGetBookTimelineAllDetail(libraryId, selectedTimelineId);
 
   const { deleteBook } = useLibraryBookRegister();
+  const { mutate: deleteFocusRecord } = useDeleteFocusRecord();
 
   /**
    * 각 페이지의 dateGroups를 하나의 배열로 합친다.
@@ -135,13 +137,30 @@ export default function AllHistoryPage() {
       return;
     }
 
-    deleteBook(bookDetailData.bookId, {
-      onSuccess: () => {
-        navigate(`/library/${bookDetailData.isbn13}`, {
-          replace: true,
-        });
+    deleteBook(
+      { bookId: bookDetailData.bookId, libraryId: libraryId },
+      {
+        onSuccess: () => {
+          navigate(`/library/${bookDetailData.isbn13}`, {
+            replace: true,
+          });
+        },
       },
-    });
+    );
+  };
+
+  const handleDeleteFocusRecord = () => {
+    if (!selectedDetail) {
+      return;
+    }
+    deleteFocusRecord(
+      { focusId: selectedDetail.targetId, libraryId: libraryId },
+      {
+        onSuccess: () => {
+          setSelectedTimelineId(null);
+        },
+      },
+    );
   };
 
   return (
@@ -238,7 +257,7 @@ export default function AllHistoryPage() {
                 return;
               }
               if (selectedDetail?.type === "FOCUS") {
-                alert("포커스 기록 삭제하기");
+                handleDeleteFocusRecord();
                 return;
               }
               if (selectedDetail?.type === "RECORD") {

@@ -102,7 +102,7 @@ export default function IndividueleReportPage() {
           onClickLeft={() => navigate(-1)}
         />
         <div className="flex flex-col items-start justify-start gap-8 w-full min-w-0">
-          <div className="flex justify-start items-start mt-4 gap-5 w-full ">
+          <div className="flex justify-start items-center mt-4 gap-5 w-full ">
             <BookCover
               imageUrl={book?.coverImageUrl || book?.coverUrl || testBookCover}
               size="M"

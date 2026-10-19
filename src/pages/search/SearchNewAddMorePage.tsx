@@ -29,7 +29,11 @@ export default function SearchNewAddMorePage({
   const bookId = history.state?.usr?.bookId ?? null;
   const bookData = history.state?.usr?.bookData ?? null;
 
-  const { mutateAsync: editBook } = useEditUserBook();
+  const { mutateAsync: editBook } = useEditUserBook(() => {
+    navigate(`/library/${bookId}?type=bookId`, {
+      replace: true,
+    });
+  });
 
   useEffect(() => {
     setHideFooter(true);
@@ -106,14 +110,14 @@ export default function SearchNewAddMorePage({
     try {
       setIsSubmitting(true);
 
-      if (isEditMode && !bookId) {
+      if (isEditMode && bookId) {
         let coverImageKey: string | undefined;
 
         if (imageFile) {
           coverImageKey = await uploadSingleImage(imageFile, "book");
         }
 
-        editBook({
+        await editBook({
           bookId: bookId,
           params: {
             title: title.trim(),
@@ -126,10 +130,6 @@ export default function SearchNewAddMorePage({
             isbn13: isbn.trim() || undefined,
             coverImageKey,
           },
-        });
-
-        navigate(`/library/${bookId}`, {
-          replace: true,
         });
       } else {
         let coverImageKey: string | undefined;

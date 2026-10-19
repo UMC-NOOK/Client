@@ -192,20 +192,23 @@ export default function BookInfoPage() {
   const handleDeleteBook = () => {
     if (!bookDetailData) return;
 
-    deleteBook(bookDetailData.bookId, {
-      onSuccess: () => {
-        setLibraryId(null);
-        setReadStatus("UNREGISTERED");
-        if (
-          !bookDetailData.sourceType ||
-          bookDetailData.sourceType === "USER"
-        ) {
-          navigate(-1);
-        }
+    deleteBook(
+      { bookId: bookDetailData.bookId },
+      {
+        onSuccess: () => {
+          setLibraryId(null);
+          setReadStatus("UNREGISTERED");
+          if (
+            !bookDetailData.sourceType ||
+            bookDetailData.sourceType === "USER"
+          ) {
+            navigate(-1);
+          }
 
-        openSnackbar("내 서재에서 책을 삭제했어요.");
+          openSnackbar("내 서재에서 책을 삭제했어요.");
+        },
       },
-    });
+    );
   };
 
   const handleEditBookInfo = () => {
@@ -391,7 +394,7 @@ export default function BookInfoPage() {
 
             {!isLoading && bookDetailData?.aladinLink && (
               <div className="flex gap-2 text-label-12-sb text-gray-50">
-                <div>도서 DB 제공: 알라딘</div>
+                <div>도서 DB 제공: YES24</div>
 
                 <button
                   type="button"
