@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import searchIcon from "../../assets/icons/search.svg";
 import Icon from "../../components/action/Button/Icon";
+import FocusCoachmark from "../../components/coachmark/FocusCoachmark";
 import { Focus as FocusBookRow } from "../../components/content/card/Book/List/Focus";
 import SectionHeader from "../../components/content/InformationText/SectionHeader";
 import LoadingState from "../../components/feedback/LoadingState";
@@ -10,6 +11,7 @@ import Toast from "../../components/feedback/toast";
 import Dim from "../../components/layout/Dim";
 import MaskGradient from "../../components/layout/MaskGradient";
 import TabBar from "../../components/navigation/tabs/TabBar";
+import { useAuthMe } from "../../hooks/queries/useAuthMe";
 import { useFocusHome } from "../../hooks/queries/focus/useFocusHome";
 import type { FocusBookStatus } from "../../types/focus/focus";
 import { formatDurationHmsWithSpacing } from "./utils/formatDurationHms";
@@ -33,6 +35,7 @@ function isFocusStatus(value: string): value is FocusBookStatus {
 export default function FocusMainPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { data: authMe } = useAuthMe();
   const loadMoreTargetRef = useRef<HTMLDivElement | null>(null);
   const navigationState = location.state as {
     showFocusEndToast?: boolean;
@@ -164,17 +167,25 @@ export default function FocusMainPage() {
           </>
         )}
 
-        <div className="relative flex h-full flex-col items-center justify-center gap-2">
-          <p className="text-body-16-b text-gray-90">오늘 독서한 시간</p>
-          <p className="text-title-40-b text-gray-90 tabular-nums">
-            {todayFocusTime && formatDurationHmsWithSpacing(todayFocusTime)}
-          </p>
+        <div className="relative flex h-full items-center justify-center">
+          <div
+            data-coachmark-anchor="focus-daily-time"
+            className="flex h-40 w-full flex-col items-center justify-center gap-2"
+          >
+            <p className="text-body-16-b text-gray-90">오늘 독서한 시간</p>
+            <p className="text-title-40-b text-gray-90 tabular-nums">
+              {todayFocusTime && formatDurationHmsWithSpacing(todayFocusTime)}
+            </p>
+          </div>
         </div>
       </section>
 
       <section className="mt-4 flex flex-col gap-5">
         <div className="flex flex-col gap-8">
-          <div className="flex items-center justify-between gap-4">
+          <div
+            data-coachmark-anchor="focus-book-search"
+            className="flex items-center justify-between gap-4"
+          >
             <SectionHeader
               size="16"
               top="독서할 책 선택"
@@ -200,46 +211,54 @@ export default function FocusMainPage() {
           />
         </div>
 
-        {isLoading ? (
-          <div className="flex justify-center py-16">
-            <LoadingState />
-          </div>
-        ) : books.length === 0 ? (
-          <p className="py-17 text-center text-body-14-r text-gray-50">
-            {activeTab.emptyText}
-          </p>
-        ) : (
-          <div className="flex flex-col gap-2.5">
-            {books.map((book) => (
-              <FocusBookRow
-                key={book.bookId}
-                imageUrl={book.coverUrl}
-                title={book.title}
-                author={book.author}
-                timeText={book.todayFocusTime}
-                onClick={() =>
-                  navigate(`/focus/theme?bookId=${encodeURIComponent(book.bookId)}`)
-                }
-              />
-            ))}
+        <div className="relative">
+          <div
+            data-coachmark-anchor="focus-first-book"
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-0 h-24"
+          />
 
-            {hasNextPage && !isFetchNextPageError ? (
-              <div ref={loadMoreTargetRef} className="h-6 shrink-0" />
-            ) : null}
+          {isLoading ? (
+            <div className="flex justify-center py-16">
+              <LoadingState />
+            </div>
+          ) : books.length === 0 ? (
+            <p className="py-17 text-center text-body-14-r text-gray-50">
+              {activeTab.emptyText}
+            </p>
+          ) : (
+            <div className="flex flex-col gap-2.5">
+              {books.map((book) => (
+                <FocusBookRow
+                  key={book.bookId}
+                  imageUrl={book.coverUrl}
+                  title={book.title}
+                  author={book.author}
+                  timeText={book.todayFocusTime}
+                  onClick={() =>
+                    navigate(`/focus/theme?bookId=${encodeURIComponent(book.bookId)}`)
+                  }
+                />
+              ))}
 
-            {isFetchingNextPage ? (
-              <p className="py-4 text-center text-label-14-sb text-gray-60">
-                더 불러오는 중…
-              </p>
-            ) : null}
+              {hasNextPage && !isFetchNextPageError ? (
+                <div ref={loadMoreTargetRef} className="h-6 shrink-0" />
+              ) : null}
 
-            {isFetchNextPageError ? (
-              <p className="py-4 text-center text-label-14-sb text-gray-60">
-                추가 목록을 불러오지 못했어요.
-              </p>
-            ) : null}
-          </div>
-        )}
+              {isFetchingNextPage ? (
+                <p className="py-4 text-center text-label-14-sb text-gray-60">
+                  더 불러오는 중…
+                </p>
+              ) : null}
+
+              {isFetchNextPageError ? (
+                <p className="py-4 text-center text-label-14-sb text-gray-60">
+                  추가 목록을 불러오지 못했어요.
+                </p>
+              ) : null}
+            </div>
+          )}
+        </div>
       </section>
 
       <div className="fixed inset-x-0 bottom-[calc(16px+env(safe-area-inset-bottom))] z-50 mx-auto flex w-full max-w-93.75 justify-center px-4">
@@ -249,6 +268,8 @@ export default function FocusMainPage() {
           onClose={handleFocusEndToastClose}
         />
       </div>
+
+      <FocusCoachmark userId={authMe?.id} />
     </div>
   );
 }

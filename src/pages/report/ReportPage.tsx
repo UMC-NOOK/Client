@@ -9,6 +9,7 @@ import ContainerText from "../../components/action/Button/ContainerText";
 import EmptyState from "../../components/content/EmptyState/EmptyState";
 import Snackbar from "../../components/feedback/snackbar";
 import LoadingState from "../../components/feedback/LoadingState";
+import ReportCoachmark from "../../components/coachmark/ReportCoachmark";
 // assets
 import plus from "../../assets/icons/plus.svg";
 //types
@@ -17,9 +18,11 @@ import type { SortOption } from "../../types/report/sortOption.type";
 import { useGetReportCount } from "../../hooks/queries/report/useGetReportCount";
 import { useGetReport } from "../../hooks/queries/report/useGetReort";
 import { useLibraryBookNum } from "../../hooks/queries/library/useLibraryBookNum";
+import { useAuthMe } from "../../hooks/queries/useAuthMe";
 
 export default function ReportPage() {
   const navigate = useNavigate();
+  const { data: authMe } = useAuthMe();
 
   const [showSortSheet, setShowSortSheet] = useState(false);
   const [sortOption, setSortOption] = useState<SortOption>("RECENT_RECORDED");
@@ -89,9 +92,15 @@ export default function ReportPage() {
             )
           }
         />
-        <div className="cursor-pointer p-2 w-auto h-auto" onClick={onClickPlus}>
-          <img src={plus} alt="plus" />
-        </div>
+        <button
+          type="button"
+          data-coachmark-anchor="report-add"
+          aria-label="독서 기록 추가"
+          className="h-auto w-auto cursor-pointer p-2"
+          onClick={onClickPlus}
+        >
+          <img src={plus} alt="" />
+        </button>
         <Snackbar
           isOpen={snackbar.open}
           onClose={closeSnackbar}
@@ -117,34 +126,42 @@ export default function ReportPage() {
             onToggle={setShowSortSheet}
           />
         </div>
-        <div
-          className="flex flex-col gap-2"
-          // onClick={() => setHasReport(!hasReport)}
-        >
-          {recordData?.items && recordData.items.length > 0 ? (
-            recordData.items.map((item) => (
-              <Report
-                key={item.bookId}
-                {...item}
-                imageUrl={item.coverImageUrl}
-                title={item.title}
-                author={item.author}
-                recent={item.recordContent}
-                reviewNumber={item.recordCount}
-                onClick={() =>
-                  navigate(`/report/${item.bookId}`, {
-                    state: {
-                      bookTitle: item.title,
-                      bookId: item.bookId,
-                      book: item,
-                    },
-                  })
-                }
-              />
-            ))
-          ) : (
-            <EmptyState text="작성한 기록이 없어요." />
-          )}
+        <div className="relative">
+          <div
+            data-coachmark-anchor="report-first-card"
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-0 h-28.5"
+          />
+
+          <div
+            className="flex flex-col gap-2"
+            // onClick={() => setHasReport(!hasReport)}
+          >
+            {recordData?.items && recordData.items.length > 0 ? (
+              recordData.items.map((item) => (
+                <Report
+                  key={item.bookId}
+                  {...item}
+                  imageUrl={item.coverImageUrl}
+                  title={item.title}
+                  author={item.author}
+                  recent={item.recordContent}
+                  reviewNumber={item.recordCount}
+                  onClick={() =>
+                    navigate(`/report/${item.bookId}`, {
+                      state: {
+                        bookTitle: item.title,
+                        bookId: item.bookId,
+                        book: item,
+                      },
+                    })
+                  }
+                />
+              ))
+            ) : (
+              <EmptyState text="작성한 기록이 없어요." />
+            )}
+          </div>
         </div>
       </div>
       {/* bottom sheet */}
@@ -167,6 +184,7 @@ export default function ReportPage() {
           ))}
         </div>
       </BottomSheet>
+      <ReportCoachmark userId={authMe?.id} />
     </div>
   );
 }

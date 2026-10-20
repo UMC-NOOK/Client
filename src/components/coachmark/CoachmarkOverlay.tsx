@@ -34,6 +34,7 @@ type CoachmarkOverlayProps = {
     bottom: number;
     left: number;
   }>;
+  scrollAnchorIntoView?: boolean;
 };
 
 function toRect(rect: DOMRect): MeasuredRect {
@@ -47,7 +48,11 @@ function toRect(rect: DOMRect): MeasuredRect {
   };
 }
 
-function useCoachmarkGeometry(open: boolean, anchorName: string) {
+function useCoachmarkGeometry(
+  open: boolean,
+  anchorName: string,
+  scrollAnchorIntoView: boolean,
+) {
   const [geometry, setGeometry] = useState<CoachmarkGeometry | null>(null);
 
   useEffect(() => {
@@ -84,6 +89,10 @@ function useCoachmarkGeometry(open: boolean, anchorName: string) {
     );
 
     if (app && anchor) {
+      if (scrollAnchorIntoView) {
+        anchor.scrollIntoView({ block: "nearest" });
+      }
+
       observer = new ResizeObserver(measure);
       observer.observe(app);
       observer.observe(anchor);
@@ -105,7 +114,7 @@ function useCoachmarkGeometry(open: boolean, anchorName: string) {
       window.visualViewport?.removeEventListener("resize", measure);
       window.visualViewport?.removeEventListener("scroll", measure);
     };
-  }, [anchorName, open]);
+  }, [anchorName, open, scrollAnchorIntoView]);
 
   return geometry;
 }
@@ -137,8 +146,13 @@ export default function CoachmarkOverlay({
   highlight,
   children,
   highlightInset = {},
+  scrollAnchorIntoView = false,
 }: CoachmarkOverlayProps) {
-  const geometry = useCoachmarkGeometry(open, anchorName);
+  const geometry = useCoachmarkGeometry(
+    open,
+    anchorName,
+    scrollAnchorIntoView,
+  );
 
   useEffect(() => {
     if (!open) return;
