@@ -19,6 +19,7 @@ import Solid from "../../components/action/Button/Solid";
 import HistoryInfoCard from "../../components/content/list/History";
 import InformationSection from "../../components/content/InformationText/InformationSection";
 import ResourceDate from "../../components/content/list/Resource/Date";
+import BookDetailCoachmark from "../../components/coachmark/BookDetailCoachmark";
 
 import chevronLeft from "../../assets/icons/chevron_left.svg";
 import testBookCover from "../../assets/images/book-cover-placeholder.png";
@@ -28,6 +29,7 @@ import { useGetBookDetailWithBookId } from "../../hooks/queries/bookInfo/useGetB
 import { useGetBookDetailWithISBN } from "../../hooks/queries/bookInfo/useGetBookDetailWithISBN";
 import { useLibraryBookRegister } from "../../hooks/mutations/library/useLibraryBookRegister";
 import { useGetBookTimeline } from "../../hooks/queries/bookInfo/useGetBookTimeline";
+import { useAuthMe } from "../../hooks/queries/useAuthMe";
 
 type DetailTab = "info" | "log";
 
@@ -55,6 +57,7 @@ const detailTabs = [
 export default function BookInfoPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { data: authMe } = useAuthMe();
 
   const locationState = location.state as BookInfoLocationState | null;
   const stateBookId =
@@ -301,13 +304,14 @@ export default function BookInfoPage() {
             </div>
           </div>
 
-          <TabBar
-            options={detailTabs}
-            value={selectedTab}
-            onChange={setSelectedTab}
-            variant="underlineGradient"
-            className="mt-6"
-          />
+          <div data-coachmark-anchor="book-detail-tabs" className="mt-6">
+            <TabBar
+              options={detailTabs}
+              value={selectedTab}
+              onChange={setSelectedTab}
+              variant="underlineGradient"
+            />
+          </div>
         </div>
       </div>
 
@@ -530,10 +534,15 @@ export default function BookInfoPage() {
             )}
 
             <div
-              className={`flex flex-col gap-2 rounded-sm bg-gray-15 p-4 text-body-14-r ${
-                effectiveLibraryId ? "relative max-h-80 overflow-hidden" : ""
+              className={`relative flex flex-col gap-2 rounded-sm bg-gray-15 p-4 text-body-14-r ${
+                effectiveLibraryId ? "max-h-80 overflow-hidden" : ""
               }`}
             >
+              <div
+                data-coachmark-anchor="book-detail-history-record"
+                aria-hidden="true"
+                className="pointer-events-none absolute left-9 right-0 top-4 h-14.25 scroll-mt-40"
+              />
               {bookTimelineData ? (
                 <>
                   <MaskGradient
@@ -714,6 +723,11 @@ export default function BookInfoPage() {
           }}
         />
       )}
+
+      <BookDetailCoachmark
+        userId={authMe?.id}
+        onShowReadingHistory={() => setSelectedTab("log")}
+      />
     </div>
   );
 }

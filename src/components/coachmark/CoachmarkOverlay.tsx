@@ -35,6 +35,7 @@ type CoachmarkOverlayProps = {
     left: number;
   }>;
   scrollAnchorIntoView?: boolean;
+  scrollAnchorBlock?: ScrollLogicalPosition;
 };
 
 function toRect(rect: DOMRect): MeasuredRect {
@@ -52,6 +53,7 @@ function useCoachmarkGeometry(
   open: boolean,
   anchorName: string,
   scrollAnchorIntoView: boolean,
+  scrollAnchorBlock: ScrollLogicalPosition,
 ) {
   const [geometry, setGeometry] = useState<CoachmarkGeometry | null>(null);
 
@@ -83,6 +85,18 @@ function useCoachmarkGeometry(
       });
     };
 
+    const measureAfterViewportChange = () => {
+      const anchor = document.querySelector<HTMLElement>(
+        `[data-coachmark-anchor="${anchorName}"]`,
+      );
+
+      if (scrollAnchorIntoView) {
+        anchor?.scrollIntoView({ block: scrollAnchorBlock });
+      }
+
+      measure();
+    };
+
     const app = document.querySelector<HTMLElement>("[data-app-shell]");
     const anchor = document.querySelector<HTMLElement>(
       `[data-coachmark-anchor="${anchorName}"]`,
@@ -90,7 +104,7 @@ function useCoachmarkGeometry(
 
     if (app && anchor) {
       if (scrollAnchorIntoView) {
-        anchor.scrollIntoView({ block: "nearest" });
+        anchor.scrollIntoView({ block: scrollAnchorBlock });
       }
 
       observer = new ResizeObserver(measure);
@@ -99,22 +113,28 @@ function useCoachmarkGeometry(
     }
 
     measure();
-    window.addEventListener("resize", measure);
-    window.addEventListener("orientationchange", measure);
+    window.addEventListener("resize", measureAfterViewportChange);
+    window.addEventListener("orientationchange", measureAfterViewportChange);
     window.addEventListener("scroll", measure, true);
-    window.visualViewport?.addEventListener("resize", measure);
+    window.visualViewport?.addEventListener("resize", measureAfterViewportChange);
     window.visualViewport?.addEventListener("scroll", measure);
 
     return () => {
       cancelAnimationFrame(frame);
       observer?.disconnect();
-      window.removeEventListener("resize", measure);
-      window.removeEventListener("orientationchange", measure);
+      window.removeEventListener("resize", measureAfterViewportChange);
+      window.removeEventListener(
+        "orientationchange",
+        measureAfterViewportChange,
+      );
       window.removeEventListener("scroll", measure, true);
-      window.visualViewport?.removeEventListener("resize", measure);
+      window.visualViewport?.removeEventListener(
+        "resize",
+        measureAfterViewportChange,
+      );
       window.visualViewport?.removeEventListener("scroll", measure);
     };
-  }, [anchorName, open, scrollAnchorIntoView]);
+  }, [anchorName, open, scrollAnchorBlock, scrollAnchorIntoView]);
 
   return geometry;
 }
@@ -147,11 +167,13 @@ export default function CoachmarkOverlay({
   children,
   highlightInset = {},
   scrollAnchorIntoView = false,
+  scrollAnchorBlock = "nearest",
 }: CoachmarkOverlayProps) {
   const geometry = useCoachmarkGeometry(
     open,
     anchorName,
     scrollAnchorIntoView,
+    scrollAnchorBlock,
   );
 
   useEffect(() => {

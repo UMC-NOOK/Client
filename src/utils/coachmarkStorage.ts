@@ -1,4 +1,10 @@
-export type CoachmarkScreen = "library" | "search" | "focus" | "record";
+export type CoachmarkScreen =
+  | "library"
+  | "search"
+  | "focus"
+  | "record"
+  | "record-detail"
+  | "book-detail";
 
 const STORAGE_PREFIX = "nook:coachmark:v1";
 const changeEvent = new EventTarget();

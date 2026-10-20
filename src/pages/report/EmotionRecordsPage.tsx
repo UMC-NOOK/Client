@@ -10,9 +10,11 @@ import FAB from "../../components/action/Button/FAB";
 import BookCover from "../../components/atomic/BookCover";
 import Text from "../../components/action/Button/Text";
 import LoadingState from "../../components/feedback/LoadingState";
+import RecordDetailCoachmark from "../../components/coachmark/RecordDetailCoachmark";
 // api
 import { useGetIndividueleRecords } from "../../hooks/queries/report/useGetEmotionRecords";
 import { useGetEmotions } from "../../hooks/queries/report/useGetEmotions";
+import { useAuthMe } from "../../hooks/queries/useAuthMe";
 // types
 import type { EmotionKey } from "../../types/report/emotions.type";
 import type { EmotionKey as emotion } from "../../components/action/Chip/Emotion";
@@ -28,6 +30,7 @@ export default function IndividueleReportPage() {
   const book = history.state?.usr?.book || null;
 
   const navigate = useNavigate();
+  const { data: authMe } = useAuthMe();
 
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey>("ALL");
 
@@ -132,22 +135,29 @@ export default function IndividueleReportPage() {
               </Text>
             </div>
           </div>
-          <div className="flex items-start min-w-0 overflow-x-scroll gap-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] -ml-4 w-[calc(100%+2rem)] px-4">
-            {Object.entries(emotionMetaMap).map(([key, { text, count }]) => (
-              <div key={key} className="shrink-0">
-                <Chip
-                  active={selectedEmotion === key}
-                  text={`${text} ${count}`}
-                  variant="none"
-                  onClick={() => setSelectedEmotion(key as EmotionKey)}
-                />
-              </div>
-            ))}
+          <div data-coachmark-anchor="record-detail-emotions" className="w-full">
+            <div className="-ml-4 flex w-[calc(100%+2rem)] min-w-0 items-start gap-1 overflow-x-scroll px-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {Object.entries(emotionMetaMap).map(([key, { text, count }]) => (
+                <div key={key} className="shrink-0">
+                  <Chip
+                    active={selectedEmotion === key}
+                    text={`${text} ${count}`}
+                    variant="none"
+                    onClick={() => setSelectedEmotion(key as EmotionKey)}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 w-full overflow-y-auto flex flex-col items-center justify-start gap-1 pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div className="relative flex w-full flex-1 flex-col items-center justify-start gap-1 overflow-y-auto pb-10 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div
+          data-coachmark-anchor="record-detail-first-record"
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-24"
+        />
         {isLoadingRecords && <EmptyState text="기록을 불러오는 중이에요..." />}
         {!isLoadingRecords && records.length === 0 && (
           <EmptyState text="작성한 기록이 없어요." />
@@ -170,6 +180,7 @@ export default function IndividueleReportPage() {
       </div>
       <div className="pointer-events-none fixed bottom-6 left-1/2 z-50 flex w-full max-w-93.75 -translate-x-1/2 justify-end px-4">
         <FAB
+          data-coachmark-anchor="record-detail-add"
           aria-label="기록 작성"
           icon={<img src={plus} alt="" />}
           onClick={() =>
@@ -180,6 +191,7 @@ export default function IndividueleReportPage() {
           className="pointer-events-auto"
         />
       </div>
+      <RecordDetailCoachmark userId={authMe?.id} />
     </div>
   );
 }
