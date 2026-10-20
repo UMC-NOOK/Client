@@ -96,6 +96,9 @@ function MainTabsLayout() {
         onSearchClick={() => navigate("/search")}
         onMenuClick={() => navigate("/mypage")}
         onLogoClick={() => navigate("/library")}
+        searchCoachmarkAnchor={
+          activeTab === "library" ? "library-search" : undefined
+        }
       />
 
       <div className="mx-auto w-full max-w-85.75">

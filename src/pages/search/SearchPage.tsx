@@ -29,12 +29,15 @@ import { useRecommendations } from "../../hooks/queries/useRecommendations";
 import { useDeleteSearchHistory } from "../../hooks/mutations/useDeleteSearchHIstory";
 
 import type { SearchBooksResult } from "../../api/search";
+import { useAuthMe } from "../../hooks/queries/useAuthMe";
+import SearchCoachmark from "../../components/coachmark/SearchCoachmark";
 
 type ViewMode = "idle" | "searching" | "results";
 
 export default function SearchPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { data: authMe } = useAuthMe();
 
   const restoredQuery = location.state?.restoreSearch
     ? (location.state.searchQuery ?? "")
@@ -239,6 +242,10 @@ export default function SearchPage() {
             replace: true,
           });
         }}
+        coachmarkScopeAnchor={{
+          value: "my",
+          name: "search-my-library",
+        }}
       />
 
       {mode === "searching" && (
@@ -311,6 +318,8 @@ export default function SearchPage() {
           onDirectAdd={handleDirectAdd}
         />
       )}
+
+      <SearchCoachmark userId={authMe?.id} />
     </div>
   );
 }
