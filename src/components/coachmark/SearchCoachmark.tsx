@@ -1,4 +1,4 @@
-import arrowLong from "../../assets/coachmark/arrow-long.png";
+import CoachmarkArrow from "./CoachmarkArrow";
 import { useCoachmark } from "../../hooks/useCoachmark";
 import CoachmarkOverlay from "./CoachmarkOverlay";
 
@@ -19,6 +19,8 @@ export default function SearchCoachmark({ userId }: SearchCoachmarkProps) {
       anchorName="search-my-library"
       actionLabel="도서 검색 코치마크 완료"
       onAction={advance}
+      scrollAnchorIntoView
+      anchorViewportBottomInset={90}
       highlight={
         <div className="flex size-full items-center justify-center rounded-full bg-gray-30">
           <span className="text-label-16-sb text-gray-90">내 서재 검색</span>
@@ -26,22 +28,19 @@ export default function SearchCoachmark({ userId }: SearchCoachmarkProps) {
       }
     >
       {(geometry) => {
-        const anchorX = geometry.anchor.left - geometry.app.left;
-
         return (
           <>
-            <img
-              src={arrowLong}
-              alt=""
-              className="absolute h-2.75 w-12.75 rotate-90"
+            <CoachmarkArrow
+              variant={2}
+              className="absolute"
               style={{
-                left: anchorX + geometry.anchor.width - 20,
-                top: geometry.anchor.bottom + 18,
+                left: geometry.app.width - 34,
+                top: geometry.anchor.bottom,
               }}
             />
             <p
-              className="absolute right-4 whitespace-nowrap text-body-14-b text-gray-90"
-              style={{ top: geometry.anchor.bottom + 59 }}
+              className="absolute right-8.5 whitespace-nowrap text-body-14-b leading-none text-gray-90"
+              style={{ top: geometry.anchor.bottom + 60 }}
             >
               <span className="text-mint-60">서재에 등록한 책</span>을 빠르게 찾을 수 있어요
             </p>
