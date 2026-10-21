@@ -52,6 +52,7 @@ export default function AppShell({
 
         {/* 실제 앱 콘텐츠는 최대 375px */}
         <div
+          data-app-shell
           className="relative z-10 mx-auto min-h-dvh w-full"
           style={{ maxWidth: maxWidthPx }}
         >

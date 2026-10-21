@@ -16,6 +16,7 @@ type Props<T extends string> = {
   variant?: "fluid" | "fixed";
 
   buttonWidthPx?: number;
+  coachmarkAnchor?: { value: T; name: string };
 };
 
 export default function Text<T extends string>({
@@ -23,6 +24,7 @@ export default function Text<T extends string>({
   value,
   onChange,
   buttonWidthPx,
+  coachmarkAnchor,
   className = "",
   ariaLabel = "segmented control",
 }: Props<T>) {
@@ -50,6 +52,11 @@ export default function Text<T extends string>({
             type="button"
             role="tab"
             aria-selected={active}
+            data-coachmark-anchor={
+              coachmarkAnchor?.value === opt.value
+                ? coachmarkAnchor.name
+                : undefined
+            }
             onClick={() => onChange(opt.value)}
             style={buttonWidthPx ? { width: buttonWidthPx } : undefined}
             className={[

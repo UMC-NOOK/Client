@@ -29,6 +29,7 @@ type ReadingGoal =
 
 type ZeroProps = {
   percent: "ZERO";
+  message?: string;
 };
 
 type NonZeroPercent = Exclude<ReadingGoal, "ZERO">;
@@ -38,7 +39,9 @@ type NonZeroProps = {
   message: string;
 };
 
-type Props = ZeroProps | NonZeroProps;
+type Props = (ZeroProps | NonZeroProps) & {
+  variant?: "default" | "coachmark";
+};
 
 const ICON_BY_VARIANT: Record<ReadingGoal, string> = {
   ZERO: BookIllust,
@@ -66,7 +69,8 @@ function splitGoalText(text: string) {
 }
 
 export default function BookGoal(props: Props) {
-  const { percent } = props;
+  const { percent, variant = "default" } = props;
+  const isCoachmark = variant === "coachmark";
   
   const resolvedMessage =
   "message" in props && props.message
@@ -79,15 +83,21 @@ export default function BookGoal(props: Props) {
 
   return (
     <div
-      className="flex w-full items-start justify-between rounded-[8px] bg-center bg-cover bg-no-repeat p-4"
+      className="flex w-full items-start justify-between rounded-lg bg-center bg-cover bg-no-repeat p-4"
       style={{
         backgroundImage: `url(${bg})`,
       }}
     >
       <div className="flex flex-col gap-1">
-        <p className="text-label-12-sb text-gray-70">독서 목표</p>
+        <p
+          className={`text-label-12-sb ${isCoachmark ? "text-gray-60" : "text-gray-70"}`}
+        >
+          독서 목표
+        </p>
 
-        <div className="flex flex-col items-start gap-2 pt-1 text-label-16-sb text-gray-90">
+        <div
+          className={`flex flex-col items-start text-gray-90 ${isCoachmark ? "text-body-16-b" : "gap-2 pt-1 text-label-16-sb"}`}
+        >
           {lines.map((line, i) => (
             <div key={i}>
               {line}

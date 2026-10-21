@@ -16,6 +16,7 @@ type Props = {
   /** 아이콘 노출 제어가 필요할 때 */
   showSearch?: boolean;
   showMenu?: boolean;
+  searchCoachmarkAnchor?: string;
 
   /** 가운데 정렬/폭 제한을 바깥에서 할지, 여기서 할지 선택 */
   className?: string;
@@ -29,6 +30,7 @@ export default function TopGnb({
   logoAlt = "nook",
   showSearch = true,
   showMenu = true,
+  searchCoachmarkAnchor,
   className = "w-full h-10 flex items-center justify-between",
 }: Props) {
   const resolvedLogoSrc = logoSrc ?? logoSvg;
@@ -51,7 +53,11 @@ export default function TopGnb({
 
       <div className="flex items-center">
         {showSearch && (
-          <IconButton ariaLabel="Search" onClick={onSearchClick}>
+          <IconButton
+            ariaLabel="Search"
+            onClick={onSearchClick}
+            coachmarkAnchor={searchCoachmarkAnchor}
+          >
             <img src={searchPng} alt="" className="w-6 h-6" draggable={false} />
           </IconButton>
         )}
@@ -70,15 +76,18 @@ function IconButton({
   ariaLabel,
   onClick,
   children,
+  coachmarkAnchor,
 }: {
   ariaLabel: string;
   onClick?: () => void;
   children: React.ReactNode;
+  coachmarkAnchor?: string;
 }) {
   return (
     <button
       type="button"
       aria-label={ariaLabel}
+      data-coachmark-anchor={coachmarkAnchor}
       onClick={onClick}
       className="
         h-10 w-10 rounded-full

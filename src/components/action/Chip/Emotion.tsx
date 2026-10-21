@@ -1,4 +1,4 @@
-type Size = "s" | "m";
+type Size = "s" | "m" | "coachmark";
 type Variant = "yellow" | "pink" | "green" | "blue" | "purple" | "red" | "none"; // 필요하면 "blue" | "mint" ... 이런 식으로 확장
 export type EmotionKey =
   | "FUN"
@@ -52,14 +52,26 @@ type BaseProps = {
   size: Size;
   emojiKey: EmotionKey; // default: "yellow"
   onClick?: () => void;
+  surface?: "default" | "strong";
 };
 
 const base =
-  "flex shrink-0 whitespace-nowrap w-fit justify-center items-center select-none";
+  "flex shrink-0 whitespace-nowrap justify-center items-center select-none";
 
 const sizeClassMap: Record<Size, string> = {
-  s: "p-1 h-[20px] rounded-[4px] text-label-12-sb bg-gray-20",
-  m: "p-2 h-[30px] gap-2 rounded-[2px]",
+  s: "w-fit h-5 rounded-sm p-1 text-label-12-sb",
+  m: "w-fit h-7.5 gap-2 rounded-xs p-2",
+  coachmark: "h-7 rounded-xs px-2 text-label-12-sb",
+};
+
+// 안내용 칩만 Figma의 고정 폭을 사용하고 일반 감정 칩은 내용에 맞춰 유지한다.
+const coachmarkWidthClassMap: Record<EmotionKey, string> = {
+  FUN: "w-11.5",
+  EMPATHIZING: "w-13.25",
+  USEFUL: "w-11.75",
+  SAD: "w-12",
+  COMPLICATED: "w-14.5",
+  UNCOMFORTABLE: "w-13",
 };
 
 const variantColorClassMap: Record<Variant, string> = {
@@ -75,6 +87,7 @@ const variantColorClassMap: Record<Variant, string> = {
 const sizeStyleMap: Record<Size, { emoji: string; text: string }> = {
   s: { emoji: "text-label-12-sb", text: "null" }, // s 사이즈일 때 emoji와 text 크기 동일
   m: { emoji: "text-label-14-sb", text: "text-label-12-sb" }, // m 사이즈일 때 emoji는 16px, text는 14px
+  coachmark: { emoji: "text-label-12-sb", text: "null" },
 };
 
 export default function Emotion({
@@ -82,13 +95,14 @@ export default function Emotion({
   size,
   emojiKey,
   onClick,
+  surface = "default",
 }: BaseProps) {
   if (emojiKey === null) {
     // render empty/inactive when no emotion is provided
     const inactive = variantColorClassMap["none"];
-    if (size === "s") {
+    if (size !== "m") {
       return (
-        <span className={[base, sizeClassMap.s, inactive].join(" ")}></span>
+        <span className={[base, sizeClassMap[size], inactive].join(" ")}></span>
       );
     }
     return <span className={[base, sizeClassMap.m].join(" ")}></span>;
@@ -101,10 +115,16 @@ export default function Emotion({
 
   const { emoji, text } = sizeStyleMap[size];
 
-  if (size === "s") {
+  if (size !== "m") {
     return (
       <span
-        className={[base, sizeClassMap.s, active ? color : inactive].join(" ")}
+        className={[
+          base,
+          sizeClassMap[size],
+          size === "coachmark" ? coachmarkWidthClassMap[emojiKey] : "",
+          surface === "strong" ? "bg-gray-30" : "bg-gray-20",
+          active ? color : inactive,
+        ].join(" ")}
       >
         <span className={emoji}>{emojiFeature}</span>
       </span>

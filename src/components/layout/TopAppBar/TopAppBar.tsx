@@ -16,6 +16,7 @@ export type TopAppBarProps = {
   logoAlt?: string;
 
   showTabs?: boolean;
+  searchCoachmarkAnchor?: string;
 
   /** 탭 갯수는 인자로 넘겨줘야 설정 가능  */
   tabs?: readonly TabOption<TabKey>[];
@@ -37,6 +38,7 @@ export default function TopAppBar({
   logoSrc,
   logoAlt = "nook",
   showTabs = true,
+  searchCoachmarkAnchor,
   tabs = DEFAULT_TABS,
 }: TopAppBarProps) {
   return (
@@ -49,6 +51,7 @@ export default function TopAppBar({
           onMenuClick={onMenuClick}
           logoSrc={logoSrc}
           logoAlt={logoAlt}
+          searchCoachmarkAnchor={searchCoachmarkAnchor}
         />
 
         {/* 공용 컴포넌트 TabBar */}

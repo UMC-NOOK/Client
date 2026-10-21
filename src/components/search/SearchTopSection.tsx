@@ -19,6 +19,7 @@ type Props = {
   onBlur?: () => void;
   onEnter?: () => void;
   placeholder?: string;
+  coachmarkScopeAnchor?: { value: SearchScope; name: string };
 };
 
 export default function SearchTopSection({
@@ -33,6 +34,7 @@ export default function SearchTopSection({
   onBlur,
   onEnter,
   placeholder = "제목, 저자, ISBN으로 검색",
+  coachmarkScopeAnchor,
 }: Props) {
   const [currentScope, setCurrentScope] = useState<SearchScope>(activeScope);
 
@@ -83,6 +85,7 @@ export default function SearchTopSection({
           value={currentScope}
           onChange={handleScopeChange}
           buttonWidthPx={168}
+          coachmarkAnchor={coachmarkScopeAnchor}
           options={[
             { value: "all", label: "전체 도서 검색" },
             { value: "my", label: "내 서재 검색" },

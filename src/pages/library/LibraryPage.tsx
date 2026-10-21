@@ -36,6 +36,7 @@ import DropDown from "../../components/section/dropDown/DropDown";
 import { useLibrarySpecificDateBookInfo } from "../../hooks/queries/library/useLibrarySpecificDateBookInfo";
 import { useAuthMe } from "../../hooks/queries/useAuthMe";
 import { dismissBottomBanner, isBottomBannerDismissed, subscribeBottomBanner } from "./utils/bottomBannerState";
+import LibraryCoachmark from "../../components/coachmark/LibraryCoachmark";
 
 type SelectedYearMonth = {
   year: number;
@@ -195,33 +196,36 @@ export default function LibraryPage() {
   return (
     <div className="relative flex flex-col w-full">
       <div className="flex flex-col pt-6.5">
-        <div className="flex flex-row gap-1">
-          <label className="text-label-20-b text-gray-90">
-            {isAuthMeLoading ? "" : nickName}
-          </label>
-          <label className="text-label-20-b text-gray-90">님의 서재에</label>
-        </div>
-
-        <div className="flex flex-row gap-1 pt-2.5">
-          <div>
-            <label className="text-label-20-b text-yellow-70">
-              {isBookLoading
-                ? mockLibraryBookNumResponse.result.totalBookNum
-                : totalBookNum}
-            </label>
-            <label className="text-label-20-b text-yellow-70">권</label>
+        <div data-coachmark-anchor="library-summary" className="flex flex-col">
+          <div className="flex flex-row gap-1">
             <label className="text-label-20-b text-gray-90">
-              의 책이 있어요.
+              {isAuthMeLoading ? "" : nickName}
             </label>
+            <label className="text-label-20-b text-gray-90">님의 서재에</label>
           </div>
-          <Link to="/library/status">
-            <Icon size="m" className="items-center">
-              <img src={arrowRight} />
-            </Icon>
-          </Link>
+
+          <div className="flex flex-row gap-1 pt-2.5">
+            <div>
+              <label className="text-label-20-b text-yellow-70">
+                {isBookLoading
+                  ? mockLibraryBookNumResponse.result.totalBookNum
+                  : totalBookNum}
+              </label>
+              <label className="text-label-20-b text-yellow-70">권</label>
+              <label className="text-label-20-b text-gray-90">
+                의 책이 있어요.
+              </label>
+            </div>
+            <Link to="/library/status">
+              <Icon size="m" className="items-center">
+                <img src={arrowRight} />
+              </Icon>
+            </Link>
+          </div>
         </div>
 
         <Link
+          data-coachmark-anchor="library-goal"
           to="/users/me/onboarding/goal"
           className="block w-full pt-4 text-inherit no-underline outline-none focus-visible:ring-2 focus-visible:ring-gray-40 focus-visible:ring-offset-2 rounded-lg"
         >
@@ -273,7 +277,10 @@ export default function LibraryPage() {
             }
           />
 
-          <div className="ml-auto flex flex-row gap-0">
+          <div
+            data-coachmark-anchor="library-calendar-view"
+            className="ml-auto flex flex-row gap-0"
+          >
             <div
               className="cursor-pointer"
               onClick={() => setSelectedView("focus")}
@@ -347,6 +354,8 @@ export default function LibraryPage() {
         selectedDate={selectedDate}
         items={modalItems}
       />
+
+      <LibraryCoachmark userId={authMe?.id} nickname={nickName} />
     </div>
   );
 }
