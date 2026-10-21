@@ -56,12 +56,22 @@ type BaseProps = {
 };
 
 const base =
-  "flex shrink-0 whitespace-nowrap w-fit justify-center items-center select-none";
+  "flex shrink-0 whitespace-nowrap justify-center items-center select-none";
 
 const sizeClassMap: Record<Size, string> = {
-  s: "h-5 rounded-sm p-1 text-label-12-sb",
-  m: "h-7.5 gap-2 rounded-xs p-2",
+  s: "w-fit h-5 rounded-sm p-1 text-label-12-sb",
+  m: "w-fit h-7.5 gap-2 rounded-xs p-2",
   coachmark: "h-7 rounded-xs px-2 text-label-12-sb",
+};
+
+// 안내용 칩만 Figma의 고정 폭을 사용하고 일반 감정 칩은 내용에 맞춰 유지한다.
+const coachmarkWidthClassMap: Record<EmotionKey, string> = {
+  FUN: "w-11.5",
+  EMPATHIZING: "w-13.25",
+  USEFUL: "w-11.75",
+  SAD: "w-12",
+  COMPLICATED: "w-14.5",
+  UNCOMFORTABLE: "w-13",
 };
 
 const variantColorClassMap: Record<Variant, string> = {
@@ -111,6 +121,7 @@ export default function Emotion({
         className={[
           base,
           sizeClassMap[size],
+          size === "coachmark" ? coachmarkWidthClassMap[emojiKey] : "",
           surface === "strong" ? "bg-gray-30" : "bg-gray-20",
           active ? color : inactive,
         ].join(" ")}

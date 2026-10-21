@@ -47,7 +47,7 @@ function EmotionStep({ open, onNext }: { open: boolean; onNext: () => void }) {
       {(geometry) => {
         const emotionTop = Math.min(
           geometry.viewportHeight - 125,
-          geometry.anchor.bottom + 35,
+          geometry.anchor.bottom + 37,
         );
         const textTop = Math.min(
           geometry.viewportHeight - 72,
@@ -56,18 +56,9 @@ function EmotionStep({ open, onNext }: { open: boolean; onNext: () => void }) {
 
         return (
           <>
-            <div
-              aria-hidden="true"
-              className="absolute inset-x-0 bg-black"
-              style={{
-                top: geometry.anchor.bottom + 12,
-                height: Math.max(112, textTop + 52 - geometry.anchor.bottom),
-              }}
-            />
             <CoachmarkArrow
               variant={1}
-              layout="horizontal"
-              className="absolute h-2 w-7 -rotate-90"
+              className="absolute -scale-x-100"
               style={{
                 left: appX(geometry) + 13,
                 top: geometry.anchor.bottom,
@@ -76,7 +67,7 @@ function EmotionStep({ open, onNext }: { open: boolean; onNext: () => void }) {
             <div
               className="absolute flex gap-1"
               style={{
-                left: Math.max(16, (geometry.app.width - 323) / 2),
+                left: Math.max(16, (geometry.app.width - 324) / 2 + 0.5),
                 top: emotionTop,
               }}
             >
@@ -95,6 +86,7 @@ function EmotionStep({ open, onNext }: { open: boolean; onNext: () => void }) {
               style={{ left: appX(geometry) + 10, top: textTop }}
             >
               <CoachmarkText
+                compact
                 align="left"
                 title="감정 표현"
                 description="책에 대한 감상을 이모지로 표현해요"
@@ -114,7 +106,6 @@ function RecordStep({ open, onNext }: { open: boolean; onNext: () => void }) {
       anchorName="record-detail-first-record"
       actionLabel="기록 수정 안내 다음 단계"
       onAction={onNext}
-      scrollAnchorIntoView
       highlight={
         <ReportList
           date="26.12.11"
@@ -133,18 +124,17 @@ function RecordStep({ open, onNext }: { open: boolean; onNext: () => void }) {
           <>
             <CoachmarkArrow
               variant={1}
-              layout="horizontal"
-              className={`absolute h-2 w-7 ${placeBelow ? "-rotate-90" : "rotate-90"}`}
+              className={`absolute ${placeBelow ? "-scale-x-100" : "-scale-100"}`}
               style={{
                 left: appX(geometry) + 12,
                 top: placeBelow
                   ? geometry.anchor.bottom
-                  : geometry.anchor.top - 9,
+                  : geometry.anchor.top - 29,
               }}
             />
             <p
-              className="absolute whitespace-nowrap text-body-14-b text-gray-90"
-              style={{ left: appX(geometry) + 26, top: textTop }}
+              className="absolute whitespace-nowrap text-body-14-b leading-none text-gray-90"
+              style={{ left: appX(geometry) + 28, top: textTop }}
             >
               기록을 선택해 내용을 수정할 수 있어요
             </p>
@@ -171,15 +161,18 @@ function AddRecordStep({ open, onNext }: { open: boolean; onNext: () => void }) 
       anchorName="record-detail-add"
       actionLabel="상세 기록 코치마크 완료"
       onAction={onNext}
+      highlightInset={{ top: 4, left: 4 }}
       highlight={
         <FAB
+          size="l"
           aria-label="안내용 기록 작성"
           icon={<img src={plusIcon} alt="" />}
         />
       }
     >
       {(geometry) => {
-        const textTop = Math.max(16, geometry.anchor.top - 120);
+        const highlightTop = geometry.anchor.top - 4;
+        const textTop = Math.max(16, highlightTop - 120);
 
         return (
           <>
@@ -191,6 +184,7 @@ function AddRecordStep({ open, onNext }: { open: boolean; onNext: () => void }) 
               }}
             >
               <CoachmarkText
+                compact
                 align="left"
                 title="기록 남기기 표현"
                 description="이 책에 새로운 독서 기록을 남겨요"
@@ -198,11 +192,10 @@ function AddRecordStep({ open, onNext }: { open: boolean; onNext: () => void }) 
             </div>
             <CoachmarkArrow
               variant={2}
-              layout="horizontal"
-              className="absolute h-2.75 w-12.75 rotate-90"
+              className="absolute -scale-y-100"
               style={{
-                left: appX(geometry) + geometry.anchor.width - 21,
-                top: geometry.anchor.top - 66,
+                left: appX(geometry) + geometry.anchor.width - 22,
+                top: highlightTop - 66,
               }}
             />
           </>
