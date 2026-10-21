@@ -12,6 +12,7 @@ import { useGetBookDetailWithBookId } from "../../hooks/queries/bookInfo/useGetB
 import { useGetBookTimeline } from "../../hooks/queries/bookInfo/useGetBookTimeline";
 import type { FocusEndResult } from "../../types/focus/focus";
 import FocusEndSheet from "./component/FocusEndSheet";
+import FocusSessionBookInfo from "./component/FocusSessionBookInfo";
 import { formatDurationHmsWithSpacing } from "./utils/formatDurationHms";
 import {
   clearFocusSession,
@@ -256,14 +257,12 @@ export default function FocusSessionPage() {
             type="Image"
             imageUrl={bookDetail?.coverImageUrl}
           />
-          <div className="flex flex-col items-center gap-0.5 text-center">
-            <p className="max-w-85.75 truncate text-subtitle-14-sb text-gray-90">
-              {session.bookTitle}
-            </p>
-            <p className="text-body-13-r text-gray-90">{session.author}</p>
-          </div>
+          <FocusSessionBookInfo
+            title={session.bookTitle}
+            author={session.author}
+          />
         </div>
-        <p className="text-title-40-b tabular-nums text-gray-90">
+        <p className="w-56 text-center text-title-40-b tabular-nums text-gray-90">
           {formatDurationHmsWithSpacing(elapsedSeconds)}
         </p>
       </div>

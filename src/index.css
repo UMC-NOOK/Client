@@ -81,6 +81,65 @@
   display: none;
 }
 
+@keyframes focus-session-book-info-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(
+      calc(-1 * var(--focus-book-info-distance)),
+      0,
+      0
+    );
+  }
+}
+
+.focus-session-book-info-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 16px,
+    black calc(100% - 16px),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 16px,
+    black calc(100% - 16px),
+    transparent
+  );
+}
+
+.focus-session-book-info-track {
+  animation: focus-session-book-info-scroll
+    var(--focus-book-info-duration) ease-in infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .focus-session-book-info-track {
+    display: block;
+    width: 100%;
+    animation: none;
+    will-change: auto;
+  }
+
+  .focus-session-book-info-track > div {
+    width: 100%;
+  }
+
+  .focus-session-book-info-track > div:not(:first-child) {
+    display: none;
+  }
+
+  .focus-session-book-info-track p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 @layer components {
   .btn-14-sb {
     font-size: 14px;
