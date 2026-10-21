@@ -1,5 +1,4 @@
-import arrowLong from "../../assets/coachmark/arrow-long.png";
-import arrowShort from "../../assets/coachmark/arrow-short.png";
+import CoachmarkArrow from "./CoachmarkArrow";
 import finger from "../../assets/coachmark/finger.svg";
 import closeIcon from "../../assets/icons/close.svg";
 import { useCoachmark } from "../../hooks/useCoachmark";
@@ -63,9 +62,9 @@ function ReadingHistoryStep({
                 top: geometry.anchor.bottom - 12,
               }}
             />
-            <img
-              src={arrowShort}
-              alt=""
+            <CoachmarkArrow
+              variant={1}
+              layout="horizontal"
               className="absolute h-2 w-7 -rotate-90"
               style={{
                 left: appX(geometry) + geometry.anchor.width - 9,
@@ -150,9 +149,9 @@ function HistoryPreviewStep({
                 description="기록을 선택해 상세 내용을 볼 수 있어요"
               />
             </div>
-            <img
-              src={arrowLong}
-              alt=""
+            <CoachmarkArrow
+              variant={2}
+              layout="horizontal"
               className="absolute h-2.75 w-12.75 -rotate-90"
               style={{
                 left: geometry.app.width - 93,

@@ -1,5 +1,4 @@
-import arrowLong from "../../assets/coachmark/arrow-long.png";
-import arrowShort from "../../assets/coachmark/arrow-short.png";
+import CoachmarkArrow from "./CoachmarkArrow";
 import finger from "../../assets/coachmark/finger.svg";
 import reportSampleBookCover from "../../assets/coachmark/report-sample-book-cover.jpg";
 import plusIcon from "../../assets/icons/plus.svg";
@@ -39,9 +38,9 @@ function AddReportStep({ open, onNext }: { open: boolean; onNext: () => void }) 
 
         return (
           <>
-            <img
-              src={arrowLong}
-              alt=""
+            <CoachmarkArrow
+              variant={2}
+              layout="horizontal"
               className="absolute h-2.75 w-12.75 rotate-90"
               style={{
                 left: appX(geometry) + geometry.anchor.width - 18,
@@ -91,9 +90,9 @@ function ReportCardStep({ open, onNext }: { open: boolean; onNext: () => void })
 
         return (
           <>
-            <img
-              src={arrowShort}
-              alt=""
+            <CoachmarkArrow
+              variant={1}
+              layout="horizontal"
               className={`absolute h-2 w-7 ${placeBelow ? "-rotate-90" : "rotate-90"}`}
               style={{ left: appX(geometry) + 16, top: arrowTop }}
             />

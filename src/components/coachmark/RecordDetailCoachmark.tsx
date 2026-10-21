@@ -1,5 +1,4 @@
-import arrowLong from "../../assets/coachmark/arrow-long.png";
-import arrowShort from "../../assets/coachmark/arrow-short.png";
+import CoachmarkArrow from "./CoachmarkArrow";
 import finger from "../../assets/coachmark/finger.svg";
 import plusIcon from "../../assets/icons/plus-gray-10.svg";
 import { useCoachmark } from "../../hooks/useCoachmark";
@@ -65,9 +64,9 @@ function EmotionStep({ open, onNext }: { open: boolean; onNext: () => void }) {
                 height: Math.max(112, textTop + 52 - geometry.anchor.bottom),
               }}
             />
-            <img
-              src={arrowShort}
-              alt=""
+            <CoachmarkArrow
+              variant={1}
+              layout="horizontal"
               className="absolute h-2 w-7 -rotate-90"
               style={{
                 left: appX(geometry) + 13,
@@ -132,9 +131,9 @@ function RecordStep({ open, onNext }: { open: boolean; onNext: () => void }) {
 
         return (
           <>
-            <img
-              src={arrowShort}
-              alt=""
+            <CoachmarkArrow
+              variant={1}
+              layout="horizontal"
               className={`absolute h-2 w-7 ${placeBelow ? "-rotate-90" : "rotate-90"}`}
               style={{
                 left: appX(geometry) + 12,
@@ -197,9 +196,9 @@ function AddRecordStep({ open, onNext }: { open: boolean; onNext: () => void }) 
                 description="이 책에 새로운 독서 기록을 남겨요"
               />
             </div>
-            <img
-              src={arrowLong}
-              alt=""
+            <CoachmarkArrow
+              variant={2}
+              layout="horizontal"
               className="absolute h-2.75 w-12.75 rotate-90"
               style={{
                 left: appX(geometry) + geometry.anchor.width - 21,
