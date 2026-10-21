@@ -36,6 +36,8 @@ type CoachmarkOverlayProps = {
   }>;
   scrollAnchorIntoView?: boolean;
   scrollAnchorBlock?: ScrollLogicalPosition;
+  anchorViewportBottomInset?: number;
+  additionalActions?: ReactNode;
 };
 
 function toRect(rect: DOMRect): MeasuredRect {
@@ -54,6 +56,7 @@ function useCoachmarkGeometry(
   anchorName: string,
   scrollAnchorIntoView: boolean,
   scrollAnchorBlock: ScrollLogicalPosition,
+  anchorViewportBottomInset: number,
 ) {
   const [geometry, setGeometry] = useState<CoachmarkGeometry | null>(null);
 
@@ -73,9 +76,22 @@ function useCoachmarkGeometry(
 
         if (!app || !anchor) return;
 
+        const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+        const anchorBottom = anchor.getBoundingClientRect().bottom;
+
+        // 안내용 바텀시트와 설명이 대상 요소를 가리지 않도록 공간을 확보한다.
+        if (
+          anchorViewportBottomInset > 0 &&
+          anchorBottom > viewportHeight - anchorViewportBottomInset
+        ) {
+          window.scrollBy({
+            top: anchorBottom - viewportHeight + anchorViewportBottomInset,
+            behavior: "instant",
+          });
+        }
+
         const appRect = app.getBoundingClientRect();
         const anchorRect = anchor.getBoundingClientRect();
-        const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
 
         setGeometry({
           app: toRect(appRect),
@@ -134,7 +150,13 @@ function useCoachmarkGeometry(
       );
       window.visualViewport?.removeEventListener("scroll", measure);
     };
-  }, [anchorName, open, scrollAnchorBlock, scrollAnchorIntoView]);
+  }, [
+    anchorName,
+    anchorViewportBottomInset,
+    open,
+    scrollAnchorBlock,
+    scrollAnchorIntoView,
+  ]);
 
   return geometry;
 }
@@ -143,17 +165,27 @@ export function CoachmarkText({
   title,
   description,
   align = "right",
+  compact = false,
 }: {
   title: ReactNode;
   description: ReactNode;
   align?: "left" | "right";
+  compact?: boolean;
 }) {
   return (
     <div
       className={`flex flex-col gap-2 whitespace-nowrap ${align === "right" ? "items-end text-right" : "items-start text-left"}`}
     >
-      <p className="text-body-16-b text-mint-60">{title}</p>
-      <p className="text-body-14-b text-gray-90">{description}</p>
+      <p
+        className={`${compact ? "text-label-16-b" : "text-body-16-b"} text-mint-60`}
+      >
+        {title}
+      </p>
+      <p
+        className={`text-body-14-b text-gray-90 ${compact ? "leading-none" : ""}`}
+      >
+        {description}
+      </p>
     </div>
   );
 }
@@ -168,12 +200,15 @@ export default function CoachmarkOverlay({
   highlightInset = {},
   scrollAnchorIntoView = false,
   scrollAnchorBlock = "nearest",
+  anchorViewportBottomInset = 0,
+  additionalActions,
 }: CoachmarkOverlayProps) {
   const geometry = useCoachmarkGeometry(
     open,
     anchorName,
     scrollAnchorIntoView,
     scrollAnchorBlock,
+    anchorViewportBottomInset,
   );
 
   useEffect(() => {
@@ -227,6 +262,12 @@ export default function CoachmarkOverlay({
         className="absolute z-20 cursor-pointer bg-transparent"
         style={highlightStyle}
       />
+
+      {additionalActions && (
+        <div className="pointer-events-none absolute inset-0 z-20">
+          {additionalActions}
+        </div>
+      )}
 
       <div className="pointer-events-none absolute inset-0 z-30" aria-hidden="true">
         {children(geometry)}
