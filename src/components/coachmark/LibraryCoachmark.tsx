@@ -3,10 +3,7 @@ import arrowRight from "../../assets/icons/arrow_right.svg";
 import focusIcon from "../../assets/icons/focus.svg";
 import bookIcon from "../../assets/icons/book_gray_40.svg";
 import closeIcon from "../../assets/icons/close.svg";
-import bookGoalComplete from "../../assets/icons/book_illust_100.svg";
-import arrowShort from "../../assets/coachmark/arrow-short.png";
-import arrowLong from "../../assets/coachmark/arrow-long.png";
-import arrowGoal from "../../assets/coachmark/arrow-goal.png";
+import goalHalf from "../../assets/coachmark/library-goal-half.svg";
 import finger from "../../assets/coachmark/finger.svg";
 import sampleBookCover from "../../assets/coachmark/sample-book-cover.png";
 import BookGoal from "../content/card/BookGoal/BookGoal";
@@ -15,6 +12,7 @@ import CoachmarkOverlay, {
   type CoachmarkGeometry,
 } from "./CoachmarkOverlay";
 import { useCoachmark } from "../../hooks/useCoachmark";
+import CoachmarkArrow from "./CoachmarkArrow";
 
 type LibraryCoachmarkProps = {
   userId: number | undefined;
@@ -53,17 +51,18 @@ function SearchStep({
 
         return (
           <>
-            <img
-              src={arrowShort}
-              alt=""
-              className="absolute h-2 w-7 rotate-90"
+            <CoachmarkArrow
+              variant={1}
+              className="absolute"
               style={{
-                left: appX(geometry) + geometry.anchor.width / 2 - 14,
-                top: geometry.anchor.bottom + 4,
+                left: appX(geometry) + geometry.anchor.width - 8,
+                top: geometry.anchor.bottom + 10,
               }}
             />
             <div className="absolute" style={{ left: x, top: y }}>
               <CoachmarkText
+                align="left"
+                compact
                 title="도서 검색"
                 description="원하는 책을 서재에 등록해요"
               />
@@ -90,9 +89,9 @@ function LibrarySummaryStep({
       anchorName="library-summary"
       actionLabel="서재 전체 보기 안내 다음 단계"
       onAction={onNext}
-      highlightInset={{ top: 11, right: 16, bottom: 6, left: 16 }}
+      highlightInset={{ top: 11, right: 16, bottom: 22, left: 16 }}
       highlight={
-        <div className="flex size-full flex-col justify-center bg-gray-17 px-4">
+        <div className="flex size-full flex-col bg-gray-17 px-4 pb-4 pt-2.75">
           <p className="text-title-20-b text-gray-90">{nickname}님의 서재에</p>
           <div className="flex items-center gap-1">
             <p className="text-title-20-b text-gray-90">
@@ -106,7 +105,7 @@ function LibrarySummaryStep({
       {(geometry) => {
         const textTop = Math.min(
           geometry.viewportHeight - 73,
-          geometry.anchor.bottom + 79,
+          geometry.anchor.top + 149,
         );
         const textLeft = Math.max(16, geometry.app.width - 221);
 
@@ -115,23 +114,24 @@ function LibrarySummaryStep({
             <img
               src={finger}
               alt=""
-              className="absolute h-11.75 w-11.25"
+              className="absolute"
               style={{
-                left: appX(geometry) + geometry.anchor.width * 0.56,
-                top: geometry.anchor.bottom - 25,
+                left: appX(geometry) + geometry.anchor.width - 151,
+                top: geometry.anchor.top + 51,
               }}
             />
-            <img
-              src={arrowLong}
-              alt=""
-              className="absolute h-2.75 w-12.75 rotate-90"
+            <CoachmarkArrow
+              variant={2}
+              className="absolute"
               style={{
-                left: geometry.app.width - 119,
-                top: geometry.anchor.bottom + 22,
+                left: geometry.app.width - 112,
+                top: geometry.anchor.top + 98,
               }}
             />
             <div className="absolute" style={{ left: textLeft, top: textTop }}>
               <CoachmarkText
+                align="left"
+                compact
                 title="서재 전체 보기"
                 description="화살표를 클릭해 내 서재로 이동해요"
               />
@@ -153,8 +153,9 @@ function GoalStep({ open, onNext }: { open: boolean; onNext: () => void }) {
       highlight={
         <div className="size-full pt-4">
           <BookGoal
-            percent="PCT_100"
+            percent="ZERO"
             message="100권까지 100권 남았어요."
+            variant="coachmark"
           />
         </div>
       }
@@ -169,38 +170,37 @@ function GoalStep({ open, onNext }: { open: boolean; onNext: () => void }) {
             <img
               src={finger}
               alt=""
-              className="absolute h-11.75 w-11.25"
+              className="absolute"
               style={{
-                left: appX(geometry) + geometry.anchor.width * 0.36,
+                left: appX(geometry) + 122,
                 top: geometry.anchor.bottom - 19,
               }}
             />
-            <img
-              src={arrowShort}
-              alt=""
-              className="absolute h-2 w-7 -rotate-90"
-              style={{ left: 19, top: geometry.anchor.bottom }}
+            <CoachmarkArrow
+              variant={1}
+              className="absolute -scale-x-100"
+              style={{ left: appX(geometry) + 2.6, top: geometry.anchor.bottom }}
             />
             <div className="absolute left-4" style={{ top: firstTextTop }}>
               <CoachmarkText
                 align="left"
+                compact
                 title="서재 전체 보기"
                 description="화살표를 클릭해 내 서재로 이동해요"
               />
             </div>
-            <img
-              src={arrowGoal}
-              alt=""
-              className="absolute h-3.5 w-25 rotate-90"
+            <CoachmarkArrow
+              variant={3}
+              className="absolute"
               style={{
-                left: geometry.app.width - 70,
-                top: geometry.anchor.bottom + 35,
+                left: appX(geometry) + geometry.anchor.width - 24,
+                top: geometry.anchor.bottom - 7,
               }}
             />
             <img
-              src={bookGoalComplete}
+              src={goalHalf}
               alt=""
-              className="absolute h-17.5 w-31"
+              className="absolute"
               style={{ left: geometry.app.width - 153, top: booksTop }}
             />
             <div
@@ -208,6 +208,8 @@ function GoalStep({ open, onNext }: { open: boolean; onNext: () => void }) {
               style={{ left: Math.max(16, geometry.app.width - 221), top: secondTextTop }}
             >
               <CoachmarkText
+                align="left"
+                compact
                 title="서재 전체 목표 달성률"
                 description="완독할 때마다 책 게이지가 채워져요"
               />
@@ -220,12 +222,15 @@ function GoalStep({ open, onNext }: { open: boolean; onNext: () => void }) {
 }
 
 function CalendarStep({ open, onNext }: { open: boolean; onNext: () => void }) {
+  const sheetHeight = 210;
+
   return (
     <CoachmarkOverlay
       open={open}
       anchorName="library-calendar-view"
       actionLabel="서재 코치마크 완료"
       onAction={onNext}
+      anchorViewportBottomInset={sheetHeight + 160}
       highlight={
         <div className="flex size-full items-center rounded-sm bg-gray-17">
           <span className="flex size-10 items-center justify-center">
@@ -236,50 +241,55 @@ function CalendarStep({ open, onNext }: { open: boolean; onNext: () => void }) {
           </span>
         </div>
       }
+      additionalActions={
+        <button
+          type="button"
+          aria-label="하단 상세 정보 안내 완료"
+          onClick={onNext}
+          className="pointer-events-auto absolute inset-x-0 bottom-0 cursor-pointer bg-transparent"
+          style={{ height: sheetHeight }}
+        />
+      }
     >
       {(geometry) => {
         const anchorX = appX(geometry);
-        const sheetHeight = 210;
         const sheetTop = geometry.viewportHeight - sheetHeight;
 
         return (
           <>
-            <img
-              src={arrowLong}
-              alt=""
-              className="absolute h-2.75 w-12.75 rotate-90"
-              style={{ left: anchorX + 31, top: geometry.anchor.bottom + 19 }}
+            <CoachmarkArrow
+              variant={2}
+              className="absolute"
+              style={{ left: anchorX + 55, top: geometry.anchor.bottom + 5 }}
             />
-            <img
-              src={arrowShort}
-              alt=""
-              className="absolute h-2 w-7 rotate-90"
-              style={{ left: anchorX - 2, top: geometry.anchor.bottom + 7 }}
+            <CoachmarkArrow
+              variant={1}
+              className="absolute"
+              style={{ left: anchorX + 20, top: geometry.anchor.bottom + 5 }}
             />
             <p
-              className="absolute whitespace-nowrap text-body-14-b text-gray-90"
-              style={{ right: geometry.app.width - geometry.anchor.right + geometry.app.left + 63, top: geometry.anchor.bottom + 38 }}
+              className="absolute whitespace-nowrap text-body-14-b leading-none text-gray-90"
+              style={{ right: geometry.app.width - anchorX - 16.5, top: geometry.anchor.bottom + 37 }}
             >
-              일별 <span className="text-mint-60">포커스</span> 시간을 비교해요
+              일별 <span className="text-mint-60">포커스 시간</span>을 비교해요
             </p>
             <p
-              className="absolute whitespace-nowrap text-body-14-b text-gray-90"
-              style={{ right: 23, top: geometry.anchor.bottom + 71 }}
+              className="absolute whitespace-nowrap text-body-14-b leading-none text-gray-90"
+              style={{ right: geometry.app.width - anchorX - 55, top: geometry.anchor.bottom + 70 }}
             >
-              독서한 책의 <span className="text-mint-60">표지</span>를 모아 봐요
+              독서한 <span className="text-mint-60">책의 표지</span>를 모아 봐요
             </p>
 
             <p
-              className="absolute left-6 whitespace-nowrap text-body-14-b text-gray-90"
-              style={{ top: sheetTop - 52 }}
+              className="absolute left-6 whitespace-nowrap text-body-14-b leading-none text-gray-90"
+              style={{ top: sheetTop - 55 }}
             >
               날짜를 클릭하면 <span className="text-mint-60">상세 정보</span>가 떠요
             </p>
-            <img
-              src={arrowShort}
-              alt=""
-              className="absolute h-2 w-7 -rotate-90"
-              style={{ left: 22, top: sheetTop - 28 }}
+            <CoachmarkArrow
+              variant={1}
+              className="absolute rotate-180"
+              style={{ left: 32.05, top: sheetTop - 28 }}
             />
 
             <div
@@ -288,21 +298,21 @@ function CalendarStep({ open, onNext }: { open: boolean; onNext: () => void }) {
             >
               <div className="flex h-10 items-center justify-between">
                 <span className="size-10" />
-                <p className="text-label-18-rb text-gray-90">12월 20일</p>
+                <p className="text-title-18-m text-gray-90">12월 20일</p>
                 <span className="flex size-10 items-center justify-center">
                   <img src={closeIcon} alt="" className="size-6" />
                 </span>
               </div>
-              <div className="mt-4 flex gap-4">
+              <div className="relative mt-4 flex h-26.5 gap-3 py-3">
                 <img
                   src={sampleBookCover}
                   alt=""
-                  className="h-18.5 w-13 object-cover"
+                  className="h-20.5 w-14 rounded-xs object-cover"
                 />
-                <div className="flex flex-col gap-2 pt-1">
-                  <p className="text-body-14-b text-gray-90">첫사랑의 침공</p>
-                  <p className="text-body-13-r text-gray-80">권혁일</p>
-                  <p className="flex items-center gap-1 text-body-13-r text-gray-60">
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-label-14-sb leading-normal text-gray-90">첫사랑의 침공</p>
+                  <p className="text-body-13-r text-gray-90">권혁일</p>
+                  <p className="absolute left-17 top-19.5 flex items-center gap-1 text-label-13-sb text-gray-60">
                     <img src={focusIcon} alt="" className="size-4" />
                     01:00:30
                   </p>
