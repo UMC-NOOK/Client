@@ -538,11 +538,6 @@ export default function BookInfoPage() {
                 effectiveLibraryId ? "max-h-80 overflow-hidden" : ""
               }`}
             >
-              <div
-                data-coachmark-anchor="book-detail-history-record"
-                aria-hidden="true"
-                className="pointer-events-none absolute left-9 right-0 top-4 h-14.25 scroll-mt-40"
-              />
               {bookTimelineData ? (
                 <>
                   <MaskGradient
@@ -724,10 +719,7 @@ export default function BookInfoPage() {
         />
       )}
 
-      <BookDetailCoachmark
-        userId={authMe?.id}
-        onShowReadingHistory={() => setSelectedTab("log")}
-      />
+      <BookDetailCoachmark userId={authMe?.id} />
     </div>
   );
 }

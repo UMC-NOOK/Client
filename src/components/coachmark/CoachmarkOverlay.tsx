@@ -37,7 +37,7 @@ type CoachmarkOverlayProps = {
   scrollAnchorIntoView?: boolean;
   scrollAnchorBlock?: ScrollLogicalPosition;
   anchorViewportBottomInset?: number;
-  additionalActions?: ReactNode;
+  additionalActions?: ReactNode | ((geometry: CoachmarkGeometry) => ReactNode);
 };
 
 function toRect(rect: DOMRect): MeasuredRect {
@@ -265,7 +265,9 @@ export default function CoachmarkOverlay({
 
       {additionalActions && (
         <div className="pointer-events-none absolute inset-0 z-20">
-          {additionalActions}
+          {typeof additionalActions === "function"
+            ? additionalActions(geometry)
+            : additionalActions}
         </div>
       )}
 
