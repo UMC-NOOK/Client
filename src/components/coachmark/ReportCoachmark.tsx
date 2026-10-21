@@ -33,23 +33,22 @@ function AddReportStep({ open, onNext }: { open: boolean; onNext: () => void }) 
       {(geometry) => {
         const textTop = Math.min(
           geometry.viewportHeight - 40,
-          geometry.anchor.bottom + 66,
+          geometry.anchor.bottom + 69,
         );
 
         return (
           <>
             <CoachmarkArrow
               variant={2}
-              layout="horizontal"
-              className="absolute h-2.75 w-12.75 rotate-90"
+              className="absolute"
               style={{
-                left: appX(geometry) + geometry.anchor.width - 18,
+                left: appX(geometry) + geometry.anchor.width - 15,
                 top: geometry.anchor.bottom + 7,
               }}
             />
             <p
-              className="absolute whitespace-nowrap text-body-14-b text-gray-90"
-              style={{ right: 20, top: textTop }}
+              className="absolute whitespace-nowrap text-body-14-b leading-none text-gray-90"
+              style={{ right: 26, top: textTop }}
             >
               서재에서 기록을 남기고 싶은 책을 불러와요
             </p>
@@ -67,7 +66,6 @@ function ReportCardStep({ open, onNext }: { open: boolean; onNext: () => void })
       anchorName="report-first-card"
       actionLabel="기록 코치마크 완료"
       onAction={onNext}
-      scrollAnchorIntoView
       highlight={
         <Report
           imageUrl={reportSampleBookCover}
@@ -82,18 +80,17 @@ function ReportCardStep({ open, onNext }: { open: boolean; onNext: () => void })
         const roomBelow = geometry.viewportHeight - geometry.anchor.bottom;
         const placeBelow = roomBelow >= 105;
         const textTop = placeBelow
-          ? geometry.anchor.bottom + 34
+          ? geometry.anchor.bottom + 35
           : Math.max(16, geometry.anchor.top - 74);
         const arrowTop = placeBelow
-          ? geometry.anchor.bottom
-          : geometry.anchor.top - 17;
+          ? geometry.anchor.bottom + 1
+          : geometry.anchor.top - 29;
 
         return (
           <>
             <CoachmarkArrow
               variant={1}
-              layout="horizontal"
-              className={`absolute h-2 w-7 ${placeBelow ? "-rotate-90" : "rotate-90"}`}
+              className={`absolute ${placeBelow ? "-scale-x-100" : "-scale-100"}`}
               style={{ left: appX(geometry) + 16, top: arrowTop }}
             />
             <div
@@ -101,6 +98,7 @@ function ReportCardStep({ open, onNext }: { open: boolean; onNext: () => void })
               style={{ left: appX(geometry) + 29, top: textTop }}
             >
               <CoachmarkText
+                compact
                 align="left"
                 title="독서 기록"
                 description="한 권의 책에 독서 기록을 여러 번 남길 수 있어요."
@@ -112,7 +110,7 @@ function ReportCardStep({ open, onNext }: { open: boolean; onNext: () => void })
               className="absolute h-11.75 w-11.25"
               style={{
                 left: appX(geometry) + geometry.anchor.width - 61,
-                top: geometry.anchor.bottom - 20,
+                top: geometry.anchor.bottom - 19,
               }}
             />
           </>
