@@ -259,8 +259,7 @@ export default function CoachmarkOverlay({
         type="button"
         aria-label={actionLabel}
         onClick={onAction}
-        className="absolute z-20 cursor-pointer bg-transparent"
-        style={highlightStyle}
+        className="absolute inset-0 z-20 cursor-pointer bg-transparent"
       />
 
       {additionalActions && (
