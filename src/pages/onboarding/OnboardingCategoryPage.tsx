@@ -53,9 +53,7 @@ export function OnboardingCategoryPage() {
         관심 있는 도서 분야를 선택해주세요.
       </p>
 
-      <p className=" text-gray-50 text-[14px] font-medium">
-        최대 2개 선택 가능합니다.
-      </p>
+      
 
       <div className="mt-8 mb-10">
         <OnboardingCategoryForm
