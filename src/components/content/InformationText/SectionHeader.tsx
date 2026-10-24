@@ -114,7 +114,7 @@ export default function SectionHeader({
       <>
         <span
           className={[
-            "min-w-0 text-label-16-sb text-gray-90",
+            "min-w-0 flex-1 text-label-16-sb text-gray-90",
             truncateTopClass,
           ].join(" ")}
         >

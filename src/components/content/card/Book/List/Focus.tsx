@@ -1,5 +1,5 @@
 import playIcon from "../../../../../assets/icons/movement.svg";
-import CharacterLimitedText from "../../../CharacterLimitedText";
+import WidthLimitedText from "../../../WidthLimitedText";
 import SectionHeader from "../../../InformationText/SectionHeader";
 
 type Props = {
@@ -47,8 +47,8 @@ export function Focus({
           <div className="mt-auto w-full min-w-0">
             <SectionHeader
               size="16"
-              top={<CharacterLimitedText text={title} />}
-              bottom={<CharacterLimitedText text={author} />}
+              top={<WidthLimitedText text={title} />}
+              bottom={<WidthLimitedText text={author} />}
             />
           </div>
         </div>
