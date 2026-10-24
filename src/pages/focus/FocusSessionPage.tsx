@@ -9,7 +9,7 @@ import MaskGradient from "../../components/layout/MaskGradient";
 import { useEndFocus } from "../../hooks/mutations/focus/useEndFocus";
 import { usePatchFocusBookStatus } from "../../hooks/mutations/focus/usePatchFocusBookStatus";
 import { useGetBookDetailWithBookId } from "../../hooks/queries/bookInfo/useGetBookDetailWithBookId";
-import { useGetBookTimeline } from "../../hooks/queries/bookInfo/useGetBookTimeline";
+import { useLastFocusPage } from "../../hooks/queries/focus/useLastFocusPage";
 import type { FocusEndResult } from "../../types/focus/focus";
 import FocusEndSheet from "./component/FocusEndSheet";
 import FocusSessionBookInfo from "./component/FocusSessionBookInfo";
@@ -52,17 +52,14 @@ export default function FocusSessionPage() {
     session?.bookId ?? null,
     session !== null,
   );
-  const { data: bookTimeline } = useGetBookTimeline(bookDetail?.libraryId);
+  const { data: lastReadPage } = useLastFocusPage(bookDetail?.libraryId);
 
   // 테마 선택 화면과 같은 키를 읽어 마지막으로 시작한 테마 배경을 이어서 보여준다.
   const [themeId] = useState(readStoredFocusThemeId);
   const [imageError, setImageError] = useState(false);
 
   const [timerState, setTimerState] = useState<FocusSessionTimerState>(
-    () =>
-      readOrCreateFocusSessionTimer(
-        session ? new Date(session.startedAt).getTime() : undefined,
-      ),
+    readOrCreateFocusSessionTimer,
   );
   const [elapsedSeconds, setElapsedSeconds] = useState(() =>
     getFocusElapsedSeconds(timerState),
@@ -79,11 +76,7 @@ export default function FocusSessionPage() {
   // 이 초기값과 handleSubmitEnd의 상태 보정 PATCH를 함께 재검토해야 한다.
   const isFinished =
     isFinishedDraft ?? bookDetail?.readingStatus === "FINISHED";
-  const lastReadPage = bookTimeline?.focusSummary.page;
-
-  // 임시 정책(PM 미확정): 종료 시트에는 이 책의 서버 타임라인에 저장된 마지막 페이지를
-  // 기본값으로 보여주고, 취소한 입력은 저장하지 않는다. 정책 철회 시 이 조회·파생값과
-  // handleCloseSheet의 pageInputDraft 초기화를 함께 제거하면 된다.
+  // 마지막 포커스에서 비워 저장한 값도 그대로 복원하고, 취소한 입력은 버린다.
   const pageInput =
     pageInputDraft ??
     (typeof lastReadPage === "number" &&

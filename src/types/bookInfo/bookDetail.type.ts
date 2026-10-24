@@ -13,7 +13,7 @@ export interface BookDetailResponse {
   pages: number | null;
   description: string;
   coverImageUrl: string;
-  aladinLink: string | null;
+  purchaseLink: string | null;
   sourceType: string;
   libraryId: number | null;
   readingStatus: BookStatusType;
