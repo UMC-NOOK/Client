@@ -8,6 +8,7 @@ import HistoryInfoCard from "../../components/content/list/History";
 import ResourceDate from "../../components/content/list/Resource/Date";
 import BottomSheet from "../../components/presentation/modal/bottomsheet/Origin";
 import Emotion from "../../components/action/Chip/Emotion";
+import ReadingHistoryCoachmark from "../../components/coachmark/ReadingHistoryCoachmark";
 
 // assets
 import chevron_left from "../../assets/icons/chevron_left.svg";
@@ -20,12 +21,14 @@ import {
 } from "../../hooks/queries/bookInfo/useGetBookTimelineAll";
 import { useLibraryBookRegister } from "../../hooks/mutations/library/useLibraryBookRegister";
 import { useDeleteFocusRecord } from "../../hooks/mutations/focus/useDeleteFocusRecord";
+import { useAuthMe } from "../../hooks/queries/useAuthMe";
 
 // utils
 import { formatDateKorean, formatDateDot } from "../../utils/formatDateParts";
 
 export default function AllHistoryPage() {
   const navigate = useNavigate();
+  const { data: authMe } = useAuthMe();
 
   const libraryId = history.state?.usr?.libraryId || null;
   const bookDetailData = history.state?.usr?.book || null;
@@ -172,54 +175,62 @@ export default function AllHistoryPage() {
         className="mb-10"
       />
 
-      {isTimelinePending ? (
-        <div className="py-10 text-center text-body-14-r text-gray-60">
-          독서 히스토리를 불러오는 중이에요.
-        </div>
-      ) : isTimelineError ? (
-        <div className="py-10 text-center text-body-14-r text-gray-60">
-          독서 히스토리를 불러오지 못했어요.
-        </div>
-      ) : (
-        <div className="flex w-full flex-col gap-4">
-          {historyData.map((yearGroup) => (
-            <div
-              key={`${yearGroup.year}-${yearGroup.monthDay}`}
-              className="flex items-start gap-2"
-            >
-              <ResourceDate
-                topText={yearGroup.monthDay}
-                bottomText={yearGroup.showYear ? String(yearGroup.year) : ""}
-              />
-
-              <div className="flex min-w-0 flex-1 flex-col gap-1">
-                {yearGroup.items.map((item) => (
-                  <HistoryInfoCard
-                    key={item.timelineId}
-                    variant={item.type === "RECORD" ? "history" : "time"}
-                    title={item.title}
-                    time={item.subtitle || item.previewText}
-                    hasIcon={item.type !== "REGISTER" && item.type !== "STATUS"}
-                    onClick={() => setSelectedTimelineId(item.timelineId)}
-                  />
-                ))}
-              </div>
-            </div>
-          ))}
-
-          {/* 이 요소가 화면 근처에 보이면 다음 페이지를 불러온다. */}
-          <div
-            ref={loadMoreRef}
-            className="flex min-h-10 items-center justify-center"
-          >
-            {isFetchingNextPage ? (
-              <p className="text-body-14-r text-gray-60">
-                히스토리를 더 불러오는 중이에요.
-              </p>
-            ) : null}
+      <div className="relative w-full">
+        <div
+          data-coachmark-anchor="reading-history-record"
+          aria-hidden="true"
+          className="pointer-events-none absolute left-10 right-0 top-18.25 h-14.25"
+        />
+        {isTimelinePending ? (
+          <div className="py-10 text-center text-body-14-r text-gray-60">
+            독서 히스토리를 불러오는 중이에요.
           </div>
-        </div>
-      )}
+        ) : isTimelineError ? (
+          <div className="py-10 text-center text-body-14-r text-gray-60">
+            독서 히스토리를 불러오지 못했어요.
+          </div>
+        ) : (
+          <div className="flex w-full flex-col gap-4">
+            {historyData.map((yearGroup) => (
+              <div
+                key={`${yearGroup.year}-${yearGroup.monthDay}`}
+                className="flex items-start gap-2"
+              >
+                <ResourceDate
+                  topText={yearGroup.monthDay}
+                  bottomText={yearGroup.showYear ? String(yearGroup.year) : ""}
+                />
+
+                <div className="flex min-w-0 flex-1 flex-col gap-1">
+                  {yearGroup.items.map((item) => (
+                    <HistoryInfoCard
+                      key={item.timelineId}
+                      variant={item.type === "RECORD" ? "history" : "time"}
+                      title={item.title}
+                      time={item.subtitle || item.previewText}
+                      hasIcon={item.type !== "REGISTER" && item.type !== "STATUS"}
+                      onClick={() => setSelectedTimelineId(item.timelineId)}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            {/* 이 요소가 화면 근처에 보이면 다음 페이지를 불러온다. */}
+            <div
+              ref={loadMoreRef}
+              className="flex min-h-10 items-center justify-center"
+            >
+              {isFetchingNextPage ? (
+                <p className="text-body-14-r text-gray-60">
+                  히스토리를 더 불러오는 중이에요.
+                </p>
+              ) : null}
+            </div>
+          </div>
+        )}
+
+      </div>
 
       {selectedTimelineId !== null ? (
         <BottomSheet
@@ -374,6 +385,13 @@ export default function AllHistoryPage() {
           ) : null}
         </BottomSheet>
       ) : null}
+      <ReadingHistoryCoachmark
+        userId={
+          !isTimelinePending && !isTimelineError && historyData.length > 0
+            ? authMe?.id
+            : undefined
+        }
+      />
     </div>
   );
 }
