@@ -241,9 +241,9 @@ export default function BookInfoPage() {
   };
 
   const handleOpenPurchaseLink = () => {
-    if (!bookDetailData?.aladinLink) return;
+    if (!bookDetailData?.purchaseLink) return;
 
-    window.open(bookDetailData.aladinLink, "_blank", "noopener,noreferrer");
+    window.open(bookDetailData.purchaseLink, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -396,7 +396,7 @@ export default function BookInfoPage() {
               />
             )}
 
-            {!isLoading && bookDetailData?.aladinLink && (
+            {!isLoading && bookDetailData?.purchaseLink && (
               <div className="flex gap-2 text-label-12-sb text-gray-50">
                 <div>도서 DB 제공: YES24</div>
 
