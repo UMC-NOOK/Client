@@ -1,12 +1,10 @@
 import searchIcon from "../../assets/icons/search.svg";
-import arrowRight from "../../assets/icons/arrow_right.svg";
 import focusIcon from "../../assets/icons/focus.svg";
 import bookIcon from "../../assets/icons/book_gray_40.svg";
 import closeIcon from "../../assets/icons/close.svg";
 import goalHalf from "../../assets/coachmark/library-goal-half.svg";
 import finger from "../../assets/coachmark/finger.svg";
 import sampleBookCover from "../../assets/coachmark/sample-book-cover.png";
-import BookGoal from "../content/card/BookGoal/BookGoal";
 import CoachmarkOverlay, {
   CoachmarkText,
   type CoachmarkGeometry,
@@ -17,7 +15,6 @@ import CoachmarkArrow from "./CoachmarkArrow";
 
 type LibraryCoachmarkProps = {
   userId: number | undefined;
-  nickname: string;
 };
 
 function appX(geometry: CoachmarkGeometry) {
@@ -74,8 +71,7 @@ function LibrarySummaryStep({
   open,
   onNext,
   dontShowAgain,
-  nickname,
-}: CoachmarkStepProps & { nickname: string }) {
+}: CoachmarkStepProps) {
   return (
     <CoachmarkOverlay
       open={open}
@@ -83,18 +79,8 @@ function LibrarySummaryStep({
       anchorName="library-summary"
       actionLabel="서재 전체 보기 안내 다음 단계"
       onAction={onNext}
-      highlightInset={{ top: 11, right: 16, bottom: 22, left: 16 }}
-      highlight={
-        <div className="flex size-full flex-col bg-gray-17 px-4 pb-4 pt-2.75">
-          <p className="text-title-20-b text-gray-90">{nickname}님의 서재에</p>
-          <div className="flex items-center gap-1">
-            <p className="text-title-20-b text-gray-90">
-              <span className="text-yellow-70">0권</span>의 책이 있어요.
-            </p>
-            <img src={arrowRight} alt="" className="size-6" />
-          </div>
-        </div>
-      }
+      highlightInset={{ top: 11, right: 16, bottom: 16, left: 16 }}
+      revealAnchor
     >
       {(geometry) => {
         const textTop = Math.min(
@@ -145,15 +131,8 @@ function GoalStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
       anchorName="library-goal"
       actionLabel="독서 목표 안내 다음 단계"
       onAction={onNext}
-      highlight={
-        <div className="size-full pt-4">
-          <BookGoal
-            percent="ZERO"
-            message="100권까지 100권 남았어요."
-            variant="coachmark"
-          />
-        </div>
-      }
+      revealAnchor
+      revealRadiusClassName="rounded-lg"
     >
       {(geometry) => {
         const firstTextTop = geometry.anchor.bottom + 34;
@@ -322,10 +301,7 @@ function CalendarStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
   );
 }
 
-export default function LibraryCoachmark({
-  userId,
-  nickname,
-}: LibraryCoachmarkProps) {
+export default function LibraryCoachmark({ userId }: LibraryCoachmarkProps) {
   const { isOpen, step, advance, dontShowAgain } = useCoachmark({
     userId,
     screen: "library",
@@ -339,7 +315,6 @@ export default function LibraryCoachmark({
         open={isOpen && step === 1}
         onNext={advance}
         dontShowAgain={dontShowAgain}
-        nickname={nickname || "누키"}
       />
       <GoalStep open={isOpen && step === 2} onNext={advance} dontShowAgain={dontShowAgain} />
       <CalendarStep open={isOpen && step === 3} onNext={advance} dontShowAgain={dontShowAgain} />
