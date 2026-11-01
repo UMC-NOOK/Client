@@ -21,11 +21,8 @@ export default function SearchCoachmark({ userId }: SearchCoachmarkProps) {
       onAction={advance}
       scrollAnchorIntoView
       anchorViewportBottomInset={90}
-      highlight={
-        <div className="flex size-full items-center justify-center rounded-full bg-gray-30">
-          <span className="text-label-16-sb text-gray-90">내 서재 검색</span>
-        </div>
-      }
+      revealAnchor
+      revealRadiusClassName="rounded-full"
     >
       {(geometry) => {
         return (
