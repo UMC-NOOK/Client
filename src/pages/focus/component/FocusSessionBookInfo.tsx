@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const VIEWPORT_WIDTH = 224;
-const MARQUEE_SPEED = 28;
+const MARQUEE_SPEED = 33;
 const MARQUEE_PAUSE_SECONDS = 1.5;
 
 type Props = {
