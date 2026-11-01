@@ -82,8 +82,8 @@ export default function FocusThemePage() {
           saveStoredFocusThemeId(selectedThemeId);
           saveFocusSession(session);
 
-          const startedAtMs = new Date(session.startedAt).getTime();
-          resetFocusSessionTimer(startedAtMs);
+          // 서버와 기기의 시계 차이가 타이머 시작을 지연시키지 않도록 진입 시각을 쓴다.
+          resetFocusSessionTimer();
           navigate("/focus/session");
         },
       },

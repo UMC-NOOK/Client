@@ -49,7 +49,7 @@ export interface StatusDetail {
 
 export interface FocusDetail {
   timeText: string;
-  page: number;
+  page: number | null;
 }
 
 export interface RecordDetail {

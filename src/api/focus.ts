@@ -1,4 +1,5 @@
 import { api } from "./axios";
+import { getBookTimelineAll, getBookTimelineAllDetail } from "./history";
 import type BaseApiResponse from "../types/BaseApiResponse";
 import type {
   FocusBookStatus,
@@ -13,6 +14,30 @@ import type {
 
 const FOCUS_BASE = "/api/v1/focuses";
 const LIBRARY_BOOKS_ENDPOINT = "/api/v1/library/books";
+
+export async function getLastFocusPage(libraryId: number): Promise<number | null> {
+  let cursor: string | null = null;
+
+  // 서재 요약의 page는 미입력 종료 시 이전 값을 유지하므로 마지막 포커스 원본을 읽는다.
+  do {
+    const timeline = await getBookTimelineAll(libraryId, cursor);
+    const lastFocus = timeline.dateGroups
+      .flatMap((group) => group.items)
+      .find((item) => item.type === "FOCUS");
+
+    if (lastFocus) {
+      const result = await getBookTimelineAllDetail(libraryId, lastFocus.timelineId);
+      if (result.type !== "FOCUS") {
+        throw new Error("포커스 타임라인 상세 응답이 아닙니다.");
+      }
+      return result.detail.page;
+    }
+
+    cursor = timeline.hasNext ? timeline.nextCursor : null;
+  } while (cursor !== null);
+
+  return null;
+}
 
 export async function getFocusHome(params: {
   status: FocusBookStatus;
