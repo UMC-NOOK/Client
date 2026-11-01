@@ -7,7 +7,7 @@ type SearchCoachmarkProps = {
 };
 
 export default function SearchCoachmark({ userId }: SearchCoachmarkProps) {
-  const { isOpen, advance } = useCoachmark({
+  const { isOpen, advance, dontShowAgain } = useCoachmark({
     userId,
     screen: "search",
     stepCount: 1,
@@ -16,6 +16,7 @@ export default function SearchCoachmark({ userId }: SearchCoachmarkProps) {
   return (
     <CoachmarkOverlay
       open={isOpen}
+      dontShowAgain={dontShowAgain}
       anchorName="search-my-library"
       actionLabel="도서 검색 코치마크 완료"
       onAction={advance}

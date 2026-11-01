@@ -7,24 +7,24 @@ export type CoachmarkScreen =
   | "book-detail"
   | "reading-history";
 
-const STORAGE_PREFIX = "nook:coachmark:v1";
+const STORAGE_PREFIX = "nook:coachmark:v2";
 const changeEvent = new EventTarget();
 
 function getStorageKey(userId: number, screen: CoachmarkScreen) {
   return `${STORAGE_PREFIX}:${userId}:${screen}`;
 }
 
-export function isCoachmarkCompleted(
+export function isCoachmarkHidden(
   userId: number | undefined,
   screen: CoachmarkScreen,
 ) {
   if (userId === undefined || typeof window === "undefined") return false;
 
-  return localStorage.getItem(getStorageKey(userId, screen)) === "completed";
+  return localStorage.getItem(getStorageKey(userId, screen)) === "hidden";
 }
 
-export function completeCoachmark(userId: number, screen: CoachmarkScreen) {
-  localStorage.setItem(getStorageKey(userId, screen), "completed");
+export function hideCoachmark(userId: number, screen: CoachmarkScreen) {
+  localStorage.setItem(getStorageKey(userId, screen), "hidden");
   changeEvent.dispatchEvent(new Event(getStorageKey(userId, screen)));
 }
 

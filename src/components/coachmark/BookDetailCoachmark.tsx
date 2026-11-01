@@ -13,7 +13,7 @@ export default function BookDetailCoachmark({
 }: {
   userId: number | undefined;
 }) {
-  const { isOpen, advance } = useCoachmark({
+  const { isOpen, advance, dontShowAgain } = useCoachmark({
     userId,
     screen: "book-detail",
     stepCount: 1,
@@ -22,6 +22,7 @@ export default function BookDetailCoachmark({
   return (
     <CoachmarkOverlay
       open={isOpen}
+      dontShowAgain={dontShowAgain}
       anchorName="book-detail-tabs"
       actionLabel="책 상세 코치마크 완료"
       onAction={advance}

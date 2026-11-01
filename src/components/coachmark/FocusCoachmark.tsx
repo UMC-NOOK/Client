@@ -10,6 +10,7 @@ import SectionHeader from "../content/InformationText/SectionHeader";
 import CoachmarkOverlay, {
   CoachmarkText,
   type CoachmarkGeometry,
+  type CoachmarkStepProps,
 } from "./CoachmarkOverlay";
 
 type FocusCoachmarkProps = {
@@ -20,10 +21,11 @@ function appX(geometry: CoachmarkGeometry) {
   return geometry.anchor.left - geometry.app.left;
 }
 
-function DailyTimeStep({ open, onNext }: { open: boolean; onNext: () => void }) {
+function DailyTimeStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
   return (
     <CoachmarkOverlay
       open={open}
+      dontShowAgain={dontShowAgain}
       anchorName="focus-daily-time"
       actionLabel="오늘 포커스 시간 안내 다음 단계"
       onAction={onNext}
@@ -65,10 +67,11 @@ function DailyTimeStep({ open, onNext }: { open: boolean; onNext: () => void }) 
   );
 }
 
-function BookSearchStep({ open, onNext }: { open: boolean; onNext: () => void }) {
+function BookSearchStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
   return (
     <CoachmarkOverlay
       open={open}
+      dontShowAgain={dontShowAgain}
       anchorName="focus-book-search"
       actionLabel="포커스할 책 불러오기 안내 다음 단계"
       onAction={onNext}
@@ -117,10 +120,11 @@ function BookSearchStep({ open, onNext }: { open: boolean; onNext: () => void })
   );
 }
 
-function StartFocusStep({ open, onNext }: { open: boolean; onNext: () => void }) {
+function StartFocusStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
   return (
     <CoachmarkOverlay
       open={open}
+      dontShowAgain={dontShowAgain}
       anchorName="focus-first-book"
       actionLabel="포커스 코치마크 완료"
       onAction={onNext}
@@ -193,7 +197,7 @@ function StartFocusStep({ open, onNext }: { open: boolean; onNext: () => void })
 }
 
 export default function FocusCoachmark({ userId }: FocusCoachmarkProps) {
-  const { isOpen, step, advance } = useCoachmark({
+  const { isOpen, step, advance, dontShowAgain } = useCoachmark({
     userId,
     screen: "focus",
     stepCount: 3,
@@ -201,9 +205,9 @@ export default function FocusCoachmark({ userId }: FocusCoachmarkProps) {
 
   return (
     <>
-      <DailyTimeStep open={isOpen && step === 0} onNext={advance} />
-      <BookSearchStep open={isOpen && step === 1} onNext={advance} />
-      <StartFocusStep open={isOpen && step === 2} onNext={advance} />
+      <DailyTimeStep open={isOpen && step === 0} onNext={advance} dontShowAgain={dontShowAgain} />
+      <BookSearchStep open={isOpen && step === 1} onNext={advance} dontShowAgain={dontShowAgain} />
+      <StartFocusStep open={isOpen && step === 2} onNext={advance} dontShowAgain={dontShowAgain} />
     </>
   );
 }

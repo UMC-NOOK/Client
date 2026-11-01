@@ -5,6 +5,7 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
+import Checkbox from "../section/checkbox/Checkbox";
 
 type MeasuredRect = {
   left: number;
@@ -21,8 +22,20 @@ export type CoachmarkGeometry = {
   viewportHeight: number;
 };
 
+export type DontShowAgain = {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+};
+
+export type CoachmarkStepProps = {
+  open: boolean;
+  onNext: () => void;
+  dontShowAgain: DontShowAgain;
+};
+
 type CoachmarkOverlayProps = {
   open: boolean;
+  dontShowAgain: DontShowAgain;
   anchorName: string;
   actionLabel: string;
   onAction: () => void;
@@ -197,6 +210,7 @@ export function CoachmarkText({
 
 export default function CoachmarkOverlay({
   open,
+  dontShowAgain,
   anchorName,
   actionLabel,
   onAction,
@@ -289,6 +303,15 @@ export default function CoachmarkOverlay({
 
       <div className="pointer-events-none absolute inset-0 z-30" aria-hidden="true">
         {children(geometry)}
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-31.5 bg-linear-to-b from-transparent to-black" />
+      <div className="absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-4.25 z-40">
+        <Checkbox
+          text="다시 보지 않기"
+          checked={dontShowAgain.checked}
+          onCheckedChange={dontShowAgain.onChange}
+        />
       </div>
     </div>,
     document.body,
