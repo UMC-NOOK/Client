@@ -29,14 +29,7 @@ function DailyTimeStep({ open, onNext }: { open: boolean; onNext: () => void }) 
       onAction={onNext}
       scrollAnchorIntoView
       anchorViewportBottomInset={88}
-      highlight={
-        <div className="flex size-full flex-col items-center justify-center bg-gray-17">
-          <p className="text-body-16-b text-gray-90">오늘 독서한 시간</p>
-          <p className="text-title-40-b text-gray-90 tabular-nums">
-            00 : 00 : 00
-          </p>
-        </div>
-      }
+      revealAnchor
     >
       {(geometry) => {
         const textTop = Math.min(

@@ -98,6 +98,10 @@
   );
 }
 
+.coachmark-dim-reveal {
+  box-shadow: 0 0 0 100vmax rgb(0 0 0 / 0.6);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .focus-session-book-info-track {
     display: block;
