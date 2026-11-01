@@ -1,4 +1,3 @@
-import CoachmarkArrow from "./CoachmarkArrow";
 import finger from "../../assets/coachmark/finger.svg";
 import { useCoachmark } from "../../hooks/useCoachmark";
 import TabBar from "../navigation/tabs/TabBar";
@@ -52,16 +51,11 @@ export default function BookDetailCoachmark({
             className="absolute h-11.75 w-11.25"
             style={{ left: anchor.right - app.left - 45, top: anchor.bottom - 12 }}
           />
-          <CoachmarkArrow
-            variant={1}
-            className="absolute"
-            style={{ left: anchor.right - app.left - 9, top: anchor.bottom + 40 }}
-          />
           <div
             className="absolute"
             style={{
               left: Math.max(16, app.width - 212),
-              top: Math.min(viewportHeight - 54, anchor.bottom + 73),
+              top: Math.min(viewportHeight - 54, anchor.bottom + 22),
             }}
           >
             <CoachmarkText
