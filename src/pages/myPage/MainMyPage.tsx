@@ -241,11 +241,11 @@ export default function MainMyPage() {
               bottom={
                 <div className="flex flex-col [&>*]:cursor-pointer [&>*]:!text-btn-14-r">
                   <ContainerText text="자주 묻는 질문" active
-                    onClick={() => window.open("https://magic-moat-e7b.notion.site/3cd5fbef9af38031b72fe6fed4bfd6fe?source=copy_link")}/>
+                    onClick={() => window.open("https://booknook-page.notion.site/faq")}/>
                   <ContainerText text="이용 약관" active 
-                    onClick={() => window.open("https://magic-moat-e7b.notion.site/3ca5fbef9af380c38a3ddbbab9a4150e?source=copy_link")}/>
+                    onClick={() => window.open("https://booknook-page.notion.site/termsofservice")}/>
                   <ContainerText text="개인 정보 취급방침" active 
-                    onClick={()=> window.open("https://magic-moat-e7b.notion.site/3cd5fbef9af3800b8087d0c96b2f8bba?source=copy_link")}/>
+                    onClick={()=> window.open("https://booknook-page.notion.site/privacypolicy")}/>
                 </div>
                 }
           />
