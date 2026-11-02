@@ -13,7 +13,7 @@ export default function ReadingHistoryCoachmark({
 }: {
   userId: number | undefined;
 }) {
-  const { isOpen, advance } = useCoachmark({
+  const { isOpen, advance, dontShowAgain } = useCoachmark({
     userId,
     screen: "reading-history",
     stepCount: 1,
@@ -22,6 +22,7 @@ export default function ReadingHistoryCoachmark({
   return (
     <CoachmarkOverlay
       open={isOpen}
+      dontShowAgain={dontShowAgain}
       anchorName="reading-history-record"
       actionLabel="독서 히스토리 코치마크 완료"
       onAction={advance}

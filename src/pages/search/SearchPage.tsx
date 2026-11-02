@@ -319,7 +319,7 @@ export default function SearchPage() {
         />
       )}
 
-      <SearchCoachmark userId={authMe?.id} />
+      <SearchCoachmark userId={authMe?.id} isMyScope={scope === "my"} />
     </div>
   );
 }

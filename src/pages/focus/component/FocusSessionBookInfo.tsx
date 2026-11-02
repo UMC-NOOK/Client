@@ -1,23 +1,12 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-} from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const VIEWPORT_WIDTH = 224;
-const COPY_GAP = 32;
-const FIGMA_TRANSITION_SECONDS = 6;
-const FIGMA_TRANSITION_DISTANCE = 224;
+const MARQUEE_SPEED = 33;
+const MARQUEE_PAUSE_SECONDS = 1.5;
 
 type Props = {
   title: string;
   author: string;
-};
-
-type MarqueeStyle = CSSProperties & {
-  "--focus-book-info-distance": string;
-  "--focus-book-info-duration": string;
 };
 
 function BookInfoCopy({ title, author }: Props) {
@@ -36,6 +25,7 @@ function BookInfoCopy({ title, author }: Props) {
 export default function FocusSessionBookInfo({ title, author }: Props) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const measurementRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const [contentWidth, setContentWidth] = useState(0);
 
   useEffect(() => {
@@ -71,13 +61,28 @@ export default function FocusSessionBookInfo({ title, author }: Props) {
   }, [author, title]);
 
   const isOverflowing = contentWidth > VIEWPORT_WIDTH;
-  const travelDistance = contentWidth + COPY_GAP;
-  const duration =
-    (travelDistance / FIGMA_TRANSITION_DISTANCE) * FIGMA_TRANSITION_SECONDS;
-  const marqueeStyle: MarqueeStyle = {
-    "--focus-book-info-distance": `${travelDistance}px`,
-    "--focus-book-info-duration": `${duration}s`,
-  };
+
+  // 오른쪽 밖에서 들어와 왼쪽 밖으로 완전히 나간 뒤, 텍스트가 안 보이는 상태로 잠시 멈췄다가 처음부터 반복한다.
+  useLayoutEffect(() => {
+    const track = trackRef.current;
+    if (!track || !isOverflowing) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const moveSeconds = (VIEWPORT_WIDTH + contentWidth) / MARQUEE_SPEED;
+    const totalSeconds = moveSeconds + MARQUEE_PAUSE_SECONDS;
+    const hiddenTransform = `translate3d(${-contentWidth}px, 0, 0)`;
+
+    const animation = track.animate(
+      [
+        { transform: `translate3d(${VIEWPORT_WIDTH}px, 0, 0)` },
+        { transform: hiddenTransform, offset: moveSeconds / totalSeconds },
+        { transform: hiddenTransform },
+      ],
+      { duration: totalSeconds * 1000, iterations: Infinity, easing: "linear" },
+    );
+
+    return () => animation.cancel();
+  }, [contentWidth, isOverflowing]);
 
   return (
     <div
@@ -95,11 +100,10 @@ export default function FocusSessionBookInfo({ title, author }: Props) {
 
       {isOverflowing ? (
         <div
-          className="focus-session-book-info-track flex w-max items-center gap-8"
-          style={marqueeStyle}
+          ref={trackRef}
+          className="focus-session-book-info-track flex w-max items-center will-change-transform"
           aria-hidden="true"
         >
-          <BookInfoCopy title={title} author={author} />
           <BookInfoCopy title={title} author={author} />
         </div>
       ) : (

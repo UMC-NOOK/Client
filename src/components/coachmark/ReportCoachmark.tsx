@@ -7,6 +7,7 @@ import Report from "../content/card/Book/List/Report";
 import CoachmarkOverlay, {
   CoachmarkText,
   type CoachmarkGeometry,
+  type CoachmarkStepProps,
 } from "./CoachmarkOverlay";
 
 type ReportCoachmarkProps = {
@@ -17,10 +18,11 @@ function appX(geometry: CoachmarkGeometry) {
   return geometry.anchor.left - geometry.app.left;
 }
 
-function AddReportStep({ open, onNext }: { open: boolean; onNext: () => void }) {
+function AddReportStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
   return (
     <CoachmarkOverlay
       open={open}
+      dontShowAgain={dontShowAgain}
       anchorName="report-add"
       actionLabel="기록할 책 불러오기 안내 다음 단계"
       onAction={onNext}
@@ -59,10 +61,11 @@ function AddReportStep({ open, onNext }: { open: boolean; onNext: () => void }) 
   );
 }
 
-function ReportCardStep({ open, onNext }: { open: boolean; onNext: () => void }) {
+function ReportCardStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
   return (
     <CoachmarkOverlay
       open={open}
+      dontShowAgain={dontShowAgain}
       anchorName="report-first-card"
       actionLabel="기록 코치마크 완료"
       onAction={onNext}
@@ -121,7 +124,7 @@ function ReportCardStep({ open, onNext }: { open: boolean; onNext: () => void })
 }
 
 export default function ReportCoachmark({ userId }: ReportCoachmarkProps) {
-  const { isOpen, step, advance } = useCoachmark({
+  const { isOpen, step, advance, dontShowAgain } = useCoachmark({
     userId,
     screen: "record",
     stepCount: 2,
@@ -129,8 +132,8 @@ export default function ReportCoachmark({ userId }: ReportCoachmarkProps) {
 
   return (
     <>
-      <AddReportStep open={isOpen && step === 0} onNext={advance} />
-      <ReportCardStep open={isOpen && step === 1} onNext={advance} />
+      <AddReportStep open={isOpen && step === 0} onNext={advance} dontShowAgain={dontShowAgain} />
+      <ReportCardStep open={isOpen && step === 1} onNext={advance} dontShowAgain={dontShowAgain} />
     </>
   );
 }

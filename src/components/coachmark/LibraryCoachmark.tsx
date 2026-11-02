@@ -1,38 +1,31 @@
 import searchIcon from "../../assets/icons/search.svg";
-import arrowRight from "../../assets/icons/arrow_right.svg";
 import focusIcon from "../../assets/icons/focus.svg";
 import bookIcon from "../../assets/icons/book_gray_40.svg";
 import closeIcon from "../../assets/icons/close.svg";
 import goalHalf from "../../assets/coachmark/library-goal-half.svg";
 import finger from "../../assets/coachmark/finger.svg";
 import sampleBookCover from "../../assets/coachmark/sample-book-cover.png";
-import BookGoal from "../content/card/BookGoal/BookGoal";
 import CoachmarkOverlay, {
   CoachmarkText,
   type CoachmarkGeometry,
+  type CoachmarkStepProps,
 } from "./CoachmarkOverlay";
 import { useCoachmark } from "../../hooks/useCoachmark";
 import CoachmarkArrow from "./CoachmarkArrow";
 
 type LibraryCoachmarkProps = {
   userId: number | undefined;
-  nickname: string;
 };
 
 function appX(geometry: CoachmarkGeometry) {
   return geometry.anchor.left - geometry.app.left;
 }
 
-function SearchStep({
-  open,
-  onNext,
-}: {
-  open: boolean;
-  onNext: () => void;
-}) {
+function SearchStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
   return (
     <CoachmarkOverlay
       open={open}
+      dontShowAgain={dontShowAgain}
       anchorName="library-search"
       actionLabel="도서 검색 안내 다음 단계"
       onAction={onNext}
@@ -77,30 +70,17 @@ function SearchStep({
 function LibrarySummaryStep({
   open,
   onNext,
-  nickname,
-}: {
-  open: boolean;
-  onNext: () => void;
-  nickname: string;
-}) {
+  dontShowAgain,
+}: CoachmarkStepProps) {
   return (
     <CoachmarkOverlay
       open={open}
+      dontShowAgain={dontShowAgain}
       anchorName="library-summary"
       actionLabel="서재 전체 보기 안내 다음 단계"
       onAction={onNext}
-      highlightInset={{ top: 11, right: 16, bottom: 22, left: 16 }}
-      highlight={
-        <div className="flex size-full flex-col bg-gray-17 px-4 pb-4 pt-2.75">
-          <p className="text-title-20-b text-gray-90">{nickname}님의 서재에</p>
-          <div className="flex items-center gap-1">
-            <p className="text-title-20-b text-gray-90">
-              <span className="text-yellow-70">0권</span>의 책이 있어요.
-            </p>
-            <img src={arrowRight} alt="" className="size-6" />
-          </div>
-        </div>
-      }
+      highlightInset={{ top: 11, right: 16, bottom: 16, left: 16 }}
+      revealAnchor
     >
       {(geometry) => {
         const textTop = Math.min(
@@ -143,22 +123,16 @@ function LibrarySummaryStep({
   );
 }
 
-function GoalStep({ open, onNext }: { open: boolean; onNext: () => void }) {
+function GoalStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
   return (
     <CoachmarkOverlay
       open={open}
+      dontShowAgain={dontShowAgain}
       anchorName="library-goal"
       actionLabel="독서 목표 안내 다음 단계"
       onAction={onNext}
-      highlight={
-        <div className="size-full pt-4">
-          <BookGoal
-            percent="ZERO"
-            message="100권까지 100권 남았어요."
-            variant="coachmark"
-          />
-        </div>
-      }
+      revealAnchor
+      revealRadiusClassName="rounded-lg"
     >
       {(geometry) => {
         const firstTextTop = geometry.anchor.bottom + 34;
@@ -221,12 +195,13 @@ function GoalStep({ open, onNext }: { open: boolean; onNext: () => void }) {
   );
 }
 
-function CalendarStep({ open, onNext }: { open: boolean; onNext: () => void }) {
+function CalendarStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
   const sheetHeight = 210;
 
   return (
     <CoachmarkOverlay
       open={open}
+      dontShowAgain={dontShowAgain}
       anchorName="library-calendar-view"
       actionLabel="서재 코치마크 완료"
       onAction={onNext}
@@ -326,11 +301,8 @@ function CalendarStep({ open, onNext }: { open: boolean; onNext: () => void }) {
   );
 }
 
-export default function LibraryCoachmark({
-  userId,
-  nickname,
-}: LibraryCoachmarkProps) {
-  const { isOpen, step, advance } = useCoachmark({
+export default function LibraryCoachmark({ userId }: LibraryCoachmarkProps) {
+  const { isOpen, step, advance, dontShowAgain } = useCoachmark({
     userId,
     screen: "library",
     stepCount: 4,
@@ -338,14 +310,14 @@ export default function LibraryCoachmark({
 
   return (
     <>
-      <SearchStep open={isOpen && step === 0} onNext={advance} />
+      <SearchStep open={isOpen && step === 0} onNext={advance} dontShowAgain={dontShowAgain} />
       <LibrarySummaryStep
         open={isOpen && step === 1}
         onNext={advance}
-        nickname={nickname || "누키"}
+        dontShowAgain={dontShowAgain}
       />
-      <GoalStep open={isOpen && step === 2} onNext={advance} />
-      <CalendarStep open={isOpen && step === 3} onNext={advance} />
+      <GoalStep open={isOpen && step === 2} onNext={advance} dontShowAgain={dontShowAgain} />
+      <CalendarStep open={isOpen && step === 3} onNext={advance} dontShowAgain={dontShowAgain} />
     </>
   );
 }

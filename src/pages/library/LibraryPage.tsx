@@ -222,14 +222,15 @@ export default function LibraryPage() {
         </div>
 
         <Link
-          data-coachmark-anchor="library-goal"
           to="/users/me/onboarding/goal"
           className="block w-full pt-4 text-inherit no-underline outline-none focus-visible:ring-2 focus-visible:ring-gray-40 focus-visible:ring-offset-2 rounded-lg"
         >
-          <BookGoal
-            percent={iconProgressPercent}
-            message={`${goal}권까지 ${remainingCount}권 남았어요.`}
-          />
+          <div data-coachmark-anchor="library-goal">
+            <BookGoal
+              percent={iconProgressPercent}
+              message={`${goal}권까지 ${remainingCount}권 남았어요.`}
+            />
+          </div>
         </Link>
       </div>
 
@@ -354,7 +355,7 @@ export default function LibraryPage() {
         items={modalItems}
       />
 
-      <LibraryCoachmark userId={authMe?.id} nickname={nickName} />
+      <LibraryCoachmark userId={authMe?.id} />
     </div>
   );
 }

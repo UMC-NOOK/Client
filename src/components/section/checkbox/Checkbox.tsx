@@ -16,6 +16,7 @@ export default function Checkbox({
   disabled = false,
   onCheckedChange,
 }: CheckboxProps) {
+  const id = React.useId();
   const [uncontrolledChecked, setUncontrolledChecked] = React.useState(false);
   const isControlled = checked !== undefined;
   const resolvedChecked = isControlled ? checked : uncontrolledChecked;
@@ -28,6 +29,7 @@ export default function Checkbox({
   return (
     <div className="flex h-6.5 items-center gap-2 py-1">
       <CheckboxLib.Root
+        id={id}
         checked={resolvedChecked}
         disabled={disabled}
         onCheckedChange={(value) => handleCheckedChange(value === true)}
@@ -37,7 +39,12 @@ export default function Checkbox({
           <CheckIcon className="text-gray-25" />
         </CheckboxLib.Indicator>
       </CheckboxLib.Root>
-      <label className="text-label-14-sb flex-1 truncate text-gray-90">{text}</label>
+      <label
+        htmlFor={id}
+        className="text-label-14-sb flex-1 truncate text-gray-90"
+      >
+        {text}
+      </label>
     </div>
   );
 }

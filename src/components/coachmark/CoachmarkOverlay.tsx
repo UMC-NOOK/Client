@@ -5,6 +5,7 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
+import Checkbox from "../section/checkbox/Checkbox";
 
 type MeasuredRect = {
   left: number;
@@ -21,12 +22,29 @@ export type CoachmarkGeometry = {
   viewportHeight: number;
 };
 
+export type DontShowAgain = {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+};
+
+export type CoachmarkStepProps = {
+  open: boolean;
+  onNext: () => void;
+  dontShowAgain: DontShowAgain;
+};
+
 type CoachmarkOverlayProps = {
   open: boolean;
+  dontShowAgain: DontShowAgain;
   anchorName: string;
   actionLabel: string;
   onAction: () => void;
-  highlight: ReactNode;
+  /** 강조 대상을 다시 그려 DIM 위에 올린다. revealAnchor를 쓰면 생략한다. */
+  highlight?: ReactNode;
+  /** DIM에 구멍을 내서 실제 화면의 강조 대상을 그대로 보여준다. */
+  revealAnchor?: boolean;
+  /** revealAnchor 구멍의 모서리. Tailwind rounded 클래스를 전달한다. */
+  revealRadiusClassName?: string;
   children: (geometry: CoachmarkGeometry) => ReactNode;
   highlightInset?: Partial<{
     top: number;
@@ -192,10 +210,13 @@ export function CoachmarkText({
 
 export default function CoachmarkOverlay({
   open,
+  dontShowAgain,
   anchorName,
   actionLabel,
   onAction,
   highlight,
+  revealAnchor = false,
+  revealRadiusClassName = "",
   children,
   highlightInset = {},
   scrollAnchorIntoView = false,
@@ -245,15 +266,25 @@ export default function CoachmarkOverlay({
       className="fixed z-100 overflow-hidden"
       style={{ left: app.left, top: 0, width: app.width, height: viewportHeight }}
     >
-      <div className="absolute inset-0 bg-black/60" />
+      {revealAnchor ? (
+        <div
+          aria-hidden="true"
+          className={`coachmark-dim-reveal pointer-events-none absolute ${revealRadiusClassName}`}
+          style={highlightStyle}
+        />
+      ) : (
+        <div className="absolute inset-0 bg-black/60" />
+      )}
 
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute z-10 overflow-hidden"
-        style={highlightStyle}
-      >
-        {highlight}
-      </div>
+      {highlight && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute z-10 overflow-hidden"
+          style={highlightStyle}
+        >
+          {highlight}
+        </div>
+      )}
 
       <button
         type="button"
@@ -272,6 +303,15 @@ export default function CoachmarkOverlay({
 
       <div className="pointer-events-none absolute inset-0 z-30" aria-hidden="true">
         {children(geometry)}
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-31.5 bg-linear-to-b from-transparent to-black" />
+      <div className="absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-4.25 z-40">
+        <Checkbox
+          text="다시 보지 않기"
+          checked={dontShowAgain.checked}
+          onCheckedChange={dontShowAgain.onChange}
+        />
       </div>
     </div>,
     document.body,
