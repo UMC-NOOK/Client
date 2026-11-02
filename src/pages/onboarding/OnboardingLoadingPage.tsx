@@ -56,11 +56,7 @@ export default function OnboardingLoadingPage() {
       </section>
 
       {/* Loading Section */}
-      <LoadingState
-        label="로딩 중입니다."
-        speed={0.35}
-        className="shrink-0"
-      />
+      <LoadingState label="로딩 중입니다." className="shrink-0" />
     </main>
   );
 }
