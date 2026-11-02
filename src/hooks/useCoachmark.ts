@@ -1,7 +1,8 @@
 import { useCallback, useState, useSyncExternalStore } from "react";
 import {
   hideCoachmark,
-  isCoachmarkHidden,
+  isCoachmarkDismissed,
+  markCoachmarkSeen,
   subscribeCoachmark,
   type CoachmarkScreen,
 } from "../utils/coachmarkStorage";
@@ -21,17 +22,18 @@ export function useCoachmark({ userId, screen, stepCount }: UseCoachmarkParams) 
     [screen, userId],
   );
   const getSnapshot = useCallback(
-    () => isCoachmarkHidden(userId, screen),
+    () => isCoachmarkDismissed(userId, screen),
     [screen, userId],
   );
-  const isHidden = useSyncExternalStore(subscribe, getSnapshot, () => false);
+  const isDismissed = useSyncExternalStore(subscribe, getSnapshot, () => false);
 
   const advance = useCallback(() => {
     if (userId === undefined) return;
 
     if (step >= stepCount - 1) {
-      // '다시 보지 않기'는 코치마크를 끝까지 넘겼을 때만 저장한다.
+      // 끝까지 넘겼을 때만 저장한다. 본 화면은 이번 로그인 동안, 체크한 화면은 이후 로그인에서도 숨긴다.
       if (dontShowAgainChecked) hideCoachmark(userId, screen);
+      markCoachmarkSeen(userId, screen);
       setIsFinished(true);
       return;
     }
@@ -40,7 +42,7 @@ export function useCoachmark({ userId, screen, stepCount }: UseCoachmarkParams) 
   }, [dontShowAgainChecked, screen, step, stepCount, userId]);
 
   return {
-    isOpen: userId !== undefined && !isHidden && !isFinished,
+    isOpen: userId !== undefined && !isDismissed && !isFinished,
     step,
     advance,
     dontShowAgain: {
