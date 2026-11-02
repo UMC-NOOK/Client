@@ -136,10 +136,7 @@ export default function LibraryPage() {
   const { data: libraryRecentBookInfoData, isLoading: isRecentBookLoading } =
     useLibraryRecentBookInfo();
 
-  const dropdownPositionClass =
-    selectedView === "focus"
-      ? "absolute right-20 bottom-81 z-50"
-      : "absolute right-20 bottom-115 z-50";
+  const dropdownPositionClass = "absolute left-18 top-full z-50 mt-2";
 
   const mockLibraryBookGoal = mockLibraryBookGoalResponse.result;
 
@@ -237,49 +234,51 @@ export default function LibraryPage() {
       </div>
 
       <div className="flex flex-col pt-8 pb-10">
-        <div className="flex w-full">
-          <SectionHeader
-            size="16"
-            top={
-              <div
-                ref={dropdownRef}
-                className="flex flex-row gap-2 items-center justify-center"
-              >
-                <button
-                  type="button"
-                  className="flex cursor-pointer items-center justify-center gap-2"
-                  onClick={() => setIsDropdownOpen((prev) => !prev)}
+        <div className="flex w-full items-start gap-2">
+          <div className="min-w-0 flex-1">
+            <SectionHeader
+              size="16"
+              top={
+                <div
+                  ref={dropdownRef}
+                  className="relative flex flex-row items-center justify-start gap-2"
                 >
-                  <span className="text-label-16-b text-gray-90">
-                    {selectedYearMonth.month}월 독서 달력
-                  </span>
-                  <span className="flex w-3 h-3 items-center justify-center">
-                    <img src={isDropdownOpen ? CaretUp : CaretDown} alt="" />
-                  </span>
-                </button>
-                {isDropdownOpen && (
-                  <div className={dropdownPositionClass}>
-                    <DropDown
-                      initialYear={selectedYearMonth.year}
-                      initialMonth={selectedYearMonth.month}
-                      startYear={startYear}
-                      endYear={endYear}
-                      onApply={handleApplyYearMonth}
-                    />
-                  </div>
-                )}
-              </div>
-            }
-            bottom={
-              <div className="text-label-14-sb text-gray-70">
-                {selectedView === "focus" ? focusBottomText : bookBottomText}
-              </div>
-            }
-          />
+                  <button
+                    type="button"
+                    className="flex cursor-pointer items-center justify-center gap-2"
+                    onClick={() => setIsDropdownOpen((prev) => !prev)}
+                  >
+                    <span className="text-label-16-b text-gray-90">
+                      {selectedYearMonth.month}월 독서 달력
+                    </span>
+                    <span className="flex h-3 w-3 items-center justify-center">
+                      <img src={isDropdownOpen ? CaretUp : CaretDown} alt="" />
+                    </span>
+                  </button>
+                  {isDropdownOpen && (
+                    <div className={dropdownPositionClass}>
+                      <DropDown
+                        initialYear={selectedYearMonth.year}
+                        initialMonth={selectedYearMonth.month}
+                        startYear={startYear}
+                        endYear={endYear}
+                        onApply={handleApplyYearMonth}
+                      />
+                    </div>
+                  )}
+                </div>
+              }
+              bottom={
+                <div className="text-label-14-sb text-gray-70">
+                  {selectedView === "focus" ? focusBottomText : bookBottomText}
+                </div>
+              }
+            />
+          </div>
 
           <div
             data-coachmark-anchor="library-calendar-view"
-            className="ml-auto flex flex-row gap-0"
+            className="flex shrink-0 flex-row gap-0"
           >
             <div
               className="cursor-pointer"
