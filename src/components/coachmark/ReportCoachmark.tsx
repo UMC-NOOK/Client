@@ -35,7 +35,7 @@ function AddReportStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
       {(geometry) => {
         const textTop = Math.min(
           geometry.viewportHeight - 40,
-          geometry.anchor.bottom + 69,
+          geometry.anchor.bottom + 47,
         );
 
         return (
@@ -45,12 +45,12 @@ function AddReportStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
               className="absolute"
               style={{
                 left: appX(geometry) + geometry.anchor.width - 15,
-                top: geometry.anchor.bottom + 7,
+                top: geometry.anchor.bottom + 1,
               }}
             />
             <p
-              className="absolute whitespace-nowrap text-body-14-b leading-none text-gray-90"
-              style={{ right: 26, top: textTop }}
+              className="absolute right-9 whitespace-nowrap text-body-14-b leading-none text-gray-90"
+              style={{ top: textTop }}
             >
               서재에서 기록을 남기고 싶은 책을 불러와요
             </p>

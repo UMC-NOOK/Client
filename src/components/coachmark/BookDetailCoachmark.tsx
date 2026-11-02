@@ -56,7 +56,7 @@ export default function BookDetailCoachmark({
             className="absolute"
             style={{
               left: Math.max(16, app.width - 212),
-              top: Math.min(viewportHeight - 54, anchor.bottom + 22),
+              top: Math.min(viewportHeight - 54, anchor.bottom + 16),
             }}
           >
             <CoachmarkText
