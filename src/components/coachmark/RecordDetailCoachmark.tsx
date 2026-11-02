@@ -9,6 +9,7 @@ import ReportList from "../content/card/Report/List";
 import CoachmarkOverlay, {
   CoachmarkText,
   type CoachmarkGeometry,
+  type CoachmarkStepProps,
 } from "./CoachmarkOverlay";
 
 type RecordDetailCoachmarkProps = {
@@ -28,10 +29,11 @@ function appX(geometry: CoachmarkGeometry) {
   return geometry.anchor.left - geometry.app.left;
 }
 
-function EmotionStep({ open, onNext }: { open: boolean; onNext: () => void }) {
+function EmotionStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
   return (
     <CoachmarkOverlay
       open={open}
+      dontShowAgain={dontShowAgain}
       anchorName="record-detail-emotions"
       actionLabel="감정 표현 안내 다음 단계"
       onAction={onNext}
@@ -99,10 +101,11 @@ function EmotionStep({ open, onNext }: { open: boolean; onNext: () => void }) {
   );
 }
 
-function RecordStep({ open, onNext }: { open: boolean; onNext: () => void }) {
+function RecordStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
   return (
     <CoachmarkOverlay
       open={open}
+      dontShowAgain={dontShowAgain}
       anchorName="record-detail-first-record"
       actionLabel="기록 수정 안내 다음 단계"
       onAction={onNext}
@@ -154,10 +157,11 @@ function RecordStep({ open, onNext }: { open: boolean; onNext: () => void }) {
   );
 }
 
-function AddRecordStep({ open, onNext }: { open: boolean; onNext: () => void }) {
+function AddRecordStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
   return (
     <CoachmarkOverlay
       open={open}
+      dontShowAgain={dontShowAgain}
       anchorName="record-detail-add"
       actionLabel="상세 기록 코치마크 완료"
       onAction={onNext}
@@ -208,7 +212,7 @@ function AddRecordStep({ open, onNext }: { open: boolean; onNext: () => void }) 
 export default function RecordDetailCoachmark({
   userId,
 }: RecordDetailCoachmarkProps) {
-  const { isOpen, step, advance } = useCoachmark({
+  const { isOpen, step, advance, dontShowAgain } = useCoachmark({
     userId,
     screen: "record-detail",
     stepCount: 3,
@@ -216,9 +220,9 @@ export default function RecordDetailCoachmark({
 
   return (
     <>
-      <EmotionStep open={isOpen && step === 0} onNext={advance} />
-      <RecordStep open={isOpen && step === 1} onNext={advance} />
-      <AddRecordStep open={isOpen && step === 2} onNext={advance} />
+      <EmotionStep open={isOpen && step === 0} onNext={advance} dontShowAgain={dontShowAgain} />
+      <RecordStep open={isOpen && step === 1} onNext={advance} dontShowAgain={dontShowAgain} />
+      <AddRecordStep open={isOpen && step === 2} onNext={advance} dontShowAgain={dontShowAgain} />
     </>
   );
 }

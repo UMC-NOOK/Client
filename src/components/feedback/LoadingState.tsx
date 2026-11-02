@@ -2,7 +2,6 @@ import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { DotLottieReact, type DotLottie } from "@lottiefiles/dotlottie-react";
 
 import loadingAnimation from "../../assets/animations/loading-state.json?raw";
-import loadingFallback from "../../assets/icons/loading-state.svg";
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
@@ -40,7 +39,7 @@ function getServerReducedMotionPreference() {
  *
  * 동작
  * - 자동 재생 / 무한 반복
- * - 동작 줄이기 또는 재생 오류: 정적 SVG 사용
+ * - 동작 줄이기 또는 재생 오류: 애니메이션 미표시 (정적 대체 이미지 없음)
  */
 export default function LoadingState({
   className = "",
@@ -86,8 +85,6 @@ export default function LoadingState({
     [handleAnimationError, handleAnimationLoad],
   );
 
-  const showFallback =
-    prefersReducedMotion || hasAnimationError || !isAnimationLoaded;
   const isFullscreen = variant === "fullscreen";
   const animationSpeed = Math.min(1, Math.max(0.1, speed));
 
@@ -109,15 +106,6 @@ export default function LoadingState({
         aria-hidden
         className={isFullscreen ? "relative size-25" : "size-full"}
       >
-        {showFallback && (
-          <img
-            src={loadingFallback}
-            alt=""
-            className="size-full"
-            draggable={false}
-          />
-        )}
-
         {!prefersReducedMotion && !hasAnimationError && (
           <DotLottieReact
             data={loadingAnimation}
