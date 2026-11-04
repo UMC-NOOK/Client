@@ -38,12 +38,12 @@ export default function SearchCoachmark({
               className="absolute"
               style={{
                 left: geometry.app.width - 34,
-                top: geometry.anchor.bottom,
+                top: geometry.anchor.bottom + 9,
               }}
             />
             <p
-              className="absolute right-8.5 whitespace-nowrap text-body-14-b leading-none text-gray-90"
-              style={{ top: geometry.anchor.bottom + 60 }}
+              className="absolute right-6 whitespace-nowrap text-body-14-b leading-none text-gray-90"
+              style={{ top: geometry.anchor.bottom + 71 }}
             >
               <span className="text-mint-60">서재에 등록한 책</span>을 빠르게 찾을 수 있어요
             </p>

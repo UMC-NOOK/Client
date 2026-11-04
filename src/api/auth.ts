@@ -4,6 +4,7 @@ import type BaseApiResponse from "../types/BaseApiResponse";
 import type { AuthMe, OAuthLoginResponse } from "../types/auth/auth";
 import { api } from "./axios";
 import { resetBottomBanner } from "../pages/library/utils/bottomBannerState";
+import { resetCoachmarkSeen } from "../utils/coachmarkStorage";
 
 type DevLoginParams = {
   email: string;
@@ -53,6 +54,7 @@ function saveAuthTokens(result: {
 }) {
   localStorage.setItem("accessToken", result.accessToken);
   resetBottomBanner();
+  resetCoachmarkSeen();
 
   if (result.refreshToken) {
     localStorage.setItem("refreshToken", result.refreshToken);
