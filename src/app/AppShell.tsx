@@ -4,6 +4,7 @@ import React, { createContext, useContext, useMemo, useState } from "react";
 import { Outlet } from "react-router-dom";
 
 import Footer from "../components/navigation/Footer";
+import RateLimitModal from "../components/feedback/RateLimitModal";
 
 export type ShellContextValue = {
   hideFooter: boolean;
@@ -76,6 +77,8 @@ export default function AppShell({
           </div>
         </div>
       </div>
+      
+      <RateLimitModal />
     </ShellContext.Provider>
   );
 }
