@@ -1,6 +1,7 @@
 export const NICKNAME_MAX_LENGTH = 10;
 
-const NICKNAME_ALLOWED_CHARACTERS = /^[\p{Script=Hangul}A-Za-z0-9 ]+$/u;
+const NICKNAME_ALLOWED_CHARACTERS =
+  /^[\p{Script=Hangul}A-Za-z0-9 ]+$/u;
 
 export function getNicknameValidationMessage(nickname: string) {
   if (nickname.length > NICKNAME_MAX_LENGTH) {
