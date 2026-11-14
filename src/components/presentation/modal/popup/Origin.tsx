@@ -1,17 +1,22 @@
 //Client\src\components\presentation\modal\popup\Origin.tsx
+
+import { useId } from "react";
+import Solid from "../../../action/Button/Solid";
+
 type Props = {
   open: boolean;
 
   title: string;
   description: string;
 
-  leftLabel: string;
+  // 버튼 1개 또는 2개 지원
+  leftLabel?: string;
   rightLabel: string;
 
   onLeftClick?: () => void;
   onRightClick?: () => void;
 
-  /** overlay/ESC 등 외부 닫기 훅 (원하면 사용) */
+  /** overlay 등 외부 닫기 처리 */
   onClose?: () => void;
 
   /** overlay 클릭으로 닫기 (기본 true) */
@@ -35,69 +40,79 @@ export default function PopupConfirmModal({
   onClose,
   closeOnOverlayClick = true,
   className = "",
-  ariaLabel = "popup confirm modal",
-  onClick
+  ariaLabel,
+  onClick,
 }: Props) {
+  const id = useId();
+
   if (!open) return null;
 
-  const titleId = "popup-confirm-title";
-  const descId = "popup-confirm-desc";
+  const titleId = `${id}-title`;
+  const descId = `${id}-desc`;
+
+  const hasLeftButton = Boolean(leftLabel?.trim());
 
   return (
     <div className="fixed inset-0 z-50">
       {/* Overlay */}
-      <button
-        type="button"
-        aria-label="close overlay"
-        onClick={closeOnOverlayClick ? onClose : undefined}
+      <div
+        aria-hidden="true"
+        onClick={
+          closeOnOverlayClick ? onClose : undefined
+        }
         className={[
           "absolute inset-0",
           "bg-black/50",
-          "z=0",
-          closeOnOverlayClick ? "cursor-pointer" : "cursor-default",
+          "z-0",
+          closeOnOverlayClick
+            ? "cursor-pointer"
+            : "cursor-default",
         ].join(" ")}
       />
 
       {/* Dialog */}
       <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={ariaLabel}
-        aria-labelledby={titleId}
-        aria-describedby={descId}
         className={[
-          "absolute inset-0",
+          "pointer-events-none absolute inset-0",
           "flex items-center justify-center",
+          "px-4",
           className,
         ].join(" ")}
       >
         {/* Popup box */}
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={ariaLabel}
+          aria-labelledby={titleId}
+          aria-describedby={descId}
           onClick={onClick}
           className={[
-            // base
-            "w-77.75",
+            "pointer-events-auto",
+            "w-77.75 max-w-full",
             "flex flex-col items-center justify-center",
-            "px-12 py-8", // 48px / 32px
-            "gap-5", // 20px
+            hasLeftButton ? "px-12 py-8" : "p-8",
+            "gap-5",
             "rounded-lg",
-            "bg-gray-17", // #1B203B
+            "bg-gray-17",
           ].join(" ")}
         >
-          {/* Text block: title + description (gap 4px) */}
+          {/* Text block */}
           <div
             className={[
               "self-stretch",
               "flex flex-col items-center",
-              "gap-1", // 4px
+              "gap-1",
             ].join(" ")}
           >
             <p
               id={titleId}
               className={[
+                "w-full",
                 "text-center",
                 "text-body-16-b",
                 "text-gray-90",
+                "break-keep",
               ].join(" ")}
             >
               {title}
@@ -110,47 +125,44 @@ export default function PopupConfirmModal({
                 "text-center",
                 "text-body-14-m",
                 "text-gray-90",
+                "break-keep",
               ].join(" ")}
             >
               {description}
             </p>
           </div>
 
-          {/* Buttons row */}
-          <div className={["flex items-center justify-center", "gap-2"].join(" ")}>
-            {/* Left button */}
-            <button
-              type="button"
-              onClick={onLeftClick}
-              className={[
-                "flex items-center justify-center",
-                "px-8 py-3", // 32px / 12px
-                "rounded-sm",
-                "bg-gray-25", // #272D49
-                "text-btn-14-sb",
-                "text-gray-70", // #A2A7C3
-                "cursor-pointer",
-              ].join(" ")}
-            >
-              {leftLabel}
-            </button>
+          {/* Buttons */}
+          <div
+            className={[
+              "flex items-center justify-center",
+              "gap-2",
+              "w-full",
+            ].join(" ")}
+          >
+            {/* 왼쪽 버튼: 라벨이 있을 때만 표시 */}
+            {hasLeftButton && (
+              <Solid
+                text={leftLabel!}
+                variant="secondary"
+                size="s"
+                fullWidth={false}
+                onClick={onLeftClick}
+                className="flex-1"
+              />
+            )}
 
-            {/* Right button */}
-            <button
-              type="button"
+            {/* 오른쪽 버튼 */}
+            <Solid
+              text={rightLabel}
+              variant="primary"
+              size={hasLeftButton ? "s" : "m"}
+              fullWidth={!hasLeftButton}
               onClick={onRightClick}
-              className={[
-                "flex items-center justify-center",
-                "px-8 py-3",
-                "rounded-sm",
-                "bg-mint-60", // #7AD8D2
-                "text-btn-14-sb",
-                "text-gray-10", // #13172A
-                "cursor-pointer",
-              ].join(" ")}
-            >
-              {rightLabel}
-            </button>
+              className={
+                hasLeftButton ? "flex-1" : ""
+              }
+            />
           </div>
         </div>
       </div>
