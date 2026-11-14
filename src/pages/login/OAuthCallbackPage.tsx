@@ -2,12 +2,15 @@ import { useEffect, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import type { OAuthProvider } from "../../api/auth";
 import { useOauthLogin } from "../../hooks/mutations/useOauthLogin";
+import { useRecoverAccount } from "../../hooks/mutations/useRecoverAccount";
+import LoadingState from "../../components/feedback/LoadingState";
 
 export default function OAuthCallbackPage() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { mutateAsync, isPending } = useOauthLogin();
+  const { mutateAsync: oauthLogin } = useOauthLogin();
+  const { mutateAsync: recoverAccount } = useRecoverAccount();
   const requestedRef = useRef(false);
 
   useEffect(() => {
@@ -33,10 +36,17 @@ export default function OAuthCallbackPage() {
 
     const run = async () => {
       try {
-        const result = await mutateAsync({ provider, code });
+        const loginResponse = await oauthLogin({ provider, code });
+        let result = loginResponse.result;
+
+        // 탈퇴 유예 계정은 소셜 로그인 응답의 recoveryToken으로 즉시 복구합니다.
+        if ("recoveryToken" in result) {
+          const recoverResponse = await recoverAccount(result.recoveryToken);
+          result = recoverResponse.result;
+        }
 
         navigate(
-          result.result.onboardingCompleted ? "/library" : "/onboarding",
+          result.onboardingCompleted ? "/library" : "/onboarding",
           { replace: true },
         );
       } catch (error: any) {
@@ -49,11 +59,7 @@ export default function OAuthCallbackPage() {
     };
 
     void run();
-  }, [mutateAsync, navigate, pathname, searchParams]);
+  }, [oauthLogin, recoverAccount, navigate, pathname, searchParams]);
 
-  return (
-    <div className="flex min-h-dvh items-center justify-center text-label-14-sb text-gray-70">
-      {isPending ? "로그인 처리 중..." : "로그인 준비 중..."}
-    </div>
-  );
+  return <LoadingState variant="fullscreen" />;
 }
