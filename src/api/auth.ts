@@ -1,7 +1,11 @@
 // Client/src/api/auth.ts
 import axios, { type InternalAxiosRequestConfig } from "axios";
 import type BaseApiResponse from "../types/BaseApiResponse";
-import type { AuthMe, OAuthLoginResponse } from "../types/auth/auth";
+import type {
+  AuthMe,
+  AuthTokenResult,
+  OAuthLoginResponse,
+} from "../types/auth/auth";
 import { api } from "./axios";
 import { resetBottomBanner } from "../pages/library/utils/bottomBannerState";
 import { resetCoachmarkSeen } from "../utils/coachmarkStorage";
@@ -79,6 +83,23 @@ export async function devLogin(params: DevLoginParams) {
 
 export async function oauthLogin(params: OAuthLoginParams) {
   const response = await api.post<OAuthLoginResponse>("/api/v1/auth/oauth", params);
+
+  if ("accessToken" in response.data.result) {
+    saveAuthTokens(response.data.result);
+  }
+
+  return response.data;
+}
+
+export type RecoverAccountResponse = BaseApiResponse<AuthTokenResult>;
+
+export async function recoverAccount(
+  recoveryToken: string,
+): Promise<RecoverAccountResponse> {
+  const response = await api.post<RecoverAccountResponse>(
+    "/api/v1/auth/recover",
+    { recoveryToken },
+  );
 
   saveAuthTokens(response.data.result);
 

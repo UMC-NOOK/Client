@@ -35,13 +35,13 @@ export default function DeleteAccountModal({
               id="delete-account-title"
               className="text-center text-body-16-b text-gray-90"
             >
-              계정을 삭제하시겠어요?
+              계정을 삭제할까요?
             </p>
             <p
               id="delete-account-description"
               className="self-stretch text-center text-body-14-m text-gray-90"
             >
-              삭제한 계정은 복구할 수 없어요.
+              14일 이내로 복구할 수 있어요.
             </p>
           </div>
 

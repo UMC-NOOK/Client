@@ -5,16 +5,22 @@ export interface BaseApiResponse <T> {
     result: T;
 };
 
-type OAuthLogin = {
+export type AuthTokenResult = {
     id: number;
     email: string;
     nickName: string;
     accessToken: string;
     refreshToken: string;
-    onboardingCompleted : boolean;
+    onboardingCompleted: boolean;
 };
 
-export type OAuthLoginResponse = BaseApiResponse<OAuthLogin>;
+export type RecoveryRequiredResult = {
+  recoveryToken: string;
+};
+
+export type OAuthLoginResponse = BaseApiResponse<
+  AuthTokenResult | RecoveryRequiredResult
+>;
 
 export type AuthMe = {
   id: number;

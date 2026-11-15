@@ -117,7 +117,7 @@ export default function ProfileMyPage() {
             ? trimmedNickname
             : userMe?.nickName,
           profileImageKey:
-            profileImageKey ?? existingProfileImageKey,
+            profileImageKey ?? existingProfileImageKey ?? null,
         },
         {
           onSuccess: () => navigate(-1),
