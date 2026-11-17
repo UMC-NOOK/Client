@@ -19,19 +19,6 @@ import {
   NICKNAME_MAX_LENGTH,
 } from "../../utils/nickname";
 
-function extractProfileImageKey(profileImageUrl?: string | null) {
-  if (!profileImageUrl) return undefined;
-
-  try {
-    const pathname = new URL(profileImageUrl).pathname;
-    const key = decodeURIComponent(pathname).replace(/^\/+/, "");
-
-    return key || undefined;
-  } catch {
-    return undefined;
-  }
-}
-
 export default function ProfileMyPage() {
   const navigate = useNavigate();
   const { data: userMe, isLoading: isUserMeLoading } = useUserMe();
@@ -107,9 +94,7 @@ export default function ProfileMyPage() {
       const profileImageKey = imageFile
         ? await uploadSingleImage(imageFile, "profile")
         : undefined;
-      const existingProfileImageKey =
-        userMe?.profileImageKey ??
-        extractProfileImageKey(userMe?.profileImageUrl);
+      const existingProfileImageKey = userMe?.profileImageKey ?? null;
 
       await patchProfileMutation.mutateAsync(
         {
