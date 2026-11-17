@@ -1,7 +1,7 @@
 export const NICKNAME_MAX_LENGTH = 10;
 
 const NICKNAME_ALLOWED_CHARACTERS =
-  /^[\p{Script=Hangul}A-Za-z0-9 ]+$/u;
+  /^[가-힣ㄱ-ㅎㅏ-ㅣA-Za-z0-9 ]+$/u;
 
 export function getNicknameValidationMessage(nickname: string) {
   if (nickname.length > NICKNAME_MAX_LENGTH) {
@@ -21,7 +21,7 @@ export function getNicknameValidationMessage(nickname: string) {
   }
 
   if (!NICKNAME_ALLOWED_CHARACTERS.test(nickname)) {
-    return "닉네임은 영문, 숫자, 한글, 띄어쓰기만 사용할 수 있어요.";
+    return "닉네임은 영문, 숫자, 한글, 공백만 사용할 수 있습니다.";
   }
 
   return null;

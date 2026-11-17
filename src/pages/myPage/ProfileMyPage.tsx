@@ -94,9 +94,8 @@ export default function ProfileMyPage() {
 
     savingRef.current = true;
     setIsSaving(true);
+    const isProfileImageChanged = profileFile !== null || useDefaultProfile;
     try {
-      const isProfileImageChanged = profileFile !== null || useDefaultProfile;
-
       if (isProfileImageChanged) {
         const imageFile = useDefaultProfile
           ? await createDefaultProfileFile()
@@ -116,11 +115,11 @@ export default function ProfileMyPage() {
       navigate(-1);
     } catch (error) {
       console.error("프로필 수정에 실패했습니다.", error);
-      const message =
-        error instanceof Error
-          ? error.message
-          : "프로필 이미지 압축에 실패했어요. 다시 시도해주세요.";
-      setImageError(message);
+      window.alert(
+        isNicknameChanged && !isProfileImageChanged
+          ? "닉네임은 영문, 숫자, 한글, 공백만 사용할 수 있습니다."
+          : "프로필 수정에 실패했어요. 다시 시도해주세요.",
+      );
     } finally {
       savingRef.current = false;
       setIsSaving(false);
