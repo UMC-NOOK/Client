@@ -13,6 +13,7 @@ import LoadingState from "../../components/feedback/LoadingState";
 import ProfilePhotoModal from "./modal/ProfilePhotoModal";
 import { createDefaultProfileFile } from "./utils/createDefaultProfileFile";
 import { usePatchProfile } from "../../hooks/mutations/mypage/usePatchProfile";
+import { usePatchNickname } from "../../hooks/mutations/mypage/usePatchNickname";
 import { useUserMe } from "../../hooks/queries/useUserMe";
 import {
   getNicknameValidationMessage,
@@ -23,6 +24,7 @@ export default function ProfileMyPage() {
   const navigate = useNavigate();
   const { data: userMe, isLoading: isUserMeLoading } = useUserMe();
   const patchProfileMutation = usePatchProfile();
+  const patchNicknameMutation = usePatchNickname();
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [profileFile, setProfileFile] = useState<File | null>(null);
@@ -59,6 +61,11 @@ export default function ProfileMyPage() {
   const handleProfileChange = (file?: File) => {
     if (!file) return;
 
+    if (file.size > 10 * 1024 * 1024) {
+      window.alert("파일 용량이 커서 업로드하지 못했어요.");
+      return;
+    }
+
     if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
       setImageError("JPEG, PNG, WEBP 이미지만 업로드할 수 있습니다.");
       return;
@@ -88,36 +95,44 @@ export default function ProfileMyPage() {
     savingRef.current = true;
     setIsSaving(true);
     try {
-      const imageFile = useDefaultProfile
-        ? await createDefaultProfileFile()
-        : profileFile;
-      const profileImageKey = imageFile
-        ? await uploadSingleImage(imageFile, "profile")
-        : undefined;
-      const existingProfileImageKey = userMe?.profileImageKey ?? null;
+      const isProfileImageChanged = profileFile !== null || useDefaultProfile;
 
-      await patchProfileMutation.mutateAsync(
-        {
-          nickName: isNicknameChanged
-            ? trimmedNickname
-            : userMe?.nickName,
-          profileImageKey:
-            profileImageKey ?? existingProfileImageKey ?? null,
-        },
-        {
-          onSuccess: () => navigate(-1),
-        },
-      );
+      if (isProfileImageChanged) {
+        const imageFile = useDefaultProfile
+          ? await createDefaultProfileFile()
+          : profileFile;
+        const profileImageKey = imageFile
+          ? await uploadSingleImage(imageFile, "profile")
+          : null;
+
+        await patchProfileMutation.mutateAsync({
+          profileImageKey,
+          ...(isNicknameChanged ? { nickName: trimmedNickname } : {}),
+        });
+      } else if (isNicknameChanged) {
+        await patchNicknameMutation.mutateAsync(trimmedNickname);
+      }
+
+      navigate(-1);
     } catch (error) {
       console.error("프로필 수정에 실패했습니다.", error);
-      window.alert("프로필 수정에 실패했어요. 다시 시도해주세요.");
+      const message =
+        error instanceof Error
+          ? error.message
+          : "프로필 이미지 압축에 실패했어요. 다시 시도해주세요.";
+      setImageError(message);
     } finally {
       savingRef.current = false;
       setIsSaving(false);
     }
   };
 
-  if (isUserMeLoading || isSaving || patchProfileMutation.isPending) {
+  if (
+    isUserMeLoading ||
+    isSaving ||
+    patchProfileMutation.isPending ||
+    patchNicknameMutation.isPending
+  ) {
     return <LoadingState variant="fullscreen" />;
   }
 
