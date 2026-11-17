@@ -64,3 +64,16 @@ export async function patchProfile(
     body,
   );
 }
+
+export async function patchNickname(nickName: string): Promise<{ nickName: string }> {
+  const response = await api.patch<BaseApiResponse<{ nickName: string }>>(
+    "/api/v1/users/me/nickname",
+    { nickName },
+  );
+
+  if (response.data?.result === undefined) {
+    throw new Error("응답 result가 없습니다: /api/v1/users/me/nickname");
+  }
+
+  return response.data.result;
+}

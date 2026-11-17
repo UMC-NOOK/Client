@@ -8,11 +8,20 @@ export default function Footer() {
       <div className="flex items-center gap-2">
         <FooterLink label="소개" />
         <Divider />
-        <FooterLink label="자주 묻는 질문" />
+        <FooterLink
+          label="자주 묻는 질문"
+          href="https://booknook-page.notion.site/faq"
+        />
         <Divider />
-        <FooterLink label="이용 약관" />
+        <FooterLink
+          label="이용 약관"
+          href="https://booknook-page.notion.site/termsofservice"
+        />
         <Divider />
-        <FooterLink label="개인정보 취급 방침" />
+        <FooterLink
+          label="개인정보 취급 방침"
+          href="https://booknook-page.notion.site/privacypolicy"
+        />
       </div>
 
       <span className="text-gray-50 text-body-12-r">
@@ -22,11 +31,16 @@ export default function Footer() {
   );
 }
 
-function FooterLink({ label }: { label: string }) {
+function FooterLink({ label, href }: { label: string; href?: string }) {
   return (
-    <button type="button" className="text-gray-50 text-body-12-r">
+    <a
+      href={href}
+      target={href ? "_blank" : undefined}
+      rel={href ? "noreferrer" : undefined}
+      className="text-gray-50 text-body-12-r"
+    >
       {label}
-    </button>
+    </a>
   );
 }
 
