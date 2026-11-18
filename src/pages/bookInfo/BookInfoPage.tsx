@@ -250,7 +250,7 @@ export default function BookInfoPage() {
     <div className="relative flex flex-col pb-[calc(120px+env(safe-area-inset-bottom))]">
       <div className="relative">
         <div className="pointer-events-none absolute inset-0 z-0 -mx-4 -mt-2 overflow-hidden">
-          <div className="absolute bottom-0 left-1/2 h-131.25 w-93.75 -translate-x-1/2">
+          <div className="absolute inset-x-0 bottom-0 h-131.25">
             {isLoading ? (
               <div className="h-full w-full animate-pulse bg-gray-20 opacity-50 blur-[20px]" />
             ) : (
