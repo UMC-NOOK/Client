@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 
 import Footer from "../components/navigation/Footer";
 import RateLimitModal from "../components/feedback/RateLimitModal";
+import DevLayoutWidthControl from "../components/dev/DevLayoutWidthControl";
 
 export type ShellContextValue = {
   hideFooter: boolean;
@@ -33,6 +34,10 @@ export default function AppShell({
   disableSafeAreaTop = false,
 }: AppShellProps) {
   const [hideFooter, setHideFooter] = useState(false);
+  const [previewWidth, setPreviewWidth] = useState<number | null>(null);
+  const desktopPreviewWidth = import.meta.env.DEV
+    ? (previewWidth ?? maxWidthPx)
+    : maxWidthPx;
 
   const value = useMemo(
     () => ({
@@ -44,6 +49,12 @@ export default function AppShell({
 
   return (
     <ShellContext.Provider value={value}>
+      {import.meta.env.DEV && (
+        <DevLayoutWidthControl
+          width={previewWidth ?? maxWidthPx}
+          onWidthChange={setPreviewWidth}
+        />
+      )}
       <div className="relative isolate min-h-dvh w-full bg-gradient-background">
         {/* 화면 상하좌우 전체를 채우는 고정 배경 */}
         <div
@@ -54,8 +65,13 @@ export default function AppShell({
         {/* 실제 앱 콘텐츠는 maxWidthPx까지 유동적으로 확장한다. */}
         <div
           data-app-shell
-          className="relative z-10 mx-auto min-h-dvh w-full"
-          style={{ maxWidth: maxWidthPx }}
+          className="relative z-10 mx-auto min-h-dvh w-full max-w-(--app-shell-width) lg:max-w-(--preview-shell-width)"
+          style={
+            {
+              "--app-shell-width": `${maxWidthPx}px`,
+              "--preview-shell-width": `${desktopPreviewWidth}px`,
+            } as React.CSSProperties
+          }
         >
           <div className="flex min-h-dvh flex-col pb-[env(safe-area-inset-bottom)]">
             <main
