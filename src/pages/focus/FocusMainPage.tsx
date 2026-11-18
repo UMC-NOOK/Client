@@ -261,7 +261,7 @@ export default function FocusMainPage() {
         </div>
       </section>
 
-      <div className="fixed inset-x-0 bottom-[calc(16px+env(safe-area-inset-bottom))] z-50 mx-auto flex w-full max-w-93.75 justify-center px-4">
+      <div className="fixed inset-x-0 bottom-[calc(16px+env(safe-area-inset-bottom))] z-50 mx-auto flex w-full max-w-(--app-shell-width) justify-center px-4 lg:max-w-(--preview-shell-width)">
         <Toast
           text="포커스를 종료했어요."
           isOpen={focusEndToastOpen}
