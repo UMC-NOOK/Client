@@ -10,6 +10,7 @@ import DevLayoutWidthControl from "../components/dev/DevLayoutWidthControl";
 export type ShellContextValue = {
   hideFooter: boolean;
   setHideFooter: React.Dispatch<React.SetStateAction<boolean>>;
+  widthStyle: React.CSSProperties;
 };
 
 const ShellContext = createContext<ShellContextValue | null>(null);
@@ -38,13 +39,21 @@ export default function AppShell({
   const desktopPreviewWidth = import.meta.env.DEV
     ? (previewWidth ?? maxWidthPx)
     : maxWidthPx;
+  const widthStyle = useMemo(
+    () => ({
+      "--app-shell-width": `${maxWidthPx}px`,
+      "--preview-shell-width": `${desktopPreviewWidth}px`,
+    }) as React.CSSProperties,
+    [maxWidthPx, desktopPreviewWidth],
+  );
 
   const value = useMemo(
     () => ({
       hideFooter,
       setHideFooter,
+      widthStyle,
     }),
-    [hideFooter],
+    [hideFooter, widthStyle],
   );
 
   return (
@@ -66,12 +75,7 @@ export default function AppShell({
         <div
           data-app-shell
           className="relative z-10 mx-auto min-h-dvh w-full max-w-(--app-shell-width) bg-gradient-background lg:max-w-(--preview-shell-width)"
-          style={
-            {
-              "--app-shell-width": `${maxWidthPx}px`,
-              "--preview-shell-width": `${desktopPreviewWidth}px`,
-            } as React.CSSProperties
-          }
+          style={widthStyle}
         >
           <div className="flex min-h-dvh flex-col pb-[env(safe-area-inset-bottom)]">
             <main

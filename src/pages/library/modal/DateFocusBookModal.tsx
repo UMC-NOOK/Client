@@ -4,6 +4,7 @@ import close from "../../../assets/icons/close.svg";
 import BookList from "../../../components/content/card/Book/List";
 import { createPortal } from "react-dom";
 import type { DateBookInfo } from "../../../types/libraryInfo/library";
+import { useShell } from "../../../app/AppShell";
 
 interface DateFocusBookModalProps {
   open: boolean;
@@ -27,15 +28,19 @@ export default function DateFocusBookModal({
   selectedDate,
   items,
 }: DateFocusBookModalProps) {
+  const { widthStyle } = useShell();
+
   if (!open) return null;
 
   return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/50"
+      // Portal에서도 AppShell과 동일한 너비 설정을 사용한다.
+      style={widthStyle}
       onClick={onClose}
     >
       <div
-        className="min-w-[375px] rounded-t-[16px] bg-gray-15 px-4 pt-4 pb-8"
+        className="w-full max-w-(--app-shell-width) rounded-t-2xl bg-gray-15 px-4 pt-4 pb-8 lg:max-w-(--preview-shell-width)"
         onClick={(e) => e.stopPropagation()}
       >
         <TopNavigation
