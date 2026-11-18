@@ -215,9 +215,9 @@ export default function FocusSessionPage() {
   }
 
   return (
-    // AppShell의 375px 최대 폭 밖으로 모바일 viewport만큼 확장하고 상단까지 채운다.
+    // AppShell의 좌우 패딩만 상쇄해 앱 전체 너비를 사용하고 상단까지 채운다.
     // 높이는 기존 main 영역과 같아서 문서 전체 높이나 다른 라우트에는 영향을 주지 않는다.
-    <div className="relative left-1/2 -mt-[calc(env(safe-area-inset-top)+8px)] h-[calc(100dvh-env(safe-area-inset-bottom))] w-dvw -translate-x-1/2 overflow-hidden bg-gradient-background sm:w-93.75">
+    <div className="relative -mx-4 -mt-[calc(env(safe-area-inset-top)+8px)] h-[calc(100dvh-env(safe-area-inset-bottom))] overflow-hidden bg-gradient-background">
       {backgroundUrl && !imageError && (
         <div aria-hidden className="absolute inset-0 overflow-hidden">
           <img
