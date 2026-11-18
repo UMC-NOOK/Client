@@ -159,8 +159,8 @@ function GoalStep({ open, onNext, dontShowAgain }: CoachmarkStepProps) {
               <CoachmarkText
                 align="left"
                 compact
-                title="서재 전체 보기"
-                description="화살표를 클릭해 내 서재로 이동해요"
+                title="1년 독서 목표"
+                description="목표는 언제든 수정할 수 있어요"
               />
             </div>
             <CoachmarkArrow
