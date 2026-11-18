@@ -101,7 +101,7 @@ function MainTabsLayout() {
         }
       />
 
-      <div className="mx-auto w-full max-w-85.75">
+      <div className="mx-auto w-full">
         <Outlet />
       </div>
     </>

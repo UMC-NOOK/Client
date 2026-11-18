@@ -46,28 +46,30 @@ export default function Snackbar({
   if (!isOpen) return null;
 
   return (
-    <div
-      className={`
-        fixed bottom-4 z-50
-        flex h-[46px] w-85.75 items-center gap-2 rounded-lg bg-gray-90 px-4 py-3
-        transition-all duration-300 ease-out
-        ${visible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"}
-      `}
-    >
-      {icon && (
-        <img src={icon} alt="Icon" className="inline-block h-5 w-5 shrink-0" />
-      )}
-
-      <span className="flex-1 text-left text-btn-14-sb text-gray-25">
-        {text}
-      </span>
-
-      <button
-        onClick={onButtonClick}
-        className="shrink-0 whitespace-nowrap bg-transparent px-2 py-1 text-btn-14-sb text-gray-60"
+    <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 mx-auto flex w-full max-w-(--app-shell-width) justify-center px-4 lg:max-w-(--preview-shell-width)">
+      <div
+        className={`
+          pointer-events-auto
+          flex h-11.5 w-full items-center gap-2 rounded-lg bg-gray-90 px-4 py-3
+          transition-all duration-300 ease-out
+          ${visible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"}
+        `}
       >
-        {buttonText}
-      </button>
+        {icon && (
+          <img src={icon} alt="Icon" className="inline-block h-5 w-5 shrink-0" />
+        )}
+
+        <span className="flex-1 text-left text-btn-14-sb text-gray-25">
+          {text}
+        </span>
+
+        <button
+          onClick={onButtonClick}
+          className="shrink-0 whitespace-nowrap bg-transparent px-2 py-1 text-btn-14-sb text-gray-60"
+        >
+          {buttonText}
+        </button>
+      </div>
     </div>
   );
 }

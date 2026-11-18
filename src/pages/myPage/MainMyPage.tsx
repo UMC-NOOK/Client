@@ -203,13 +203,13 @@ export default function MainMyPage() {
               top={<span className="text-gray-60">최근 열람 도서</span>}
               bottom={
                  <div className="scrollbar-hide w-full overflow-x-auto">
-                  <div className="flex w-max gap-2">
+                  <div className="flex w-max min-w-full gap-2">
                     {isRecentBooksError ? (
                       <p className="text-label-12-r text-gray-60">
                         최근 열람 도서를 불러오지 못했어요.
                       </p>
                    ) : recentBooks.length === 0 ? (
-                      <div className="flex h-[200px] w-[343px] max-w-full items-center justify-center py-24">
+                      <div className="flex h-50 w-full items-center justify-center py-24">
                         <p className="text-label-14-sb text-gray-60">
                           최근 열람한 도서가 없어요.
                         </p>

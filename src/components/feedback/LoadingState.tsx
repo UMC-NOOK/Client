@@ -95,7 +95,7 @@ export default function LoadingState({
       aria-busy="true"
       className={[
         isFullscreen
-          ? "fixed inset-y-0 left-1/2 z-50 flex w-full max-w-93.75 -translate-x-1/2 items-center justify-center bg-gradient-background"
+          ? "fixed inset-y-0 left-1/2 z-50 flex w-full max-w-(--app-shell-width) -translate-x-1/2 items-center justify-center bg-gradient-background lg:max-w-(--preview-shell-width)"
           : "relative size-25",
         className,
       ].join(" ")}

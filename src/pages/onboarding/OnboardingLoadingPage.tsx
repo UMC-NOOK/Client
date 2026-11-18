@@ -27,7 +27,7 @@ export default function OnboardingLoadingPage() {
     <main
       className="
         fixed inset-y-0 left-1/2 z-[10000]
-        flex w-full max-w-93.75 -translate-x-1/2
+        flex w-full max-w-(--app-shell-width) -translate-x-1/2 lg:max-w-(--preview-shell-width)
         flex-col items-center
         gap-20
         bg-gradient-background
@@ -46,8 +46,7 @@ export default function OnboardingLoadingPage() {
         <p
           className="
             whitespace-nowrap
-            text-center text-[14px]
-            font-medium leading-[21px]
+            text-center text-body-14-m
             text-gray-90
           "
         >

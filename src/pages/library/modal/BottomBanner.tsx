@@ -25,7 +25,7 @@ export default function BottomBanner({
 }: BottomBannerProps) {
   return (
     <div className="pointer-events-none fixed inset-0 z-30 flex items-end justify-center pb-1">
-      <div className="pointer-events-auto flex h-29 w-full max-w-93.75 flex-col items-end justify-center px-4">
+      <div className="pointer-events-auto flex h-29 w-full max-w-(--app-shell-width) flex-col items-end justify-center px-4 lg:max-w-(--preview-shell-width)">
         <button
           type="button"
           onClick={onClose}

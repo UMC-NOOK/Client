@@ -84,7 +84,6 @@ export default function SearchTopSection({
           ariaLabel="search scope"
           value={currentScope}
           onChange={handleScopeChange}
-          buttonWidthPx={168}
           coachmarkAnchor={coachmarkScopeAnchor}
           options={[
             { value: "all", label: "전체 도서 검색" },

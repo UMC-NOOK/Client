@@ -5,10 +5,12 @@ import { Outlet } from "react-router-dom";
 
 import Footer from "../components/navigation/Footer";
 import RateLimitModal from "../components/feedback/RateLimitModal";
+import DevLayoutWidthControl from "../components/dev/DevLayoutWidthControl";
 
 export type ShellContextValue = {
   hideFooter: boolean;
   setHideFooter: React.Dispatch<React.SetStateAction<boolean>>;
+  widthStyle: React.CSSProperties;
 };
 
 const ShellContext = createContext<ShellContextValue | null>(null);
@@ -29,33 +31,51 @@ type AppShellProps = {
 };
 
 export default function AppShell({
-  maxWidthPx = 375,
+  maxWidthPx = 480,
   disableSafeAreaTop = false,
 }: AppShellProps) {
   const [hideFooter, setHideFooter] = useState(false);
+  const [previewWidth, setPreviewWidth] = useState<number | null>(null);
+  const desktopPreviewWidth = import.meta.env.DEV
+    ? (previewWidth ?? maxWidthPx)
+    : maxWidthPx;
+  const widthStyle = useMemo(
+    () => ({
+      "--app-shell-width": `${maxWidthPx}px`,
+      "--preview-shell-width": `${desktopPreviewWidth}px`,
+    }) as React.CSSProperties,
+    [maxWidthPx, desktopPreviewWidth],
+  );
 
   const value = useMemo(
     () => ({
       hideFooter,
       setHideFooter,
+      widthStyle,
     }),
-    [hideFooter],
+    [hideFooter, widthStyle],
   );
 
   return (
     <ShellContext.Provider value={value}>
-      <div className="relative isolate min-h-dvh w-full bg-gradient-background">
-        {/* 화면 상하좌우 전체를 채우는 고정 배경 */}
+      {import.meta.env.DEV && (
+        <DevLayoutWidthControl
+          width={previewWidth ?? maxWidthPx}
+          onWidthChange={setPreviewWidth}
+        />
+      )}
+      <div className="relative isolate min-h-dvh w-full bg-mint-60">
+        {/* 레이아웃 확인용 임시 배경: 앱 바깥 영역을 민트색으로 구분한다. */}
         <div
           aria-hidden
-          className="pointer-events-none fixed inset-0 z-0 bg-gradient-background"
+          className="pointer-events-none fixed inset-0 z-0 bg-mint-60"
         />
 
-        {/* 실제 앱 콘텐츠는 최대 375px */}
+        {/* 실제 앱 콘텐츠는 maxWidthPx까지 유동적으로 확장한다. */}
         <div
           data-app-shell
-          className="relative z-10 mx-auto min-h-dvh w-full"
-          style={{ maxWidth: maxWidthPx }}
+          className="relative z-10 mx-auto min-h-dvh w-full max-w-(--app-shell-width) bg-gradient-background lg:max-w-(--preview-shell-width)"
+          style={widthStyle}
         >
           <div className="flex min-h-dvh flex-col pb-[env(safe-area-inset-bottom)]">
             <main

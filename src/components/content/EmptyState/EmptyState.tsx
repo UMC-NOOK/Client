@@ -12,7 +12,7 @@ export default function EmptyState({
   const hasButton = Boolean(buttonText);
 
   return (
-    <div className="flex w-[343px] items-center justify-center py-24">
+    <div className="flex w-full min-w-0 items-center justify-center py-24">
       {hasButton ? (
         <div className="flex items-center justify-center">
           <p className="whitespace-nowrap text-label-14-sb text-gray-60">

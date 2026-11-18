@@ -252,7 +252,7 @@ export default function BottomSheet({
         className={[
           "absolute inset-x-0 bottom-0 mx-auto",
           open ? "pointer-events-auto" : "pointer-events-none",
-          "w-full max-w-93.75",
+          "w-full max-w-(--app-shell-width) lg:max-w-(--preview-shell-width)",
           "flex flex-col items-start",
           "px-4 pt-4 pb-[calc(2rem+env(safe-area-inset-bottom))]",
           "rounded-t-2xl",

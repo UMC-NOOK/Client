@@ -22,7 +22,7 @@ export default function ReportList({
 
   return (
     <div
-      className="flex w-full min-w-85.75 flex-col items-start gap-2 rounded-sm bg-gray-15 px-3 py-4"
+      className="flex w-full min-w-0 flex-col items-start gap-2 rounded-sm bg-gray-15 px-3 py-4"
       onClick={onClick}
       role={clickable ? "button" : undefined}
       tabIndex={clickable ? 0 : undefined}
@@ -45,7 +45,7 @@ export default function ReportList({
       />
 
       {limitedImages.length > 0 ? (
-        <div className="flex items-start gap-1">
+        <div className="flex max-w-full flex-wrap items-start gap-1">
           {limitedImages.map((imageUrl, index) => (
             <div
               key={`${imageUrl}-${index}`}
