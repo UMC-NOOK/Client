@@ -43,7 +43,7 @@ export default function TopAppBar({
 }: TopAppBarProps) {
   return (
     <header className="w-full">
-      <div className="w-full max-w-85.75 mx-auto">
+      <div className="w-full mx-auto">
         {/* 공용 컴포넌트 GNB */}
         <TopGnb
           onLogoClick={onLogoClick}

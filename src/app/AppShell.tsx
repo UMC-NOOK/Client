@@ -29,7 +29,7 @@ type AppShellProps = {
 };
 
 export default function AppShell({
-  maxWidthPx = 375,
+  maxWidthPx = 480,
   disableSafeAreaTop = false,
 }: AppShellProps) {
   const [hideFooter, setHideFooter] = useState(false);
@@ -51,7 +51,7 @@ export default function AppShell({
           className="pointer-events-none fixed inset-0 z-0 bg-gradient-background"
         />
 
-        {/* 실제 앱 콘텐츠는 최대 375px */}
+        {/* 실제 앱 콘텐츠는 maxWidthPx까지 유동적으로 확장한다. */}
         <div
           data-app-shell
           className="relative z-10 mx-auto min-h-dvh w-full"
