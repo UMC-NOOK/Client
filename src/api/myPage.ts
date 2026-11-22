@@ -65,6 +65,18 @@ export async function patchProfile(
   );
 }
 
+export async function patchProfileImage(
+  profileImageKey: string | null,
+): Promise<{ profileImageUrl: string | null }> {
+  return myPagePatch<
+    { profileImageKey: string | null },
+    { profileImageUrl: string | null }
+  >(
+    "/users/me/profile-image",
+    { profileImageKey },
+  );
+}
+
 export async function patchNickname(nickName: string): Promise<{ nickName: string }> {
   const response = await api.patch<BaseApiResponse<{ nickName: string }>>(
     "/api/v1/users/me/nickname",
