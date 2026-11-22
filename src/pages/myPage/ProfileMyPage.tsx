@@ -13,6 +13,7 @@ import LoadingState from "../../components/feedback/LoadingState";
 import ProfilePhotoModal from "./modal/ProfilePhotoModal";
 import { createDefaultProfileFile } from "./utils/createDefaultProfileFile";
 import { usePatchProfile } from "../../hooks/mutations/mypage/usePatchProfile";
+import { usePatchProfileImage } from "../../hooks/mutations/mypage/usePatchProfileImage";
 import { usePatchNickname } from "../../hooks/mutations/mypage/usePatchNickname";
 import { useUserMe } from "../../hooks/queries/useUserMe";
 import {
@@ -24,6 +25,7 @@ export default function ProfileMyPage() {
   const navigate = useNavigate();
   const { data: userMe, isLoading: isUserMeLoading } = useUserMe();
   const patchProfileMutation = usePatchProfile();
+  const patchProfileImageMutation = usePatchProfileImage();
   const patchNicknameMutation = usePatchNickname();
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
@@ -104,10 +106,14 @@ export default function ProfileMyPage() {
           ? await uploadSingleImage(imageFile, "profile")
           : null;
 
-        await patchProfileMutation.mutateAsync({
-          profileImageKey,
-          ...(isNicknameChanged ? { nickName: trimmedNickname } : {}),
-        });
+        if (isNicknameChanged) {
+          await patchProfileMutation.mutateAsync({
+            profileImageKey,
+            nickName: trimmedNickname,
+          });
+        } else {
+          await patchProfileImageMutation.mutateAsync(profileImageKey);
+        }
       } else if (isNicknameChanged) {
         await patchNicknameMutation.mutateAsync(trimmedNickname);
       }
@@ -130,6 +136,7 @@ export default function ProfileMyPage() {
     isUserMeLoading ||
     isSaving ||
     patchProfileMutation.isPending ||
+    patchProfileImageMutation.isPending ||
     patchNicknameMutation.isPending
   ) {
     return <LoadingState variant="fullscreen" />;
