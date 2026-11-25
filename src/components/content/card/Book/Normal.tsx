@@ -15,14 +15,14 @@ export function Normal({
 }: Props) {
   return (
     <div
-      className={[ "inline-flex w-[100px] flex-col items-start gap-1.5", ].join(" ")}
+      className={[ "inline-flex w-[clamp(80px,26.667vw,100px)] flex-col items-start gap-1.5", ].join(" ")}
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
 
       <div
-        className="flex w-[100px] h-36 items-center justify-center rounded-[2px] bg-center bg-cover bg-no-repeat"
+        className="flex aspect-[25/36] h-auto w-full items-center justify-center rounded-[2px] bg-center bg-cover bg-no-repeat"
         style={{ backgroundImage: `url(${imageUrl})` }}
         aria-label={imageAlt}
       />

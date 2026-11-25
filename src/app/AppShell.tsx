@@ -64,17 +64,17 @@ export default function AppShell({
           onWidthChange={setPreviewWidth}
         />
       )}
-      <div className="relative isolate min-h-dvh w-full bg-mint-60">
-        {/* 레이아웃 확인용 임시 배경: 앱 바깥 영역을 민트색으로 구분한다. */}
+      <div className="relative isolate min-h-dvh w-full bg-gradient-background">
+        {/* 화면 상하좌우 전체를 채우는 고정 배경 */}
         <div
           aria-hidden
-          className="pointer-events-none fixed inset-0 z-0 bg-mint-60"
+          className="pointer-events-none fixed inset-0 z-0 bg-gradient-background"
         />
 
         {/* 실제 앱 콘텐츠는 maxWidthPx까지 유동적으로 확장한다. */}
         <div
           data-app-shell
-          className="relative z-10 mx-auto min-h-dvh w-full max-w-(--app-shell-width) bg-gradient-background lg:max-w-(--preview-shell-width)"
+          className="relative z-10 mx-auto min-h-dvh w-full max-w-(--app-shell-width) lg:max-w-(--preview-shell-width)"
           style={widthStyle}
         >
           <div className="flex min-h-dvh flex-col pb-[env(safe-area-inset-bottom)]">

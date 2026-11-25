@@ -8,7 +8,13 @@ import focus from "../../assets/icons/focus.svg";
 import focusGray from "../../assets/icons/focus-gray-40.svg";
 import book from "../../assets/icons/book.svg";
 import book_gray_40 from "../../assets/icons/book_gray_40.svg";
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import DayOfTheWeek from "../../components/content/Calendar/Resource/DayOfTheWeek";
 import BottomBanner from "./modal/BottomBanner";
@@ -35,7 +41,11 @@ import getGoalPercent from "./utils/getGoalPercent";
 import DropDown from "../../components/section/dropDown/DropDown";
 import { useLibrarySpecificDateBookInfo } from "../../hooks/queries/library/useLibrarySpecificDateBookInfo";
 import { useAuthMe } from "../../hooks/queries/useAuthMe";
-import { dismissBottomBanner, isBottomBannerDismissed, subscribeBottomBanner } from "./utils/bottomBannerState";
+import {
+  dismissBottomBanner,
+  isBottomBannerDismissed,
+  subscribeBottomBanner,
+} from "./utils/bottomBannerState";
 import LibraryCoachmark from "../../components/coachmark/LibraryCoachmark";
 
 type SelectedYearMonth = {
@@ -49,60 +59,83 @@ function formatFocusMinutes(totalFocusMin: number) {
 
   if (hour === 0) return `${minute}분 동안 포커스 했어요.`;
   if (minute === 0) return `${hour}시간 동안 포커스 했어요.`;
+
   return `${hour}시간 ${minute}분 동안 포커스 했어요.`;
 }
 
 export default function LibraryPage() {
   const navigate = useNavigate();
-  const [selectedView, setSelectedView] = useState<"focus" | "book">("focus");
+
+  const [selectedView, setSelectedView] = useState<"focus" | "book">(
+    "focus",
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [modalCursor, setModalCursor] = useState<number | null>(null);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const isBannerOpen = !useSyncExternalStore(
     subscribeBottomBanner,
     isBottomBannerDismissed,
   );
-  const [modalCursor, setModalCursor] = useState<number | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { data: authMe, isLoading: isAuthMeLoading } = useAuthMe();
+
   const { data: libraryBookData, isLoading: isBookLoading } =
     useLibraryBookNum();
+
   const { data: libraryBookGoalData, isLoading: isBookGoalLoading } =
     useLibraryBookGoal();
+
   const { data: libraryToggleYearsData, isLoading: isYearsLoading } =
     useLibraryDateToggle();
 
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
-  const availableYears = libraryToggleYearsData?.years ?? [];
-  const startYear =
-    availableYears.length > 0 ? Math.min(...availableYears) : currentYear;
-  const endYear =
-    availableYears.length > 0 ? Math.max(...availableYears) : currentYear;
 
-  const [selectedYearMonth, setSelectedYearMonth] = useState<SelectedYearMonth>(
-    {
+  const availableYears = libraryToggleYearsData?.years ?? [];
+
+  const startYear =
+    availableYears.length > 0
+      ? Math.min(...availableYears)
+      : currentYear;
+
+  const endYear =
+    availableYears.length > 0
+      ? Math.max(...availableYears)
+      : currentYear;
+
+  const [selectedYearMonth, setSelectedYearMonth] =
+    useState<SelectedYearMonth>({
       year: startYear,
       month: currentMonth,
-    },
-  );
+    });
 
   const yearMonth = useMemo(() => {
-    return `${selectedYearMonth.year}-${String(selectedYearMonth.month).padStart(2, "0")}`;
+    return `${selectedYearMonth.year}-${String(
+      selectedYearMonth.month,
+    ).padStart(2, "0")}`;
   }, [selectedYearMonth.year, selectedYearMonth.month]);
 
   const {
     data: libraryFocusMonthlyData,
     isLoading: isFocusMonthlyLoading,
     isError: isFocusMonthlyError,
-  } = useLibraryFocusMonthly(yearMonth, selectedView === "focus");
+  } = useLibraryFocusMonthly(
+    yearMonth,
+    selectedView === "focus",
+  );
 
   const {
     data: libraryBooksMonthlyData,
     isLoading: isBooksMonthlyLoading,
     isError: isBooksMonthlyError,
-  } = useLibraryBooksMonthly(yearMonth, selectedView === "book");
+  } = useLibraryBooksMonthly(
+    yearMonth,
+    selectedView === "book",
+  );
 
   const handleApplyYearMonth = (value: SelectedYearMonth) => {
     setSelectedYearMonth(value);
@@ -114,6 +147,7 @@ export default function LibraryPage() {
 
     const handlePointerDown = (event: PointerEvent) => {
       if (dropdownRef.current?.contains(event.target as Node)) return;
+
       setIsDropdownOpen(false);
     };
 
@@ -130,29 +164,55 @@ export default function LibraryPage() {
     setIsModalOpen(true);
   };
 
-  const { data: specificDateBookInfo, isLoading: isSpecificDateLoading } =
-    useLibrarySpecificDateBookInfo(isModalOpen, selectedDate, modalCursor);
+  const {
+    data: specificDateBookInfo,
+    isLoading: isSpecificDateLoading,
+  } = useLibrarySpecificDateBookInfo(
+    isModalOpen,
+    selectedDate,
+    modalCursor,
+  );
 
-  const { data: libraryRecentBookInfoData, isLoading: isRecentBookLoading } =
-    useLibraryRecentBookInfo();
+  const {
+    data: libraryRecentBookInfoData,
+    isLoading: isRecentBookLoading,
+  } = useLibraryRecentBookInfo();
 
-  const dropdownPositionClass = "absolute left-18 top-full z-50 mt-2";
+  const dropdownPositionClass =
+    "absolute left-18 top-full z-50 mt-2";
 
-  const mockLibraryBookGoal = mockLibraryBookGoalResponse.result;
+  const mockLibraryBookGoal =
+    mockLibraryBookGoalResponse.result;
 
-  const totalBookNum = libraryBookData?.totalBookNum ?? 0;
-  const goal = libraryBookGoalData?.goal ?? mockLibraryBookGoal.goal;
+  const totalBookNum =
+    libraryBookData?.totalBookNum ?? 0;
+
+  const goal =
+    libraryBookGoalData?.goal ??
+    mockLibraryBookGoal.goal;
+
   const remainingCount =
-    libraryBookGoalData?.remainingCount ?? mockLibraryBookGoal.remainingCount;
+    libraryBookGoalData?.remainingCount ??
+    mockLibraryBookGoal.remainingCount;
+
   const progressPercent =
-    libraryBookGoalData?.progressPercent ?? mockLibraryBookGoal.progressPercent;
-  const iconProgressPercent = getGoalPercent(progressPercent);
+    libraryBookGoalData?.progressPercent ??
+    mockLibraryBookGoal.progressPercent;
 
-  const focusItems = libraryFocusMonthlyData?.focusBookItems ?? [];
-  const totalFocusMin = libraryFocusMonthlyData?.totalFocusMin ?? 0;
+  const iconProgressPercent =
+    getGoalPercent(progressPercent);
 
-  const bookDays = libraryBooksMonthlyData?.days ?? [];
-  const totalBookCount = libraryBooksMonthlyData?.totalBookCount ?? 0;
+  const focusItems =
+    libraryFocusMonthlyData?.focusBookItems ?? [];
+
+  const totalFocusMin =
+    libraryFocusMonthlyData?.totalFocusMin ?? 0;
+
+  const bookDays =
+    libraryBooksMonthlyData?.days ?? [];
+
+  const totalBookCount =
+    libraryBooksMonthlyData?.totalBookCount ?? 0;
 
   const dayBookInformations = bookDays.map((item) => ({
     day: String(new Date(item.date).getDate()),
@@ -173,9 +233,11 @@ export default function LibraryPage() {
       ? "포커스 시간을 불러오지 못했어요."
       : formatFocusMinutes(totalFocusMin);
 
-  const modalItems = specificDateBookInfo?.items ?? [];
+  const modalItems =
+    specificDateBookInfo?.items ?? [];
 
-  const nickName = authMe?.nickName ?? "";
+  const nickName =
+    authMe?.nickName ?? "";
 
   const isPageLoading =
     isAuthMeLoading ||
@@ -184,38 +246,52 @@ export default function LibraryPage() {
     isYearsLoading ||
     isRecentBookLoading ||
     isSpecificDateLoading ||
-    (selectedView === "focus" ? isFocusMonthlyLoading : isBooksMonthlyLoading);
+    (selectedView === "focus"
+      ? isFocusMonthlyLoading
+      : isBooksMonthlyLoading);
 
   if (isPageLoading) {
     return <LoadingState variant="fullscreen" />;
   }
 
   return (
-    <div className="relative flex flex-col w-full">
-      <div className="flex flex-col pt-6.5">
-        <div data-coachmark-anchor="library-summary" className="flex flex-col">
-          <div className="flex flex-row gap-1">
+    <div className="relative flex w-full min-w-0 flex-col">
+      {/* 서재 요약 */}
+      <div className="flex min-w-0 flex-col pt-6.5">
+        <div
+          data-coachmark-anchor="library-summary"
+          className="flex min-w-0 flex-col"
+        >
+          <div className="flex min-w-0 flex-row gap-1">
             <label className="text-label-20-b text-gray-90">
               {isAuthMeLoading ? "" : nickName}
             </label>
-            <label className="text-label-20-b text-gray-90">님의 서재에</label>
+
+            <label className="text-label-20-b text-gray-90">
+              님의 서재에
+            </label>
           </div>
 
-          <div className="flex flex-row gap-1 pt-2.5">
+          <div className="flex min-w-0 flex-row gap-1 pt-2.5">
             <div>
               <label className="text-label-20-b text-yellow-70">
                 {isBookLoading
                   ? mockLibraryBookNumResponse.result.totalBookNum
                   : totalBookNum}
               </label>
-              <label className="text-label-20-b text-yellow-70">권</label>
+
+              <label className="text-label-20-b text-yellow-70">
+                권
+              </label>
+
               <label className="text-label-20-b text-gray-90">
                 의 책이 있어요.
               </label>
             </div>
+
             <Link to="/library/status">
               <Icon size="m" className="items-center">
-                <img src={arrowRight} />
+                <img src={arrowRight} alt="" />
               </Icon>
             </Link>
           </div>
@@ -223,7 +299,7 @@ export default function LibraryPage() {
 
         <Link
           to="/users/me/onboarding/goal"
-          className="block w-full pt-4 text-inherit no-underline outline-none focus-visible:ring-2 focus-visible:ring-gray-40 focus-visible:ring-offset-2 rounded-lg"
+          className="block w-full min-w-0 rounded-lg pt-4 text-inherit no-underline outline-none focus-visible:ring-2 focus-visible:ring-gray-40 focus-visible:ring-offset-2"
         >
           <div data-coachmark-anchor="library-goal">
             <BookGoal
@@ -234,28 +310,41 @@ export default function LibraryPage() {
         </Link>
       </div>
 
-      <div className="flex flex-col pt-8 pb-10">
-        <div className="flex w-full items-start gap-2">
+      {/* 독서 달력 */}
+      <div className="flex w-full min-w-0 flex-col pt-8 pb-10">
+        {/* 달력 헤더 */}
+        <div className="flex w-full min-w-0 items-start gap-2">
           <div className="min-w-0 flex-1">
             <SectionHeader
               size="16"
               top={
                 <div
                   ref={dropdownRef}
-                  className="relative flex flex-row items-center justify-start gap-2"
+                  className="relative flex min-w-0 flex-row items-center justify-start gap-2"
                 >
                   <button
                     type="button"
-                    className="flex cursor-pointer items-center justify-center gap-2"
-                    onClick={() => setIsDropdownOpen((prev) => !prev)}
+                    className="flex min-w-0 cursor-pointer items-center justify-center gap-2"
+                    onClick={() =>
+                      setIsDropdownOpen((prev) => !prev)
+                    }
                   >
                     <span className="text-label-16-b text-gray-90">
                       {selectedYearMonth.month}월 독서 달력
                     </span>
-                    <span className="flex h-3 w-3 items-center justify-center">
-                      <img src={isDropdownOpen ? CaretUp : CaretDown} alt="" />
+
+                    <span className="flex h-3 w-3 shrink-0 items-center justify-center">
+                      <img
+                        src={
+                          isDropdownOpen
+                            ? CaretUp
+                            : CaretDown
+                        }
+                        alt=""
+                      />
                     </span>
                   </button>
+
                   {isDropdownOpen && (
                     <div className={dropdownPositionClass}>
                       <DropDown
@@ -271,51 +360,71 @@ export default function LibraryPage() {
               }
               bottom={
                 <div className="text-label-14-sb text-gray-70">
-                  {selectedView === "focus" ? focusBottomText : bookBottomText}
+                  {selectedView === "focus"
+                    ? focusBottomText
+                    : bookBottomText}
                 </div>
               }
             />
           </div>
 
+          {/* 달력 보기 전환 */}
           <div
             data-coachmark-anchor="library-calendar-view"
             className="flex shrink-0 flex-row gap-0"
           >
-            <div
+            <button
+              type="button"
               className="cursor-pointer"
               onClick={() => setSelectedView("focus")}
             >
               <Icon size="m">
                 <img
-                  src={selectedView === "focus" ? focus : focusGray}
-                  alt=""
+                  src={
+                    selectedView === "focus"
+                      ? focus
+                      : focusGray
+                  }
+                  alt="포커스 달력"
                 />
               </Icon>
-            </div>
+            </button>
 
-            <div
+            <button
+              type="button"
               className="cursor-pointer"
               onClick={() => setSelectedView("book")}
             >
               <Icon size="m">
                 <img
-                  src={selectedView === "book" ? book : book_gray_40}
-                  alt=""
+                  src={
+                    selectedView === "book"
+                      ? book
+                      : book_gray_40
+                  }
+                  alt="독서 달력"
                 />
               </Icon>
-            </div>
+            </button>
           </div>
         </div>
 
-        <div className="grid w-full grid-cols-7 pt-4">
-          {(["월", "화", "수", "목", "금", "토", "일"] as const).map((d) => (
-            <div key={d} className="flex justify-center">
-              <DayOfTheWeek text={d} />
+        {/* 요일 */}
+        <div className="grid w-full min-w-0 grid-cols-[repeat(7,minmax(0,1fr))] pt-4">
+          {(
+            ["월", "화", "수", "목", "금", "토", "일"] as const
+          ).map((day) => (
+            <div
+              key={day}
+              className="flex min-w-0 items-center justify-center"
+            >
+              <DayOfTheWeek text={day} />
             </div>
           ))}
         </div>
 
-        <div className="pt-2">
+        {/* 날짜 */}
+        <div className="w-full min-w-0 pt-2">
           {selectedView === "focus" ? (
             <DayIndicatorSet
               year={selectedYearMonth.year}
@@ -334,6 +443,7 @@ export default function LibraryPage() {
         </div>
       </div>
 
+      {/* 하단 배너 */}
       {isBannerOpen && libraryRecentBookInfoData ? (
         <BottomBanner
           bookId={libraryRecentBookInfoData.bookId}
@@ -342,12 +452,15 @@ export default function LibraryPage() {
           page={libraryRecentBookInfoData.page}
           focusTime={libraryRecentBookInfoData.focusTime}
           onClick={(bookId) =>
-            navigate(`/focus/theme?bookId=${encodeURIComponent(bookId)}`)
+            navigate(
+              `/focus/theme?bookId=${encodeURIComponent(bookId)}`,
+            )
           }
           onClose={dismissBottomBanner}
         />
       ) : null}
 
+      {/* 날짜별 독서 모달 */}
       <DateFocusBookModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
