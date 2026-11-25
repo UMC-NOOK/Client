@@ -95,8 +95,8 @@ export default function LibraryGoalInputPage() {
                             bottom={`${year}년은 ${remainingDays}일 남았어요.`}
                         />
                     </div>
-                    <div className="flex flex-row gap-3 items-center">
-                        <div className="flex h-[54px] w-[305px] items-center rounded-[8px] bg-gray-17 py-3 px-4">
+                    <div className="flex min-w-0 flex-row items-center gap-3">
+                        <div className="flex h-[54px] min-w-0 w-full flex-1 items-center rounded-[8px] bg-gray-17 px-4 py-3">
                             <input
                                 type="text"
                                 inputMode="numeric"
@@ -106,7 +106,7 @@ export default function LibraryGoalInputPage() {
                                     setGoalCount(e.target.value.replace(/\D/g, ""))
                                 }
                                 placeholder="몇"
-                                className="w-full bg-transparent text-label-20-b text-gray-90 outline-none  placeholder:text-label-20-b placeholder:text-gray-70"
+                                className="min-w-0 w-full bg-transparent text-label-20-b text-gray-90 outline-none placeholder:text-label-20-b placeholder:text-gray-70"
                             />
                         </div>
                         <div className="text-label-20-b text-gray-80 items-center">

@@ -100,15 +100,15 @@ export default function OnboardingGoalPage() {
         {year}년은 {days}일 남았어요.
       </p>
 
-      <div className="mt-10 flex items-center gap-2">
-        <div className="flex-1 px-4 py-3 rounded-md bg-gray-17">
+      <div className="mt-10 flex min-w-0 items-center gap-2">
+        <div className="min-w-0 flex-1 rounded-md bg-gray-17 px-4 py-3">
           <input
             type="text"
             inputMode="numeric"
             value={goalInput}
             onChange={handleGoalChange}
             placeholder="몇"
-            className="w-full bg-transparent outline-none text-[20px] font-bold text-gray-90 placeholder:text-gray-70"
+            className="min-w-0 w-full bg-transparent outline-none text-[20px] font-bold text-gray-90 placeholder:text-gray-70"
           />
         </div>
 

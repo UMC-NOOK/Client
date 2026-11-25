@@ -23,7 +23,7 @@ export default function BookSet({
 }: Props) {
   if (!visible) {
     return (
-      <div className="flex w-11 h-[89px] flex-col items-start gap-1" />
+      <div className="flex h-[89px] w-full max-w-11 flex-col items-start gap-1" />
     );
   }
 
@@ -32,14 +32,14 @@ export default function BookSet({
       type="button"
       onClick={onClick}
       disabled={!onClick}
-      className="flex flex-col items-center gap-1 disabled:cursor-default"
+      className="flex w-full max-w-11 flex-col items-center gap-1 disabled:cursor-default"
     >
       <Day text={day} disable={disable} />
 
       {disable ? (
-        <div className="h-16 w-11 shrink-0 rounded-[2px] bg-gray-10" />
+        <div className="aspect-[11/16] h-auto w-full shrink-0 rounded-[2px] bg-gray-10" />
       ) : (
-        <div className="relative h-16 w-11 overflow-hidden rounded-[2px]">
+        <div className="relative aspect-[11/16] h-auto w-full overflow-hidden rounded-[2px]">
           {coverUrl ? (
             <img
               src={coverUrl}
