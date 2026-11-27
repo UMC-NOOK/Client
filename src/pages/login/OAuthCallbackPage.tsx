@@ -4,6 +4,7 @@ import type { OAuthProvider } from "../../api/auth";
 import { useOauthLogin } from "../../hooks/mutations/useOauthLogin";
 import { useRecoverAccount } from "../../hooks/mutations/useRecoverAccount";
 import LoadingState from "../../components/feedback/LoadingState";
+import { trackEvent } from "../../utils/analytics";
 
 export default function OAuthCallbackPage() {
   const { pathname } = useLocation();
@@ -38,12 +39,18 @@ export default function OAuthCallbackPage() {
       try {
         const loginResponse = await oauthLogin({ provider, code });
         let result = loginResponse.result;
+        let wasRecovery = false;
 
         // 탈퇴 유예 계정은 소셜 로그인 응답의 recoveryToken으로 즉시 복구합니다.
         if ("recoveryToken" in result) {
+          wasRecovery = true;
           const recoverResponse = await recoverAccount(result.recoveryToken);
           result = recoverResponse.result;
         }
+
+        trackEvent(wasRecovery || result.onboardingCompleted ? "login" : "sign_up", {
+          method: provider.toLowerCase(),
+        });
 
         navigate(
           result.onboardingCompleted ? "/library" : "/onboarding",

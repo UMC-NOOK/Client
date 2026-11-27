@@ -54,6 +54,8 @@ import { OnboardingProvider } from "../pages/onboarding/OnboardingContext";
 
 import LoginPage from "../pages/login/LoginPage";
 import OAuthCallbackPage from "../pages/login/OAuthCallbackPage";
+import { useAuthMe } from "../hooks/queries/useAuthMe";
+import { setAnalyticsUserId, trackPageView } from "../utils/analytics";
 
 /* ---------------- Tabs ---------------- */
 
@@ -133,6 +135,24 @@ function AppShellLayout() {
   );
 }
 
+function AnalyticsTracker() {
+  const { pathname, search } = useLocation();
+  const { data: authMe } = useAuthMe();
+
+  useEffect(() => {
+    trackPageView(`${pathname}${search}`);
+  }, [pathname, search]);
+
+  useEffect(() => {
+    if (authMe?.id !== undefined) {
+      // 로그인 후 내부 회원 번호만 USER ID로 사용합니다.
+      setAnalyticsUserId(authMe.id);
+    }
+  }, [authMe?.id]);
+
+  return null;
+}
+
 /* ---------------- Auth ---------------- */
 
 function RequireAuth() {
@@ -171,7 +191,9 @@ function getAuthRedirectPath() {
 
 export default function AppRoutes() {
   return (
-    <Routes>
+    <>
+      <AnalyticsTracker />
+      <Routes>
       <Route element={<AppShell />}>
         <Route element={<AppShellLayout />}>
           {/* ROOT */}
@@ -339,6 +361,7 @@ export default function AppRoutes() {
           />
         </Route>
       </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 }

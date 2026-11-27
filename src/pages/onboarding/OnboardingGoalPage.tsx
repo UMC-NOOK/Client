@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import OnboardingLayout from "../onboarding/OnboardingLayout";
 import { useOnboardingDraft } from "./OnboardingContext";
 import { useShell } from "../../app/AppShell";
+import { trackEvent } from "../../utils/analytics";
 
 const MAX_GOAL = 300;
 
@@ -74,6 +75,7 @@ export default function OnboardingGoalPage() {
   const handleNext = () => {
     if (!isNextActive || parsedGoal === null) return;
     updateDraft({ goal: parsedGoal });
+    trackEvent("onboarding_step_complete", { step: "goal" });
     navigate("/onboarding/category");
   };
 

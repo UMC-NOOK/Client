@@ -6,6 +6,7 @@ import {
   subscribeCoachmark,
   type CoachmarkScreen,
 } from "../utils/coachmarkStorage";
+import { trackEvent } from "../utils/analytics";
 
 type UseCoachmarkParams = {
   userId: number | undefined;
@@ -27,6 +28,14 @@ export function useCoachmark({ userId, screen, stepCount }: UseCoachmarkParams) 
   );
   const isDismissed = useSyncExternalStore(subscribe, getSnapshot, () => false);
 
+  const handleDontShowAgainChange = useCallback(
+    (checked: boolean) => {
+      setDontShowAgainChecked(checked);
+      if (checked) trackEvent("coachmark_skip");
+    },
+    [],
+  );
+
   const advance = useCallback(() => {
     if (userId === undefined) return;
 
@@ -47,7 +56,7 @@ export function useCoachmark({ userId, screen, stepCount }: UseCoachmarkParams) 
     advance,
     dontShowAgain: {
       checked: dontShowAgainChecked,
-      onChange: setDontShowAgainChecked,
+      onChange: handleDontShowAgainChange,
     },
   };
 }

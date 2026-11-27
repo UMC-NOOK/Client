@@ -32,11 +32,15 @@ function ResultRow({
 
   const handleBookClick = () => {
     if (book.bookId != null) {
-      navigate(`/library/${book.bookId}?type=bookId`);
+      navigate(`/library/${book.bookId}?type=bookId`, {
+        state: { bookAddSource: "search" },
+      });
       return;
     }
 
-    navigate(`/library/${book.isbn13}?type=isbn13`);
+    navigate(`/library/${book.isbn13}?type=isbn13`, {
+      state: { bookAddSource: "search" },
+    });
   };
 
   return (

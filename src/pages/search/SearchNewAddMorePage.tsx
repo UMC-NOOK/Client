@@ -8,6 +8,7 @@ import { createUserBook } from "../../api/book";
 import { uploadSingleImage } from "../../api/image";
 import SearchNewAddLayout from "../../components/search/new/SearchNewAddLayout";
 import SearchNewAddMoreForm from "../../components/search/new/SearchNewAddMoreForm";
+import { trackEvent } from "../../utils/analytics";
 
 import { useEditUserBook } from "../../hooks/mutations/useEditBook";
 
@@ -149,6 +150,7 @@ export default function SearchNewAddMorePage({
           isbn13: isbn.trim() || undefined,
           coverImageKey,
         });
+        trackEvent("book_add", { source: "manual" });
         navigate(`/library/${createdBook.bookId}?type=bookId`, {
           replace: true,
           state: {

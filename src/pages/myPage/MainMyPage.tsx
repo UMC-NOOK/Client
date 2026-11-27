@@ -18,6 +18,7 @@ import { useUserMe } from "../../hooks/queries/useUserMe";
 import DeleteAccountModal from "./modal/DeleteAccountModal";
 import LogoutModal from "./modal/LogoutModal";
 import { getBookDetailWithBookId } from "../../api/bookInfo";
+import { trackEvent } from "../../utils/analytics";
 
 export default function MainMyPage() {
   const navigate = useNavigate();
@@ -270,7 +271,10 @@ export default function MainMyPage() {
                     text="계정 삭제"
                     active
                     danger
-                    onClick={() => setIsDeleteAccountModalOpen(true)}
+                    onClick={() => {
+                      trackEvent("withdraw_click");
+                      setIsDeleteAccountModalOpen(true);
+                    }}
                   />
                 </div>
                 }

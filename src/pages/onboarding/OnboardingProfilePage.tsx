@@ -27,6 +27,7 @@ import { useOnboardingDraft } from "./OnboardingContext";
 import chevronLeftIcon from "../../assets/icons/chevron_left.svg";
 import cameraIcon from "../../assets/icons/Shape.svg";
 import defaultProfile from "../../assets/icons/Profile Image.svg";
+import { trackEvent } from "../../utils/analytics";
 
 export default function OnboardingProfilePage() {
   const navigate = useNavigate();
@@ -195,6 +196,7 @@ export default function OnboardingProfilePage() {
       );
 
       await completeOnboarding(payload);
+      trackEvent("onboarding_step_complete", { step: "profile" });
 
       localStorage.setItem(
         "onboardingCompleted",

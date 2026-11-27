@@ -30,6 +30,7 @@ import { useGetBookDetailWithISBN } from "../../hooks/queries/bookInfo/useGetBoo
 import { useLibraryBookRegister } from "../../hooks/mutations/library/useLibraryBookRegister";
 import { useGetBookTimeline } from "../../hooks/queries/bookInfo/useGetBookTimeline";
 import { useAuthMe } from "../../hooks/queries/useAuthMe";
+import { trackEvent } from "../../utils/analytics";
 
 type DetailTab = "info" | "log";
 
@@ -41,6 +42,7 @@ type BookInfoLocationState = {
   searchMode?: "LIBRARY" | "GLOBAL";
   restoreSearch?: boolean;
   searchQuery?: string;
+  bookAddSource?: "search" | "recommend";
 };
 
 const detailTabs = [
@@ -233,6 +235,9 @@ export default function BookInfoPage() {
 
     addBook(bookDetailData.bookId, {
       onSuccess: (data) => {
+        trackEvent("book_add", {
+          source: locationState?.bookAddSource ?? "search",
+        });
         setLibraryId(data.result.libraryId);
         openSnackbar("내 서재에 책을 등록했어요.");
         setReadStatus("READING");

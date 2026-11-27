@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import bookCover from "../../assets/search/mock_bookcover.svg";
 import type { GlobalHomeBookItem } from "../../api/search";
+import { trackEvent } from "../../utils/analytics";
 
 type Props = {
   recommendedBooks: GlobalHomeBookItem[];
@@ -12,7 +13,13 @@ type Props = {
 
 const LIMIT = 5;
 
-function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
+function HorizontalBookScroller({
+  books,
+  section,
+}: {
+  books: GlobalHomeBookItem[];
+  section: "recommend" | "bestseller";
+}) {
   const navigate = useNavigate();
 
   const ref = useRef<HTMLDivElement | null>(null);
@@ -90,7 +97,10 @@ function HorizontalBookScroller({ books }: { books: GlobalHomeBookItem[] }) {
               }
 
               console.log("navigate to book detail by isbn13", book.isbn13);
-              navigate(`/library/${book.isbn13}?type=isbn13`);
+              trackEvent("recommendation_click", { section });
+              navigate(`/library/${book.isbn13}?type=isbn13`, {
+                state: { bookAddSource: "recommend" },
+              });
             }}
           >
             <img
@@ -129,7 +139,7 @@ export default function AllBookListSection({
     <section className="w-full flex flex-col items-start gap-8 pt-8">
       <div className="w-full flex flex-col items-start gap-4">
         <span className="text-gray-90 text-label-13-sb">이 책을 추천해요</span>
-        <HorizontalBookScroller books={recommendedBooks} />
+          <HorizontalBookScroller books={recommendedBooks} section="recommend" />
       </div>
 
       <div className="w-full flex flex-col items-start gap-4">
@@ -142,7 +152,10 @@ export default function AllBookListSection({
               className="w-full h-7 flex items-center gap-2"
               onClick={() => {
                 console.log("navigate to book detail by isbn13", book.isbn13);
-                navigate(`/library/${book.isbn13}?type=isbn13`);
+                trackEvent("recommendation_click", { section: "bestseller" });
+                navigate(`/library/${book.isbn13}?type=isbn13`, {
+                  state: { bookAddSource: "recommend" },
+                });
               }}
             >
               <div className="w-7 h-7 flex items-center justify-center">

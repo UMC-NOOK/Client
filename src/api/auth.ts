@@ -9,6 +9,7 @@ import type {
 import { api } from "./axios";
 import { resetBottomBanner } from "../pages/library/utils/bottomBannerState";
 import { resetCoachmarkSeen } from "../utils/coachmarkStorage";
+import { setAnalyticsUserId } from "../utils/analytics";
 
 type DevLoginParams = {
   email: string;
@@ -52,10 +53,12 @@ type RetryableRequestConfig = InternalAxiosRequestConfig & {
 };
 
 function saveAuthTokens(result: {
+  id?: number;
   accessToken: string;
   refreshToken?: string;
   onboardingCompleted?: boolean;
 }) {
+  setAnalyticsUserId(result.id);
   localStorage.setItem("accessToken", result.accessToken);
   resetBottomBanner();
   resetCoachmarkSeen();
