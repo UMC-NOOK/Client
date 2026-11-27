@@ -20,6 +20,13 @@ import {
   readStoredFocusThemeId,
   saveStoredFocusThemeId,
 } from "./utils/focusThemeStorage";
+import { trackEvent } from "../../utils/analytics";
+
+function getThemeAnalyticsName(themeId: FocusThemeId | null) {
+  if (themeId === 1) return "grass";
+  if (themeId === 2) return "space";
+  return "library";
+}
 
 function parseBookId(value: string | null) {
   if (value === null || !/^\d+$/.test(value)) return null;
@@ -79,6 +86,9 @@ export default function FocusThemePage() {
       { bookId },
       {
         onSuccess: (session) => {
+          trackEvent("focus_start", {
+            theme: getThemeAnalyticsName(selectedThemeId),
+          });
           saveStoredFocusThemeId(selectedThemeId);
           saveFocusSession(session);
 

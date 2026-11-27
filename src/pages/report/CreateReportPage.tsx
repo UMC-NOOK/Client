@@ -21,6 +21,7 @@ import type { EmotionKey } from "../../components/action/Chip/Emotion";
 // hooks
 import { useCreateRecord } from "../../hooks/mutations/record/useCreateRecord";
 import { useEditRecord } from "../../hooks/mutations/record/useEditRecord";
+import { trackEvent } from "../../utils/analytics";
 
 export default function CreateReportPage() {
   const navigate = useNavigate();
@@ -437,6 +438,10 @@ export default function CreateReportPage() {
               },
               {
                 onSuccess: (data) => {
+                  trackEvent("record_create", {
+                    has_image: imageFiles.length > 0,
+                    has_emotion: selectedEmotion !== "EMPTY",
+                  });
                   navigate(`/report/${bookId}/${data.recordId}`, {
                     replace: true,
                     state: { bookTitle, bookId, record: data, book },

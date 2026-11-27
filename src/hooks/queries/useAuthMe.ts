@@ -5,5 +5,6 @@ export function useAuthMe() {
   return useQuery({
     queryKey: ["auth", "me"],
     queryFn: getAuthMe,
+    enabled: Boolean(localStorage.getItem("accessToken")),
   });
 }

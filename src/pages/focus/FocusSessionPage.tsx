@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useBlocker, useNavigate } from "react-router-dom";
 
 import pencilIcon from "../../assets/icons/pencil.svg";
@@ -19,6 +19,7 @@ import {
   readFocusSession,
 } from "./utils/focusSessionStorage";
 import { findFocusTheme } from "./utils/focusThemes";
+import { trackEvent } from "../../utils/analytics";
 import { readStoredFocusThemeId } from "./utils/focusThemeStorage";
 import {
   clearFocusSessionTimer,
@@ -70,6 +71,22 @@ export default function FocusSessionPage() {
   const [completedEndResult, setCompletedEndResult] =
     useState<FocusEndResult | null>(null);
   const [submitError, setSubmitError] = useState<string>();
+  const didCompleteSessionRef = useRef(false);
+  const timerStateRef = useRef(timerState);
+
+  useEffect(() => {
+    timerStateRef.current = timerState;
+  }, [timerState]);
+
+  useEffect(() => {
+    return () => {
+      if (session !== null && !didCompleteSessionRef.current) {
+        trackEvent("focus_exit", {
+          elapsed_sec: getFocusElapsedSeconds(timerStateRef.current),
+        });
+      }
+    };
+  }, [session]);
 
   // 임시 정책(PM 미확정): 완독 책으로 다시 포커스하면 종료 시트를 체크 상태로 열고,
   // 체크를 풀어 종료할 때 READING으로 되돌린다. 정책이 확정되거나 철회되면
@@ -187,6 +204,9 @@ export default function FocusSessionPage() {
 
         clearFocusSessionTimer();
         clearFocusSession();
+        didCompleteSessionRef.current = true;
+        trackEvent("focus_end", { duration_sec: elapsedSeconds });
+        if (isFinished) trackEvent("book_complete");
         navigate("/focus", { state: { showFocusEndToast: true } });
       } catch (error) {
         setSubmitError(

@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import {
@@ -31,6 +32,7 @@ import { useDeleteSearchHistory } from "../../hooks/mutations/useDeleteSearchHIs
 import type { SearchBooksResult } from "../../api/search";
 import { useAuthMe } from "../../hooks/queries/useAuthMe";
 import SearchCoachmark from "../../components/coachmark/SearchCoachmark";
+import { trackEvent } from "../../utils/analytics";
 
 type ViewMode = "idle" | "searching" | "results";
 
@@ -60,6 +62,7 @@ export default function SearchPage() {
   const [mode, setMode] = useState<ViewMode>(
     restoredQuery ? "results" : "idle",
   );
+  const trackedNoResultRef = useRef<string | null>(null);
 
   const [recent, setRecent] =
     useState<RecentKeyword[]>([]);
@@ -134,6 +137,23 @@ export default function SearchPage() {
   const totalResults =
     data?.pages?.[0]?.totalResults ?? 0;
 
+  useEffect(() => {
+    const key = `${scope}:${submittedQuery}`;
+    if (
+      mode !== "results" ||
+      isLoading ||
+      isError ||
+      !submittedQuery ||
+      totalResults !== 0 ||
+      trackedNoResultRef.current === key
+    ) return;
+
+    trackEvent("search_no_result", {
+      scope: scope === "my" ? "library" : "all",
+    });
+    trackedNoResultRef.current = key;
+  }, [isError, isLoading, mode, scope, submittedQuery, totalResults]);
+
   const safeBooks = Array.isArray(books)
     ? books
     : [];
@@ -158,6 +178,9 @@ export default function SearchPage() {
       setQuery(target);
       setSubmittedQuery(target);
       setMode("results");
+      trackEvent("book_search", {
+        scope: scope === "my" ? "library" : "all",
+      });
 
       navigate("/search", {
         replace: true,

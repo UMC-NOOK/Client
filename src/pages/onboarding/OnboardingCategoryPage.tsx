@@ -7,6 +7,7 @@ import OnboardingCategoryForm from "../../components/onboarding/OnboardingCatego
 import { useOnboardingDraft } from "./OnboardingContext";
 import { useShell } from "../../app/AppShell";
 import chevronLeftIcon from "../../assets/icons/chevron_left.svg";
+import { trackEvent } from "../../utils/analytics";
 
 export function OnboardingCategoryPage() {
   const { setHideFooter } = useShell();
@@ -30,6 +31,7 @@ export function OnboardingCategoryPage() {
   const handleNext = () => {
     if (!isNextActive) return;
     updateDraft({ categories });
+    trackEvent("onboarding_step_complete", { step: "category" });
     navigate("/onboarding/profile");
   };
 
